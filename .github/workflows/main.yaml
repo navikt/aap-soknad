@@ -41,19 +41,6 @@ jobs:
         "CLUSTER": "dev-gcp"
         "RESOURCE": ".nais/nais.yaml"
         "VARS": ".nais/dev.yaml"
-  "deployAppToProd":
-    name: "Deploy app to prod"
-    needs: "deployAppToDev"
-    runs-on: "ubuntu-18.04"
-    steps:
-    - uses: "actions/checkout@v2"
-    - name: "Deploy to PROD"
-      uses: "nais/deploy/actions/deploy@v1"
-      env:
-        "APIKEY": "${{ secrets.NAIS_DEPLOY_APIKEY }}"
-        "CLUSTER": "prod-gcp"
-        "RESOURCE": ".nais/nais.yaml"
-        "VARS": ".nais/prod.yaml"
   "deployAlertsToDev":
     name: "Deploy alerts to dev"
     needs: "build"
@@ -67,16 +54,3 @@ jobs:
         "CLUSTER": "dev-gcp"
         "RESOURCE": ".nais/alerts-dev.yaml"
         "VARS": ".nais/dev.yaml"
-  "deployAlertsToProd":
-    name: "Deploy alerts to prod"
-    needs: "build"
-    runs-on: "ubuntu-18.04"
-    steps:
-    - uses: "actions/checkout@v2"
-    - name: "Deploy alerts to PROD"
-      uses: "nais/deploy/actions/deploy@v1"
-      env:
-        "APIKEY": "${{ secrets.NAIS_DEPLOY_APIKEY }}"
-        "CLUSTER": "prod-gcp"
-        "RESOURCE": ".nais/alerts-prod.yaml"
-        "VARS": ".nais/prod.yaml"
