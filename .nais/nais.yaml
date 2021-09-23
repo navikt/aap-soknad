@@ -7,30 +7,21 @@ metadata:
     "team": "aap"
 spec:
   image: {{image}}
+  port: 3000
   liveness:
-    path: "/isalive"
-    port: 8080
+    path: "/aap/internal/isAlive"
     initialDelay: 20
     timeout: 60
   readiness:
-    path: "/isready"
-    port: 8080
+    path: "/aap/internal/isready"
     initialDelay: 20
     timeout: 60
   replicas:
     min: 2
     max: 2
-    cpuThresholdPercentage: 50
   prometheus:
     enabled: true
     path: "/metrics"
-  resources:
-    limits:
-      cpu: "200m"
-      memory: "256Mi"
-    requests:
-      cpu: "200"
-      memory: "256Mi"
   ingresses: 
   {{#each ingresses as |url|}}
     - {{url}}
