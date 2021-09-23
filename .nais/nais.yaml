@@ -5,8 +5,6 @@ metadata:
   namespace: "aap"
   labels:
     "team": "aap"
-    "start.nais.io/created-by": "me"
-    "start.nais.io/creationTimestamp": "2021-09-22T08:16:29.964216528"
 spec:
   image: {{image}}
   liveness:
