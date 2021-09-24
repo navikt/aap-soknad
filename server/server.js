@@ -7,7 +7,7 @@ const BUILD_PATH = path.join(__dirname, '../build');
 const PORT = process.env.PORT || 3000;
 
 const startServer = () => {
-    server.use(BASE_PATH, express.static(BUILD_PATH));
+    server.use(express.static(BUILD_PATH));
 
     // health checks
     server.get(`${BASE_PATH}/internal/isAlive`, (req, res) => res.sendStatus(200));
