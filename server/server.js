@@ -3,18 +3,18 @@ const server = express();
 const path = require('path');
 
 const BASE_PATH = '/aap';
-const HOME_FOLDER = './build';
+const BUILD_PATH = path.join(__dirname, '../build');
 const PORT = process.env.PORT || 3000;
 
 const startServer = () => {
-    server.use(BASE_PATH, express.static(HOME_FOLDER));
+    server.use(BASE_PATH, express.static(BUILD_PATH));
 
     // health checks
     server.get(`${BASE_PATH}/internal/isAlive`, (req, res) => res.sendStatus(200));
     server.get(`${BASE_PATH}/internal/isReady`, (req, res) => res.sendStatus(200));
 
     server.get(`${BASE_PATH}/*`, (req, res) => {
-        res.sendFile(path.join(__dirname, HOME_FOLDER, 'index.html'));
+        res.sendFile(path.join(BUILD_PATH, 'index.html'));
     });
 
     server.listen(PORT, () => {
