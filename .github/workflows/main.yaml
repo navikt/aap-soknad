@@ -18,8 +18,6 @@ jobs:
         run: "yarn install"
       - name: "run tests"
         run: "yarn test"
-      - name: "run linting"
-        run: "yarn lint"
       - name: "Bygg (yarn run build)"
         run: "yarn run build"
       - name: "Login to GitHub Docker Registry"
