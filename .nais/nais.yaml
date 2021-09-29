@@ -22,7 +22,12 @@ spec:
   prometheus:
     enabled: true
     path: "/metrics"
-  ingresses: 
+  idporten:
+    enabled: true
+    sidecar:
+      enabled: true
+      level: Level4
+  ingresses:
   {{#each ingresses as |url|}}
     - {{url}}
   {{/each}}
