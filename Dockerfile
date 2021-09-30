@@ -2,7 +2,7 @@ FROM navikt/node-express:14-alpine
 ENV NODE_ENV production
 
 WORKDIR /app
-COPY server ./server
+COPY serverBuild ./server
 COPY build/ ./build
 
 USER root
