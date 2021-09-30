@@ -9,8 +9,8 @@ USER root
 RUN chown -R apprunner:apprunner /app
 USER apprunner
 
-WORKDIR /app/server
+WORKDIR /app
 RUN yarn install --frozen-lockfile
 
 EXPOSE 3000
-CMD ["node", "server.js"]
+CMD ["node", "server/server.js"]
