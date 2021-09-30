@@ -1,11 +1,24 @@
 import React from "react";
 import "./App.less";
-import { Heading } from "@navikt/ds-react"
+// @ts-ignore
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import Utland from "./pages/Utland";
 
 const App = (): JSX.Element => {
-  return <div className="app">
-    <Heading size={"2xlarge"} level={"1"} spacing={true}>AAP App</Heading>
-  </div>;
+  return (
+    <div className="app">
+      <Router>
+        <Switch>
+          <Route path="/utland">
+            <Utland />
+          </Route>
+          <Route path="*">
+            <span>Not Found</span>
+          </Route>
+        </Switch>
+      </Router>
+    </div>
+  );
 };
 
 export default App;
