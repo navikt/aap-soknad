@@ -10,7 +10,7 @@ const App = (): JSX.Element => {
     <div className="app">
       <Router>
         <Switch>
-          <Route path="/utland">
+          <Route path="/aap/utland">
             <Utland />
           </Route>
           <Route path="*">
