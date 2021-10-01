@@ -32,7 +32,7 @@ spec:
     - {{url}}
   {{/each}}
   env:
-  {{ #each env}}
+  {{#each env}}
     - name: {{this.name }}
       value: {{this.value}}
   {{/each}}
