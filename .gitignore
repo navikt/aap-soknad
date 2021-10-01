@@ -2,6 +2,7 @@
 
 # dependencies
 /node_modules
+/server/node_modules
 /.pnp
 .pnp.js
 
@@ -11,7 +12,7 @@
 
 # production
 /build
-/serverBuild
+/server/dist
 
 #IDE
 .idea/

@@ -1,7 +1,7 @@
 const express = require("express");
 const server = express();
 const path = require("path");
-const { validerToken } = require("./idporten");
+const { validerToken } = require("./auth/idporten");
 
 const BASE_PATH = "/aap";
 const BUILD_PATH = path.join(__dirname, "../build");

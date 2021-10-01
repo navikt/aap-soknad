@@ -1,7 +1,6 @@
 {
   "compilerOptions": {
     "target": "es5",
-    "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
     "esModuleInterop": true,
@@ -11,7 +10,7 @@
     "noFallthroughCasesInSwitch": true,
     "module": "commonjs",
     "moduleResolution": "node",
-    "outDir": "../serverBuild/"
+    "outDir": "dist"
   },
-  "include": ["./*"]
+  "include": ["./**/*"]
 }
