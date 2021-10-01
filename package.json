@@ -17,8 +17,6 @@
     "craco": "^0.0.3",
     "craco-less": "^1.17.1",
     "express": "^4.17.1",
-    "jose": "^3.19.0",
-    "openid-client": "^4.9.0",
     "prop-types": "^15.7.2",
     "react": "^17.0.1",
     "react-dom": "^16.8.0",
