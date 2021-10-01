@@ -31,3 +31,8 @@ spec:
   {{#each ingresses as |url|}}
     - {{url}}
   {{/each}}
+  env:
+  {{ #each env}}
+    - name: {{this.name }}
+      value: {{this.value}}
+  {{/each}}

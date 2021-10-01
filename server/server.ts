@@ -2,6 +2,7 @@ const express = require("express");
 const server = express();
 const path = require("path");
 const { validerToken } = require("./auth/idporten");
+import { getHtmlWithDecorator } from "./dekorator";
 
 const BASE_PATH = "/aap";
 const BUILD_PATH = path.join(__dirname, "../build");
@@ -30,9 +31,15 @@ const startServer = () => {
     }
   });
 
-  server.get(`${BASE_PATH}/*`, (req: any, res: any) => {
-    res.sendFile(path.join(BUILD_PATH, "index.html"));
-  });
+  server.get(`${BASE_PATH}/*`, (req: any, res: any) =>
+    getHtmlWithDecorator(`${BUILD_PATH}/index.html`)
+      .then((html) => {
+        res.send(html);
+      })
+      .catch((e) => {
+        res.status(500).send(e);
+      })
+  );
 
   server.listen(PORT, () => {
     // eslint-disable-next-line no-console
