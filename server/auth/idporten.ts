@@ -10,7 +10,7 @@ import { FlattenedJWSInput } from "jose/types";
 let _issuer: Issuer<Client>;
 let _remoteJWKSet: GetKeyFunction<JWSHeaderParameters, FlattenedJWSInput>;
 
-async function validerToken(token: string | Uint8Array) {
+export async function validerToken(token: string | Uint8Array) {
   return jwtVerify(token, await jwks(), {
     issuer: (await issuer()).metadata.issuer,
   });
@@ -33,9 +33,3 @@ async function issuer() {
   }
   return _issuer;
 }
-
-export default {
-  validerToken,
-};
-
-export { validerToken };

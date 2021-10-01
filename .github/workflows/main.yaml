@@ -15,9 +15,9 @@ jobs:
         with:
           node-version: "14"
       - name: "install dependencies Yarn"
-        run: "yarn install"
+        run: "yarn install --frozen-lockfile"
       - name: "install server dependencies Yarn"
-        run: "yarn install"
+        run: "yarn install --frozen-lockfile"
         working-directory: "server"
       - name: "run tests"
         run: "yarn test"

@@ -1,12 +1,13 @@
-const { getHtmlWithDecorator } = require("./dekorator");
-const express = require("express");
-const server = express();
-const path = require("path");
-const { validerToken } = require("./auth/idporten");
+import express from "express";
+import path from "path";
+
+import { getHtmlWithDecorator } from "./dekorator";
+import { validerToken } from "./auth/idporten";
 
 const BASE_PATH = "/aap";
 const BUILD_PATH = path.join(__dirname, "../build");
 const PORT = process.env.PORT || 3000;
+const server = express();
 
 const startServer = () => {
   server.use(express.static(BUILD_PATH));
