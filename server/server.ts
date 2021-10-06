@@ -21,6 +21,11 @@ const startServer = () => {
   server.get(`${BASE_PATH}/internal/isReady`, (req: any, res: any) =>
     res.sendStatus(200)
   );
+  server.use(`${BASE_PATH}/loginservice`, async (req: any, res: any) => {
+    const path = `${BASE_PATH}${req.cookies["APP_PATH"]}`;
+    res.cookie("APP_PATH", "", { httpOnly: true, domain: "nav.no" });
+    res.redirect(path);
+  });
 
   server.use(`${BASE_PATH}/*`, async (req: any, res: any, next: any) => {
     const { authorization } = req.headers;
@@ -31,8 +36,12 @@ const startServer = () => {
       res.redirect(`/oauth2/login?redirect=${req.originalUrl}/`);
       // Log in with loginservice (for decorator)
     } else if (!selvbetjeningIdtoken) {
+      res.cookie("APP_PATH", req.originalUrl, {
+        httpOnly: true,
+        domain: "nav.no",
+      });
       res.redirect(
-        `${process.env.LOGINSERVICE_URL}?redirect=${req.originalUrl}`
+        `${process.env.LOGINSERVICE_URL}?redirect=${process.env.APP_URL}/loginservice`
       );
       // Validate token and continue to app
     } else {

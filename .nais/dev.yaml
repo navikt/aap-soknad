@@ -1,5 +1,5 @@
 ingresses:
-- "https://aap-soknad.dev.intern.nav.no"
+- "https://aap-soknad.dev.nav.no"
 env:
 - name: DECORATOR_URL
   value: "https://dekoratoren.dev.nav.no"
@@ -7,5 +7,7 @@ env:
   value: "dev"
 - name: LOGINSERVICE_URL
   value: "https://loginservice.dev.nav.no/login"
+- name: APP_URL
+  value: "https://aap-soknad.dev.nav.no"
 externals:
   - "dekoratoren.dev.nav.no"

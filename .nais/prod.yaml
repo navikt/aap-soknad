@@ -1,9 +1,11 @@
 ingresses:
-- "https://aap-soknad.intern.nav.no"
+- "https://aap-soknad.nav.no"
 env:
 - name: DECORATOR_ENV
   value: "prod"
 - name: LOGINSERVICE_URL
   value: "https://loginservice.nav.no/login"
+- name: APP_URL
+  value: "https://aap-soknad.nav.no"
 externals:
   - "dekoratoren.dev.no"
