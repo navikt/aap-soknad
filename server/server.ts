@@ -1,5 +1,6 @@
 import express from "express";
 import path from "path";
+import cookieParser from "cookie-parser";
 
 import { getHtmlWithDecorator } from "./dekorator";
 import { validerToken } from "./auth/idporten";
@@ -10,6 +11,7 @@ const PORT = process.env.PORT || 3000;
 const server = express();
 
 const startServer = () => {
+  server.use(cookieParser());
   server.use(express.static(BUILD_PATH));
 
   // health checks
@@ -22,9 +24,17 @@ const startServer = () => {
 
   server.use(`${BASE_PATH}/*`, async (req: any, res: any, next: any) => {
     const { authorization } = req.headers;
+    const selvbetjeningIdtoken = req.cookies["selvbetjening-idtoken"];
 
+    // Not logged in - log in with wonderwall
     if (!authorization) {
-      res.redirect(`/oauth2/login?redirect=${BASE_PATH}/`);
+      res.redirect(`/oauth2/login?redirect=${req.originalUrl}/`);
+      // Log in with loginservice (for decorator)
+    } else if (!selvbetjeningIdtoken) {
+      res.redirect(
+        `${process.env.LOGINSERVICE_URL}?redirect=${req.originalUrl}`
+      );
+      // Validate token and continue to app
     } else {
       const token = authorization.split(" ")[1];
       await validerToken(token);

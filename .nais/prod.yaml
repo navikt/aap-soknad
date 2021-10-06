@@ -3,3 +3,5 @@ ingresses:
 env:
 - name: DECORATOR_ENV
   value: "prod"
+- name: LOGINSERVICE_URL
+  value: "https://loginservice.nav.no/signin"

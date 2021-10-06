@@ -5,3 +5,5 @@ env:
   value: "https://dekoratoren.dev.nav.no"
 - name: DECORATOR_ENV
   value: "dev"
+- name: LOGINSERVICE_URL
+  value: "http://loginservice.test/signin"
