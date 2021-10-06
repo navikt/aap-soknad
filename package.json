@@ -59,13 +59,6 @@
     "ignoreFiles": []
   },
   "prettier": {},
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest",
-      "plugin:jsx-a11y/recommended"
-    ]
-  },
   "browserslist": {
     "production": [
       ">0.2%",

@@ -22,7 +22,7 @@ const startServer = () => {
     res.sendStatus(200)
   );
   server.use(`${BASE_PATH}/loginservice`, async (req: any, res: any) => {
-    const path = `${BASE_PATH}${req.cookies["APP_PATH"] || ""}`;
+    const path = `${req.cookies["APP_PATH"] || ""}`;
     res.cookie("APP_PATH", "", { httpOnly: true, domain: "nav.no" });
     res.redirect(path);
   });
