@@ -35,14 +35,14 @@ const startServer = () => {
     if (!authorization) {
       res.redirect(`/oauth2/login?redirect=${req.originalUrl}/`);
       // Log in with loginservice (for decorator)
-      // } else if (!selvbetjeningIdtoken) {
-      //   res.cookie("APP_PATH", req.originalUrl, {
-      //     httpOnly: true,
-      //     domain: "nav.no",
-      //   });
-      //   res.redirect(
-      //     `${process.env.LOGINSERVICE_URL}?redirect=${process.env.APP_URL}/loginservice`
-      //   );
+    } else if (!selvbetjeningIdtoken) {
+      res.cookie("APP_PATH", req.originalUrl, {
+        httpOnly: true,
+        domain: "nav.no",
+      });
+      res.redirect(
+        `${process.env.LOGINSERVICE_URL}?redirect=${process.env.APP_URL}${BASE_PATH}/loginservice`
+      );
       // Validate token and continue to app
     } else {
       const token = authorization.split(" ")[1];
