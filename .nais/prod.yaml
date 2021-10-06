@@ -5,3 +5,5 @@ env:
   value: "prod"
 - name: LOGINSERVICE_URL
   value: "https://loginservice.nav.no/login"
+externals:
+  - "dekoratoren.dev.no"
