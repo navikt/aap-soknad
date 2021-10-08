@@ -15,4 +15,3 @@ env:
   value: "dev-gcp:aap:aap-soknad-api"
 externals:
   - "dekoratoren.dev.nav.no"
-  - "aap-soknad-api.dev.intern.nav.no"
