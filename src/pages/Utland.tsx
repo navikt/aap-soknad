@@ -54,8 +54,7 @@ const Utland = (): JSX.Element => {
       confirmationPanel: false,
     },
   });
-  const onSubmit = (data: FormValues) => {
-    if (Object.keys(errors).length > 0) return;
+  const onSubmit = async (data: FormValues) => {
     setIsWaiting(true);
     console.log(data);
     setTimeout(() => setIsWaiting(false), 3000);
@@ -73,7 +72,7 @@ const Utland = (): JSX.Element => {
         Du må sørge for at du kan gjennomføre den aktiviteten du har avtalt med
         NAV ved utenlandsopphold.
       </Ingress>
-      <form onSubmit={handleSubmit(onSubmit)} className="soknad-utland-form">
+      <form onSubmit={handleSubmit( data => onSubmit(data))} className="soknad-utland-form">
         <Select
           label="Landet du skal oppholde deg i"
           error={errors.country?.message}

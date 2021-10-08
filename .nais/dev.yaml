@@ -9,5 +9,10 @@ env:
   value: "https://loginservice.dev.nav.no/login"
 - name: APP_URL
   value: "https://aap-soknad.dev.nav.no"
+- name: SOKNAD_API_URL
+  value: "https://aap-soknad-api.dev.intern.nav.no"
+- name: SOKNAD_API_AUDIENCE
+  value: "dev-gcp:aap:aap-soknad-api"
 externals:
   - "dekoratoren.dev.nav.no"
+  - "aap-soknad-api.dev.intern.nav.no"

@@ -1,0 +1,39 @@
+import { Application} from "express";
+import proxy from 'express-http-proxy';
+import {getToken} from "./auth/tokenx";
+
+const options = (targetAudience: string) => ({
+  parseReqBody: true,
+  proxyReqOptDecorator: (options, req) => {
+    console.log(`Veksler inn token til aud ${targetAudience}`);
+    const { authorization } = req.headers;
+    const token = authorization.split(" ")[1];
+    return new Promise((resolve, reject) => {
+      return getToken(token, targetAudience).then(
+        apiToken => {
+          options.headers.Authorization = `Bearer ${apiToken}`
+          resolve(options)
+        },
+        error => {
+          console.log('Error ved token ex', error)
+          reject(error)
+        })
+    });
+  },
+  proxyReqPathResolver: (req) => {
+    console.log('Req orig url', req.originalUrl)
+    if (req.originalUrl.startsWith('/aap')) {
+      return req.originalUrl.slice(4);
+    }
+    return req.originalUrl;
+  },
+  // Mutate request body
+  // proxyReqBodyDecorator: function(bodyContent, srcReq) {}
+});
+
+
+
+export const tokenXProxy = (path: string, server: Application) => {
+  //server.use(path, proxy(process.env.SOKNAD_API_URL, options(process.env.SOKNAD_API_AUDIENCE)));
+  server.use(path, proxy('http://localhost:5000', options(process.env.SOKNAD_API_AUDIENCE)));
+}

@@ -19,7 +19,7 @@ export async function validerToken(token: string | Uint8Array) {
 async function jwks() {
   if (typeof _remoteJWKSet === "undefined") {
     const iss = await issuer();
-    _remoteJWKSet = createRemoteJWKSet(new URL(<string>iss.metadata.jwks_uri));
+    _remoteJWKSet = createRemoteJWKSet(new URL(iss.metadata.jwks_uri as string));
   }
 
   return _remoteJWKSet;
