@@ -14,7 +14,7 @@
         "node_modules/*"
       ]
     },
-    "types" : ["node"]
+    "types" : ["jest", "node"]
   },
   "include": ["./src/**/*"],
   "exclude": ["node_modules", "dist"]
