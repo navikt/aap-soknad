@@ -34,6 +34,5 @@ const options = (targetAudience: string) => ({
 
 
 export const tokenXProxy = (path: string, server: Application) => {
-  //server.use(path, proxy(process.env.SOKNAD_API_URL, options(process.env.SOKNAD_API_AUDIENCE)));
-  server.use(path, proxy('http://localhost:5000', options(process.env.SOKNAD_API_AUDIENCE)));
+  server.use(path, proxy(process.env.SOKNAD_API_URL, options(process.env.SOKNAD_API_AUDIENCE)));
 }
