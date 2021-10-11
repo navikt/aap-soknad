@@ -1,10 +1,10 @@
-import { Application} from "express";
+import { Application, Request} from "express";
 import proxy from 'express-http-proxy';
 import {getToken} from "./auth/tokenx";
 
 const options = (targetAudience: string) => ({
   parseReqBody: true,
-  proxyReqOptDecorator: (options, req) => {
+  proxyReqOptDecorator: (options: any, req: Request) => {
     console.log(`Veksler inn token til aud ${targetAudience}`);
     const { authorization } = req.headers;
     const token = authorization.split(" ")[1];
@@ -20,7 +20,7 @@ const options = (targetAudience: string) => ({
         })
     });
   },
-  proxyReqPathResolver: (req) => {
+  proxyReqPathResolver: (req: Request) => {
     console.log('Req orig url', req.originalUrl)
     if (req.originalUrl.startsWith('/aap')) {
       return req.originalUrl.slice(4);
