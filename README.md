@@ -1,3 +1,9 @@
+# EsLint autofix
+
+IntelliJ
+https://www.jetbrains.com/help/idea/eslint.html#ws_eslint_configure_run_eslint_on_save
+
+
 # Create-React-App eksempel prosjekt
 
 Basert på create-react-app fra nav-frontend-moduler
