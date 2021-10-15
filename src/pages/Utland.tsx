@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./Utland.less";
 import {
   Select,
@@ -40,6 +40,14 @@ const FormErrorSummary = ({ errors }: FieldErrors) => {
 
 const Utland = (): JSX.Element => {
   const [isWaiting, setIsWaiting] = useState<boolean>(false);
+  const [countryList, setCountryList] = useState([]);
+  useEffect(() => {
+    const fetchCountries = async () => {
+      const list = await fetch('/aap/resources/countries').then(res => res.json());
+      setCountryList(list);
+    }
+    fetchCountries();
+  }, [setCountryList])
   const {
     getValues,
     register,
@@ -81,9 +89,7 @@ const Utland = (): JSX.Element => {
             validate: (value) => value !== "none" || "Venligst velg et land.",
           })}
         >
-          <option value="none">Velg land</option>
-          <option value="norge">Norge</option>
-          <option value="sverige">Sverige</option>
+          { countryList.map(([key, val]) => <option value={key}>{val}</option>) }
         </Select>
         <Controller
           name="fromDate"

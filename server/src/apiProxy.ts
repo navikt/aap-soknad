@@ -1,6 +1,7 @@
 import { Application, Request} from "express";
 import proxy from 'express-http-proxy';
 import {getToken} from "./auth/tokenx";
+import config from "./config";
 
 const options = (targetAudience: string) => ({
   parseReqBody: true,
@@ -34,5 +35,5 @@ const options = (targetAudience: string) => ({
 
 
 export const tokenXProxy = (path: string, server: Application) => {
-  server.use(path, proxy(process.env.SOKNAD_API_URL, options(process.env.SOKNAD_API_AUDIENCE)));
+  server.use(path, proxy(config.SOKNAD_API_URL, options(config.SOKNAD_API_AUDIENCE)));
 }

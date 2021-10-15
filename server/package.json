@@ -16,6 +16,7 @@
     "express": "^4.17.1",
     "express-http-proxy": "^1.6.2",
     "got": "^11.8.2",
+    "i18n-iso-countries": "^6.8.0",
     "jose": "^3.19.0",
     "node-cache": "5.1.2",
     "node-fetch": "2.6.1",
