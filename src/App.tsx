@@ -4,12 +4,16 @@ import "./App.less";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { Heading } from "@navikt/ds-react";
 import Utland from "./pages/Utland";
+import Me from "./pages/Me";
 
 const App = (): JSX.Element => {
   return (
     <div className="app">
       <Router>
         <Switch>
+          <Route path="/aap/me">
+            <Me />
+          </Route>
           <Route path="/aap/utland">
             <Utland />
           </Route>

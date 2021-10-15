@@ -1,15 +1,10 @@
 import express from "express";
 import path from "path";
 import cookieParser from "cookie-parser";
-import countries from "i18n-iso-countries";
 import config from './config';
 import { enforceIDPortenAuthenticationMiddleware } from './auth';
 import { getHtmlWithDecorator } from "./dekorator";
 import { tokenXProxy} from "./apiProxy";
-
-// Support norwegian & english languages.
-countries.registerLocale(require("i18n-iso-countries/langs/en.json"));
-countries.registerLocale(require("i18n-iso-countries/langs/nb.json"));
 
 const BUILD_PATH = path.join(__dirname, "../build");
 const PORT = process.env.PORT || 3000;
@@ -29,12 +24,6 @@ const startServer = () => {
 
   // Enforce authentication
   server.use(`${config.BASE_PATH}/*`, enforceIDPortenAuthenticationMiddleware);
-
-  // Countries list
-  server.get(`${config.BASE_PATH}/resources/countries`, (req: any, res: any) => {
-    const countryList = Object.entries(countries.getNames("nb", {select: "official"}))
-    res.json(countryList);
-  });
 
   // Reverse proxy to add tokenx header for api calls
   tokenXProxy(`${config.BASE_PATH}/api`, server);

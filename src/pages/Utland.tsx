@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import countries from "i18n-iso-countries";
 import "./Utland.less";
 import {
   Select,
@@ -13,6 +14,10 @@ import {
 import { Controller, useForm, FieldErrors } from "react-hook-form";
 import DatoVelger from "../components/datovelger";
 import { vFirstDateIsAfterSecondDate } from "../utils/formValidation";
+
+// Support norwegian & english languages.
+countries.registerLocale(require("i18n-iso-countries/langs/en.json"));
+countries.registerLocale(require("i18n-iso-countries/langs/nb.json"));
 
 type FormValues = {
   country: string;
@@ -40,13 +45,13 @@ const FormErrorSummary = ({ errors }: FieldErrors) => {
 
 const Utland = (): JSX.Element => {
   const [isWaiting, setIsWaiting] = useState<boolean>(false);
-  const [countryList, setCountryList] = useState([]);
+  const [countryList, setCountryList] = useState<string[][]>([]);
   useEffect(() => {
-    const fetchCountries = async () => {
-      const list = await fetch('/aap/resources/countries').then(res => res.json());
+    const getCountries = () => {
+      const list = Object.entries(countries.getNames("nb", {select: "official"}))
       setCountryList(list);
     }
-    fetchCountries();
+    getCountries();
   }, [setCountryList])
   const {
     getValues,
@@ -89,6 +94,7 @@ const Utland = (): JSX.Element => {
             validate: (value) => value !== "none" || "Venligst velg et land.",
           })}
         >
+          <option value="none">Velg land</option>
           { countryList.map(([key, val]) => <option value={key}>{val}</option>) }
         </Select>
         <Controller
