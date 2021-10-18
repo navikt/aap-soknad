@@ -27,6 +27,7 @@ spec:
     sidecar:
       enabled: true
       level: Level4
+      autoLogin: true
   ingresses:
   {{#each ingresses as |url|}}
     - {{url}}
