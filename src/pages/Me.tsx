@@ -6,7 +6,7 @@ import {
   Button,
   Loader,
 } from "@navikt/ds-react";
-import {logger} from "../utils/logger";
+import { logger } from "../utils/logger";
 
 const Utland = (): JSX.Element => {
   const [isWaiting, setIsWaiting] = useState<boolean>(false);
