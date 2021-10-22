@@ -7,8 +7,18 @@ import {
   Loader,
 } from "@navikt/ds-react";
 import { logger } from "../utils/logger";
+import { useQuery } from "react-query";
+import { get } from "../api/fetch";
+import { Me } from "../interfaces/me";
 
 const Utland = (): JSX.Element => {
+  const fetchMe = async() => {
+    const res = await get<Me>('/aap/api/me')
+    console.log(res);
+    return res;
+  }
+  const { isLoading, error, data } = useQuery("fetchMe", fetchMe)
+
   const [isWaiting, setIsWaiting] = useState<boolean>(false);
   const onSubmit = async () => {
     setIsWaiting(true);
@@ -30,7 +40,9 @@ const Utland = (): JSX.Element => {
       </Ingress>
       <Button variant="primary" type="submit" onClick={() => onSubmit()} >
         Test
-        {isWaiting ? <Loader /> : null}
+        {isLoading ? <Loader /> : null}
+        {error ? error : null}
+        {data ? data.fornavn : null}
       </Button>
     </>
   );

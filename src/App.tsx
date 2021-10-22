@@ -5,6 +5,9 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { Heading } from "@navikt/ds-react";
 import Utland from "./pages/Utland";
 import Me from "./pages/Me";
+import {QueryClient, QueryClientProvider} from "react-query";
+
+const queryClient = new QueryClient()
 
 const App = (): JSX.Element => {
   return (
@@ -12,7 +15,9 @@ const App = (): JSX.Element => {
       <Router>
         <Switch>
           <Route path="/aap/me">
-            <Me />
+            <QueryClientProvider client={queryClient}>
+              <Me />
+            </QueryClientProvider>
           </Route>
           <Route path="/aap/utland">
             <Utland />

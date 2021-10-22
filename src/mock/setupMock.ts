@@ -10,6 +10,6 @@ fetchMock.get(
     body: meMock
   },
   {
-    delay: 1000
+    delay: 5000
   }
 );

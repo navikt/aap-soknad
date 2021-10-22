@@ -1,3 +1,6 @@
-export const meMock = {
-  name: "Ola Nordmann"
+import { Me } from "../../interfaces/me";
+
+export const meMock: Me = {
+  fornavn: 'Ola',
+  etternavn: 'Nordmann'
 };
