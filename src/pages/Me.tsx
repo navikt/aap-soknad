@@ -10,12 +10,21 @@ import { logger } from "../utils/logger";
 
 const Utland = (): JSX.Element => {
   const [isWaiting, setIsWaiting] = useState<boolean>(false);
-  const onSubmit = async () => {
+  const onSubmitProxyApi = async () => {
     setIsWaiting(true);
     const response = await fetch('/aap/api/me');
-    const json = response.json();
+    const json = await response.json();
     logger.info({
       message: 'api/me called',
+      payload: json
+    });
+  };
+  const onSubmitApiTest = async () => {
+    setIsWaiting(true);
+    const response = await fetch('/aap/apitest');
+    const json = await response.json();
+    logger.info({
+      message: '/apitest called',
       payload: json
     });
   };
@@ -28,8 +37,12 @@ const Utland = (): JSX.Element => {
       <Ingress spacing={true}>
         Api test.
       </Ingress>
-      <Button variant="primary" type="submit" onClick={() => onSubmit()} >
-        Test
+      <Button variant="primary" type="submit" onClick={() => onSubmitProxyApi()} >
+        ProxyApi Test
+        {isWaiting ? <Loader /> : null}
+      </Button>
+      <Button variant="primary" type="submit" onClick={() => onSubmitApiTest()} >
+        ApiTest
         {isWaiting ? <Loader /> : null}
       </Button>
     </>
