@@ -38,8 +38,10 @@ const startServer = () => {
         console.log('Error ved token ex', error)
         return {};
       });
-    const apiRes = await fetch(`${config.SOKNAD_API_URL}/api/me`, {headers});
+    const apiRes = await fetch(`${config.SOKNAD_API_URL}/api/me`, { headers });
+    console.log(`${config.SOKNAD_API_URL}/api/me`);
     console.log(apiRes.status, apiRes.statusText, apiRes.ok);
+    console.log(apiRes);
     const data = await apiRes.json();
     console.log('api response: ', data)
     if (data) res.json(data);
