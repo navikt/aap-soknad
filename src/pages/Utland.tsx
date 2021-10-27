@@ -6,13 +6,16 @@ import {
   ConfirmationPanel,
   ErrorSummary,
   ErrorSummaryItem,
-  Heading,
-  Ingress,
+  GuidePanel,
   Button,
-  Loader,
+  Label,
+  BodyShort,
+  Heading,
 } from "@navikt/ds-react";
 import { Controller, useForm, FieldErrors } from "react-hook-form";
+import SoknadWizard from "../layouts/SoknadWizard";
 import DatoVelger from "../components/datovelger";
+import { utland as Texts } from "../texts/nb.json";
 import { vFirstDateIsAfterSecondDate } from "../utils/formValidation";
 
 // Support norwegian & english languages.
@@ -42,9 +45,21 @@ const FormErrorSummary = ({ errors }: FieldErrors) => {
     </ErrorSummary>
   );
 };
+const getFormInputLabel = (key: string) => {
+  // @ts-ignore
+  return Texts?.form?.[key]?.label
+}
+const lastStepIndex = 2;
+
 
 const Utland = (): JSX.Element => {
-  const [isWaiting, setIsWaiting] = useState<boolean>(false);
+  const [currentStepIndex, setCurrentStepIndex] = useState<number>(0);
+  const [soknadData, setSoknadData] = useState<FormValues>({
+    country: "none",
+    fromDate: "",
+    toDate: "",
+    confirmationPanel: false,
+  });
   const [countryList, setCountryList] = useState<string[][]>([]);
   useEffect(() => {
     const getCountries = () => {
@@ -67,99 +82,116 @@ const Utland = (): JSX.Element => {
       confirmationPanel: false,
     },
   });
-  const onSubmit = async (data: FormValues) => {
-    setIsWaiting(true);
-    console.log(data);
-    setTimeout(() => setIsWaiting(false), 3000);
-  };
+  const onSubmitClick = (data: FormValues) => {
+    if (currentStepIndex < lastStepIndex) {
+      setSoknadData({...data});
+      setCurrentStepIndex(currentStepIndex + 1);
+    } else {
+      // TODO: Post data
+      console.log(data);
+    }
+  }
 
   return (
-    <>
-      <Heading size="2xlarge" level="1" spacing={true}>
-        Søknad om å beholde arbeidsavklaringspenger under opphold i utlandet
-      </Heading>
-      <Ingress spacing={true}>
-        Du må som hovedregel oppholde deg i Norge eller i et annet EU/EØS-land
-        for å få AAP. Er du statsborger i et EU/EØS-land, må du søke om å motta
-        AAP i en begrenset periode hvis du oppholder deg utenfor et EU/EØS-land.
-        Du må sørge for at du kan gjennomføre den aktiviteten du har avtalt med
-        NAV ved utenlandsopphold.
-      </Ingress>
-      <form onSubmit={handleSubmit( data => onSubmit(data))} className="soknad-utland-form">
-        <Select
-          label="Landet du skal oppholde deg i"
-          error={errors.country?.message}
-          {...register("country", {
-            required: "Venligst velg et land.",
-            validate: (value) => value !== "none" || "Venligst velg et land.",
-          })}
-        >
-          <option value="none">Velg land</option>
-          { countryList.map(([key, val]) => <option value={key}>{val}</option>) }
-        </Select>
-        <Controller
-          name="fromDate"
-          control={control}
-          rules={{
-            required: "Venligst velg en dato",
-          }}
-          render={({ field: { name, value, onChange } }) => (
-            <DatoVelger
-              id={name}
-              name={name}
-              label="Fra dato"
-              value={value}
-              onChange={onChange}
-              error={errors.fromDate?.message}
+    <SoknadWizard
+      title={Texts?.pageTitle}
+    >
+      <form onSubmit={handleSubmit( data => onSubmitClick(data))} className="soknad-utland-form">
+        {currentStepIndex === 0
+          ? <>
+            <GuidePanel poster>
+              {Texts?.guideText}
+            </GuidePanel>
+            <Select
+              label={Texts?.form?.country?.label}
+              error={errors.country?.message}
+              {...register("country", {
+                required: Texts?.form?.country?.required,
+                validate: (value) => value !== "none" || Texts?.form?.country?.required,
+              })}
+            >
+              <option key="none" value="none">Velg land</option>
+              { countryList.map(([key, val]) => <option key={key} value={key}>{val}</option>) }
+            </Select>
+          </>
+          : null}
+        {currentStepIndex === 1
+          ? <>
+            <Controller
+              name="fromDate"
+              control={control}
+              rules={{
+                required: Texts?.form?.fromDate?.required,
+              }}
+              render={({ field: { name, value, onChange } }) => (
+                <DatoVelger
+                  id={name}
+                  name={name}
+                  label={Texts?.form?.fromDate?.label}
+                  value={value}
+                  onChange={onChange}
+                  error={errors.fromDate?.message}
+                />
+              )}
             />
-          )}
-        />
-        <Controller
-          name="toDate"
-          control={control}
-          rules={{
-            required: "Venligst velg en dato",
-            validate: () =>
-              vFirstDateIsAfterSecondDate(
-                getValues("toDate"),
-                getValues("fromDate")
-              ),
-          }}
-          render={({ field: { name, value, onChange } }) => (
-            <DatoVelger
-              id={name}
-              name={name}
-              label="Til dato"
-              value={value}
-              onChange={onChange}
-              error={errors.toDate?.message}
+            <Controller
+              name="toDate"
+              control={control}
+              rules={{
+                required: Texts?.form?.toDate?.required,
+                validate: () =>
+                  vFirstDateIsAfterSecondDate(
+                    getValues("toDate"),
+                    getValues("fromDate")
+                  ),
+              }}
+              render={({ field: { name, value, onChange } }) => (
+                <DatoVelger
+                  id={name}
+                  name={name}
+                  label={Texts?.form?.fromDate?.label}
+                  value={value}
+                  onChange={onChange}
+                  error={errors.toDate?.message}
+                />
+              )}
             />
-          )}
-        />
-        <Controller
-          name="confirmationPanel"
-          control={control}
-          rules={{
-            required: "Kryss av for å bekrefte",
-          }}
-          render={({ field: { name, value, onChange } }) => (
-            <ConfirmationPanel
-              id={name}
-              name={name}
-              label="Jeg bekrefter at utenlandsoppholdet ikke er til hinder for avtalt aktivitet som behandling, arbeidsrettede tiltak eller oppfølging fra NAV."
-              checked={value}
-              onChange={onChange}
-              error={errors.confirmationPanel?.message}
+          </>
+          : null }
+        {currentStepIndex === 2
+          ? <>
+            <Heading size="medium" level="2" >
+              {Texts?.summary}
+            </Heading>
+            {Object.entries(soknadData).filter(([key, val]) => !!val).map(([key, val]) => <>
+              <Label>{getFormInputLabel(key)}</Label>
+              <BodyShort>{`${val}`}</BodyShort>
+            </>)}
+            <Controller
+              name="confirmationPanel"
+              control={control}
+              rules={{
+                required: "Kryss av for å bekrefte",
+              }}
+              render={({ field: { name, value, onChange } }) => (
+                <ConfirmationPanel
+                  id={name}
+                  name={name}
+                  label={Texts?.form?.confirmationPanel?.label}
+                  checked={value}
+                  onChange={onChange}
+                  error={errors.confirmationPanel?.message}
+                />
+              )}
             />
-          )}
-        />
+          </>
+          : null}
         <FormErrorSummary errors={errors} />
         <Button variant="primary" type="submit">
           Send inn
-          {isWaiting ? <Loader /> : null}
         </Button>
       </form>
-    </>
+    </SoknadWizard>
   );
 };
 
