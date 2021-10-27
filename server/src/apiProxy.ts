@@ -6,14 +6,18 @@ import config from "./config";
 const options = (targetAudience: string) => ({
   parseReqBody: true,
   proxyReqOptDecorator: (options: any, req: Request) => {
-    console.log(`Veksler inn token til aud ${targetAudience}`);
     const { authorization } = req.headers;
     const token = authorization.split(" ")[1];
     return new Promise((resolve, reject) => {
       return getToken(token, targetAudience).then(
         apiToken => {
-          options.headers.Authorization = `Bearer ${apiToken}`
-          resolve(options)
+          resolve({
+            ...options,
+            headers: {
+              ...options.headers,
+              Authorization: `Bearer ${apiToken}`
+            }
+          })
         },
         error => {
           console.log('Error ved token ex', error)
@@ -22,11 +26,11 @@ const options = (targetAudience: string) => ({
     });
   },
   proxyReqPathResolver: (req: Request) => {
-    console.log('Req orig url', req.originalUrl)
-    if (req.originalUrl.startsWith('/aap')) {
-      return req.originalUrl.slice(4);
-    }
-    return req.originalUrl;
+    const newPath = (req.originalUrl.startsWith('/aap'))
+      ? req.originalUrl.slice(4)
+      : req.originalUrl;
+    console.log('PROXY ', req.originalUrl, ' --> ', `${config.SOKNAD_API_URL}${newPath}`);
+    return newPath;
   },
   // Mutate request body
   // proxyReqBodyDecorator: function(bodyContent, srcReq) {}
