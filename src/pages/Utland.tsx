@@ -17,6 +17,8 @@ import SoknadWizard from "../layouts/SoknadWizard";
 import DatoVelger from "../components/datovelger";
 import { utland as Texts } from "../texts/nb.json";
 import { vFirstDateIsAfterSecondDate } from "../utils/formValidation";
+import {format} from "date-fns";
+import {nb} from "date-fns/locale";
 
 // Support norwegian & english languages.
 countries.registerLocale(require("i18n-iso-countries/langs/en.json"));
@@ -153,14 +155,26 @@ interface SummaryProps {
   errors: FieldErrors;
   data: any
 }
-const StepSummary = ({data, control, errors}: SummaryProps) =>
-  (<>
-    <Heading size="medium" level="2" >
+const StepSummary = ({data, control, errors}: SummaryProps) => {
+  const getFormValueReadable = (key: string, val: any) => {
+    switch (key) {
+    case 'country':
+      return countries.getName(`${val}`, 'nb', {select: 'official'});
+    case 'fromDate':
+    case 'toDate':
+      return format(val, 'dd.MM.yyyy', { locale: nb });
+    default:
+      return val;
+    }
+  }
+
+  return (<>
+    <Heading size="medium" level="2">
       {Texts?.summary}
     </Heading>
     {Object.entries(data).filter(([key, val]) => !!val).map(([key, val]) => <div key={key}>
       <Label>{getFormInputLabel(key)}</Label>
-      <BodyShort>{`${val}`}</BodyShort>
+      <BodyShort>{getFormValueReadable(key, val)}</BodyShort>
     </div>)}
     <Controller
       name="confirmationPanel"
@@ -168,7 +182,7 @@ const StepSummary = ({data, control, errors}: SummaryProps) =>
       rules={{
         required: "Kryss av for å bekrefte",
       }}
-      render={({ field: { name, value, onChange } }) => (
+      render={({field: {name, value, onChange}}) => (
         <ConfirmationPanel
           id={name}
           name={name}
@@ -180,6 +194,7 @@ const StepSummary = ({data, control, errors}: SummaryProps) =>
       )}
     />
   </>)
+}
 
 
 const Utland = (): JSX.Element => {
