@@ -1,7 +1,14 @@
 {
   "utland": {
     "pageTitle": "Søknad om å beholde arbeidsavklaringspenger under opphold i utlandet",
-    "guideText": "Du må som hovedregel oppholde deg i Norge eller i et annet EU/EØS-land for å få AAP. Er du statsborger i et EU/EØS-land, må du søke om å motta AAP i en begrenset periode hvis du oppholder deg utenfor et EU/EØS-land. Du må sørge for at du kan gjennomføre den aktiviteten du har avtalt medNAV ved utenlandsopphold.",
+    "steps": {
+      "introduction": {
+        "guideText": "Du trenger ikke å søke hvis du er EU/EØS-borger eller sveitsisk statsborger og skal oppholde deg innenfor EU/EØS eller Sveits."
+      },
+      "country": {
+        "guideText": "Du må som hovedregel oppholde deg i Norge eller i et annet EU/EØS-land for å få AAP. Er du statsborger i et EU/EØS-land, må du søke om å motta AAP i en begrenset periode hvis du oppholder deg utenfor et EU/EØS-land. Du må sørge for at du kan gjennomføre den aktiviteten du har avtalt medNAV ved utenlandsopphold."
+      }
+    },
     "form": {
       "country": {
         "label": "Landet du skal oppholde deg i",

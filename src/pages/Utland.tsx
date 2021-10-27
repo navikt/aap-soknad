@@ -45,11 +45,29 @@ const FormErrorSummary = ({ errors }: FieldErrors) => {
     </ErrorSummary>
   );
 };
+const getButtonText = (index: number) => {
+  switch(index) {
+  case 0:
+    return 'Fortsett til søknaden';
+  case 3:
+    return 'Send søknaden';
+  default:
+    return 'Neste'
+  }
+}
+
 const getFormInputLabel = (key: string) => {
   // @ts-ignore
   return Texts?.form?.[key]?.label
 }
-const lastStepIndex = 2;
+const lastStepIndex = 3;
+
+const StepIntroduction = () =>
+  (<>
+    <GuidePanel poster>
+      {Texts?.steps?.introduction?.guideText}
+    </GuidePanel>
+  </>)
 
 interface SelectCountryProps<T> extends UseControllerProps<T> {
   errors: FieldErrors;
@@ -58,7 +76,7 @@ interface SelectCountryProps<T> extends UseControllerProps<T> {
 const StepSelectCountry = <T extends FieldValues>({ countries, name, control, errors }: SelectCountryProps<T>) =>
   (<>
     <GuidePanel poster>
-      {Texts?.guideText}
+      {Texts?.steps?.country?.guideText}
     </GuidePanel>
     <Controller
       name={name}
@@ -140,10 +158,10 @@ const StepSummary = ({data, control, errors}: SummaryProps) =>
     <Heading size="medium" level="2" >
       {Texts?.summary}
     </Heading>
-    {Object.entries(data).filter(([key, val]) => !!val).map(([key, val]) => <>
+    {Object.entries(data).filter(([key, val]) => !!val).map(([key, val]) => <div key={key}>
       <Label>{getFormInputLabel(key)}</Label>
       <BodyShort>{`${val}`}</BodyShort>
-    </>)}
+    </div>)}
     <Controller
       name="confirmationPanel"
       control={control}
@@ -208,18 +226,23 @@ const Utland = (): JSX.Element => {
     <SoknadWizard
       title={Texts?.pageTitle}
     >
-      <form onSubmit={handleSubmit( data => onSubmitClick(data))} className="soknad-utland-form">
-        {currentStepIndex === 0 &&
+      <>
+        {currentStepIndex === 0
+          ? <StepIntroduction />
+          : null}
+        <form onSubmit={handleSubmit( data => onSubmitClick(data))} className="soknad-utland-form">
+          {currentStepIndex === 1 &&
           <StepSelectCountry name="country" control={control} errors={errors} countries={countryList}/>}
-        {currentStepIndex === 1 &&
+          {currentStepIndex === 2 &&
           <StepSelectTravelPeriod control={control} errors={errors} getValues={getValues} />}
-        {currentStepIndex === 2 &&
+          {currentStepIndex === 3 &&
           <StepSummary control={control} errors={errors} data={soknadData} />}
-        <FormErrorSummary errors={errors} />
-        <Button variant="primary" type="submit">
-          Send inn
-        </Button>
-      </form>
+          <FormErrorSummary errors={errors} />
+          <Button variant="primary" type="submit">
+            {getButtonText(currentStepIndex)}
+          </Button>
+        </form>
+      </>
     </SoknadWizard>
   );
 };
