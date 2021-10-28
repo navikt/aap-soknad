@@ -13,3 +13,14 @@ fetchMock.get(
     delay: 1000
   }
 );
+
+fetchMock.post(
+  '/aap/api/innsending/utland',
+  {
+    status: 200,
+    body: {}
+  },
+  {
+    delay: 3000
+  }
+);

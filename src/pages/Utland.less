@@ -1,6 +1,17 @@
 .soknad-utland-form {
+  width: 100%;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   row-gap: var(--navds-spacing-3);
+
+  .navds-select__container {
+    max-width: 350px;
+  }
+
+  .navds-form-field {
+    &.datovelger {
+      max-width: calc(10ch + 1ch);
+    }
+  }
 }
