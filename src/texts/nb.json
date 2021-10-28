@@ -7,6 +7,10 @@
       },
       "country": {
         "guideText": "Du må som hovedregel oppholde deg i Norge eller i et annet EU/EØS-land for å få AAP. Er du statsborger i et EU/EØS-land, må du søke om å motta AAP i en begrenset periode hvis du oppholder deg utenfor et EU/EØS-land. Du må sørge for at du kan gjennomføre den aktiviteten du har avtalt medNAV ved utenlandsopphold."
+      },
+      "kvittering": {
+        "guideText": "Takk, søknaden er mottatt. Nå tar vi oss av resten =).",
+        "error": "Noe gikk galt. Vennligst prøv igjen"
       }
     },
     "form": {

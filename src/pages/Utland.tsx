@@ -11,6 +11,7 @@ import {
   Label,
   BodyShort,
   Heading,
+  Alert,
 } from "@navikt/ds-react";
 import { Controller, useForm, FieldErrors, FieldValues, UseControllerProps } from "react-hook-form";
 import SoknadWizard from "../layouts/SoknadWizard";
@@ -195,7 +196,19 @@ const StepSummary = ({data, control, errors}: SummaryProps) => {
     />
   </>)
 }
-
+interface KvitteringProps {
+  success?: boolean;
+}
+const StepKvittering = ({ success }: KvitteringProps) =>
+  (<>
+    {success
+      ? <GuidePanel>
+        {Texts?.steps?.kvittering?.guideText}
+      </GuidePanel>
+      : <Alert variant="error" >
+        {Texts?.steps?.kvittering?.error}
+      </Alert>}
+  </>);
 
 const Utland = (): JSX.Element => {
   const [currentStepIndex, setCurrentStepIndex] = useState<number>(0);
@@ -206,6 +219,7 @@ const Utland = (): JSX.Element => {
     confirmationPanel: false,
   });
   const [countryList, setCountryList] = useState<string[][]>([]);
+  const [soknadKvittering, setSoknadKvittering] = useState<KvitteringProps>({});
   useEffect(() => {
     const getCountries = () => {
       const list = Object.entries(countries.getNames("nb", {select: "official"}))
@@ -226,26 +240,38 @@ const Utland = (): JSX.Element => {
       confirmationPanel: false,
     },
   });
-  const onSubmitClick = (data: FormValues) => {
+  const onSubmitClick = async (data: FormValues) => {
     if (currentStepIndex < lastStepIndex) {
       console.log(data);
       setSoknadData({...data});
       setCurrentStepIndex(currentStepIndex + 1);
     } else {
-      // TODO: Post data
-      console.log(data);
+      const soknadResponse = await fetch('/aap/api/innsending/utland', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(soknadData)
+      });
+      if(soknadResponse.status === 200) {
+        setSoknadKvittering({success: true});
+      } else {
+        setSoknadKvittering({success: false});
+      }
+      setCurrentStepIndex(currentStepIndex + 1);
     }
   }
+  const onBackButtonClick = () => setCurrentStepIndex(currentStepIndex - 1);
+
 
   return (
     <SoknadWizard
       title={Texts?.pageTitle}
     >
       <>
-        {currentStepIndex === 0
-          ? <StepIntroduction />
-          : null}
-        <form onSubmit={handleSubmit( data => onSubmitClick(data))} className="soknad-utland-form">
+        {currentStepIndex === 0 &&
+          <StepIntroduction />}
+        <form onSubmit={handleSubmit( async data => await onSubmitClick(data))} className="soknad-utland-form">
           {currentStepIndex === 1 &&
           <StepSelectCountry name="country" control={control} errors={errors} countries={countryList}/>}
           {currentStepIndex === 2 &&
@@ -257,6 +283,9 @@ const Utland = (): JSX.Element => {
             {getButtonText(currentStepIndex)}
           </Button>
         </form>
+        {currentStepIndex === 4 &&
+        <StepKvittering success={soknadKvittering.success} />}
+        <Button variant="tertiary" onClick={onBackButtonClick}>Tilbake</Button>
       </>
     </SoknadWizard>
   );
