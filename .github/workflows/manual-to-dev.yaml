@@ -1,7 +1,7 @@
-name: "Build and deploy aap-soknad"
+name: "Manual deploy to dev"
 on:
   workflow_dispatch:
-    
+
 env:
   "IMAGE": "ghcr.io/${{ github.repository }}:${{ github.sha }}"
 jobs:
