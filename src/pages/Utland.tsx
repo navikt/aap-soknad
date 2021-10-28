@@ -2,8 +2,6 @@ import React, { useState, useEffect } from "react";
 import countries from "i18n-iso-countries";
 import "./Utland.less";
 import {
-  Select,
-  ConfirmationPanel,
   ErrorSummary,
   ErrorSummaryItem,
   GuidePanel,
@@ -13,13 +11,15 @@ import {
   Heading,
   Alert,
 } from "@navikt/ds-react";
-import { Controller, useForm, FieldErrors, FieldValues, UseControllerProps } from "react-hook-form";
+import { useForm, FieldErrors } from "react-hook-form";
 import SoknadWizard from "../layouts/SoknadWizard";
-import DatoVelger from "../components/datovelger";
 import { utland as Texts } from "../texts/nb.json";
 import { vFirstDateIsAfterSecondDate } from "../utils/formValidation";
 import {format} from "date-fns";
 import {nb} from "date-fns/locale";
+import ControlConfirmationPanel from "../components/input/ControlConfirmationPanel";
+import ControlDatoVelger from "../components/input/ControlDatoVelger";
+import ControlSelect from "../components/input/ControlSelect";
 
 // Support norwegian & english languages.
 countries.registerLocale(require("i18n-iso-countries/langs/en.json"));
@@ -72,35 +72,25 @@ const StepIntroduction = () =>
     </GuidePanel>
   </>)
 
-interface SelectCountryProps<T> extends UseControllerProps<T> {
+interface SelectCountryProps {
+  control: any;
   errors: FieldErrors;
   countries: string[][];
 }
-const StepSelectCountry = <T extends FieldValues>({ countries, name, control, errors }: SelectCountryProps<T>) =>
+const StepSelectCountry = ({ countries, control, errors }: SelectCountryProps) =>
   (<>
     <GuidePanel poster>
       {Texts?.steps?.country?.guideText}
     </GuidePanel>
-    <Controller
-      name={name}
+    <ControlSelect
+      name="country"
       control={control}
-      rules={{
-        required: Texts?.form?.country?.required,
-        validate: (value) => value !== "none" || Texts?.form?.country?.required
-      }}
-      render={({ field: { name, value, onChange } }) => (
-        <Select
-          name={name}
-          label={Texts?.form?.country?.label}
-          value={value}
-          onChange={onChange}
-          error={errors.country?.message}
-        >
-          <option key="none" value="none">Velg land</option>
-          { countries.map(([key, val]) => <option key={key} value={key}>{val}</option>) }
-        </Select>
-      )}
-    />
+      error={errors.country?.message}
+      required={Texts?.form?.country?.required}
+      validate={(value) => value !== "none" || Texts?.form?.country?.required}
+    >
+      { countries.map(([key, val]) => <option key={key} value={key}>{val}</option>) }
+    </ControlSelect>
   </>)
 
 interface SelectTravelPeriodProps {
@@ -110,44 +100,22 @@ interface SelectTravelPeriodProps {
 }
 const StepSelectTravelPeriod = ({ control, errors, getValues }: SelectTravelPeriodProps) =>
   (<>
-    <Controller
-      name={"fromDate"}
+    <ControlDatoVelger
+      name="fromDate"
       control={control}
-      rules={{
-        required: Texts?.form?.fromDate?.required,
-      }}
-      render={({ field: { name, value, onChange } }) => (
-        <DatoVelger
-          id={name}
-          name={"fromDate"}
-          label={Texts?.form?.fromDate?.label}
-          value={value}
-          onChange={onChange}
-          error={errors.fromDate?.message}
-        />
-      )}
+      error={errors.fromDate?.message}
+      required={Texts?.form?.fromDate?.required}
     />
-    <Controller
+    <ControlDatoVelger
       name="toDate"
       control={control}
-      rules={{
-        required: Texts?.form?.toDate?.required,
-        validate: () =>
-          vFirstDateIsAfterSecondDate(
-            getValues('toDate'),
-            getValues('fromDate')
-          ),
-      }}
-      render={({ field: { name, value, onChange } }) => (
-        <DatoVelger
-          id={name}
-          name={name}
-          label={Texts?.form?.fromDate?.label}
-          value={value}
-          onChange={onChange}
-          error={errors.toDate?.message}
-        />
-      )}
+      error={errors.toDate?.message}
+      required={Texts?.form?.toDate?.required}
+      validate={() =>
+        vFirstDateIsAfterSecondDate(
+          getValues('toDate'),
+          getValues('fromDate')
+        )}
     />
   </>)
 
@@ -177,23 +145,7 @@ const StepSummary = ({data, control, errors}: SummaryProps) => {
       <Label>{getFormInputLabel(key)}</Label>
       <BodyShort>{getFormValueReadable(key, val)}</BodyShort>
     </div>)}
-    <Controller
-      name="confirmationPanel"
-      control={control}
-      rules={{
-        required: "Kryss av for å bekrefte",
-      }}
-      render={({field: {name, value, onChange}}) => (
-        <ConfirmationPanel
-          id={name}
-          name={name}
-          label={Texts?.form?.confirmationPanel?.label}
-          checked={value}
-          onChange={onChange}
-          error={errors.confirmationPanel?.message}
-        />
-      )}
-    />
+    <ControlConfirmationPanel control={control} error={errors.confirmationPanel?.message} />
   </>)
 }
 interface KvitteringProps {
@@ -273,7 +225,7 @@ const Utland = (): JSX.Element => {
           <StepIntroduction />}
         <form onSubmit={handleSubmit( async data => await onSubmitClick(data))} className="soknad-utland-form">
           {currentStepIndex === 1 &&
-          <StepSelectCountry name="country" control={control} errors={errors} countries={countryList}/>}
+          <StepSelectCountry control={control} errors={errors} countries={countryList}/>}
           {currentStepIndex === 2 &&
           <StepSelectTravelPeriod control={control} errors={errors} getValues={getValues} />}
           {currentStepIndex === 3 &&
