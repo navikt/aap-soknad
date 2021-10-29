@@ -3,7 +3,7 @@ import "./App.less";
 // @ts-ignore
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { Heading } from "@navikt/ds-react";
-import Utland from "./pages/Utland";
+import Utland from "./pages/utland/Utland";
 import Me from "./pages/Me";
 
 const App = (): JSX.Element => {

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "./Utland.less";
+import "./utland/Utland.less";
 import {
   Heading,
   Ingress,
