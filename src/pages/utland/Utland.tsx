@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import countries from "i18n-iso-countries";
 import "./Utland.less";
 import {
@@ -7,16 +7,17 @@ import {
   Button,
 } from "@navikt/ds-react";
 import { useForm, FieldErrors } from "react-hook-form";
+import { ModalContext } from "../../context/modalContext";
 import SoknadWizard, {Step} from "../../layouts/SoknadWizard";
 import { utland as Texts } from "../../texts/nb.json";
 import {
-  KvitteringProps,
   StepIntroduction,
   StepKvittering,
   StepSelectCountry,
   StepSelectTravelPeriod,
   StepSummary
 } from "./Steps";
+import {fetchPOST} from "../../api/useFetch";
 
 // Support norwegian & english languages.
 countries.registerLocale(require("i18n-iso-countries/langs/en.json"));
@@ -79,12 +80,21 @@ const getButtonText = (name: string) => {
   }
 }
 
+const showButton = (name: string) => {
+  switch(name) {
+  case StepName.RECEIPT:
+    return false;
+  default:
+    return true;
+  }
+}
+
 
 const Utland = (): JSX.Element => {
   const [currentStepIndex, setCurrentStepIndex] = useState<number>(0);
   const [soknadData, setSoknadData] = useState<FormValues>(defaultForm);
   const [countryList, setCountryList] = useState<string[][]>([]);
-  const [soknadKvittering, setSoknadKvittering] = useState<KvitteringProps>({});
+  const { handleNotificationModal } = useContext(ModalContext);
   useEffect(() => {
     const getCountries = () => {
       const list = Object.entries(countries.getNames("nb", {select: "official"}))
@@ -99,28 +109,28 @@ const Utland = (): JSX.Element => {
     formState: { errors },
   } = useForm<FormValues>({ defaultValues: defaultForm});
   const onSubmitClick = async (data: FormValues) => {
-    if (currentStepIndex < lastStepIndex) {
+    console.log(currentStepIndex, lastStepIndex)
+    if (currentStepNameIs(StepName.SUMMARY)) {
+      const postResponse = await fetchPOST('/aap/api/innsending/utland', soknadData);
+      console.log('postresponse', postResponse);
+      if(postResponse.ok) {
+        setCurrentStepIndex(currentStepIndex + 1);
+      } else {
+        // TODO global showError component?
+        handleNotificationModal({
+          heading: 'En feil har oppstått!',
+          text: 'Vi beklager. Venligst send inn søknaden på nytt, eller prøv igjen senere',
+          type: 'error'})
+      }
+    } else {
       console.log(data);
       setSoknadData({...data});
-      setCurrentStepIndex(currentStepIndex + 1);
-    } else {
-      const soknadResponse = await fetch('/aap/api/innsending/utland', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(soknadData)
-      });
-      if(soknadResponse.status === 200) {
-        setSoknadKvittering({success: true});
-      } else {
-        setSoknadKvittering({success: false});
-      }
       setCurrentStepIndex(currentStepIndex + 1);
     }
   }
   const onBackButtonClick = () => setCurrentStepIndex(currentStepIndex - 1);
   const getStepName = (index: number) => stepList[index]?.name;
+  const currentStepNameIs = (name: StepName) => name === getStepName(currentStepIndex);
 
   return (
     <SoknadWizard
@@ -129,22 +139,28 @@ const Utland = (): JSX.Element => {
       currentStepIndex={currentStepIndex}
     >
       <>
-        {currentStepIndex === 0 &&
+        {currentStepNameIs(StepName.INTRODUCTION) &&
           <StepIntroduction />}
         <form onSubmit={handleSubmit( async data => await onSubmitClick(data))} className="soknad-utland-form">
-          {currentStepIndex === 1 &&
+
+          {currentStepNameIs(StepName.COUNTRY) &&
           <StepSelectCountry control={control} errors={errors} countries={countryList}/>}
-          {currentStepIndex === 2 &&
+
+          {currentStepNameIs(StepName.PERIOD) &&
           <StepSelectTravelPeriod control={control} errors={errors} getValues={getValues} />}
-          {currentStepIndex === 3 &&
+
+          {currentStepNameIs(StepName.SUMMARY) &&
           <StepSummary control={control} errors={errors} data={soknadData} />}
+
           <FormErrorSummary errors={errors} />
+
+          {showButton(getStepName(currentStepIndex)) &&
           <Button variant="primary" type="submit">
             {getButtonText(getStepName(currentStepIndex))}
-          </Button>
+          </Button>}
         </form>
-        {currentStepIndex === 4 &&
-        <StepKvittering success={soknadKvittering.success} />}
+        {currentStepNameIs(StepName.RECEIPT) &&
+        <StepKvittering />}
         <Button variant="tertiary" onClick={onBackButtonClick}>Tilbake</Button>
       </>
     </SoknadWizard>

@@ -1,4 +1,4 @@
-import {Alert, BodyShort, GuidePanel, Heading, Label} from "@navikt/ds-react";
+import { BodyShort, GuidePanel, Heading, Label} from "@navikt/ds-react";
 import {utland as Texts} from "../../texts/nb.json";
 import {FieldErrors} from "react-hook-form";
 import ControlSelect from "../../components/input/ControlSelect";
@@ -97,16 +97,7 @@ export const StepSummary = ({data, control, errors}: SummaryProps) => {
     <ControlConfirmationPanel control={control} error={errors.confirmationPanel?.message} />
   </>)
 }
-export interface KvitteringProps {
-  success?: boolean;
-}
-export const StepKvittering = ({ success }: KvitteringProps) =>
-  (<>
-    {success
-      ? <GuidePanel>
-        {Texts?.steps?.kvittering?.guideText}
-      </GuidePanel>
-      : <Alert variant="error" >
-        {Texts?.steps?.kvittering?.error}
-      </Alert>}
-  </>);
+export const StepKvittering = () =>
+  <GuidePanel>
+    {Texts?.steps?.kvittering?.guideText}
+  </GuidePanel>;

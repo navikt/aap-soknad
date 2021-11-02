@@ -27,32 +27,41 @@ export const useFetchGET = (url: string) => {
   return {data, isLoading, error}
 };
 
-export const useFetchPOST = (url: string, payload: object) => {
+export const useFetchPOST = () => {
   const [data, setData] = useState(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>('');
 
-  useEffect(() => {
-    const abortController = new AbortController();
-    const fetchPost = async () => {
-      setIsLoading(true);
-      try {
-        const res = await fetch(url, {
-          method: 'POST',
-          body: JSON.stringify(payload)
-        });
-        const data = await res.json();
-        data && setData(data);
-        setIsLoading(false);
-      } catch (e) {
-        setError(`useFetchPOST: ${e}`);
-        setIsLoading(false);
-      }
+  const post = async (url: string, payload: object) => {
+    setIsLoading(true);
+    try {
+      const res = await fetch(url, {
+        method: 'POST',
+        body: JSON.stringify(payload)
+      });
+      const data = await res.json();
+      data && setData(data);
+      setIsLoading(false);
+    } catch (e) {
+      setError(`useFetchPOST: ${e}`);
+      setIsLoading(false);
     }
-    fetchPost();
-    return () => {
-      abortController.abort();
+  };
+  return {data, isLoading, post, error}
+};
+export const fetchPOST = async (url: string, payload: object) => {
+  try {
+    const res = await fetch(url, {
+      method: 'POST',
+      body: JSON.stringify(payload)
+    });
+    if(res.ok) {
+      const data = await res.json();
+      return { ok: res.ok, data};
+    } else {
+      return {ok: res.ok, error: res.statusText};
     }
-  }, [url, payload])
-  return {data, isLoading, error}
+  } catch (e) {
+    return { error: `useFetchPOST: ${e}` };
+  }
 };

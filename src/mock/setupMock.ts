@@ -17,7 +17,7 @@ fetchMock.get(
 fetchMock.post(
   '/aap/api/innsending/utland',
   {
-    status: 200,
+    status: 500,
     body: {}
   },
   {
