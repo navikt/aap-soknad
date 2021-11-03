@@ -1,0 +1,26 @@
+apiVersion: "nais.io/v1alpha1"
+kind: "Application"
+metadata:
+  name: "aap-soknad"
+  namespace: "aap"
+  labels:
+    "team": "aap"
+spec:
+  image: {{image}}
+  port: 3000
+  ingresses:
+    - "https://aap-soknad.labs.nais.io/"
+  liveness:
+    path: "/aap/internal/isAlive"
+    initialDelay: 20
+    timeout: 60
+  readiness:
+    path: "/aap/internal/isready"
+    initialDelay: 20
+    timeout: 60
+  replicas:
+    min: 2
+    max: 2
+  env:
+    - name: "REACT_APP_USE_MOCK"
+      value: "true"

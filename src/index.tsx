@@ -4,7 +4,7 @@ import "./index.css";
 import App from "./App";
 import { setupLogger } from './utils/logger';
 
-if (process.env.NODE_ENV === 'development') {
+if (process.env.REACT_APP_USE_MOCK) {
   require('./mock/setupMock');
 }
 

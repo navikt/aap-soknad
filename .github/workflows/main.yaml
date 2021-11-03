@@ -50,6 +50,17 @@ jobs:
           "CLUSTER": "dev-gcp"
           "RESOURCE": ".nais/nais.yaml"
           "VARS": ".nais/dev.yaml"
+  "deployAppToLabs":
+    name: "Deploy app to labs"
+    needs: "build"
+    runs-on: "ubuntu-18.04"
+    steps:
+      - uses: "actions/checkout@v2"
+      - name: "Deploy to LABS"
+        uses: "nais/deploy/actions/deploy@v1"
+        env:
+          "CLUSTER": "labs-gcp"
+          "RESOURCE": ".nais/labs-gcp.yaml"
   "deployAlertsToDev":
     name: "Deploy alerts to dev"
     needs: "build"
