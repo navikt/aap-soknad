@@ -23,7 +23,7 @@ const startServer = () => {
   server.use(`${config.BASE_PATH}/loginservice`, loginserviceCallback);
 
   // Enforce authentication
-  server.use(`${config.BASE_PATH}/*`, enforceIDPortenAuthenticationMiddleware);
+  !process.env.REACT_APP_USE_MOCK && server.use(`${config.BASE_PATH}/*`, enforceIDPortenAuthenticationMiddleware);
 
   // Reverse proxy to add tokenx header for api calls
   tokenXProxy(`${config.BASE_PATH}/api`, server);
