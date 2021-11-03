@@ -30,13 +30,15 @@ const startServer = () => {
 
   // Render app
   server.get(`${config.BASE_PATH}/*`, (req: any, res: any) =>
-    getHtmlWithDecorator(`${BUILD_PATH}/index.html`)
-      .then((html) => {
-        res.send(html);
-      })
-      .catch((e) => {
-        res.status(500).send(e);
-      })
+    process.env.REACT_APP_USE_MOCK
+      ? res.render(`${BUILD_PATH}/index.html`)
+      : getHtmlWithDecorator(`${BUILD_PATH}/index.html`)
+        .then((html) => {
+          res.send(html);
+        })
+        .catch((e) => {
+          res.status(500).send(e);
+        })
   );
 
   server.listen(PORT, () => {
