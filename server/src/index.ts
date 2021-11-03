@@ -31,7 +31,7 @@ const startServer = () => {
   // Render app
   server.get(`${config.BASE_PATH}/*`, (req: any, res: any) =>
     process.env.REACT_APP_USE_MOCK
-      ? res.render(`${BUILD_PATH}/index.html`)
+      ? res.sendFile(path.join(BUILD_PATH, 'index.html'))
       : getHtmlWithDecorator(`${BUILD_PATH}/index.html`)
         .then((html) => {
           res.send(html);
