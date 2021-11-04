@@ -21,9 +21,17 @@ jobs:
         with:
           path: 'node_modules'
           key: "${{ runner.os }}-modules-${{ hashFiles('yarn.lock') }}"
+      - name: "Cache server node_modules"
+        id: "cache-server-node-modules"
+        uses: "actions/cache@v2"
+        with:
+          path: 'server/node_modules'
+          key: "${{ runner.os }}-modules-${{ hashFiles('server/yarn.lock') }}"
       - name: "install dependencies Yarn"
+        if: "steps.cache-node-modules.outputs.cache-hit != 'true'"
         run: "yarn install --frozen-lockfile"
       - name: "install server dependencies Yarn"
+        if: "steps.cache-server-node-modules.outputs.cache-hit != 'true'"
         run: "yarn install --frozen-lockfile"
         working-directory: "server"
       - name: "server tests"
