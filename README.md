@@ -1,35 +1,20 @@
-# EsLint autofix
-
-IntelliJ
-https://www.jetbrains.com/help/idea/eslint.html#ws_eslint_configure_run_eslint_on_save
 
 
-# Create-React-App eksempel prosjekt
+# AAP Søknad
 
-Basert på create-react-app fra nav-frontend-moduler
+Basert på create-react-app fra nav-frontend-moduler. Kjører med mock lokalt og server i dev og prod for autentisering.
 
 Satt opp for å støtte lasting av `less` filer ved hjelp av `craco-less` https://github.com/DocSpring/craco-less#readme.
 
 Prosjektet kjører `pretty-quick` on-`git commit` for automatisk kjøring av prettier, samt linting av js/ts og less on-`git push`.
 
-Development og linting:
-
+Kom i gang lokalt:
 ```
 yarn install
 yarn start
 ```
+Push til master bygges og deployes til dev-gcp.
+# EsLint autofix
 
-Bygging for produksjon:
-
-```
-yarn install
-yarn run build
-```
-
-For å kjøre build lokalt kan `serve` brukes:
-https://www.npmjs.com/package/serve
-
-```
-yarn install -g serve
-serve build
-```
+IntelliJ
+https://www.jetbrains.com/help/idea/eslint.html#ws_eslint_configure_run_eslint_on_save
