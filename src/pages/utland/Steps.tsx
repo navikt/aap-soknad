@@ -5,10 +5,9 @@ import ControlSelect from "../../components/input/ControlSelect";
 import ControlDatoVelger from "../../components/input/ControlDatoVelger";
 import {vFirstDateIsAfterSecondDate} from "../../utils/formValidation";
 import countries from "i18n-iso-countries";
-import {format} from "date-fns";
-import {nb} from "date-fns/locale";
 import ControlConfirmationPanel from "../../components/input/ControlConfirmationPanel";
 import React from "react";
+import {formatDate} from "../../utils/date";
 
 export const StepIntroduction = () =>
   (<>
@@ -80,7 +79,7 @@ export const StepSummary = ({data, control, errors}: SummaryProps) => {
       return countries.getName(`${val}`, 'nb', {select: 'official'});
     case 'fromDate':
     case 'toDate':
-      return format(val, 'dd.MM.yyyy', { locale: nb });
+      return formatDate(val, 'dd.MM.yyyy');
     default:
       return val;
     }

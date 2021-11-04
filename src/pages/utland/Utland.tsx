@@ -17,7 +17,8 @@ import {
   StepSelectTravelPeriod,
   StepSummary
 } from "./Steps";
-import {fetchPOST} from "../../api/useFetch";
+import {fetchPOST, useFetchPOST} from "../../api/useFetch";
+import {formatDate} from "../../utils/date";
 
 // Support norwegian & english languages.
 countries.registerLocale(require("i18n-iso-countries/langs/en.json"));
@@ -111,12 +112,18 @@ const Utland = (): JSX.Element => {
   const onSubmitClick = async (data: FormValues) => {
     console.log(currentStepIndex, lastStepIndex)
     if (currentStepNameIs(StepName.SUMMARY)) {
-      const postResponse = await fetchPOST('/aap/api/innsending/utland', soknadData);
+      const postResponse = await fetchPOST('/aap/api/innsending/utland', {
+        land: soknadData?.country,
+        periode: {
+          fom: formatDate(soknadData.fromDate,'yyyy-mm-dd'),
+          tom: formatDate(soknadData.toDate, 'yyyy-mm-dd')
+        }
+      });
       console.log('postresponse', postResponse);
       if(postResponse.ok) {
         setCurrentStepIndex(currentStepIndex + 1);
       } else {
-        // TODO global showError component?
+        // TODO frontend-error error
         handleNotificationModal({
           heading: 'En feil har oppstått!',
           text: 'Vi beklager. Venligst send inn søknaden på nytt, eller prøv igjen senere',

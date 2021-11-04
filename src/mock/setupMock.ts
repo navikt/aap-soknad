@@ -17,8 +17,8 @@ fetchMock.get(
 fetchMock.post(
   '/aap/api/innsending/utland',
   {
-    status: 500,
-    body: {}
+    status: 200,
+    body: {id: 12345}
   },
   {
     delay: 3000

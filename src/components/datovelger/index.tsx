@@ -1,10 +1,11 @@
 import React from "react";
 import DayPickerInput from "react-day-picker/DayPickerInput";
-import { format, parse } from "date-fns";
+import { parse } from "date-fns";
 import { nb } from "date-fns/locale";
 import "react-day-picker/lib/style.css";
 import "./datovelger.less";
 import { TextField } from "@navikt/ds-react";
+import { formatDate } from "../../utils/date"
 
 const parseDate = (str: string, format: string, locale: string) => {
   try {
@@ -13,8 +14,8 @@ const parseDate = (str: string, format: string, locale: string) => {
     console.error("parseDate error", err);
   }
 };
-const formatDate = (date: Date, dateFormat: string, locale: string) =>
-  format(date, dateFormat, { locale: nb });
+const wrapFormatDate = (date: Date, dateFormat: string, locale: string) =>
+  formatDate(date, dateFormat);
 
 interface DatovelgerProps {
   onChange: (nyDato: Date) => void;
@@ -40,7 +41,7 @@ const datovelger = ({
       value={value}
       dayPickerProps={{ locale: "nb" }}
       parseDate={parseDate}
-      formatDate={formatDate}
+      formatDate={wrapFormatDate}
       onDayChange={onChange}
       inputProps={{ name, id }}
       component={(props: any) => (
