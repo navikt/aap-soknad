@@ -115,8 +115,8 @@ const Utland = (): JSX.Element => {
       const postResponse = await fetchPOST('/aap/api/innsending/utland', {
         land: soknadData?.country,
         periode: {
-          fom: formatDate(soknadData.fromDate,'yyyy-mm-dd'),
-          tom: formatDate(soknadData.toDate, 'yyyy-mm-dd')
+          fom: formatDate(soknadData.fromDate,'yyyy-MM-dd'),
+          tom: formatDate(soknadData.toDate, 'yyyy-MM-dd')
         }
       });
       console.log('postresponse', postResponse);

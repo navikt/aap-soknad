@@ -62,7 +62,7 @@ export const fetchPOST = async (url: string, payload: object, opts: Options = {}
     const res = await fetch(url, {
       method: 'POST',
       body: JSON.stringify(payload),
-      ...headers
+      headers
     });
     if(res.ok) {
       const data = await res.json();
