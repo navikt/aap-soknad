@@ -17,7 +17,7 @@ import {
   StepSelectTravelPeriod,
   StepSummary
 } from "./Steps";
-import {fetchPOST, useFetchPOST} from "../../api/useFetch";
+import {fetchPOST} from "../../api/useFetch";
 import {formatDate} from "../../utils/date";
 
 // Support norwegian & english languages.
