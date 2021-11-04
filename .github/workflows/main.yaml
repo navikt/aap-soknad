@@ -63,8 +63,6 @@ jobs:
           push: "true"
           cache-from: "type=gha"
           cache-to: "type=gha,mode=max"
-      - name: "Build and push Docker image"
-        run: "docker build --pull --tag ${IMAGE} . && docker push ${IMAGE}"
   "deployAppToDev":
     name: "Deploy app to dev"
     needs: "build"
