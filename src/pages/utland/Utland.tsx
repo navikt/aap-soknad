@@ -149,17 +149,17 @@ const Utland = (): JSX.Element => {
     >
       <>
         {currentStepNameIs(StepName.INTRODUCTION) &&
-          <StepIntroduction texts={getText('steps.introduction')}/>}
+          <StepIntroduction texts={getText} />}
         <form onSubmit={handleSubmit( async data => await onSubmitClick(data))} className="soknad-utland-form">
 
           {currentStepNameIs(StepName.COUNTRY) &&
-          <StepSelectCountry control={control} errors={errors} countries={countryList}/>}
+          <StepSelectCountry texts={getText} control={control} errors={errors} countries={countryList}/>}
 
           {currentStepNameIs(StepName.PERIOD) &&
-          <StepSelectTravelPeriod control={control} errors={errors} getValues={getValues} />}
+          <StepSelectTravelPeriod texts={getText} control={control} errors={errors} getValues={getValues} />}
 
           {currentStepNameIs(StepName.SUMMARY) &&
-          <StepSummary control={control} errors={errors} data={soknadData} />}
+          <StepSummary texts={getText} control={control} errors={errors} data={soknadData} />}
 
           <FormErrorSummary errors={errors} />
 
@@ -169,7 +169,7 @@ const Utland = (): JSX.Element => {
           </Button>}
         </form>
         {currentStepNameIs(StepName.RECEIPT) &&
-        <StepKvittering />}
+        <StepKvittering texts={getText} />}
         <Button variant="tertiary" onClick={onBackButtonClick}>Tilbake</Button>
       </>
     </SoknadWizard>
