@@ -19,6 +19,7 @@ import {
 } from "./Steps";
 import {fetchPOST} from "../../api/useFetch";
 import {formatDate} from "../../utils/date";
+import useTexts from "../../hooks/useTexts";
 
 // Support norwegian & english languages.
 countries.registerLocale(require("i18n-iso-countries/langs/en.json"));
@@ -95,6 +96,7 @@ const Utland = (): JSX.Element => {
   const [currentStepIndex, setCurrentStepIndex] = useState<number>(0);
   const [soknadData, setSoknadData] = useState<FormValues>(defaultForm);
   const [countryList, setCountryList] = useState<string[][]>([]);
+  const { getText} = useTexts('utland');
   const { handleNotificationModal } = useContext(ModalContext);
   useEffect(() => {
     const getCountries = () => {
@@ -147,7 +149,7 @@ const Utland = (): JSX.Element => {
     >
       <>
         {currentStepNameIs(StepName.INTRODUCTION) &&
-          <StepIntroduction />}
+          <StepIntroduction texts={getText('steps.introduction')}/>}
         <form onSubmit={handleSubmit( async data => await onSubmitClick(data))} className="soknad-utland-form">
 
           {currentStepNameIs(StepName.COUNTRY) &&

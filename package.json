@@ -7,6 +7,7 @@
     "@navikt/ds-css": "^0.8.3",
     "@navikt/ds-react": "^0.8.3",
     "@navikt/frontendlogger": "^2.0.0",
+    "@navikt/nav-dekoratoren-moduler": "^1.6.5",
     "classnames": "^2.2.6",
     "craco": "^0.0.3",
     "craco-less": "^1.20.0",

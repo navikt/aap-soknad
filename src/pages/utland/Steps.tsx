@@ -9,10 +9,13 @@ import ControlConfirmationPanel from "../../components/input/ControlConfirmation
 import React from "react";
 import {formatDate} from "../../utils/date";
 
-export const StepIntroduction = () =>
+interface IntroductionProps {
+  texts: any;
+}
+export const StepIntroduction = ({texts}: IntroductionProps) =>
   (<>
     <GuidePanel poster>
-      {Texts?.steps?.introduction?.guideText}
+      {texts?.guideText}
     </GuidePanel>
   </>)
 
