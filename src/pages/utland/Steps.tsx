@@ -1,5 +1,4 @@
 import { BodyShort, GuidePanel, Heading, Label} from "@navikt/ds-react";
-import {utland as Texts} from "../../texts/nb.json";
 import {FieldErrors} from "react-hook-form";
 import ControlSelect from "../../components/input/ControlSelect";
 import ControlDatoVelger from "../../components/input/ControlDatoVelger";
@@ -9,52 +8,57 @@ import ControlConfirmationPanel from "../../components/input/ControlConfirmation
 import React from "react";
 import {formatDate} from "../../utils/date";
 
-export const StepIntroduction = () =>
+interface IntroductionProps {
+  texts: any;
+}
+export const StepIntroduction = ({texts}: IntroductionProps) =>
   (<>
     <GuidePanel poster>
-      {Texts?.steps?.introduction?.guideText}
+      {texts('steps.introduction.guideText')}
     </GuidePanel>
   </>)
 
 interface SelectCountryProps {
+  texts: any;
   control: any;
   errors: FieldErrors;
   countries: string[][];
 }
-export const StepSelectCountry = ({ countries, control, errors }: SelectCountryProps) =>
+export const StepSelectCountry = ({ texts, countries, control, errors }: SelectCountryProps) =>
   (<>
     <GuidePanel poster>
-      {Texts?.steps?.country?.guideText}
+      {texts('steps.country.guideText')}
     </GuidePanel>
     <ControlSelect
       name="country"
       control={control}
       error={errors.country?.message}
-      required={Texts?.form?.country?.required}
-      validate={(value) => value !== "none" || Texts?.form?.country?.required}
+      required={texts('form.country.required')}
+      validate={(value) => value !== "none" || texts('form.country.required')}
     >
       { countries.map(([key, val]) => <option key={key} value={key}>{val}</option>) }
     </ControlSelect>
   </>)
 
 interface SelectTravelPeriodProps {
+  texts: any;
   control: any;
   errors: FieldErrors;
   getValues: (payload?: any) => any
 }
-export const StepSelectTravelPeriod = ({ control, errors, getValues }: SelectTravelPeriodProps) =>
+export const StepSelectTravelPeriod = ({ texts, control, errors, getValues }: SelectTravelPeriodProps) =>
   (<>
     <ControlDatoVelger
       name="fromDate"
       control={control}
       error={errors.fromDate?.message}
-      required={Texts?.form?.fromDate?.required}
+      required={texts('form.fromDate.required')}
     />
     <ControlDatoVelger
       name="toDate"
       control={control}
       error={errors.toDate?.message}
-      required={Texts?.form?.toDate?.required}
+      required={texts('form.toDate.required')}
       validate={() =>
         vFirstDateIsAfterSecondDate(
           getValues('toDate'),
@@ -64,15 +68,14 @@ export const StepSelectTravelPeriod = ({ control, errors, getValues }: SelectTra
   </>)
 
 interface SummaryProps {
+  texts: any;
   control: any;
   errors: FieldErrors;
   data: any
 }
-export const StepSummary = ({data, control, errors}: SummaryProps) => {
-  const getFormInputLabel = (key: string) => {
-    // @ts-ignore
-    return Texts?.form?.[key]?.label
-  };
+export const StepSummary = ({texts, data, control, errors}: SummaryProps) => {
+  const getFormInputLabel = (key: string) =>
+    texts(`form.${key}.label`);
   const getFormValueReadable = (key: string, val: any) => {
     switch (key) {
     case 'country':
@@ -87,7 +90,7 @@ export const StepSummary = ({data, control, errors}: SummaryProps) => {
 
   return (<>
     <Heading size="medium" level="2">
-      {Texts?.summary}
+      {texts('summary')}
     </Heading>
     {Object.entries(data).filter(([key, val]) => !!val).map(([key, val]) => <div key={key}>
       <Label>{getFormInputLabel(key)}</Label>
@@ -96,7 +99,7 @@ export const StepSummary = ({data, control, errors}: SummaryProps) => {
     <ControlConfirmationPanel control={control} error={errors.confirmationPanel?.message} />
   </>)
 }
-export const StepKvittering = () =>
+export const StepKvittering = ({texts}: any) =>
   <GuidePanel>
-    {Texts?.steps?.kvittering?.guideText}
+    {texts('steps.kvittering.guideText')}
   </GuidePanel>;
