@@ -26,7 +26,7 @@ jobs:
         uses: "docker/build-push-action@v2"
         with:
           context: .
-          file: "{context}/Dockerfile.labs"
+          file: "Dockerfile.labs"
           tags: "${{ env.IMAGE }}"
           push: "true"
           cache-from: "type=gha"
