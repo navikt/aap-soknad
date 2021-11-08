@@ -1,0 +1,15 @@
+FROM navikt/node-express:14-alpine
+ENV NODE_ENV production
+
+WORKDIR /app
+COPY package.json .
+COPY yarn.lock .
+
+
+USER root
+RUN chown -R apprunner:apprunner /app
+
+WORKDIR /app
+RUN yarn install
+EXPOSE 3000
+CMD ["yarn", "start"]
