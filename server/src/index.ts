@@ -23,22 +23,20 @@ const startServer = () => {
   server.use(`${config.BASE_PATH}/loginservice`, loginserviceCallback);
 
   // Enforce authentication
-  !process.env.REACT_APP_USE_MOCK && server.use(`${config.BASE_PATH}/*`, enforceIDPortenAuthenticationMiddleware);
+  server.use(`${config.BASE_PATH}/*`, enforceIDPortenAuthenticationMiddleware);
 
   // Reverse proxy to add tokenx header for api calls
   tokenXProxy(`${config.BASE_PATH}/api`, server);
 
   // Render app
   server.get(`${config.BASE_PATH}/*`, (req: any, res: any) =>
-    process.env.REACT_APP_USE_MOCK
-      ? res.sendFile(path.join(BUILD_PATH, 'index.html'))
-      : getHtmlWithDecorator(`${BUILD_PATH}/index.html`)
-        .then((html) => {
-          res.send(html);
-        })
-        .catch((e) => {
-          res.status(500).send(e);
-        })
+    getHtmlWithDecorator(`${BUILD_PATH}/index.html`)
+      .then((html) => {
+        res.send(html);
+      })
+      .catch((e) => {
+        res.status(500).send(e);
+      })
   );
 
   server.listen(PORT, () => {
