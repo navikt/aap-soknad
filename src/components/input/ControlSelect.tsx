@@ -1,10 +1,10 @@
-import {utland as Texts} from "../../texts/nb.json";
 import {Select} from "@navikt/ds-react";
 import {Controller} from "react-hook-form";
 import React from "react";
 
-export interface ConfirmationPanelProps {
+export interface SelectProps {
   name: string;
+  label: string;
   control: any;
   error: string;
   required?: string;
@@ -14,7 +14,7 @@ export interface ConfirmationPanelProps {
     | React.ReactChild[];
 }
 
-const ControlSelect = ({name, control, error, required, validate, children}: ConfirmationPanelProps) =>
+const ControlSelect = ({name, label, control, error, required, validate, children}: SelectProps) =>
   <Controller
     name={name}
     control={control}
@@ -25,7 +25,7 @@ const ControlSelect = ({name, control, error, required, validate, children}: Con
     render={({ field: { name, value, onChange } }) => (
       <Select
         name={name}
-        label={Texts?.form?.country?.label}
+        label={label}
         value={value}
         onChange={onChange}
         error={error}

@@ -1,13 +1,13 @@
 import {Controller} from "react-hook-form";
 import {ConfirmationPanel} from "@navikt/ds-react";
-import {utland as Texts} from "../../texts/nb.json";
 import React from "react";
 
 export interface ConfirmationPanelProps {
+  label: string;
   control: any;
   error: string;
 }
-const ControlConfirmationPanel = ({control, error}: ConfirmationPanelProps) =>
+const ControlConfirmationPanel = ({label, control, error}: ConfirmationPanelProps) =>
   (<Controller
     name="confirmationPanel"
     control={control}
@@ -18,7 +18,7 @@ const ControlConfirmationPanel = ({control, error}: ConfirmationPanelProps) =>
       <ConfirmationPanel
         id={name}
         name={name}
-        label={Texts?.form?.confirmationPanel?.label}
+        label={label}
         checked={value}
         onChange={onChange}
         error={error}

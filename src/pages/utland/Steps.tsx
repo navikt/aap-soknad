@@ -7,6 +7,7 @@ import countries from "i18n-iso-countries";
 import ControlConfirmationPanel from "../../components/input/ControlConfirmationPanel";
 import React from "react";
 import {formatDate} from "../../utils/date";
+import {utland as Texts} from "../../texts/nb.json";
 
 interface IntroductionProps {
   texts: any;
@@ -31,6 +32,7 @@ export const StepSelectCountry = ({ texts, countries, control, errors }: SelectC
     </GuidePanel>
     <ControlSelect
       name="country"
+      label={Texts?.form?.country?.label}
       control={control}
       error={errors.country?.message}
       required={texts('form.country.required')}
@@ -50,12 +52,14 @@ export const StepSelectTravelPeriod = ({ texts, control, errors, getValues }: Se
   (<>
     <ControlDatoVelger
       name="fromDate"
+      label={Texts?.form?.fromDate?.label}
       control={control}
       error={errors.fromDate?.message}
       required={texts('form.fromDate.required')}
     />
     <ControlDatoVelger
       name="toDate"
+      label={Texts?.form?.toDate?.label}
       control={control}
       error={errors.toDate?.message}
       required={texts('form.toDate.required')}
@@ -96,7 +100,7 @@ export const StepSummary = ({texts, data, control, errors}: SummaryProps) => {
       <Label>{getFormInputLabel(key)}</Label>
       <BodyShort>{getFormValueReadable(key, val)}</BodyShort>
     </div>)}
-    <ControlConfirmationPanel control={control} error={errors.confirmationPanel?.message} />
+    <ControlConfirmationPanel label={Texts?.form?.confirmationPanel?.label} control={control} error={errors.confirmationPanel?.message} />
   </>)
 }
 export const StepKvittering = ({texts}: any) =>

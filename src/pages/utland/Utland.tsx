@@ -4,7 +4,7 @@ import "./Utland.less";
 import {
   ErrorSummary,
   ErrorSummaryItem,
-  Button,
+  Button, Loader,
 } from "@navikt/ds-react";
 import { useForm, FieldErrors } from "react-hook-form";
 import { ModalContext } from "../../context/modalContext";
@@ -40,7 +40,6 @@ const stepList: Step[] = [
   { name: StepName.SUMMARY},
   { name: StepName.RECEIPT}
 ];
-const lastStepIndex = stepList.length - 1;
 
 type FormValues = {
   country: string;
@@ -96,6 +95,8 @@ const Utland = (): JSX.Element => {
   const [currentStepIndex, setCurrentStepIndex] = useState<number>(0);
   const [soknadData, setSoknadData] = useState<FormValues>(defaultForm);
   const [countryList, setCountryList] = useState<string[][]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
   const { getText} = useTexts('utland');
   const { handleNotificationModal } = useContext(ModalContext);
   useEffect(() => {
@@ -112,8 +113,8 @@ const Utland = (): JSX.Element => {
     formState: { errors },
   } = useForm<FormValues>({ defaultValues: defaultForm});
   const onSubmitClick = async (data: FormValues) => {
-    console.log(currentStepIndex, lastStepIndex)
     if (currentStepNameIs(StepName.SUMMARY)) {
+      setIsLoading(true);
       const postResponse = await fetchPOST('/aap/api/innsending/utland', {
         land: soknadData?.country,
         periode: {
@@ -121,7 +122,7 @@ const Utland = (): JSX.Element => {
           tom: formatDate(soknadData.toDate, 'yyyy-MM-dd')
         }
       });
-      console.log('postresponse', postResponse);
+      setIsLoading(false);
       if(postResponse.ok) {
         setCurrentStepIndex(currentStepIndex + 1);
       } else {
@@ -164,8 +165,9 @@ const Utland = (): JSX.Element => {
           <FormErrorSummary errors={errors} />
 
           {showButton(getStepName(currentStepIndex)) &&
-          <Button variant="primary" type="submit">
+          <Button variant="primary" type="submit" disabled={isLoading}>
             {getButtonText(getStepName(currentStepIndex))}
+            {isLoading && <Loader />}
           </Button>}
         </form>
         {currentStepNameIs(StepName.RECEIPT) &&
