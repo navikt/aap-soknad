@@ -6,9 +6,10 @@ import countries from "i18n-iso-countries";
 import ControlConfirmationPanel from "../../components/input/ControlConfirmationPanel";
 import React from "react";
 import {formatDate} from "../../utils/date";
+import {GetText} from "../../hooks/useTexts";
 
 interface IntroductionProps {
-  getText: any;
+  getText: GetText;
 }
 export const StepIntroduction = ({getText}: IntroductionProps) =>
   (<>
@@ -18,7 +19,7 @@ export const StepIntroduction = ({getText}: IntroductionProps) =>
   </>)
 
 interface SelectCountryProps {
-  getText: (str: string) => string;
+  getText: GetText;
   control: any;
   errors: FieldErrors;
   countries: string[][];
@@ -39,7 +40,7 @@ export const StepSelectCountry = ({ getText, countries, control, errors }: Selec
   </>)
 
 interface SelectTravelPeriodProps {
-  getText: any;
+  getText: GetText;
   control: any;
   errors: FieldErrors;
   getValues: (payload?: any) => any
@@ -62,7 +63,7 @@ export const StepSelectTravelPeriod = ({ getText, control, errors }: SelectTrave
   </>)
 
 interface SummaryProps {
-  getText: any;
+  getText: GetText;
   control: any;
   errors: FieldErrors;
   data: any
