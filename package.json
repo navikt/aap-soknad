@@ -42,9 +42,9 @@
     "stylelint-config-standard": "^22.0.0"
   },
   "scripts": {
-    "start": "cross-env REACT_APP_USE_MOCK=true craco start",
-    "build": "craco build",
-    "build:mock": "cross-env REACT_APP_USE_MOCK=true craco build",
+    "start": "cross-env REACT_APP_USE_MOCK='true' craco start",
+    "build": "cross-env REACT_APP_USE_MOCK='false' craco build",
+    "build:mock": "cross-env REACT_APP_USE_MOCK='true' craco build",
     "test": "craco test",
     "eject": "craco eject",
     "lint": "yarn lint:jsts && yarn lint:less",
