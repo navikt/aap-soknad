@@ -1,14 +1,13 @@
 name: "Deploy mocked client to labs"
 on:
+  push:
+    branches: [ master ]
+  pull_request:
+    # The branches below must be a subset of the branches above
+    branches: [ master ]
   workflow_dispatch:
-#  push:
-#    branches: [ master ]
-#  pull_request:
-#    # The branches below must be a subset of the branches above
-#    branches: [ master ]
-#  workflow_dispatch:
 env:
-  "IMAGE": "ghcr.io/${{ github.repository }}:${{ github.sha }}"
+  "IMAGE": "ghcr.io/${{ github.repository }}:${{ github.sha }}-labs"
 jobs:
   "build":
     name: "build"
