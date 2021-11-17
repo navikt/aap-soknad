@@ -14,6 +14,6 @@ env:
 - name: SOKNAD_API_AUDIENCE
   value: "dev-gcp:aap:aap-soknad-api"
 - name: REACT_APP_USE_MOCK
-  value: "false"
+  value: "no"
 externals:
   - "dekoratoren.dev.nav.no"
