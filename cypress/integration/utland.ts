@@ -31,6 +31,8 @@ describe('AAP Soeknad', () => {
 
     // fiks feilmelding og gå videre
     cy.findByRole('combobox', {name: /^Landet du skal oppholde deg i$/}).select('CC');
+    cy.findByText('Vennligst velg et land').should('not.exist');
     cy.findByRole('button', { name: /^Neste$/}).click();
+    cy.findByRole('textbox', {name: /Fra dato/}).should('be.visible');
   })
 })
