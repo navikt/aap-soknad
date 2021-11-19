@@ -21,6 +21,7 @@
     "node-cache": "5.1.2",
     "node-fetch": "2.6.1",
     "openid-client": "^4.9.0",
+    "prom-client": "^14.0.1",
     "react": "^17.0.2",
     "winston": "^3.3.3"
   },
