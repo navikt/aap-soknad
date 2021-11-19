@@ -9,7 +9,8 @@
 # testing
 /coverage
 /server/coverage
-.eslintcache
+.eslintcach
+/cypress/videos
 
 # production
 /build
