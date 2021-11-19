@@ -12,14 +12,10 @@ export interface DatoVelgerProps {
   validate?: () => any;
 }
 
-const ControlDatoVelger = ({name, label, control, error, required, validate}: DatoVelgerProps) =>
+const ControlDatoVelger = ({name, label, control, error}: DatoVelgerProps) =>
   <Controller
     name={name}
     control={control}
-    rules={{
-      ...(required ? {required} : {}),
-      ...(validate ? {validate} : {})
-    }}
     render={({ field: { name, value, onChange } }) => (
       <DatoVelger
         id={name}

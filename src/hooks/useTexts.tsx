@@ -3,7 +3,9 @@ import { onLanguageSelect } from '@navikt/nav-dekoratoren-moduler'
 import nbTexts from "../texts/nb.json";
 import enTexts from "../texts/en.json";
 
-const useTexts = (pageName: string) => {
+export interface GetText { (str: string): string }
+
+const useTexts = (pageName: string)=> {
   const [language, setLanguage] = useState<string>('nb');
   const [texts, setTexts] = useState<object>({})
 
@@ -30,7 +32,7 @@ const useTexts = (pageName: string) => {
     getTextsForPage();
   }, [pageName, language]);
 
-  const getText = (path: string) => safeDeepGet(texts, path);
+  const getText = (path: string): string => safeDeepGet(texts, path);
 
   return {language, pageTexts: texts, getText};
 }

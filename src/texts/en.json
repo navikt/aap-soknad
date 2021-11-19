@@ -23,7 +23,8 @@
       },
       "toDate": {
         "label": "Til dato",
-        "required": "Venligst velg en dato."
+        "required": "Venligst velg en dato.",
+        "afterFromDate": "Til dato må være etter Fra dato"
       },
       "confirmationPanel": {
         "label": "Jeg bekrefter at utenlandsoppholdet ikke er til hinder for avtalt aktivitet som behandling, arbeidsrettede tiltak eller oppfølging fra NAV.",

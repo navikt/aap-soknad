@@ -14,14 +14,10 @@ export interface SelectProps {
     | React.ReactChild[];
 }
 
-const ControlSelect = ({name, label, control, error, required, validate, children}: SelectProps) =>
+const ControlSelect = ({name, label, control, error, children}: SelectProps) =>
   <Controller
     name={name}
     control={control}
-    rules={{
-      ...(required ? {required} : {}),
-      ...(validate ? {validate} : {})
-    }}
     render={({ field: { name, value, onChange } }) => (
       <Select
         name={name}

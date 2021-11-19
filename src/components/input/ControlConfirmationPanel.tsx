@@ -11,9 +11,6 @@ const ControlConfirmationPanel = ({label, control, error}: ConfirmationPanelProp
   (<Controller
     name="confirmationPanel"
     control={control}
-    rules={{
-      required: "Kryss av for å bekrefte",
-    }}
     render={({field: {name, value, onChange}}) => (
       <ConfirmationPanel
         id={name}
