@@ -20,6 +20,9 @@ import {
 import {fetchPOST} from "../../api/useFetch";
 import {formatDate} from "../../utils/date";
 import useTexts from "../../hooks/useTexts";
+import { yupResolver } from '@hookform/resolvers/yup';
+import {getUtlandSchemas} from "../../schemas/utland";
+
 
 // Support norwegian & english languages.
 countries.registerLocale(require("i18n-iso-countries/langs/en.json"));
@@ -91,6 +94,7 @@ const showButton = (name: string) => {
 }
 
 
+
 const Utland = (): JSX.Element => {
   const [currentStepIndex, setCurrentStepIndex] = useState<number>(0);
   const [soknadData, setSoknadData] = useState<FormValues>(defaultForm);
@@ -99,6 +103,10 @@ const Utland = (): JSX.Element => {
 
   const { getText} = useTexts('utland');
   const { handleNotificationModal } = useContext(ModalContext);
+
+  const SoknadUtlandSchemas = getUtlandSchemas(getText);
+  const currentSchema = SoknadUtlandSchemas[currentStepIndex];
+
   useEffect(() => {
     const getCountries = () => {
       const list = Object.entries(countries.getNames("nb", {select: "official"}))
@@ -111,7 +119,7 @@ const Utland = (): JSX.Element => {
     control,
     handleSubmit,
     formState: { errors },
-  } = useForm<FormValues>({ defaultValues: defaultForm});
+  } = useForm({ resolver: yupResolver(currentSchema), defaultValues: defaultForm});
   const onSubmitClick = async (data: FormValues) => {
     if (currentStepNameIs(StepName.SUMMARY)) {
       setIsLoading(true);
@@ -150,17 +158,17 @@ const Utland = (): JSX.Element => {
     >
       <>
         {currentStepNameIs(StepName.INTRODUCTION) &&
-          <StepIntroduction texts={getText} />}
+          <StepIntroduction getText={getText} />}
         <form onSubmit={handleSubmit( async data => await onSubmitClick(data))} className="soknad-utland-form">
 
           {currentStepNameIs(StepName.COUNTRY) &&
-          <StepSelectCountry texts={getText} control={control} errors={errors} countries={countryList}/>}
+          <StepSelectCountry getText={getText} control={control} errors={errors} countries={countryList}/>}
 
           {currentStepNameIs(StepName.PERIOD) &&
-          <StepSelectTravelPeriod texts={getText} control={control} errors={errors} getValues={getValues} />}
+          <StepSelectTravelPeriod getText={getText} control={control} errors={errors} getValues={getValues} />}
 
           {currentStepNameIs(StepName.SUMMARY) &&
-          <StepSummary texts={getText} control={control} errors={errors} data={soknadData} />}
+          <StepSummary getText={getText} control={control} errors={errors} data={soknadData} />}
 
           <FormErrorSummary errors={errors} />
 
@@ -171,7 +179,7 @@ const Utland = (): JSX.Element => {
           </Button>}
         </form>
         {currentStepNameIs(StepName.RECEIPT) &&
-        <StepKvittering texts={getText} />}
+        <StepKvittering getText={getText} />}
         <Button variant="tertiary" onClick={onBackButtonClick}>Tilbake</Button>
       </>
     </SoknadWizard>
