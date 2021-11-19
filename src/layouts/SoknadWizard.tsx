@@ -21,15 +21,11 @@ const SoknadWizard = ({title, ingress, stepList, currentStepIndex, children}: So
 
   return (
     <>
-      <PageHeader align="center">
-        {title}
-      </PageHeader>
-      <Ingress spacing={true}>
-        {ingress}
-      </Ingress>
-      <main className="soknad-wizard-main">
-        {children}
-      </main>
+      <header>
+        <PageHeader align="center">{title}</PageHeader>
+      </header>
+      <Ingress spacing={true}>{ingress}</Ingress>
+      <main className="soknad-wizard-main">{children}</main>
     </>
   );
 };
