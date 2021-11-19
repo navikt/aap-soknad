@@ -1,6 +1,7 @@
 import { Application, Request} from "express";
 import proxy from 'express-http-proxy';
 import {getToken} from "./auth/tokenx";
+import {LogError} from "./logger";
 import config from "./config";
 
 const options = (targetAudience: string) => ({
@@ -20,17 +21,15 @@ const options = (targetAudience: string) => ({
           })
         },
         error => {
-          console.log('Error ved token ex', error)
+          LogError('TokeX error:', error)
           reject(error)
         })
     });
   },
   proxyReqPathResolver: (req: Request) => {
-    const newPath = (req.originalUrl.startsWith('/aap'))
+    return (req.originalUrl.startsWith('/aap'))
       ? req.originalUrl.slice(4)
       : req.originalUrl;
-    console.log('PROXY ', req.originalUrl, ' --> ', `${config.SOKNAD_API_URL}${newPath}`);
-    return newPath;
   },
   // Mutate request body
   // proxyReqBodyDecorator: function(bodyContent, srcReq) {}

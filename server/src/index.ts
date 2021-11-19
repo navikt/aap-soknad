@@ -2,9 +2,11 @@ import express from "express";
 import path from "path";
 import cookieParser from "cookie-parser";
 import config from './config';
-import { enforceIDPortenAuthenticationMiddleware } from './auth';
 import { getHtmlWithDecorator } from "./dekorator";
 import { tokenXProxy} from "./apiProxy";
+import {LogError, LogInfo} from "./logger";
+import {loginserviceCallback} from "./auth/loginservice";
+import {enforceIDPortenAuthenticationMiddleware} from "./auth/middleware";
 
 const BUILD_PATH = path.join(__dirname, "../build");
 const PORT = process.env.PORT || 3000;
@@ -22,7 +24,7 @@ const startServer = () => {
   // Callback from loginservice, get originalUrl from cookie
   server.use(`${config.BASE_PATH}/loginservice`, loginserviceCallback);
 
-  // Enforce authentication
+  // Enforce idporten authentication
   server.use(`${config.BASE_PATH}/*`, enforceIDPortenAuthenticationMiddleware);
 
   // Reverse proxy to add tokenx header for api calls
@@ -35,20 +37,14 @@ const startServer = () => {
         res.send(html);
       })
       .catch((e) => {
+        LogError('Dekoratøren error', e);
         res.status(500).send(e);
       })
   );
 
   server.listen(PORT, () => {
-    // eslint-disable-next-line no-console
-    console.log("Server started: listening on port", PORT);
+    LogInfo(`Server started: listening on port ${PORT}`);
   });
-};
-
-const loginserviceCallback = async (req: any, res: any) => {
-  const path = `${req.cookies["APP_PATH"] || ""}`;
-  res.cookie("APP_PATH", "", { httpOnly: true, domain: "nav.no" });
-  res.redirect(path);
 };
 
 startServer();
