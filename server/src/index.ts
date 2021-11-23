@@ -27,9 +27,9 @@ const startServer = () => {
   server.use(express.static(BUILD_PATH));
 
   // metrics
-  server.get(`${config.BASE_PATH}/internal/metrics`, (req: any, res: any) => {
+  server.get(`${config.BASE_PATH}/internal/metrics`, async (req: any, res: any) => {
     res.setHeader('Content-Type', register.contentType);
-    res.end(register.metrics());
+    res.end(await register.metrics());
   });
   // health checks
   server.get([`${config.BASE_PATH}/internal/isAlive`, `${config.BASE_PATH}/internal/isReady`], (req: any, res: any) =>
