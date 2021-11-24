@@ -21,7 +21,7 @@ spec:
     max: 2
   prometheus:
     enabled: true
-    path: "/metrics"
+    path: "/aap/internal/metrics"
   idporten:
     enabled: true
     sidecar:
