@@ -12,7 +12,7 @@ export const redirectToLoginservice = function(req: Request, res: Response) {
   );
 }
 
-export const loginserviceCallback = (req: any, res: any) => {
+export const loginserviceCallback = (req: Request, res: Response) => {
   const path = `${req.cookies["APP_PATH"] || ""}`;
   res.cookie("APP_PATH", " ", { httpOnly: true, domain: "nav.no" });
   res.redirect(path);

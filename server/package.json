@@ -9,7 +9,7 @@
     "build:mock": "rimraf dist && ncc build src/mockServer.ts -o dist",
     "dev:server": "nodemon",
     "dev:server-debug": "node -r ts-node/register --inspect=5858 src/index.ts",
-    "test": "jest --detectOpenHandles"
+    "test": "jest"
   },
   "dependencies": {
     "@navikt/nav-dekoratoren-moduler": "^1.6.3",

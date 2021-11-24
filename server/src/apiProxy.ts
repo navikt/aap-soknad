@@ -21,7 +21,7 @@ const options = (targetAudience: string) => ({
           })
         },
         error => {
-          LogError('TokeX error:', error)
+          LogError('TokenX error:', error)
           reject(error)
         })
     });
