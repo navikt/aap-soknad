@@ -2,14 +2,14 @@ import React from "react";
 import { PageHeader, Ingress } from '@navikt/ds-react';
 import "./SoknadWizard.less";
 
-export type Step = {
+export type StepType = {
   name: string;
 }
 
 type SoknadWizardProps = {
   title: string;
   ingress?: string;
-  stepList: Step[];
+  stepList: StepType[];
   currentStepIndex: number;
   children?:
     | React.ReactChild
