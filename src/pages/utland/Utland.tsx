@@ -20,6 +20,7 @@ import { formatDate } from "../../utils/date";
 import useTexts from "../../hooks/useTexts";
 import { getUtlandSchemas } from "../../schemas/utland";
 import { Step } from "../../components/Step";
+import { FormErrorSummary } from "../../components/schema/FormErrorSummary";
 
 // Support norwegian & english languages.
 countries.registerLocale(require("i18n-iso-countries/langs/en.json"));
@@ -54,22 +55,6 @@ const defaultForm: FormValues = {
   confirmationPanel: false,
 };
 
-const FormErrorSummary = ({ errors }: FieldErrors) => {
-  const keyList = Object.keys(errors).filter((e) => e);
-  if (keyList.length < 1) return null;
-  return (
-    <ErrorSummary>
-      {keyList.map((key) => (
-        <ErrorSummary.Item key={key} href={`#${key}`}>
-          {
-            // @ts-ignore
-            errors[key]?.message
-          }
-        </ErrorSummary.Item>
-      ))}
-    </ErrorSummary>
-  );
-};
 const getButtonText = (name: string) => {
   switch (name) {
     case StepName.INTRODUCTION:

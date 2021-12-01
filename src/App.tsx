@@ -8,6 +8,7 @@ import { ModalProvider } from "./context/modalContext";
 // Pages
 import Utland from "./pages/utland/Utland";
 import Me from "./pages/Me";
+import { Bedrift } from "./pages/bedrift/Bedrift";
 
 const App = (): JSX.Element => {
   return (
@@ -17,6 +18,7 @@ const App = (): JSX.Element => {
           <Routes>
             <Route path="/aap/me" element={<Me />} />
             <Route path="/aap/utland" element={<Utland />} />
+            <Route path="/aap/bedrift" element={<Bedrift />} />
             <Route
               path="*"
               element={

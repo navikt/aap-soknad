@@ -32,5 +32,27 @@
       }
     },
     "summary": "Oppsummering av søknad"
+  },
+  "bedrift": {
+    "pageTitle": "Starte egen bedrift",
+    "steps": {
+      "introduction": {
+        "guideText": "Her kan du søke om arbeidsavklaringspenger under etablering av egen virksomhet"
+      }
+    },
+    "form": {
+      "typeStoette": {
+        "label": "Hvilken fase ønsker du å søke støtte til?",
+        "utviklingsfase": "Utviklingsfase (inntil seks måneder)",
+        "oppstartEtterUtvikling": "Oppstartingsfase etter forutgående utviklingsfase (inntil tre måneder)",
+        "oppstartUtenUtvikling": "Oppstartingsfase uten forutgående utviklingsfase (inntil tre måneder)",
+        "required": "Vennligst velg hvilken fase du ønsker å søke støtte til"
+      },
+      "personlig": {
+        "kommune": "Bostedskommune",
+        "tlfPrivat": "Telefon privat",
+        "tlfArbeid": "Telefon arbeid"
+      }
+    }
   }
 }
