@@ -1,5 +1,14 @@
+import { format, startOfMonth, endOfMonth } from "date-fns";
+
 describe('AAP Soeknad', () => {
+  let dato = new Date();
+  let foersteIMnd = format(startOfMonth(dato), 'EEE MMM dd yyyy');
+  let sisteIMnd = format(endOfMonth(dato), 'EEE MMM dd yyyy');
+  beforeEach(() => {
+
+  });
   it('kommer igjennom grønt løp', () => {
+
     cy.visit('aap/utland');
     cy.contains('Søknad om å beholde arbeidsavklaringspenger under opphold i utlandet');
     cy.findByRole('button', {name: /^Fortsett til søknaden$/}).click();
@@ -8,10 +17,10 @@ describe('AAP Soeknad', () => {
     cy.findByRole('button', { name: /^Neste$/}).click();
 
     cy.findByRole('textbox', {name: /Fra dato/}).click();
-    cy.findByLabelText(/Mon Nov 01 2021/).click();
+    cy.findByLabelText(foersteIMnd).click();
 
     cy.findByRole('textbox', {name: /Til dato/}).click();
-    cy.findByLabelText(/Tue Nov 30 2021/).click();
+    cy.findByLabelText(sisteIMnd).click();
     cy.findByRole('button', {name: /^Neste$/}).click();
     cy.findByRole('checkbox', {name: /^Jeg bekrefter at utenlandsoppholdet/}).click();
     cy.findByRole('button', {name: /^Send søknaden$/}).click();
