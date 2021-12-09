@@ -1,12 +1,11 @@
-import { GuidePanel, RadioGroup, TextField } from "@navikt/ds-react";
+import { Cell, Grid, GuidePanel, TextField } from "@navikt/ds-react";
 import { GetText } from "../../hooks/useTexts";
-import { Control, FieldErrors } from "react-hook-form";
-import { ControlRadio } from "../../components/input/ControlRadio";
+import { FieldErrors, FieldValues, UseFormRegister } from "react-hook-form";
+import { InputRadio, RadioGruppe } from "../../components/input/RadioWrapper";
 
 interface StepProps {
   getText: GetText;
-  control: Control;
-  register?: any;
+  register: UseFormRegister<FieldValues>;
   errors: FieldErrors;
 }
 
@@ -20,38 +19,81 @@ export const Introduction = ({ getText }: IntroductionProps) => (
 
 export const TypeStoette = ({
   getText,
-  control,
   errors,
+  register,
 }: StepProps): JSX.Element => {
-  console.log(errors);
+  const keys = [
+    "utviklingsfase",
+    "oppstartEtterUtvikling",
+    "oppstartUtenUtvikling",
+  ];
+  const radios = keys.map((key) => (
+    <InputRadio
+      register={register}
+      value={key}
+      noekkel={"typeStoette"}
+      key={key}
+      getText={getText}
+    />
+  ));
   return (
-    <RadioGroup
-      legend={getText("form.typeStoette.label")}
+    <RadioGruppe
+      groupKey={"typeStoette"}
+      getText={getText}
       error={errors.typeStoette?.message}
     >
-      <ControlRadio
-        name={"typeStoette"}
-        label={getText("form.typeStoette.utviklingsfase")}
-        control={control}
-      />
-      <ControlRadio
-        name={"typeStoette"}
-        label={getText("form.typeStoette.oppstartEtterUtvikling")}
-        control={control}
-      />
-      <ControlRadio
-        name={"typeStoette"}
-        label={getText("form.typeStoette.oppstartUtenUtvikling")}
-        control={control}
-      />
-    </RadioGroup>
+      {radios}
+    </RadioGruppe>
   );
 };
 
-export const PersonligInfo = ({ getText }: StepProps): JSX.Element => (
+export const PersonligInfo = ({
+  getText,
+  register,
+}: StepProps): JSX.Element => (
   <>
-    <TextField label={getText("form.personlig.kommune")} />
-    <TextField label={getText("form.personlig.tlfPrivat")} type="tel" />
-    <TextField label={getText("form.personlig.tlfArbeid")} type="tel" />
+    <TextField
+      label={getText("form.personlig.kommune")}
+      {...register("kommune")}
+      id={"kommune"}
+    />
+    <TextField
+      label={getText("form.personlig.tlfPrivat")}
+      type="tel"
+      id={"tlfPrivat"}
+      {...register("tlfPrivat")}
+    />
+    <TextField
+      label={getText("form.personlig.tlfArbeid")}
+      type="tel"
+      id={"tlfArbeid"}
+      {...register("tlfArbeid")}
+    />
+  </>
+);
+
+export const Utdanning = ({ getText, register }: StepProps): JSX.Element => (
+  <>
+    <GuidePanel poster>{getText("steps.introduction.guideText")}</GuidePanel>
+    <Grid>
+      <Cell xs={8}>
+        <TextField
+          label={getText("form.utdanning.institusjonsnavn")}
+          {...register("institusjonsnavn")}
+        />
+      </Cell>
+      <Cell xs={2}>
+        <TextField
+          label={getText("form.utdanning.fraAar")}
+          {...register("fraAar")}
+        />
+      </Cell>
+      <Cell xs={2}>
+        <TextField
+          label={getText("form.utdanning.tilAar")}
+          {...register("tilAar")}
+        />
+      </Cell>
+    </Grid>
   </>
 );

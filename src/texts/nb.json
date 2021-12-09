@@ -41,6 +41,9 @@
       }
     },
     "form": {
+      "errors": {
+        "required": "må fylles ut"
+      },
       "typeStoette": {
         "label": "Hvilken fase ønsker du å søke støtte til?",
         "utviklingsfase": "Utviklingsfase (inntil seks måneder)",
@@ -52,6 +55,17 @@
         "kommune": "Bostedskommune",
         "tlfPrivat": "Telefon privat",
         "tlfArbeid": "Telefon arbeid"
+      },
+      "utdanning": {
+        "errors": {
+          "paakrevd": " må fylles ut",
+          "fremtid": "Årstallet kan ikke være i fremtiden",
+          "forGammel": "Utdanningen kan ikke være mer enn 50 år gammel",
+          "feilformatAarstall": "Årstall må bestå av fire siffer"
+        },
+        "institusjonsnavn": "Navn på skole/utdanningsinstitusjon",
+        "fraAar": "Fra (år)",
+        "tilAar": "Til (år)"
       }
     }
   }

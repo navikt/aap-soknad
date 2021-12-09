@@ -2,7 +2,12 @@ import React, { useState } from "react";
 import SoknadWizard, { StepType } from "../../layouts/SoknadWizard";
 import useTexts from "../../hooks/useTexts";
 import { bedrift as Texts } from "../../texts/nb.json";
-import { Introduction, PersonligInfo, TypeStoette } from "./BedriftSteps";
+import {
+  Introduction,
+  PersonligInfo,
+  TypeStoette,
+  Utdanning,
+} from "./BedriftSteps";
 import { Button, Loader } from "@navikt/ds-react";
 import "./Bedrift.less";
 import { useForm } from "react-hook-form";
@@ -15,6 +20,7 @@ enum StepName {
   INTRODUCTION = "INTRODUCTION",
   TYPE_STOETTE = "TYPE_STOETTE",
   PERSONLIG = "PERSONLIG",
+  UTDANNING = "UTDANNING",
   SUMMARY = "SUMMARY",
   RECEIPT = "RECEIPT",
 }
@@ -23,6 +29,7 @@ const stepList: StepType[] = [
   { name: StepName.INTRODUCTION },
   { name: StepName.TYPE_STOETTE },
   { name: StepName.PERSONLIG },
+  { name: StepName.UTDANNING },
   { name: StepName.SUMMARY },
   { name: StepName.RECEIPT },
 ];
@@ -50,14 +57,17 @@ const Bedrift = (): JSX.Element => {
 
   const {
     register,
-    getValues,
-    control,
     handleSubmit,
     formState: { errors },
-  } = useForm({resolver: yupResolver(currentSchema)});
+  } = useForm({
+    resolver: yupResolver(currentSchema),
+    mode: "onBlur",
+    reValidateMode: "onBlur"
+  });
 
   const getStepName = (index: number) => stepList[index]?.name;
-  const currentStepNameIs = (name: StepName) => name === getStepName(currentStepIndex);
+  const currentStepNameIs = (name: StepName) =>
+    name === getStepName(currentStepIndex);
   const onBackButtonClick = () => setCurrentStepIndex(currentStepIndex - 1);
 
   const onSubmitClick = async (data: FormData) => {
@@ -75,7 +85,6 @@ const Bedrift = (): JSX.Element => {
       stepList={stepList}
       currentStepIndex={currentStepIndex}
     >
-      <div>{currentStepIndex}</div>
       <>
         <Step renderWhen={currentStepNameIs(StepName.INTRODUCTION)}>
           <Introduction getText={getText} />
@@ -85,10 +94,21 @@ const Bedrift = (): JSX.Element => {
           className="soknad-bedrift-form"
         >
           <Step renderWhen={currentStepNameIs(StepName.TYPE_STOETTE)}>
-            <TypeStoette getText={getText} control={control} errors={errors} register={register} />
+            <TypeStoette
+              getText={getText}
+              errors={errors}
+              register={register}
+            />
           </Step>
           <Step renderWhen={currentStepNameIs(StepName.PERSONLIG)}>
-            <PersonligInfo getText={getText} control={control} errors={errors} />
+            <PersonligInfo
+              getText={getText}
+              errors={errors}
+              register={register}
+            />
+          </Step>
+          <Step renderWhen={currentStepNameIs(StepName.UTDANNING)}>
+            <Utdanning getText={getText} errors={errors} register={register} />
           </Step>
           <FormErrorSummary errors={errors} />
           <Button variant="primary" type="submit" disabled={isLoading}>
