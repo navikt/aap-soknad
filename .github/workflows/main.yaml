@@ -55,7 +55,7 @@ jobs:
         if: failure()
         with:
           name: cypress-screenshots
-          artifact: cypress/screenshots
+          path: cypress/screenshots
           retention-days: 5
       - name: "Set up Docker Buildx"
         id: "buildx"

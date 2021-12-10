@@ -10,21 +10,24 @@ const femtiAarSiden = detteAaret - 50;
 export const getBedriftSchema = (getText: Function) => [
   yup.object(),
   yup.object().shape({
+    // Hvordan støtte
     typeStoette: yup
       .string()
       .ensure()
       .required(getText("form.typeStoette.required")),
   }),
   yup.object().shape({
+    // Personlig info
     kommune: string().required(
       paakrevdMelding("form.personlig.kommune", getText)
     ),
     tlfPrivat: string()
       .required(paakrevdMelding("form.personlig.tlfPrivat", getText))
-      .matches(/\+?\d{5,}/, "Ugyldig telefonnummer"),
+      .matches(/^\+?\d{5,20}$/, "Ugyldig telefonnummer"),
     tlfArbeid: string(),
   }),
   object().shape({
+    // Utdanning
     institusjonsnavn: string().required(
       getText("form.utdanning.institusjonsnavn")
     ),
@@ -37,10 +40,7 @@ export const getBedriftSchema = (getText: Function) => [
       const parsed = Number.parseInt(value, 10);
       if (!isNaN(parsed)) {
         return number()
-          .max(
-            detteAaret,
-            getText("form.utdanning.errors.fremtid")
-          )
+          .max(detteAaret, getText("form.utdanning.errors.fremtid"))
           .when("fraAar", (fraAar, schema) => {
             if (fraAar) {
               return schema.min(
@@ -58,5 +58,13 @@ export const getBedriftSchema = (getText: Function) => [
         message: getText("forms.utdanning.errors.feilformatAarstall"),
       });
     }),
+  }),
+  object().shape({
+    // Praksis
+    navn: string().required(paakrevdMelding("form.praksis.navn", getText)),
+    fraDato: yup
+      .date()
+      .required(paakrevdMelding("form.praksis.fraDato", getText)),
+    tilDato: yup.date(),
   }),
 ];

@@ -38,6 +38,12 @@
     "steps": {
       "introduction": {
         "guideText": "Her kan du søke om arbeidsavklaringspenger under etablering av egen virksomhet"
+      },
+      "utdanning": {
+        "guideText": "Her kan du registrere utdanning"
+      },
+      "praksis": {
+        "guideText": "Her registrerer du yrkeserfaring og annen relevant praktisk erfaring"
       }
     },
     "form": {
@@ -66,6 +72,15 @@
         "institusjonsnavn": "Navn på skole/utdanningsinstitusjon",
         "fraAar": "Fra (år)",
         "tilAar": "Til (år)"
+      },
+      "praksis": {
+        "errors": {
+          "paakrevd": " må fylles ut",
+          "ikkeIFremtiden": "Datoen er i fremtiden"
+        },
+        "navn": "Navn på arbeidsgiver / praksissted",
+        "fraDato": "Fra",
+        "tilDato": "Til"
       }
     }
   }

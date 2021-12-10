@@ -5,6 +5,7 @@ import { bedrift as Texts } from "../../texts/nb.json";
 import {
   Introduction,
   PersonligInfo,
+  Praksis,
   TypeStoette,
   Utdanning,
 } from "./BedriftSteps";
@@ -21,6 +22,7 @@ enum StepName {
   TYPE_STOETTE = "TYPE_STOETTE",
   PERSONLIG = "PERSONLIG",
   UTDANNING = "UTDANNING",
+  PRAKSIS = "PRAKSIS",
   SUMMARY = "SUMMARY",
   RECEIPT = "RECEIPT",
 }
@@ -30,6 +32,7 @@ const stepList: StepType[] = [
   { name: StepName.TYPE_STOETTE },
   { name: StepName.PERSONLIG },
   { name: StepName.UTDANNING },
+  { name: StepName.PRAKSIS },
   { name: StepName.SUMMARY },
   { name: StepName.RECEIPT },
 ];
@@ -56,13 +59,14 @@ const Bedrift = (): JSX.Element => {
   const currentSchema = bedriftSchema[currentStepIndex];
 
   const {
+    control,
     register,
     handleSubmit,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(currentSchema),
     mode: "onBlur",
-    reValidateMode: "onBlur"
+    reValidateMode: "onBlur",
   });
 
   const getStepName = (index: number) => stepList[index]?.name;
@@ -109,6 +113,14 @@ const Bedrift = (): JSX.Element => {
           </Step>
           <Step renderWhen={currentStepNameIs(StepName.UTDANNING)}>
             <Utdanning getText={getText} errors={errors} register={register} />
+          </Step>
+          <Step renderWhen={currentStepNameIs(StepName.PRAKSIS)}>
+            <Praksis
+              getText={getText}
+              register={register}
+              errors={errors}
+              control={control}
+            />
           </Step>
           <FormErrorSummary errors={errors} />
           <Button variant="primary" type="submit" disabled={isLoading}>
