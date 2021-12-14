@@ -40,6 +40,7 @@
     "cypress-axe": "^0.13.0",
     "eslint-plugin-jsx-a11y": "^6.5.1",
     "husky": "^7.0.2",
+    "postcss-less": "^5.0.0",
     "prettier": "^2.5.1",
     "pretty-quick": "^3.1.2",
     "react-scripts": "4.0.3",
@@ -54,7 +55,7 @@
     "eject": "craco eject",
     "lint": "yarn lint:jsts && yarn lint:less",
     "lint:jsts": "npx eslint .",
-    "lint:less": "npx stylelint --syntax less **/*.less",
+    "lint:less": "npx stylelint **/*.less --custom-syntax postcss-less",
     "build-server": "tsc --skipLibCheck -p ./server/tsconfig.json",
     "cypress:run": "cypress run",
     "cypress:open": "cypress open"
