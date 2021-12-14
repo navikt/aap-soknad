@@ -6,8 +6,7 @@ import {
   Introduction,
   PersonligInfo,
   Praksis,
-  TypeStoette,
-  Utdanning,
+  TypeStoette
 } from "./BedriftSteps";
 import { Button, Loader } from "@navikt/ds-react";
 import "./Bedrift.less";
@@ -16,6 +15,7 @@ import { Step } from "../../components/Step";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { getBedriftSchema } from "../../schemas/bedrift";
 import { FormErrorSummary } from "../../components/schema/FormErrorSummary";
+import { Utdanning } from "./steps/Utdanning";
 
 enum StepName {
   INTRODUCTION = "INTRODUCTION",

@@ -71,7 +71,8 @@
         },
         "institusjonsnavn": "Navn på skole/utdanningsinstitusjon",
         "fraAar": "Fra (år)",
-        "tilAar": "Til (år)"
+        "tilAar": "Til (år)",
+        "leggTil": "Legg til utdanning"
       },
       "praksis": {
         "errors": {

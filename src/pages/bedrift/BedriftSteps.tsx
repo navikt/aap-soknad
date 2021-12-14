@@ -78,40 +78,6 @@ export const PersonligInfo = ({ getText, register }: StepType): JSX.Element => (
   </>
 );
 
-export const Utdanning = ({ getText, register }: StepType): JSX.Element => (
-  <>
-    <GuidePanel poster>{getText("steps.utdanning.guideText")}</GuidePanel>
-    <section>
-      <Grid>
-        <Cell xs={8}>
-          <TextField
-            label={getText("form.utdanning.institusjonsnavn")}
-            {...register("institusjonsnavn")}
-          />
-        </Cell>
-        <Cell xs={2}>
-          <TextField
-            label={getText("form.utdanning.fraAar")}
-            {...register("fraAar")}
-          />
-        </Cell>
-        <Cell xs={2}>
-          <TextField
-            label={getText("form.utdanning.tilAar")}
-            {...register("tilAar")}
-          />
-        </Cell>
-      </Grid>
-    </section>
-    <section>
-      <Button variant={"tertiary"} size={"small"}>
-        <AddCircle />
-        Legg til utdanning
-      </Button>
-    </section>
-  </>
-);
-
 interface PraksisType extends StepType {
   control: Control;
 }
