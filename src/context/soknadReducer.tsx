@@ -6,7 +6,7 @@ const soknadReducer = (
   action: SoknadAction
 ): SoknadContextState => {
   switch (action.type) {
-    case SoknadActionKeys.SET_FORM_DATA:
+    case SoknadActionKeys.SET_SOKNAD:
       return {
         ...state,
         søknad: action.payload
