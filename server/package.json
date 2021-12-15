@@ -12,7 +12,7 @@
     "test": "jest"
   },
   "dependencies": {
-    "@navikt/nav-dekoratoren-moduler": "^1.6.3",
+    "@navikt/nav-dekoratoren-moduler": "^1.6.9",
     "cookie-parser": "^1.4.5",
     "express": "^4.17.1",
     "express-http-proxy": "^1.6.2",
