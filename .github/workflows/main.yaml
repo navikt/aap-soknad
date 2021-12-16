@@ -2,7 +2,7 @@ name: "Build and deploy aap-soknad"
 on:
   push:
     branches:
-      - "master"
+      - "main"
 env:
   "IMAGE": "ghcr.io/${{ github.repository }}:${{ github.sha }}"
 jobs:
