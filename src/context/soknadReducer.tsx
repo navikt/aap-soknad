@@ -5,6 +5,7 @@ const soknadReducer = (
   state: SoknadContextState,
   action: SoknadAction
 ): SoknadContextState => {
+  console.log('soknadReducer', action.type, action.payload)
   switch (action.type) {
     case SoknadActionKeys.SET_SOKNAD:
       return {

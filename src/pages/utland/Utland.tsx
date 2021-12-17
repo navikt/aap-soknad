@@ -1,26 +1,22 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, {useContext, useEffect, useState} from "react";
 import countries from "i18n-iso-countries";
 import "./Utland.less";
-import { ErrorSummary, Button, Loader } from "@navikt/ds-react";
-import { useForm, FieldErrors } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
+import {Button, Loader} from "@navikt/ds-react";
+import {useForm} from "react-hook-form";
+import {yupResolver} from "@hookform/resolvers/yup";
 
-import { ModalContext } from "../../context/modalContext";
-import SoknadWizard, { StepType } from "../../layouts/SoknadWizard";
-import { utland as Texts } from "../../texts/nb.json";
-import {
-  StepIntroduction,
-  StepKvittering,
-  StepSelectCountry,
-  StepSelectTravelPeriod,
-  StepSummary,
-} from "./Steps";
-import { fetchPOST } from "../../api/useFetch";
-import { formatDate } from "../../utils/date";
+import {ModalContext} from "../../context/modalContext";
+import SoknadWizard, {StepType} from "../../layouts/SoknadWizard";
+import {utland as Texts} from "../../texts/nb.json";
+import {StepIntroduction, StepKvittering, StepSelectCountry, StepSelectTravelPeriod, StepSummary,} from "./Steps";
+import {fetchPOST} from "../../api/useFetch";
+import {formatDate} from "../../utils/date";
 import useTexts from "../../hooks/useTexts";
-import { getUtlandSchemas } from "../../schemas/utland";
-import { Step } from "../../components/Step";
-import { FormErrorSummary } from "../../components/schema/FormErrorSummary";
+import {getUtlandSchemas} from "../../schemas/utland";
+import {Step} from "../../components/Step";
+import {FormErrorSummary} from "../../components/schema/FormErrorSummary";
+import {useSoknadContext} from "../../hooks/useSoknadContext";
+import {SoknadActionKeys} from "../../context/soknadActions";
 
 // Support norwegian & english languages.
 countries.registerLocale(require("i18n-iso-countries/langs/en.json"));
@@ -80,6 +76,7 @@ const Utland = (): JSX.Element => {
   const [soknadData, setSoknadData] = useState<FormValues>(defaultForm);
   const [countryList, setCountryList] = useState<string[][]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const { dispatch } = useSoknadContext();
 
   const { getText } = useTexts("utland");
   const { handleNotificationModal } = useContext(ModalContext);
@@ -131,6 +128,7 @@ const Utland = (): JSX.Element => {
       setSoknadData({ ...data });
       setCurrentStepIndex(currentStepIndex + 1);
     }
+    dispatch({type: SoknadActionKeys.SET_SOKNAD, payload: data});
   };
   const onBackButtonClick = () => setCurrentStepIndex(currentStepIndex - 1);
   const getStepName = (index: number) => stepList[index]?.name;
