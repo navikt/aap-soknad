@@ -112,7 +112,7 @@ const Bedrift = (): JSX.Element => {
             />
           </Step>
           <Step renderWhen={currentStepNameIs(StepName.UTDANNING)}>
-            <Utdanning getText={getText} errors={errors} register={register} />
+            <Utdanning getText={getText} errors={errors.utdanning} register={register} control={control} />
           </Step>
           <Step renderWhen={currentStepNameIs(StepName.PRAKSIS)}>
             <Praksis

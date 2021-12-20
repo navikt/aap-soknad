@@ -27,37 +27,41 @@ export const getBedriftSchema = (getText: Function) => [
     tlfArbeid: string(),
   }),
   object().shape({
-    // Utdanning
-    institusjonsnavn: string().required(
-      getText("form.utdanning.institusjonsnavn")
-    ),
-    fraAar: number()
-      .typeError(getText("form.utdanning.errors.feilformatAarstall"))
-      .required(paakrevdMelding("form.utdanning.fraAar", getText))
-      .min(femtiAarSiden, getText("form.utdanning.errors.forGammel"))
-      .max(detteAaret, getText("form.utdanning.errors.fremtid")),
-    tilAar: lazy((value) => {
-      const parsed = Number.parseInt(value, 10);
-      if (!isNaN(parsed)) {
-        return number()
-          .max(detteAaret, getText("form.utdanning.errors.fremtid"))
-          .when("fraAar", (fraAar, schema) => {
-            if (fraAar) {
-              return schema.min(
-                fraAar,
-                (tilAar: { value: number }) =>
-                  `${fraAar} er etter ${tilAar.value}`
-              );
-            } else {
-              return undefined;
-            }
+    utdanning: yup.array().of(
+      object().shape({
+        // Utdanning
+        institusjonsnavn: string().required(
+          paakrevdMelding("form.utdanning.institusjonsnavn", getText)
+        ),
+        fraAar: number()
+          .typeError(getText("form.utdanning.errors.feilformatAarstall"))
+          .required(paakrevdMelding("form.utdanning.fraAar", getText))
+          .min(femtiAarSiden, getText("form.utdanning.errors.forGammel"))
+          .max(detteAaret, getText("form.utdanning.errors.fremtid")),
+        tilAar: lazy((value) => {
+          const parsed = Number.parseInt(value, 10);
+          if (!isNaN(parsed)) {
+            return number()
+              .max(detteAaret, getText("form.utdanning.errors.fremtid"))
+              .when("fraAar", (fraAar, schema) => {
+                if (fraAar) {
+                  return schema.min(
+                    fraAar,
+                    (tilAar: { value: number }) =>
+                      `${fraAar} er etter ${tilAar.value}`
+                  );
+                } else {
+                  return undefined;
+                }
+              });
+          }
+          return string().matches(/^\d{4}$/, {
+            excludeEmptyString: true,
+            message: getText("forms.utdanning.errors.feilformatAarstall"),
           });
-      }
-      return string().matches(/^\d{4}$/, {
-        excludeEmptyString: true,
-        message: getText("forms.utdanning.errors.feilformatAarstall"),
-      });
-    }),
+        }),
+      })
+    ),
   }),
   object().shape({
     // Praksis
@@ -66,5 +70,8 @@ export const getBedriftSchema = (getText: Function) => [
       .date()
       .required(paakrevdMelding("form.praksis.fraDato", getText)),
     tilDato: yup.date(),
+  }),
+  yup.object().shape({
+    numbers: yup.array().of(yup.number()),
   }),
 ];
