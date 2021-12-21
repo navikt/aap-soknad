@@ -1,7 +1,8 @@
-import React, {createContext, Dispatch, ReactNode, useReducer, useMemo} from "react";
+import React, {createContext, Dispatch, ReactNode, useReducer, useMemo, useEffect} from "react";
 import SoknadForm from "../types/SoknadForm";
 import soknadReducer from "./soknadReducer";
 import {SoknadAction, SoknadActionKeys} from "./soknadActions";
+import {fetchPOST} from "../api/useFetch";
 
 export interface SoknadContextState {
   version: number;
@@ -31,6 +32,22 @@ export const SoknadContextProvider = ({ children }: Props) => {
   const contextValue = useMemo(() => {
     return {state, dispatch}
   }, [state, dispatch]);
+  useEffect(() => {
+    console.log('store soknad')
+    // const storeState = async () => {
+    //   await fetchPOST("/aap/api/lagre/UTLAND", {...state});
+    // }
+    // storeState();
+  }, [state?.søknad]);
+  useEffect(() => {
+    console.log('get soknad')
+    // const getStoredState = async () => {
+    //   const søknad = await fetch("/aap/api/les/UTLAND");
+    //   dispatch({type: SoknadActionKeys.SET_SOKNAD, payload: søknad});
+    // }
+    // if (!state?.søknad) getStoredState();
+    // }, [state,dispatch]);
+  },[]);
   const dispatchSoknad = (data: SoknadForm) => dispatch({type: SoknadActionKeys.SET_SOKNAD, payload: data });
   return (
     <SoknadContext.Provider value={contextValue} >
