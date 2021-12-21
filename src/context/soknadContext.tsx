@@ -1,8 +1,8 @@
 import React, {createContext, Dispatch, ReactNode, useReducer, useMemo, useEffect} from "react";
 import SoknadForm from "../types/SoknadForm";
 import soknadReducer from "./soknadReducer";
-import {SoknadAction, SoknadActionKeys} from "./soknadActions";
-import {fetchPOST} from "../api/useFetch";
+import {SoknadAction} from "./soknadActions";
+// import {fetchPOST} from "../api/useFetch";
 
 export interface SoknadContextState {
   version: number;
@@ -48,7 +48,6 @@ export const SoknadContextProvider = ({ children }: Props) => {
     // if (!state?.søknad) getStoredState();
     // }, [state,dispatch]);
   },[]);
-  const dispatchSoknad = (data: SoknadForm) => dispatch({type: SoknadActionKeys.SET_SOKNAD, payload: data });
   return (
     <SoknadContext.Provider value={contextValue} >
       {children}

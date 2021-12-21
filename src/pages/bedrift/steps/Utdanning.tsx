@@ -1,6 +1,6 @@
 import { Button, Cell, Grid, GuidePanel, TextField } from "@navikt/ds-react";
 import { AddCircle } from "@navikt/ds-icons";
-import useTexts, { GetText } from "../../../hooks/useTexts";
+import { GetText } from "../../../hooks/useTexts";
 import { FieldErrors, FieldValues, UseFormRegister } from "react-hook-form";
 
 interface UtdanningTypes {

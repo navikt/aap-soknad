@@ -52,8 +52,8 @@ const getButtonText = (name: string) => {
 
 const Bedrift = (): JSX.Element => {
   const [currentStepIndex, setCurrentStepIndex] = useState<number>(0);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [soknadData, setSoknadData] = useState<FormData>(undefined);
+  const [isLoading] = useState<boolean>(false);
+  const [, setSoknadData] = useState<FormData>(undefined);
   const { getText } = useTexts("bedrift");
   const bedriftSchema = getBedriftSchema(getText);
   const currentSchema = bedriftSchema[currentStepIndex];
