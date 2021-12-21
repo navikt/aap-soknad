@@ -29,9 +29,9 @@ const options = (targetAudience: string) => ({
   proxyReqPathResolver: (req: Request) => {
     // DEBUG
     if (req.originalUrl.startsWith('/aap/api/lagre'))
-      return '/lagre//UTLAND'
+      return '/lagre/08089405603/UTLAND'
     if (req.originalUrl.startsWith('/aap/api/les'))
-      return '/les//UTLAND'
+      return '/les/08089405603/UTLAND'
     return (req.originalUrl.startsWith('/aap'))
       ? req.originalUrl.slice(4)
       : req.originalUrl;

@@ -1,7 +1,8 @@
 import React, {createContext, Dispatch, ReactNode, useReducer, useMemo, useEffect} from "react";
 import SoknadForm from "../types/SoknadForm";
 import soknadReducer from "./soknadReducer";
-import {SoknadAction} from "./soknadActions";
+import {SoknadAction, SoknadActionKeys} from "./soknadActions";
+import {fetchPOST} from "../api/useFetch";
 // import {fetchPOST} from "../api/useFetch";
 
 export interface SoknadContextState {
@@ -34,19 +35,21 @@ export const SoknadContextProvider = ({ children }: Props) => {
   }, [state, dispatch]);
   useEffect(() => {
     console.log('store soknad')
-    // const storeState = async () => {
-    //   await fetchPOST("/aap/api/lagre/UTLAND", {...state});
-    // }
-    // storeState();
-  }, [state?.søknad]);
+    const storeState = async () => {
+      const sendSøknad = await fetchPOST("/aap/api/lagre/UTLAND", {...state});
+      console.log('storesøknad', sendSøknad);
+    }
+    if(state.søknad) storeState();
+  }, [state]);
   useEffect(() => {
     console.log('get soknad')
-    // const getStoredState = async () => {
-    //   const søknad = await fetch("/aap/api/les/UTLAND");
-    //   dispatch({type: SoknadActionKeys.SET_SOKNAD, payload: søknad});
-    // }
-    // if (!state?.søknad) getStoredState();
-    // }, [state,dispatch]);
+    const getStoredState = async () => {
+      const søknad = await fetch("/aap/api/les/UTLAND").then(res => res.json());
+      console.log('getsøknad', søknad);
+      dispatch({type: SoknadActionKeys.SET_SOKNAD, payload: søknad});
+    }
+    if (!state?.søknad) getStoredState();
+    // eslint-disable-next-line
   },[]);
   return (
     <SoknadContext.Provider value={contextValue} >

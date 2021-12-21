@@ -29,8 +29,6 @@ const validateAuthorization = async (authorization: string) => {
   try {
     const token = authorization.split(" ")[1];
     const JWTVerifyResult = await validerToken(token);
-    // DEBUG
-    console.log('fnr', JWTVerifyResult?.payload)
     return !!JWTVerifyResult?.payload;
   } catch (e) {
     LogError('idporten error', e);
