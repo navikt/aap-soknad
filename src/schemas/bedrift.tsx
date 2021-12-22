@@ -29,7 +29,6 @@ export const getBedriftSchema = (getText: Function) => [
   object().shape({
     utdanning: yup.array().of(
       object().shape({
-        // Utdanning
         institusjonsnavn: string().required(
           paakrevdMelding("form.utdanning.institusjonsnavn", getText)
         ),
@@ -64,14 +63,14 @@ export const getBedriftSchema = (getText: Function) => [
     ),
   }),
   object().shape({
-    // Praksis
-    navn: string().required(paakrevdMelding("form.praksis.navn", getText)),
-    fraDato: yup
-      .date()
-      .required(paakrevdMelding("form.praksis.fraDato", getText)),
-    tilDato: yup.date(),
-  }),
-  yup.object().shape({
-    numbers: yup.array().of(yup.number()),
-  }),
+    praksis: yup.array().of(
+      object().shape({
+        navn: string().required(paakrevdMelding("form.praksis.navn", getText)),
+        fraDato: yup
+          .date()
+          .required(paakrevdMelding("form.praksis.fraDato", getText)),
+        tilDato: yup.date(),
+      })
+    ),
+  })
 ];

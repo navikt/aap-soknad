@@ -1,16 +1,13 @@
 import {
-  Control,
   FieldErrors,
   FieldValues,
   UseFormRegister,
 } from "react-hook-form";
 
-import { Button, Cell, Grid, GuidePanel, TextField } from "@navikt/ds-react";
-import { AddCircle } from "@navikt/ds-icons";
+import { GuidePanel, TextField } from "@navikt/ds-react";
 
 import { GetText } from "../../hooks/useTexts";
 import { InputRadio, RadioGruppe } from "../../components/input/RadioWrapper";
-import ControlDatoVelger from "../../components/input/ControlDatoVelger";
 
 interface StepType {
   getText: GetText;
@@ -75,53 +72,5 @@ export const PersonligInfo = ({ getText, register }: StepType): JSX.Element => (
       id={"tlfArbeid"}
       {...register("tlfArbeid")}
     />
-  </>
-);
-
-interface PraksisType extends StepType {
-  control: Control;
-}
-
-export const Praksis = ({
-  getText,
-  register,
-  control,
-  errors,
-}: PraksisType): JSX.Element => (
-  <>
-    <GuidePanel poster>{getText("steps.praksis.guideText")}</GuidePanel>
-    <section>
-      <Grid>
-        <Cell xs={8}>
-          <TextField
-            label={getText("form.praksis.navn")}
-            error={errors.navn?.message}
-            {...register("navn")}
-          />
-        </Cell>
-        <Cell xs={2}>
-          <ControlDatoVelger
-            name={"fraDato"}
-            label={getText("form.praksis.fraDato")}
-            control={control}
-            error={errors.fraDato?.message}
-          />
-        </Cell>
-        <Cell xs={2}>
-          <ControlDatoVelger
-            name={"tilDato"}
-            label={getText("form.praksis.tilDato")}
-            control={control}
-            error={errors.tilDato?.message}
-          />
-        </Cell>
-      </Grid>
-    </section>
-    <section>
-      <Button variant={"tertiary"} size={"small"}>
-        <AddCircle />
-        Legg til yrkeserfaring
-      </Button>
-    </section>
   </>
 );

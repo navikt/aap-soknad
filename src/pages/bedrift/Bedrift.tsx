@@ -2,12 +2,7 @@ import React, { useState } from "react";
 import SoknadWizard, { StepType } from "../../layouts/SoknadWizard";
 import useTexts from "../../hooks/useTexts";
 import { bedrift as Texts } from "../../texts/nb.json";
-import {
-  Introduction,
-  PersonligInfo,
-  Praksis,
-  TypeStoette
-} from "./BedriftSteps";
+import { Introduction, PersonligInfo, TypeStoette } from "./BedriftSteps";
 import { Button, Loader } from "@navikt/ds-react";
 import "./Bedrift.less";
 import { useForm } from "react-hook-form";
@@ -16,6 +11,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { getBedriftSchema } from "../../schemas/bedrift";
 import { FormErrorSummary } from "../../components/schema/FormErrorSummary";
 import { Utdanning } from "./steps/Utdanning";
+import { Praksis } from "./steps/Praksis";
 
 enum StepName {
   INTRODUCTION = "INTRODUCTION",
@@ -112,13 +108,18 @@ const Bedrift = (): JSX.Element => {
             />
           </Step>
           <Step renderWhen={currentStepNameIs(StepName.UTDANNING)}>
-            <Utdanning getText={getText} errors={errors.utdanning} register={register} control={control} />
+            <Utdanning
+              getText={getText}
+              errors={errors.utdanning}
+              register={register}
+              control={control}
+            />
           </Step>
           <Step renderWhen={currentStepNameIs(StepName.PRAKSIS)}>
             <Praksis
               getText={getText}
               register={register}
-              errors={errors}
+              errors={errors.praksis}
               control={control}
             />
           </Step>

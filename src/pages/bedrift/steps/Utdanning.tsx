@@ -1,7 +1,7 @@
 import React from "react";
 
 import { Button, Cell, Grid, GuidePanel, TextField } from "@navikt/ds-react";
-import { AddCircle } from "@navikt/ds-icons";
+import { AddCircle, DeleteFilled } from "@navikt/ds-icons";
 import { GetText } from "../../../hooks/useTexts";
 import {
   Control,
@@ -21,6 +21,7 @@ interface UtdanningTypes {
 interface RadTypes extends UtdanningTypes {
   index: number;
   fieldKey: string;
+  remove: Function
 }
 
 const UtdanningRad = ({
@@ -28,12 +29,13 @@ const UtdanningRad = ({
   register,
   errors,
   fieldKey,
-  index
+  index,
+  remove
 }: RadTypes): JSX.Element => {
   const fieldErrors = errors?.[index];
   return (
     <Grid>
-      <Cell xs={8}>
+      <Cell xs={7}>
         <TextField
           label={getText("form.utdanning.institusjonsnavn")}
           {...register(`${fieldKey}.${index}.institusjonsnavn`)}
@@ -53,6 +55,11 @@ const UtdanningRad = ({
           {...register(`${fieldKey}.${index}.tilAar`)}
           error={fieldErrors?.tilAar?.message}
         />
+      </Cell>
+      <Cell xs={1}>
+        <Button variant={'tertiary'} size={'small'} onClick={() => remove()}>
+          <DeleteFilled title={getText('form.utdanning.slettRad')}/>
+        </Button>
       </Cell>
     </Grid>
   );
@@ -82,6 +89,7 @@ export const Utdanning = ({
             key={field.id}
             index={index}
             fieldKey={'utdanning'}
+            remove={remove}
           />
         ))}
       </section>
