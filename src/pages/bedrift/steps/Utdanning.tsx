@@ -57,7 +57,7 @@ const UtdanningRad = ({
         />
       </Cell>
       <Cell xs={1}>
-        <Button variant={'tertiary'} size={'small'} onClick={() => remove()}>
+        <Button variant={'tertiary'} size={'small'} onClick={() => remove(index)}>
           <DeleteFilled title={getText('form.utdanning.slettRad')}/>
         </Button>
       </Cell>

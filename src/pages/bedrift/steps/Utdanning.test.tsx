@@ -56,20 +56,21 @@ describe("Utdanning", () => {
   });
 
   it("må kunne slette rader", () => {
+    const skolenavn = 'Nes Vidregående skole';
     const leggTilKnapp = screen.getByRole("button", {
       name: texts.form.utdanning.leggTil,
     });
 
-    expect(leggTilKnapp).toBeVisible();
     userEvent.click(leggTilKnapp);
-    expect(
-      screen.getByLabelText(texts.form.utdanning.institusjonsnavn)
-    ).toBeVisible();
-    const slettKnapp = screen.getByRole('button', { name: texts.form.utdanning.slettRad});
-    expect(slettKnapp).toBeVisible();
-    userEvent.click(slettKnapp);
-    expect(
-      screen.queryByLabelText(texts.form.utdanning.institusjonsnavn)
-    ).not.toBeInTheDocument();
+    userEvent.type(screen.getByLabelText(texts.form.utdanning.institusjonsnavn), skolenavn);
+    userEvent.type(screen.getByLabelText(texts.form.utdanning.fraAar), '2010');
+    userEvent.type(screen.getByLabelText(texts.form.utdanning.tilAar), '2013');
+
+    userEvent.click(leggTilKnapp);
+
+    expect(screen.getAllByLabelText(texts.form.utdanning.institusjonsnavn)).toHaveLength(2);
+
+    userEvent.click(screen.getAllByRole('button', { name: texts.form.utdanning.slettRad})[1]);
+    expect(screen.getByDisplayValue(skolenavn)).toBeVisible();
   });
 });

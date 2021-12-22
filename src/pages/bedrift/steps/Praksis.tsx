@@ -61,7 +61,7 @@ const PraksisRad = ({
             />
           </Cell>
           <Cell xs={1}>
-            <Button variant={"tertiary"} onClick={() => remove()} name={getText('form.praksis.slettRad')}>
+            <Button variant={"tertiary"} onClick={() => remove(index)} name={getText('form.praksis.slettRad')}>
               <DeleteFilled title={getText('form.praksis.slettRad')} />
             </Button>
           </Cell>
