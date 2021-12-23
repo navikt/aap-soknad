@@ -1,8 +1,9 @@
-import Periode from "./Periode";
 
 interface SoknadUtland {
-  land: string;
-  periode: Periode;
+  country?: string;
+  fromDate?: string;
+  toDate?: string;
+  confirmationPanel?: boolean;
 }
 
 export default SoknadUtland;

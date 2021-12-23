@@ -17,6 +17,8 @@ import {Step} from "../../components/Step";
 import {FormErrorSummary} from "../../components/schema/FormErrorSummary";
 import {useSoknadContext} from "../../hooks/useSoknadContext";
 import {SoknadActionKeys} from "../../context/soknadActions";
+import SoknadUtland from "../../types/SoknadUtland";
+import {SøknadType} from "../../context/soknadContext";
 
 // Support norwegian & english languages.
 countries.registerLocale(require("i18n-iso-countries/langs/en.json"));
@@ -37,19 +39,6 @@ const stepList: StepType[] = [
   { name: StepName.SUMMARY },
   { name: StepName.RECEIPT },
 ];
-
-type FormValues = {
-  country: string;
-  fromDate?: string;
-  toDate?: string;
-  confirmationPanel: boolean;
-};
-const defaultForm: FormValues = {
-  country: "none",
-  fromDate: undefined,
-  toDate: undefined,
-  confirmationPanel: false,
-};
 
 const getButtonText = (name: string) => {
   switch (name) {
@@ -73,16 +62,32 @@ const showButton = (name: string) => {
 
 const Utland = (): JSX.Element => {
   const [currentStepIndex, setCurrentStepIndex] = useState<number>(0);
-  const [soknadData, setSoknadData] = useState<FormValues>(defaultForm);
   const [countryList, setCountryList] = useState<string[][]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const { dispatch } = useSoknadContext();
+  const { state, dispatch } = useSoknadContext();
+  const [initialForm, setInitialForm] = useState<SoknadUtland>( {
+    country: "none",
+    fromDate: undefined,
+    toDate: undefined,
+    confirmationPanel: false,
+  });
 
   const { getText } = useTexts("utland");
   const { handleNotificationModal } = useContext(ModalContext);
 
   const SoknadUtlandSchemas = getUtlandSchemas(getText);
   const currentSchema = SoknadUtlandSchemas[currentStepIndex];
+  useEffect(() => {
+    if(state.type && state.currentStep) {
+      setInitialForm({...state.søknad});
+      const stepIndex = stepList.indexOf(state.currentStep as unknown as StepType);
+      if(stepIndex > 0) setCurrentStepIndex(stepIndex);
+    } else {
+      dispatch({type: SoknadActionKeys.SET_SOKNAD_TYPE, payload: SøknadType.UTLAND})
+    }
+    // eslint-disable-next-line
+  }, []);
+  const [soknadData, setSoknadData] = useState<SoknadUtland>(initialForm);
 
   useEffect(() => {
     const getCountries = () => {
@@ -100,9 +105,9 @@ const Utland = (): JSX.Element => {
     formState: { errors },
   } = useForm({
     resolver: yupResolver(currentSchema),
-    defaultValues: defaultForm,
+    defaultValues: initialForm,
   });
-  const onSubmitClick = async (data: FormValues) => {
+  const onSubmitClick = async (data: SoknadUtland) => {
     if (currentStepNameIs(StepName.SUMMARY)) {
       setIsLoading(true);
       const postResponse = await fetchPOST("/aap/api/innsending/utland", {
@@ -129,6 +134,7 @@ const Utland = (): JSX.Element => {
       setCurrentStepIndex(currentStepIndex + 1);
     }
     dispatch({type: SoknadActionKeys.SET_SOKNAD, payload: data});
+    dispatch({type: SoknadActionKeys.SET_CURRENT_STEP, payload: getStepName(currentStepIndex)})
   };
   const onBackButtonClick = () => setCurrentStepIndex(currentStepIndex - 1);
   const getStepName = (index: number) => stepList[index]?.name;

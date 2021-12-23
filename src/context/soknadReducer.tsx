@@ -7,10 +7,20 @@ const soknadReducer = (
 ): SoknadContextState => {
   console.log('soknadReducer', action.type, action.payload)
   switch (action.type) {
+    case SoknadActionKeys.SET_SOKNAD_TYPE:
+      return {
+        ...state,
+        type: action.payload
+      };
     case SoknadActionKeys.SET_SOKNAD:
       return {
         ...state,
         søknad: action.payload
+      };
+    case SoknadActionKeys.SET_CURRENT_STEP:
+      return {
+        ...state,
+        currentStep: action.payload
       };
   }
 }

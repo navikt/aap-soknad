@@ -4,10 +4,14 @@ import soknadReducer from "./soknadReducer";
 import {SoknadAction, SoknadActionKeys} from "./soknadActions";
 import {fetchPOST} from "../api/useFetch";
 // import {fetchPOST} from "../api/useFetch";
+export enum SøknadType {
+  UTLAND = 'UTLAND',
+}
 
 export interface SoknadContextState {
   version: number;
-  currentRoute: string;
+  type?: SøknadType;
+  currentStep?: string;
   søknad?: SoknadForm;
   søkerinfo: string;
 }
@@ -21,7 +25,8 @@ interface Props {
 
 const soknadContextInititalState = {
   version: 1,
-  currentRoute: 'test',
+  type: undefined,
+  currentStep: undefined,
   søknad: undefined,
   søkerinfo: 'test'
 }
