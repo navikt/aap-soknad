@@ -15,7 +15,7 @@
     "@navikt/nav-dekoratoren-moduler": "^1.6.9",
     "cookie-parser": "^1.4.6",
     "express": "^4.17.1",
-    "express-http-proxy": "^1.6.2",
+    "express-http-proxy": "^1.6.3",
     "got": "^11.8.2",
     "jose": "^3.20.3",
     "node-cache": "5.1.2",
