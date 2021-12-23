@@ -6,15 +6,21 @@ import "react-day-picker/lib/style.css";
 import "./datovelger.less";
 import { TextField } from "@navikt/ds-react";
 import { formatDate } from "../../utils/date"
+import { DateUtils } from "react-day-picker";
 
-const parseDate = (str: string, format: string, locale: string) => {
+const parseDate = (str: string, format: string) => {
   try {
-    return parse(str, format, new Date(), { locale: nb });
+    const res = parse(str, format, new Date(), { locale: nb });
+    if (DateUtils.isDate(res)) {
+      return res;
+    }
+
+    return undefined;
   } catch (err) {
     console.error("parseDate error", err);
   }
 };
-const wrapFormatDate = (date: Date, dateFormat: string, locale: string) =>
+const wrapFormatDate = (date: Date, dateFormat: string) =>
   formatDate(date, dateFormat);
 
 interface DatovelgerProps {

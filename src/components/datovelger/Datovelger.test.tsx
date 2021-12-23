@@ -22,7 +22,7 @@ describe("Datovelger", () => {
     expect(input).toHaveDisplayValue(forventetVisningsverdi);
   });
 
-  test.skip("kan skrive inn dato", async () =>{
+  test("kan skrive inn dato", async () =>{
     const dato = new Date();
     const forventetVisningsverdi = format(dato, 'dd.MM.yyyy');
     render(
