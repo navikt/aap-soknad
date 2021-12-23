@@ -61,8 +61,12 @@ const PraksisRad = ({
             />
           </Cell>
           <Cell xs={1}>
-            <Button variant={"tertiary"} onClick={() => remove(index)} name={getText('form.praksis.slettRad')}>
-              <DeleteFilled title={getText('form.praksis.slettRad')} />
+            <Button
+              variant={"tertiary"}
+              onClick={() => remove(index)}
+              name={getText("form.praksis.slettRad")}
+            >
+              <DeleteFilled title={getText("form.praksis.slettRad")} />
             </Button>
           </Cell>
         </Grid>
@@ -100,8 +104,8 @@ const Praksis = ({
       </section>
       <section>
         <Button variant={"tertiary"} size={"small"} onClick={() => append({})}>
-          <AddCircle />
-          {getText('form.praksis.leggTil')}
+          <AddCircle aria-hidden title={getText("form.praksis.leggTil")} />
+          {getText("form.praksis.leggTil")}
         </Button>
       </section>
     </>

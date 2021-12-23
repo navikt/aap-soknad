@@ -1,5 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import { useForm } from "react-hook-form";
+import { axe, toHaveNoViolations } from "jest-axe";
 
 import * as bedriftstekster from "../../../texts/nb.json";
 import useTexts from "../../../hooks/useTexts";
@@ -10,29 +11,29 @@ import { endOfMonth, format, startOfMonth } from "date-fns";
 let dato = new Date();
 let foersteIMnd = format(startOfMonth(dato), "EEE MMM dd yyyy");
 let sisteIMnd = format(endOfMonth(dato), "EEE MMM dd yyyy");
+expect.extend(toHaveNoViolations);
 
 describe("Praksis", () => {
   const texts = bedriftstekster.bedrift;
-  beforeEach(() => {
-    const Component = () => {
-      const { control } = useForm();
-      const { getText } = useTexts("bedrift");
 
-      return (
-        <>
-          <Praksis
-            getText={getText}
-            control={control}
-            register={jest.fn()}
-            errors={{}}
-          />
-        </>
-      );
-    };
-    render(<Component />);
-  });
+  const Component = () => {
+    const { control } = useForm();
+    const { getText } = useTexts("bedrift");
+
+    return (
+      <>
+        <Praksis
+          getText={getText}
+          control={control}
+          register={jest.fn()}
+          errors={{}}
+        />
+      </>
+    );
+  };
 
   it("skal starte uten oppføringer", () => {
+    render(<Component />);
     expect(screen.getByText(texts.steps.praksis.guideText)).toBeVisible();
     expect(
       screen.queryByLabelText(texts.form.praksis.navn)
@@ -40,6 +41,7 @@ describe("Praksis", () => {
   });
 
   it("må kunne legge til oppføringer", () => {
+    render(<Component />);
     const leggTilKnapp = screen.getByRole("button", {
       name: texts.form.praksis.leggTil,
     });
@@ -50,6 +52,7 @@ describe("Praksis", () => {
   });
 
   it("må kunne slette rader", () => {
+    render(<Component />);
     const firmanavn = "Lokal snekker AS";
     const leggTilKnapp = screen.getByRole("button", {
       name: texts.form.praksis.leggTil,
@@ -68,5 +71,11 @@ describe("Praksis", () => {
       screen.getAllByRole("button", { name: texts.form.praksis.slettRad })[1]
     );
     expect(screen.getByDisplayValue(firmanavn)).toBeVisible();
+  });
+
+  it("skal ikke ha brudd på krav til universell utforming", async () => {
+    const { container } = render(<Component />);
+    const res = await axe(container);
+    expect(res).toHaveNoViolations();
   });
 });
