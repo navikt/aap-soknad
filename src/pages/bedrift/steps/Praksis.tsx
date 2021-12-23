@@ -34,44 +34,42 @@ const PraksisRad = ({
 }: PraksisRadType): JSX.Element => {
   const fieldErrors = errors?.[index];
   return (
-    <>
-      <section>
-        <Grid>
-          <Cell xs={7}>
-            <TextField
-              label={getText("form.praksis.navn")}
-              error={fieldErrors?.navn?.message}
-              {...register(`${fieldKey}.${index}.navn`)}
-            />
-          </Cell>
-          <Cell xs={2}>
-            <ControlDatoVelger
-              name={"fraDato"}
-              label={getText("form.praksis.fraDato")}
-              control={control}
-              error={fieldErrors?.fraDato?.message}
-            />
-          </Cell>
-          <Cell xs={2}>
-            <ControlDatoVelger
-              name={"tilDato"}
-              label={getText("form.praksis.tilDato")}
-              control={control}
-              error={fieldErrors?.tilDato?.message}
-            />
-          </Cell>
-          <Cell xs={1}>
-            <Button
-              variant={"tertiary"}
-              onClick={() => remove(index)}
-              name={getText("form.praksis.slettRad")}
-            >
-              <DeleteFilled title={getText("form.praksis.slettRad")} />
-            </Button>
-          </Cell>
-        </Grid>
-      </section>
-    </>
+    <div className={"rad"}>
+      <Grid>
+        <Cell xs={7}>
+          <TextField
+            label={getText("form.praksis.navn")}
+            error={fieldErrors?.navn?.message}
+            {...register(`${fieldKey}.${index}.navn`)}
+          />
+        </Cell>
+        <Cell xs={2}>
+          <ControlDatoVelger
+            name={"fraDato"}
+            label={getText("form.praksis.fraDato")}
+            control={control}
+            error={fieldErrors?.fraDato?.message}
+          />
+        </Cell>
+        <Cell xs={2}>
+          <ControlDatoVelger
+            name={"tilDato"}
+            label={getText("form.praksis.tilDato")}
+            control={control}
+            error={fieldErrors?.tilDato?.message}
+          />
+        </Cell>
+        <Cell xs={1} className={"slett__ikon"}>
+          <Button
+            variant={"tertiary"}
+            onClick={() => remove(index)}
+            name={getText("form.praksis.slettRad")}
+          >
+            <DeleteFilled title={getText("form.praksis.slettRad")} />
+          </Button>
+        </Cell>
+      </Grid>
+    </div>
   );
 };
 

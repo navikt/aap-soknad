@@ -34,38 +34,40 @@ const UtdanningRad = ({
 }: RadTypes): JSX.Element => {
   const fieldErrors = errors?.[index];
   return (
-    <Grid>
-      <Cell xs={7}>
-        <TextField
-          label={getText("form.utdanning.institusjonsnavn")}
-          {...register(`${fieldKey}.${index}.institusjonsnavn`)}
-          error={fieldErrors?.institusjonsnavn?.message}
-        />
-      </Cell>
-      <Cell xs={2}>
-        <TextField
-          label={getText("form.utdanning.fraAar")}
-          {...register(`${fieldKey}.${index}.fraAar`)}
-          error={fieldErrors?.fraAar?.message}
-        />
-      </Cell>
-      <Cell xs={2}>
-        <TextField
-          label={getText("form.utdanning.tilAar")}
-          {...register(`${fieldKey}.${index}.tilAar`)}
-          error={fieldErrors?.tilAar?.message}
-        />
-      </Cell>
-      <Cell xs={1}>
-        <Button
-          variant={"tertiary"}
-          size={"small"}
-          onClick={() => remove(index)}
-        >
-          <DeleteFilled title={getText("form.utdanning.slettRad")} />
-        </Button>
-      </Cell>
-    </Grid>
+    <div className={"rad"}>
+      <Grid>
+        <Cell xs={7}>
+          <TextField
+            label={getText("form.utdanning.institusjonsnavn")}
+            {...register(`${fieldKey}.${index}.institusjonsnavn`)}
+            error={fieldErrors?.institusjonsnavn?.message}
+          />
+        </Cell>
+        <Cell xs={2}>
+          <TextField
+            label={getText("form.utdanning.fraAar")}
+            {...register(`${fieldKey}.${index}.fraAar`)}
+            error={fieldErrors?.fraAar?.message}
+          />
+        </Cell>
+        <Cell xs={2}>
+          <TextField
+            label={getText("form.utdanning.tilAar")}
+            {...register(`${fieldKey}.${index}.tilAar`)}
+            error={fieldErrors?.tilAar?.message}
+          />
+        </Cell>
+        <Cell xs={1} className={'slett__ikon'}>
+          <Button
+            variant={"tertiary"}
+            size={"small"}
+            onClick={() => remove(index)}
+          >
+            <DeleteFilled title={getText("form.utdanning.slettRad")} />
+          </Button>
+        </Cell>
+      </Grid>
+    </div>
   );
 };
 
