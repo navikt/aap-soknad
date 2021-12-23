@@ -72,5 +72,9 @@ export const getBedriftSchema = (getText: Function) => [
         tilDato: yup.date(),
       })
     ),
+  }),
+  object().shape({
+    soektOm: yup.boolean().required(getText("form.etablererStipend.soektOm.paakrevd")),
+    resultat: yup.string().oneOf(['avslaatt', 'innvilget', 'ikkeFerdigBehandlet']).required()
   })
 ];

@@ -21,7 +21,7 @@ interface UtdanningTypes {
 interface RadTypes extends UtdanningTypes {
   index: number;
   fieldKey: string;
-  remove: Function
+  remove: Function;
 }
 
 const UtdanningRad = ({
@@ -30,7 +30,7 @@ const UtdanningRad = ({
   errors,
   fieldKey,
   index,
-  remove
+  remove,
 }: RadTypes): JSX.Element => {
   const fieldErrors = errors?.[index];
   return (
@@ -57,8 +57,12 @@ const UtdanningRad = ({
         />
       </Cell>
       <Cell xs={1}>
-        <Button variant={'tertiary'} size={'small'} onClick={() => remove(index)}>
-          <DeleteFilled title={getText('form.utdanning.slettRad')}/>
+        <Button
+          variant={"tertiary"}
+          size={"small"}
+          onClick={() => remove(index)}
+        >
+          <DeleteFilled title={getText("form.utdanning.slettRad")} />
         </Button>
       </Cell>
     </Grid>
@@ -88,14 +92,14 @@ export const Utdanning = ({
             errors={errors}
             key={field.id}
             index={index}
-            fieldKey={'utdanning'}
+            fieldKey={"utdanning"}
             remove={remove}
           />
         ))}
       </section>
       <section>
         <Button variant={"tertiary"} size={"small"} onClick={() => append({})}>
-          <AddCircle />
+          <AddCircle aria-hidden title={getText("form.utdanning.leggTil")} />
           {getText("form.utdanning.leggTil")}
         </Button>
       </section>

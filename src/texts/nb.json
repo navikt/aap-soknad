@@ -44,6 +44,9 @@
       },
       "praksis": {
         "guideText": "Her registrerer du yrkeserfaring og annen relevant praktisk erfaring"
+      },
+      "etablererstipend": {
+        "guideText": "Etablererstipend fra Innovasjon Norge"
       }
     },
     "form": {
@@ -85,6 +88,16 @@
         "tilDato": "Til",
         "leggTil": "Legg til yrkeserfaring / praksis",
         "slettRad": "Slett rad"
+      },
+      "etablererStipend": {
+          "soektOm": {
+            "label": "Har du søkt om etablererstipend?",
+            "paakrevd": "Du må svare på spørsmålet"
+          },
+        "resultat": {
+          "label": "Hva ble resultatet av søknaden?",
+          "paakrevd": "Du må angi hva resultatet av søknaden ble."
+        }
       }
     }
   }
