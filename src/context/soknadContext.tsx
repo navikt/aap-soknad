@@ -49,9 +49,10 @@ export const SoknadContextProvider = ({ children }: Props) => {
   useEffect(() => {
     console.log('get soknad')
     const getStoredState = async () => {
-      const søknad = await fetch("/aap/api/les/UTLAND").then(res => res.json());
-      console.log('getsøknad', søknad);
-      dispatch({type: SoknadActionKeys.SET_SOKNAD, payload: søknad});
+      const cacheResponse = await fetch("/aap/api/les/UTLAND").then(res => res.json());
+      console.log('get søknad', cacheResponse);
+      const cachedContext: SoknadContextState = cacheResponse?.data;
+      cachedContext && dispatch({type: SoknadActionKeys.SET_STATE_FROM_CACHE, payload: cachedContext});
     }
     if (!state?.søknad) getStoredState();
     // eslint-disable-next-line
