@@ -24,3 +24,24 @@ fetchMock.post(
     delay: 3000
   }
 );
+
+fetchMock.post(
+  '/aap/api/lagre/UTLAND',
+  {
+    status: 200,
+    body: {}
+  },
+  {
+    delay: 100
+  }
+);
+fetchMock.get(
+  '/aap/api/les/UTLAND',
+  {
+    status: 200,
+    body: {}
+  },
+  {
+    delay: 100
+  }
+);

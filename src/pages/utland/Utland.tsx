@@ -127,11 +127,10 @@ const Utland = (): JSX.Element => {
         });
       }
     } else {
-      console.log(data);
       setCurrentStepIndex(currentStepIndex + 1);
     }
     dispatch({type: SoknadActionKeys.SET_SOKNAD, payload: data});
-    dispatch({type: SoknadActionKeys.SET_CURRENT_STEP, payload: getStepName(currentStepIndex)})
+    dispatch({type: SoknadActionKeys.SET_CURRENT_STEP, payload: getStepName(currentStepIndex + 1)})
   };
   const onBackButtonClick = () => setCurrentStepIndex(currentStepIndex - 1);
   const getStepName = (index: number) => stepList[index]?.name;
