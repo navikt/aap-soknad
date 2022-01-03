@@ -88,7 +88,9 @@ const Utland = (): JSX.Element => {
   useEffect(() => {
     if(state.currentStep && state.søknad) {
       reset({...state.søknad});
-      const stepIndex = stepList.indexOf(state.currentStep as unknown as StepType);
+      const stepIndex = stepList.findIndex(step =>
+        step?.name as unknown as StepType === state.currentStep as unknown as StepType
+      );
       console.log('stepIndex', stepIndex, state.currentStep);
       if(stepIndex > 0) setCurrentStepIndex(stepIndex);
     }
