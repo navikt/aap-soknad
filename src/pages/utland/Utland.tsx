@@ -82,14 +82,17 @@ const Utland = (): JSX.Element => {
     defaultValues: useMemo(() => state?.søknad, [state]),
   });
   useEffect(() => {
-    if(state.type && state.currentStep) {
+    dispatch({type: SoknadActionKeys.SET_SOKNAD_TYPE, payload: SøknadType.UTLAND})
+    // eslint-disable-next-line
+  }, [])
+  useEffect(() => {
+    if(state.currentStep) {
       reset({...state.søknad});
       const stepIndex = stepList.indexOf(state.currentStep as unknown as StepType);
       if(stepIndex > 0) setCurrentStepIndex(stepIndex);
-    } else {
-      dispatch({type: SoknadActionKeys.SET_SOKNAD_TYPE, payload: SøknadType.UTLAND})
     }
-  }, [state, state?.søknad, reset, dispatch]);
+    // eslint-disable-next-line
+  }, [state?.søknad, reset, dispatch]);
 
   useEffect(() => {
     const getCountries = () => {
