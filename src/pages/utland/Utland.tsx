@@ -86,13 +86,13 @@ const Utland = (): JSX.Element => {
     // eslint-disable-next-line
   }, [])
   useEffect(() => {
-    if(state.currentStep) {
+    if(state.currentStep && state.søknad) {
       reset({...state.søknad});
       const stepIndex = stepList.indexOf(state.currentStep as unknown as StepType);
+      console.log('stepIndex', stepIndex, state.currentStep);
       if(stepIndex > 0) setCurrentStepIndex(stepIndex);
     }
-    // eslint-disable-next-line
-  }, [state?.søknad, reset, dispatch]);
+  }, [state, reset, dispatch]);
 
   useEffect(() => {
     const getCountries = () => {
