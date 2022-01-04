@@ -7,6 +7,11 @@ const soknadReducer = (
 ): SoknadContextState => {
   console.log('soknadReducer', action.type, action.payload)
   switch (action.type) {
+    case SoknadActionKeys.SET_STATE_FROM_CACHE:
+      return {
+        ...state,
+        ...action.payload
+      };
     case SoknadActionKeys.SET_SOKNAD_TYPE:
       return {
         ...state,

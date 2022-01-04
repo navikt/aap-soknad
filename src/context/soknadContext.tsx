@@ -45,13 +45,14 @@ export const SoknadContextProvider = ({ children }: Props) => {
       console.log('storesøknad', sendSøknad);
     }
     if(state.søknad) storeState();
-  }, [state]);
+    // eslint-disable-next-line
+  }, [state?.søknad]);
   useEffect(() => {
     console.log('get soknad')
     const getStoredState = async () => {
-      const søknad = await fetch("/aap/api/les/UTLAND").then(res => res.json());
-      console.log('getsøknad', søknad);
-      dispatch({type: SoknadActionKeys.SET_SOKNAD, payload: søknad});
+      const cachedContext: SoknadContextState = await fetch("/aap/api/les/UTLAND").then(res => res.json());
+      console.log('getsøknad', cachedContext);
+      cachedContext && dispatch({type: SoknadActionKeys.SET_STATE_FROM_CACHE, payload: cachedContext});
     }
     if (!state?.søknad) getStoredState();
     // eslint-disable-next-line
