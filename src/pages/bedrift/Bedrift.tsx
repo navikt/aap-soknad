@@ -12,6 +12,7 @@ import { getBedriftSchema } from "../../schemas/bedrift";
 import { FormErrorSummary } from "../../components/schema/FormErrorSummary";
 import { Utdanning } from "./steps/Utdanning";
 import { Praksis } from "./steps/Praksis";
+import { Etablererstipend } from "./steps/Etablererstipend";
 
 enum StepName {
   INTRODUCTION = "INTRODUCTION",
@@ -19,6 +20,7 @@ enum StepName {
   PERSONLIG = "PERSONLIG",
   UTDANNING = "UTDANNING",
   PRAKSIS = "PRAKSIS",
+  SOEKT_OM_ETABLERER_STIPEND = 'SOEKT_OM_ETABLERER_STIPEND',
   SUMMARY = "SUMMARY",
   RECEIPT = "RECEIPT",
 }
@@ -29,6 +31,7 @@ const stepList: StepType[] = [
   { name: StepName.PERSONLIG },
   { name: StepName.UTDANNING },
   { name: StepName.PRAKSIS },
+  { name: StepName.SOEKT_OM_ETABLERER_STIPEND },
   { name: StepName.SUMMARY },
   { name: StepName.RECEIPT },
 ];
@@ -59,6 +62,7 @@ const Bedrift = (): JSX.Element => {
     register,
     handleSubmit,
     formState: { errors },
+    getValues
   } = useForm({
     resolver: yupResolver(currentSchema),
     mode: "onBlur",
@@ -121,6 +125,14 @@ const Bedrift = (): JSX.Element => {
               register={register}
               errors={errors.praksis}
               control={control}
+            />
+          </Step>
+          <Step renderWhen={currentStepNameIs(StepName.SOEKT_OM_ETABLERER_STIPEND)}>
+            <Etablererstipend
+              getText={getText}
+              register={register}
+              errors={errors.etablererstipend}
+              getValues={getValues}
             />
           </Step>
           <FormErrorSummary errors={errors} />

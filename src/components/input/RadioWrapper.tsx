@@ -2,13 +2,14 @@ import { Radio, RadioGroup } from "@navikt/ds-react";
 
 type InputRadioType = {
   register: any;
-  value: string;
+  value: string | boolean;
   noekkel: string;
   getText: Function
+  onChange?: Function
 }
 
-const InputRadio = ({register, value, noekkel, getText}: InputRadioType): JSX.Element => (
-  <Radio {...register(noekkel)} value={value}>
+const InputRadio = ({register, value, noekkel, getText, onChange}: InputRadioType): JSX.Element => (
+  <Radio {...register(noekkel)} value={value} onChange={onChange}>
     {getText(`form.${noekkel}.${value}`)}
   </Radio>
 )
