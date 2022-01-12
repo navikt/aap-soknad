@@ -122,8 +122,8 @@ const Utland = (): JSX.Element => {
     } else {
       goToNextStep();
     }
-    dispatch({type: SoknadActionKeys.SET_SOKNAD, payload: data});
     dispatch({type: SoknadActionKeys.SET_CURRENT_STEP, payload: nextStep?.name})
+    dispatch({type: SoknadActionKeys.SET_SOKNAD, payload: data});
   };
   const currentStepNameIs = (name: StepName) =>
     name === currentStep.name;
