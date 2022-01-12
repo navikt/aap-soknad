@@ -59,7 +59,7 @@ export const SoknadContextProvider = ({ children }: Props) => {
     }
     if (!state?.søknad) getStoredState();
     // eslint-disable-next-line
-  },[]);
+  },[state.type]);
   return (
     <SoknadContext.Provider value={contextValue} >
       {children}
