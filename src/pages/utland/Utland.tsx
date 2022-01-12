@@ -19,6 +19,7 @@ import {useSoknadContext} from "../../hooks/useSoknadContext";
 import {SoknadActionKeys} from "../../context/soknadActions";
 import SoknadUtland from "../../types/SoknadUtland";
 import {SøknadType} from "../../context/soknadContext";
+import useSteps from "../../hooks/useSteps";
 
 // Support norwegian & english languages.
 countries.registerLocale(require("i18n-iso-countries/langs/en.json"));
@@ -32,7 +33,7 @@ enum StepName {
   RECEIPT = "RECEIPT",
 }
 // Move inside component in useState if we need dynamic steps
-const stepList: StepType[] = [
+const initStepList: StepType[] = [
   { name: StepName.INTRODUCTION },
   { name: StepName.COUNTRY },
   { name: StepName.PERIOD },
@@ -61,10 +62,10 @@ const showButton = (name: string) => {
 };
 
 const Utland = (): JSX.Element => {
-  const [currentStepIndex, setCurrentStepIndex] = useState<number>(0);
+  const {stepList, currentStepIndex, goToNamedStep, goToNextStep, goToPreviousStep, nextStep, currentStep} = useSteps(initStepList);
   const [countryList, setCountryList] = useState<string[][]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const { state, dispatch } = useSoknadContext();
+  const { state, dispatch } = useSoknadContext(SøknadType.UTLAND);
 
   const { getText } = useTexts("utland");
   const { handleNotificationModal } = useContext(ModalContext);
@@ -82,19 +83,11 @@ const Utland = (): JSX.Element => {
     defaultValues: useMemo(() => state?.søknad, [state]),
   });
   useEffect(() => {
-    dispatch({type: SoknadActionKeys.SET_SOKNAD_TYPE, payload: SøknadType.UTLAND})
-    // eslint-disable-next-line
-  }, [])
-  useEffect(() => {
     if(state.currentStep && state.søknad) {
       reset({...state.søknad});
-      const stepIndex = stepList.findIndex(step =>
-        step?.name as unknown as StepType === state.currentStep as unknown as StepType
-      );
-      console.log('stepIndex', stepIndex, state.currentStep);
-      if(stepIndex > 0) setCurrentStepIndex(stepIndex);
+      goToNamedStep(state.currentStep as string);
     }
-  }, [state, reset, dispatch]);
+  }, [state, reset, goToNamedStep]);
 
   useEffect(() => {
     const getCountries = () => {
@@ -117,7 +110,7 @@ const Utland = (): JSX.Element => {
       });
       setIsLoading(false);
       if (postResponse.ok) {
-        setCurrentStepIndex(currentStepIndex + 1);
+        goToNextStep();
       } else {
         // TODO frontend-error error
         handleNotificationModal({
@@ -127,15 +120,13 @@ const Utland = (): JSX.Element => {
         });
       }
     } else {
-      setCurrentStepIndex(currentStepIndex + 1);
+      goToNextStep();
     }
     dispatch({type: SoknadActionKeys.SET_SOKNAD, payload: data});
-    dispatch({type: SoknadActionKeys.SET_CURRENT_STEP, payload: getStepName(currentStepIndex + 1)})
+    dispatch({type: SoknadActionKeys.SET_CURRENT_STEP, payload: nextStep?.name})
   };
-  const onBackButtonClick = () => setCurrentStepIndex(currentStepIndex - 1);
-  const getStepName = (index: number) => stepList[index]?.name;
   const currentStepNameIs = (name: StepName) =>
-    name === getStepName(currentStepIndex);
+    name === currentStep.name;
 
   return (
     <SoknadWizard
@@ -180,9 +171,9 @@ const Utland = (): JSX.Element => {
 
           <FormErrorSummary errors={errors} />
 
-          {showButton(getStepName(currentStepIndex)) && (
+          {showButton(currentStep?.name) && (
             <Button variant="primary" type="submit" disabled={isLoading}>
-              {getButtonText(getStepName(currentStepIndex))}
+              {getButtonText(currentStep?.name)}
               {isLoading && <Loader />}
             </Button>
           )}
@@ -190,7 +181,7 @@ const Utland = (): JSX.Element => {
         <Step renderWhen={currentStepNameIs(StepName.RECEIPT)}>
           <StepKvittering getText={getText} />
         </Step>
-        <Button variant="tertiary" onClick={onBackButtonClick}>
+        <Button variant="tertiary" onClick={goToPreviousStep}>
           Tilbake
         </Button>
       </>
