@@ -1,4 +1,7 @@
 {
+  "felles": {
+    "skjemafeil": "Du må rette opp i følgende før du kan fortsette"
+  },
   "utland": {
     "pageTitle": "Søknad om å beholde arbeidsavklaringspenger under opphold i utlandet",
     "steps": {
@@ -89,14 +92,19 @@
         "leggTil": "Legg til yrkeserfaring / praksis",
         "slettRad": "Slett rad"
       },
-      "etablererStipend": {
+      "etablererstipend": {
           "soektOm": {
             "label": "Har du søkt om etablererstipend?",
-            "paakrevd": "Du må svare på spørsmålet"
+            "paakrevd": "Du må svare på spørsmålet",
+            "true": "Ja",
+            "false": "Nei"
           },
         "resultat": {
           "label": "Hva ble resultatet av søknaden?",
-          "paakrevd": "Du må angi hva resultatet av søknaden ble."
+          "paakrevd": "Du må angi hva resultatet av søknaden ble.",
+          "avslaatt": "Avslått",
+          "innvilget": "Innvilget",
+          "ikkeFerdigBehandlet": "Den er ikke ferdig behandlet"
         }
       }
     }

@@ -74,7 +74,12 @@ export const getBedriftSchema = (getText: Function) => [
     ),
   }),
   object().shape({
-    soektOm: yup.boolean().required(getText("form.etablererStipend.soektOm.paakrevd")),
-    resultat: yup.string().oneOf(['avslaatt', 'innvilget', 'ikkeFerdigBehandlet']).required()
+    etablererstipend: object().shape({
+      soektOm: yup.boolean().nullable().required(getText("form.etablererstipend.soektOm.paakrevd")),
+      resultat: yup.string().nullable().when('soektOm', {
+        is: true,
+        then: yup.string().oneOf(['avslaatt', 'innvilget', 'ikkeFerdigBehandlet']).nullable().required(getText("form.etablererstipend.resultat.paakrevd"))
+      })
+    }),
   })
 ];
