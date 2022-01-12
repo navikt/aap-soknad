@@ -82,6 +82,10 @@ export const Utdanning = ({
     name: "utdanning",
   });
 
+  const leggTilRad = () => {
+    append({institusjonsnavn: '', fraAar: null, tilAar: null});
+  }
+
   return (
     <>
       <GuidePanel poster>{getText("steps.utdanning.guideText")}</GuidePanel>
@@ -100,7 +104,7 @@ export const Utdanning = ({
         ))}
       </section>
       <section>
-        <Button variant={"tertiary"} size={"small"} onClick={() => append({})}>
+        <Button variant={"tertiary"} size={"small"} onClick={leggTilRad} type={"button"}>
           <AddCircle aria-hidden title={getText("form.utdanning.leggTil")} />
           {getText("form.utdanning.leggTil")}
         </Button>

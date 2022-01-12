@@ -5,21 +5,25 @@ import { axe, toHaveNoViolations } from "jest-axe";
 
 import { Utdanning } from "./Utdanning";
 import * as bedriftstekster from "../../../texts/nb.json";
+
 import useTexts from "../../../hooks/useTexts";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { getBedriftSchema } from "../../../schemas/bedrift";
 
 expect.extend(toHaveNoViolations);
 describe("Utdanning", () => {
   const texts = bedriftstekster.bedrift;
   const Component = () => {
-    const { control } = useForm();
     const { getText } = useTexts("bedrift");
+    const schema = getBedriftSchema(getText);
+    const { register, control, formState: { errors } } = useForm({resolver: yupResolver(schema[3])});
     return (
       <>
         <Utdanning
           getText={getText}
-          register={jest.fn()}
+          register={register}
           control={control}
-          errors={{}}
+          errors={errors}
         />
       </>
     );

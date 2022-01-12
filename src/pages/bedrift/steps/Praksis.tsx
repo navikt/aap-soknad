@@ -9,6 +9,7 @@ import {
   useFieldArray,
   UseFormRegister,
 } from "react-hook-form";
+import React from "react";
 
 interface PraksisType {
   getText: GetText;
@@ -83,6 +84,11 @@ const Praksis = ({
     control,
     name: "praksis",
   });
+
+  const leggTilRad = () => {
+    append({navn: '', fraDato: null, tilDato: ''});
+  };
+
   return (
     <>
       <GuidePanel poster>{getText("steps.praksis.guideText")}</GuidePanel>
@@ -101,7 +107,7 @@ const Praksis = ({
         ))}
       </section>
       <section>
-        <Button variant={"tertiary"} size={"small"} onClick={() => append({})}>
+        <Button variant={"tertiary"} size={"small"} onClick={leggTilRad} type={"button"}>
           <AddCircle aria-hidden title={getText("form.praksis.leggTil")} />
           {getText("form.praksis.leggTil")}
         </Button>

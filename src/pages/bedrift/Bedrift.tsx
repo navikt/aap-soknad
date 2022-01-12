@@ -65,8 +65,7 @@ const Bedrift = (): JSX.Element => {
     getValues
   } = useForm({
     resolver: yupResolver(currentSchema),
-    mode: "onBlur",
-    reValidateMode: "onBlur",
+    mode: "onBlur"
   });
 
   const getStepName = (index: number) => stepList[index]?.name;
