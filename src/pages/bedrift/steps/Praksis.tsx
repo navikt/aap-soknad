@@ -86,7 +86,7 @@ const Praksis = ({
   });
 
   const leggTilRad = () => {
-    append({navn: '', fraDato: null, tilDato: ''});
+    append({navn: '', fraDato: null, tilDato: null});
   };
 
   return (
