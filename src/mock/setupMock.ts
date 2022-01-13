@@ -4,7 +4,7 @@ import { meMock } from "./data/me";
 fetchMock.config.fallbackToNetwork = true;
 
 fetchMock.get(
-  '/aap/api/me',
+  '/aap/soknad-api/me',
   {
     status: 200,
     body: meMock
@@ -15,7 +15,7 @@ fetchMock.get(
 );
 
 fetchMock.post(
-  '/aap/api/innsending/utland',
+  '/aap/soknad-api/innsending/utland',
   {
     status: 200,
     body: {id: 12345}
@@ -26,7 +26,7 @@ fetchMock.post(
 );
 
 fetchMock.post(
-  '/aap/api/lagre/UTLAND',
+  '/aap/soknad-api/buckets/lagre/UTLAND',
   {
     status: 200,
     body: {}
@@ -36,7 +36,7 @@ fetchMock.post(
   }
 );
 fetchMock.get(
-  '/aap/api/les/UTLAND',
+  '/aap/soknad-api/buckets/les/UTLAND',
   {
     status: 200,
     body: {}

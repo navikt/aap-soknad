@@ -43,7 +43,7 @@ const startServer = () => {
   server.use(`${config.BASE_PATH}/*`, enforceIDPortenAuthenticationMiddleware);
 
   // Reverse proxy to add tokenx header for api calls
-  tokenXProxy(`${config.BASE_PATH}/api`, server);
+  tokenXProxy(`${config.BASE_PATH}/soknad-api`, server);
 
   // Render app
   server.get(`${config.BASE_PATH}/*`, (req: any, res: any) =>
