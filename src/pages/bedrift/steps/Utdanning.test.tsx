@@ -52,7 +52,7 @@ describe("Utdanning", () => {
     expect(leggTilKnapp).toBeVisible();
     userEvent.click(leggTilKnapp);
     expect(
-      screen.queryByLabelText(texts.form.utdanning.institusjonsnavn)
+      screen.getByLabelText(texts.form.utdanning.institusjonsnavn)
     ).toBeInTheDocument();
     userEvent.click(leggTilKnapp);
     expect(

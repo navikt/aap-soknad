@@ -7,7 +7,6 @@ import {yupResolver} from "@hookform/resolvers/yup";
 
 import {ModalContext} from "../../context/modalContext";
 import SoknadWizard, {StepType} from "../../layouts/SoknadWizard";
-import {utland as Texts} from "../../texts/nb.json";
 import {StepIntroduction, StepKvittering, StepSelectCountry, StepSelectTravelPeriod, StepSummary,} from "./Steps";
 import {fetchPOST} from "../../api/useFetch";
 import {formatDate} from "../../utils/date";
@@ -130,7 +129,7 @@ const Utland = (): JSX.Element => {
 
   return (
     <SoknadWizard
-      title={Texts?.pageTitle}
+      title={getText('pageTitle')}
       stepList={stepList}
       currentStepIndex={currentStepIndex}
     >
