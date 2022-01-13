@@ -10,7 +10,7 @@ const femtiAarSiden = detteAaret - 50;
 export const getBedriftSchema = (getText: Function) => [
   yup.object(),
   yup.object().shape({
-    // Hvordan støtte
+    // Hvilken type støtte
     typeStoette: yup
       .string()
       .ensure()
@@ -69,7 +69,7 @@ export const getBedriftSchema = (getText: Function) => [
         fraDato: yup
           .date()
           .required(paakrevdMelding("form.praksis.fraDato", getText)),
-        tilDato: yup.date(),
+        tilDato: yup.date().nullable(),
       })
     ),
   }),
