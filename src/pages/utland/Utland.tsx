@@ -100,7 +100,7 @@ const Utland = (): JSX.Element => {
   const onSubmitClick = async (data: SoknadUtland) => {
     if (currentStepNameIs(StepName.SUMMARY)) {
       setIsLoading(true);
-      const postResponse = await fetchPOST("/aap/api/innsending/utland", {
+      const postResponse = await fetchPOST("/aap/soknad-api/innsending/utland", {
         land: state?.søknad?.country,
         periode: {
           fom: formatDate(state?.søknad?.fromDate, "yyyy-MM-dd"),

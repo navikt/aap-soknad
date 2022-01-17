@@ -45,3 +45,14 @@ fetchMock.get(
     delay: 100
   }
 );
+
+fetchMock.post(
+  '/aap/soknad-api/innsending/soknad',
+  {
+    status: 200,
+    body: {}
+  },
+  {
+    delay: 2000
+  }
+)

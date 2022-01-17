@@ -9,6 +9,7 @@ import { SoknadContextProvider } from "./context/soknadContext";
 import Utland from "./pages/utland/Utland";
 import Me from "./pages/Me";
 import { Bedrift } from "./pages/bedrift/Bedrift";
+import { Hovedsøknad } from "./pages/hovedsøknad/Hovedsøknad";
 
 const App = (): JSX.Element => {
   return (
@@ -17,6 +18,7 @@ const App = (): JSX.Element => {
         <ModalProvider>
           <BrowserRouter>
             <Routes>
+              <Route path="/" element={<Hovedsøknad />} />
               <Route path="/aap/me" element={<Me />} />
               <Route path="/aap/utland" element={<Utland />} />
               <Route path="/aap/bedrift" element={<Bedrift />} />

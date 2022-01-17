@@ -38,11 +38,12 @@ const useTexts = (pageName: string)=> {
 }
 const safeDeepGet = (obj: any, path: string) => {
   try {
-    return path.split('.')
+    const res = path.split('.')
       .reduce((acc: any, curr: string) => {
         // @ts-ignore
         return acc?.[curr];
       },obj)
+    return res || path;
   } catch (e) {
     console.error('safeDeepGet', e);
     return '';
