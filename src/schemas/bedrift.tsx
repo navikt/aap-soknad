@@ -2,7 +2,7 @@ import * as yup from "yup";
 import { format } from "date-fns";
 import { lazy, number, object, string } from "yup";
 
-const paakrevdMelding = (key: String, getText: Function): string =>
+const paakrevdMelding = (key: string, getText: Function): string =>
   getText(key) + " " + getText("form.errors.required");
 const detteAaret = parseInt(format(new Date(), "yyyy"), 10);
 const femtiAarSiden = detteAaret - 50;

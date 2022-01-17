@@ -21,14 +21,5 @@ describe("Søknad om AAP under etablering av egen bedrift", () => {
     cy.findByRole('button', {name: /Legg til yrkeserfaring \/ praksis/}).click();
     cy.findByText("Navn på arbeidsgiver / praksissted må fylles ut").should("not.exist");
     cy.findByLabelText('Navn på arbeidsgiver / praksissted').type('Video Nova, Oscarsgate');
-    // TODO virker ikke enda
-    // cy.findByLabelText(/Fra/).click();
-    // cy.findByLabelText(foersteIMnd).click();
-    // cy.findByLabelText(/Til/).click();
-    // cy.findByLabelText(sisteIMnd).click();
-    // trykkPaaNeste();
-
-    // cy.findByLabelText('Ja').click();
-    // trykkPaaNeste();
   })
 });
