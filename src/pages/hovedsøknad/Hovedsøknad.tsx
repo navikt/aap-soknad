@@ -26,9 +26,14 @@ const Hovedsøknad = (): JSX.Element => {
     setSenderMelding(true);
     const res = await fetchPOST("/aap/soknad-api/innsending/soknad", {});
     if (!res.ok) {
+      setSenderMelding(false);
       setInnsendingFeil(true);
     }
     if (res.ok) {
+      if (innsendingFeil) {
+        setInnsendingFeil(false);
+        setSenderMelding(false);
+      }
       setCurrentStepIndex(currentStepIndex + 1);
     }
   };
