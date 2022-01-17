@@ -27,8 +27,8 @@ const options = (targetAudience: string) => ({
     });
   },
   proxyReqPathResolver: (req: Request) => {
-    return (req.originalUrl.startsWith('/aap'))
-      ? req.originalUrl.slice(4)
+    return (req.originalUrl.startsWith('/aap/soknad-api'))
+      ? req.originalUrl.slice(15)
       : req.originalUrl;
   },
   // Mutate request body
