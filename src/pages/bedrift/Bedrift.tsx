@@ -92,7 +92,7 @@ const Bedrift = (): JSX.Element => {
           <Introduction getText={getText} />
         </Step>
         <form
-          onSubmit={handleSubmit(async (data) => await onSubmitClick(data))}
+          onSubmit={handleSubmit(async (data) => onSubmitClick(data))}
           className="soknad-bedrift-form"
         >
           <Step renderWhen={currentStepNameIs(StepName.TYPE_STOETTE)}>

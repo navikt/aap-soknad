@@ -3,7 +3,6 @@ import SoknadForm from "../types/SoknadForm";
 import soknadReducer from "./soknadReducer";
 import {SoknadAction, SoknadActionKeys} from "./soknadActions";
 import {fetchPOST} from "../api/useFetch";
-// import {fetchPOST} from "../api/useFetch";
 export enum SøknadType {
   UTLAND = 'UTLAND',
 }

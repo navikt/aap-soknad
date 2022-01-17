@@ -138,7 +138,7 @@ const Utland = (): JSX.Element => {
           <StepIntroduction getText={getText} />
         </Step>
         <form
-          onSubmit={handleSubmit(async (data) => await onSubmitClick(data))}
+          onSubmit={handleSubmit(async (data) => onSubmitClick(data))}
           className="soknad-utland-form"
         >
           <Step renderWhen={currentStepNameIs(StepName.COUNTRY)}>
