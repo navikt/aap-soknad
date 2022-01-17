@@ -6,7 +6,6 @@ import useTexts from "../../hooks/useTexts";
 import SoknadWizard, { StepType } from "../../layouts/SoknadWizard";
 import { Step } from "../../components/Step";
 import { RenderWhen } from "../../components/RenderWhen";
-import "./Hovedsøknad.less";
 
 enum StepName {
   INTRODUCTION = "INTRODUCTION",
