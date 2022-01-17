@@ -79,6 +79,10 @@ export const getBedriftSchema = (getText: Function) => [
       resultat: yup.string().nullable().when('soektOm', {
         is: true,
         then: yup.string().oneOf(['avslaatt', 'innvilget', 'ikkeFerdigBehandlet']).nullable().required(getText("form.etablererstipend.resultat.paakrevd"))
+      }),
+      vedlegg: yup.string().nullable().when('resultat', {
+        is: ['avslaatt', 'innvilget'],
+        then: yup.string()
       })
     }),
   })

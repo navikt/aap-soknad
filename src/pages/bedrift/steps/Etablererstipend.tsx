@@ -12,6 +12,12 @@ import {
 import { RenderWhen } from "../../../components/RenderWhen";
 import { useState } from "react";
 
+const etablererstipendSoeknadstatus = Object.freeze({
+  INNVILGET: "innvilget",
+  AVSLÅTT: "avslått",
+  IKKE_FERDIG_BEHANDLET: "ikkeFerdigBehandlet",
+});
+
 interface EtablererstipendTypes {
   getText: GetText;
   errors: FieldErrors;
@@ -25,8 +31,15 @@ const Etablererstipend = ({
   register,
   getValues,
 }: EtablererstipendTypes): JSX.Element => {
-  const initiellVerdi = getValues("etablererstipend.soektOm");
-  const [val, setVal] = useState<boolean>(initiellVerdi === "true");
+
+  const [harSoektOmEtablererStipend, setHarSoektOmEtablererStipend] =
+    useState<boolean>(getValues("etablererstipend.soektOm") === "true");
+  const [maaLasteOppVedlegg, setMaaLasteOppVedlegg] = useState<boolean>(
+    getValues("etablererstipend.resultat") ===
+      etablererstipendSoeknadstatus.AVSLÅTT ||
+      getValues("etablererstipend.resultat") ===
+        etablererstipendSoeknadstatus.INNVILGET
+  );
 
   return (
     <section>
@@ -40,17 +53,17 @@ const Etablererstipend = ({
           value={true}
           noekkel={"etablererstipend.soektOm"}
           getText={getText}
-          onChange={() => setVal(true)}
+          onChange={() => setHarSoektOmEtablererStipend(true)}
         />
         <InputRadio
           register={register}
           value={false}
           noekkel={"etablererstipend.soektOm"}
           getText={getText}
-          onChange={() => setVal(false)}
+          onChange={() => setHarSoektOmEtablererStipend(false)}
         />
       </RadioGruppe>
-      <RenderWhen when={val}>
+      <RenderWhen when={harSoektOmEtablererStipend}>
         <RadioGruppe
           groupKey={"etablererstipend.resultat"}
           getText={getText}
@@ -58,23 +71,32 @@ const Etablererstipend = ({
         >
           <InputRadio
             register={register}
-            value={"avslaatt"}
+            value={etablererstipendSoeknadstatus.AVSLÅTT}
             noekkel={"etablererstipend.resultat"}
             getText={getText}
+            onChange={() => setMaaLasteOppVedlegg(true)}
           />
           <InputRadio
             register={register}
-            value={"innvilget"}
+            value={etablererstipendSoeknadstatus.INNVILGET}
             noekkel={"etablererstipend.resultat"}
             getText={getText}
+            onChange={() => setMaaLasteOppVedlegg(true)}
           />
           <InputRadio
             register={register}
-            value={"ikkeFerdigBehandlet"}
+            value={etablererstipendSoeknadstatus.IKKE_FERDIG_BEHANDLET}
             noekkel={"etablererstipend.resultat"}
             getText={getText}
+            onChange={() => setMaaLasteOppVedlegg(false)}
           />
         </RadioGruppe>
+      </RenderWhen>
+      <RenderWhen when={maaLasteOppVedlegg}>
+        <label>
+          {getText("form.etablererstipend.vedlegg.label")}
+          <input type="file" name="kopiAvVedtak" />
+        </label>
       </RenderWhen>
     </section>
   );

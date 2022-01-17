@@ -12,7 +12,12 @@ describe("Etablererstipend", () => {
     const { getText } = useTexts("bedrift");
     return (
       <>
-        <Etablererstipend getText={getText} register={jest.fn()} errors={{}} getValues={jest.fn()} />
+        <Etablererstipend
+          getText={getText}
+          register={jest.fn()}
+          errors={{}}
+          getValues={jest.fn()}
+        />
       </>
     );
   };
@@ -28,11 +33,24 @@ describe("Etablererstipend", () => {
 
   it("skal få flere valg når man sier at man har søkt", () => {
     render(<Component />);
-    expect(screen.queryByText(texts.form.etablererstipend.resultat.label)).not.toBeInTheDocument();
-    const jaValg = screen.getByRole("radio", {name: /Ja/});
+    expect(
+      screen.queryByText(texts.form.etablererstipend.resultat.label)
+    ).not.toBeInTheDocument();
+    const jaValg = screen.getByRole("radio", { name: /Ja/ });
     userEvent.click(jaValg);
-    expect(screen.getByText(texts.form.etablererstipend.resultat.label)).toBeVisible();
-  })
+    expect(
+      screen.getByText(texts.form.etablererstipend.resultat.label)
+    ).toBeVisible();
+  });
+
+  it("skal få filopplastning når man har fått svar på søknaden", () => {
+    render(<Component />);
+    userEvent.click(screen.getByRole("radio", { name: /Ja/ }));
+    userEvent.click(screen.getByRole("radio", { name: /Innvilget/ }));
+    expect(
+      screen.getByText(texts.form.etablererstipend.vedlegg.label)
+    ).toBeVisible();
+  });
 
   it("skal ikke ha brudd på krav til universell utforming", async () => {
     const { container } = render(<Component />);
