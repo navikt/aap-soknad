@@ -7,19 +7,28 @@ export type StepType = {
 
 type StepWizardProps = {
   children?: React.ReactNode;
+  onSubmit?: React.FormEventHandler<HTMLFormElement>;
 };
 
-const SoknadWizard = ({ children}: StepWizardProps) => {
+const SoknadWizard = ({ children, onSubmit }: StepWizardProps) => {
   const { setStepList, setCurrentStepIndex } = useContext(StepWizardContext);
   const newStepList = Children.toArray(children).reduce((acc: any, child: any) => {
-    return child?.props?.order && child?.props?.name
-     ? [
-        ...acc,
-        { order: child?.props?.order, name: child?.props?.name}
+    const nestedChildren = Array.isArray(child?.props?.children) ? child?.props?.children : [];
+    const childList = [ child, ...nestedChildren];
+    const steps = childList.reduce((subAcc: any, element: any) =>
+      element?.props?.order && element?.props?.name
+        ? [
+          ...subAcc,
+          { order: element?.props?.order, name: element?.props?.name}
         ]
-      : acc;
+        : subAcc, []);
+    return [
+      ...acc,
+      ...steps
+    ];
   }, []);
   useEffect(() => {
+    // @ts-ignore
     const stepList = newStepList.sort((a: any, b: any) => a.order - b.order).map((e: any) => ({ name: e?.name }));
     setStepList(stepList);
     setCurrentStepIndex(0);
@@ -27,7 +36,14 @@ const SoknadWizard = ({ children}: StepWizardProps) => {
   }, [])
 
   return (
-    <main className="soknad-wizard-main">{children}</main>
+    <main className="soknad-wizard-main">
+      <form
+        onSubmit={onSubmit}
+        className="soknad-utland-form"
+      >
+        {children}
+      </form>
+    </main>
   );
 };
 
