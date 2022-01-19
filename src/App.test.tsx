@@ -2,8 +2,7 @@ import React from "react";
 import { render, screen } from "@testing-library/react";
 import App from "./App";
 
-test("renders learn react link", () => {
+test("kan tegne appen", () => {
   render(<App />);
-  const linkElement = screen.getByText(/AAP App/i);
-  expect(linkElement).toBeInTheDocument();
+  expect(screen.getByText(/Søk om AAP/)).toBeVisible();
 });

@@ -102,11 +102,27 @@
         "resultat": {
           "label": "Hva ble resultatet av søknaden?",
           "paakrevd": "Du må angi hva resultatet av søknaden ble.",
-          "avslaatt": "Avslått",
+          "avslått": "Avslått",
           "innvilget": "Innvilget",
           "ikkeFerdigBehandlet": "Den er ikke ferdig behandlet"
+        },
+        "vedlegg": {
+          "label": "Legg ved kopi av vedtaket",
+          "paakrevd": "Du må legge ved en kopi av vedtaket"
         }
       }
+    }
+  },
+  "hovedsøknad": {
+    "pageTitle": "Søk om AAP",
+    "steps": {
+      "introduction": {
+        "guideText": "Her kan du søke om AAP"
+      },
+      "kvittering": "Takk, søknaden er mottatt. Nå tar vi oss av resten."
+    },
+    "innsending": {
+      "feil": "En feil oppstod. Vennligst vent litt, og forsøk å sende meldingen på nytt."
     }
   }
 }

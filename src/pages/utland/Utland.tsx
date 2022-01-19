@@ -7,7 +7,6 @@ import {yupResolver} from "@hookform/resolvers/yup";
 
 import {ModalContext} from "../../context/modalContext";
 import SoknadWizard, {StepType} from "../../layouts/SoknadWizard";
-import {utland as Texts} from "../../texts/nb.json";
 import {StepIntroduction, StepKvittering, StepSelectCountry, StepSelectTravelPeriod, StepSummary,} from "./Steps";
 import {fetchPOST} from "../../api/useFetch";
 import {formatDate} from "../../utils/date";
@@ -101,7 +100,7 @@ const Utland = (): JSX.Element => {
   const onSubmitClick = async (data: SoknadUtland) => {
     if (currentStepNameIs(StepName.SUMMARY)) {
       setIsLoading(true);
-      const postResponse = await fetchPOST("/aap/api/innsending/utland", {
+      const postResponse = await fetchPOST("/aap/soknad-api/innsending/utland", {
         land: state?.søknad?.country,
         periode: {
           fom: formatDate(state?.søknad?.fromDate, "yyyy-MM-dd"),
@@ -130,7 +129,7 @@ const Utland = (): JSX.Element => {
 
   return (
     <SoknadWizard
-      title={Texts?.pageTitle}
+      title={getText('pageTitle')}
       stepList={stepList}
       currentStepIndex={currentStepIndex}
     >
@@ -139,7 +138,7 @@ const Utland = (): JSX.Element => {
           <StepIntroduction getText={getText} />
         </Step>
         <form
-          onSubmit={handleSubmit(async (data) => await onSubmitClick(data))}
+          onSubmit={handleSubmit(async (data) => onSubmitClick(data))}
           className="soknad-utland-form"
         >
           <Step renderWhen={currentStepNameIs(StepName.COUNTRY)}>

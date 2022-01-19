@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import SoknadWizard, { StepType } from "../../layouts/SoknadWizard";
 import useTexts from "../../hooks/useTexts";
-import { bedrift as Texts } from "../../texts/nb.json";
 import { Introduction, PersonligInfo, TypeStoette } from "./BedriftSteps";
 import { Button, Loader } from "@navikt/ds-react";
 import "./Bedrift.less";
@@ -84,7 +83,7 @@ const Bedrift = (): JSX.Element => {
 
   return (
     <SoknadWizard
-      title={Texts.pageTitle}
+      title={getText('pageTitle')}
       stepList={stepList}
       currentStepIndex={currentStepIndex}
     >
@@ -93,7 +92,7 @@ const Bedrift = (): JSX.Element => {
           <Introduction getText={getText} />
         </Step>
         <form
-          onSubmit={handleSubmit(async (data) => await onSubmitClick(data))}
+          onSubmit={handleSubmit(async (data) => onSubmitClick(data))}
           className="soknad-bedrift-form"
         >
           <Step renderWhen={currentStepNameIs(StepName.TYPE_STOETTE)}>
