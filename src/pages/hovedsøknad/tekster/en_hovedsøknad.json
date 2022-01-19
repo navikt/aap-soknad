@@ -1,0 +1,12 @@
+{
+  "pageTitle": "Apply for AAP",
+  "steps": {
+    "introduction": {
+      "guideText": "You can apply for AAP here"
+    },
+    "kvittering": "Thank you, we have received your application. We will handle the rest."
+  },
+  "innsending": {
+    "feil": "An error occured. Please wait a moment, and try again."
+  }
+}

@@ -1,15 +1,14 @@
 import { render, screen } from "@testing-library/react";
 import { Etablererstipend } from "./Etablererstipend";
 import useTexts from "../../../hooks/useTexts";
-import * as bedriftstekster from "../../../texts/nb.json";
+import * as tekster from "../tekster";
 import { axe, toHaveNoViolations } from "jest-axe";
 import userEvent from "@testing-library/user-event";
 
 expect.extend(toHaveNoViolations);
 describe("Etablererstipend", () => {
-  const texts = bedriftstekster.bedrift;
   const Component = () => {
-    const { getText } = useTexts("bedrift");
+    const { getText } = useTexts(tekster);
     return (
       <>
         <Etablererstipend
@@ -25,7 +24,7 @@ describe("Etablererstipend", () => {
   it("skal kun ha valg for ja og nei initiellt", () => {
     render(<Component />);
     expect(
-      screen.getByText(texts.form.etablererstipend.soektOm.label)
+      screen.getByText(tekster.nb.form.etablererstipend.soektOm.label)
     ).toBeVisible();
     expect(screen.getByRole("radio", { name: /Ja/ })).toBeVisible();
     expect(screen.getByRole("radio", { name: /Nei/ })).toBeVisible();
@@ -34,12 +33,12 @@ describe("Etablererstipend", () => {
   it("skal få flere valg når man sier at man har søkt", () => {
     render(<Component />);
     expect(
-      screen.queryByText(texts.form.etablererstipend.resultat.label)
+      screen.queryByText(tekster.nb.form.etablererstipend.resultat.label)
     ).not.toBeInTheDocument();
     const jaValg = screen.getByRole("radio", { name: /Ja/ });
     userEvent.click(jaValg);
     expect(
-      screen.getByText(texts.form.etablererstipend.resultat.label)
+      screen.getByText(tekster.nb.form.etablererstipend.resultat.label)
     ).toBeVisible();
   });
 
@@ -48,7 +47,7 @@ describe("Etablererstipend", () => {
     userEvent.click(screen.getByRole("radio", { name: /Ja/ }));
     userEvent.click(screen.getByRole("radio", { name: /Innvilget/ }));
     expect(
-      screen.getByText(texts.form.etablererstipend.vedlegg.label)
+      screen.getByText(tekster.nb.form.etablererstipend.vedlegg.label)
     ).toBeVisible();
   });
 

@@ -20,6 +20,8 @@ import SoknadUtland from "../../types/SoknadUtland";
 import {SøknadType} from "../../context/soknadContext";
 import useSteps from "../../hooks/useSteps";
 
+import * as tekster from "./tekster";
+
 // Support norwegian & english languages.
 countries.registerLocale(require("i18n-iso-countries/langs/en.json"));
 countries.registerLocale(require("i18n-iso-countries/langs/nb.json"));
@@ -66,7 +68,7 @@ const Utland = (): JSX.Element => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const { state, dispatch } = useSoknadContext(SøknadType.UTLAND);
 
-  const { getText } = useTexts("utland");
+  const { getText } = useTexts(tekster);
   const { handleNotificationModal } = useContext(ModalContext);
 
   const SoknadUtlandSchemas = getUtlandSchemas(getText);

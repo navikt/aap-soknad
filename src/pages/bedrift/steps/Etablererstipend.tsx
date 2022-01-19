@@ -1,16 +1,18 @@
-import { GetText } from "../../../hooks/useTexts";
+import { useState } from "react";
+
 import {
   FieldErrors,
   FieldValues,
   UseFormGetValues,
   UseFormRegister,
 } from "react-hook-form";
+
+import { GetText } from "../../../hooks/useTexts";
 import {
   InputRadio,
   RadioGruppe,
 } from "../../../components/input/RadioWrapper";
 import { RenderWhen } from "../../../components/RenderWhen";
-import { useState } from "react";
 
 const etablererstipendSoeknadstatus = Object.freeze({
   INNVILGET: "innvilget",
