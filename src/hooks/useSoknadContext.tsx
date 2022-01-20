@@ -3,10 +3,10 @@ import {SoknadContext, SøknadType} from "../context/soknadContext";
 import {SoknadActionKeys} from "../context/soknadActions";
 
 export const useSoknadContext = (søknadType: SøknadType) => {
-  const {state, dispatch} = useContext(SoknadContext);
+  const {state, dispatch, deleteStoredState} = useContext(SoknadContext);
   useEffect(() => {
     dispatch({type: SoknadActionKeys.SET_SOKNAD_TYPE, payload: søknadType})
     // eslint-disable-next-line
   }, [])
-  return {state, dispatch};
+  return {state, dispatch, deleteStoredState};
 }

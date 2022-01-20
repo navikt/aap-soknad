@@ -45,6 +45,15 @@ fetchMock.get(
     delay: 100
   }
 );
+fetchMock.delete(
+  '/aap/soknad-api/buckets/slett/UTLAND',
+  {
+    status: 200,
+  },
+  {
+    delay: 3000
+  }
+);
 
 fetchMock.post(
   '/aap/soknad-api/innsending/soknad',

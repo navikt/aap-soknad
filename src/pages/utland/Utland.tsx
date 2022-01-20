@@ -48,8 +48,8 @@ const showButton = (name?: string) => {
 
 
 const Utland = (): JSX.Element => {
-  const { state, dispatch } = useSoknadContext(SøknadType.UTLAND);
-  const { currentStepIndex, goToNamedStep, goToNextStep, setNamedStepCompleted, currentStep, nextStep, goToPreviousStep } = useContext(StepWizardContext);
+  const { state, dispatch, deleteStoredState } = useSoknadContext(SøknadType.UTLAND);
+  const { currentStepIndex, goToNamedStep, goToNextStep, setNamedStepCompleted, currentStep, nextStep, goToPreviousStep, resetStepWizard } = useContext(StepWizardContext);
   const [countryList, setCountryList] = useState<string[][]>([]);
   const { getText } = useTexts("utland");
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -118,6 +118,18 @@ const Utland = (): JSX.Element => {
         tom: formatDate(data?.toDate, "yyyy-MM-dd"),
       },
     });
+  const onDeleteSøknad = async () => {
+    const deleteRes = await deleteStoredState(state.type);
+    if(deleteRes) {
+      resetStepWizard();
+    } else {
+      handleNotificationModal({
+        heading: 'Feil',
+        text: 'Noe gikk galt. Venligst forsøk igjen senere.',
+        type: 'error'
+      });
+    }
+  }
 
   return (
     <StepWizard hideLabels={false}>
@@ -162,6 +174,9 @@ const Utland = (): JSX.Element => {
         </Button>}
         <Button variant="tertiary" type="button" onClick={goToPreviousStep}>
           <BodyShort>Tilbake</BodyShort>
+        </Button>
+        <Button variant="tertiary" type="button" onClick={() => onDeleteSøknad()}>
+          <BodyShort>Slett påbegynt søknad</BodyShort>
         </Button>
       </form>
     </StepWizard>

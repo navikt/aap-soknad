@@ -19,6 +19,7 @@ interface StepWizardContextData {
   nextStep?: StepType;
   currentStep: StepType;
   setNamedStepCompleted: (name: string) => void;
+  resetStepWizard: () => void;
 }
 
 export const StepWizardContext = createContext<StepWizardContextData>(null!);
@@ -26,8 +27,12 @@ export const StepWizardContext = createContext<StepWizardContextData>(null!);
 
 export const StepWizardContextProvider = ({ children }: Props) => {
   const {stepList, setStepList, currentStepIndex, setCurrentStepIndex, goToNamedStep, goToNextStep, goToPreviousStep, nextStep, currentStep, setNamedStepCompleted} = useSteps([]);
+  const resetStepWizard = () => {
+    setStepList(stepList.map(step => ({...step, completed: false})));
+    setCurrentStepIndex(0);
+  }
   return (
-    <StepWizardContext.Provider value={{stepList, setStepList, currentStepIndex, setCurrentStepIndex, goToNamedStep, goToNextStep, goToPreviousStep, nextStep, currentStep, setNamedStepCompleted}} >
+    <StepWizardContext.Provider value={{stepList, setStepList, currentStepIndex, setCurrentStepIndex, goToNamedStep, goToNextStep, goToPreviousStep, nextStep, currentStep, setNamedStepCompleted, resetStepWizard}} >
       {children}
     </StepWizardContext.Provider>
   )
