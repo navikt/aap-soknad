@@ -9,7 +9,7 @@ import { StepWizardContextProvider} from "./context/stepWizardContext";
 // Pages
 import Me from "./pages/Me";
 import { Bedrift } from "./pages/bedrift/Bedrift";
-import UtlandNew from "./pages/utland/UtlandNew";
+import Utland from "./pages/utland/Utland";
 import { Hovedsøknad } from "./pages/hovedsøknad/Hovedsøknad";
 
 const App = (): JSX.Element => {
@@ -22,8 +22,7 @@ const App = (): JSX.Element => {
               <Routes>
                 <Route path="/" element={<Hovedsøknad />} />
                 <Route path="/aap/me" element={<Me />} />
-                {/*<Route path="/aap/utland" element={<Utland />} />*/}
-                <Route path="/aap/utland" element={<UtlandNew />} />
+                <Route path="/aap/utland" element={<Utland />} />
                 <Route path="/aap/bedrift" element={<Bedrift />} />
                 <Route
                   path="*"

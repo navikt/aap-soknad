@@ -1,23 +1,24 @@
 import React, {useContext} from "react";
 import {StepWizardContext} from "../../context/stepWizardContext";
-import {Button} from "@navikt/ds-react";
 
-
+export type StepType = {
+  name: string;
+  label?: string;
+  completed?: boolean;
+};
 type StepProps = {
   order?: number;
-  name?: string;
+  name?: StepType["name"];
+  label?: StepType["label"];
+  completed?: StepType["completed"];
   children?: React.ReactNode;
 };
 
 const Step = ({ name, children}: StepProps) => {
-  const { currentStep, goToPreviousStep} = useContext(StepWizardContext);
+  const { currentStep} = useContext(StepWizardContext);
   return currentStep?.name === name
     ? <>
       {children}
-      <Button variant="primary" type="submit" >Neste</Button>
-      <Button variant="tertiary" onClick={goToPreviousStep}>
-        Tilbake
-      </Button>
     </>
     : null;
 };

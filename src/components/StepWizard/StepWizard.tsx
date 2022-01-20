@@ -1,50 +1,61 @@
 import React, {Children, useContext, useEffect} from "react";
+import {BodyShort, StepIndicator} from '@navikt/ds-react';
+import {StepType} from "./Step";
 import {StepWizardContext} from "../../context/stepWizardContext";
 
-export type StepType = {
-  name: string;
+type OrderedStepType = {
+  order: number;
+  name: StepType["name"];
+  label: StepType["label"];
 }
+type StepListType = OrderedStepType[];
 
 type StepWizardProps = {
   children?: React.ReactNode;
-  onSubmit?: React.FormEventHandler<HTMLFormElement>;
+  hideLabels?: boolean;
 };
 
-const SoknadWizard = ({ children, onSubmit }: StepWizardProps) => {
-  const { setStepList, setCurrentStepIndex } = useContext(StepWizardContext);
-  const newStepList = Children.toArray(children).reduce((acc: any, child: any) => {
-    const nestedChildren = Array.isArray(child?.props?.children) ? child?.props?.children : [];
-    const childList = [ child, ...nestedChildren];
-    const steps = childList.reduce((subAcc: any, element: any) =>
-      element?.props?.order && element?.props?.name
-        ? [
-          ...subAcc,
-          { order: element?.props?.order, name: element?.props?.name}
-        ]
-        : subAcc, []);
-    return [
-      ...acc,
-      ...steps
-    ];
-  }, []);
+const StepWizard = ({ children, hideLabels = false}: StepWizardProps) => {
+  const { stepList, setStepList, currentStepIndex, setCurrentStepIndex } = useContext(StepWizardContext);
   useEffect(() => {
-    // @ts-ignore
-    const stepList = newStepList.sort((a: any, b: any) => a.order - b.order).map((e: any) => ({ name: e?.name }));
-    setStepList(stepList);
+    const newStepList: StepListType = Children.toArray(children).reduce((acc: StepListType, child: any) => {
+      const nestedChildren = Array.isArray(child?.props?.children) ? child?.props?.children : [];
+      const childAndNestedChildren = [ child, ...nestedChildren];
+      const steps: StepListType = childAndNestedChildren.reduce((subAcc: StepListType, element: any) =>
+        element?.props?.order && element?.props?.name
+          ? [
+            ...subAcc,
+            { order: element?.props?.order,
+              name: element?.props?.name,
+              label: element?.props?.label}
+          ]
+          : subAcc, []);
+      return [
+        ...acc,
+        ...steps
+      ];
+    }, []);
+    const sortedNewStepList: StepType[] = newStepList
+      .sort((a, b) => a.order - b.order)
+      .map((e) => ({ name: e?.name, label: e?.label }));
+    setStepList(sortedNewStepList);
     setCurrentStepIndex(0);
     // eslint-disable-next-line
   }, [])
-
+  const onStepChange = (stepIndex: number) => {
+    if(stepIndex === 0) setCurrentStepIndex(stepIndex);
+   const stepBeforeDestinationStep = stepList[stepIndex - 1];
+   if(stepBeforeDestinationStep?.completed)
+     setCurrentStepIndex(stepIndex);
+  }
   return (
     <main className="soknad-wizard-main">
-      <form
-        onSubmit={onSubmit}
-        className="soknad-utland-form"
-      >
-        {children}
-      </form>
+      <StepIndicator activeStep={currentStepIndex} hideLabels={hideLabels} responsive={true} onStepChange={onStepChange}>
+        {stepList.map((step: any) => <StepIndicator.Step key={step.name} children={<BodyShort>{step?.label}</BodyShort>} />)}
+      </StepIndicator>
+      {children}
     </main>
   );
 };
 
-export default SoknadWizard;
+export default StepWizard;

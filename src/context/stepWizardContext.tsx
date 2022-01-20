@@ -1,6 +1,6 @@
 import React, {createContext, Dispatch, ReactNode} from "react";
 import useSteps from "../hooks/useSteps";
-import {StepType} from "../layouts/SoknadWizard";
+import {StepType} from "../components/StepWizard/Step";
 export enum SøknadType {
   UTLAND = 'UTLAND',
 }
@@ -18,15 +18,16 @@ interface StepWizardContextData {
   goToPreviousStep: () => void;
   nextStep?: StepType;
   currentStep: StepType;
+  setNamedStepCompleted: (name: string) => void;
 }
 
 export const StepWizardContext = createContext<StepWizardContextData>(null!);
 
 
 export const StepWizardContextProvider = ({ children }: Props) => {
-  const {stepList, setStepList, currentStepIndex, setCurrentStepIndex, goToNamedStep, goToNextStep, goToPreviousStep, nextStep, currentStep} = useSteps([]);
+  const {stepList, setStepList, currentStepIndex, setCurrentStepIndex, goToNamedStep, goToNextStep, goToPreviousStep, nextStep, currentStep, setNamedStepCompleted} = useSteps([]);
   return (
-    <StepWizardContext.Provider value={{stepList, setStepList, currentStepIndex, setCurrentStepIndex, goToNamedStep, goToNextStep, goToPreviousStep, nextStep, currentStep}} >
+    <StepWizardContext.Provider value={{stepList, setStepList, currentStepIndex, setCurrentStepIndex, goToNamedStep, goToNextStep, goToPreviousStep, nextStep, currentStep, setNamedStepCompleted}} >
       {children}
     </StepWizardContext.Provider>
   )
