@@ -2223,10 +2223,10 @@
   dependencies:
     uuid "^8.3.2"
 
-"@navikt/ds-react@^0.14.0":
-  version "0.14.6"
-  resolved "https://registry.yarnpkg.com/@navikt/ds-react/-/ds-react-0.14.6.tgz#409d4e54e52e1262b699867df741c3ff49837b73"
-  integrity sha512-BiaogShzH3dWBBXwye4b/BvUlb4v9sUTsjwi6/81ucTJwuSBfn8h7VAtcP1lDLwbkNn43Zurpwax65PK/3hpzQ==
+"@navikt/ds-react@^0.14.11":
+  version "0.14.11"
+  resolved "https://registry.yarnpkg.com/@navikt/ds-react/-/ds-react-0.14.11.tgz#1567555fb1f6ebe4f008371c9248f00cdf286ccb"
+  integrity sha512-9TcFJB8KpWHjAuuOx6STPJT1YRfYLclIIk8Dp48kS/e3ZHx7iNfJVB+TMgtjPjoc+vfX5I9Gy3aTsL1fckD90w==
   dependencies:
     "@material-ui/core" "^4.12.3"
     "@navikt/ds-icons" "^0.7.2"
