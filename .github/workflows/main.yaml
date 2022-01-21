@@ -55,7 +55,9 @@ jobs:
         if: failure()
         with:
           name: cypress-screenshots
-          path: cypress/screenshots
+          path: |
+            cypress/screenshots
+            cypress/videos
           retention-days: 5
       - name: "Set up Docker Buildx"
         id: "buildx"
