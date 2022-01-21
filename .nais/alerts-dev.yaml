@@ -1,19 +1,19 @@
 apiVersion: "nais.io/v1"
 kind: "Alert"
 metadata:
-  name: "aap-soknad"
+  name: "soknad"
   namespace: "aap"
   labels:
     "team": "aap"
 spec:
   receivers:
     slack:
-      channel: "aap-alerts-dev"
+      channel: "aap-github"
       prependText: "<!here> | "
   alerts:
-  - alert: "aap-soknad er nede"
+  - alert: "soknad er nede"
     description: "App {{ $labels.app }} er nede i namespace {{ $labels.kubernetes_namespace }}"
-    expr: "kube_deployment_status_replicas_available{deployment=\"aap-soknad\"} >\
+    expr: "kube_deployment_status_replicas_available{deployment=\"soknad\"} >\
       \ 0"
     for: "2m"
     action: "kubectl describe pod {{ $labels.kubernetes_pod_name }} -n {{ $labels.kubernetes_namespace }}` for events, og `kubectl logs {{ $labels.kubernetes_pod_name }} -n {{ $labels.kubernetes_namespace }}` for logger"
@@ -22,8 +22,8 @@ spec:
     severity: "danger"
   - alert: "Mye feil i loggene"
     expr: "(100 * sum by (log_app, log_namespace) (rate(logd_messages_total{log_app=\"\
-      aap-soknad\",log_level=~\"Warning|Error\"}[3m])) / sum by (log_app, log_namespace)\
-      (rate(logd_messages_total{log_app=\"aap-soknad\"}[3m]))) > 10"
+      soknad\",log_level=~\"Warning|Error\"}[3m])) / sum by (log_app, log_namespace)\
+      (rate(logd_messages_total{log_app=\"soknad\"}[3m]))) > 10"
     for: "3m"
     action: "Sjekk loggene til app {{ $labels.log_app }} i namespace {{ $labels.log_namespace }} for å se hvorfor det er så mye feil"
     sla: "Responder innen 1 time i kontortid"
