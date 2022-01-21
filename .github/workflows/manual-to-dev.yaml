@@ -60,18 +60,5 @@ jobs:
         env:
           "APIKEY": "${{ secrets.NAIS_DEPLOY_APIKEY }}"
           "CLUSTER": "dev-gcp"
-          "RESOURCE": ".nais/nais.yaml"
-          "VARS": ".nais/dev.yaml"
-  "deployAlertsToDev":
-    name: "Deploy alerts to dev"
-    needs: "build"
-    runs-on: "ubuntu-18.04"
-    steps:
-      - uses: "actions/checkout@v2"
-      - name: "Deploy alerts to DEV"
-        uses: "nais/deploy/actions/deploy@v1"
-        env:
-          "APIKEY": "${{ secrets.NAIS_DEPLOY_APIKEY }}"
-          "CLUSTER": "dev-gcp"
-          "RESOURCE": ".nais/alerts-dev.yaml"
+          "RESOURCE": ".nais/nais.yaml,.nais/alerts.yaml"
           "VARS": ".nais/dev.yaml"
