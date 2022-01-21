@@ -8,7 +8,7 @@ metadata:
 spec:
   receivers:
     slack:
-      channel: "aap-github"
+      channel: ""#aap-github"
       prependText: "<!here> | "
   alerts:
   - alert: "soknad er nede"
