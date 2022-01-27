@@ -90,8 +90,7 @@ const Utland = (): JSX.Element => {
     getCountries();
   }, [setCountryList]);
   const myHandleSubmit = async (data: SoknadForm) => {
-    switch(currentStep.name) {
-      case StepNames.SUMMARY:
+    if(currentStep.name === StepNames.SUMMARY) {
         setIsLoading(true);
         const postResponse = await postSøknad(state?.søknad);
         setIsLoading(false);
@@ -104,9 +103,6 @@ const Utland = (): JSX.Element => {
           });
           return;
         }
-        break;
-      default:
-        break;
     }
     dispatch({type: SoknadActionKeys.SET_CURRENT_STEP, payload: nextStep?.name})
     dispatch({type: SoknadActionKeys.SET_SOKNAD, payload: data});
@@ -142,6 +138,7 @@ const Utland = (): JSX.Element => {
       <form
         onSubmit={handleSubmit(myHandleSubmit)}
         className="soknad-utland-form"
+        autoComplete="off"
       >
         <Step order={2} name={StepNames.DESTINATION} label='Destinasjon'>
           <StepSelectCountry

@@ -35,7 +35,7 @@ const StepWizard = ({ children, hideLabels = false}: StepWizardProps) => {
         ...steps
       ];
     }, []);
-    const sortedNewStepList: StepType[] = newStepList
+    const sortedNewStepList: StepType[] = [...newStepList]
       .sort((a, b) => a.order - b.order)
       .map((e) => ({ name: e?.name, label: e?.label }));
     setStepList(sortedNewStepList);
