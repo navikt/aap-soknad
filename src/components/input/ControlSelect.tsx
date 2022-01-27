@@ -6,7 +6,7 @@ export interface SelectProps {
   name: string;
   label: string;
   control: any;
-  error: string;
+  error?: string;
   required?: string;
   validate?: (value: any) => any;
   children?:

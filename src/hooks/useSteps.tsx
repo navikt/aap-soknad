@@ -1,5 +1,5 @@
 import {useCallback, useMemo, useState} from 'react';
-import {StepType} from "../layouts/SoknadWizard";
+import {StepType} from "../components/StepWizard/Step";
 
 const useModal = (initalStepList: StepType[]) => {
   const [stepList, setStepList] = useState<StepType[]>(initalStepList);
@@ -29,7 +29,21 @@ const useModal = (initalStepList: StepType[]) => {
     if(indexIsLegal(index)) setCurrentStepIndex(index);
   }, [setCurrentStepIndex, indexIsLegal]);
 
-  return { stepList, setStepList, currentStepIndex, setCurrentStepIndex, currentStep, nextStep, goToNextStep, goToPreviousStep, goToNamedStep, goToStep}
+  const setNamedStepCompleted = useCallback((name?: string) => {
+    const stepIndex = stepList.findIndex(step =>
+      step?.name === name
+    );
+    if(indexIsLegal(stepIndex)) {
+      const newStepList = [
+        ...stepList.slice(0, stepIndex),
+        { ...stepList[stepIndex], completed: true},
+        ...(stepList.length > stepIndex + 1 ? stepList.slice(stepIndex + 1) : [])
+      ];
+      setStepList(newStepList);
+    }
+  }, [indexIsLegal, stepList]);
+
+  return { stepList, setStepList, currentStepIndex, setCurrentStepIndex, currentStep, nextStep, goToNextStep, goToPreviousStep, goToNamedStep, goToStep, setNamedStepCompleted}
 }
 
 export default useModal;

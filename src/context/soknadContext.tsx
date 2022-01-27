@@ -1,4 +1,4 @@
-import React, {createContext, Dispatch, ReactNode, useReducer, useMemo, useEffect} from "react";
+import React, {createContext, Dispatch, ReactNode, useReducer, useMemo, useEffect, useCallback} from "react";
 import SoknadForm from "../types/SoknadForm";
 import soknadReducer from "./soknadReducer";
 import {SoknadAction, SoknadActionKeys} from "./soknadActions";
@@ -14,9 +14,10 @@ export interface SoknadContextState {
   søknad?: SoknadForm;
   søkerinfo: string;
 }
-interface SoknadContextData {
+export interface SoknadContextData {
   state: SoknadContextState;
   dispatch: Dispatch<SoknadAction>;
+  deleteStoredState: (søknadType?: string) => Promise<boolean>;
 }
 interface Props {
   children: ReactNode;
@@ -34,9 +35,8 @@ export const SoknadContext = createContext<SoknadContextData>(null!);
 
 export const SoknadContextProvider = ({ children }: Props) => {
   const [state, dispatch] = useReducer(soknadReducer, soknadContextInititalState);
-  const contextValue = useMemo(() => {
-    return {state, dispatch}
-  }, [state, dispatch]);
+
+  // lagre søknad når søknad endres
   useEffect(() => {
     const storeState = async () => {
       if(state.type) {
@@ -47,6 +47,8 @@ export const SoknadContextProvider = ({ children }: Props) => {
     if(state.søknad) storeState();
     // eslint-disable-next-line
   }, [state?.søknad]);
+
+  // hent lagret søknad når type endres
   useEffect(() => {
     const getStoredState = async () => {
       console.log('getStoredState', state.type);
@@ -59,6 +61,23 @@ export const SoknadContextProvider = ({ children }: Props) => {
     if (!state?.søknad) getStoredState();
     // eslint-disable-next-line
   },[state.type]);
+
+  // slett lagret søknad
+  const deleteStoredState = useCallback(async (søknadType?: string) => {
+    if(søknadType) {
+      const deleteResponse = await fetch(`/aap/soknad-api/buckets/slett/${søknadType}`,{ method: 'DELETE' });
+      console.log('slett søknad', deleteResponse?.ok)
+      deleteResponse?.ok && dispatch({type: SoknadActionKeys.SET_STATE_FROM_CACHE, payload: soknadContextInititalState});
+      return !!deleteResponse?.ok;
+    }
+    return false;
+  }, [])
+
+
+  const contextValue = useMemo(() => {
+    return {state, dispatch, deleteStoredState}
+  }, [state, dispatch, deleteStoredState]);
+
   return (
     <SoknadContext.Provider value={contextValue} >
       {children}

@@ -1,61 +1,48 @@
-import React, {useContext, useEffect, useMemo, useState} from "react";
+import {BodyShort, Button, Loader} from "@navikt/ds-react";
 import countries from "i18n-iso-countries";
-import "./Utland.less";
-import {Button, Loader} from "@navikt/ds-react";
+import { StepWizard, Step } from '../../components/StepWizard';
+import React, {useContext, useEffect, useMemo, useState} from "react";
 import {useForm} from "react-hook-form";
 import {yupResolver} from "@hookform/resolvers/yup";
-
 import {ModalContext} from "../../context/modalContext";
-import SoknadWizard, {StepType} from "../../layouts/SoknadWizard";
 import {StepIntroduction, StepKvittering, StepSelectCountry, StepSelectTravelPeriod, StepSummary,} from "./Steps";
 import {fetchPOST} from "../../api/useFetch";
 import {formatDate} from "../../utils/date";
 import useTexts from "../../hooks/useTexts";
 import {getUtlandSchemas} from "../../schemas/utland";
-import {Step} from "../../components/Step";
 import {FormErrorSummary} from "../../components/schema/FormErrorSummary";
 import {useSoknadContext} from "../../hooks/useSoknadContext";
-import {SoknadActionKeys} from "../../context/soknadActions";
-import SoknadUtland from "../../types/SoknadUtland";
 import {SøknadType} from "../../context/soknadContext";
-import useSteps from "../../hooks/useSteps";
 
 import * as tekster from "./tekster";
 
+import {StepWizardContext} from "../../context/stepWizardContext";
+import SoknadForm from "../../types/SoknadForm";
+import {SoknadActionKeys} from "../../context/soknadActions";
 // Support norwegian & english languages.
 countries.registerLocale(require("i18n-iso-countries/langs/en.json"));
 countries.registerLocale(require("i18n-iso-countries/langs/nb.json"));
-
-enum StepName {
+enum StepNames {
   INTRODUCTION = "INTRODUCTION",
-  COUNTRY = "COUNTRY",
-  PERIOD = "PERIOD",
+  DESTINATION = "DESTINATION",
+  TRAVEL_PERIOD = "TRAVEL_PERIOD",
   SUMMARY = "SUMMARY",
   RECEIPT = "RECEIPT",
 }
-// Move inside component in useState if we need dynamic steps
-const initStepList: StepType[] = [
-  { name: StepName.INTRODUCTION },
-  { name: StepName.COUNTRY },
-  { name: StepName.PERIOD },
-  { name: StepName.SUMMARY },
-  { name: StepName.RECEIPT },
-];
-
-const getButtonText = (name: string) => {
+const getButtonText = (name?: string) => {
   switch (name) {
-    case StepName.INTRODUCTION:
+    case StepNames.INTRODUCTION:
       return "Fortsett til søknaden";
-    case StepName.SUMMARY:
+    case StepNames.SUMMARY:
       return "Send søknaden";
     default:
       return "Neste";
   }
 };
 
-const showButton = (name: string) => {
+const showButton = (name?: string) => {
   switch (name) {
-    case StepName.RECEIPT:
+    case StepNames.RECEIPT:
       return false;
     default:
       return true;
@@ -63,16 +50,19 @@ const showButton = (name: string) => {
 };
 
 const Utland = (): JSX.Element => {
-  const {stepList, currentStepIndex, goToNamedStep, goToNextStep, goToPreviousStep, nextStep, currentStep} = useSteps(initStepList);
+  const { state, dispatch, deleteStoredState } = useSoknadContext(SøknadType.UTLAND);
+  const { currentStepIndex, goToNamedStep, goToNextStep, setNamedStepCompleted, currentStep, nextStep, goToPreviousStep, resetStepWizard } = useContext(StepWizardContext);
   const [countryList, setCountryList] = useState<string[][]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const { state, dispatch } = useSoknadContext(SøknadType.UTLAND);
 
   const { getText } = useTexts(tekster);
   const { handleNotificationModal } = useContext(ModalContext);
 
   const SoknadUtlandSchemas = getUtlandSchemas(getText);
-  const currentSchema = SoknadUtlandSchemas[currentStepIndex];
+  const currentSchema = useMemo(() => {
+    return SoknadUtlandSchemas[currentStepIndex];
+  }, [currentStepIndex, SoknadUtlandSchemas]);
+
   const {
     getValues,
     control,
@@ -99,94 +89,97 @@ const Utland = (): JSX.Element => {
     };
     getCountries();
   }, [setCountryList]);
-  const onSubmitClick = async (data: SoknadUtland) => {
-    if (currentStepNameIs(StepName.SUMMARY)) {
-      setIsLoading(true);
-      const postResponse = await fetchPOST("/aap/soknad-api/innsending/utland", {
-        land: state?.søknad?.country,
-        periode: {
-          fom: formatDate(state?.søknad?.fromDate, "yyyy-MM-dd"),
-          tom: formatDate(state?.søknad?.toDate, "yyyy-MM-dd"),
-        },
-      });
-      setIsLoading(false);
-      if (postResponse.ok) {
-        goToNextStep();
-      } else {
-        // TODO frontend-error error
-        handleNotificationModal({
-          heading: "En feil har oppstått!",
-          text: "Vi beklager. Venligst send inn søknaden på nytt, eller prøv igjen senere",
-          type: "error",
-        });
-      }
-    } else {
-      goToNextStep();
+  const myHandleSubmit = async (data: SoknadForm) => {
+    if(currentStep.name === StepNames.SUMMARY) {
+        setIsLoading(true);
+        const postResponse = await postSøknad(state?.søknad);
+        setIsLoading(false);
+        console.log('postResponse', postResponse);
+        if(!postResponse.ok) {
+          handleNotificationModal({
+            heading: 'Feil',
+            text: postResponse.error,
+            type: 'error'
+          });
+          return;
+        }
     }
-    dispatch({type: SoknadActionKeys.SET_SOKNAD, payload: data});
     dispatch({type: SoknadActionKeys.SET_CURRENT_STEP, payload: nextStep?.name})
-  };
-  const currentStepNameIs = (name: StepName) =>
-    name === currentStep.name;
+    dispatch({type: SoknadActionKeys.SET_SOKNAD, payload: data});
+    setNamedStepCompleted(currentStep.name);
+    goToNextStep();
+  }
+  const postSøknad = async (data?: SoknadForm) =>
+    fetchPOST("/aap/soknad-api/innsending/utland", {
+      land: data?.country,
+      periode: {
+        fom: formatDate(data?.fromDate, "yyyy-MM-dd"),
+        tom: formatDate(data?.toDate, "yyyy-MM-dd"),
+      },
+    });
+  const onDeleteSøknad = async () => {
+    const deleteRes = await deleteStoredState(state.type);
+    if(deleteRes) {
+      resetStepWizard();
+    } else {
+      handleNotificationModal({
+        heading: 'Feil',
+        text: 'Noe gikk galt. Venligst forsøk igjen senere.',
+        type: 'error'
+      });
+    }
+  }
 
   return (
-    <SoknadWizard
-      title={getText('pageTitle')}
-      stepList={stepList}
-      currentStepIndex={currentStepIndex}
-    >
-      <>
-        <Step renderWhen={currentStepNameIs(StepName.INTRODUCTION)}>
-          <StepIntroduction getText={getText} />
+    <StepWizard hideLabels={false}>
+      <Step order={1} name={StepNames.INTRODUCTION} >
+        <StepIntroduction getText={getText} />
+      </Step>
+      <form
+        onSubmit={handleSubmit(myHandleSubmit)}
+        className="soknad-utland-form"
+        autoComplete="off"
+      >
+        <Step order={2} name={StepNames.DESTINATION} label='Destinasjon'>
+          <StepSelectCountry
+            getText={getText}
+            control={control}
+            errors={errors}
+            countries={countryList}
+          />
         </Step>
-        <form
-          onSubmit={handleSubmit(async (data) => onSubmitClick(data))}
-          className="soknad-utland-form"
-        >
-          <Step renderWhen={currentStepNameIs(StepName.COUNTRY)}>
-            <StepSelectCountry
-              getText={getText}
-              control={control}
-              errors={errors}
-              countries={countryList}
-            />
-          </Step>
-
-          <Step renderWhen={currentStepNameIs(StepName.PERIOD)}>
-            <StepSelectTravelPeriod
-              getText={getText}
-              control={control}
-              errors={errors}
-              getValues={getValues}
-            />
-          </Step>
-
-          <Step renderWhen={currentStepNameIs(StepName.SUMMARY)}>
-            <StepSummary
-              getText={getText}
-              control={control}
-              errors={errors}
-              data={state?.søknad}
-            />
-          </Step>
-
-          <FormErrorSummary errors={errors} />
-
-          {showButton(currentStep?.name) && (
-            <Button variant="primary" type="submit" disabled={isLoading}>
-              {getButtonText(currentStep?.name)}
-              {isLoading && <Loader />}
-            </Button>
-          )}
-        </form>
-        <Step renderWhen={currentStepNameIs(StepName.RECEIPT)}>
+        <Step order={3} name={StepNames.TRAVEL_PERIOD} label='Periode'>
+          <StepSelectTravelPeriod
+            getText={getText}
+            control={control}
+            errors={errors}
+            getValues={getValues}
+          />
+        </Step>
+        <Step order={4} name={StepNames.SUMMARY} label='Oppsummering'>
+          <StepSummary
+            getText={getText}
+            control={control}
+            errors={errors}
+            data={state?.søknad}
+          />
+        </Step>
+        <FormErrorSummary errors={errors} />
+        <Step order={5} name={StepNames.RECEIPT} label='Kvittering' >
           <StepKvittering getText={getText} />
         </Step>
-        <Button variant="tertiary" onClick={goToPreviousStep}>
-          Tilbake
+        {showButton(currentStep?.name) && <Button variant="primary" type="submit" disabled={isLoading} >
+          <BodyShort>{getButtonText(currentStep?.name)}</BodyShort>
+          {isLoading && <Loader />}
+        </Button>}
+        <Button variant="tertiary" type="button" onClick={goToPreviousStep}>
+          <BodyShort>Tilbake</BodyShort>
         </Button>
-      </>
-    </SoknadWizard>
+        <Button variant="tertiary" type="button" onClick={() => onDeleteSøknad()}>
+          <BodyShort>Slett påbegynt søknad</BodyShort>
+        </Button>
+      </form>
+    </StepWizard>
   );
 };
 

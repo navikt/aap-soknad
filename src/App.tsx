@@ -4,11 +4,12 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Heading } from "@navikt/ds-react";
 import { ModalProvider } from "./context/modalContext";
 import { SoknadContextProvider } from "./context/soknadContext";
+import { StepWizardContextProvider} from "./context/stepWizardContext";
 
 // Pages
-import Utland from "./pages/utland/Utland";
 import Me from "./pages/Me";
 import { Bedrift } from "./pages/bedrift/Bedrift";
+import Utland from "./pages/utland/Utland";
 import { Hovedsøknad } from "./pages/hovedsøknad/Hovedsøknad";
 
 const App = (): JSX.Element => {
@@ -16,25 +17,27 @@ const App = (): JSX.Element => {
     <div className="app">
       <SoknadContextProvider>
         <ModalProvider>
-          <BrowserRouter>
-            <Routes>
-              <Route path="/aap" element={<Hovedsøknad />} />
-              <Route path="/aap/me" element={<Me />} />
-              <Route path="/aap/utland" element={<Utland />} />
-              <Route path="/aap/bedrift" element={<Bedrift />} />
-              <Route
-                path="*"
-                element={
-                  <>
-                    <Heading size={"2xlarge"} level={"1"} spacing={true}>
-                      AAP App
-                    </Heading>
-                    <span>Not Found</span>
-                  </>
-                }
-              />
-            </Routes>
-          </BrowserRouter>
+          <StepWizardContextProvider>
+            <BrowserRouter>
+              <Routes>
+                <Route path="/aap" element={<Hovedsøknad />} />
+                <Route path="/aap/me" element={<Me />} />
+                <Route path="/aap/utland" element={<Utland />} />
+                <Route path="/aap/bedrift" element={<Bedrift />} />
+                <Route
+                  path="*"
+                  element={
+                    <>
+                      <Heading size={"2xlarge"} level={"1"} spacing={true}>
+                        AAP App
+                      </Heading>
+                      <span>Not Found</span>
+                    </>
+                  }
+                />
+              </Routes>
+            </BrowserRouter>
+          </StepWizardContextProvider>
         </ModalProvider>
       </SoknadContextProvider>
     </div>
