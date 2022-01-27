@@ -13,7 +13,6 @@ import {getUtlandSchemas} from "../../schemas/utland";
 import {FormErrorSummary} from "../../components/schema/FormErrorSummary";
 import {useSoknadContext} from "../../hooks/useSoknadContext";
 import {SøknadType} from "../../context/soknadContext";
-import useSteps from "../../hooks/useSteps";
 
 import * as tekster from "./tekster";
 
