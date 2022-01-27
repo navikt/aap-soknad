@@ -1,22 +1,17 @@
 import {render, screen} from "@testing-library/react";
-import {toHaveNoViolations} from "jest-axe";
+import { axe, toHaveNoViolations } from "jest-axe";
 import {rest} from "msw";
 import {setupServer} from 'msw/node';
 import {Step, StepWizard} from './index';
 import {StepWizardContext, StepWizardContextData} from "../../context/stepWizardContext";
-import {SoknadContext, SoknadContextData, SoknadContextState, SøknadType} from "../../context/soknadContext";
+import {SoknadContext, SoknadContextData, SøknadType} from "../../context/soknadContext";
 import {BodyShort} from "@navikt/ds-react";
 
+// SET UP DUMMY DATA FOR CONTEXT
 enum stepNames {
   STEP_ONE = 'STEP_ONE',
   STEP_TWO = 'STEP_TWO',
   STEP_THREE = 'STEP_THREE',
-};
-const renderWithWizardContext = (ui: any, {providerProps, ...renderOptions}: any) => {
-  return render(
-    <StepWizardContext.Provider {...providerProps}>{ui}</StepWizardContext.Provider>,
-    renderOptions,
-  )
 }
 const soknadContext: SoknadContextData = {
   state: {
@@ -29,7 +24,7 @@ const soknadContext: SoknadContextData = {
 }
 const wizardContext: StepWizardContextData = {
   currentStepIndex: 0,
-  stepList: [{name: stepNames.STEP_ONE}],
+  stepList: [{name: stepNames.STEP_ONE},{name: stepNames.STEP_TWO},{name: stepNames.STEP_THREE}],
   setStepList: () => console.log('setStepList'),
   setCurrentStepIndex: () => console.log('setStepList'),
   goToNamedStep: (name: string) => console.log('gotonamedstep', name),
@@ -41,14 +36,7 @@ const wizardContext: StepWizardContextData = {
 
 }
 
-const renderWithSoknadContext = (ui: any, {providerProps, ...renderOptions}: any) => {
-  return render(
-    <SoknadContext.Provider{...providerProps}>{ui}</SoknadContext.Provider>,
-  renderOptions,
-)
-}
-const renderWithContext = (ui: any, {providerProps, ...renderOptions}: any) => {
-  // return renderWithSoknadContext(renderWithWizardContext(ui, {providerProps: wizardContext}), {providerProps: {} })
+const renderWithContext = (ui: any, {...renderOptions}: any) => {
   return render(
     <SoknadContext.Provider value={{...soknadContext}}>
       <StepWizardContext.Provider value={{...wizardContext}}>{ui}</StepWizardContext.Provider>,
@@ -80,25 +68,16 @@ expect.extend(toHaveNoViolations);
 
 describe("StepWizard", () => {
 
-  it("placeholder", () => {
-    expect(true).toBe(true);
-  });
-
   it("render StepWizard med steg", () => {
-    // render(<SoknadContextProvider>
-    //   <StepWizardContextProvider>
-    //     <MyWizard />
-    //   </StepWizardContextProvider>
-    // </SoknadContextProvider>);
     renderWithContext(<MyWizard />, {})
-    expect(screen.getAllByText(stepNames.STEP_ONE)).toBe(stepNames.STEP_ONE);
+    expect(screen.getByText(stepNames.STEP_ONE)).toBeDefined();
     expect(screen.getAllByRole('button')).toHaveLength(3);
   });
 
-  // it("uu-sjekk", async () => {
-  //   const { container } = renderWithContext(<MyWizard />, {});
-  //   const res = await axe(container);
-  //
-  //   expect(res).toHaveNoViolations();
-  // });
+  it("uu-sjekk", async () => {
+    const { container } = renderWithContext(<MyWizard />, {});
+    const res = await axe(container);
+
+    expect(res).toHaveNoViolations();
+  });
 });
