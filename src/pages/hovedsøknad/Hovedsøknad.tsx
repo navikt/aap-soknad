@@ -2,10 +2,12 @@ import React, { useState } from "react";
 
 import { Alert, Button, GuidePanel, Loader } from "@navikt/ds-react";
 import { fetchPOST } from "../../api/useFetch";
-import useTexts from "../../hooks/useTexts";
+import { useTexts } from "../../hooks/useTexts";
 import SoknadWizard, { StepType } from "../../layouts/SoknadWizard";
 import { Step } from "../../components/Step";
 import { RenderWhen } from "../../components/RenderWhen";
+
+import * as tekster from "./tekster";
 
 enum StepName {
   INTRODUCTION = "INTRODUCTION",
@@ -37,7 +39,8 @@ const Hovedsøknad = (): JSX.Element => {
       setCurrentStepIndex(currentStepIndex + 1);
     }
   };
-  const { getText } = useTexts("hovedsøknad");
+
+  const { getText } = useTexts(tekster);
   const getStepName = (index: number) => stepList[index]?.name;
   const currentStepNameIs = (name: StepName) =>
     name === getStepName(currentStepIndex);

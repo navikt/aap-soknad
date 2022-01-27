@@ -12,10 +12,10 @@ const Utland = (): JSX.Element => {
   const [isWaiting, setIsWaiting] = useState<boolean>(false);
   const onSubmit = async () => {
     setIsWaiting(true);
-    const response = await fetch('/aap/api/me');
+    const response = await fetch('/aap/soknad-api/me');
     const json = response.json();
     logger.info({
-      message: 'api/me called',
+      message: 'soknad-api/me called',
       payload: json
     });
   };

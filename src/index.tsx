@@ -5,7 +5,8 @@ import App from "./App";
 import { setupLogger } from './utils/logger';
 
 if (process.env.REACT_APP_USE_MOCK === 'true') {
-  require('./mock/setupMock');
+  const { worker } = require("./mocks/browser");
+  worker.start();
 }
 
 setupLogger();

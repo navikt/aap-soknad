@@ -20,7 +20,7 @@ const App = (): JSX.Element => {
           <StepWizardContextProvider>
             <BrowserRouter>
               <Routes>
-                <Route path="/" element={<Hovedsøknad />} />
+                <Route path="/aap" element={<Hovedsøknad />} />
                 <Route path="/aap/me" element={<Me />} />
                 <Route path="/aap/utland" element={<Utland />} />
                 <Route path="/aap/bedrift" element={<Bedrift />} />

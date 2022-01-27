@@ -4,5 +4,5 @@ import App from "./App";
 
 test("kan tegne appen", () => {
   render(<App />);
-  expect(screen.getByText(/Søk om AAP/)).toBeVisible();
+  expect(screen.getByText(/AAP App/)).toBeVisible();
 });

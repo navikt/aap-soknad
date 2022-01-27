@@ -1,22 +1,25 @@
 import { render, screen } from "@testing-library/react";
+import { yupResolver } from "@hookform/resolvers/yup";
 import userEvent from "@testing-library/user-event";
 import { useForm } from "react-hook-form";
 import { axe, toHaveNoViolations } from "jest-axe";
 
 import { Utdanning } from "./Utdanning";
-import * as bedriftstekster from "../../../texts/nb.json";
-
 import useTexts from "../../../hooks/useTexts";
-import { yupResolver } from "@hookform/resolvers/yup";
 import { getBedriftSchema } from "../../../schemas/bedrift";
+
+import * as tekster from "../tekster";
 
 expect.extend(toHaveNoViolations);
 describe("Utdanning", () => {
-  const texts = bedriftstekster.bedrift;
   const Component = () => {
-    const { getText } = useTexts("bedrift");
+    const { getText } = useTexts(tekster);
     const schema = getBedriftSchema(getText);
-    const { register, control, formState: { errors } } = useForm({resolver: yupResolver(schema[3])});
+    const {
+      register,
+      control,
+      formState: { errors },
+    } = useForm({ resolver: yupResolver(schema[3]) });
     return (
       <>
         <Utdanning
@@ -31,32 +34,32 @@ describe("Utdanning", () => {
 
   it("skal starte uten oppføringer", () => {
     render(<Component />);
-    expect(screen.getByText(texts.steps.utdanning.guideText)).toBeVisible();
+    expect(screen.getByText(tekster.nb.steps.utdanning.guideText)).toBeVisible();
     expect(
-      screen.queryByLabelText(texts.form.utdanning.institusjonsnavn)
+      screen.queryByLabelText(tekster.nb.form.utdanning.institusjonsnavn)
     ).not.toBeInTheDocument();
     expect(
-      screen.getByRole("button", { name: texts.form.utdanning.leggTil })
+      screen.getByRole("button", { name: tekster.nb.form.utdanning.leggTil })
     ).toBeVisible();
   });
 
   it("må kunne legge til rader", () => {
     render(<Component />);
-    expect(screen.getByText(texts.steps.utdanning.guideText)).toBeVisible();
+    expect(screen.getByText(tekster.nb.steps.utdanning.guideText)).toBeVisible();
     expect(
-      screen.queryByLabelText(texts.form.utdanning.institusjonsnavn)
+      screen.queryByLabelText(tekster.nb.form.utdanning.institusjonsnavn)
     ).not.toBeInTheDocument();
     const leggTilKnapp = screen.getByRole("button", {
-      name: texts.form.utdanning.leggTil,
+      name: tekster.nb.form.utdanning.leggTil,
     });
     expect(leggTilKnapp).toBeVisible();
     userEvent.click(leggTilKnapp);
     expect(
-      screen.getByLabelText(texts.form.utdanning.institusjonsnavn)
+      screen.getByLabelText(tekster.nb.form.utdanning.institusjonsnavn)
     ).toBeInTheDocument();
     userEvent.click(leggTilKnapp);
     expect(
-      screen.getAllByLabelText(texts.form.utdanning.institusjonsnavn)
+      screen.getAllByLabelText(tekster.nb.form.utdanning.institusjonsnavn)
     ).toHaveLength(2);
   });
 
@@ -64,25 +67,25 @@ describe("Utdanning", () => {
     render(<Component />);
     const skolenavn = "Nes Vidregående skole";
     const leggTilKnapp = screen.getByRole("button", {
-      name: texts.form.utdanning.leggTil,
+      name: tekster.nb.form.utdanning.leggTil,
     });
 
     userEvent.click(leggTilKnapp);
     userEvent.type(
-      screen.getByLabelText(texts.form.utdanning.institusjonsnavn),
+      screen.getByLabelText(tekster.nb.form.utdanning.institusjonsnavn),
       skolenavn
     );
-    userEvent.type(screen.getByLabelText(texts.form.utdanning.fraAar), "2010");
-    userEvent.type(screen.getByLabelText(texts.form.utdanning.tilAar), "2013");
+    userEvent.type(screen.getByLabelText(tekster.nb.form.utdanning.fraAar), "2010");
+    userEvent.type(screen.getByLabelText(tekster.nb.form.utdanning.tilAar), "2013");
 
     userEvent.click(leggTilKnapp);
 
     expect(
-      screen.getAllByLabelText(texts.form.utdanning.institusjonsnavn)
+      screen.getAllByLabelText(tekster.nb.form.utdanning.institusjonsnavn)
     ).toHaveLength(2);
 
     userEvent.click(
-      screen.getAllByRole("button", { name: texts.form.utdanning.slettRad })[1]
+      screen.getAllByRole("button", { name: tekster.nb.form.utdanning.slettRad })[1]
     );
     expect(screen.getByDisplayValue(skolenavn)).toBeVisible();
   });

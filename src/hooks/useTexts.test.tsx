@@ -1,27 +1,50 @@
 import useTexts from "./useTexts";
 import { render, screen } from "@testing-library/react";
-import testTexts from "../texts/nb.json";
 
 describe("useTexts", () => {
-  it("gir tekst tilbake", () => {
-    const Component = () => {
-      const { getText } = useTexts('hovedsøknad');
-      return (
-        <div>{getText("pageTitle")}</div>
-      )
+  const tekstpakke = {
+    nb: {
+      overskrift: "En overskrift",
+      beskrivelse: "En beskrivelse",
+      steg: {
+        intro: "Introduksjon"
+      }
+    },
+    en: {
+      overskrift: "A heading",
+      beskrivelse: "A description",
+      steg: {
+        intro: "Introduction"
+      }
     }
-    render(<Component />);
-    expect(screen.getByText(testTexts.hovedsøknad.pageTitle)).toBeVisible();
-  });
+  };
 
   it("ingen treff på tekst gir nøkkel tilbake", () => {
     const Component = () => {
-      const { getText } = useTexts('hovedsøknad');
-      return (
-        <div>{getText("nøkkel.som.ikke.finnes")}</div>
-      )
-    }
+      const { getText } = useTexts(tekstpakke);
+      return <div>{getText("nøkkel.som.ikke.finnes")}</div>;
+    };
     render(<Component />);
     expect(screen.getByText("nøkkel.som.ikke.finnes")).toBeVisible();
-  })
-})
+  });
+
+  it("gir tekst tilbake", () => {
+    const Component = () => {
+      const { getText } = useTexts(tekstpakke);
+      return (
+        <>
+          <h1>{getText('overskrift')}</h1>
+          <div>{getText('beskrivelse')}</div>
+          <dl>
+            <dt>{getText('steg.intro')}</dt>
+          </dl>
+        </>
+      )
+    };
+
+    render(<Component />);
+    expect(screen.getByRole('heading', {name: tekstpakke.nb.overskrift})).toBeVisible();
+    expect(screen.getByText(tekstpakke.nb.beskrivelse)).toBeVisible();
+    expect(screen.getByText(tekstpakke.nb.steg.intro)).toBeVisible();
+  });
+});

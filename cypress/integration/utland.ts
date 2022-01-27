@@ -7,7 +7,7 @@ describe('AAP Soeknad', () => {
   beforeEach(() => {
 
   });
-  it('kommer igjennom grønt løp', () => {
+  it.skip('kommer igjennom grønt løp', () => {
 
     cy.visit('aap/utland');
     cy.contains('Søknad om å beholde arbeidsavklaringspenger under opphold i utlandet');
@@ -27,7 +27,7 @@ describe('AAP Soeknad', () => {
     cy.contains('Takk, søknaden er mottatt. Nå tar vi oss av resten.');
   })
 
-  it('gir valideringsfeil underveis', () => {
+  it.skip('gir valideringsfeil underveis', () => {
     cy.visit('aap/utland')
     cy.contains('Søknad om å beholde arbeidsavklaringspenger under opphold i utlandet');
     cy.findByRole('button', {name: /^Fortsett til søknaden$/}).click();

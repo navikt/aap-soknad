@@ -1,17 +1,21 @@
 import React, { useState } from "react";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+
+import { Button, Loader } from "@navikt/ds-react";
+
 import SoknadWizard, { StepType } from "../../layouts/SoknadWizard";
 import useTexts from "../../hooks/useTexts";
 import { Introduction, PersonligInfo, TypeStoette } from "./BedriftSteps";
-import { Button, Loader } from "@navikt/ds-react";
-import "./Bedrift.less";
-import { useForm } from "react-hook-form";
 import { Step } from "../../components/Step";
-import { yupResolver } from "@hookform/resolvers/yup";
 import { getBedriftSchema } from "../../schemas/bedrift";
 import { FormErrorSummary } from "../../components/schema/FormErrorSummary";
 import { Utdanning } from "./steps/Utdanning";
 import { Praksis } from "./steps/Praksis";
 import { Etablererstipend } from "./steps/Etablererstipend";
+
+import "./Bedrift.less";
+import * as tekster from "./tekster";
 
 enum StepName {
   INTRODUCTION = "INTRODUCTION",
@@ -52,7 +56,7 @@ const Bedrift = (): JSX.Element => {
   const [currentStepIndex, setCurrentStepIndex] = useState<number>(0);
   const [isLoading] = useState<boolean>(false);
   const [, setSoknadData] = useState<FormData>(undefined);
-  const { getText } = useTexts("bedrift");
+  const { getText } = useTexts(tekster);
   const bedriftSchema = getBedriftSchema(getText);
   const currentSchema = bedriftSchema[currentStepIndex];
 

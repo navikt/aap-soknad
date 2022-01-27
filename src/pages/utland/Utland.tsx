@@ -4,18 +4,22 @@ import { StepWizard, Step } from '../../components/StepWizard';
 import React, {useContext, useEffect, useMemo, useState} from "react";
 import {useForm} from "react-hook-form";
 import {yupResolver} from "@hookform/resolvers/yup";
-import {getUtlandSchemas} from "../../schemas/utland";
-import useTexts from "../../hooks/useTexts";
-import {useSoknadContext} from "../../hooks/useSoknadContext";
-import {SøknadType} from "../../context/soknadContext";
-import {StepWizardContext} from "../../context/stepWizardContext";
-import SoknadForm from "../../types/SoknadForm";
-import {StepIntroduction, StepKvittering, StepSelectCountry, StepSelectTravelPeriod, StepSummary} from "./Steps";
-import {FormErrorSummary} from "../../components/schema/FormErrorSummary";
-import {SoknadActionKeys} from "../../context/soknadActions";
+import {ModalContext} from "../../context/modalContext";
+import {StepIntroduction, StepKvittering, StepSelectCountry, StepSelectTravelPeriod, StepSummary,} from "./Steps";
 import {fetchPOST} from "../../api/useFetch";
 import {formatDate} from "../../utils/date";
-import {ModalContext} from "../../context/modalContext";
+import useTexts from "../../hooks/useTexts";
+import {getUtlandSchemas} from "../../schemas/utland";
+import {FormErrorSummary} from "../../components/schema/FormErrorSummary";
+import {useSoknadContext} from "../../hooks/useSoknadContext";
+import {SøknadType} from "../../context/soknadContext";
+import useSteps from "../../hooks/useSteps";
+
+import * as tekster from "./tekster";
+
+import {StepWizardContext} from "../../context/stepWizardContext";
+import SoknadForm from "../../types/SoknadForm";
+import {SoknadActionKeys} from "../../context/soknadActions";
 // Support norwegian & english languages.
 countries.registerLocale(require("i18n-iso-countries/langs/en.json"));
 countries.registerLocale(require("i18n-iso-countries/langs/nb.json"));
@@ -46,13 +50,13 @@ const showButton = (name?: string) => {
   }
 };
 
-
 const Utland = (): JSX.Element => {
   const { state, dispatch, deleteStoredState } = useSoknadContext(SøknadType.UTLAND);
   const { currentStepIndex, goToNamedStep, goToNextStep, setNamedStepCompleted, currentStep, nextStep, goToPreviousStep, resetStepWizard } = useContext(StepWizardContext);
   const [countryList, setCountryList] = useState<string[][]>([]);
-  const { getText } = useTexts("utland");
   const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  const { getText } = useTexts(tekster);
   const { handleNotificationModal } = useContext(ModalContext);
 
   const SoknadUtlandSchemas = getUtlandSchemas(getText);
