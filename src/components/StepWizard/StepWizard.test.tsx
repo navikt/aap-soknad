@@ -1,11 +1,11 @@
-import {findAllByRole, render, screen} from "@testing-library/react";
-import { axe, toHaveNoViolations } from "jest-axe";
-import { Step, StepWizard } from './index';
-import {StepWizardContext, StepWizardContextData, StepWizardContextProvider} from "../../context/stepWizardContext";
-import {SoknadContext, SoknadContextProvider} from "../../context/soknadContext";
+import {render, screen} from "@testing-library/react";
+import {toHaveNoViolations} from "jest-axe";
+import {rest} from "msw";
+import {setupServer} from 'msw/node';
+import {Step, StepWizard} from './index';
+import {StepWizardContext, StepWizardContextData} from "../../context/stepWizardContext";
+import {SoknadContext, SoknadContextData, SoknadContextState, SøknadType} from "../../context/soknadContext";
 import {BodyShort} from "@navikt/ds-react";
-import {Dispatch, useContext} from "react";
-import {StepType} from "./Step";
 
 enum stepNames {
   STEP_ONE = 'STEP_ONE',
@@ -17,6 +17,15 @@ const renderWithWizardContext = (ui: any, {providerProps, ...renderOptions}: any
     <StepWizardContext.Provider {...providerProps}>{ui}</StepWizardContext.Provider>,
     renderOptions,
   )
+}
+const soknadContext: SoknadContextData = {
+  state: {
+    version: 1,
+    type: SøknadType.UTLAND,
+    søkerinfo: 'info'
+  },
+  dispatch: () => console.log('dispatch'),
+  deleteStoredState: () => Promise.resolve(true)
 }
 const wizardContext: StepWizardContextData = {
   currentStepIndex: 0,
@@ -41,7 +50,7 @@ const renderWithSoknadContext = (ui: any, {providerProps, ...renderOptions}: any
 const renderWithContext = (ui: any, {providerProps, ...renderOptions}: any) => {
   // return renderWithSoknadContext(renderWithWizardContext(ui, {providerProps: wizardContext}), {providerProps: {} })
   return render(
-    <SoknadContext.Provider{...providerProps}>
+    <SoknadContext.Provider value={{...soknadContext}}>
       <StepWizardContext.Provider value={{...wizardContext}}>{ui}</StepWizardContext.Provider>,
     </SoknadContext.Provider>,
     renderOptions,
@@ -52,6 +61,20 @@ const MyWizard = () => <StepWizard>
   <Step name={stepNames.STEP_TWO} label={stepNames.STEP_TWO}><BodyShort>{stepNames.STEP_TWO}</BodyShort></Step>
   <Step name={stepNames.STEP_THREE} label={stepNames.STEP_THREE}><BodyShort>{stepNames.STEP_THREE}</BodyShort></Step>
 </StepWizard>;
+
+
+const server = setupServer(
+  rest.get('/aap/soknad-api/buckets/lagre/UTLAND', (req, res, ctx) => {
+    return res(ctx.json({}))
+  }),
+  rest.post('/aap/soknad-api/buckets/les/UTLAND', (req, res, ctx) => {
+    return res(ctx.json({}))
+  }),
+)
+
+beforeAll(() => server.listen())
+afterEach(() => server.resetHandlers())
+afterAll(() => server.close())
 
 expect.extend(toHaveNoViolations);
 

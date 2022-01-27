@@ -14,7 +14,7 @@ export interface SoknadContextState {
   søknad?: SoknadForm;
   søkerinfo: string;
 }
-interface SoknadContextData {
+export interface SoknadContextData {
   state: SoknadContextState;
   dispatch: Dispatch<SoknadAction>;
   deleteStoredState: (søknadType?: string) => Promise<boolean>;
