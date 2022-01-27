@@ -8,7 +8,7 @@ export enum SøknadType {
 interface Props {
   children: ReactNode;
 }
-interface StepWizardContextData {
+export interface StepWizardContextData {
   stepList: StepType[];
   setStepList: Dispatch<Array<StepType>>;
   currentStepIndex: number;
