@@ -13,7 +13,6 @@ const options = (targetAudience: string) => ({
     return new Promise((resolve, reject) => {
       return getToken(token, targetAudience).then(
         apiToken => {
-          LogInfo(`TokenX: ${apiToken}`)
           resolve({
             ...options,
             headers: {
