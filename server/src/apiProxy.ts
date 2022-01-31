@@ -37,7 +37,10 @@ const options = (targetAudience: string) => ({
   },
   userResDecorator: function(proxyRes: IncomingMessage, proxyResData: any) {
     if (proxyRes.statusCode > 299) {
-      const resData = JSON.parse(proxyResData.toString('utf8'));
+      let resData = {};
+      try {
+        resData = JSON.parse(proxyResData.toString('utf8'));
+      } catch  {}
       LogError('proxyError', {
         statusCode: proxyRes.statusCode,
         statusMessage: proxyRes.statusMessage,
