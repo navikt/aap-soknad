@@ -36,10 +36,14 @@ const options = (targetAudience: string) => ({
     return reqPath;
   },
   userResDecorator: function(proxyRes: IncomingMessage, proxyResData: any) {
-    console.log('')
-    console.log('proxy response')
-    console.log(proxyRes.statusCode, proxyRes.statusMessage);
-    console.log(proxyResData)
+    if (proxyRes.statusCode > 299) {
+      const resData = JSON.parse(proxyResData.toString('utf8'));
+      LogError('proxyError', {
+        statusCode: proxyRes.statusCode,
+        statusMessage: proxyRes.statusMessage,
+        data: resData
+      })
+    }
     return proxyResData;
   }
   // Mutate request body
