@@ -10,8 +10,8 @@ env:
 - name: APP_URL
   value: "https://aap-soknad.nav.no"
 - name: SOKNAD_API_URL
-  value: "https://aap-soknad-api.intern.nav.no"
+  value: "http://soknad-api"
 - name: SOKNAD_API_AUDIENCE
-  value: "prod-gcp:aap:aap-soknad-api"
+  value: "prod-gcp:aap:soknad-api"
 externals:
   - "dekoratoren.dev.no"
