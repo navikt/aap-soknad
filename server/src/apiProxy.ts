@@ -32,12 +32,14 @@ const options = (targetAudience: string) => ({
     const reqPath = req.originalUrl.startsWith('/aap/soknad-api')
       ? req.originalUrl.slice(15)
       : req.originalUrl;
-    LogInfo(`proxy to: ${reqPath}`);
+    LogInfo('requestPath', {reqPath});
     return reqPath;
   },
   userResDecorator: function(proxyRes: IncomingMessage, proxyResData: any) {
+    console.log('')
     console.log('proxy response')
-    console.log(proxyRes);
+    console.log(proxyRes.statusCode, proxyRes.statusMessage);
+    console.log(proxyResData)
     return proxyResData;
   }
   // Mutate request body
