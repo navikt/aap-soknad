@@ -1,8 +1,9 @@
-import { Application, Request} from "express";
+import { Application, Request } from "express";
 import proxy from 'express-http-proxy';
 import {getToken} from "./auth/tokenx";
-import {LogError} from "./logger";
+import {LogError, LogInfo} from "./logger";
 import config from "./config";
+import {IncomingMessage} from "http";
 
 const options = (targetAudience: string) => ({
   parseReqBody: true,
@@ -12,6 +13,7 @@ const options = (targetAudience: string) => ({
     return new Promise((resolve, reject) => {
       return getToken(token, targetAudience).then(
         apiToken => {
+          LogInfo(`TokenX: ${apiToken}`)
           resolve({
             ...options,
             headers: {
@@ -27,10 +29,17 @@ const options = (targetAudience: string) => ({
     });
   },
   proxyReqPathResolver: (req: Request) => {
-    return (req.originalUrl.startsWith('/aap/soknad-api'))
+    const reqPath = req.originalUrl.startsWith('/aap/soknad-api')
       ? req.originalUrl.slice(15)
       : req.originalUrl;
+    LogInfo(`proxy to: ${reqPath}`);
+    return reqPath;
   },
+  userResDecorator: function(proxyRes: IncomingMessage, proxyResData: any) {
+    console.log('proxy response')
+    console.log(proxyRes);
+    return proxyResData;
+  }
   // Mutate request body
   // proxyReqBodyDecorator: function(bodyContent, srcReq) {}
 });
