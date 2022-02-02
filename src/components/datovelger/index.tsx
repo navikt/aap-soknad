@@ -1,4 +1,4 @@
-import React from "react";
+import React, { forwardRef } from "react";
 import DayPickerInput from "react-day-picker/DayPickerInput";
 import { parse } from "date-fns";
 import { nb } from "date-fns/locale";
@@ -39,22 +39,26 @@ const datovelger = ({
   label,
   id,
   value,
-}: DatovelgerProps) => (
-  <div className="datovelger navds-form-field">
-    <DayPickerInput
-      format="dd.MM.yyyy"
-      placeholder=""
-      value={value}
-      dayPickerProps={{ locale: "nb" }}
-      parseDate={parseDate}
-      formatDate={wrapFormatDate}
-      onDayChange={onChange}
-      inputProps={{ name, id }}
-      component={(props: any) => (
-        <TextField label={label} id={id} name={name} error={error} {...props} />
-      )}
-    />
-  </div>
-);
+}: DatovelgerProps) => {
+  const TextFieldInput = forwardRef( (props, ref) =>
+    <TextField label={label} id={id} name={name} error={error} {...props} {...ref} />
+  );
+  return (
+    <div className="datovelger navds-form-field">
+      <DayPickerInput
+        format="dd.MM.yyyy"
+        placeholder=""
+        value={value}
+        dayPickerProps={{ locale: "nb" }}
+        parseDate={parseDate}
+        formatDate={wrapFormatDate}
+        onDayChange={onChange}
+        inputProps={{ name, id }}
+        component={TextFieldInput
+        }
+      />
+    </div>
+  );
+}
 
 export default datovelger;
