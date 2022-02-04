@@ -11,9 +11,11 @@
 /server/coverage
 .eslintcach
 /cypress/videos
+.parcel-cache
 
 # production
 /build
+/dist
 /server/dist
 
 #IDE

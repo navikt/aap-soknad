@@ -3,7 +3,7 @@ ENV NODE_ENV production
 
 WORKDIR /app
 COPY server/dist/ ./server
-COPY build/ ./build
+COPY dist/ ./dist
 
 
 USER root
