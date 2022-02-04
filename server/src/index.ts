@@ -10,7 +10,7 @@ import {loginserviceCallback} from "./auth/loginservice";
 import {enforceIDPortenAuthenticationMiddleware} from "./auth/middleware";
 
 
-const BUILD_PATH = path.join(__dirname, "../build");
+const BUILD_PATH = path.join(__dirname, "../dist");
 const PORT = process.env.PORT || 3000;
 const server = express();
 
