@@ -19,7 +19,7 @@ const stepList: StepType[] = [
   { name: StepName.RECEIPT },
 ];
 
-const Hovedsøknad = (): JSX.Element => {
+const Hovedsoknad = (): JSX.Element => {
   const [currentStepIndex, setCurrentStepIndex] = useState<number>(0);
   const [innsendingFeil, setInnsendingFeil] = useState<boolean>(false);
   const [senderMelding, setSenderMelding] = useState<boolean>(false);
@@ -77,4 +77,4 @@ const Hovedsøknad = (): JSX.Element => {
   );
 };
 
-export { Hovedsøknad };
+export { Hovedsoknad };

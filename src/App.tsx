@@ -10,7 +10,7 @@ import { StepWizardContextProvider} from "./context/stepWizardContext";
 import Me from "./pages/Me";
 import { Bedrift } from "./pages/bedrift/Bedrift";
 import Utland from "./pages/utland/Utland";
-import { Hovedsøknad } from "./pages/hovedsøknad/Hovedsøknad";
+import {Hovedsoknad} from "./pages/hovedsoknad/Hovedsoknad";
 
 const App = (): JSX.Element => {
   return (
@@ -20,7 +20,7 @@ const App = (): JSX.Element => {
           <StepWizardContextProvider>
             <BrowserRouter>
               <Routes>
-                <Route path="/aap" element={<Hovedsøknad />} />
+                <Route path="/aap" element={<Hovedsoknad />} />
                 <Route path="/aap/me" element={<Me />} />
                 <Route path="/aap/utland" element={<Utland />} />
                 <Route path="/aap/bedrift" element={<Bedrift />} />

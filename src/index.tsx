@@ -4,9 +4,7 @@ import App from "./App";
 import "@navikt/ds-css";
 import { setupLogger } from './utils/logger';
 
-console.log('use mock:', process.env.USE_MOCK);
 if (process.env.USE_MOCK === 'true') {
-  console.log('yes, use mock')
   const { worker } = require("./mocks/browser");
   worker.start();
 }
