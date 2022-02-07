@@ -1,7 +1,7 @@
 import React from "react";
 import "./App.less";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import { Heading } from "@navikt/ds-react";
+import {Button, Heading} from "@navikt/ds-react";
 import { ModalProvider } from "./context/modalContext";
 import { SoknadContextProvider } from "./context/soknadContext";
 import { StepWizardContextProvider} from "./context/stepWizardContext";
@@ -31,6 +31,7 @@ const App = (): JSX.Element => {
                       <Heading size={"2xlarge"} level={"1"} spacing={true}>
                         AAP App
                       </Heading>
+                      <Button onClick={() => console.log('USE_MOCK', process.env.USE_MOCK)} >USE MOCK</Button>
                       <span>Not Found</span>
                     </>
                   }
