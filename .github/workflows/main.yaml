@@ -50,7 +50,9 @@ jobs:
           start: "yarn start"
           wait-on: "http://localhost:1234/"
           browser: "chrome"
-          headless: false
+        env:
+          NODE_ENV: "localhost"
+          USE_MOCK: "true"
       - name: "Upload screenshots if Cypress tests failed"
         uses: "actions/upload-artifact@v2"
         if: failure()
