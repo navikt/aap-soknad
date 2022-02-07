@@ -49,6 +49,7 @@ jobs:
         with:
           start: "yarn start"
           wait-on: "http://localhost:1234/"
+          browser: "chrome"
           headless: true
       - name: "Upload screenshots if Cypress tests failed"
         uses: "actions/upload-artifact@v2"
