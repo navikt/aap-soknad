@@ -57,7 +57,7 @@
   "scripts": {
     "start": "cross-env NODE_ENV=localhost parcel src/index.html",
     "clean": "rimraf dist",
-    "build": "yarn run clean && parcel build src/index.html",
+    "build": "parcel build src/index.html",
     "build:mock": "cross-env NODE_ENV=localhost parcel build src/index.html",
     "lint": "yarn lint:jsts",
     "lint:jsts": "npx eslint .",
