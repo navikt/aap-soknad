@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
 import { Alert, Button, GuidePanel, Loader } from "@navikt/ds-react";
-import { fetchPOST } from "../../api/useFetch";
+import { fetchPOST } from "../../api/fetch";
 import { useTexts } from "../../hooks/useTexts";
 import SoknadWizard, { StepType } from "../../layouts/SoknadWizard";
 import { Step } from "../../components/Step";

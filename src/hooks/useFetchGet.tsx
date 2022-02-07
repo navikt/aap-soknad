@@ -1,5 +1,6 @@
 import {useEffect, useState} from "react";
 import {APP_URL_TEST} from "../config";
+import fetch from "cross-fetch";
 
 export const useFetchGET = (url: string) => {
   const [data, setData] = useState(null);

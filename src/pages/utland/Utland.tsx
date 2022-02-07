@@ -6,7 +6,7 @@ import {useForm} from "react-hook-form";
 import {yupResolver} from "@hookform/resolvers/yup";
 import {ModalContext} from "../../context/modalContext";
 import {StepIntroduction, StepKvittering, StepSelectCountry, StepSelectTravelPeriod, StepSummary,} from "./Steps";
-import {fetchPOST} from "../../api/useFetch";
+import {fetchPOST} from "../../api/fetch";
 import {formatDate} from "../../utils/date";
 import useTexts from "../../hooks/useTexts";
 import {getUtlandSchemas} from "../../schemas/utland";

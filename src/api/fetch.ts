@@ -1,5 +1,7 @@
 import { RequestOptions } from "http";
 import {APP_URL_TEST} from "../config";
+import fetch from "cross-fetch";
+
 export const fetchPOST = async (url: string, payload: object, opts: RequestOptions = {}) => {
   const completeUrl = process.env.NODE_ENV === "test"
     ? `${APP_URL_TEST}${url}`
