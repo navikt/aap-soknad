@@ -54,10 +54,10 @@
     "lmdb": "2.1.7"
   },
   "scripts": {
-    "start": "cross-env USE_MOCK='true' parcel src/index.html",
+    "start": "cross-env AAP_SOKNAD_USE_MOCK='true' parcel src/index.html",
     "clean": "rimraf dist",
     "build": "yarn run clean && parcel build src/index.html",
-    "build:mock": "cross-env USE_MOCK='true' parcel build src/index.html",
+    "build:mock": "cross-env AAP_SOKNAD_USE_MOCK='true' parcel build src/index.html",
     "lint": "yarn lint:jsts",
     "lint:jsts": "npx eslint .",
     "test": "jest",
