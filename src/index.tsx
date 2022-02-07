@@ -4,7 +4,7 @@ import App from "./App";
 import "@navikt/ds-css";
 import { setupLogger } from './utils/logger';
 
-if (process.env.AAP_SOKNAD_USE_MOCK === 'true') {
+if (process.env.NODE_ENV !== 'production') {
   const { worker } = require("./mocks/browser");
   worker.start();
 }

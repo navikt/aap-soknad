@@ -31,7 +31,10 @@ const App = (): JSX.Element => {
                       <Heading size={"2xlarge"} level={"1"} spacing={true}>
                         AAP App
                       </Heading>
-                      <Button onClick={() => console.log('USE_MOCK', process.env.AAP_SOKNAD_USE_MOCK)} >USE MOCK</Button>
+                      <Button onClick={() => {
+                        console.log('USE_MOCK', process.env.USE_MOCK)
+                        console.log('NODE_ENV', process.env.NODE_ENV)
+                      }} >USE MOCK</Button>
                       <span>Not Found</span>
                     </>
                   }
