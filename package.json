@@ -54,9 +54,10 @@
     "lmdb": "2.1.7"
   },
   "scripts": {
-    "start": "parcel src/index.html",
+    "start": "cross-env NODE_ENV=localhost parcel src/index.html",
     "clean": "rimraf dist",
     "build": "yarn run clean && parcel build src/index.html",
+    "build:mock": "cross-env NODE_ENV=localhost parcel build src/index.html",
     "lint": "yarn lint:jsts",
     "lint:jsts": "npx eslint .",
     "test": "jest",
