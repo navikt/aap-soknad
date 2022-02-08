@@ -1,8 +1,7 @@
-import React, {createContext, Dispatch, ReactNode, useReducer, useMemo, useEffect, useCallback} from "react";
+import React, {createContext, Dispatch, ReactNode, useReducer, useMemo, useCallback} from "react";
 import SoknadForm from "../types/SoknadForm";
 import soknadReducer from "./soknadReducer";
 import {SoknadAction, SoknadActionKeys} from "./soknadActions";
-import {fetchPOST} from "../api/fetch";
 export enum SøknadType {
   UTLAND = 'UTLAND',
 }
@@ -37,30 +36,30 @@ export const SoknadContextProvider = ({ children }: Props) => {
   const [state, dispatch] = useReducer(soknadReducer, soknadContextInititalState);
 
   // lagre søknad når søknad endres
-  useEffect(() => {
-    const storeState = async () => {
-      if(state.type) {
-        const sendSøknad = await fetchPOST(`/aap/soknad-api/buckets/lagre/${state.type}`, {...state});
-        console.log('storesøknad', sendSøknad);
-      }
-    }
-    if(state.søknad) storeState();
+  // useEffect(() => {
+    // const storeState = async () => {
+    //   if(state.type) {
+    //     const sendSøknad = await fetchPOST(`/aap/soknad-api/buckets/lagre/${state.type}`, {...state});
+    //     console.log('storesøknad', sendSøknad);
+    //   }
+    // }
+    // if(state.søknad) storeState();
     // eslint-disable-next-line
-  }, [state?.søknad]);
+  // }, [state?.søknad]);
 
   // hent lagret søknad når type endres
-  useEffect(() => {
-    const getStoredState = async () => {
-      console.log('getStoredState', state.type);
-      if(state.type){
-        const cachedContext: SoknadContextState = await fetch(`/aap/soknad-api/buckets/les/${state?.type}`).then(res => res.json());
-        console.log('getsøknad', cachedContext);
-        cachedContext && dispatch({type: SoknadActionKeys.SET_STATE_FROM_CACHE, payload: cachedContext});
-      }
-    }
-    if (!state?.søknad) getStoredState();
+  // useEffect(() => {
+  //   const getStoredState = async () => {
+  //     console.log('getStoredState', state.type);
+  //     if(state.type){
+  //       const cachedContext: SoknadContextState = await fetch(`/aap/soknad-api/buckets/les/${state?.type}`).then(res => res.json());
+  //       console.log('getsøknad', cachedContext);
+  //       cachedContext && dispatch({type: SoknadActionKeys.SET_STATE_FROM_CACHE, payload: cachedContext});
+  //     }
+  //   }
+  //   if (!state?.søknad) getStoredState();
     // eslint-disable-next-line
-  },[state.type]);
+  // },[state.type]);
 
   // slett lagret søknad
   const deleteStoredState = useCallback(async (søknadType?: string) => {
