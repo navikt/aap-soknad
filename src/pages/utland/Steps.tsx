@@ -7,6 +7,7 @@ import ControlConfirmationPanel from "../../components/input/ControlConfirmation
 import React from "react";
 import {formatDate} from "../../utils/date";
 import {GetText} from "../../hooks/useTexts";
+import {parseISO} from "date-fns";
 
 interface IntroductionProps {
   getText: GetText;
@@ -76,8 +77,8 @@ export const StepSummary = ({getText, data, control, errors}: SummaryProps) => {
     case 'country':
       return countries.getName(`${val}`, 'nb', {select: 'official'});
     case 'fromDate':
-    case 'toDate':
-      return formatDate(val, 'dd.MM.yyyy');
+      case 'toDate':
+      return formatDate(parseISO(val), 'dd.MM.yyyy');
     default:
       return val;
     }
