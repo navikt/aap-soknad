@@ -1,7 +1,6 @@
-import React, { Children, useContext, useEffect } from 'react';
+import React, { Children, useEffect } from 'react';
 import { BodyShort, StepIndicator } from '@navikt/ds-react';
 import { StepType } from './Step';
-// import { StepWizardContext } from '../../context/stepWizardContext';
 import { setStepList, setCurrentStepIndex, useStepWizard } from '../../context/stepWizardContextV2';
 
 type OrderedStepType = {
@@ -18,8 +17,6 @@ type StepWizardProps = {
 };
 
 const StepWizard = ({ children, hideLabels = false }: StepWizardProps) => {
-  // const { stepList, setStepList, currentStepIndex, setCurrentStepIndex } =
-  //   useContext(StepWizardContext);
   const { stepList, currentStepIndex, stepWizardDispatch } = useStepWizard();
   const isNamedStepCompleted = (name: StepType['name']) => {
     const step = stepList.find((e) => e.name === name);
@@ -63,7 +60,6 @@ const StepWizard = ({ children, hideLabels = false }: StepWizardProps) => {
       ];
     }
     setStepList(sortedNewStepList, stepWizardDispatch);
-    console.log(sortedNewStepList);
     // eslint-disable-next-line
   }, []);
   const onStepChange = (stepIndex: number) => {

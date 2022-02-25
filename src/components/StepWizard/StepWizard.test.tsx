@@ -3,7 +3,7 @@ import { axe, toHaveNoViolations } from 'jest-axe';
 import { rest } from 'msw';
 import { setupServer } from 'msw/node';
 import { Step, StepWizard } from './index';
-import { StepWizardContext, StepWizardContextData } from '../../context/stepWizardContext';
+import { StepWizardContext, StepWizardContextState } from '../../context/stepWizardContextV2';
 import { SoknadContext, SoknadContextData, SøknadType } from '../../context/soknadContext';
 import { BodyShort } from '@navikt/ds-react';
 
@@ -20,22 +20,15 @@ const soknadContext: SoknadContextData = {
   },
   søknadDispatch: () => console.log('dispatch'),
 };
-const wizardContext: StepWizardContextData = {
-  currentStepIndex: 0,
+const wizardContext: StepWizardContextState = {
   stepList: [
     { name: stepNames.STEP_ONE },
     { name: stepNames.STEP_TWO },
     { name: stepNames.STEP_THREE },
   ],
-  setStepList: () => console.log('setStepList'),
-  setCurrentStepIndex: () => console.log('setStepList'),
-  goToNamedStep: (name: string) => console.log('gotonamedstep', name),
-  goToNextStep: () => console.log('gotonextstep'),
-  goToPreviousStep: () => console.log('gotoprevioousstep'),
   currentStep: { name: stepNames.STEP_ONE },
-  setNamedStepCompleted: (name: string) => console.log('setNamedstepcompleted', name),
-  resetStepWizard: () => console.log('resetstepwizard'),
-  completeAndGoToNextStep: () => console.log('completeandgotonextstep'),
+  currentStepIndex: 0,
+  stepWizardDispatch: () => ({}),
 };
 
 const renderWithContext = (ui: any, { ...renderOptions }: any) => {

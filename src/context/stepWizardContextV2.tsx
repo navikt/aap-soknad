@@ -4,11 +4,9 @@ import React, {
   ReactNode,
   useCallback,
   useContext,
-  useEffect,
   useMemo,
   useReducer,
 } from 'react';
-import useSteps from '../hooks/useSteps';
 import { StepType } from '../components/StepWizard/Step';
 
 interface DispatchStepWizardAction {
@@ -24,16 +22,15 @@ interface DispatchStepWizardAction {
 type StepWizardState = {
   stepList: Array<StepType>;
 };
-type StepWizardContextState = {
+export type StepWizardContextState = {
   stepList: Array<StepType>;
   currentStepIndex: number;
   currentStep: StepType;
   stepWizardDispatch: Dispatch<DispatchStepWizardAction>;
 };
-const StepWizardContext = createContext<StepWizardContextState | undefined>(undefined);
+export const StepWizardContext = createContext<StepWizardContextState | undefined>(undefined);
 
 function stateReducer(state: StepWizardState, action: DispatchStepWizardAction) {
-  console.log(action.type, action.payload);
   switch (action.type) {
     case 'SET_STEP_LIST': {
       return {
@@ -56,7 +53,6 @@ function stateReducer(state: StepWizardState, action: DispatchStepWizardAction) 
     case 'COMPLETE_AND_GOTO_NEXT_STEP': {
       const currentStepIndex = state.stepList.findIndex((e) => e.active);
       const nextStepIndex = currentStepIndex + 1;
-      console.log('completeandgotonext', currentStepIndex, nextStepIndex);
       let newStepList = state.stepList.map((step, index) => ({
         ...step,
         ...(index === currentStepIndex ? { completed: true } : {}),
@@ -96,7 +92,6 @@ interface Props {
 }
 export const StepWizardProvider = ({ children }: Props) => {
   const [state, dispatch] = useReducer(stateReducer, { stepList: [] });
-  useEffect(() => console.log(state?.stepList), [state]);
   const indexIsLegal = useCallback(
     (index: number) => index > -1 && index < state.stepList.length,
     [state]
