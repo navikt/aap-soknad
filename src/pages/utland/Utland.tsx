@@ -1,10 +1,9 @@
 import { BodyShort, Button, Loader } from '@navikt/ds-react';
 import countries from 'i18n-iso-countries';
 import { Step, StepWizard } from '../../components/StepWizard';
-import React, { useContext, useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { ModalContext } from '../../context/modalContext';
 import {
   StepIntroduction,
   StepKvittering,
@@ -66,22 +65,11 @@ const showButton = (name?: string) => {
 
 const Utland = (): JSX.Element => {
   const { søknadState, søknadDispatch } = useSoknadContext();
-  // const {
-  //   currentStepIndex,
-  //   goToNamedStep,
-  //   goToNextStep,
-  //   setNamedStepCompleted,
-  //   currentStep,
-  //   nextStep,
-  //   goToPreviousStep,
-  //   resetStepWizard,
-  // } = useContext(StepWizardContext);
   const { currentStep, currentStepIndex, stepWizardDispatch } = useStepWizard();
   const [countryList, setCountryList] = useState<string[][]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const { getText } = useTexts(tekster);
-  const { handleNotificationModal } = useContext(ModalContext);
 
   const SoknadUtlandSchemas = getUtlandSchemas(getText);
   const currentSchema = useMemo(() => {
@@ -101,6 +89,9 @@ const Utland = (): JSX.Element => {
   useEffect(() => {
     hentSoknadState(søknadDispatch, SøknadType.UTLAND);
   }, []);
+  useEffect(() => {
+    reset({ ...søknadState.søknad });
+  }, [currentStep, reset]);
   useEffect(() => {
     const getCountries = () => {
       const list = Object.entries(countries.getNames('nb', { select: 'official' }));

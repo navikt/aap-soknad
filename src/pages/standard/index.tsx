@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useTexts } from '../../hooks/useTexts';
 import { BodyShort, Button, Heading, Loader, PageHeader } from '@navikt/ds-react';
 import * as tekster from './tekster';
@@ -29,7 +29,6 @@ import { TilknytningTilNorge } from './TilknytningTilNorge';
 import { Yrkesskade } from './Yrkesskade';
 import { AndreUtbetalinger } from './AndreUtbetalinger';
 import { Barnetillegg } from './Barnetillegg';
-import { ModalContext } from '../../context/modalContext';
 
 enum StepNames {
   VEILEDNING = 'VEILEDNING',
@@ -44,10 +43,9 @@ const initFieldVals: FieldValues = {
   rettogplikt: false,
 };
 export const StandardPage = (): JSX.Element => {
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isLoading] = useState<boolean>(false);
   const { søknadState, søknadDispatch } = useSoknadContext();
   const { oppslagState, oppslagDispatch } = useSokerOppslag();
-  const { handleNotificationModal } = useContext(ModalContext);
   const { currentStep, currentStepIndex, stepWizardDispatch } = useStepWizard();
   const { getText } = useTexts(tekster);
   const StepSchemas = getStepSchemas(getText);
@@ -78,12 +76,11 @@ export const StandardPage = (): JSX.Element => {
   }, []);
   // Reset form to hydrate with data from søknadstate
   useEffect(() => {
-    console.log('step changed', currentStep);
     reset({ ...søknadState.søknad });
   }, [currentStep, reset]);
   const myHandleSubmit = async (data: SoknadForm<SoknadStandard>) => {
+    console.log(data);
     completeAndGoToNextStep(stepWizardDispatch);
-    reset({ ...søknadState.søknad });
   };
   const onDeleteSøknad = async () => {
     if (søknadState.type) {
