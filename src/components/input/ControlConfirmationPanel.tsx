@@ -1,17 +1,18 @@
-import {Controller} from "react-hook-form";
-import {ConfirmationPanel} from "@navikt/ds-react";
-import React from "react";
+import { Controller } from 'react-hook-form';
+import { ConfirmationPanel } from '@navikt/ds-react';
+import React from 'react';
 
 export interface ConfirmationPanelProps {
+  name: string;
   label: string;
   control: any;
   error: string;
 }
-const ControlConfirmationPanel = ({label, control, error}: ConfirmationPanelProps) =>
-  (<Controller
-    name="confirmationPanel"
+const ControlConfirmationPanel = ({ label, control, error, name }: ConfirmationPanelProps) => (
+  <Controller
+    name={name}
     control={control}
-    render={({field: {name, value, onChange}}) => (
+    render={({ field: { name, value, onChange } }) => (
       <ConfirmationPanel
         id={name}
         name={name}
@@ -21,6 +22,7 @@ const ControlConfirmationPanel = ({label, control, error}: ConfirmationPanelProp
         error={!!error}
       />
     )}
-  />);
+  />
+);
 
 export default ControlConfirmationPanel;

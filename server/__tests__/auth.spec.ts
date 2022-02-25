@@ -1,13 +1,13 @@
-import { createRequest, createResponse} from "node-mocks-http";
-import { Request, Response} from "express";
+import { createRequest, createResponse } from 'node-mocks-http';
+import { Request, Response } from 'express';
 
-import {enforceIDPortenAuthenticationMiddleware} from '../src/auth/middleware';
-import {loginserviceCallback, redirectToLoginservice} from "../src/auth/loginservice";
+import { enforceIDPortenAuthenticationMiddleware } from '../src/auth/middleware';
+import { loginserviceCallback, redirectToLoginservice } from '../src/auth/loginservice';
 
-jest.mock("../src/auth/idporten");
+jest.mock('../src/auth/idporten');
 
-describe("auth/middleware", () => {
-  test("redirect til idporten login hvis authentication mangler", async () => {
+describe('auth/middleware', () => {
+  test('redirect til idporten login hvis authentication mangler', async () => {
     const req = createRequest<Request>();
     const res = createResponse<Response>();
     await enforceIDPortenAuthenticationMiddleware(req, res, () => 'next');
@@ -15,14 +15,14 @@ describe("auth/middleware", () => {
     expect(res._getRedirectUrl()).toEqual('/oauth2/login?redirect=/');
   });
 
-  test("redirect til idporten login hvis authentication ikke validerer", async () => {
+  test('redirect til idporten login hvis authentication ikke validerer', async () => {
     const req = createRequest<Request>({
       headers: {
-        authorization: "Bearer foo",
+        authorization: 'Bearer foo',
       },
       cookies: {
-        'selvbetjening-idtoken': 'foo'
-      }
+        'selvbetjening-idtoken': 'foo',
+      },
     });
     const res = createResponse<Response>();
     await enforceIDPortenAuthenticationMiddleware(req, res, () => 'next');
@@ -31,25 +31,24 @@ describe("auth/middleware", () => {
   });
 });
 
-describe("loginservice", () => {
-
-  test("originalUrl i APP_PATH cookie når redirect til loginservice", async () => {
+describe('loginservice', () => {
+  test('originalUrl i APP_PATH cookie når redirect til loginservice', async () => {
     const req = createRequest<Request>({
-      url: '/aap/foo'
+      url: '/aap/foo',
     });
     const res = createResponse<Response>();
     redirectToLoginservice(req, res);
     expect(res.cookies.APP_PATH?.value).toEqual('/aap/foo');
   });
 
-  test("redirect til originalUrl fra APP_PATH cookie etter loginservice", () => {
+  test('redirect til originalUrl fra APP_PATH cookie etter loginservice', () => {
     const req = createRequest<Request>({
       headers: {
-        authorization: "Bearer foo",
+        authorization: 'Bearer foo',
       },
       cookies: {
-        'APP_PATH': '/aap/foo'
-      }
+        APP_PATH: '/aap/foo',
+      },
     });
     const res = createResponse<Response>();
     loginserviceCallback(req, res);

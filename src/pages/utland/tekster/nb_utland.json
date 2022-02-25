@@ -2,13 +2,13 @@
   "pageTitle": "Søknad om å beholde arbeidsavklaringspenger under opphold i utlandet",
   "steps": {
     "introduction": {
-      "guideText": "Du trenger ikke å søke hvis du er EU/EØS-borger eller sveitsisk statsborger og skal oppholde deg innenfor EU/EØS eller Sveits."
+      "guidetext": "Du trenger ikke å søke hvis du er EU/EØS-borger eller sveitsisk statsborger og skal oppholde deg innenfor EU/EØS eller Sveits."
     },
     "country": {
-      "guideText": "Du må som hovedregel oppholde deg i Norge eller i et annet EU/EØS-land for å få AAP. Er du statsborger i et EU/EØS-land, må du søke om å motta AAP i en begrenset periode hvis du oppholder deg utenfor et EU/EØS-land. Du må sørge for at du kan gjennomføre den aktiviteten du har avtalt medNAV ved utenlandsopphold."
+      "guidetext": "Du må som hovedregel oppholde deg i Norge eller i et annet EU/EØS-land for å få AAP. Er du statsborger i et EU/EØS-land, må du søke om å motta AAP i en begrenset periode hvis du oppholder deg utenfor et EU/EØS-land. Du må sørge for at du kan gjennomføre den aktiviteten du har avtalt medNAV ved utenlandsopphold."
     },
     "kvittering": {
-      "guideText": "Takk, søknaden er mottatt. Nå tar vi oss av resten."
+      "guidetext": "Takk, søknaden er mottatt. Nå tar vi oss av resten."
     }
   },
   "form": {
@@ -16,16 +16,16 @@
       "label": "Landet du skal oppholde deg i",
       "required": "Venligst velg et land."
     },
-    "fromDate": {
+    "fromdate": {
       "label": "Fra dato",
       "required": "Venligst velg en dato."
     },
-    "toDate": {
+    "todate": {
       "label": "Til dato",
       "required": "Venligst velg en dato.",
-      "afterFromDate": "Til dato må være etter Fra dato"
+      "afterfromdate": "Til dato må være etter Fra dato"
     },
-    "confirmationPanel": {
+    "confirmationpanel": {
       "label": "Jeg bekrefter at utenlandsoppholdet ikke er til hinder for avtalt aktivitet som behandling, arbeidsrettede tiltak eller oppfølging fra NAV",
       "required": "Kryss av for å bekrefte."
     }

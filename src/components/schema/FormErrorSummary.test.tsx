@@ -1,46 +1,37 @@
-import { FormErrorSummary } from "./FormErrorSummary";
-import { render, screen } from "@testing-library/react";
-import { axe, toHaveNoViolations } from "jest-axe";
+import { FormErrorSummary } from './FormErrorSummary';
+import { render, screen } from '@testing-library/react';
+import { axe, toHaveNoViolations } from 'jest-axe';
 
 expect.extend(toHaveNoViolations);
 
-describe("FormErrorSummary", () => {
+describe('FormErrorSummary', () => {
   const errorArray = {
     aarstall: {
-      message: "Årstall må bestå av fire siffer",
+      message: 'Årstall må bestå av fire siffer',
     },
     fraDato: {
-      message: "Datoen kan ikke være tilbake i tid",
+      message: 'Datoen kan ikke være tilbake i tid',
     },
   };
 
-  it("tegner ingenting når vi ikke har feil", () => {
+  it('tegner ingenting når vi ikke har feil', () => {
     const { container } = render(<FormErrorSummary errors={[]} />);
     expect(container.childElementCount).toBe(0);
   });
 
-  it("lister opp alle feil", () => {
+  it('lister opp alle feil', () => {
     render(<FormErrorSummary errors={errorArray} />);
+    expect(screen.getByRole('link', { name: errorArray.aarstall.message })).toBeInTheDocument();
     expect(
-      screen.getByRole("link", { name: errorArray.aarstall.message })
-    ).toBeInTheDocument();
+      screen.getByRole('link', { name: errorArray.aarstall.message }).getAttribute('href')
+    ).toBe('#aarstall');
+    expect(screen.getByRole('link', { name: errorArray.fraDato.message })).toBeInTheDocument();
     expect(
-      screen
-        .getByRole("link", { name: errorArray.aarstall.message })
-        .getAttribute("href")
-    ).toBe("#aarstall");
-    expect(
-      screen.getByRole("link", { name: errorArray.fraDato.message })
-    ).toBeInTheDocument();
-    expect(
-      screen
-        .getByRole("link", { name: errorArray.fraDato.message })
-        .getAttribute("href")
-    ).toBe("#fraDato");
-
+      screen.getByRole('link', { name: errorArray.fraDato.message }).getAttribute('href')
+    ).toBe('#fraDato');
   });
 
-  it("uu-sjekk", async () => {
+  it('uu-sjekk', async () => {
     const { container } = render(<FormErrorSummary errors={errorArray} />);
     const res = await axe(container);
 

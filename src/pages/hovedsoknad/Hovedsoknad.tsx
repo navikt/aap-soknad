@@ -1,23 +1,20 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 
-import { Alert, Button, GuidePanel, Loader } from "@navikt/ds-react";
-import { fetchPOST } from "../../api/fetch";
-import { useTexts } from "../../hooks/useTexts";
-import SoknadWizard, { StepType } from "../../layouts/SoknadWizard";
-import { Step } from "../../components/Step";
-import { RenderWhen } from "../../components/RenderWhen";
+import { Alert, Button, GuidePanel, Loader } from '@navikt/ds-react';
+import { fetchPOST } from '../../api/fetch';
+import { useTexts } from '../../hooks/useTexts';
+import SoknadWizard, { StepType } from '../../layouts/SoknadWizard';
+import { Step } from '../../components/Step';
+import { RenderWhen } from '../../components/RenderWhen';
 
-import * as tekster from "./tekster";
+import * as tekster from './tekster';
 
 enum StepName {
-  INTRODUCTION = "INTRODUCTION",
-  RECEIPT = "RECEIPT",
+  INTRODUCTION = 'INTRODUCTION',
+  RECEIPT = 'RECEIPT',
 }
 
-const stepList: StepType[] = [
-  { name: StepName.INTRODUCTION },
-  { name: StepName.RECEIPT },
-];
+const stepList: StepType[] = [{ name: StepName.INTRODUCTION }, { name: StepName.RECEIPT }];
 
 const Hovedsoknad = (): JSX.Element => {
   const [currentStepIndex, setCurrentStepIndex] = useState<number>(0);
@@ -26,7 +23,7 @@ const Hovedsoknad = (): JSX.Element => {
 
   const sendSøknad = async () => {
     setSenderMelding(true);
-    const res = await fetchPOST("/aap/soknad-api/innsending/soknad", {});
+    const res = await fetchPOST('/aap/soknad-api/innsending/soknad', {});
     if (!res.ok) {
       setSenderMelding(false);
       setInnsendingFeil(true);
@@ -42,36 +39,28 @@ const Hovedsoknad = (): JSX.Element => {
 
   const { getText } = useTexts(tekster);
   const getStepName = (index: number) => stepList[index]?.name;
-  const currentStepNameIs = (name: StepName) =>
-    name === getStepName(currentStepIndex);
+  const currentStepNameIs = (name: StepName) => name === getStepName(currentStepIndex);
 
   return (
     <SoknadWizard
-      title={getText("pageTitle")}
+      title={getText('pageTitle')}
       stepList={stepList}
       currentStepIndex={currentStepIndex}
     >
       <Step renderWhen={currentStepNameIs(StepName.INTRODUCTION)}>
         <>
-          <GuidePanel poster>
-            {getText("steps.introduction.guideText")}
-          </GuidePanel>
-          <Button
-            variant="primary"
-            type="submit"
-            onClick={sendSøknad}
-            disabled={senderMelding}
-          >
+          <GuidePanel poster>{getText('steps.introduction.guideText')}</GuidePanel>
+          <Button variant="primary" type="submit" onClick={sendSøknad} disabled={senderMelding}>
             Søk AAP
             {senderMelding && <Loader />}
           </Button>
         </>
       </Step>
       <Step renderWhen={currentStepNameIs(StepName.RECEIPT)}>
-        <GuidePanel>{getText("steps.kvittering")}</GuidePanel>
+        <GuidePanel>{getText('steps.kvittering')}</GuidePanel>
       </Step>
       <RenderWhen when={innsendingFeil}>
-        <Alert variant={"error"}>{getText("innsending.feil")}</Alert>
+        <Alert variant={'error'}>{getText('innsending.feil')}</Alert>
       </RenderWhen>
     </SoknadWizard>
   );

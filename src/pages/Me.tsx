@@ -1,12 +1,7 @@
-import React, { useState } from "react";
-import "./utland/Utland.less";
-import {
-  Heading,
-  Ingress,
-  Button,
-  Loader,
-} from "@navikt/ds-react";
-import { logger } from "../utils/logger";
+import React, { useState } from 'react';
+import './utland/Utland.less';
+import { Heading, Ingress, Button, Loader } from '@navikt/ds-react';
+import { logger } from '../utils/logger';
 
 const Utland = (): JSX.Element => {
   const [isWaiting, setIsWaiting] = useState<boolean>(false);
@@ -16,7 +11,7 @@ const Utland = (): JSX.Element => {
     const json = response.json();
     logger.info({
       message: 'soknad-api/me called',
-      payload: json
+      payload: json,
     });
   };
 
@@ -25,10 +20,8 @@ const Utland = (): JSX.Element => {
       <Heading size="2xlarge" level="1" spacing={true}>
         Meg
       </Heading>
-      <Ingress spacing={true}>
-        Api test.
-      </Ingress>
-      <Button variant="primary" type="submit" onClick={() => onSubmit()} >
+      <Ingress spacing={true}>Api test.</Ingress>
+      <Button variant="primary" type="submit" onClick={() => onSubmit()}>
         Test
         {isWaiting ? <Loader /> : null}
       </Button>

@@ -1,4 +1,3 @@
-
 interface SoknadUtland {
   country?: string;
   fromDate?: string;

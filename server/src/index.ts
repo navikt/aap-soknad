@@ -1,16 +1,15 @@
-import express from "express";
-import path from "path";
-import cookieParser from "cookie-parser";
+import express from 'express';
+import path from 'path';
+import cookieParser from 'cookie-parser';
 import client from 'prom-client';
 import config from './config';
-import { getHtmlWithDecorator } from "./dekorator";
-import { tokenXProxy} from "./apiProxy";
-import {LogError, LogInfo} from "./logger";
-import {loginserviceCallback} from "./auth/loginservice";
-import {enforceIDPortenAuthenticationMiddleware} from "./auth/middleware";
+import { getHtmlWithDecorator } from './dekorator';
+import { tokenXProxy } from './apiProxy';
+import { LogError, LogInfo } from './logger';
+import { loginserviceCallback } from './auth/loginservice';
+import { enforceIDPortenAuthenticationMiddleware } from './auth/middleware';
 
-
-const BUILD_PATH = path.join(__dirname, "../dist");
+const BUILD_PATH = path.join(__dirname, '../dist');
 const PORT = process.env.PORT || 3000;
 const server = express();
 
@@ -19,8 +18,8 @@ const startServer = () => {
   const register = new client.Registry();
   // Add a default label which is added to all metrics
   register.setDefaultLabels({
-    app: 'aap-soknad'
-  });// Enable the collection of default metrics
+    app: 'aap-soknad',
+  }); // Enable the collection of default metrics
   client.collectDefaultMetrics({ register });
 
   server.use(cookieParser());
@@ -32,8 +31,9 @@ const startServer = () => {
     res.end(await register.metrics());
   });
   // health checks
-  server.get([`${config.BASE_PATH}/internal/isAlive`, `${config.BASE_PATH}/internal/isReady`], (req: any, res: any) =>
-    res.sendStatus(200)
+  server.get(
+    [`${config.BASE_PATH}/internal/isAlive`, `${config.BASE_PATH}/internal/isReady`],
+    (req: any, res: any) => res.sendStatus(200)
   );
 
   // Callback from loginservice, get originalUrl from cookie

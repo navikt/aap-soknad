@@ -1,31 +1,31 @@
-import React, { useState } from "react";
-import { useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
+import React, { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
 
-import { Button, Loader } from "@navikt/ds-react";
+import { Button, Loader } from '@navikt/ds-react';
 
-import SoknadWizard, { StepType } from "../../layouts/SoknadWizard";
-import useTexts from "../../hooks/useTexts";
-import { Introduction, PersonligInfo, TypeStoette } from "./BedriftSteps";
-import { Step } from "../../components/Step";
-import { getBedriftSchema } from "../../schemas/bedrift";
-import { FormErrorSummary } from "../../components/schema/FormErrorSummary";
-import { Utdanning } from "./steps/Utdanning";
-import { Praksis } from "./steps/Praksis";
-import { Etablererstipend } from "./steps/Etablererstipend";
+import SoknadWizard, { StepType } from '../../layouts/SoknadWizard';
+import useTexts from '../../hooks/useTexts';
+import { Introduction, PersonligInfo, TypeStoette } from './BedriftSteps';
+import { Step } from '../../components/Step';
+import { getBedriftSchema } from '../../schemas/bedrift';
+import { FormErrorSummary } from '../../components/schema/FormErrorSummary';
+import { Utdanning } from './steps/Utdanning';
+import { Praksis } from './steps/Praksis';
+import { Etablererstipend } from './steps/Etablererstipend';
 
-import "./Bedrift.less";
-import * as tekster from "./tekster";
+import './Bedrift.less';
+import * as tekster from './tekster';
 
 enum StepName {
-  INTRODUCTION = "INTRODUCTION",
-  TYPE_STOETTE = "TYPE_STOETTE",
-  PERSONLIG = "PERSONLIG",
-  UTDANNING = "UTDANNING",
-  PRAKSIS = "PRAKSIS",
+  INTRODUCTION = 'INTRODUCTION',
+  TYPE_STOETTE = 'TYPE_STOETTE',
+  PERSONLIG = 'PERSONLIG',
+  UTDANNING = 'UTDANNING',
+  PRAKSIS = 'PRAKSIS',
   SOEKT_OM_ETABLERER_STIPEND = 'SOEKT_OM_ETABLERER_STIPEND',
-  SUMMARY = "SUMMARY",
-  RECEIPT = "RECEIPT",
+  SUMMARY = 'SUMMARY',
+  RECEIPT = 'RECEIPT',
 }
 
 const stepList: StepType[] = [
@@ -44,11 +44,11 @@ type FormData = object | undefined;
 const getButtonText = (name: string) => {
   switch (name) {
     case StepName.INTRODUCTION:
-      return "Fortsett til søknaden";
+      return 'Fortsett til søknaden';
     case StepName.SUMMARY:
-      return "Send søknaden";
+      return 'Send søknaden';
     default:
-      return "Neste";
+      return 'Neste';
   }
 };
 
@@ -65,15 +65,14 @@ const Bedrift = (): JSX.Element => {
     register,
     handleSubmit,
     formState: { errors },
-    getValues
+    getValues,
   } = useForm({
     resolver: yupResolver(currentSchema),
-    mode: "onBlur"
+    mode: 'onBlur',
   });
 
   const getStepName = (index: number) => stepList[index]?.name;
-  const currentStepNameIs = (name: StepName) =>
-    name === getStepName(currentStepIndex);
+  const currentStepNameIs = (name: StepName) => name === getStepName(currentStepIndex);
   const onBackButtonClick = () => setCurrentStepIndex(currentStepIndex - 1);
 
   const onSubmitClick = async (data: FormData) => {
@@ -100,18 +99,10 @@ const Bedrift = (): JSX.Element => {
           className="soknad-bedrift-form"
         >
           <Step renderWhen={currentStepNameIs(StepName.TYPE_STOETTE)}>
-            <TypeStoette
-              getText={getText}
-              errors={errors}
-              register={register}
-            />
+            <TypeStoette getText={getText} errors={errors} register={register} />
           </Step>
           <Step renderWhen={currentStepNameIs(StepName.PERSONLIG)}>
-            <PersonligInfo
-              getText={getText}
-              errors={errors}
-              register={register}
-            />
+            <PersonligInfo getText={getText} errors={errors} register={register} />
           </Step>
           <Step renderWhen={currentStepNameIs(StepName.UTDANNING)}>
             <Utdanning
@@ -143,12 +134,11 @@ const Bedrift = (): JSX.Element => {
             {isLoading && <Loader />}
           </Button>
         </form>
-        {!currentStepNameIs(StepName.INTRODUCTION) &&
-          !currentStepNameIs(StepName.RECEIPT) && (
-            <Button variant="tertiary" onClick={onBackButtonClick}>
-              Tilbake
-            </Button>
-          )}
+        {!currentStepNameIs(StepName.INTRODUCTION) && !currentStepNameIs(StepName.RECEIPT) && (
+          <Button variant="tertiary" onClick={onBackButtonClick}>
+            Tilbake
+          </Button>
+        )}
       </>
     </SoknadWizard>
   );

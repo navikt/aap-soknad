@@ -1,4 +1,4 @@
-import Step from "./Step";
-import StepWizard from "./StepWizard";
+import Step from './Step';
+import StepWizard from './StepWizard';
 
 export { Step, StepWizard };

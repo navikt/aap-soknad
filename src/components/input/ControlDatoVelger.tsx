@@ -1,7 +1,6 @@
-import {Controller} from "react-hook-form";
-import DatoVelger from "../datovelger";
-import React from "react";
-
+import { Controller } from 'react-hook-form';
+import DatoVelger from '../datovelger';
+import React from 'react';
 
 export interface DatoVelgerProps {
   name: string;
@@ -12,7 +11,7 @@ export interface DatoVelgerProps {
   validate?: () => any;
 }
 
-const ControlDatoVelger = ({name, label, control, error}: DatoVelgerProps) =>
+const ControlDatoVelger = ({ name, label, control, error }: DatoVelgerProps) => (
   <Controller
     name={name}
     control={control}
@@ -26,6 +25,7 @@ const ControlDatoVelger = ({name, label, control, error}: DatoVelgerProps) =>
         error={error}
       />
     )}
-  />;
+  />
+);
 
 export default ControlDatoVelger;

@@ -1,24 +1,26 @@
-import React from "react";
+import React from 'react';
 import { PageHeader, Ingress } from '@navikt/ds-react';
-import "./SoknadWizard.less";
+import './SoknadWizard.less';
 
 export type StepType = {
   name: string;
-}
+};
 
 type SoknadWizardProps = {
   title: string;
   ingress?: string;
   stepList: StepType[];
   currentStepIndex: number;
-  children?:
-    | React.ReactChild
-    | React.ReactChild[];
+  children?: React.ReactChild | React.ReactChild[];
 };
 
-
-const SoknadWizard = ({title, ingress, stepList, currentStepIndex, children}: SoknadWizardProps) => {
-
+const SoknadWizard = ({
+  title,
+  ingress,
+  stepList,
+  currentStepIndex,
+  children,
+}: SoknadWizardProps) => {
   return (
     <>
       <header>

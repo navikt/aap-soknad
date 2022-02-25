@@ -1,12 +1,12 @@
-describe("uu-test bedrift", () => {
+describe('uu-test bedrift', () => {
   beforeEach(() => {
-    cy.visit("aap/bedrift");
+    cy.visit('aap/bedrift');
     cy.injectAxe();
   });
-  const trykkPaaNeste = () => cy.findByRole('button', {name: /Neste/}).click();
-  it("Har ingen feil", () => {
+  const trykkPaaNeste = () => cy.findByRole('button', { name: /Neste/ }).click();
+  it('Har ingen feil', () => {
     cy.checkA11y();
-    cy.findByRole('button', {name: /^Fortsett til søknaden$/}).click();
+    cy.findByRole('button', { name: /^Fortsett til søknaden$/ }).click();
     cy.checkA11y();
 
     trykkPaaNeste();

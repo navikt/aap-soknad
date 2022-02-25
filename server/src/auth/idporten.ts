@@ -1,11 +1,7 @@
-import { Client, Issuer } from "openid-client";
-import {
-  GetKeyFunction,
-  JWSHeaderParameters,
-  jwtVerify,
-} from "jose/jwt/verify";
-import { createRemoteJWKSet } from "jose/jwks/remote";
-import { FlattenedJWSInput } from "jose/types";
+import { Client, Issuer } from 'openid-client';
+import { GetKeyFunction, JWSHeaderParameters, jwtVerify } from 'jose/jwt/verify';
+import { createRemoteJWKSet } from 'jose/jwks/remote';
+import { FlattenedJWSInput } from 'jose/types';
 
 let _issuer: Issuer<Client>;
 let _remoteJWKSet: GetKeyFunction<JWSHeaderParameters, FlattenedJWSInput>;
@@ -17,7 +13,7 @@ export async function validerToken(token: string | Uint8Array) {
 }
 
 async function jwks() {
-  if (typeof _remoteJWKSet === "undefined") {
+  if (typeof _remoteJWKSet === 'undefined') {
     const iss = await issuer();
     _remoteJWKSet = createRemoteJWKSet(new URL(iss.metadata.jwks_uri as string));
   }
@@ -26,7 +22,7 @@ async function jwks() {
 }
 
 async function issuer() {
-  if (typeof _issuer === "undefined") {
+  if (typeof _issuer === 'undefined') {
     if (!process.env.IDPORTEN_WELL_KNOWN_URL)
       throw new Error(`Miljøvariabelen "IDPORTEN_WELL_KNOWN_URL" må være satt`);
     _issuer = await Issuer.discover(process.env.IDPORTEN_WELL_KNOWN_URL);

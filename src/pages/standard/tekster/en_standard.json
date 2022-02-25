@@ -1,0 +1,12 @@
+{
+  "pageTitle": "Søknad om arbeidsavklaringspenger",
+  "steps": {
+    "veiledning": {
+      "title": "Velkommen til søknad om arbeidsavklaringspenger (AAP)",
+      "ingress": "Arbeidsavklaringspenger skal sikre deg inntekt i perioder du, på grunn av sykdom eller skade, har behov for hjelp fra NAV for å komme i arbeid. For å gå videre med søknaden må du bekrefte at du har lest og forstått dine rettigheter og plikter (åpnes i ny fane)."
+    }
+  },
+  "innsending": {
+    "feil": "En feil oppstod. Vennligst vent litt, og forsøk å sende meldingen på nytt."
+  }
+}

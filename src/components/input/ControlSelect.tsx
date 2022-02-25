@@ -1,6 +1,6 @@
-import {Select} from "@navikt/ds-react";
-import {Controller} from "react-hook-form";
-import React from "react";
+import { Select } from '@navikt/ds-react';
+import { Controller } from 'react-hook-form';
+import React from 'react';
 
 export interface SelectProps {
   name: string;
@@ -9,27 +9,19 @@ export interface SelectProps {
   error?: string;
   required?: string;
   validate?: (value: any) => any;
-  children?:
-    | React.ReactChild
-    | React.ReactChild[];
+  children?: React.ReactChild | React.ReactChild[];
 }
 
-const ControlSelect = ({name, label, control, error, children}: SelectProps) =>
+const ControlSelect = ({ name, label, control, error, children }: SelectProps) => (
   <Controller
     name={name}
     control={control}
     render={({ field: { name, value, onChange } }) => (
-      <Select
-        name={name}
-        label={label}
-        value={value}
-        onChange={onChange}
-        error={error}
-      >
-        <option key="none" value="none">Velg land</option>
-        { children }
+      <Select name={name} label={label} value={value} onChange={onChange} error={error}>
+        {children}
       </Select>
     )}
   />
+);
 
 export default ControlSelect;
