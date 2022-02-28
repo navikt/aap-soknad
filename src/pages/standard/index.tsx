@@ -29,7 +29,7 @@ import { TilknytningTilNorge } from './TilknytningTilNorge';
 import { Yrkesskade } from './Yrkesskade';
 import { AndreUtbetalinger } from './AndreUtbetalinger';
 import { Barnetillegg } from './Barnetillegg';
-
+import * as classes from './standard.module.css';
 enum StepNames {
   VEILEDNING = 'VEILEDNING',
   KONTAKTINFO = 'KONTAKTINFO',
@@ -96,9 +96,13 @@ export const StandardPage = (): JSX.Element => {
     <>
       <PageHeader align="center">{getText('pagetitle')}</PageHeader>
       <StepWizard hideLabels={true}>
-        <form onSubmit={handleSubmit(myHandleSubmit)} autoComplete="off">
+        <form
+          onSubmit={handleSubmit(myHandleSubmit)}
+          className={classes?.soknadForm}
+          autoComplete="off"
+        >
           <Heading size="small" level="2">
-            {getText(`steps.${currentStep?.name}.title`)}
+            {getText(`steps.${currentStep?.name.toLowerCase()}.title`)}
           </Heading>
           <FormErrorSummary errors={errors} />
           <Step order={1} name={StepNames.VEILEDNING} label={'Veiledning'}>
