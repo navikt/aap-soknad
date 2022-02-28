@@ -1,23 +1,20 @@
 import React, { useState } from 'react';
 
-import { Alert, Button, GuidePanel, Loader } from '@navikt/ds-react';
+import { Alert, Button, GuidePanel, Loader, PageHeader } from '@navikt/ds-react';
 import { fetchPOST } from '../../api/fetch';
 import { useTexts } from '../../hooks/useTexts';
-import SoknadWizard, { StepType } from '../../layouts/SoknadWizard';
-import { Step } from '../../components/Step';
-import { RenderWhen } from '../../components/RenderWhen';
+import { StepWizard, Step } from '../../components/StepWizard';
 
 import * as tekster from './tekster';
+import { completeAndGoToNextStep, useStepWizard } from '../../context/stepWizardContextV2';
 
 enum StepName {
   INTRODUCTION = 'INTRODUCTION',
   RECEIPT = 'RECEIPT',
 }
 
-const stepList: StepType[] = [{ name: StepName.INTRODUCTION }, { name: StepName.RECEIPT }];
-
 const Hovedsoknad = (): JSX.Element => {
-  const [currentStepIndex, setCurrentStepIndex] = useState<number>(0);
+  const { stepWizardDispatch } = useStepWizard();
   const [innsendingFeil, setInnsendingFeil] = useState<boolean>(false);
   const [senderMelding, setSenderMelding] = useState<boolean>(false);
 
@@ -33,36 +30,31 @@ const Hovedsoknad = (): JSX.Element => {
         setInnsendingFeil(false);
         setSenderMelding(false);
       }
-      setCurrentStepIndex(currentStepIndex + 1);
+      completeAndGoToNextStep(stepWizardDispatch);
     }
   };
 
   const { getText } = useTexts(tekster);
-  const getStepName = (index: number) => stepList[index]?.name;
-  const currentStepNameIs = (name: StepName) => name === getStepName(currentStepIndex);
 
   return (
-    <SoknadWizard
-      title={getText('pageTitle')}
-      stepList={stepList}
-      currentStepIndex={currentStepIndex}
-    >
-      <Step renderWhen={currentStepNameIs(StepName.INTRODUCTION)}>
-        <>
-          <GuidePanel poster>{getText('steps.introduction.guideText')}</GuidePanel>
-          <Button variant="primary" type="submit" onClick={sendSøknad} disabled={senderMelding}>
-            Søk AAP
-            {senderMelding && <Loader />}
-          </Button>
-        </>
-      </Step>
-      <Step renderWhen={currentStepNameIs(StepName.RECEIPT)}>
-        <GuidePanel>{getText('steps.kvittering')}</GuidePanel>
-      </Step>
-      <RenderWhen when={innsendingFeil}>
-        <Alert variant={'error'}>{getText('innsending.feil')}</Alert>
-      </RenderWhen>
-    </SoknadWizard>
+    <>
+      <PageHeader>{getText('pageTitle')}</PageHeader>
+      <StepWizard>
+        <Step order={1} name={StepName.INTRODUCTION}>
+          <>
+            <GuidePanel poster>{getText('steps.introduction.guideText')}</GuidePanel>
+            <Button variant="primary" type="submit" onClick={sendSøknad} disabled={senderMelding}>
+              Søk AAP
+              {senderMelding && <Loader />}
+            </Button>
+          </>
+        </Step>
+        <Step order={2} name={StepName.RECEIPT}>
+          <GuidePanel>{getText('steps.kvittering')}</GuidePanel>
+        </Step>
+        {innsendingFeil && <Alert variant={'error'}>{getText('innsending.feil')}</Alert>}
+      </StepWizard>
+    </>
   );
 };
 

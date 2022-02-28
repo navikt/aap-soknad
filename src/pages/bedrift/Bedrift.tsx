@@ -2,12 +2,10 @@ import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
-import { Button, Loader } from '@navikt/ds-react';
-
-import SoknadWizard, { StepType } from '../../layouts/SoknadWizard';
+import { Button, Loader, PageHeader } from '@navikt/ds-react';
+import { StepWizard, Step } from '../../components/StepWizard';
 import useTexts from '../../hooks/useTexts';
 import { Introduction, PersonligInfo, TypeStoette } from './BedriftSteps';
-import { Step } from '../../components/Step';
 import { getBedriftSchema } from '../../schemas/bedrift';
 import { FormErrorSummary } from '../../components/schema/FormErrorSummary';
 import { Utdanning } from './steps/Utdanning';
@@ -16,6 +14,11 @@ import { Etablererstipend } from './steps/Etablererstipend';
 
 import './Bedrift.less';
 import * as tekster from './tekster';
+import {
+  completeAndGoToNextStep,
+  goToPreviousStep,
+  useStepWizard,
+} from '../../context/stepWizardContextV2';
 
 enum StepName {
   INTRODUCTION = 'INTRODUCTION',
@@ -27,17 +30,6 @@ enum StepName {
   SUMMARY = 'SUMMARY',
   RECEIPT = 'RECEIPT',
 }
-
-const stepList: StepType[] = [
-  { name: StepName.INTRODUCTION },
-  { name: StepName.TYPE_STOETTE },
-  { name: StepName.PERSONLIG },
-  { name: StepName.UTDANNING },
-  { name: StepName.PRAKSIS },
-  { name: StepName.SOEKT_OM_ETABLERER_STIPEND },
-  { name: StepName.SUMMARY },
-  { name: StepName.RECEIPT },
-];
 
 type FormData = object | undefined;
 
@@ -53,9 +45,8 @@ const getButtonText = (name: string) => {
 };
 
 const Bedrift = (): JSX.Element => {
-  const [currentStepIndex, setCurrentStepIndex] = useState<number>(0);
+  const { currentStep, currentStepIndex, stepWizardDispatch } = useStepWizard();
   const [isLoading] = useState<boolean>(false);
-  const [, setSoknadData] = useState<FormData>(undefined);
   const { getText } = useTexts(tekster);
   const bedriftSchema = getBedriftSchema(getText);
   const currentSchema = bedriftSchema[currentStepIndex];
@@ -71,40 +62,32 @@ const Bedrift = (): JSX.Element => {
     mode: 'onBlur',
   });
 
-  const getStepName = (index: number) => stepList[index]?.name;
-  const currentStepNameIs = (name: StepName) => name === getStepName(currentStepIndex);
-  const onBackButtonClick = () => setCurrentStepIndex(currentStepIndex - 1);
-
   const onSubmitClick = async (data: FormData) => {
-    if (currentStepNameIs(StepName.SUMMARY)) {
+    if (currentStep?.name === StepName.SUMMARY) {
       console.log(data);
     } else {
-      setSoknadData({ ...data });
-      setCurrentStepIndex(currentStepIndex + 1);
+      completeAndGoToNextStep(stepWizardDispatch);
     }
   };
 
   return (
-    <SoknadWizard
-      title={getText('pageTitle')}
-      stepList={stepList}
-      currentStepIndex={currentStepIndex}
-    >
-      <>
-        <Step renderWhen={currentStepNameIs(StepName.INTRODUCTION)}>
+    <>
+      <PageHeader align="center">{getText('pageTitle')}</PageHeader>
+      <StepWizard>
+        <Step order={1} name={StepName.INTRODUCTION}>
           <Introduction getText={getText} />
         </Step>
         <form
           onSubmit={handleSubmit(async (data) => onSubmitClick(data))}
           className="soknad-bedrift-form"
         >
-          <Step renderWhen={currentStepNameIs(StepName.TYPE_STOETTE)}>
+          <Step order={2} name={StepName.TYPE_STOETTE}>
             <TypeStoette getText={getText} errors={errors} register={register} />
           </Step>
-          <Step renderWhen={currentStepNameIs(StepName.PERSONLIG)}>
+          <Step order={3} name={StepName.PERSONLIG}>
             <PersonligInfo getText={getText} errors={errors} register={register} />
           </Step>
-          <Step renderWhen={currentStepNameIs(StepName.UTDANNING)}>
+          <Step order={4} name={StepName.UTDANNING}>
             <Utdanning
               getText={getText}
               errors={errors.utdanning}
@@ -112,7 +95,7 @@ const Bedrift = (): JSX.Element => {
               control={control}
             />
           </Step>
-          <Step renderWhen={currentStepNameIs(StepName.PRAKSIS)}>
+          <Step order={5} name={StepName.PRAKSIS}>
             <Praksis
               getText={getText}
               register={register}
@@ -120,7 +103,7 @@ const Bedrift = (): JSX.Element => {
               control={control}
             />
           </Step>
-          <Step renderWhen={currentStepNameIs(StepName.SOEKT_OM_ETABLERER_STIPEND)}>
+          <Step order={6} name={StepName.SOEKT_OM_ETABLERER_STIPEND}>
             <Etablererstipend
               getText={getText}
               register={register}
@@ -130,17 +113,17 @@ const Bedrift = (): JSX.Element => {
           </Step>
           <FormErrorSummary errors={errors} />
           <Button variant="primary" type="submit" disabled={isLoading}>
-            {getButtonText(getStepName(currentStepIndex))}
+            {getButtonText(currentStep?.name)}
             {isLoading && <Loader />}
           </Button>
         </form>
-        {!currentStepNameIs(StepName.INTRODUCTION) && !currentStepNameIs(StepName.RECEIPT) && (
-          <Button variant="tertiary" onClick={onBackButtonClick}>
+        {![StepName.INTRODUCTION, StepName.RECEIPT].includes(currentStep.name as StepName) && (
+          <Button variant="tertiary" onClick={() => goToPreviousStep(stepWizardDispatch)}>
             Tilbake
           </Button>
         )}
-      </>
-    </SoknadWizard>
+      </StepWizard>
+    </>
   );
 };
 

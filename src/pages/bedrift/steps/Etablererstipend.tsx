@@ -4,7 +4,6 @@ import { FieldErrors, FieldValues, UseFormGetValues, UseFormRegister } from 'rea
 
 import { GetText } from '../../../hooks/useTexts';
 import { InputRadio, RadioGruppe } from '../../../components/input/RadioWrapper';
-import { RenderWhen } from '../../../components/RenderWhen';
 
 const etablererstipendSoeknadstatus = Object.freeze({
   INNVILGET: 'innvilget',
@@ -55,7 +54,7 @@ const Etablererstipend = ({
           onChange={() => setHarSoektOmEtablererStipend(false)}
         />
       </RadioGruppe>
-      <RenderWhen when={harSoektOmEtablererStipend}>
+      {harSoektOmEtablererStipend && (
         <RadioGruppe
           groupKey={'etablererstipend.resultat'}
           getText={getText}
@@ -83,13 +82,13 @@ const Etablererstipend = ({
             onChange={() => setMaaLasteOppVedlegg(false)}
           />
         </RadioGruppe>
-      </RenderWhen>
-      <RenderWhen when={maaLasteOppVedlegg}>
+      )}
+      {maaLasteOppVedlegg && (
         <label>
           {getText('form.etablererstipend.vedlegg.label')}
           <input type="file" name="kopiAvVedtak" />
         </label>
-      </RenderWhen>
+      )}
     </section>
   );
 };
