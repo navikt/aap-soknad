@@ -2,6 +2,7 @@ import React, { Children, useEffect } from 'react';
 import { BodyShort, StepIndicator } from '@navikt/ds-react';
 import { StepType } from './Step';
 import { setStepList, setCurrentStepIndex, useStepWizard } from '../../context/stepWizardContextV2';
+import * as classes from './StepWizard.module.css';
 
 type OrderedStepType = {
   order: number;
@@ -68,7 +69,7 @@ const StepWizard = ({ children, hideLabels = false }: StepWizardProps) => {
     if (stepBeforeDestinationStep?.completed) setCurrentStepIndex(stepIndex, stepWizardDispatch);
   };
   return (
-    <main className="soknad-wizard-main">
+    <main className={classes?.stepWizardMain}>
       <StepIndicator
         activeStep={currentStepIndex}
         hideLabels={hideLabels}
