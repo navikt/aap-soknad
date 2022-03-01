@@ -3,7 +3,7 @@ import path from 'path';
 import cookieParser from 'cookie-parser';
 import config from './config';
 
-const BUILD_PATH = path.join(__dirname, '../build');
+const BUILD_PATH = path.join(__dirname, '../dist');
 const PORT = process.env.PORT || 3000;
 const server = express();
 
