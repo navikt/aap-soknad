@@ -22,7 +22,6 @@ jobs:
           node-version: "14"
           cache: "yarn"
       - name: "install server dependencies Yarn"
-        if: "steps.cache-server-node-modules.outputs.cache-hit != 'true'"
         run: "yarn install --frozen-lockfile"
         working-directory: "server"
       - name: "install dependencies Yarn"
