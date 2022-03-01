@@ -40,52 +40,52 @@ export const handlers = [
     return res(
       ctx.status(200),
       ctx.delay(100),
-      // ctx.json({})
-      ctx.json({
-        version: 1,
-        type: 'HOVED',
-        lagretCurrentStep: 'KONTAKTINFO',
-        søknad: {
-          firstname: 'Tor',
-          lastname: 'Idland',
-          adresse: 'Veiveien 245',
-          postnummer: '0472',
-          poststed: 'Oslo',
-          epost: 'tor@tor.no',
-          telefon: '98809693',
-        },
-        lagretStepList: [
-          {
-            name: 'VEILEDNING',
-            completed: true,
-          },
-          {
-            name: 'KONTAKTINFO',
-            active: true,
-          },
-          {
-            name: 'FASTLEGE',
-            label: 'Fastlege',
-          },
-          {
-            name: 'TILKNYTNING_TIL_NORGE',
-            label: 'Tilknytning til Norge',
-          },
-          {
-            name: 'YRKESSKADE',
-            label: 'Yrkesskade',
-          },
-          {
-            name: 'ANDRE_UTBETALINGER',
-            label: 'Andre utbetalinger',
-          },
-          {
-            name: 'BARNETILLEGG',
-            label: 'Barnetilleggg',
-            completed: false,
-          },
-        ],
-      })
+      ctx.json({})
+      // ctx.json({
+      //   version: 1,
+      //   type: 'HOVED',
+      //   lagretCurrentStep: 'KONTAKTINFO',
+      //   søknad: {
+      //     firstname: 'Tor',
+      //     lastname: 'Idland',
+      //     adresse: 'Veiveien 245',
+      //     postnummer: '0472',
+      //     poststed: 'Oslo',
+      //     epost: 'tor@tor.no',
+      //     telefon: '98809693',
+      //   },
+      //   lagretStepList: [
+      //     {
+      //       name: 'VEILEDNING',
+      //       completed: true,
+      //     },
+      //     {
+      //       name: 'KONTAKTINFO',
+      //       active: true,
+      //     },
+      //     {
+      //       name: 'FASTLEGE',
+      //       label: 'Fastlege',
+      //     },
+      //     {
+      //       name: 'TILKNYTNING_TIL_NORGE',
+      //       label: 'Tilknytning til Norge',
+      //     },
+      //     {
+      //       name: 'YRKESSKADE',
+      //       label: 'Yrkesskade',
+      //     },
+      //     {
+      //       name: 'ANDRE_UTBETALINGER',
+      //       label: 'Andre utbetalinger',
+      //     },
+      //     {
+      //       name: 'BARNETILLEGG',
+      //       label: 'Barnetilleggg',
+      //       completed: false,
+      //     },
+      //   ],
+      // })
     );
   }),
   rest.delete('/aap/soknad-api/buckets/slett/HOVED', (req, res, ctx) => {
