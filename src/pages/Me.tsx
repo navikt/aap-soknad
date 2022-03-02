@@ -11,14 +11,22 @@ const Utland = (): JSX.Element => {
     await fetch('/aap/soknad-api/me');
   };
   const handleThing = () => {
+    handleSecondThing();
+  };
+
+  const handleSecondThing = () => {
+    doSideffect();
+  };
+
+  const doSideffect = () => {
     try {
       const testVar = true;
       testVar.map((e: any) => e);
     } catch (e) {
+      console.log(e);
       handleError(e);
     }
   };
-
   return (
     <>
       <Heading size="2xlarge" level="1" spacing={true}>
