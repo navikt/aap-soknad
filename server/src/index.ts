@@ -8,7 +8,7 @@ import { tokenXProxy } from './apiProxy';
 import { LogError, LogInfo } from './logger';
 import { loginserviceCallback } from './auth/loginservice';
 import { enforceIDPortenAuthenticationMiddleware } from './auth/middleware';
-import { logClientError } from './auth/clientLogger';
+import { logClientError } from './clientLogger';
 
 const BUILD_PATH = path.join(__dirname, '../dist');
 const PORT = process.env.PORT || 3000;
