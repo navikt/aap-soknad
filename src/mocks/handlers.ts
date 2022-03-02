@@ -1,6 +1,9 @@
 import { rest } from 'msw';
 
 export const handlers = [
+  rest.post('/aap/client-logger/error', (req, res, ctx) => {
+    return res(ctx.status(200), ctx.delay(1000));
+  }),
   rest.get('/aap/soknad-api/me', (req, res, ctx) => {
     return res(
       ctx.status(200),

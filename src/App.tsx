@@ -14,10 +14,14 @@ import Utland from './pages/utland/Utland';
 import { Hovedsoknad } from './pages/hovedsoknad/Hovedsoknad';
 import StandardPage from './pages/standard';
 import { Feilviser } from './components/Feilviser/Feilviser';
+import { logError } from './utils/clientLogger';
 
 const App = (): JSX.Element => {
   return (
-    <ErrorBoundary FallbackComponent={Feilviser}>
+    <ErrorBoundary
+      FallbackComponent={Feilviser}
+      onError={(error, errorStack) => logError(error, errorStack?.componentStack)}
+    >
       <div className="app">
         <SoknadContextProvider>
           <SokerOppslagProvider>

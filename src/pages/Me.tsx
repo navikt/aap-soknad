@@ -1,18 +1,22 @@
 import React, { useState } from 'react';
 import './utland/Utland.less';
 import { Heading, Ingress, Button, Loader } from '@navikt/ds-react';
-import { logger } from '../utils/logger';
+import { useErrorHandler } from 'react-error-boundary';
 
 const Utland = (): JSX.Element => {
   const [isWaiting, setIsWaiting] = useState<boolean>(false);
+  const handleError = useErrorHandler();
   const onSubmit = async () => {
     setIsWaiting(true);
-    const response = await fetch('/aap/soknad-api/me');
-    const json = response.json();
-    logger.info({
-      message: 'soknad-api/me called',
-      payload: json,
-    });
+    await fetch('/aap/soknad-api/me');
+  };
+  const handleThing = () => {
+    try {
+      const testVar = true;
+      testVar.map((e: any) => e);
+    } catch (e) {
+      handleError(e);
+    }
   };
 
   return (
@@ -21,6 +25,9 @@ const Utland = (): JSX.Element => {
         Meg
       </Heading>
       <Ingress spacing={true}>Api test.</Ingress>
+      <Button variant="primary" type="submit" onClick={() => handleThing()}>
+        Frontend error
+      </Button>
       <Button variant="primary" type="submit" onClick={() => onSubmit()}>
         Test
         {isWaiting ? <Loader /> : null}

@@ -8,6 +8,7 @@ import { tokenXProxy } from './apiProxy';
 import { LogError, LogInfo } from './logger';
 import { loginserviceCallback } from './auth/loginservice';
 import { enforceIDPortenAuthenticationMiddleware } from './auth/middleware';
+import { logClientError } from './auth/clientLogger';
 
 const BUILD_PATH = path.join(__dirname, '../dist');
 const PORT = process.env.PORT || 3000;
@@ -41,6 +42,9 @@ const startServer = () => {
 
   // Enforce idporten authentication
   server.use(`${config.BASE_PATH}/*`, enforceIDPortenAuthenticationMiddleware);
+
+  // Client error logger
+  server.use(`${config.BASE_PATH}/client-logger/error`, logClientError);
 
   // Reverse proxy to add tokenx header for api calls
   tokenXProxy(`${config.BASE_PATH}/soknad-api`, server);
