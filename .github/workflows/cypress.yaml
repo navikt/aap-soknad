@@ -1,8 +1,9 @@
 name: "Cypress tests"
 on:
-  push:
-    branches:
-      - "main"
+  workflow_dispatch:
+#  push:
+#    branches:
+#      - "main"
 env:
   "IMAGE": "ghcr.io/${{ github.repository }}:${{ github.sha }}-cypress"
 jobs:

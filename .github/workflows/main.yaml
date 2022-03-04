@@ -87,3 +87,4 @@ jobs:
           environment: "development"
           version: "${{ github.sha }}"
           set_commits: "skip"
+          sourcemaps: "./dist"
