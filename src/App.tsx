@@ -3,6 +3,7 @@ import './App.less';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { Button, Heading } from '@navikt/ds-react';
 import { ErrorBoundary } from 'react-error-boundary';
+import { captureException } from '@sentry/react';
 import { SoknadContextProvider } from './context/soknadContext';
 import { StepWizardProvider } from './context/stepWizardContextV2';
 import { SokerOppslagProvider } from './context/sokerOppslagContext';
@@ -20,7 +21,9 @@ const App = (): JSX.Element => {
   return (
     <ErrorBoundary
       FallbackComponent={Feilviser}
-      onError={(error, errorStack) => logError(error, errorStack?.componentStack)}
+      onError={(error, errorStack) =>
+        logError(error, errorStack?.componentStack).then(() => captureException(error))
+      }
     >
       <div className="app">
         <SoknadContextProvider>

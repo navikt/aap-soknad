@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import './utland/Utland.less';
 import { Heading, Ingress, Button, Loader } from '@navikt/ds-react';
 import { useErrorHandler } from 'react-error-boundary';
+import { captureException } from '@sentry/react';
 
 const Utland = (): JSX.Element => {
   const [isWaiting, setIsWaiting] = useState<boolean>(false);
@@ -27,6 +28,14 @@ const Utland = (): JSX.Element => {
       handleError(e);
     }
   };
+  const handleSentryThing = () => {
+    try {
+      const testVar = 77;
+      testVar.map((e: any) => e);
+    } catch (err) {
+      captureException(err);
+    }
+  };
   return (
     <>
       <Heading size="2xlarge" level="1" spacing={true}>
@@ -35,6 +44,9 @@ const Utland = (): JSX.Element => {
       <Ingress spacing={true}>Api test.</Ingress>
       <Button variant="primary" type="submit" onClick={() => handleThing()}>
         Frontend error
+      </Button>
+      <Button variant="primary" type="submit" onClick={() => handleSentryThing()}>
+        Sentry error
       </Button>
       <Button variant="primary" type="submit" onClick={() => onSubmit()}>
         Test
