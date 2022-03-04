@@ -3,7 +3,6 @@ import path from 'path';
 import cookieParser from 'cookie-parser';
 import client from 'prom-client';
 import config from './config';
-import helmet from 'helmet';
 import { getHtmlWithDecorator } from './dekorator';
 import { tokenXProxy } from './apiProxy';
 import { LogError, LogInfo } from './logger';
@@ -26,7 +25,7 @@ const startServer = () => {
 
   server.use(cookieParser());
   server.use(express.static(BUILD_PATH));
-  server.use(helmet());
+  // server.use(helmet());
 
   // metrics
   server.get(`${config.BASE_PATH}/internal/metrics`, async (req: any, res: any) => {
