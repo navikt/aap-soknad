@@ -61,6 +61,8 @@ jobs:
           push: "true"
           cache-from: "type=gha"
           cache-to: "type=gha,mode=max"
+          secrets: |
+            "SENTRY_AUTH_TOKEN=${{ secrets.SENTRY_AUTH_TOKEN }}"
   "deployAppToDev":
     name: "Deploy app to dev"
     needs: "build"
@@ -74,3 +76,14 @@ jobs:
           "CLUSTER": "dev-gcp"
           "RESOURCE": ".nais/nais.yaml,.nais/alerts.yaml"
           "VARS": ".nais/dev.yaml"
+      - name: "Lag deployment i Sentry"
+        uses: "getsentry/action-release@v1"
+        env:
+          SENTRY_AUTH_TOKEN: "${{ secrets.SENTRY_AUTH_TOKEN }}"
+          SENTRY_URL: "https://sentry.gc.nav.no"
+          SENTRY_ORG: "nav"
+          SENTRY_PROJECT: "aap-soknad"
+        with:
+          environment: "development"
+          version: "${{ github.sha }}"
+          set_commits: "skip"
