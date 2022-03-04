@@ -7,6 +7,8 @@
     "@navikt/ds-css": "^0.12.0",
     "@navikt/ds-react": "^0.14.11",
     "@navikt/nav-dekoratoren-moduler": "^1.6.9",
+    "@sentry/react": "6.18.1",
+    "@sentry/tracing": "6.18.1",
     "cross-fetch": "^3.1.5",
     "cypress": "^9.2.1",
     "date-fns": "^2.27.0",
