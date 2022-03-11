@@ -10,14 +10,7 @@ export interface CheckboxProps {
   control: Control<FieldValues>;
   children?: React.ReactChild | React.ReactChild[];
 }
-export const HFCheckboxGroup = ({
-  children,
-  name,
-  legend,
-  size,
-  control,
-  error,
-}: CheckboxProps) => (
+const CheckboxGroupWrapper = ({ children, name, legend, size, control, error }: CheckboxProps) => (
   <Controller
     name={name}
     control={control}
@@ -36,3 +29,4 @@ export const HFCheckboxGroup = ({
     )}
   />
 );
+export default CheckboxGroupWrapper;

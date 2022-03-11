@@ -9,11 +9,12 @@ export interface RadioProps {
   control: Control<FieldValues>;
   children?: React.ReactChild | React.ReactChild[];
 }
-export const InputRadioGroup = ({ children, name, legend, control, error }: RadioProps) => (
+const RadioGroupWrapper = ({ children, name, legend, control, error }: RadioProps) => (
   <Controller
     name={name}
     control={control}
-    render={({ field: { onChange, value } }) => (
+    defaultValue={null}
+    render={({ field: { value, onChange } }) => (
       <RadioGroup
         id={name}
         value={value}
@@ -27,3 +28,4 @@ export const InputRadioGroup = ({ children, name, legend, control, error }: Radi
     )}
   />
 );
+export default RadioGroupWrapper;

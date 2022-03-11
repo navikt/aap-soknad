@@ -11,7 +11,7 @@ export interface DatoVelgerProps {
   validate?: () => any;
 }
 
-const ControlDatoVelger = ({ name, label, control, error }: DatoVelgerProps) => (
+const DatoVelgerWrapper = ({ name, label, control, error }: DatoVelgerProps) => (
   <Controller
     name={name}
     control={control}
@@ -28,4 +28,4 @@ const ControlDatoVelger = ({ name, label, control, error }: DatoVelgerProps) => 
   />
 );
 
-export default ControlDatoVelger;
+export default DatoVelgerWrapper;

@@ -12,7 +12,7 @@ export interface SelectProps {
   children?: React.ReactChild | React.ReactChild[];
 }
 
-const ControlSelect = ({ name, label, control, error, children }: SelectProps) => (
+const SelectWrapper = ({ name, label, control, error, children }: SelectProps) => (
   <Controller
     name={name}
     control={control}
@@ -24,4 +24,4 @@ const ControlSelect = ({ name, label, control, error, children }: SelectProps) =
   />
 );
 
-export default ControlSelect;
+export default SelectWrapper;

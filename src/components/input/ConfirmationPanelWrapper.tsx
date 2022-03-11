@@ -8,10 +8,11 @@ export interface ConfirmationPanelProps {
   control: any;
   error: string;
 }
-const ControlConfirmationPanel = ({ label, control, error, name }: ConfirmationPanelProps) => (
+const ConfirmationPanelWrapper = ({ label, control, error, name }: ConfirmationPanelProps) => (
   <Controller
     name={name}
     control={control}
+    defaultValue={false}
     render={({ field: { name, value, onChange } }) => (
       <ConfirmationPanel
         id={name}
@@ -25,4 +26,4 @@ const ControlConfirmationPanel = ({ label, control, error, name }: ConfirmationP
   />
 );
 
-export default ControlConfirmationPanel;
+export default ConfirmationPanelWrapper;
