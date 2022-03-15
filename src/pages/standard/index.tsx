@@ -31,7 +31,8 @@ import { AndreUtbetalinger } from './AndreUtbetalinger';
 import { Barnetillegg } from './Barnetillegg';
 import * as classes from './standard.module.css';
 import Student from './Student';
-enum StepNames {
+import Oppsummering from './Oppsummering';
+export enum StepNames {
   VEILEDNING = 'VEILEDNING',
   KONTAKTINFO = 'KONTAKTINFO',
   FASTLEGE = 'FASTLEGE',
@@ -40,6 +41,7 @@ enum StepNames {
   STUDENT = 'STUDENT',
   ANDRE_UTBETALINGER = 'ANDRE_UTBETALINGER',
   BARNETILLEGG = 'BARNETILLEGG',
+  OPPSUMMERING = 'OPPSUMMERING',
 }
 const initFieldVals: SoknadStandard = {
   behandlere: [],
@@ -168,6 +170,9 @@ export const StandardPage = (): JSX.Element => {
               control={control}
               barneListe={oppslagState?.søker?.barn}
             />
+          </Step>
+          <Step order={7} name={StepNames.OPPSUMMERING} label={'Oppsummering'}>
+            <Oppsummering getText={getText} errors={errors} control={control} />
           </Step>
           <div className={classes?.buttonWrapper}>
             <Button
