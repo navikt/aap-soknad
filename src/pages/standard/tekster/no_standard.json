@@ -1,20 +1,46 @@
 {
   "pagetitle": "Søknad om arbeidsavklaringspenger",
   "buttontext": "Neste",
+  "backButtontext": "Tilbake",
   "steps": {
     "veiledning": {
-      "title": "Velkommen til søknad om arbeidsavklaringspenger (AAP)",
-      "ingress": "Arbeidsavklaringspenger skal sikre deg inntekt i perioder du, på grunn av sykdom eller skade, har behov for hjelp fra NAV for å komme i arbeid. For å gå videre med søknaden må du bekrefte at du har lest og forstått dine rettigheter og plikter (åpnes i ny fane).",
-      "rettogplikt": "Jeg bekrefter at jeg har lest og forstått mine rettigheter og plikter."
+      "guide": "Jeg er her for å veilede deg gjennom søknaden",
+      "title": "Søknad om arbeidsavklaringspenger (AAP)",
+      "ingress": "Arbeidsavklaringspenger skal sikre deg inntekt i perioder du, på grunn av sykdom eller skade, har behov for hjelp fra NAV for å komme i arbeid.",
+      "opplysninger": {
+        "title": "Innhenting av opplysninger",
+        "paragraphs": ["Når vi behandler søknaden din, henter vi opplysninger fra blant annet Folkeregisteret, Skatteetaten og legen din. Ved behov sender vi opplysninger til andre offentlige og private virksomheter. Les om hvordan NAV behandler personopplysninger (åpnes i ny fane)."]
+      },
+      "utbetaling": {
+        "title": "Eventuell utbetaling av AAP",
+        "paragraphs": [
+          "Du kan bare ha ett kontonummer registrert hos NAV. Du kan enkelt endre hvilket kontonummer vi benytter (åpnes i ny fane).",
+          "Du kan tidligst få arbeidsavklaringspenger fra og med den dagen vi mottar søknaden din. Hvis du får innvilget arbeidsavklaringspenger, får du utbetalt pengene etter at du har sendt inn meldekort.",
+          "Du kan bare ha ett kontonummer registrert hos NAV. Du kan enkelt endre hvilket kontonummer vi benytter (åpnes i ny fane)."
+        ]
+      },
+      "rettogplikt": "Jeg bekrefter at jeg har lest og forstått mine rettigheter og plikter.",
+      "riktigeopplysninger": "Jeg er klar over at jeg kan miste retten til arbeidsavklaringspenger hvis jeg ikke gir riktige opplysninger. Jeg er også klar over at jeg må betale tilbake hvis jeg får penger jeg ikke har rett til og som skyldes at jeg har latt være å informere eller gitt feil opplysninger.",
+      "buttonText": "Start søknad"
     },
     "kontaktinfo": {
-      "title": "Dine opplysninger"
+      "title": "Dine opplysninger",
+      "registrertInfo": {
+        "title": "Registrert kontaktinfo",
+        "text": "NAV har registrert følgende kontaktinformasjon. Hvis den ikke stemmer, kan du legge til en midlertidig adresse i Din profil. Du kan også legge inn eller endre kontonummer og telefonnummer der."
+      },
+      "fullname": "Navn",
+      "personident": "Fødselsnummer eller D-nummer",
+      "adresse": "Folkeregistrert adresse"
     },
     "fastlege": {
-      "title": "Fastlege"
+      "title": "Kontaktperson for helseopplysninger",
+      "guide": "NAV henter helseopplysninger fra fastlegen din når vi skal behandle søknaden din. Ved behov kan vi også hente inn opplysninger fra andre  behandlere eller leger. \u2028\nHvis vi allerede har tilsrekkelig med opplysninger om deg fra tidligere, innhenter vi ikke legeerklæring.",
+      "annenBehandler": "Hvis dette er feil, trenger NAV å få vite riktig kontraktperson for å hente helseopplysninger. \n\nHvis  du har en annen lege eller behandler, som du vil NAV skal vite om eller som du vil at vi skal innhente legeerklæringen din fra, kan du legge til denne her."
     },
-    "tilknytning_til_norge": {
-      "title": "Tilknytning til Norge",
+    "medlemskap": {
+      "title": "Medlem i folketrygden",
+      "guide": "Nå lurer vi på om du oppfyller kravene til medlemskap i folketrygden. Har du bodd eller jobbet utenfor Norge de siste 5 årene, er det ikke alltid du har nok medlemskap i folketrygden til å kunne få AAP.",
       "opphold": {
         "title": "Opphold i Norge de siste 5 årene",
         "ingress": "Som hovedregel må du ha bodd eller arbeidet sammenhengende i Norge de siste 5 årene før du søker om arbeidsavklaringspenger."
@@ -22,10 +48,16 @@
       "arbeid": {
         "title": "Arbeid utenfor Norge",
         "ingress": "Hvis du har arbeidet utenfor Norge før du ble syk, kan du i noen tilgeller få arbeidsperioder med, når vi beregner arbeidsavklaringspengene dine."
+      },
+      "utenlandsPeriode": {
+        "title": "Utenlandsopphold",
+        "ingress": "Oppgi hvilket land og hvilken periode du har bodd i utlandet de siste fem årene",
+        "info": "Nå må du oppgi i hvilke perioder du har bodd eller jobbet utenfor Norge.  Oppgi også hvilket land du var i. Ta med alle perioder siden du var 16 år. Vi vil beregne om du oppfyller kravene til medlemskap basert på opplysningene du gir oss. "
       }
     },
     "yrkesskade": {
       "title": "Yrkesskade",
+      "guide": "Hvis arbeidsevnen din er nedsatt på grunn av yrkesskade eller yrkessykdom, skal saken behandles etter egne regler.\n\nYrkesskadefordeler vurderes kun for plager som er godkjent som yrkesskade/yrkessykdom av trygdekontoret eller NAV, og som fortsatt nedsetter din arbeidsevne. Videre må det være medisinsk årsakssammenheng mellom yrkesskaden og din nedsatte arbeidsevne.",
       "ingress": "Hvis arbeidsevnen din er nedsatt på grunn av yrkesskade eller yrkessykdom, skal saken behandles etter egne regler.",
       "alert": {
         "ja": {
@@ -43,6 +75,9 @@
         "vetikke": "NAV vil undersøke om du har en godkjent yrkesskade eller yrkessykdom."
       }
     },
+    "student": {
+      "title": "Student"
+    },
     "andre_utbetalinger": {
       "title": "Andre utbetalinger",
       "ingress": "Hvis du får utbetalinger fra NAV, arveidsgiver eller andre, kan arveidsavklaringspengene reduseres eller falle bort i perioden du får utbetalingen",
@@ -57,94 +92,66 @@
     "rettogplikt": {
       "required": "Vennligst bekreft at du har lest og forstått dine rettigheter og plikter."
     },
+    "riktigeopplysninger": {
+      "required": "Vennligst bekreft at du har lest og forstått dine rettigheter og plikter."
+    },
     "kontaktinfo": {
-      "firstname": {
-        "label": "Fornavn",
-        "required": "Vennligst angi fornavn"
-      },
-      "lastname": {
-        "label": "Etternavn",
-        "required": "Vennligst angi etternavn"
-      },
-      "adresse": {
-        "label": "Adresse",
-        "required": "Vennligst angi adresse"
-      },
-      "postnummer": {
-        "label": "Postnummer",
-        "required": "Vennligst angi postnummer"
-      },
-      "poststed": {
-        "label": "Poststed",
-        "required": "Vennligst angi poststed"
-      },
-      "epost": {
-        "label": "E-post (valgfritt)",
-        "format": "Må være en gyldig E-postadresse"
-      },
-      "telefon": {
-        "label": "Telefonnummer (valgfritt)"
+      "bekreftOpplysninger": {
+        "legend": "Stemnmer opplysningene over?",
+        "alert": "Du kan legge til en midlertidig adresse i Din profil. Du kan også legge inn eller endre kontonummer og telefonnummer der."
       }
     },
-    "behandlere": {
-      "firstname": {
-        "label": "Fornavn",
-        "required": "Vennligst oppgi fornavn"
+    "fastlege": {
+      "annenbehandler": {
+        "name": {
+          "label": "Leges/behandlers navn",
+          "required": "Vennligst oppgi navn"
+        },
+        "legekontor": {
+          "label": "Legekontor",
+          "required": "Vennligst oppgi legekontor"
+        },
+        "gateadresse": {
+          "label": "Gateadresse",
+          "required": "Vennligst oppgi gateadresse"
+        },
+        "postnummer": {
+          "label": "Postnummer",
+          "required": "Vennligst oppgi postnummer"
+        },
+        "poststed": {
+          "label": "Poststed",
+          "required": "Vennligst oppgi poststed"
+        },
+        "telefon": {
+          "label": "Telefonnummer",
+          "required": "Vennligst oppgi telefonnummer"
+        }
+      }
+    },
+    "utenlandsperiode": {
+      "land": {
+        "label": "Land",
+        "required": "Vennligst oppgi land"
       },
-      "lastname": {
-        "label": "Etternavn",
-        "required": "Vennligst oppgi etternavn"
+      "fraDato": {
+        "label": "Fra og med dato",
+        "required": "Vennligst oppgi fra dato"
       },
-      "telefon": {
-        "label": "Telefonnummer",
-        "required": "Vennligst oppgi telefonnummer"
+      "tilDato": {
+        "label": "Til og med dato",
+        "required": "Vennligst oppgi til dato",
+        "etterFraDato": "Til dato må være etter fra dato"
+      },
+      "iArbeid": {
+        "legend": "Jobbet du i dette landet i denne perioden?"
       }
     },
     "utenlandsopphold": {
-      "radiolegend": "Har du bodd eller arbeidet sammenhengende i Norge de siste 5 årene?",
-      "land": {
-        "label": "Land",
-        "required": "Vennligst oppgi land"
-      },
-      "framåned": {
-        "label": "Fra og med måned",
-        "required": "Vennligst oppgi fra og med måned"
-      },
-      "tilmåned": {
-        "label": "Til og med måned",
-        "required": "Vennligst oppgi til og med måned"
-      },
-      "fraår": {
-        "label": "Fra og med år",
-        "required": "Vennligst oppgi fra og med år"
-      },
-      "tilår": {
-        "label": "Til og med år",
-        "required": "Vennligst oppgi til og med år"
-      }
+      "radiolegend": "Har du bodd sammenhengende i Norge de siste 5 årene?"
     },
     "utenlandsarbeid": {
-      "land": {
-        "label": "Land",
-        "required": "Vennligst oppgi land"
-      },
-      "framåned": {
-        "label": "Fra og med måned",
-        "required": "Vennligst oppgi fra og med måned"
-      },
-      "tilmåned": {
-        "label": "Til og med måned",
-        "required": "Vennligst oppgi til og med måned"
-      },
-      "fraår": {
-        "label": "Fra og med år",
-        "required": "Vennligst oppgi fra og med år"
-      },
-      "tilår": {
-        "label": "Til og med år",
-        "required": "Vennligst oppgi til og med år"
-      },
-      "radiolegend": "Har du jobbet utenfor Norge før du ble syk?"
+      "radiolegend": "Har du jobbet sammenhengende i Norge de siste 5 årene?"
     },
     "yrkesskade": {
       "legend": "Har du en yrkesskade eller yrkessykdom som er godkjent av NAV?",
@@ -205,6 +212,9 @@
       "legend": "Forsørger du barnet?",
       "ja": "Ja",
       "nei": "Nei"
+    },
+    "student": {
+      "legend": "Er du student nå?"
     }
   },
   "innsending": {

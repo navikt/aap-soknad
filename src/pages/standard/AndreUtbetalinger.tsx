@@ -1,10 +1,10 @@
-import { Alert, BodyShort, Checkbox, Radio, RadioGroup } from '@navikt/ds-react';
-import React, { useState } from 'react';
+import { Alert, BodyShort, Checkbox, Radio } from '@navikt/ds-react';
+import React from 'react';
 import { GetText } from '../../hooks/useTexts';
 import { Control, FieldErrors, FieldValues, UseFormWatch } from 'react-hook-form';
-import { HFCheckboxGroup } from '../../components/input/CheckboxWrapper';
-import { InputRadioGroup } from '../../components/input/InputRadio';
-import ControlDatoVelger from '../../components/input/ControlDatoVelger';
+import CheckboxGroupWrapper from '../../components/input/CheckboxGroupWrapper';
+import RadioGroupWrapper from '../../components/input/RadioGroupWrapper';
+import DatoVelgerWrapper from '../../components/input/DatoVelgerWrapper';
 
 interface AndreUtbetalingerProps {
   watch: UseFormWatch<FieldValues>;
@@ -35,7 +35,7 @@ export const AndreUtbetalinger = ({ getText, errors, control, watch }: AndreUtbe
   return (
     <>
       <BodyShort>{getText('steps.andre_utbetalinger.ingress')}</BodyShort>
-      <HFCheckboxGroup
+      <CheckboxGroupWrapper
         name={'andreutbetalinger'}
         control={control}
         size="medium"
@@ -56,8 +56,8 @@ export const AndreUtbetalinger = ({ getText, errors, control, watch }: AndreUtbe
         <Checkbox value="utland">{getText('form.andreutbetalinger.utland')}</Checkbox>
         <Checkbox value="annet">{getText('form.andreutbetalinger.annet')}</Checkbox>
         <Checkbox value="nei">{getText('form.andreutbetalinger.nei')}</Checkbox>
-      </HFCheckboxGroup>
-      <InputRadioGroup
+      </CheckboxGroupWrapper>
+      <RadioGroupWrapper
         legend={getText('form.lønnellersykepenger.legend')}
         name={'lønnEllerSykepenger'}
         control={control}
@@ -72,9 +72,9 @@ export const AndreUtbetalinger = ({ getText, errors, control, watch }: AndreUtbe
         <Radio value={JaNeiVetikke.VET_IKKE}>
           <BodyShort>{getText('form.lønnellersykepenger.vetikke')}</BodyShort>
         </Radio>
-      </InputRadioGroup>
+      </RadioGroupWrapper>
       {lønnEllerSykepenger === JaNeiVetikke.JA && (
-        <InputRadioGroup
+        <RadioGroupWrapper
           legend={getText('form.ferie.legend')}
           name={'ferie.harPlaner'}
           control={control}
@@ -92,17 +92,17 @@ export const AndreUtbetalinger = ({ getText, errors, control, watch }: AndreUtbe
           <Radio value={Ferie.VET_IKKE}>
             <BodyShort>{getText('form.ferie.vetikke')}</BodyShort>
           </Radio>
-        </InputRadioGroup>
+        </RadioGroupWrapper>
       )}
       {lønnEllerSykepenger === JaNeiVetikke.JA && feriePlaner === Ferie.JA_DATOER && (
         <>
-          <ControlDatoVelger
+          <DatoVelgerWrapper
             name="ferie.fromdate"
             label={getText('form.ferie.fromdate.label')}
             control={control}
             error={errors.ferie?.fromdate?.message}
           />
-          <ControlDatoVelger
+          <DatoVelgerWrapper
             name="ferie.todate"
             label={getText('form.ferie.todate.label')}
             control={control}
@@ -110,7 +110,7 @@ export const AndreUtbetalinger = ({ getText, errors, control, watch }: AndreUtbe
           />
         </>
       )}
-      <InputRadioGroup
+      <RadioGroupWrapper
         legend={getText('form.andregoder.legend')}
         name={'andreGoder.fårAndreGoder'}
         control={control}
@@ -125,10 +125,10 @@ export const AndreUtbetalinger = ({ getText, errors, control, watch }: AndreUtbe
         <Radio value={JaNeiVetikke.VET_IKKE}>
           <BodyShort>{getText('form.andregoder.vetikke')}</BodyShort>
         </Radio>
-      </InputRadioGroup>
+      </RadioGroupWrapper>
       {fårAndreGoder === JaNeiVetikke.JA && (
         <>
-          <InputRadioGroup
+          <RadioGroupWrapper
             legend={getText('form.andregoder.utbetalingsmåte.legend')}
             name={'andreGoder.utbetalingsmåte'}
             control={control}
@@ -140,7 +140,7 @@ export const AndreUtbetalinger = ({ getText, errors, control, watch }: AndreUtbe
             <Radio value={Utbetalingsmåte.LØPENDE}>
               <BodyShort>{getText('form.andregoder.utbetalingsmåte.løpende')}</BodyShort>
             </Radio>
-          </InputRadioGroup>
+          </RadioGroupWrapper>
           <Alert variant="info">
             <BodyShort>{getText('steps.andre_utbetalinger.vedlegg.title')}</BodyShort>
             <ul>

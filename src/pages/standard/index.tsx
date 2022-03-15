@@ -1,16 +1,17 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { useTexts } from '../../hooks/useTexts';
-import { BodyShort, Button, Heading, Loader, PageHeader } from '@navikt/ds-react';
+import { BodyShort, Button, GuidePanel, Heading, Loader, PageHeader } from '@navikt/ds-react';
 import * as tekster from './tekster';
 import { Step, StepWizard } from '../../components/StepWizard';
 import { getStepSchemas } from './schema';
-import { useForm, FieldValues } from 'react-hook-form';
+import { useForm, FieldValues, UseFormProps, Resolver, SubmitHandler } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import {
   setStepList,
   completeAndGoToNextStep,
   useStepWizard,
   resetStepWizard,
+  goToPreviousStep,
 } from '../../context/stepWizardContextV2';
 import SoknadForm from '../../types/SoknadForm';
 import SoknadStandard from '../../types/SoknadStandard';
@@ -21,46 +22,59 @@ import {
   SøknadType,
   slettLagretSoknadState,
 } from '../../context/soknadContext';
-import { Kontaktinfo } from './Kontaktinfo';
 import { Veiledning } from './Veiledning';
 import { hentSokerOppslag, useSokerOppslag } from '../../context/sokerOppslagContext';
 import { Behandlere } from './Behandlere';
-import { TilknytningTilNorge } from './TilknytningTilNorge';
+import { Medlemskap } from './Medlemskap';
 import { Yrkesskade } from './Yrkesskade';
 import { AndreUtbetalinger } from './AndreUtbetalinger';
 import { Barnetillegg } from './Barnetillegg';
 import * as classes from './standard.module.css';
+import Student from './Student';
 enum StepNames {
   VEILEDNING = 'VEILEDNING',
   KONTAKTINFO = 'KONTAKTINFO',
   FASTLEGE = 'FASTLEGE',
-  TILKNYTNING_TIL_NORGE = 'TILKNYTNING_TIL_NORGE',
+  MEDLEMSKAP = 'MEDLEMSKAP',
   YRKESSKADE = 'YRKESSKADE',
+  STUDENT = 'STUDENT',
   ANDRE_UTBETALINGER = 'ANDRE_UTBETALINGER',
   BARNETILLEGG = 'BARNETILLEGG',
 }
-const initFieldVals: FieldValues = {
-  rettogplikt: false,
+const initFieldVals: SoknadStandard = {
+  behandlere: [],
+  utenlandsOpphold: [],
+  utenlandsArbeid: [],
 };
 export const StandardPage = (): JSX.Element => {
   const [isLoading] = useState<boolean>(false);
+  const [showVeiledning, setShowVeiledning] = useState<boolean>(true);
   const { søknadState, søknadDispatch } = useSoknadContext();
-  const { oppslagState, oppslagDispatch } = useSokerOppslag();
+  const { oppslagState, oppslagDispatch, søkerFulltNavn, fastlege } = useSokerOppslag();
   const { currentStep, currentStepIndex, stepWizardDispatch } = useStepWizard();
   const { getText } = useTexts(tekster);
   const StepSchemas = getStepSchemas(getText);
   const currentSchema = useMemo(() => {
     return StepSchemas[currentStepIndex];
   }, [currentStepIndex, StepSchemas]);
+  const resolver: Resolver<UseFormProps<SoknadForm<SoknadStandard>>> = async (
+    values,
+    context,
+    options
+  ) => {
+    const myResolver = yupResolver(currentSchema);
+    // @ts-ignore
+    return myResolver(values, context, options);
+  };
   const {
     control,
     handleSubmit,
     watch,
     formState: { errors },
     reset,
-  } = useForm({
-    resolver: yupResolver(currentSchema),
-    defaultValues: useMemo(() => ({ ...initFieldVals, ...søknadState?.søknad }), [søknadState]),
+  } = useForm<FieldValues>({
+    resolver,
+    defaultValues: { ...initFieldVals },
   });
   useEffect(() => {
     hentSokerOppslag(oppslagDispatch);
@@ -78,7 +92,11 @@ export const StandardPage = (): JSX.Element => {
   useEffect(() => {
     reset({ ...søknadState.søknad });
   }, [currentStep, reset]);
-  const myHandleSubmit = async (data: SoknadForm<SoknadStandard>) => {
+  const showGuidePanel = useMemo(
+    () => !!getText(`steps.${currentStep?.name?.toLowerCase()}.guide`),
+    [currentStep, getText]
+  );
+  const myHandleSubmit: SubmitHandler<UseFormProps<SoknadStandard>> = async (data) => {
     console.log(data);
     completeAndGoToNextStep(stepWizardDispatch);
   };
@@ -92,6 +110,24 @@ export const StandardPage = (): JSX.Element => {
       }
     }
   };
+  if (showVeiledning)
+    return (
+      <form
+        onSubmit={handleSubmit(myHandleSubmit)}
+        className={classes?.soknadForm}
+        autoComplete="off"
+      >
+        <Veiledning
+          getText={getText}
+          errors={errors}
+          control={control}
+          søkerFulltNavn={søkerFulltNavn}
+        />
+        <Button variant="primary" type="submit" onClick={() => setShowVeiledning(false)}>
+          <BodyShort>{getText(`steps.veiledning.buttonText`, 'buttontext')}</BodyShort>
+        </Button>
+      </form>
+    );
   return (
     <>
       <PageHeader align="center">{getText('pagetitle')}</PageHeader>
@@ -101,45 +137,57 @@ export const StandardPage = (): JSX.Element => {
           className={classes?.soknadForm}
           autoComplete="off"
         >
-          <Heading size="small" level="2">
+          {showGuidePanel && (
+            <GuidePanel>
+              <BodyShort>{getText(`steps.${currentStep?.name?.toLowerCase()}.guide`)}</BodyShort>
+            </GuidePanel>
+          )}
+          <Heading size="large" level="2">
             {getText(`steps.${currentStep?.name.toLowerCase()}.title`)}
           </Heading>
           <FormErrorSummary errors={errors} />
-          <Step order={1} name={StepNames.VEILEDNING} label={'Veiledning'}>
-            <Veiledning getText={getText} errors={errors} control={control} />
+          <Step order={1} name={StepNames.YRKESSKADE} label={'Yrkesskade'}>
+            <Yrkesskade getText={getText} errors={errors} control={control} watch={watch} />
           </Step>
-          <Step order={2} name={StepNames.KONTAKTINFO} label={'Kontaktinformasjon'}>
-            <Kontaktinfo getText={getText} errors={errors} control={control} />
+          <Step order={2} name={StepNames.MEDLEMSKAP} label={'Tilknytning til Norge'}>
+            <Medlemskap getText={getText} errors={errors} />
           </Step>
           <Step order={3} name={StepNames.FASTLEGE} label={'Fastlege'}>
-            <Behandlere getText={getText} errors={errors} control={control} />
+            <Behandlere getText={getText} fastlege={fastlege} />
           </Step>
-          <Step order={4} name={StepNames.TILKNYTNING_TIL_NORGE} label={'Tilknytning til Norge'}>
-            <TilknytningTilNorge getText={getText} errors={errors} control={control} />
+          <Step order={4} name={StepNames.STUDENT} label={'Student'}>
+            <Student getText={getText} errors={errors} control={control} />
           </Step>
-          <Step order={5} name={StepNames.YRKESSKADE} label={'Yrkesskade'}>
-            <Yrkesskade getText={getText} errors={errors} control={control} />
-          </Step>
-          <Step order={6} name={StepNames.ANDRE_UTBETALINGER} label={'Andre utbetalinger'}>
+          <Step order={5} name={StepNames.ANDRE_UTBETALINGER} label={'Andre utbetalinger'}>
             <AndreUtbetalinger getText={getText} errors={errors} control={control} watch={watch} />
           </Step>
-          <Step order={7} name={StepNames.BARNETILLEGG} label={'Barnetilleggg'}>
+          <Step order={6} name={StepNames.BARNETILLEGG} label={'Barnetilleggg'}>
             <Barnetillegg
               getText={getText}
               errors={errors}
               control={control}
-              barneListe={oppslagState?.barn}
+              barneListe={oppslagState?.søker?.barn}
             />
           </Step>
-          <Button variant="primary" type="submit" disabled={isLoading}>
-            {!isLoading && (
-              <BodyShort>{getText(`${currentStep?.name}.buttontext`, 'buttontext')}</BodyShort>
-            )}
-            {isLoading && <Loader />}
-          </Button>
+          <div className={classes?.buttonWrapper}>
+            <Button
+              variant="secondary"
+              type="button"
+              onClick={() => goToPreviousStep(stepWizardDispatch)}
+            >
+              {getText('backButtontext')}
+            </Button>
+            <Button variant="primary" type="submit" disabled={isLoading}>
+              {!isLoading && (
+                <BodyShort>
+                  {getText(`${currentStep?.name.toLowerCase()}.buttontext`, 'buttontext')}
+                </BodyShort>
+              )}
+              {isLoading && <Loader />}
+            </Button>
+          </div>
           <Button variant="tertiary" type="button" onClick={() => onDeleteSøknad()}>
-            {!isLoading ? 'Slett påbegynt søknad' : ''}
-            {isLoading && <Loader />}
+            Avbryt
           </Button>
         </form>
       </StepWizard>

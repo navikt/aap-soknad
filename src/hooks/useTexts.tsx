@@ -1,6 +1,5 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { onLanguageSelect } from '@navikt/nav-dekoratoren-moduler';
-import { filter } from 'cypress/types/minimatch';
 
 export interface GetText {
   (str: string): string;
@@ -26,7 +25,7 @@ export const useTexts = (tekstpakke: Tekstpakker) => {
 
   const getText = (path: string, fallbackPath: string = ''): string => {
     const primary = safeDeepGet(path);
-    return primary === path && fallbackPath ? safeDeepGet(fallbackPath) : primary;
+    return !primary && fallbackPath ? safeDeepGet(fallbackPath) : primary;
   };
 
   const safeDeepGet = (path: string) => {
@@ -35,7 +34,7 @@ export const useTexts = (tekstpakke: Tekstpakker) => {
         // @ts-ignore
         return acc?.[curr];
       }, filteredTexts);
-      return res || path;
+      return res || '';
     } catch (e) {
       console.error('safeDeepGet', e);
       return '';

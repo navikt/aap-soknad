@@ -103,46 +103,61 @@ export const handlers = [
       ctx.status(200),
       ctx.delay(100),
       ctx.json({
-        navn: {
-          fornavn: 'Fornavn oppslag',
-          mellomnavn: 'string',
-          etternavn: 'Etternavn oppslag',
+        søker: {
+          navn: {
+            fornavn: 'Fornavn',
+            mellomnavn: 'Fra',
+            etternavn: 'Oppslag',
+          },
+          fødseldato: '2022-02-14',
+          barn: [
+            {
+              navn: {
+                fornavn: 'Barn',
+                mellomnavn: 'Nummer',
+                etternavn: 'En',
+              },
+              fødseldato: '2022-02-14',
+            },
+            {
+              navn: {
+                fornavn: 'Barn',
+                mellomnavn: 'Nummer',
+                etternavn: 'To',
+              },
+              fødseldato: '2022-02-14',
+            },
+            {
+              navn: {
+                fornavn: 'Barn',
+                mellomnavn: 'Nummer',
+                etternavn: 'Tre',
+              },
+              fødseldato: '2022-02-14',
+            },
+            {
+              navn: {
+                fornavn: 'Barn',
+                mellomnavn: 'Nummer',
+                etternavn: 'Fire',
+              },
+              fødseldato: '2022-02-14',
+            },
+          ],
         },
-        fødseldato: '2022-02-14',
-        barn: [
-          {
-            navn: {
-              fornavn: 'Barn',
-              mellomnavn: 'Nummer',
-              etternavn: 'En',
-            },
-            fødseldato: '2022-02-14',
+        behandler: {
+          type: 'FASTLEGE',
+          navn: { fornavn: 'Nina Unni', etternavn: 'Borge' },
+          kontaktinformasjon: {
+            behandlerRef: 'd182f24b-ebca-4f44-bf86-65901ec6141b',
+            kontor: 'ASKØY KOMMUNE SAMFUNNSMEDISINSK AVD ALMENNLEGETJENESTEN',
+            orgnummer: '976673867',
+            adresse: 'Kleppeveien 17',
+            postnr: '5300',
+            poststed: 'KLEPPESTØ',
+            telefon: '56 15 83 10',
           },
-          {
-            navn: {
-              fornavn: 'Barn',
-              mellomnavn: 'Nummer',
-              etternavn: 'To',
-            },
-            fødseldato: '2022-02-14',
-          },
-          {
-            navn: {
-              fornavn: 'Barn',
-              mellomnavn: 'Nummer',
-              etternavn: 'Tre',
-            },
-            fødseldato: '2022-02-14',
-          },
-          {
-            navn: {
-              fornavn: 'Barn',
-              mellomnavn: 'Nummer',
-              etternavn: 'Fire',
-            },
-            fødseldato: '2022-02-14',
-          },
-        ],
+        },
       })
     );
   }),

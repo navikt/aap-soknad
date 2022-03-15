@@ -41,6 +41,8 @@ jobs:
         run: "yarn test"
       - name: "Bygg klient(yarn run build)"
         run: "yarn run build"
+        env:
+          SENTRY_RELEASE: "{{ github.sha }}"
       - name: "Bygg server(yarn run build)"
         run: "yarn run build"
         working-directory: "server"
@@ -75,6 +77,8 @@ jobs:
           cache-to: "type=gha,mode=max"
           secrets: |
             "SENTRY_AUTH_TOKEN=${{ secrets.SENTRY_AUTH_TOKEN }}"
+          build-args: |
+            "SENTRY_RELEASE=${{ github.sha }}"
   "deployAppToDev":
     name: "Deploy app to dev"
     needs: "build"

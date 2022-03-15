@@ -1,9 +1,9 @@
 import { BodyShort, GuidePanel, Heading, Label } from '@navikt/ds-react';
 import { FieldErrors } from 'react-hook-form';
-import ControlSelect from '../../components/input/ControlSelect';
-import ControlDatoVelger from '../../components/input/ControlDatoVelger';
+import SelectWrapper from '../../components/input/SelectWrapper';
+import DatoVelgerWrapper from '../../components/input/DatoVelgerWrapper';
 import countries from 'i18n-iso-countries';
-import ControlConfirmationPanel from '../../components/input/ControlConfirmationPanel';
+import ConfirmationPanelWrapper from '../../components/input/ConfirmationPanelWrapper';
 import React from 'react';
 import { formatDate } from '../../utils/date';
 import { GetText } from '../../hooks/useTexts';
@@ -27,7 +27,7 @@ interface SelectCountryProps {
 export const StepSelectCountry = ({ getText, countries, control, errors }: SelectCountryProps) => (
   <>
     <GuidePanel poster>{getText('steps.country.guidetext')}</GuidePanel>
-    <ControlSelect
+    <SelectWrapper
       name="country"
       label={getText('form.country.label')}
       control={control}
@@ -43,7 +43,7 @@ export const StepSelectCountry = ({ getText, countries, control, errors }: Selec
           </option>
         )),
       ]}
-    </ControlSelect>
+    </SelectWrapper>
   </>
 );
 
@@ -55,13 +55,13 @@ interface SelectTravelPeriodProps {
 }
 export const StepSelectTravelPeriod = ({ getText, control, errors }: SelectTravelPeriodProps) => (
   <>
-    <ControlDatoVelger
+    <DatoVelgerWrapper
       name="fromDate"
       label={getText('form.fromdate.label')}
       control={control}
       error={errors.fromDate?.message}
     />
-    <ControlDatoVelger
+    <DatoVelgerWrapper
       name="toDate"
       label={getText('form.todate.label')}
       control={control}
@@ -105,7 +105,7 @@ export const StepSummary = ({ getText, data, control, errors }: SummaryProps) =>
             <BodyShort>{getFormValueReadable(key, val)}</BodyShort>
           </div>
         ))}
-      <ControlConfirmationPanel
+      <ConfirmationPanelWrapper
         name="confirmationPanel"
         label={getText('form.confirmationpanel.label')}
         control={control}

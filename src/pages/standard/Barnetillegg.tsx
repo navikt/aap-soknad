@@ -1,8 +1,8 @@
 import { BodyLong, BodyShort, GuidePanel, Heading, Radio } from '@navikt/ds-react';
-import React, { useState } from 'react';
+import React from 'react';
 import { GetText } from '../../hooks/useTexts';
 import { Control, FieldErrors, FieldValues } from 'react-hook-form';
-import { InputRadioGroup } from '../../components/input/InputRadio';
+import RadioGroupWrapper from '../../components/input/RadioGroupWrapper';
 
 interface BarnetilleggProps {
   getText: GetText;
@@ -24,7 +24,7 @@ export const Barnetillegg = ({ getText, errors, control, barneListe }: Barnetill
             size={'xsmall'}
             level={'2'}
           >{`${barn?.navn?.fornavn} ${barn?.navn?.mellomnavn} ${barn?.navn?.etternavn}`}</Heading>
-          <InputRadioGroup
+          <RadioGroupWrapper
             legend={getText('form.barnetillegg.legend')}
             name={`barnetillegg.${index}.${barn?.navn?.fornavn}${barn?.navn?.mellomnavn}${barn?.navn?.etternavn}`}
             control={control}
@@ -40,7 +40,7 @@ export const Barnetillegg = ({ getText, errors, control, barneListe }: Barnetill
             <Radio value={JaNei.NEI}>
               <BodyShort>{getText('form.barnetillegg.nei')}</BodyShort>
             </Radio>
-          </InputRadioGroup>
+          </RadioGroupWrapper>
         </GuidePanel>
       ))}
     </>

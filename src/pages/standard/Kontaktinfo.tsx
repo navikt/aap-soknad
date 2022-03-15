@@ -1,59 +1,63 @@
-import { Heading, TextField } from '@navikt/ds-react';
-import TextFieldWrapper from '../../components/input/TextFieldWrapper';
+import { Alert, BodyShort, Label, Radio } from '@navikt/ds-react';
 import React from 'react';
 import { GetText } from '../../hooks/useTexts';
-import { Control, FieldErrors, FieldValues } from 'react-hook-form';
+import { Control, FieldErrors, FieldValues, UseFormWatch } from 'react-hook-form';
+import RadioGroupWrapper from '../../components/input/RadioGroupWrapper';
+import { JaEllerNei } from '../../types/Generic';
 
 interface KontaktinfoProps {
+  watch: UseFormWatch<FieldValues>;
+  control: Control<FieldValues>;
   getText: GetText;
   errors: FieldErrors;
-  control: Control<FieldValues>;
+  søkerFulltNavn: string;
+  personident: string;
+  adresseFull: string;
 }
-export const Kontaktinfo = ({ getText, errors, control }: KontaktinfoProps) => {
+export const Kontaktinfo = ({
+  watch,
+  control,
+  getText,
+  errors,
+  søkerFulltNavn,
+  personident,
+  adresseFull,
+}: KontaktinfoProps) => {
+  const bekreftOpplysninger = watch('bekreftOpplysninger');
   return (
     <>
-      <TextFieldWrapper
+      <div>
+        <Label>{getText('steps.kontaktinfo.registrertInfo.title')}</Label>
+        <BodyShort>{getText('steps.kontaktinfo.registrertInfo.text')}</BodyShort>
+      </div>
+      <div>
+        <Label>{getText('steps.kontaktinfo.fullname')}</Label>
+        <BodyShort>{søkerFulltNavn}</BodyShort>
+      </div>
+      <div>
+        <Label>{getText('steps.kontaktinfo.personident')}</Label>
+        <BodyShort>{personident}</BodyShort>
+      </div>
+      <div>
+        <Label>{getText('steps.kontaktinfo.adresse')}</Label>
+        <BodyShort>{adresseFull}</BodyShort>
+      </div>
+      <RadioGroupWrapper
+        name={'bekreftOpplysninger'}
+        legend={getText('form.kontaktinfo.bekreftOpplysninger.legend')}
         control={control}
-        error={errors?.firstname?.message}
-        label={getText('form.kontaktinfo.firstname.label')}
-        name="firstname"
-      />
-      <TextFieldWrapper
-        control={control}
-        error={errors?.lastname?.message}
-        label={getText('form.kontaktinfo.lastname.label')}
-        name="lastname"
-      />
-      <TextFieldWrapper
-        control={control}
-        error={errors?.adresse?.message}
-        label={getText('form.kontaktinfo.adresse.label')}
-        name="adresse"
-      />
-      <TextFieldWrapper
-        control={control}
-        error={errors?.postnummer?.message}
-        label={getText('form.kontaktinfo.postnummer.label')}
-        name="postnummer"
-      />
-      <TextFieldWrapper
-        control={control}
-        error={errors?.poststed?.message}
-        label={getText('form.kontaktinfo.poststed.label')}
-        name="poststed"
-      />
-      <TextFieldWrapper
-        control={control}
-        error={errors?.epost?.message}
-        label={getText('form.kontaktinfo.epost.label')}
-        name="epost"
-      />
-      <TextFieldWrapper
-        control={control}
-        error={errors?.telefon?.message}
-        label={getText('form.kontaktinfo.telefon.label')}
-        name="telefon"
-      />
+        error={errors?.bekreftOpplysninger?.message}
+      >
+        <Radio value={JaEllerNei.JA}>
+          <BodyShort>Ja</BodyShort>
+        </Radio>
+        <Radio value={JaEllerNei.NEI}>
+          <BodyShort>Nei</BodyShort>
+        </Radio>
+      </RadioGroupWrapper>
+      {bekreftOpplysninger === JaEllerNei.NEI && (
+        <Alert variant={'info'}>{getText('form.kontaktinfo.bekreftOpplysninger.alert')}</Alert>
+      )}
     </>
   );
 };

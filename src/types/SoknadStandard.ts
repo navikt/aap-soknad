@@ -1,5 +1,14 @@
+import { UtenlandsPeriode } from '../pages/standard/UtenlandsPeriodeVelger/UtenlandsPeriodeVelger';
+import { JaEllerNei } from './Generic';
+import { Behandler } from '../pages/standard/Behandlere';
+
 interface SoknadStandard {
-  rettoplikt?: boolean;
+  bekreftOpplysninger?: JaEllerNei;
+  harAnnenBehandler?: JaEllerNei;
+  behandlere?: Behandler[];
+  utenlandsOpphold?: UtenlandsPeriode[];
+  utenlandsArbeid?: UtenlandsPeriode[];
+  erStudent?: JaEllerNei;
 }
 
 export default SoknadStandard;

@@ -4,3 +4,9 @@
   justify-content: space-between;
   gap: 20px;
 }
+.buttonWrapper {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 20px;
+}

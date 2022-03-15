@@ -1,13 +1,14 @@
 import { GetText } from '../../hooks/useTexts';
-import { Control, FieldErrors, FieldValues } from 'react-hook-form';
-import React, { useMemo, useState } from 'react';
-import { Alert, BodyShort, Radio, RadioGroup } from '@navikt/ds-react';
-import { InputRadioGroup } from '../../components/input/InputRadio';
+import { Control, FieldErrors, FieldValues, UseFormWatch } from 'react-hook-form';
+import React from 'react';
+import { Alert, BodyShort, Radio } from '@navikt/ds-react';
+import RadioGroupWrapper from '../../components/input/RadioGroupWrapper';
 
 interface YrkesskadeProps {
   getText: GetText;
   errors: FieldErrors;
   control: Control<FieldValues>;
+  watch: UseFormWatch<FieldValues>;
 }
 enum GodkjentYrkesskadeStatus {
   JA = 'ja',
@@ -51,24 +52,12 @@ const YrkesskadeAlert = ({ status, getText }: YrkesskadeAlertProps) => {
   );
 };
 
-export const Yrkesskade = ({ getText, errors, control }: YrkesskadeProps) => {
-  const [godkjentYrkesskade, setGodkjentYrkesskade] = useState<GodkjentYrkesskadeStatus>();
-  const alert = useMemo(() => {
-    switch (godkjentYrkesskade) {
-      case GodkjentYrkesskadeStatus.JA:
-        return getText('steps.yrkesskade.alert.ja');
-      case GodkjentYrkesskadeStatus.SØKNAD_UNDER_BEHANDLING:
-        return getText('steps.yrkesskade.alert.søknadsendt');
-      case GodkjentYrkesskadeStatus.VET_IKKE:
-        return getText('steps.yrkesskade.alert.vetikke');
-      default:
-        return '';
-    }
-  }, [godkjentYrkesskade]);
+export const Yrkesskade = ({ getText, errors, control, watch }: YrkesskadeProps) => {
+  const godkjentYrkesskade = watch('yrkesskade');
   return (
     <>
       <BodyShort>{getText('steps.yrkesskade.ingress')}</BodyShort>
-      <InputRadioGroup
+      <RadioGroupWrapper
         name={'yrkesskade'}
         legend={getText('form.yrkesskade.legend')}
         control={control}
@@ -86,7 +75,7 @@ export const Yrkesskade = ({ getText, errors, control }: YrkesskadeProps) => {
         <Radio value={GodkjentYrkesskadeStatus.VET_IKKE}>
           <BodyShort>{getText('form.yrkesskade.vetikke')}</BodyShort>
         </Radio>
-      </InputRadioGroup>
+      </RadioGroupWrapper>
       {godkjentYrkesskade !== GodkjentYrkesskadeStatus.NEI && (
         <YrkesskadeAlert status={godkjentYrkesskade} getText={getText} />
       )}

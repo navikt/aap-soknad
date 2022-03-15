@@ -755,6 +755,13 @@
   resolved "https://registry.yarnpkg.com/@navikt/ds-css/-/ds-css-0.12.11.tgz#b6b46f8112319b6a5dc2d766da9a7430d63ce9eb"
   integrity sha512-ZrXBQpCFcsQqFN1M+WhbBK8xww9HN0hAal7vSXyBuarAfiWVHFpmfAa0fq6aeelEmCpI53/hmMQIscWrC4hznA==
 
+"@navikt/ds-icons@0.8.4-beta.0":
+  version "0.8.4-beta.0"
+  resolved "https://registry.yarnpkg.com/@navikt/ds-icons/-/ds-icons-0.8.4-beta.0.tgz#e8e6b5c258d13f30839aa8b82606151305594995"
+  integrity sha512-IiviGTStvKF04HqUYpoovlvkLhp7bntYQPm9JQ4FCFgcUm4zyVU2VrRlmQUFFP2DVVFxtyEaWT6gm16sQdpPiQ==
+  dependencies:
+    uuid "^8.3.2"
+
 "@navikt/ds-icons@^0.7.3":
   version "0.7.3"
   resolved "https://registry.yarnpkg.com/@navikt/ds-icons/-/ds-icons-0.7.3.tgz#ffe37e32cc5a0b3e640b9db0f95ff4c5f18c4002"

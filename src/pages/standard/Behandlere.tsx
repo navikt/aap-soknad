@@ -1,59 +1,121 @@
-import { BodyShort, Button, Label } from '@navikt/ds-react';
-import React from 'react';
+import { BodyLong, BodyShort, Button, Heading, Modal, Table, TextField } from '@navikt/ds-react';
+import React, { useState } from 'react';
 import { GetText } from '../../hooks/useTexts';
-import { Control, FieldErrors, FieldValues, useFieldArray } from 'react-hook-form';
-import TextFieldWrapper from '../../components/input/TextFieldWrapper';
+import { useFieldArray, useFormContext } from 'react-hook-form';
+import { FastlegeView } from '../../context/sokerOppslagContext';
+import { Delete, Add } from '@navikt/ds-icons';
 
 interface BehandlereProps {
   getText: GetText;
-  errors: FieldErrors;
-  control: Control<FieldValues>;
+  fastlege: FastlegeView;
 }
-enum JaEllerNei {
-  JA = 'ja',
-  NEI = 'nei',
-}
+export type Behandler = {
+  name: string;
+  gateadresse: string;
+  legekontor: string;
+  postnummer: string;
+  poststed: string;
+  telefon: string;
+};
+type Behandlere = {
+  behandlere: Behandler[];
+};
+const FIELD_ARRAY_NAME = 'behandlere';
 
-export const Behandlere = ({ getText, errors, control }: BehandlereProps) => {
-  const { fields, append, remove } = useFieldArray({ name: 'behandlere', control });
+export const Behandlere = ({ getText, fastlege }: BehandlereProps) => {
+  const [showModal, setShowModal] = useState<boolean>(false);
+  const [name, setName] = useState<string>('');
+  const [legekontor, setLegekontor] = useState<string>('');
+  const [gateadresse, setGateadresse] = useState<string>('');
+  const [postnummer, setPostnummer] = useState<string>('');
+  const [poststed, setPoststed] = useState<string>('');
+  const [telefon, setTelefon] = useState<string>('');
+  const { control } = useFormContext<Behandlere>();
+  const { fields, append, remove } = useFieldArray({
+    name: FIELD_ARRAY_NAME,
+    control,
+  });
   return (
     <>
-      <Label>Din registrerte fastlege</Label>
-      <BodyShort>Lege Legesen</BodyShort>
-      <BodyShort>Legenes legekontor</BodyShort>
-      <BodyShort>Bamseveien 21, 0101 Bodø</BodyShort>
-      {fields.map((field, index) => (
-        <div key={field.id}>
-          <TextFieldWrapper
-            control={control}
-            error={errors?.behandlere?.[index]?.firstname?.message}
-            label={getText('form.behandlere.firstname.label')}
-            name={`behandlere.${index}.firstname`}
-          />
-          <TextFieldWrapper
-            control={control}
-            error={errors?.behandlere?.[index]?.lastname?.message}
-            label={getText('form.behandlere.lastname.label')}
-            name={`behandlere.${index}.lastname`}
-          />
-          <TextFieldWrapper
-            control={control}
-            error={errors?.behandlere?.[index]?.telefon?.message}
-            label={getText('form.behandlere.telefon.label')}
-            name={`behandlere.${index}.telefon`}
-          />
-          <Button type="button" onClick={() => remove(index)}>
-            Fjern
-          </Button>
-        </div>
-      ))}
-      <Button
-        variant="primary"
-        type="button"
-        onClick={() => append({ firstname: '', lastname: '' })}
-      >
-        Legg til behandler
-      </Button>
+      <article>
+        <Heading size={'small'} level={'2'}>{`Fastlege`}</Heading>
+        <BodyShort>{fastlege?.fulltNavn}</BodyShort>
+        <BodyShort>{fastlege?.legekontor}</BodyShort>
+        <BodyShort>{fastlege?.adresse}</BodyShort>
+        <BodyShort>{`Telefon: ${fastlege?.telefon}`}</BodyShort>
+      </article>
+      <article>
+        <BodyLong>{getText('steps.fastlege.annenBehandler')}</BodyLong>
+        {fields.length > 0 && (
+          <Table size="medium">
+            <Table.Body>
+              {fields.map((field, index) => (
+                <Table.Row key={field.id}>
+                  <Table.DataCell>{`${field?.name}, ${field?.legekontor}`}</Table.DataCell>
+                  <Table.DataCell>{<Delete onClick={() => remove(index)} />}</Table.DataCell>
+                </Table.Row>
+              ))}
+            </Table.Body>
+          </Table>
+        )}
+        <Button variant="secondary" type="button" onClick={() => setShowModal(true)}>
+          <Add />
+          Legg til lege/behandler
+        </Button>
+        <Modal open={showModal} onClose={() => setShowModal(false)}>
+          <Modal.Content>
+            <Heading size={'small'} level={'2'}>{`Legg til lege eller behandler`}</Heading>
+            <TextField
+              label={getText('form.fastlege.annenbehandler.name.label')}
+              name={'name'}
+              onChange={(e) => e?.target?.value && setName(e?.target?.value)}
+            />
+            <TextField
+              label={getText('form.fastlege.annenbehandler.legekontor.label')}
+              name={'legekontor'}
+              onChange={(e) => e?.target?.value && setLegekontor(e?.target?.value)}
+            />
+            <TextField
+              label={getText('form.fastlege.annenbehandler.gateadresse.label')}
+              name={'gateadresse'}
+              onChange={(e) => e?.target?.value && setGateadresse(e?.target?.value)}
+            />
+            <TextField
+              label={getText('form.fastlege.annenbehandler.postnummer.label')}
+              name={'postnummer'}
+              onChange={(e) => e?.target?.value && setPostnummer(e?.target?.value)}
+            />
+            <TextField
+              label={getText('form.fastlege.annenbehandler.poststed.label')}
+              name={'poststed'}
+              onChange={(e) => e?.target?.value && setPoststed(e?.target?.value)}
+            />
+            <TextField
+              label={getText('form.fastlege.annenbehandler.telefon.label')}
+              name={'telefon'}
+              onChange={(e) => e?.target?.value && setTelefon(e?.target?.value)}
+            />
+            <Button
+              type="button"
+              onClick={() => {
+                append({ name, legekontor, gateadresse, postnummer, poststed, telefon });
+                setShowModal(false);
+              }}
+            >
+              Lagre
+            </Button>
+            <Button
+              type="button"
+              variant={'secondary'}
+              onClick={() => {
+                setShowModal(false);
+              }}
+            >
+              Avbryt
+            </Button>
+          </Modal.Content>
+        </Modal>
+      </article>
     </>
   );
 };

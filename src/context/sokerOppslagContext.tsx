@@ -14,18 +14,36 @@ type Barn = {
   navn: Navn;
   fødselsdato: string;
 };
-type SokerOppslagState = {
+export type Soker = {
   navn: Navn;
   fødseldato: string;
   barn: Array<Barn>;
 };
+type Fastlege = {
+  navn: Navn;
+};
+export type FastlegeView = {
+  fulltNavn: string;
+  legekontor: string;
+  adresse: string;
+  telefon: string;
+};
+export type SokerOppslagState = {
+  søker: Soker;
+  fastlege: Fastlege;
+};
 const søkerOppslagInitialValue = {
   barn: [],
 };
-const SokerOppslagContext = createContext<
-  | { oppslagState: SokerOppslagState; oppslagDispatch: Dispatch<DispatchSokerOppslagAction> }
-  | undefined
->(undefined);
+type SokerOppslagContextState = {
+  oppslagState: SokerOppslagState;
+  oppslagDispatch: Dispatch<DispatchSokerOppslagAction>;
+  søkerFulltNavn: string;
+  adresseFull: string;
+  personident: string;
+  fastlege: FastlegeView;
+};
+const SokerOppslagContext = createContext<SokerOppslagContextState | undefined>(undefined);
 
 function stateReducer(state: SokerOppslagState, action: DispatchSokerOppslagAction) {
   console.log(action.type, action.payload);
@@ -42,9 +60,32 @@ interface Props {
   children: ReactNode;
 }
 function SokerOppslagProvider({ children }: Props) {
+  const getFulltNavn = (navn: Navn) =>
+    `${navn?.fornavn}${navn?.mellomnavn ? ` ${navn?.mellomnavn}` : ''} ${navn?.etternavn}`;
+  const getAddressDescription = (kontaktInfo: any) =>
+    `${kontaktInfo?.adresse}, ${kontaktInfo?.postnr} ${kontaktInfo?.poststed}`;
   const [state, dispatch] = useReducer(stateReducer, søkerOppslagInitialValue);
+  const søkerFulltNavn = useMemo(() => getFulltNavn(state?.søker?.navn), [state]);
+  const adresseFull = useMemo(() => 'Veiveien 4, 0659 Huttiheita', [state]);
+  const personident = useMemo(() => '10029045645', [state]);
+  const fastlege: FastlegeView = useMemo(
+    () => ({
+      fulltNavn: getFulltNavn(state?.behandler?.navn),
+      legekontor: state?.behandler?.kontaktinformasjon?.kontor,
+      adresse: getAddressDescription(state?.behandler?.kontaktinformasjon),
+      telefon: state?.behandler?.kontaktinformasjon?.telefon,
+    }),
+    [state]
+  );
   const contextValue = useMemo(() => {
-    return { oppslagState: state, oppslagDispatch: dispatch };
+    return {
+      oppslagState: state,
+      oppslagDispatch: dispatch,
+      søkerFulltNavn,
+      adresseFull,
+      personident,
+      fastlege,
+    };
   }, [state, dispatch]);
   return (
     <SokerOppslagContext.Provider value={contextValue}>{children}</SokerOppslagContext.Provider>

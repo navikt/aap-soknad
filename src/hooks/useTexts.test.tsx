@@ -19,15 +19,6 @@ describe('useTexts', () => {
     },
   };
 
-  it('ingen treff på tekst gir nøkkel tilbake', () => {
-    const Component = () => {
-      const { getText } = useTexts(tekstpakke);
-      return <div>{getText('nøkkel.som.ikke.finnes')}</div>;
-    };
-    render(<Component />);
-    expect(screen.getByText('nøkkel.som.ikke.finnes')).toBeVisible();
-  });
-
   it('gir tekst tilbake', () => {
     const Component = () => {
       const { getText } = useTexts(tekstpakke);
