@@ -43,11 +43,7 @@ export enum StepNames {
   BARNETILLEGG = 'BARNETILLEGG',
   OPPSUMMERING = 'OPPSUMMERING',
 }
-const initFieldVals: SoknadStandard = {
-  behandlere: [],
-  utenlandsOpphold: [],
-  utenlandsArbeid: [],
-};
+const initFieldVals: SoknadStandard = {};
 export const StandardPage = (): JSX.Element => {
   const [isLoading] = useState<boolean>(false);
   const [showVeiledning, setShowVeiledning] = useState<boolean>(true);
@@ -65,6 +61,7 @@ export const StandardPage = (): JSX.Element => {
     watch,
     formState: { errors },
     reset,
+    setValue,
   } = useForm<SoknadStandard>({
     resolver: yupResolver(currentSchema),
     defaultValues: { ...initFieldVals },
@@ -141,10 +138,22 @@ export const StandardPage = (): JSX.Element => {
           </Heading>
           <FormErrorSummary errors={errors} />
           <Step order={1} name={StepNames.YRKESSKADE} label={'Yrkesskade'}>
-            <Yrkesskade getText={getText} errors={errors} control={control} watch={watch} />
+            <Yrkesskade
+              getText={getText}
+              errors={errors}
+              control={control}
+              watch={watch}
+              setValue={setValue}
+            />
           </Step>
           <Step order={2} name={StepNames.MEDLEMSKAP} label={'Tilknytning til Norge'}>
-            <Medlemskap getText={getText} errors={errors} control={control} watch={watch} />
+            <Medlemskap
+              getText={getText}
+              errors={errors}
+              control={control}
+              watch={watch}
+              setValue={setValue}
+            />
           </Step>
           <Step order={3} name={StepNames.FASTLEGE} label={'Fastlege'}>
             <Behandlere getText={getText} fastlege={fastlege} />

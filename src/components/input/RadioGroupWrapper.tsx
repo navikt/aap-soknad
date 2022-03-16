@@ -1,18 +1,23 @@
 import React from 'react';
 import { RadioGroup } from '@navikt/ds-react';
-import { Control, Controller } from 'react-hook-form';
+import { Controller, FieldError, FieldValues, UseControllerProps } from 'react-hook-form';
 
-export interface RadioProps {
-  name: string;
+export interface RadioProps<T> extends UseControllerProps<T> {
   legend?: string;
-  error?: string;
-  control: Control;
+  error: FieldError | undefined;
   children?: React.ReactChild | React.ReactChild[];
 }
-const RadioGroupWrapper = ({ children, name, legend, control, error }: RadioProps) => (
+const RadioGroupWrapper = <T extends FieldValues>({
+  children,
+  name,
+  legend,
+  control,
+  error,
+}: RadioProps<T>) => (
   <Controller
     name={name}
     control={control}
+    // @ts-ignore
     defaultValue={null}
     render={({ field: { value, onChange } }) => (
       <RadioGroup

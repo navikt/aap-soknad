@@ -15,17 +15,28 @@ interface TilknytningTilNorgeProps {
   getText: GetText;
   errors: FieldErrors;
   control: Control<SoknadStandard>;
+  setValue: any;
 }
 const UTENLANDSOPPHOLD = 'utenlandsOpphold';
 const BODD_I_NORGE = 'harBoddINorgeSiste5År';
 const ARBEID_I_NORGE = 'harArbeidetINorgeSiste5År';
+const MEDLEMSKAP = 'medlemskap';
 
-export const Medlemskap = ({ getText, control, errors, watch }: TilknytningTilNorgeProps) => {
+export const Medlemskap = ({
+  getText,
+  control,
+  errors,
+  watch,
+  setValue,
+}: TilknytningTilNorgeProps) => {
   const [showUtenlandsPeriodeModal, setShowUtenlandsPeriodeModal] = useState<boolean>(false);
   const [countryList, setCountryList] = useState<string[][]>([]);
-  const utenlandsOppholdFieldArray = useFieldArray({ name: UTENLANDSOPPHOLD, control });
-  const boddINorge = watch(`${BODD_I_NORGE}`);
-  const arbeidINorge = watch(`${ARBEID_I_NORGE}`);
+  const utenlandsOppholdFieldArray = useFieldArray({
+    name: `${MEDLEMSKAP}.${UTENLANDSOPPHOLD}`,
+    control,
+  });
+  const boddINorge = watch(`${MEDLEMSKAP}.${BODD_I_NORGE}.value`);
+  const arbeidINorge = watch(`${MEDLEMSKAP}.${ARBEID_I_NORGE}.value`);
   useEffect(() => {
     const getCountries = () => {
       const list = Object.entries(countries.getNames('nb', { select: 'official' }));
@@ -33,13 +44,17 @@ export const Medlemskap = ({ getText, control, errors, watch }: TilknytningTilNo
     };
     getCountries();
   }, [setCountryList]);
+  useEffect(() => {
+    setValue(`${MEDLEMSKAP}.${BODD_I_NORGE}.label`, getText('form.utenlandsopphold.radiolegend'));
+    setValue(`${MEDLEMSKAP}.${ARBEID_I_NORGE}.label`, getText('form.utenlandsarbeid.radiolegend'));
+  }, [getText]);
   return (
     <>
       <RadioGroupWrapper
-        name={BODD_I_NORGE}
+        name={`${MEDLEMSKAP}.${BODD_I_NORGE}.value`}
         legend={getText('form.utenlandsopphold.radiolegend')}
         control={control}
-        error={errors?.[BODD_I_NORGE]?.message}
+        error={errors?.[MEDLEMSKAP]?.[BODD_I_NORGE]?.message}
       >
         <Radio value={JaEllerNei.JA}>
           <BodyShort>Ja</BodyShort>
@@ -63,10 +78,10 @@ export const Medlemskap = ({ getText, control, errors, watch }: TilknytningTilNo
       />
       {boddINorge === JaEllerNei.NEI && (
         <RadioGroupWrapper
-          name={ARBEID_I_NORGE}
+          name={`${MEDLEMSKAP}.${ARBEID_I_NORGE}.value`}
           legend={getText('form.utenlandsarbeid.radiolegend')}
           control={control}
-          error={errors?.[ARBEID_I_NORGE]?.message}
+          error={errors?.[MEDLEMSKAP]?.[ARBEID_I_NORGE]?.message}
         >
           <Radio value={JaEllerNei.JA}>
             <BodyShort>Ja</BodyShort>

@@ -1,13 +1,15 @@
 import { GetText } from '../../hooks/useTexts';
 import { Control, FieldErrors, FieldValues, UseFormWatch } from 'react-hook-form';
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { Alert, BodyShort, Radio } from '@navikt/ds-react';
 import RadioGroupWrapper from '../../components/input/RadioGroupWrapper';
+import SoknadStandard from '../../types/SoknadStandard';
 
 interface YrkesskadeProps {
+  setValue: any;
   getText: GetText;
   errors: FieldErrors;
-  control: Control<FieldValues>;
+  control: Control<SoknadStandard>;
   watch: UseFormWatch<FieldValues>;
 }
 type YrkesskadeAlertProps = {
@@ -58,7 +60,7 @@ const YrkesskadeAlert = ({ status, getText, yrkesskadeStatuser }: YrkesskadeAler
   );
 };
 
-export const Yrkesskade = ({ getText, errors, control, watch }: YrkesskadeProps) => {
+export const Yrkesskade = ({ getText, errors, control, watch, setValue }: YrkesskadeProps) => {
   const GodkjentYrkesskadeStatus: YrkesSkader = useMemo(
     () => ({
       JA: getText(`form.${YRKESSKADE}.ja`),
@@ -69,6 +71,7 @@ export const Yrkesskade = ({ getText, errors, control, watch }: YrkesskadeProps)
     [getText]
   );
   const godkjentYrkesskade = watch(`${YRKESSKADE}.value`);
+  useEffect(() => setValue(`${YRKESSKADE}.label`, getText(`form.${YRKESSKADE}.legend`)), [getText]);
   return (
     <>
       <BodyShort>{getText(`steps.${YRKESSKADE}.ingress`)}</BodyShort>
