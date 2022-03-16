@@ -162,7 +162,12 @@ export const StandardPage = (): JSX.Element => {
             <Student getText={getText} errors={errors} control={control} setValue={setValue} />
           </Step>
           <Step order={5} name={StepNames.ANDRE_UTBETALINGER} label={'Andre utbetalinger'}>
-            <AndreUtbetalinger getText={getText} errors={errors} control={control} watch={watch} />
+            <AndreUtbetalinger
+              getText={getText}
+              errors={errors}
+              control={control}
+              setValue={setValue}
+            />
           </Step>
           <Step order={6} name={StepNames.BARNETILLEGG} label={'Barnetilleggg'}>
             <Barnetillegg

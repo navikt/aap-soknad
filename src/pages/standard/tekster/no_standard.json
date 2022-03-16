@@ -79,13 +79,8 @@
       "title": "Student"
     },
     "andre_utbetalinger": {
-      "title": "Andre utbetalinger",
-      "ingress": "Hvis du får utbetalinger fra NAV, arveidsgiver eller andre, kan arveidsavklaringspengene reduseres eller falle bort i perioden du får utbetalingen",
-      "vedlegg": {
-        "title": "Du må legge med følgende:",
-        "bullet1": "Dokumentasjon av utbetalinger eller goder fra arbeidsgiver.",
-        "bullet2": "Kopi av inngått sluttpakke, avtale om etterlønn eller lignende."
-      }
+      "guide": "Hvis du får utbetalinger fra NAV, arbeidsgiver eller andre, kan arbeidsavklaringspengene reduseres eller falle bort i perioden du får utbetalingen.",
+      "title": "Andre utbetalinger"
     }
   },
   "form": {
@@ -161,36 +156,22 @@
       "søknadsendt": "Nei, jeg har ikke en godkjent yrkesskade eller yrkessykdom, men jeg har sendt inn en søknad om godkjenning av yrkesskade eller yrkessykdom.",
       "vetikke": "Vet ikke"
     },
-    "andreutbetalinger": {
-      "legend": "Mottar du, eller har du nylig søkt om, noen av disse utbetalingene?",
-      "kvalifiseringsstønad": "Kvalifiseringsstønad (valgfritt)",
-      "sosialhjelp": "Økonomisk sosialhjelp (valgfritt)",
-      "introduksjonsstønad": "Introduksjonsstønad(introduksjonsprogrammet) (valgfritt)",
-      "omsorgsstønad": "Omsorgsstønad fra kommunen (valgfritt)",
-      "fosterhjemsgodtgjørelse": "Fosterhjemsgodtgjørelse, enten til deg eller ektefellen/partneren/samboeren din (valgfritt)",
-      "verv": "Godtgjørelse eller lønn for verv (valgfritt)",
-      "utland": "Ytelser fra utenlandske trygdemyndigheter (valgfritt)",
-      "annet": "Annet, for eksempel pensjoner eller forsikringsordninger (valgfritt)",
-      "nei": "Nei, jeg hverken mottar, eller har nylig søkt om noen av disse utbetalingene (valgfritt)"
-    },
-    "lønnellersykepenger": {
-      "legend": "Mottar du lønn eller sykepenger?",
-      "required": "Venligst velg et av alternativene",
-      "ja": "Ja, jeg mottar lønn eller sykepenger",
-      "nei": "Nei, jeg mottar hverken lønn eller sykepenger",
-      "vetikke": "Vet ikke"
-    },
-    "andregoder": {
-      "legend": "Har du fått eller får sluttpakke, etterlønn eller andre goder fra nåværende eller tidligere arbeidsgivere?",
-      "required": "Venligst velg et av alternativene",
-      "ja": "Ja, jeg har fått eller får sluttpakke, etterlønn eller andre goder fra nåværende eller tidligere arbeidsgivere",
-      "nei": "Nei, jeg verken har fått eller får sluttpakke, etterlønn eller andre goder fra nåværende eller tidligere arbeidsgivere",
-      "vetikke": "Vet ikke",
-      "utbetalingsmåte": {
-        "legend": "Hvordan mottar du utbetalingen eller godet?",
-        "required": "Du må fylle ut: Hvordan mottar du utbetalingen eller godet?",
-        "engangsbeløp": "Som engangsbeløp",
-        "løpende": "Som løpende utbetaling (Dette er en utbetaling som kommer i flere delbetalinger over en periode)."
+    "andreUtbetalinger": {
+      "stønad": {
+        "legend": "Mottar du, eller har du nylig søkt om, noen av disse utbetalingene?",
+        "omsorgsstønad": "Omsorgsstønad fra kommunen",
+        "fosterhjemsgodtgjørelse": "Fosterhjemsgodtgjørelse, enten til deg eller ektefellen/partneren/samboeren din",
+        "verv": "Godtgjørelse eller lønn for verv",
+        "utland": "Ytelser fra utenlandske trygdemyndigheter",
+        "annet": "Annet, for eksempel pensjoner eller forsikringsordninger",
+        "nei": "Nei, jeg hverken mottar, eller har nylig søkt om noen av disse utbetalingene"
+      },
+      "lønn": {
+        "legend": "Har du fått eller får du sluttpakke, etterlønn eller andre goder fra nåværende eller tidligere arbeidsgivere?",
+        "required": "Venligst velg et av alternativene",
+        "ja": "Ja, jeg har fått eller får sluttpakke, etterlønn eller andre goder fra nåværende eller tidligere arbeidsgivere",
+        "nei": "Nei, jeg verken har fått eller får sluttpakke, etterlønn eller andre goder fra nåværende eller tidligere arbeidsgivere",
+        "vetikke": "Vet ikke"
       }
     },
     "ferie": {

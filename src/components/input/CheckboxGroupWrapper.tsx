@@ -14,6 +14,7 @@ const CheckboxGroupWrapper = ({ children, name, legend, size, control, error }: 
   <Controller
     name={name}
     control={control}
+    defaultValue={[]}
     render={({ field: { name, value, onChange } }) => (
       <CheckboxGroup
         size={size}

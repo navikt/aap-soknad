@@ -22,12 +22,17 @@ export type Behandler = {
 type Student = {
   erStudent?: FieldAndLabel<JaEllerNei>;
 };
+type AndreUtbetalinger = {
+  lønn?: FieldAndLabel<string>;
+  stønad?: FieldAndLabel<Array<string>>;
+};
 interface SoknadStandard {
   bekreftOpplysninger?: JaEllerNei;
   yrkesskade?: Yrkesskade;
   medlemskap?: Medlemskap;
   behandlere?: Behandler[];
   student?: Student;
+  andreUtbetalinger?: AndreUtbetalinger;
 }
 
 export default SoknadStandard;

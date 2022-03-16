@@ -1,155 +1,94 @@
-import { Alert, BodyShort, Checkbox, Radio } from '@navikt/ds-react';
-import React from 'react';
+import { BodyShort, Checkbox, Radio } from '@navikt/ds-react';
+import React, { useEffect, useMemo } from 'react';
 import { GetText } from '../../hooks/useTexts';
-import { Control, FieldErrors, FieldValues, UseFormWatch } from 'react-hook-form';
+import { Control, FieldErrors } from 'react-hook-form';
 import CheckboxGroupWrapper from '../../components/input/CheckboxGroupWrapper';
 import RadioGroupWrapper from '../../components/input/RadioGroupWrapper';
-import DatoVelgerWrapper from '../../components/input/DatoVelgerWrapper';
+import SoknadStandard from '../../types/SoknadStandard';
 
 interface AndreUtbetalingerProps {
-  watch: UseFormWatch<FieldValues>;
+  setValue: any;
   getText: GetText;
   errors: FieldErrors;
-  control: Control<FieldValues>;
+  control: Control<SoknadStandard>;
 }
-enum JaNeiVetikke {
-  JA = 'JA',
-  NEI = 'NEI',
-  VET_IKKE = 'VET_IKKE',
-}
-enum Ferie {
-  JA_DATOER = 'JA_DATOER',
-  JA_DAGER = 'JA_DAGER',
-  NEI = 'NEI',
-  VET_IKKE = 'VET_IKKE',
-}
-enum Utbetalingsmåte {
-  ENGANGSBELØP = 'ENGANGSBELØP',
-  LØPENDE = 'LØPENDE',
-}
+const ANDRE_UTBETALINGER = 'andreUtbetalinger';
+const LØNN = 'lønn';
+const STØNAD = 'stønad';
 
-export const AndreUtbetalinger = ({ getText, errors, control, watch }: AndreUtbetalingerProps) => {
-  const lønnEllerSykepenger = watch('lønnEllerSykepenger');
-  const feriePlaner = watch('ferie.harPlaner');
-  const fårAndreGoder = watch('andreGoder.fårAndreGoder');
+export const AndreUtbetalinger = ({
+  getText,
+  errors,
+  control,
+  setValue,
+}: AndreUtbetalingerProps) => {
+  const LønnsAlternativer = useMemo(
+    () => ({
+      JA: getText(`form.${ANDRE_UTBETALINGER}.${LØNN}.ja`),
+      NEI: getText(`form.${ANDRE_UTBETALINGER}.${LØNN}.nei`),
+      VET_IKKE: getText(`form.${ANDRE_UTBETALINGER}.${LØNN}.vetikke`),
+    }),
+    [getText]
+  );
+  const StønadAlternativer = useMemo(
+    () => ({
+      OMSORGSSTØNAD: getText(`form.${ANDRE_UTBETALINGER}.${STØNAD}.omsorgsstønad`),
+      FOSTERHJEMSGODTGJØRELSE: getText(
+        `form.${ANDRE_UTBETALINGER}.${STØNAD}.fosterhjemsgodtgjørelse`
+      ),
+      VERV: getText(`form.${ANDRE_UTBETALINGER}.${STØNAD}.verv`),
+      UTLAND: getText(`form.${ANDRE_UTBETALINGER}.${STØNAD}.utland`),
+      ANNET: getText(`form.${ANDRE_UTBETALINGER}.${STØNAD}.annet`),
+      NEI: getText(`form.${ANDRE_UTBETALINGER}.${STØNAD}.nei`),
+    }),
+    [getText]
+  );
+  useEffect(() => {
+    setValue(
+      `${ANDRE_UTBETALINGER}.${STØNAD}.label`,
+      getText(`form.${ANDRE_UTBETALINGER}.${STØNAD}.legend`)
+    );
+    setValue(
+      `${ANDRE_UTBETALINGER}.${LØNN}.label`,
+      getText(`form.${ANDRE_UTBETALINGER}.${LØNN}.legend`)
+    );
+  }, [getText]);
   return (
     <>
-      <BodyShort>{getText('steps.andre_utbetalinger.ingress')}</BodyShort>
+      <RadioGroupWrapper
+        legend={getText(`form.${ANDRE_UTBETALINGER}.${LØNN}.legend`)}
+        name={`${ANDRE_UTBETALINGER}.${LØNN}.value`}
+        control={control}
+        error={errors?.[ANDRE_UTBETALINGER]?.[LØNN]?.message}
+      >
+        <Radio value={LønnsAlternativer.JA}>
+          <BodyShort>{LønnsAlternativer.JA}</BodyShort>
+        </Radio>
+        <Radio value={LønnsAlternativer.NEI}>
+          <BodyShort>{LønnsAlternativer.NEI}</BodyShort>
+        </Radio>
+        <Radio value={LønnsAlternativer.VET_IKKE}>
+          <BodyShort>{LønnsAlternativer.VET_IKKE}</BodyShort>
+        </Radio>
+      </RadioGroupWrapper>
       <CheckboxGroupWrapper
-        name={'andreutbetalinger'}
+        name={`${ANDRE_UTBETALINGER}.${STØNAD}.value`}
         control={control}
         size="medium"
-        legend={getText('form.andreutbetalinger.legend')}
+        legend={getText(`form.${ANDRE_UTBETALINGER}.${STØNAD}.legend`)}
+        error={errors?.[ANDRE_UTBETALINGER]?.[STØNAD]?.message}
       >
-        <Checkbox value="Kvalifiseringsstønad">
-          {getText('form.andreutbetalinger.kvalifiseringsstønad')}
+        <Checkbox value={StønadAlternativer.OMSORGSSTØNAD}>
+          {StønadAlternativer.OMSORGSSTØNAD}
         </Checkbox>
-        <Checkbox value="sosialhjelp">{getText('form.andreutbetalinger.sosialhjelp')}</Checkbox>
-        <Checkbox value="introduksjonsstønad">
-          {getText('form.andreutbetalinger.introduksjonsstønad')}
+        <Checkbox value={StønadAlternativer.FOSTERHJEMSGODTGJØRELSE}>
+          {StønadAlternativer.FOSTERHJEMSGODTGJØRELSE}
         </Checkbox>
-        <Checkbox value="omsorgsstønad">{getText('form.andreutbetalinger.omsorgsstønad')}</Checkbox>
-        <Checkbox value="forsterhjemsgodtgjørelse">
-          {getText('form.andreutbetalinger.forsterhjemsgodtgjørelse')}
-        </Checkbox>
-        <Checkbox value="verv">{getText('form.andreutbetalinger.verv')}</Checkbox>
-        <Checkbox value="utland">{getText('form.andreutbetalinger.utland')}</Checkbox>
-        <Checkbox value="annet">{getText('form.andreutbetalinger.annet')}</Checkbox>
-        <Checkbox value="nei">{getText('form.andreutbetalinger.nei')}</Checkbox>
+        <Checkbox value={StønadAlternativer.VERV}>{StønadAlternativer.VERV}</Checkbox>
+        <Checkbox value={StønadAlternativer.UTLAND}>{StønadAlternativer.UTLAND}</Checkbox>
+        <Checkbox value={StønadAlternativer.ANNET}>{StønadAlternativer.ANNET}</Checkbox>
+        <Checkbox value={StønadAlternativer.NEI}>{StønadAlternativer.NEI}</Checkbox>
       </CheckboxGroupWrapper>
-      <RadioGroupWrapper
-        legend={getText('form.lønnellersykepenger.legend')}
-        name={'lønnEllerSykepenger'}
-        control={control}
-        error={errors?.lønnEllerSykepenger?.message}
-      >
-        <Radio value={JaNeiVetikke.JA}>
-          <BodyShort>{getText('form.lønnellersykepenger.ja')}</BodyShort>
-        </Radio>
-        <Radio value={JaNeiVetikke.NEI}>
-          <BodyShort>{getText('form.lønnellersykepenger.nei')}</BodyShort>
-        </Radio>
-        <Radio value={JaNeiVetikke.VET_IKKE}>
-          <BodyShort>{getText('form.lønnellersykepenger.vetikke')}</BodyShort>
-        </Radio>
-      </RadioGroupWrapper>
-      {lønnEllerSykepenger === JaNeiVetikke.JA && (
-        <RadioGroupWrapper
-          legend={getText('form.ferie.legend')}
-          name={'ferie.harPlaner'}
-          control={control}
-          error={errors?.ferie?.message}
-        >
-          <Radio value={Ferie.JA_DATOER}>
-            <BodyShort>{getText('form.ferie.ja_datoer')}</BodyShort>
-          </Radio>
-          <Radio value={Ferie.JA_DAGER}>
-            <BodyShort>{getText('form.ferie.ja_dager')}</BodyShort>
-          </Radio>
-          <Radio value={Ferie.NEI}>
-            <BodyShort>{getText('form.ferie.nei')}</BodyShort>
-          </Radio>
-          <Radio value={Ferie.VET_IKKE}>
-            <BodyShort>{getText('form.ferie.vetikke')}</BodyShort>
-          </Radio>
-        </RadioGroupWrapper>
-      )}
-      {lønnEllerSykepenger === JaNeiVetikke.JA && feriePlaner === Ferie.JA_DATOER && (
-        <>
-          <DatoVelgerWrapper
-            name="ferie.fromdate"
-            label={getText('form.ferie.fromdate.label')}
-            control={control}
-            error={errors.ferie?.fromdate?.message}
-          />
-          <DatoVelgerWrapper
-            name="ferie.todate"
-            label={getText('form.ferie.todate.label')}
-            control={control}
-            error={errors.ferie?.todate?.message}
-          />
-        </>
-      )}
-      <RadioGroupWrapper
-        legend={getText('form.andregoder.legend')}
-        name={'andreGoder.fårAndreGoder'}
-        control={control}
-        error={errors?.andreGoder?.message}
-      >
-        <Radio value={JaNeiVetikke.JA}>
-          <BodyShort>{getText('form.andregoder.ja')}</BodyShort>
-        </Radio>
-        <Radio value={JaNeiVetikke.NEI}>
-          <BodyShort>{getText('form.andregoder.nei')}</BodyShort>
-        </Radio>
-        <Radio value={JaNeiVetikke.VET_IKKE}>
-          <BodyShort>{getText('form.andregoder.vetikke')}</BodyShort>
-        </Radio>
-      </RadioGroupWrapper>
-      {fårAndreGoder === JaNeiVetikke.JA && (
-        <>
-          <RadioGroupWrapper
-            legend={getText('form.andregoder.utbetalingsmåte.legend')}
-            name={'andreGoder.utbetalingsmåte'}
-            control={control}
-            error={errors?.andreGoder?.message}
-          >
-            <Radio value={Utbetalingsmåte.ENGANGSBELØP}>
-              <BodyShort>{getText('form.andregoder.utbetalingsmåte.engangsbeløp')}</BodyShort>
-            </Radio>
-            <Radio value={Utbetalingsmåte.LØPENDE}>
-              <BodyShort>{getText('form.andregoder.utbetalingsmåte.løpende')}</BodyShort>
-            </Radio>
-          </RadioGroupWrapper>
-          <Alert variant="info">
-            <BodyShort>{getText('steps.andre_utbetalinger.vedlegg.title')}</BodyShort>
-            <ul>
-              <li>{getText('steps.andre_utbetalinger.vedlegg.bullet1')}</li>
-              <li>{getText('steps.andre_utbetalinger.vedlegg.bullet2')}</li>
-            </ul>
-          </Alert>
-        </>
-      )}
     </>
   );
 };
