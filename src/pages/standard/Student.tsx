@@ -4,21 +4,28 @@ import { GetText } from '../../hooks/useTexts';
 import RadioGroupWrapper from '../../components/input/RadioGroupWrapper';
 import { BodyShort, Radio } from '@navikt/ds-react';
 import { JaEllerNei } from '../../types/Generic';
-import React from 'react';
+import React, { useEffect } from 'react';
 
+const STUDENT = 'student';
+const ER_STUDENT = 'erStudent';
 interface StudentProps {
   control: Control<SoknadStandard>;
   getText: GetText;
   errors: FieldErrors;
+  setValue: any;
 }
 
-const Student = ({ getText, errors, control }: StudentProps) => {
+const Student = ({ getText, errors, control, setValue }: StudentProps) => {
+  useEffect(
+    () => setValue(`${STUDENT}.${ER_STUDENT}.label`, getText(`form.${STUDENT}.legend`)),
+    [getText]
+  );
   return (
     <RadioGroupWrapper
-      name={'erStudent'}
-      legend={getText('form.student.legend')}
+      name={`${STUDENT}.${ER_STUDENT}.value`}
+      legend={getText(`form.${STUDENT}.legend`)}
       control={control}
-      error={errors?.erStudent?.message}
+      error={errors?.[STUDENT]?.[ER_STUDENT]?.message}
     >
       <Radio value={JaEllerNei.JA}>
         <BodyShort>Ja</BodyShort>

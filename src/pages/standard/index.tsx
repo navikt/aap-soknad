@@ -156,10 +156,10 @@ export const StandardPage = (): JSX.Element => {
             />
           </Step>
           <Step order={3} name={StepNames.FASTLEGE} label={'Fastlege'}>
-            <Behandlere getText={getText} fastlege={fastlege} />
+            <Behandlere getText={getText} fastlege={fastlege} control={control} />
           </Step>
           <Step order={4} name={StepNames.STUDENT} label={'Student'}>
-            <Student getText={getText} errors={errors} control={control} />
+            <Student getText={getText} errors={errors} control={control} setValue={setValue} />
           </Step>
           <Step order={5} name={StepNames.ANDRE_UTBETALINGER} label={'Andre utbetalinger'}>
             <AndreUtbetalinger getText={getText} errors={errors} control={control} watch={watch} />

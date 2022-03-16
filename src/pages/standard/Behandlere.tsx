@@ -1,28 +1,19 @@
 import { BodyLong, BodyShort, Button, Heading, Modal, Table, TextField } from '@navikt/ds-react';
 import React, { useState } from 'react';
 import { GetText } from '../../hooks/useTexts';
-import { useFieldArray, useFormContext } from 'react-hook-form';
+import { Control, useFieldArray } from 'react-hook-form';
 import { FastlegeView } from '../../context/sokerOppslagContext';
 import { Delete, Add } from '@navikt/ds-icons';
+import SoknadStandard from '../../types/SoknadStandard';
 
 interface BehandlereProps {
   getText: GetText;
   fastlege: FastlegeView | undefined;
+  control: Control<SoknadStandard>;
 }
-export type Behandler = {
-  name: string;
-  gateadresse: string;
-  legekontor: string;
-  postnummer: string;
-  poststed: string;
-  telefon: string;
-};
-type Behandlere = {
-  behandlere: Behandler[];
-};
 const FIELD_ARRAY_NAME = 'behandlere';
 
-export const Behandlere = ({ getText, fastlege }: BehandlereProps) => {
+export const Behandlere = ({ getText, fastlege, control }: BehandlereProps) => {
   const [showModal, setShowModal] = useState<boolean>(false);
   const [name, setName] = useState<string>('');
   const [legekontor, setLegekontor] = useState<string>('');
@@ -30,7 +21,6 @@ export const Behandlere = ({ getText, fastlege }: BehandlereProps) => {
   const [postnummer, setPostnummer] = useState<string>('');
   const [poststed, setPoststed] = useState<string>('');
   const [telefon, setTelefon] = useState<string>('');
-  const { control } = useFormContext<Behandlere>();
   const { fields, append, remove } = useFieldArray({
     name: FIELD_ARRAY_NAME,
     control,

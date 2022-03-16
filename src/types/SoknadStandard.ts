@@ -1,6 +1,5 @@
 import { UtenlandsPeriode } from '../pages/standard/UtenlandsPeriodeVelger/UtenlandsPeriodeVelger';
 import { JaEllerNei } from './Generic';
-import { Behandler } from '../pages/standard/Behandlere';
 
 type FieldAndLabel<T> = {
   label: string;
@@ -12,13 +11,23 @@ type Medlemskap = {
   harArbeidetINorgeSiste5År?: FieldAndLabel<JaEllerNei>;
   utenlandsOpphold?: UtenlandsPeriode[];
 };
+export type Behandler = {
+  name: string;
+  gateadresse: string;
+  legekontor: string;
+  postnummer: string;
+  poststed: string;
+  telefon: string;
+};
+type Student = {
+  erStudent?: FieldAndLabel<JaEllerNei>;
+};
 interface SoknadStandard {
   bekreftOpplysninger?: JaEllerNei;
   yrkesskade?: Yrkesskade;
   medlemskap?: Medlemskap;
-  harAnnenBehandler?: JaEllerNei;
   behandlere?: Behandler[];
-  erStudent?: JaEllerNei;
+  student?: Student;
 }
 
 export default SoknadStandard;
