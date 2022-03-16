@@ -21,6 +21,7 @@ import {
   hentSoknadState,
   SøknadType,
   slettLagretSoknadState,
+  setSøknadData,
 } from '../../context/soknadContext';
 import { Veiledning } from './Veiledning';
 import { hentSokerOppslag, useSokerOppslag } from '../../context/sokerOppslagContext';
@@ -100,6 +101,7 @@ export const StandardPage = (): JSX.Element => {
   );
   const myHandleSubmit: SubmitHandler<UseFormProps<SoknadStandard>> = async (data) => {
     console.log(data);
+    setSøknadData(søknadDispatch, data);
     completeAndGoToNextStep(stepWizardDispatch);
   };
   const onDeleteSøknad = async () => {

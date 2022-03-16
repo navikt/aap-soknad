@@ -63,6 +63,10 @@ export const slettLagretSoknadState = async (
   return !!deleteResponse?.ok;
 };
 
+export const setSøknadData = (dispatch: Dispatch<SoknadAction>, data: SoknadForm) => {
+  dispatch({ type: SoknadActionKeys.SET_SOKNAD, payload: data });
+};
+
 export const SoknadContext = createContext<SoknadContextData | undefined>(undefined);
 
 export const SoknadContextProvider = ({ children }: Props) => {
