@@ -1,40 +1,31 @@
-import {
-  BodyShort,
-  Heading,
-  RadioGroup,
-  Radio,
-  Button,
-  Ingress,
-  Table,
-  BodyLong,
-} from '@navikt/ds-react';
+import { BodyShort, Radio, Button, Table, BodyLong } from '@navikt/ds-react';
 import React, { useState, useEffect } from 'react';
 import { GetText } from '../../hooks/useTexts';
-import { FieldErrors, useFieldArray, useFormContext } from 'react-hook-form';
+import { Control, FieldErrors, FieldValues, useFieldArray, UseFormWatch } from 'react-hook-form';
 import countries from 'i18n-iso-countries';
 import { JaEllerNei } from '../../types/Generic';
 import { Add, Delete } from '@navikt/ds-icons';
-import UtenlandsPeriodeVelger, {
-  UtenlandsPeriode,
-} from './UtenlandsPeriodeVelger/UtenlandsPeriodeVelger';
+import UtenlandsPeriodeVelger from './UtenlandsPeriodeVelger/UtenlandsPeriodeVelger';
 import { formatDate } from '../../utils/date';
+import RadioGroupWrapper from '../../components/input/RadioGroupWrapper';
+import SoknadStandard from '../../types/SoknadStandard';
 
 interface TilknytningTilNorgeProps {
+  watch: UseFormWatch<FieldValues>;
   getText: GetText;
   errors: FieldErrors;
+  control: Control<SoknadStandard>;
 }
 const UTENLANDSOPPHOLD = 'utenlandsOpphold';
-type Utenlandsopphold = {
-  [UTENLANDSOPPHOLD]: UtenlandsPeriode[];
-};
+const BODD_I_NORGE = 'harBoddINorgeSiste5År';
+const ARBEID_I_NORGE = 'harArbeidetINorgeSiste5År';
 
-export const Medlemskap = ({ getText }: TilknytningTilNorgeProps) => {
+export const Medlemskap = ({ getText, control, errors, watch }: TilknytningTilNorgeProps) => {
   const [showUtenlandsPeriodeModal, setShowUtenlandsPeriodeModal] = useState<boolean>(false);
-  const [opphold, setOpphold] = useState<JaEllerNei>(JaEllerNei.JA);
-  const [arbeid, setArbeid] = useState<JaEllerNei>(JaEllerNei.JA);
   const [countryList, setCountryList] = useState<string[][]>([]);
-  const { control } = useFormContext<Utenlandsopphold>();
   const utenlandsOppholdFieldArray = useFieldArray({ name: UTENLANDSOPPHOLD, control });
+  const boddINorge = watch(`${BODD_I_NORGE}`);
+  const arbeidINorge = watch(`${ARBEID_I_NORGE}`);
   useEffect(() => {
     const getCountries = () => {
       const list = Object.entries(countries.getNames('nb', { select: 'official' }));
@@ -44,16 +35,11 @@ export const Medlemskap = ({ getText }: TilknytningTilNorgeProps) => {
   }, [setCountryList]);
   return (
     <>
-      <Heading size={'small'} level={'2'}>
-        {getText('steps.tilknytningTilNorge.heading')}
-      </Heading>
-      <Ingress>{getText('steps.tilknytningTilNorge.opphold.ingress')}</Ingress>
-      <RadioGroup
-        value={opphold}
-        onChange={(val) => {
-          setOpphold(val as JaEllerNei);
-        }}
+      <RadioGroupWrapper
+        name={BODD_I_NORGE}
         legend={getText('form.utenlandsopphold.radiolegend')}
+        control={control}
+        error={errors?.[BODD_I_NORGE]?.message}
       >
         <Radio value={JaEllerNei.JA}>
           <BodyShort>Ja</BodyShort>
@@ -61,7 +47,7 @@ export const Medlemskap = ({ getText }: TilknytningTilNorgeProps) => {
         <Radio value={JaEllerNei.NEI}>
           <BodyShort>Nei</BodyShort>
         </Radio>
-      </RadioGroup>
+      </RadioGroupWrapper>
       <UtenlandsPeriodeVelger
         open={showUtenlandsPeriodeModal}
         onSave={(data) => {
@@ -75,13 +61,12 @@ export const Medlemskap = ({ getText }: TilknytningTilNorgeProps) => {
         heading={getText('steps.medlemskap.utenlandsPeriode.title')}
         ingress={getText('steps.medlemskap.utenlandsPeriode.ingress')}
       />
-      {opphold === JaEllerNei.NEI && (
-        <RadioGroup
-          value={arbeid}
-          onChange={(val) => {
-            setArbeid(val as JaEllerNei);
-          }}
+      {boddINorge === JaEllerNei.NEI && (
+        <RadioGroupWrapper
+          name={ARBEID_I_NORGE}
           legend={getText('form.utenlandsarbeid.radiolegend')}
+          control={control}
+          error={errors?.[ARBEID_I_NORGE]?.message}
         >
           <Radio value={JaEllerNei.JA}>
             <BodyShort>Ja</BodyShort>
@@ -89,9 +74,9 @@ export const Medlemskap = ({ getText }: TilknytningTilNorgeProps) => {
           <Radio value={JaEllerNei.NEI}>
             <BodyShort>Nei</BodyShort>
           </Radio>
-        </RadioGroup>
+        </RadioGroupWrapper>
       )}
-      {arbeid === JaEllerNei.NEI &&
+      {arbeidINorge === JaEllerNei.NEI &&
         utenlandsOppholdFieldArray?.fields?.map((field, index) => (
           <Table.Row key={field.id}>
             <Table.DataCell>{`${field?.land.split(':')?.[1]} ${formatDate(
@@ -105,7 +90,7 @@ export const Medlemskap = ({ getText }: TilknytningTilNorgeProps) => {
             </Table.DataCell>
           </Table.Row>
         ))}
-      {arbeid === JaEllerNei.NEI && (
+      {arbeidINorge === JaEllerNei.NEI && (
         <>
           <BodyLong>{getText('steps.medlemskap.utenlandsPeriode.info')}</BodyLong>
           <Button

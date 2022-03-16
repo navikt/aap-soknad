@@ -144,7 +144,7 @@ export const StandardPage = (): JSX.Element => {
             <Yrkesskade getText={getText} errors={errors} control={control} watch={watch} />
           </Step>
           <Step order={2} name={StepNames.MEDLEMSKAP} label={'Tilknytning til Norge'}>
-            <Medlemskap getText={getText} errors={errors} control={control} />
+            <Medlemskap getText={getText} errors={errors} control={control} watch={watch} />
           </Step>
           <Step order={3} name={StepNames.FASTLEGE} label={'Fastlege'}>
             <Behandlere getText={getText} fastlege={fastlege} />
