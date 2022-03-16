@@ -1,4 +1,4 @@
-import { Control, FieldErrors, UseFormProps } from 'react-hook-form';
+import { Control, FieldErrors } from 'react-hook-form';
 import SoknadStandard from '../../types/SoknadStandard';
 import { GetText } from '../../hooks/useTexts';
 import RadioGroupWrapper from '../../components/input/RadioGroupWrapper';
@@ -7,7 +7,7 @@ import { JaEllerNei } from '../../types/Generic';
 import React from 'react';
 
 interface StudentProps {
-  control: Control<UseFormProps<SoknadStandard>>;
+  control: Control<SoknadStandard>;
   getText: GetText;
   errors: FieldErrors;
 }

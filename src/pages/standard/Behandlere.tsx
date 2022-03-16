@@ -7,7 +7,7 @@ import { Delete, Add } from '@navikt/ds-icons';
 
 interface BehandlereProps {
   getText: GetText;
-  fastlege: FastlegeView;
+  fastlege: FastlegeView | undefined;
 }
 export type Behandler = {
   name: string;

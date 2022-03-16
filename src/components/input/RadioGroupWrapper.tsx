@@ -1,12 +1,12 @@
 import React from 'react';
 import { RadioGroup } from '@navikt/ds-react';
-import { Control, Controller, FieldValues } from 'react-hook-form';
+import { Control, Controller } from 'react-hook-form';
 
 export interface RadioProps {
   name: string;
   legend?: string;
   error?: string;
-  control: Control<FieldValues>;
+  control: Control;
   children?: React.ReactChild | React.ReactChild[];
 }
 const RadioGroupWrapper = ({ children, name, legend, control, error }: RadioProps) => (

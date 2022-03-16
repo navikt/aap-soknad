@@ -4,7 +4,7 @@ import { BodyShort, Button, GuidePanel, Heading, Loader, PageHeader } from '@nav
 import * as tekster from './tekster';
 import { Step, StepWizard } from '../../components/StepWizard';
 import { getStepSchemas } from './schema';
-import { useForm, FieldValues, UseFormProps, Resolver, SubmitHandler } from 'react-hook-form';
+import { useForm, SubmitHandler } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import {
   setStepList,
@@ -13,7 +13,6 @@ import {
   resetStepWizard,
   goToPreviousStep,
 } from '../../context/stepWizardContextV2';
-import SoknadForm from '../../types/SoknadForm';
 import SoknadStandard from '../../types/SoknadStandard';
 import { FormErrorSummary } from '../../components/schema/FormErrorSummary';
 import {
@@ -60,23 +59,14 @@ export const StandardPage = (): JSX.Element => {
   const currentSchema = useMemo(() => {
     return StepSchemas[currentStepIndex];
   }, [currentStepIndex, StepSchemas]);
-  const resolver: Resolver<UseFormProps<SoknadForm<SoknadStandard>>> = async (
-    values,
-    context,
-    options
-  ) => {
-    const myResolver = yupResolver(currentSchema);
-    // @ts-ignore
-    return myResolver(values, context, options);
-  };
   const {
     control,
     handleSubmit,
     watch,
     formState: { errors },
     reset,
-  } = useForm<FieldValues>({
-    resolver,
+  } = useForm<SoknadStandard>({
+    resolver: yupResolver(currentSchema),
     defaultValues: { ...initFieldVals },
   });
   useEffect(() => {
@@ -99,7 +89,7 @@ export const StandardPage = (): JSX.Element => {
     () => !!getText(`steps.${currentStep?.name?.toLowerCase()}.guide`),
     [currentStep, getText]
   );
-  const myHandleSubmit: SubmitHandler<UseFormProps<SoknadStandard>> = async (data) => {
+  const myHandleSubmit: SubmitHandler<SoknadStandard> = async (data) => {
     console.log(data);
     setSøknadData(søknadDispatch, data);
     completeAndGoToNextStep(stepWizardDispatch);
@@ -154,7 +144,7 @@ export const StandardPage = (): JSX.Element => {
             <Yrkesskade getText={getText} errors={errors} control={control} watch={watch} />
           </Step>
           <Step order={2} name={StepNames.MEDLEMSKAP} label={'Tilknytning til Norge'}>
-            <Medlemskap getText={getText} errors={errors} />
+            <Medlemskap getText={getText} errors={errors} control={control} />
           </Step>
           <Step order={3} name={StepNames.FASTLEGE} label={'Fastlege'}>
             <Behandlere getText={getText} fastlege={fastlege} />

@@ -1,15 +1,14 @@
 import { BodyLong, BodyShort, GuidePanel, Heading, Ingress } from '@navikt/ds-react';
 import React from 'react';
 import { GetText } from '../../hooks/useTexts';
-import { Control, FieldErrors, UseFormProps } from 'react-hook-form';
+import { Control, FieldErrors } from 'react-hook-form';
 import ConfirmationPanelWrapper from '../../components/input/ConfirmationPanelWrapper';
-import SoknadForm from '../../types/SoknadForm';
 import SoknadStandard from '../../types/SoknadStandard';
 
 interface VeiledningProps {
   getText: GetText;
   errors: FieldErrors;
-  control: Control<UseFormProps<SoknadForm<SoknadStandard>>>;
+  control: Control<SoknadStandard>;
   søkerFulltNavn: string;
 }
 export const Veiledning = ({ getText, errors, control, søkerFulltNavn }: VeiledningProps) => {

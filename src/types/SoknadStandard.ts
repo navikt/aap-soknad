@@ -9,6 +9,7 @@ interface SoknadStandard {
   utenlandsOpphold?: UtenlandsPeriode[];
   utenlandsArbeid?: UtenlandsPeriode[];
   erStudent?: JaEllerNei;
+  harBoddINorgeSiste5År?: JaEllerNei;
 }
 
 export default SoknadStandard;
