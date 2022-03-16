@@ -1,6 +1,6 @@
 import { GetText } from '../../hooks/useTexts';
 import { Control, FieldErrors, FieldValues, UseFormWatch } from 'react-hook-form';
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Alert, BodyShort, Radio } from '@navikt/ds-react';
 import RadioGroupWrapper from '../../components/input/RadioGroupWrapper';
 
@@ -10,20 +10,26 @@ interface YrkesskadeProps {
   control: Control<FieldValues>;
   watch: UseFormWatch<FieldValues>;
 }
-enum GodkjentYrkesskadeStatus {
-  JA = 'ja',
-  NEI = 'nei',
-  SØKNAD_UNDER_BEHANDLING = 'søknad_under_behandling',
-  VET_IKKE = 'vet_ikke',
-}
 type YrkesskadeAlertProps = {
-  status?: GodkjentYrkesskadeStatus;
+  status?: string;
   getText: GetText;
+  yrkesskadeStatuser: YrkesSkader;
 };
-const YrkesskadeAlert = ({ status, getText }: YrkesskadeAlertProps) => {
+enum YrkesskadeStatuser {
+  JA = 'JA',
+  NEI = 'NEI',
+  SØKNAD_UNDER_BEHANDLING = 'SØKNAD_UNDER_BEHANDLING',
+  VET_IKKE = 'VET_IKKE',
+}
+type YrkesSkader = {
+  [key in YrkesskadeStatuser]: string;
+};
+const YRKESSKADE = 'yrkesskade';
+
+const YrkesskadeAlert = ({ status, getText, yrkesskadeStatuser }: YrkesskadeAlertProps) => {
   return (
     <>
-      {status === GodkjentYrkesskadeStatus.JA && (
+      {status === yrkesskadeStatuser.JA && (
         <Alert variant="info">
           <BodyShort>{getText('steps.yrkesskade.alert.ja.title')}</BodyShort>
           <ul>
@@ -33,7 +39,7 @@ const YrkesskadeAlert = ({ status, getText }: YrkesskadeAlertProps) => {
           </ul>
         </Alert>
       )}
-      {status === GodkjentYrkesskadeStatus.SØKNAD_UNDER_BEHANDLING && (
+      {status === yrkesskadeStatuser.SØKNAD_UNDER_BEHANDLING && (
         <Alert variant="info">
           <BodyShort>{getText('steps.yrkesskade.alert.søknadsendt.title')}</BodyShort>
           <ul>
@@ -43,7 +49,7 @@ const YrkesskadeAlert = ({ status, getText }: YrkesskadeAlertProps) => {
           </ul>
         </Alert>
       )}
-      {status === GodkjentYrkesskadeStatus.VET_IKKE && (
+      {status === yrkesskadeStatuser.VET_IKKE && (
         <Alert variant="info">
           <BodyShort>{getText('steps.yrkesskade.alert.vetikke')}</BodyShort>
         </Alert>
@@ -53,31 +59,44 @@ const YrkesskadeAlert = ({ status, getText }: YrkesskadeAlertProps) => {
 };
 
 export const Yrkesskade = ({ getText, errors, control, watch }: YrkesskadeProps) => {
-  const godkjentYrkesskade = watch('yrkesskade');
+  const GodkjentYrkesskadeStatus: YrkesSkader = useMemo(
+    () => ({
+      JA: getText(`form.${YRKESSKADE}.ja`),
+      NEI: getText(`form.${YRKESSKADE}.nei`),
+      SØKNAD_UNDER_BEHANDLING: getText(`form.${YRKESSKADE}.søknadsendt`),
+      VET_IKKE: getText(`form.${YRKESSKADE}.vetikke`),
+    }),
+    [getText]
+  );
+  const godkjentYrkesskade = watch(`${YRKESSKADE}.value`);
   return (
     <>
-      <BodyShort>{getText('steps.yrkesskade.ingress')}</BodyShort>
+      <BodyShort>{getText(`steps.${YRKESSKADE}.ingress`)}</BodyShort>
       <RadioGroupWrapper
-        name={'yrkesskade'}
-        legend={getText('form.yrkesskade.legend')}
+        name={`${YRKESSKADE}.value`}
+        legend={getText(`form.${YRKESSKADE}.legend`)}
         control={control}
-        error={errors?.yrkesskade?.message}
+        error={errors?.[YRKESSKADE]?.message}
       >
         <Radio value={GodkjentYrkesskadeStatus.JA}>
-          <BodyShort>{getText('form.yrkesskade.ja')}</BodyShort>
+          <BodyShort>{getText(`form.${YRKESSKADE}.ja`)}</BodyShort>
         </Radio>
         <Radio value={GodkjentYrkesskadeStatus.NEI}>
-          <BodyShort>{getText('form.yrkesskade.nei')}</BodyShort>
+          <BodyShort>{getText(`form.${YRKESSKADE}.nei`)}</BodyShort>
         </Radio>
         <Radio value={GodkjentYrkesskadeStatus.SØKNAD_UNDER_BEHANDLING}>
-          <BodyShort>{getText('form.yrkesskade.søknadsendt')}</BodyShort>
+          <BodyShort>{getText(`form.${YRKESSKADE}.søknadsendt`)}</BodyShort>
         </Radio>
         <Radio value={GodkjentYrkesskadeStatus.VET_IKKE}>
-          <BodyShort>{getText('form.yrkesskade.vetikke')}</BodyShort>
+          <BodyShort>{getText(`form.${YRKESSKADE}.vetikke`)}</BodyShort>
         </Radio>
       </RadioGroupWrapper>
       {godkjentYrkesskade !== GodkjentYrkesskadeStatus.NEI && (
-        <YrkesskadeAlert status={godkjentYrkesskade} getText={getText} />
+        <YrkesskadeAlert
+          status={godkjentYrkesskade}
+          getText={getText}
+          yrkesskadeStatuser={GodkjentYrkesskadeStatus}
+        />
       )}
     </>
   );
