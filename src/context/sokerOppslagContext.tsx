@@ -23,10 +23,10 @@ type Fastlege = {
   navn: Navn;
 };
 export type FastlegeView = {
-  fulltNavn: string;
-  legekontor: string;
-  adresse: string;
-  telefon: string;
+  fulltNavn?: string;
+  legekontor?: string;
+  adresse?: string;
+  telefon?: string;
 };
 export type SokerOppslagState = {
   søker: Soker;
@@ -41,7 +41,7 @@ type SokerOppslagContextState = {
   søkerFulltNavn: string;
   adresseFull: string;
   personident: string;
-  fastlege: FastlegeView;
+  fastlege?: FastlegeView;
 };
 const SokerOppslagContext = createContext<SokerOppslagContextState | undefined>(undefined);
 
@@ -68,15 +68,16 @@ function SokerOppslagProvider({ children }: Props) {
   const søkerFulltNavn = useMemo(() => getFulltNavn(state?.søker?.navn), [state]);
   const adresseFull = useMemo(() => 'Veiveien 4, 0659 Huttiheita', [state]);
   const personident = useMemo(() => '10029045645', [state]);
-  const fastlege: FastlegeView = useMemo(
-    () => ({
-      fulltNavn: getFulltNavn(state?.behandler?.navn),
-      legekontor: state?.behandler?.kontaktinformasjon?.kontor,
-      adresse: getAddressDescription(state?.behandler?.kontaktinformasjon),
-      telefon: state?.behandler?.kontaktinformasjon?.telefon,
-    }),
-    [state]
-  );
+  const fastlege: FastlegeView | undefined = useMemo(() => {
+    const fastlege = state?.behandlere?.find((e: any) => e?.type === 'FASTLEGE');
+    if (!fastlege) return;
+    return {
+      fulltNavn: getFulltNavn(fastlege?.navn),
+      legekontor: fastlege?.kontaktinformasjon?.kontor,
+      adresse: getAddressDescription(fastlege?.kontaktinformasjon),
+      telefon: fastlege?.kontaktinformasjon?.telefon,
+    };
+  }, [state]);
   const contextValue = useMemo(() => {
     return {
       oppslagState: state,

@@ -145,19 +145,21 @@ export const handlers = [
             },
           ],
         },
-        behandler: {
-          type: 'FASTLEGE',
-          navn: { fornavn: 'Nina Unni', etternavn: 'Borge' },
-          kontaktinformasjon: {
-            behandlerRef: 'd182f24b-ebca-4f44-bf86-65901ec6141b',
-            kontor: 'ASKØY KOMMUNE SAMFUNNSMEDISINSK AVD ALMENNLEGETJENESTEN',
-            orgnummer: '976673867',
-            adresse: 'Kleppeveien 17',
-            postnr: '5300',
-            poststed: 'KLEPPESTØ',
-            telefon: '56 15 83 10',
+        behandlere: [
+          {
+            type: 'FASTLEGE',
+            navn: { fornavn: 'Nina Unni', etternavn: 'Borge' },
+            kontaktinformasjon: {
+              behandlerRef: 'd182f24b-ebca-4f44-bf86-65901ec6141b',
+              kontor: 'ASKØY KOMMUNE SAMFUNNSMEDISINSK AVD ALMENNLEGETJENESTEN',
+              orgnummer: '976673867',
+              adresse: 'Kleppeveien 17',
+              postnr: '5300',
+              poststed: 'KLEPPESTØ',
+              telefon: '56 15 83 10',
+            },
           },
-        },
+        ],
       })
     );
   }),
