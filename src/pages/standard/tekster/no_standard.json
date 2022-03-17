@@ -84,7 +84,15 @@
     },
     "barnetillegg": {
       "title": "Barnetillegg",
-      "guide": "Du får barnetillegg for barn under 18 år som du har forsørgeransvar for, med noen unntak. Dette gjelder også for adoptivbarn, fosterbarn og andre barn som du forsørger. Du kan få barnetillegg selv om barnet ikke bor sammen med deg, så lenge du forsørger barnet. Du kan lese mer om barnetillegg her."
+      "guide": "Du får barnetillegg for barn under 18 år som du har forsørgeransvar for, med noen unntak. Dette gjelder også for adoptivbarn, fosterbarn og andre barn som du forsørger. Du kan få barnetillegg selv om barnet ikke bor sammen med deg, så lenge du forsørger barnet. Du kan lese mer om barnetillegg her.",
+      "leggTil": {
+        "title": "Legg til barn",
+        "description": "Du kan legge til barn under 18 år som du har forsørgeransvar for."
+      }
+    },
+    "tilleggsopplysninger": {
+      "title": "Har du noen tilleggsopplysninger? ",
+      "guide": "Nå har NAV fått opplysningene vi trenger for å begynne å behandle søknaden din. Hvis vi trenger mer informasjon, vil vi kontakte deg."
     }
   },
   "form": {
@@ -220,6 +228,9 @@
     },
     "student": {
       "legend": "Er du student nå?"
+    },
+    "tilleggsopplysninger": {
+      "label": "Hvis du har flere opplysninger du mener er viktig for søknaden din, kan du skrive dem her."
     }
   },
   "innsending": {

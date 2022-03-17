@@ -63,6 +63,10 @@ export const Barnetillegg = ({ getText, errors, control }: BarnetilleggProps) =>
           </article>
         );
       })}
+      <Heading size={'small'} level={'2'}>
+        {getText('steps.barnetillegg.leggTil.title')}
+      </Heading>
+      <BodyShort>{getText('steps.barnetillegg.leggTil.description')}</BodyShort>
       <Button variant="secondary" type="button" onClick={() => setShowModal(true)}>
         <Add />
         Legg til barn

@@ -33,6 +33,7 @@ import { Barnetillegg } from './Barnetillegg/Barnetillegg';
 import * as classes from './standard.module.css';
 import Student from './Student';
 import Oppsummering from './Oppsummering';
+import Tilleggsopplysninger from './Tilleggsopplysninger';
 export enum StepNames {
   VEILEDNING = 'VEILEDNING',
   KONTAKTINFO = 'KONTAKTINFO',
@@ -42,6 +43,7 @@ export enum StepNames {
   STUDENT = 'STUDENT',
   ANDRE_UTBETALINGER = 'ANDRE_UTBETALINGER',
   BARNETILLEGG = 'BARNETILLEGG',
+  TILLEGGSOPPLYSNINGER = 'TILLEGGSOPPLYSNINGER',
   OPPSUMMERING = 'OPPSUMMERING',
 }
 const initFieldVals: SoknadStandard = {};
@@ -173,7 +175,15 @@ export const StandardPage = (): JSX.Element => {
           <Step order={6} name={StepNames.BARNETILLEGG} label={'Barnetilleggg'}>
             <Barnetillegg getText={getText} errors={errors} control={control} />
           </Step>
-          <Step order={7} name={StepNames.OPPSUMMERING} label={'Oppsummering'}>
+          <Step order={7} name={StepNames.TILLEGGSOPPLYSNINGER} label={'Tilleggsopplysninger'}>
+            <Tilleggsopplysninger
+              getText={getText}
+              errors={errors}
+              control={control}
+              setValue={setValue}
+            />
+          </Step>
+          <Step order={8} name={StepNames.OPPSUMMERING} label={'Oppsummering'}>
             <Oppsummering getText={getText} errors={errors} control={control} />
           </Step>
           <div className={classes?.buttonWrapper}>
