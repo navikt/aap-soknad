@@ -69,10 +69,11 @@ export const StandardPage = (): JSX.Element => {
   });
   useEffect(() => {
     const getSoknadStateAndOppslag = async () => {
-      const cachedState = await hentSoknadState(søknadDispatch, SøknadType.HOVED);
-      if (cachedState?.lagretStepList) {
-        setStepList([...cachedState.lagretStepList], stepWizardDispatch);
-      }
+      // Wait to test cache
+      // const cachedState = await hentSoknadState(søknadDispatch, SøknadType.HOVED);
+      // if (cachedState?.lagretStepList) {
+      //   setStepList([...cachedState.lagretStepList], stepWizardDispatch);
+      // }
       const oppslag = await hentSokerOppslag(oppslagDispatch);
       if (oppslag?.søker?.barn) addBarnIfMissing(søknadDispatch, oppslag.søker.barn);
     };
