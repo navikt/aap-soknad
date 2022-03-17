@@ -10,14 +10,15 @@ type Navn = {
   mellomnavn: string;
   etternavn: string;
 };
-type Barn = {
+export type OppslagBarn = {
   navn: Navn;
   fødselsdato: string;
+  fnr: string;
 };
 export type Soker = {
   navn: Navn;
   fødseldato: string;
-  barn: Array<Barn>;
+  barn: Array<OppslagBarn>;
 };
 type Fastlege = {
   navn: Navn;
@@ -97,7 +98,8 @@ export const hentSokerOppslag = async (dispatch: Dispatch<DispatchSokerOppslagAc
   const oppslag: SokerOppslagState = await fetch('/aap/soknad-api/oppslag/soeker').then((res) =>
     res.json()
   );
-  oppslag && dispatch({ type: 'SET_SOKER_OPPSLAG', payload: oppslag });
+  if (oppslag) dispatch({ type: 'SET_SOKER_OPPSLAG', payload: oppslag });
+  return oppslag;
 };
 
 function useSokerOppslag() {

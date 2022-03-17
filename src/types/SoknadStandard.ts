@@ -5,6 +5,11 @@ type FieldAndLabel<T> = {
   label: string;
   value: T;
 };
+type Navn = {
+  fornavn: string;
+  mellomnavn?: string;
+  etternavn: string;
+};
 type Yrkesskade = FieldAndLabel<string>;
 type Medlemskap = {
   harBoddINorgeSiste5År?: FieldAndLabel<JaEllerNei>;
@@ -26,6 +31,14 @@ type AndreUtbetalinger = {
   lønn?: FieldAndLabel<string>;
   stønad?: FieldAndLabel<Array<string>>;
 };
+type Barn = {
+  navn: Navn;
+  fødselsdato?: string;
+  fnr: string;
+  erForsørger?: FieldAndLabel<string>;
+  manueltOpprettet?: boolean;
+  adoptertEllerFosterBarn?: string;
+};
 interface SoknadStandard {
   bekreftOpplysninger?: JaEllerNei;
   yrkesskade?: Yrkesskade;
@@ -33,6 +46,7 @@ interface SoknadStandard {
   behandlere?: Behandler[];
   student?: Student;
   andreUtbetalinger?: AndreUtbetalinger;
+  barnetillegg?: Barn[];
 }
 
 export default SoknadStandard;

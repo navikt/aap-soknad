@@ -112,6 +112,7 @@ export const handlers = [
           fødseldato: '2022-02-14',
           barn: [
             {
+              fnr: '123',
               navn: {
                 fornavn: 'Barn',
                 mellomnavn: 'Nummer',
@@ -120,6 +121,7 @@ export const handlers = [
               fødseldato: '2022-02-14',
             },
             {
+              fnr: '456',
               navn: {
                 fornavn: 'Barn',
                 mellomnavn: 'Nummer',
@@ -128,6 +130,7 @@ export const handlers = [
               fødseldato: '2022-02-14',
             },
             {
+              fnr: '789',
               navn: {
                 fornavn: 'Barn',
                 mellomnavn: 'Nummer',
@@ -136,6 +139,7 @@ export const handlers = [
               fødseldato: '2022-02-14',
             },
             {
+              fnr: '012',
               navn: {
                 fornavn: 'Barn',
                 mellomnavn: 'Nummer',

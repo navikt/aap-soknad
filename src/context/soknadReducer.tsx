@@ -19,6 +19,17 @@ const soknadReducer = (state: SoknadContextState, action: SoknadAction): SoknadC
         ...state,
         søknad: action.payload,
       };
+    case SoknadActionKeys.ADD_BARN_IF_MISSING: {
+      const barn = state?.søknad?.barnetillegg || [];
+      const newBarn = action.payload?.filter((e: any) => !barn.find((a: any) => a?.fnr === e?.fnr));
+      return {
+        ...state,
+        søknad: {
+          ...state.søknad,
+          barnetillegg: [...barn, ...newBarn],
+        },
+      };
+    }
     default: {
       throw new Error(`Unhandled action type: ${action.type}`);
     }

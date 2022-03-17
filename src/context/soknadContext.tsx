@@ -1,9 +1,10 @@
 import React, { createContext, Dispatch, ReactNode, useReducer, useMemo, useContext } from 'react';
-import SoknadForm from '../types/SoknadForm';
 import soknadReducer from './soknadReducer';
 import { SoknadAction, SoknadActionKeys } from './soknadActions';
 import { fetchPOST } from '../api/fetch';
 import { StepType } from '../components/StepWizard/Step';
+import SoknadStandard from '../types/SoknadStandard';
+import { OppslagBarn } from './sokerOppslagContext';
 export enum SøknadType {
   UTLAND = 'UTLAND',
   HOVED = 'HOVED',
@@ -12,7 +13,7 @@ export interface SoknadContextState {
   version: number;
   type?: SøknadType;
   lagretCurrentStep?: string;
-  søknad?: SoknadForm;
+  søknad?: SoknadStandard;
   lagretStepList?: Array<StepType>;
 }
 export interface SoknadContextData {
@@ -63,8 +64,11 @@ export const slettLagretSoknadState = async (
   return !!deleteResponse?.ok;
 };
 
-export const setSøknadData = (dispatch: Dispatch<SoknadAction>, data: SoknadForm) => {
+export const setSøknadData = (dispatch: Dispatch<SoknadAction>, data: SoknadStandard) => {
   dispatch({ type: SoknadActionKeys.SET_SOKNAD, payload: data });
+};
+export const addBarnIfMissing = (dispatch: Dispatch<SoknadAction>, data: OppslagBarn[]) => {
+  dispatch({ type: SoknadActionKeys.ADD_BARN_IF_MISSING, payload: data });
 };
 
 export const SoknadContext = createContext<SoknadContextData | undefined>(undefined);

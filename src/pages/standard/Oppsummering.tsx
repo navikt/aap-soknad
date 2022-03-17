@@ -1,4 +1,4 @@
-import { Control, FieldErrors, UseFormProps } from 'react-hook-form';
+import { Control, FieldErrors } from 'react-hook-form';
 import SoknadStandard from '../../types/SoknadStandard';
 import { GetText } from '../../hooks/useTexts';
 import { Accordion, BodyShort, Label } from '@navikt/ds-react';
@@ -7,7 +7,7 @@ import ConfirmationPanelWrapper from '../../components/input/ConfirmationPanelWr
 import { StepNames } from './index';
 
 interface OppsummeringProps {
-  control: Control<UseFormProps<SoknadStandard>>;
+  control: Control<SoknadStandard>;
   getText: GetText;
   errors: FieldErrors;
 }
@@ -51,7 +51,11 @@ const Oppsummering = ({ getText, errors, control }: OppsummeringProps) => {
       title: getText('steps.medlemskap.title'),
       data: [
         {
-          label: getText('form.yrkesskade.legend'),
+          label: getText('form.utenlandsopphold.radiolegend'),
+          formKey: 'yrkesskade',
+        },
+        {
+          label: getText('form.utenlandsarbeid.radiolegend'),
           formKey: 'yrkesskade',
         },
       ],

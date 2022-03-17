@@ -81,6 +81,10 @@
     "andre_utbetalinger": {
       "guide": "Hvis du får utbetalinger fra NAV, arbeidsgiver eller andre, kan arbeidsavklaringspengene reduseres eller falle bort i perioden du får utbetalingen.",
       "title": "Andre utbetalinger"
+    },
+    "barnetillegg": {
+      "title": "Barnetillegg",
+      "guide": "Du får barnetillegg for barn under 18 år som du har forsørgeransvar for, med noen unntak. Dette gjelder også for adoptivbarn, fosterbarn og andre barn som du forsørger. Du kan få barnetillegg selv om barnet ikke bor sammen med deg, så lenge du forsørger barnet. Du kan lese mer om barnetillegg her."
     }
   },
   "form": {
@@ -192,7 +196,27 @@
     "barnetillegg": {
       "legend": "Forsørger du barnet?",
       "ja": "Ja",
-      "nei": "Nei"
+      "nei": "Nei",
+      "add": {
+        "title": "Legg til barn",
+        "ingress": "Du kan legge til adoptivbarn, fosterbarn og andre barn som du forsørger.",
+        "fornavn": {
+          "label": "Fornavn"
+        },
+        "mellomnavn": {
+          "label": "Mellomnavn"
+        },
+        "etternavn": {
+          "label": "Etternavn"
+        },
+        "fnr": {
+          "label": "Fødselsnummer / D-nummer"
+        },
+        "adoptertEllerFosterbarn": {
+          "label": "Er dette et fosterbarn eller et barn du nylig har adoptert?"
+        },
+        "alert": "Du må legge ved fødselsattest eller bostedbevis. Dette kan du laste opp senere i søknaden."
+      }
     },
     "student": {
       "legend": "Er du student nå?"

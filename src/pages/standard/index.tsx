@@ -21,6 +21,7 @@ import {
   SøknadType,
   slettLagretSoknadState,
   setSøknadData,
+  addBarnIfMissing,
 } from '../../context/soknadContext';
 import { Veiledning } from './Veiledning';
 import { hentSokerOppslag, useSokerOppslag } from '../../context/sokerOppslagContext';
@@ -28,7 +29,7 @@ import { Behandlere } from './Behandlere';
 import { Medlemskap } from './Medlemskap';
 import { Yrkesskade } from './Yrkesskade';
 import { AndreUtbetalinger } from './AndreUtbetalinger';
-import { Barnetillegg } from './Barnetillegg';
+import { Barnetillegg } from './Barnetillegg/Barnetillegg';
 import * as classes from './standard.module.css';
 import Student from './Student';
 import Oppsummering from './Oppsummering';
@@ -48,7 +49,7 @@ export const StandardPage = (): JSX.Element => {
   const [isLoading] = useState<boolean>(false);
   const [showVeiledning, setShowVeiledning] = useState<boolean>(true);
   const { søknadState, søknadDispatch } = useSoknadContext();
-  const { oppslagState, oppslagDispatch, søkerFulltNavn, fastlege } = useSokerOppslag();
+  const { oppslagDispatch, søkerFulltNavn, fastlege } = useSokerOppslag();
   const { currentStep, currentStepIndex, stepWizardDispatch } = useStepWizard();
   const { getText } = useTexts(tekster);
   const StepSchemas = getStepSchemas(getText);
@@ -67,16 +68,15 @@ export const StandardPage = (): JSX.Element => {
     defaultValues: { ...initFieldVals },
   });
   useEffect(() => {
-    hentSokerOppslag(oppslagDispatch);
-  }, []);
-  useEffect(() => {
-    const getSoknadState = async () => {
+    const getSoknadStateAndOppslag = async () => {
       const cachedState = await hentSoknadState(søknadDispatch, SøknadType.HOVED);
       if (cachedState?.lagretStepList) {
         setStepList([...cachedState.lagretStepList], stepWizardDispatch);
       }
+      const oppslag = await hentSokerOppslag(oppslagDispatch);
+      if (oppslag?.søker?.barn) addBarnIfMissing(søknadDispatch, oppslag.søker.barn);
     };
-    getSoknadState();
+    getSoknadStateAndOppslag();
   }, []);
   // Reset form to hydrate with data from søknadstate
   useEffect(() => {
@@ -170,12 +170,7 @@ export const StandardPage = (): JSX.Element => {
             />
           </Step>
           <Step order={6} name={StepNames.BARNETILLEGG} label={'Barnetilleggg'}>
-            <Barnetillegg
-              getText={getText}
-              errors={errors}
-              control={control}
-              barneListe={oppslagState?.søker?.barn}
-            />
+            <Barnetillegg getText={getText} errors={errors} control={control} />
           </Step>
           <Step order={7} name={StepNames.OPPSUMMERING} label={'Oppsummering'}>
             <Oppsummering getText={getText} errors={errors} control={control} />
