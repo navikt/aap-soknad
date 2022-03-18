@@ -32,7 +32,7 @@ import { AndreUtbetalinger } from './AndreUtbetalinger';
 import { Barnetillegg } from './Barnetillegg/Barnetillegg';
 import * as classes from './standard.module.css';
 import Student from './Student';
-import Oppsummering from './Oppsummering';
+import Oppsummering from './Oppsummering/Oppsummering';
 import Tilleggsopplysninger from './Tilleggsopplysninger';
 export enum StepNames {
   VEILEDNING = 'VEILEDNING',

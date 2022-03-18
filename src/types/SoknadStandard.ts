@@ -1,10 +1,10 @@
 import { JaEllerNei } from './Generic';
 
 export type FieldAndLabel<T> = {
-  label: string;
-  value: T;
+  label?: string;
+  value?: T;
 };
-type Navn = {
+export type Navn = {
   fornavn: string;
   mellomnavn?: string;
   etternavn: string;
@@ -36,13 +36,13 @@ type AndreUtbetalinger = {
   lønn?: FieldAndLabel<string>;
   stønad?: FieldAndLabel<Array<string>>;
 };
-type Barn = {
+export type Barn = {
   navn: Navn;
   fødselsdato?: string;
   fnr: string;
   erForsørger?: FieldAndLabel<string>;
   manueltOpprettet?: boolean;
-  adoptertEllerFosterBarn?: string;
+  adoptertEllerFosterBarn?: FieldAndLabel<string>;
 };
 interface SoknadStandard {
   bekreftOpplysninger?: JaEllerNei;
@@ -52,6 +52,7 @@ interface SoknadStandard {
   student?: Student;
   andreUtbetalinger?: AndreUtbetalinger;
   barnetillegg?: Barn[];
+  tilleggsopplysninger?: FieldAndLabel<string>;
 }
 
 export default SoknadStandard;

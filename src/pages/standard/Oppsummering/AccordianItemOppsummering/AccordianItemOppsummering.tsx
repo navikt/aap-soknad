@@ -6,7 +6,7 @@ type SummaryAccordianItemProps = {
   data: any;
   children?: React.ReactChild | React.ReactChild[];
 };
-const SummaryAccordianItem = ({ data, title, children }: SummaryAccordianItemProps) => {
+const AccordianItemOppsummering = ({ data, title, children }: SummaryAccordianItemProps) => {
   const [open, setOpen] = useState<boolean>(false);
   const list: Array<FieldAndLabel<any>> = Object.entries(data).map(([, val]: [string, any]) => {
     return { label: val?.label, value: val?.value };
@@ -25,7 +25,17 @@ const SummaryAccordianItem = ({ data, title, children }: SummaryAccordianItemPro
         {list?.map((item) => (
           <>
             <Label>{item?.label}</Label>
-            <BodyShort>{item?.value}</BodyShort>
+            {Array.isArray(item?.value) ? (
+              <ul>
+                {item?.value?.map((str) => (
+                  <li>
+                    <BodyShort>{str}</BodyShort>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <BodyShort>{item?.value}</BodyShort>
+            )}
           </>
         ))}
         {children}
@@ -33,4 +43,4 @@ const SummaryAccordianItem = ({ data, title, children }: SummaryAccordianItemPro
     </Accordion.Item>
   );
 };
-export default SummaryAccordianItem;
+export default AccordianItemOppsummering;

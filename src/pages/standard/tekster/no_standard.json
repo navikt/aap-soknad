@@ -93,6 +93,9 @@
     "tilleggsopplysninger": {
       "title": "Har du noen tilleggsopplysninger? ",
       "guide": "Nå har NAV fått opplysningene vi trenger for å begynne å behandle søknaden din. Hvis vi trenger mer informasjon, vil vi kontakte deg."
+    },
+    "oppsummering": {
+      "title": "Oppsummering"
     }
   },
   "form": {

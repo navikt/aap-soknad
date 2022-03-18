@@ -1,9 +1,9 @@
 import { BodyShort, Label } from '@navikt/ds-react';
 import React from 'react';
-import { FieldAndLabel } from '../../../types/SoknadStandard';
+import { FieldAndLabel } from '../../../../types/SoknadStandard';
 import { isDate } from 'date-fns';
-import { formatDate } from '../../../utils/date';
-import * as classes from './SummaryAccordianNestedItem.module.css';
+import { formatDate } from '../../../../utils/date';
+import * as classes from './AccordianNestedItemOppsummering.module.css';
 type SummaryAccordianItemProps = {
   title: string;
   data: any;
@@ -14,7 +14,7 @@ const formatValue = (val: any) => {
   }
   return val;
 };
-const SummaryAccordianNestedItem = ({ title, data }: SummaryAccordianItemProps) => {
+const AccordianNestedItemOppsummering = ({ title, data }: SummaryAccordianItemProps) => {
   const list: Array<Array<FieldAndLabel<any>>> = data.map((nestedItem: Array<FieldAndLabel<any>>) =>
     Object.entries(nestedItem).map(([key, val]) => {
       console.log(key);
@@ -24,8 +24,8 @@ const SummaryAccordianNestedItem = ({ title, data }: SummaryAccordianItemProps) 
   return (
     <>
       <Label>{title}</Label>
-      {list?.map((nestedItemList) => (
-        <div className={classes?.nestedSummaryItem}>
+      {list?.map((nestedItemList, index) => (
+        <div key={index} className={classes?.nestedSummaryItem}>
           {nestedItemList.map((valAndLabel) => (
             <>
               <Label>{valAndLabel?.label}</Label>
@@ -37,4 +37,4 @@ const SummaryAccordianNestedItem = ({ title, data }: SummaryAccordianItemProps) 
     </>
   );
 };
-export default SummaryAccordianNestedItem;
+export default AccordianNestedItemOppsummering;

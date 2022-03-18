@@ -9,7 +9,7 @@ import {
   RadioGroup,
   TextField,
 } from '@navikt/ds-react';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { GetText } from '../../../hooks/useTexts';
 import { Control, FieldErrors, useFieldArray } from 'react-hook-form';
 import RadioGroupWrapper from '../../../components/input/RadioGroupWrapper';
@@ -32,10 +32,19 @@ export const Barnetillegg = ({ getText, errors, control }: BarnetilleggProps) =>
   const [etternavn, setEtternavn] = useState<string>('');
   const [fnr, setFnr] = useState<string>('');
   const [adoptertEllerFosterBarn, setAdoptertEllerFosterBarn] = useState<string>('');
-  const { fields, append, remove } = useFieldArray({
+  const { fields, append, remove, update } = useFieldArray({
     name: BARNETILLEGG,
     control,
   });
+  useEffect(() => {
+    fields.forEach((field, index) => {
+      if (!field?.erForsørger?.label)
+        update(index, {
+          ...field,
+          erForsørger: { ...field?.erForsørger, label: getText('form.barnetillegg.legend') },
+        });
+    });
+  }, [fields]);
   return (
     <>
       {fields.map((barn, index) => {
@@ -49,7 +58,7 @@ export const Barnetillegg = ({ getText, errors, control }: BarnetilleggProps) =>
             <BodyShort>{`Fødselsnummer: ${barn?.fnr}`}</BodyShort>
             <RadioGroupWrapper
               legend={getText('form.barnetillegg.legend')}
-              name={`${BARNETILLEGG}.${index}.erForsørger`}
+              name={`${BARNETILLEGG}.${index}.erForsørger.value`}
               control={control}
               error={errors?.[BARNETILLEGG]?.[index]?.erForsørger?.message}
             >
@@ -118,7 +127,10 @@ export const Barnetillegg = ({ getText, errors, control }: BarnetilleggProps) =>
               append({
                 navn: { fornavn, mellomnavn, etternavn },
                 fnr,
-                adoptertEllerFosterBarn,
+                adoptertEllerFosterBarn: {
+                  label: getText('form.barnetillegg.add.adoptertEllerFosterbarn.label'),
+                  value: adoptertEllerFosterBarn,
+                },
                 manueltOpprettet: true,
               });
               setShowModal(false);
