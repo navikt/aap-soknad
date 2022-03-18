@@ -1,7 +1,6 @@
-import { UtenlandsPeriode } from '../pages/standard/UtenlandsPeriodeVelger/UtenlandsPeriodeVelger';
 import { JaEllerNei } from './Generic';
 
-type FieldAndLabel<T> = {
+export type FieldAndLabel<T> = {
   label: string;
   value: T;
 };
@@ -9,6 +8,12 @@ type Navn = {
   fornavn: string;
   mellomnavn?: string;
   etternavn: string;
+};
+export type UtenlandsPeriode = {
+  land: FieldAndLabel<string>;
+  tilDato: FieldAndLabel<Date>;
+  fraDato: FieldAndLabel<Date>;
+  iArbeid: FieldAndLabel<boolean>;
 };
 type Yrkesskade = FieldAndLabel<string>;
 type Medlemskap = {

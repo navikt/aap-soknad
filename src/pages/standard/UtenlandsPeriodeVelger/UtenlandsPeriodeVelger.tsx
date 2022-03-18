@@ -20,12 +20,6 @@ interface UtenlandsPeriodeProps {
   heading: string;
   ingress: string;
 }
-export type UtenlandsPeriode = {
-  land: string;
-  tilDato: Date;
-  fraDato: Date;
-  iArbeid: boolean;
-};
 const initFieldVals: FieldValues = {
   land: '',
   fraDato: undefined,
@@ -63,6 +57,7 @@ const UtenlandsPeriodeVelger = ({
     getValues,
     _getFieldState,
     trigger,
+    setValue,
   } = useForm({
     resolver: yupResolver(schema),
     defaultValues: { ...initFieldVals },
@@ -75,10 +70,10 @@ const UtenlandsPeriodeVelger = ({
         </Heading>
         <Ingress>{ingress}</Ingress>
         <SelectWrapper
-          name={'land'}
+          name={'land.value'}
           label={getText('form.utenlandsperiode.land.label')}
           control={control}
-          error={errors?.land?.message}
+          error={errors?.land?.value?.message}
         >
           {[
             <option key="none" value="none">
@@ -92,22 +87,22 @@ const UtenlandsPeriodeVelger = ({
           ]}
         </SelectWrapper>
         <DatoVelgerWrapper
-          name="fraDato"
+          name="fraDato.value"
           label={getText('form.utenlandsperiode.fraDato.label')}
           control={control}
-          error={errors.fraDato?.message}
+          error={errors.fraDato?.value?.message}
         />
         <DatoVelgerWrapper
-          name="tilDato"
+          name="tilDato.value"
           label={getText('form.utenlandsperiode.tilDato.label')}
           control={control}
-          error={errors.tilDato?.message}
+          error={errors.tilDato?.value?.message}
         />
         <RadioGroupWrapper
-          name={'iArbeid'}
+          name={'iArbeid.value'}
           legend={getText('form.utenlandsperiode.iArbeid.legend')}
           control={control}
-          error={errors?.iArbeid?.message}
+          error={errors?.iArbeid?.value?.message}
         >
           <Radio value={JaEllerNei.JA}>
             <BodyShort>Ja</BodyShort>
@@ -119,8 +114,12 @@ const UtenlandsPeriodeVelger = ({
         <Button
           type="button"
           onClick={async () => {
-            const isValid = await trigger(['land', 'fraDato', 'tilDato']);
+            const isValid = await trigger(['land.value', 'fraDato.value', 'tilDato.value']);
             if (isValid) {
+              setValue('land.label', getText('form.utenlandsperiode.land.label'));
+              setValue('fraDato.label', getText('form.utenlandsperiode.fraDato.label'));
+              setValue('tilDato.label', getText('form.utenlandsperiode.tilDato.label'));
+              setValue('iArbeid.label', getText('form.utenlandsperiode.iArbeid.legend'));
               const data = { ...getValues() };
               console.log('data', data);
               console.log('land', _getFieldState('land'));

@@ -94,11 +94,11 @@ export const Medlemskap = ({
       {arbeidINorge === JaEllerNei.NEI &&
         utenlandsOppholdFieldArray?.fields?.map((field, index) => (
           <Table.Row key={field.id}>
-            <Table.DataCell>{`${field?.land.split(':')?.[1]} ${formatDate(
-              field?.fraDato,
+            <Table.DataCell>{`${field?.land?.value?.split(':')?.[1]} ${formatDate(
+              field?.fraDato?.value,
               'dd.MM.yyyy'
-            )} - ${formatDate(field?.tilDato, 'dd.MM.yyyy')}${
-              field?.iArbeid ? '(Jobb)' : ''
+            )} - ${formatDate(field?.tilDato?.value, 'dd.MM.yyyy')}${
+              field?.iArbeid?.value ? '(Jobb)' : ''
             }`}</Table.DataCell>
             <Table.DataCell>
               {<Delete onClick={() => utenlandsOppholdFieldArray.remove(index)} />}

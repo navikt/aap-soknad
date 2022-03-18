@@ -1,87 +1,41 @@
 import { Control, FieldErrors } from 'react-hook-form';
 import SoknadStandard from '../../types/SoknadStandard';
 import { GetText } from '../../hooks/useTexts';
-import { Accordion, BodyShort, Label } from '@navikt/ds-react';
-import React, { useReducer } from 'react';
+import { Accordion } from '@navikt/ds-react';
+import React from 'react';
 import ConfirmationPanelWrapper from '../../components/input/ConfirmationPanelWrapper';
-import { StepNames } from './index';
+import { useSoknadContext } from '../../context/soknadContext';
+import SummaryAccordianItem from './SummaryAccordianItem/SummaryAccordianItem';
+import SummaryAccordianNestedItem from './SummaryAccordianItem/SummaryAccordianNestedItem';
 
 interface OppsummeringProps {
   control: Control<SoknadStandard>;
   getText: GetText;
   errors: FieldErrors;
 }
-interface AccordianAction {
-  payload?: StepNames;
-  error?: any;
-  type: 'ACCORDIAN_OPEN';
-}
-type Accordians = {
-  [key in StepNames]?: boolean;
-};
-
-function stateReducer(state: Accordians, action: AccordianAction) {
-  switch (action.type) {
-    case 'ACCORDIAN_OPEN': {
-      const key = action.payload as string;
-      const oldVal = !!state[key as StepNames];
-      return { ...state, [key]: !oldVal };
-    }
-    default: {
-      throw new Error(`Unhandled action type: ${action.type}`);
-    }
-  }
-}
 
 const Oppsummering = ({ getText, errors, control }: OppsummeringProps) => {
-  const [accordians, dispatch] = useReducer(stateReducer, {});
-  const steps = [
-    {
-      name: StepNames.YRKESSKADE,
-      title: getText('steps.yrkesskade.title'),
-      data: [
-        {
-          label: getText('form.yrkesskade.legend'),
-          formKey: 'yrkesskade',
-        },
-      ],
-    },
-    {
-      name: StepNames.MEDLEMSKAP,
-      title: getText('steps.medlemskap.title'),
-      data: [
-        {
-          label: getText('form.utenlandsopphold.radiolegend'),
-          formKey: 'yrkesskade',
-        },
-        {
-          label: getText('form.utenlandsarbeid.radiolegend'),
-          formKey: 'yrkesskade',
-        },
-      ],
-    },
-  ];
+  const { søknadState } = useSoknadContext();
   return (
     <>
       <Accordion>
-        {steps.map((step) => (
-          <Accordion.Item open={!!accordians?.[step.name]}>
-            <Accordion.Header
-              onClick={(e) => {
-                e.preventDefault();
-                dispatch({ type: 'ACCORDIAN_OPEN', payload: step.name });
-              }}
-            >
-              {step.title}
-            </Accordion.Header>
-            {step?.data?.map((item) => (
-              <Accordion.Content>
-                <Label>{item?.label}</Label>
-                <BodyShort>{item?.formKey}</BodyShort>
-              </Accordion.Content>
-            ))}
-          </Accordion.Item>
-        ))}
+        <SummaryAccordianItem
+          data={{ yrkesskade: søknadState?.søknad?.yrkesskade }}
+          title={getText('steps.yrkesskade.title')}
+        />
+        <SummaryAccordianItem
+          data={søknadState?.søknad?.medlemskap}
+          title={getText('steps.medlemskap.title')}
+        >
+          {søknadState?.søknad?.medlemskap?.utenlandsOpphold ? (
+            <SummaryAccordianNestedItem
+              title={'Utenlandsopphold'}
+              data={søknadState.søknad.medlemskap.utenlandsOpphold}
+            />
+          ) : (
+            <></>
+          )}
+        </SummaryAccordianItem>
       </Accordion>
       <ConfirmationPanelWrapper
         label={getText('steps.veiledning.rettogplikt')}
