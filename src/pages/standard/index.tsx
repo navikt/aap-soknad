@@ -49,6 +49,7 @@ export enum StepNames {
 const initFieldVals: SoknadStandard = {};
 export const StandardPage = (): JSX.Element => {
   const [isLoading] = useState<boolean>(false);
+  const [oppslagLoading, setOppslagLoading] = useState<boolean>(true);
   const [showVeiledning, setShowVeiledning] = useState<boolean>(true);
   const { søknadState, søknadDispatch } = useSoknadContext();
   const { oppslagDispatch, søkerFulltNavn, fastlege } = useSokerOppslag();
@@ -77,6 +78,7 @@ export const StandardPage = (): JSX.Element => {
       //   setStepList([...cachedState.lagretStepList], stepWizardDispatch);
       // }
       const oppslag = await hentSokerOppslag(oppslagDispatch);
+      setOppslagLoading(false);
       if (oppslag?.søker?.barn) addBarnIfMissing(søknadDispatch, oppslag.søker.barn);
     };
     getSoknadStateAndOppslag();
@@ -116,6 +118,7 @@ export const StandardPage = (): JSX.Element => {
           errors={errors}
           control={control}
           søkerFulltNavn={søkerFulltNavn}
+          loading={oppslagLoading}
         />
         <Button variant="primary" type="submit" onClick={() => setShowVeiledning(false)}>
           <BodyShort>{getText(`steps.veiledning.buttonText`, 'buttontext')}</BodyShort>

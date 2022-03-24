@@ -62,7 +62,9 @@ interface Props {
 }
 function SokerOppslagProvider({ children }: Props) {
   const getFulltNavn = (navn: Navn) =>
-    `${navn?.fornavn}${navn?.mellomnavn ? ` ${navn?.mellomnavn}` : ''} ${navn?.etternavn}`;
+    `${navn?.fornavn || ''}${navn?.mellomnavn ? ` ${navn?.mellomnavn}` : ''} ${
+      navn?.etternavn || ''
+    }`;
   const getAddressDescription = (kontaktInfo: any) =>
     `${kontaktInfo?.adresse}, ${kontaktInfo?.postnr} ${kontaktInfo?.poststed}`;
   const [state, dispatch] = useReducer(stateReducer, søkerOppslagInitialValue);

@@ -4,14 +4,22 @@ import { GetText } from '../../hooks/useTexts';
 import { Control, FieldErrors } from 'react-hook-form';
 import ConfirmationPanelWrapper from '../../components/input/ConfirmationPanelWrapper';
 import SoknadStandard from '../../types/SoknadStandard';
+import HeadingHelloName from '../../components/async/HeadingHelloName';
 
 interface VeiledningProps {
   getText: GetText;
   errors: FieldErrors;
   control: Control<SoknadStandard>;
+  loading: boolean;
   søkerFulltNavn: string;
 }
-export const Veiledning = ({ getText, errors, control, søkerFulltNavn }: VeiledningProps) => {
+export const Veiledning = ({
+  getText,
+  errors,
+  control,
+  søkerFulltNavn,
+  loading,
+}: VeiledningProps) => {
   const getParagraphs = (path: string) => {
     const paragraphs = getText(path);
     return Array.isArray(paragraphs) ? paragraphs : [];
@@ -19,7 +27,7 @@ export const Veiledning = ({ getText, errors, control, søkerFulltNavn }: Veiled
   return (
     <>
       <GuidePanel>
-        <Heading size={'large'} level={'2'}>{`Hei, ${søkerFulltNavn}!`}</Heading>
+        <HeadingHelloName size={'large'} level={'2'} name={søkerFulltNavn} loading={loading} />
         <BodyShort>{getText('steps.veiledning.guide')}</BodyShort>
       </GuidePanel>
       <Heading size="large" level="2">
