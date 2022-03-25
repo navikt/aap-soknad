@@ -26,11 +26,14 @@
       "buttonText": "Start søknad"
     },
     "kontaktinfo": {
-      "title": "Dine opplysninger",
-      "registrertInfo": {
-        "title": "Registrert kontaktinfo",
-        "text": "NAV har registrert følgende kontaktinformasjon. Hvis den ikke stemmer, kan du legge til en midlertidig adresse i Din profil. Du kan også legge inn eller endre kontonummer og telefonnummer der."
-      },
+      "title": "Personalia",
+      "guide": "NAV har registrert følgende kontaktinformasjon. Hvis den ikke stemmer, kan du legge til en midlertidig adresse i $$. Du kan også legge inn eller endre kontonummer, telefonnummer og e-postadresse der.",
+      "guideLinks": [
+        {
+          "name": "Din profil",
+          "href": "https://www.nav.no/person/personopplysninger"
+        }
+      ],
       "fullname": "Navn",
       "personident": "Fødselsnummer eller D-nummer",
       "adresse": "Folkeregistrert adresse"
@@ -59,8 +62,27 @@
     },
     "yrkesskade": {
       "title": "Yrkesskade",
-      "guide": "Hvis arbeidsevnen din er nedsatt på grunn av yrkesskade eller yrkessykdom, skal saken behandles etter egne regler.\n\nYrkesskadefordeler vurderes kun for plager som er godkjent som yrkesskade/yrkessykdom av trygdekontoret eller NAV, og som fortsatt nedsetter din arbeidsevne. Videre må det være medisinsk årsakssammenheng mellom yrkesskaden og din nedsatte arbeidsevne.",
-      "ingress": "Hvis arbeidsevnen din er nedsatt på grunn av yrkesskade eller yrkessykdom, skal saken behandles etter egne regler.",
+      "guide": {
+        "info": {
+          "text": "Er arbeidsevnen din nedsatt som følge av en yrkesskade eller yrkessykdom blir saken din behandlet etter egne regler. Dette kan gi deg noen fordeler. Da må yrkessaken/ yrkessykdommen din være:",
+          "bullet1": "godkjent av NAV",
+          "bullet2": "årsaken til din nedsatte arbeidsevne"
+        },
+        "application": {
+          "text": "Hvis en yrkesskade eller yrkessykdom er årsaken til at du har nedsatt arbeidsevne, bør du $$ og vurdert i saken din.",
+          "link": {
+            "name": "søke om å få din yrkesskade eller yrkessykdom godkjent av NAV",
+            "href": "https://www.nav.no/no/person/arbeid/yrkesskade-og-yrkessykdom"
+          }
+        },
+        "legal": {
+          "title": "Hva er reglene ved en yrkesskade eller en yrkessykdom?",
+          "text": "Disse reglene gjelder hvis NAV godkjenner en yrkesskade eller yrkessykdom som helt eller delvis årsak til at arbeidsevnen din er nedsatt:",
+          "bullet1": "NAV kan bruke inntekten du hadde på skadetidspunktet som grunnlag når vi beregner hele eller deler av arbeidsavklaringspengene. Dette gjør vi bare hvis det lønner seg for deg.",
+          "bullet2": "Kravet til forutgående medlemskap i folketrygden gjelder ikke.",
+          "bullet3": "Du kan få AAP hvis arbeidsevnen din er redusert med 30 prosent eller mer."
+        }
+      },
       "alert": {
         "ja": {
           "title": "Godkjent yrkessakde eller yrkessykdom må, helt eller delvis, være årsaken til at arbeidsevnen din er nedsatt. Da gjelder disse reglene:",
@@ -163,12 +185,8 @@
       "radiolegend": "Har du jobbet sammenhengende i Norge de siste 5 årene?"
     },
     "yrkesskade": {
-      "legend": "Har du en yrkesskade eller yrkessykdom som er godkjent av NAV?",
-      "required": "Venligst velg et av alternativene",
-      "ja": "Ja, jeg har en yrkesskade eller yrkessykdom som NAV har godkjent.",
-      "nei": "Nei, jeg har ikke en godkjent yrkesskade eller yrkessykdom som NAV har godkjent.",
-      "søknadsendt": "Nei, jeg har ikke en godkjent yrkesskade eller yrkessykdom, men jeg har sendt inn en søknad om godkjenning av yrkesskade eller yrkessykdom.",
-      "vetikke": "Vet ikke"
+      "legend": "Har du en yrkesskade eller yrkessykdom?",
+      "required": "Venligst velg et av alternativene"
     },
     "andreUtbetalinger": {
       "stønad": {

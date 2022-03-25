@@ -1,4 +1,4 @@
-import { BodyShort, Radio, Button, Table, BodyLong } from '@navikt/ds-react';
+import { BodyShort, Radio, Button, Table, BodyLong, GuidePanel, Heading } from '@navikt/ds-react';
 import React, { useState, useEffect } from 'react';
 import { GetText } from '../../hooks/useTexts';
 import { Control, FieldErrors, FieldValues, useFieldArray, UseFormWatch } from 'react-hook-form';
@@ -16,6 +16,7 @@ interface TilknytningTilNorgeProps {
   errors: FieldErrors;
   control: Control<SoknadStandard>;
   setValue: any;
+  pageTitle?: string;
 }
 const UTENLANDSOPPHOLD = 'utenlandsOpphold';
 const BODD_I_NORGE = 'harBoddINorgeSiste5År';
@@ -28,6 +29,7 @@ export const Medlemskap = ({
   errors,
   watch,
   setValue,
+  pageTitle,
 }: TilknytningTilNorgeProps) => {
   const [showUtenlandsPeriodeModal, setShowUtenlandsPeriodeModal] = useState<boolean>(false);
   const [countryList, setCountryList] = useState<string[][]>([]);
@@ -35,7 +37,6 @@ export const Medlemskap = ({
     name: `${MEDLEMSKAP}.${UTENLANDSOPPHOLD}`,
     control,
   });
-  const boddINorge = watch(`${MEDLEMSKAP}.${BODD_I_NORGE}.value`);
   const arbeidINorge = watch(`${MEDLEMSKAP}.${ARBEID_I_NORGE}.value`);
   useEffect(() => {
     const getCountries = () => {
@@ -50,6 +51,12 @@ export const Medlemskap = ({
   }, [getText]);
   return (
     <>
+      <GuidePanel>
+        <BodyLong>{getText(`steps.medlemskap.guide`)}</BodyLong>
+      </GuidePanel>
+      <Heading size="large" level="2">
+        {pageTitle}
+      </Heading>
       <RadioGroupWrapper
         name={`${MEDLEMSKAP}.${BODD_I_NORGE}.value`}
         legend={getText('form.utenlandsopphold.radiolegend')}
@@ -76,21 +83,20 @@ export const Medlemskap = ({
         heading={getText('steps.medlemskap.utenlandsPeriode.title')}
         ingress={getText('steps.medlemskap.utenlandsPeriode.ingress')}
       />
-      {boddINorge === JaEllerNei.NEI && (
-        <RadioGroupWrapper
-          name={`${MEDLEMSKAP}.${ARBEID_I_NORGE}.value`}
-          legend={getText('form.utenlandsarbeid.radiolegend')}
-          control={control}
-          error={errors?.[MEDLEMSKAP]?.[ARBEID_I_NORGE]?.message}
-        >
-          <Radio value={JaEllerNei.JA}>
-            <BodyShort>Ja</BodyShort>
-          </Radio>
-          <Radio value={JaEllerNei.NEI}>
-            <BodyShort>Nei</BodyShort>
-          </Radio>
-        </RadioGroupWrapper>
-      )}
+      <RadioGroupWrapper
+        name={`${MEDLEMSKAP}.${ARBEID_I_NORGE}.value`}
+        legend={getText('form.utenlandsarbeid.radiolegend')}
+        control={control}
+        error={errors?.[MEDLEMSKAP]?.[ARBEID_I_NORGE]?.message}
+      >
+        <Radio value={JaEllerNei.JA}>
+          <BodyShort>Ja</BodyShort>
+        </Radio>
+        <Radio value={JaEllerNei.NEI}>
+          <BodyShort>Nei</BodyShort>
+        </Radio>
+      </RadioGroupWrapper>
+
       {arbeidINorge === JaEllerNei.NEI &&
         utenlandsOppholdFieldArray?.fields?.map((field, index) => (
           <Table.Row key={field.id}>

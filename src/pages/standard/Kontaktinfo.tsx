@@ -1,31 +1,32 @@
-import { Alert, BodyShort, Label, Radio } from '@navikt/ds-react';
+import { BodyShort, GuidePanel, Heading, Label } from '@navikt/ds-react';
 import React from 'react';
-import { GetText } from '../../hooks/useTexts';
-import { Control, FieldErrors, FieldValues, UseFormWatch } from 'react-hook-form';
-import RadioGroupWrapper from '../../components/input/RadioGroupWrapper';
-import { JaEllerNei } from '../../types/Generic';
+import { getLinks, GetText } from '../../hooks/useTexts';
+import TextWithLink from '../../components/TextWithLink';
 
 interface KontaktinfoProps {
-  watch: UseFormWatch<FieldValues>;
-  control: Control<FieldValues>;
   getText: GetText;
-  errors: FieldErrors;
   søkerFulltNavn: string;
   personident: string;
   adresseFull: string;
+  pageTitle?: string;
 }
 export const Kontaktinfo = ({
-  watch,
-  control,
   getText,
-  errors,
   søkerFulltNavn,
   personident,
   adresseFull,
+  pageTitle,
 }: KontaktinfoProps) => {
-  const bekreftOpplysninger = watch('bekreftOpplysninger');
   return (
     <>
+      <GuidePanel>
+        <TextWithLink text={getText(`steps.kontaktinfo.guide`)}>
+          {getLinks(`steps.kontaktinfo.guideLinks`, getText)}
+        </TextWithLink>
+      </GuidePanel>
+      <Heading size="large" level="2">
+        {pageTitle}
+      </Heading>
       <div>
         <Label>{getText('steps.kontaktinfo.registrertInfo.title')}</Label>
         <BodyShort>{getText('steps.kontaktinfo.registrertInfo.text')}</BodyShort>
@@ -42,22 +43,6 @@ export const Kontaktinfo = ({
         <Label>{getText('steps.kontaktinfo.adresse')}</Label>
         <BodyShort>{adresseFull}</BodyShort>
       </div>
-      <RadioGroupWrapper
-        name={'bekreftOpplysninger'}
-        legend={getText('form.kontaktinfo.bekreftOpplysninger.legend')}
-        control={control}
-        error={errors?.bekreftOpplysninger?.message}
-      >
-        <Radio value={JaEllerNei.JA}>
-          <BodyShort>Ja</BodyShort>
-        </Radio>
-        <Radio value={JaEllerNei.NEI}>
-          <BodyShort>Nei</BodyShort>
-        </Radio>
-      </RadioGroupWrapper>
-      {bekreftOpplysninger === JaEllerNei.NEI && (
-        <Alert variant={'info'}>{getText('form.kontaktinfo.bekreftOpplysninger.alert')}</Alert>
-      )}
     </>
   );
 };

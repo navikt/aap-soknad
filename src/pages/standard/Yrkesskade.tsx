@@ -1,26 +1,21 @@
 import { GetText } from '../../hooks/useTexts';
-import { Control, FieldErrors, FieldValues, UseFormWatch } from 'react-hook-form';
-import React, { useEffect, useMemo } from 'react';
-import { Alert, BodyShort, Radio } from '@navikt/ds-react';
+import { Control, FieldErrors } from 'react-hook-form';
+import React, { useEffect, useMemo, useState } from 'react';
+import { Accordion, BodyLong, BodyShort, GuidePanel, Heading, Link, Radio } from '@navikt/ds-react';
 import RadioGroupWrapper from '../../components/input/RadioGroupWrapper';
 import SoknadStandard from '../../types/SoknadStandard';
+import TextWithLink from '../../components/TextWithLink';
 
 interface YrkesskadeProps {
   setValue: any;
   getText: GetText;
   errors: FieldErrors;
   control: Control<SoknadStandard>;
-  watch: UseFormWatch<FieldValues>;
+  pageTitle?: string;
 }
-type YrkesskadeAlertProps = {
-  status?: string;
-  getText: GetText;
-  yrkesskadeStatuser: YrkesSkader;
-};
 enum YrkesskadeStatuser {
   JA = 'JA',
   NEI = 'NEI',
-  SØKNAD_UNDER_BEHANDLING = 'SØKNAD_UNDER_BEHANDLING',
   VET_IKKE = 'VET_IKKE',
 }
 type YrkesSkader = {
@@ -28,39 +23,8 @@ type YrkesSkader = {
 };
 const YRKESSKADE = 'yrkesskade';
 
-const YrkesskadeAlert = ({ status, getText, yrkesskadeStatuser }: YrkesskadeAlertProps) => {
-  return (
-    <>
-      {status === yrkesskadeStatuser.JA && (
-        <Alert variant="info">
-          <BodyShort>{getText('steps.yrkesskade.alert.ja.title')}</BodyShort>
-          <ul>
-            <li>{getText('steps.yrkesskade.alert.ja.bullet1')}</li>
-            <li>{getText('steps.yrkesskade.alert.ja.bullet2')}</li>
-            <li>{getText('steps.yrkesskade.alert.ja.bullet3')}</li>
-          </ul>
-        </Alert>
-      )}
-      {status === yrkesskadeStatuser.SØKNAD_UNDER_BEHANDLING && (
-        <Alert variant="info">
-          <BodyShort>{getText('steps.yrkesskade.alert.søknadsendt.title')}</BodyShort>
-          <ul>
-            <li>{getText('steps.yrkesskade.alert.søknadsendt.bullet1')}</li>
-            <li>{getText('steps.yrkesskade.alert.søknadsendt.bullet2')}</li>
-            <li>{getText('steps.yrkesskade.alert.søknadsendt.bullet3')}</li>
-          </ul>
-        </Alert>
-      )}
-      {status === yrkesskadeStatuser.VET_IKKE && (
-        <Alert variant="info">
-          <BodyShort>{getText('steps.yrkesskade.alert.vetikke')}</BodyShort>
-        </Alert>
-      )}
-    </>
-  );
-};
-
-export const Yrkesskade = ({ getText, errors, control, watch, setValue }: YrkesskadeProps) => {
+export const Yrkesskade = ({ getText, errors, control, setValue, pageTitle }: YrkesskadeProps) => {
+  const [infoAccordian, setInfoAccordian] = useState<boolean>(false);
   const GodkjentYrkesskadeStatus: YrkesSkader = useMemo(
     () => ({
       JA: getText(`form.${YRKESSKADE}.ja`),
@@ -70,11 +34,54 @@ export const Yrkesskade = ({ getText, errors, control, watch, setValue }: Yrkess
     }),
     [getText]
   );
-  const godkjentYrkesskade = watch(`${YRKESSKADE}.value`);
   useEffect(() => setValue(`${YRKESSKADE}.label`, getText(`form.${YRKESSKADE}.legend`)), [getText]);
   return (
     <>
-      <BodyShort>{getText(`steps.${YRKESSKADE}.ingress`)}</BodyShort>
+      <GuidePanel>
+        <BodyLong>{getText('steps.yrkesskade.guide.info.text')}</BodyLong>
+        <ul>
+          <li>
+            <BodyShort>{getText('steps.yrkesskade.guide.info.bullet1')}</BodyShort>
+          </li>
+          <li>
+            <BodyShort>{getText('steps.yrkesskade.guide.info.bullet2')}</BodyShort>
+          </li>
+        </ul>
+        <TextWithLink text={getText('steps.yrkesskade.guide.application.text')}>
+          <Link href={getText('steps.yrkesskade.guide.application.link.href')}>
+            {getText('steps.yrkesskade.guide.application.link.name')}
+          </Link>
+        </TextWithLink>
+        <Accordion>
+          <Accordion.Item open={infoAccordian}>
+            <Accordion.Header
+              onClick={(e) => {
+                e.preventDefault();
+                setInfoAccordian(!infoAccordian);
+              }}
+            >
+              <Link>{getText('steps.yrkesskade.guide.legal.title')}</Link>
+            </Accordion.Header>
+            <Accordion.Content>
+              <BodyLong>{getText('steps.yrkesskade.guide.legal.text')}</BodyLong>
+              <ul>
+                <li>
+                  <BodyShort>{getText('steps.yrkesskade.guide.legal.bullet1')}</BodyShort>
+                </li>
+                <li>
+                  <BodyShort>{getText('steps.yrkesskade.guide.legal.bullet2')}</BodyShort>
+                </li>
+                <li>
+                  <BodyShort>{getText('steps.yrkesskade.guide.legal.bullet3')}</BodyShort>
+                </li>
+              </ul>
+            </Accordion.Content>
+          </Accordion.Item>
+        </Accordion>
+      </GuidePanel>
+      <Heading size="large" level="2">
+        {pageTitle}
+      </Heading>
       <RadioGroupWrapper
         name={`${YRKESSKADE}.value`}
         legend={getText(`form.${YRKESSKADE}.legend`)}
@@ -82,25 +89,15 @@ export const Yrkesskade = ({ getText, errors, control, watch, setValue }: Yrkess
         error={errors?.[YRKESSKADE]?.message}
       >
         <Radio value={GodkjentYrkesskadeStatus.JA}>
-          <BodyShort>{getText(`form.${YRKESSKADE}.ja`)}</BodyShort>
+          <BodyShort>{'Ja'}</BodyShort>
         </Radio>
         <Radio value={GodkjentYrkesskadeStatus.NEI}>
-          <BodyShort>{getText(`form.${YRKESSKADE}.nei`)}</BodyShort>
-        </Radio>
-        <Radio value={GodkjentYrkesskadeStatus.SØKNAD_UNDER_BEHANDLING}>
-          <BodyShort>{getText(`form.${YRKESSKADE}.søknadsendt`)}</BodyShort>
+          <BodyShort>{'Nei'}</BodyShort>
         </Radio>
         <Radio value={GodkjentYrkesskadeStatus.VET_IKKE}>
-          <BodyShort>{getText(`form.${YRKESSKADE}.vetikke`)}</BodyShort>
+          <BodyShort>{'Vet ikke'}</BodyShort>
         </Radio>
       </RadioGroupWrapper>
-      {godkjentYrkesskade !== GodkjentYrkesskadeStatus.NEI && (
-        <YrkesskadeAlert
-          status={godkjentYrkesskade}
-          getText={getText}
-          yrkesskadeStatuser={GodkjentYrkesskadeStatus}
-        />
-      )}
     </>
   );
 };
