@@ -101,7 +101,7 @@ export const handlers = [
   rest.get('/aap/soknad-api/oppslag/soeker', (req, res, ctx) => {
     return res(
       ctx.status(200),
-      ctx.delay(100),
+      ctx.delay(3000),
       ctx.json({
         søker: {
           navn: {

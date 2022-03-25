@@ -7,8 +7,15 @@ export interface ConfirmationPanelProps {
   label: string;
   control: any;
   error: string;
+  children?: React.ReactChild | React.ReactChild[];
 }
-const ConfirmationPanelWrapper = ({ label, control, error, name }: ConfirmationPanelProps) => (
+const ConfirmationPanelWrapper = ({
+  children,
+  label,
+  control,
+  error,
+  name,
+}: ConfirmationPanelProps) => (
   <Controller
     name={name}
     control={control}
@@ -21,7 +28,9 @@ const ConfirmationPanelWrapper = ({ label, control, error, name }: ConfirmationP
         checked={value}
         onChange={onChange}
         error={!!error}
-      />
+      >
+        {children}
+      </ConfirmationPanel>
     )}
   />
 );

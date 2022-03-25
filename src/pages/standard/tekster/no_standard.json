@@ -4,23 +4,25 @@
   "backButtontext": "Tilbake",
   "steps": {
     "veiledning": {
-      "guide": "Jeg er her for å veilede deg gjennom søknaden",
-      "title": "Søknad om arbeidsavklaringspenger (AAP)",
-      "ingress": "Arbeidsavklaringspenger skal sikre deg inntekt i perioder du, på grunn av sykdom eller skade, har behov for hjelp fra NAV for å komme i arbeid.",
-      "opplysninger": {
-        "title": "Innhenting av opplysninger",
-        "paragraphs": ["Når vi behandler søknaden din, henter vi opplysninger fra blant annet Folkeregisteret, Skatteetaten og legen din. Ved behov sender vi opplysninger til andre offentlige og private virksomheter. Les om hvordan NAV behandler personopplysninger (åpnes i ny fane)."]
-      },
-      "utbetaling": {
-        "title": "Eventuell utbetaling av AAP",
+      "guide": {
         "paragraphs": [
-          "Du kan bare ha ett kontonummer registrert hos NAV. Du kan enkelt endre hvilket kontonummer vi benytter (åpnes i ny fane).",
-          "Du kan tidligst få arbeidsavklaringspenger fra og med den dagen vi mottar søknaden din. Hvis du får innvilget arbeidsavklaringspenger, får du utbetalt pengene etter at du har sendt inn meldekort.",
-          "Du kan bare ha ett kontonummer registrert hos NAV. Du kan enkelt endre hvilket kontonummer vi benytter (åpnes i ny fane)."
+          "Arbeidsavklaringspenger, også kalt AAP, skal sikre deg inntekt i perioder du, på grunn av sykdom eller skade, har behov for hjelp fra NAV for å komme i arbeid. ",
+          "Jeg er her for å veilede deg gjennom søknaden"
         ]
       },
-      "rettogplikt": "Jeg bekrefter at jeg har lest og forstått mine rettigheter og plikter.",
-      "riktigeopplysninger": "Jeg er klar over at jeg kan miste retten til arbeidsavklaringspenger hvis jeg ikke gir riktige opplysninger. Jeg er også klar over at jeg må betale tilbake hvis jeg får penger jeg ikke har rett til og som skyldes at jeg har latt være å informere eller gitt feil opplysninger.",
+      "title": "Søknad om arbeidsavklaringspenger (AAP)",
+      "opplysninger": {
+        "title": "Innhenting av opplysninger",
+        "text": "Når vi behandler søknaden din, henter vi opplysninger fra blant annet Folkeregisteret, Skatteetaten og legen din. Ved behov sender vi opplysninger til andre offentlige og private virksomheter. $$."
+      },
+      "søknadsdato": {
+        "title": "Søknadsdato er viktig for eventuell utbetaling av AAP ",
+        "paragraphs": ["Du kan tidligst få arbeidsavklaringspenger fra og med den dagen vi mottar søknaden din."]
+      },
+      "rettogplikt": {
+        "label": "Jeg bekrefter at jeg har lest og forstått.",
+        "description": "Jeg bekrefter at jeg har lest og forstått mine $$."
+      },
       "buttonText": "Start søknad"
     },
     "kontaktinfo": {
@@ -99,9 +101,6 @@
     }
   },
   "form": {
-    "rettogplikt": {
-      "required": "Vennligst bekreft at du har lest og forstått dine rettigheter og plikter."
-    },
     "riktigeopplysninger": {
       "required": "Vennligst bekreft at du har lest og forstått dine rettigheter og plikter."
     },

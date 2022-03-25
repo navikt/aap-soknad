@@ -1,10 +1,11 @@
-import { BodyLong, BodyShort, GuidePanel, Heading, Ingress } from '@navikt/ds-react';
+import { BodyLong, GuidePanel, Heading, Link } from '@navikt/ds-react';
 import React from 'react';
 import { GetText } from '../../hooks/useTexts';
 import { Control, FieldErrors } from 'react-hook-form';
 import ConfirmationPanelWrapper from '../../components/input/ConfirmationPanelWrapper';
 import SoknadStandard from '../../types/SoknadStandard';
 import HeadingHelloName from '../../components/async/HeadingHelloName';
+import TextWithLink from '../../components/TextWithLink';
 
 interface VeiledningProps {
   getText: GetText;
@@ -28,36 +29,37 @@ export const Veiledning = ({
     <>
       <GuidePanel>
         <HeadingHelloName size={'large'} level={'2'} name={søkerFulltNavn} loading={loading} />
-        <BodyShort>{getText('steps.veiledning.guide')}</BodyShort>
+        {getParagraphs('steps.veiledning.guide.paragraphs').map((e: string, index: number) => (
+          <BodyLong key={`${index}`}>{e}</BodyLong>
+        ))}
       </GuidePanel>
       <Heading size="large" level="2">
         {getText(`steps.veiledning.title`)}
       </Heading>
-      <Ingress>{getText('steps.veiledning.ingress')}</Ingress>
+      <Heading size={'small'} level={'2'}>
+        {getText('steps.veiledning.søknadsdato.title')}
+      </Heading>
+      {getParagraphs('steps.veiledning.søknadsdato.paragraphs').map((e: string, index: number) => (
+        <BodyLong key={`${index}`}>{e}</BodyLong>
+      ))}
       <Heading size={'small'} level={'2'}>
         {getText('steps.veiledning.opplysninger.title')}
       </Heading>
-      {getParagraphs('steps.veiledning.opplysninger.paragraphs').map((e: string, index: number) => (
-        <BodyLong key={`${index}`}>{e}</BodyLong>
-      ))}
-      <Heading size={'small'} level={'2'}>
-        {getText('steps.veiledning.utbetaling.title')}
-      </Heading>
-      {getParagraphs('steps.veiledning.utbetaling.paragraphs').map((e: string, index: number) => (
-        <BodyLong key={`${index}`}>{e}</BodyLong>
-      ))}
+      <TextWithLink text={getText('steps.veiledning.opplysninger.text')}>
+        <Link href={'nav.no'}>
+          Les om hvordan NAV behandler personopplysninger (åpnes i ny fane)
+        </Link>
+      </TextWithLink>
       <ConfirmationPanelWrapper
-        label={getText('steps.veiledning.rettogplikt')}
+        label={getText('steps.veiledning.rettogplikt.label')}
         control={control}
         name="rettogplikt"
         error={errors?.rettogplikt?.message}
-      />
-      <ConfirmationPanelWrapper
-        label={getText('steps.veiledning.riktigeopplysninger')}
-        control={control}
-        name="riktigeopplysninger"
-        error={errors?.riktigeopplysninger?.message}
-      />
+      >
+        <TextWithLink text={getText('steps.veiledning.rettogplikt.description')}>
+          <Link href={'nav.no'}>rettigheter og plikter</Link>
+        </TextWithLink>
+      </ConfirmationPanelWrapper>
     </>
   );
 };
