@@ -1,7 +1,8 @@
 {
   "pagetitle": "Søknad om arbeidsavklaringspenger",
-  "buttontext": "Neste",
-  "backButtontext": "Tilbake",
+  "buttontext": "Neste steg",
+  "backButtontext": "Forrige steg",
+  "cancelButtonText": "Avbryt søknad",
   "steps": {
     "veiledning": {
       "guide": {

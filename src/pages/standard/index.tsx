@@ -209,9 +209,11 @@ export const StandardPage = (): JSX.Element => {
               {isLoading && <Loader />}
             </Button>
           </div>
-          <Button variant="tertiary" type="button" onClick={() => onDeleteSøknad()}>
-            Avbryt
-          </Button>
+          <div className={classes?.cancelButtonWrapper}>
+            <Button variant="tertiary" type="button" onClick={() => onDeleteSøknad()}>
+              {getText('cancelButtonText')}
+            </Button>
+          </div>
         </form>
       </StepWizard>
     </>
