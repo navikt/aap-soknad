@@ -31,7 +31,6 @@ import { Yrkesskade } from './Yrkesskade';
 import { AndreUtbetalinger } from './AndreUtbetalinger';
 import { Barnetillegg } from './Barnetillegg/Barnetillegg';
 import * as classes from './standard.module.css';
-import Student from './Student';
 import Oppsummering from './Oppsummering/Oppsummering';
 import Tilleggsopplysninger from './Tilleggsopplysninger';
 import { Kontaktinfo } from './Kontaktinfo';
@@ -145,16 +144,7 @@ export const StandardPage = (): JSX.Element => {
               pageTitle={pageTitle}
             />
           </Step>
-          <Step order={2} name={StepNames.YRKESSKADE} label={'Yrkesskade'}>
-            <Yrkesskade
-              getText={getText}
-              errors={errors}
-              control={control}
-              setValue={setValue}
-              pageTitle={pageTitle}
-            />
-          </Step>
-          <Step order={3} name={StepNames.MEDLEMSKAP} label={'Tilknytning til Norge'}>
+          <Step order={2} name={StepNames.MEDLEMSKAP} label={'Tilknytning til Norge'}>
             <Medlemskap
               getText={getText}
               errors={errors}
@@ -164,13 +154,16 @@ export const StandardPage = (): JSX.Element => {
               pageTitle={pageTitle}
             />
           </Step>
-          <Step order={4} name={StepNames.FASTLEGE} label={'Fastlege'}>
-            <Behandlere getText={getText} fastlege={fastlege} control={control} />
+          <Step order={3} name={StepNames.YRKESSKADE} label={'Yrkesskade'}>
+            <Yrkesskade
+              getText={getText}
+              errors={errors}
+              control={control}
+              setValue={setValue}
+              pageTitle={pageTitle}
+            />
           </Step>
-          <Step order={5} name={StepNames.STUDENT} label={'Student'}>
-            <Student getText={getText} errors={errors} control={control} setValue={setValue} />
-          </Step>
-          <Step order={6} name={StepNames.ANDRE_UTBETALINGER} label={'Andre utbetalinger'}>
+          <Step order={4} name={StepNames.ANDRE_UTBETALINGER} label={'Andre utbetalinger'}>
             <AndreUtbetalinger
               getText={getText}
               errors={errors}
@@ -178,10 +171,13 @@ export const StandardPage = (): JSX.Element => {
               setValue={setValue}
             />
           </Step>
-          <Step order={7} name={StepNames.BARNETILLEGG} label={'Barnetilleggg'}>
+          <Step order={5} name={StepNames.FASTLEGE} label={'Fastlege'}>
+            <Behandlere getText={getText} fastlege={fastlege} control={control} />
+          </Step>
+          <Step order={6} name={StepNames.BARNETILLEGG} label={'Barnetilleggg'}>
             <Barnetillegg getText={getText} errors={errors} control={control} />
           </Step>
-          <Step order={8} name={StepNames.TILLEGGSOPPLYSNINGER} label={'Tilleggsopplysninger'}>
+          <Step order={7} name={StepNames.TILLEGGSOPPLYSNINGER} label={'Tilleggsopplysninger'}>
             <Tilleggsopplysninger
               getText={getText}
               errors={errors}
@@ -189,14 +185,20 @@ export const StandardPage = (): JSX.Element => {
               setValue={setValue}
             />
           </Step>
-          <Step order={9} name={StepNames.OPPSUMMERING} label={'Oppsummering'}>
+          <Step order={8} name={StepNames.OPPSUMMERING} label={'Oppsummering'}>
             <Oppsummering getText={getText} errors={errors} control={control} />
           </Step>
           <div className={classes?.buttonWrapper}>
             <Button
               variant="secondary"
               type="button"
-              onClick={() => goToPreviousStep(stepWizardDispatch)}
+              onClick={() => {
+                if (currentStep?.name === StepNames.KONTAKTINFO) {
+                  setShowVeiledning(true);
+                } else {
+                  goToPreviousStep(stepWizardDispatch);
+                }
+              }}
             >
               {getText('backButtontext')}
             </Button>
