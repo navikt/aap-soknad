@@ -28,7 +28,7 @@ import { hentSokerOppslag, useSokerOppslag } from '../../context/sokerOppslagCon
 import { Behandlere } from './Behandlere';
 import { Medlemskap } from './Medlemskap';
 import { Yrkesskade } from './Yrkesskade';
-import { AndreUtbetalinger } from './AndreUtbetalinger';
+import { AndreUtbetalinger } from './AndreUtbetalinger/AndreUtbetalinger';
 import { Barnetillegg } from './Barnetillegg/Barnetillegg';
 import * as classes from './standard.module.css';
 import Oppsummering from './Oppsummering/Oppsummering';

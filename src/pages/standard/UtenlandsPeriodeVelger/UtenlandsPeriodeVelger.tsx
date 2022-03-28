@@ -4,18 +4,17 @@ import { FieldValues, useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as classes from './UtenlandsPeriode.module.css';
-import SelectWrapper from '../../../components/input/SelectWrapper';
 import DatoVelgerWrapper from '../../../components/input/DatoVelgerWrapper';
 import { BodyShort, Button, Heading, Ingress, Modal, Radio } from '@navikt/ds-react';
 import { JaEllerNei } from '../../../types/Generic';
 import RadioGroupWrapper from '../../../components/input/RadioGroupWrapper';
+import CountrySelector from '../../../components/input/CountrySelector';
 
 interface UtenlandsPeriodeProps {
   getText: GetText;
   onSave: (data: any) => void;
   onCancel: () => void;
   onClose: () => void;
-  options: string[][];
   open: boolean;
   heading: string;
   ingress: string;
@@ -31,7 +30,6 @@ const UtenlandsPeriodeVelger = ({
   onSave,
   onCancel,
   onClose,
-  options,
   open,
   heading,
   ingress,
@@ -69,23 +67,12 @@ const UtenlandsPeriodeVelger = ({
           {heading}
         </Heading>
         <Ingress>{ingress}</Ingress>
-        <SelectWrapper
+        <CountrySelector
           name={'land.value'}
           label={getText('form.utenlandsperiode.land.label')}
           control={control}
           error={errors?.land?.value?.message}
-        >
-          {[
-            <option key="none" value="none">
-              Velg land
-            </option>,
-            ...options.map(([key, val]) => (
-              <option key={key} value={`${key}:${val}`}>
-                {val}
-              </option>
-            )),
-          ]}
-        </SelectWrapper>
+        />
         <DatoVelgerWrapper
           name="fraDato.value"
           label={getText('form.utenlandsperiode.fraDato.label')}

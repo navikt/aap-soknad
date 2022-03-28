@@ -2,7 +2,6 @@ import { BodyShort, Radio, Button, Table, BodyLong, GuidePanel, Heading } from '
 import React, { useState, useEffect } from 'react';
 import { GetText } from '../../hooks/useTexts';
 import { Control, FieldErrors, FieldValues, useFieldArray, UseFormWatch } from 'react-hook-form';
-import countries from 'i18n-iso-countries';
 import { JaEllerNei } from '../../types/Generic';
 import { Add, Delete } from '@navikt/ds-icons';
 import UtenlandsPeriodeVelger from './UtenlandsPeriodeVelger/UtenlandsPeriodeVelger';
@@ -32,19 +31,11 @@ export const Medlemskap = ({
   pageTitle,
 }: TilknytningTilNorgeProps) => {
   const [showUtenlandsPeriodeModal, setShowUtenlandsPeriodeModal] = useState<boolean>(false);
-  const [countryList, setCountryList] = useState<string[][]>([]);
   const utenlandsOppholdFieldArray = useFieldArray({
     name: `${MEDLEMSKAP}.${UTENLANDSOPPHOLD}`,
     control,
   });
   const arbeidINorge = watch(`${MEDLEMSKAP}.${ARBEID_I_NORGE}.value`);
-  useEffect(() => {
-    const getCountries = () => {
-      const list = Object.entries(countries.getNames('nb', { select: 'official' }));
-      setCountryList(list);
-    };
-    getCountries();
-  }, [setCountryList]);
   useEffect(() => {
     setValue(`${MEDLEMSKAP}.${BODD_I_NORGE}.label`, getText('form.utenlandsopphold.radiolegend'));
     setValue(`${MEDLEMSKAP}.${ARBEID_I_NORGE}.label`, getText('form.utenlandsarbeid.radiolegend'));
@@ -79,7 +70,6 @@ export const Medlemskap = ({
         onCancel={() => setShowUtenlandsPeriodeModal(false)}
         onClose={() => setShowUtenlandsPeriodeModal(false)}
         getText={getText}
-        options={countryList}
         heading={getText('steps.medlemskap.utenlandsPeriode.title')}
         ingress={getText('steps.medlemskap.utenlandsPeriode.ingress')}
       />
