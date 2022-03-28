@@ -169,6 +169,7 @@ export const StandardPage = (): JSX.Element => {
               errors={errors}
               control={control}
               setValue={setValue}
+              watch={watch}
             />
           </Step>
           <Step order={5} name={StepNames.FASTLEGE} label={'Fastlege'}>

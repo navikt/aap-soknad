@@ -105,7 +105,18 @@
     },
     "andre_utbetalinger": {
       "guide": "Hvis du får utbetalinger fra NAV, arbeidsgiver eller andre, kan arbeidsavklaringspengene reduseres eller falle bort i perioden du får utbetalingen.",
-      "title": "Andre utbetalinger"
+      "title": "Andre utbetalinger",
+      "alertInfo": {
+        "omsorgsstønad": "Hvis du mottar omsorgsstønad som gir pensjonsopptjening, skal dette føres som arbeid på meldekortet.",
+        "verv": "På meldekortet skal du føre opp som arbeid alle timer som du bruker på verv, og som du får lønn eller godtgjørelse for."
+      },
+      "alertAttachments": {
+        "title": "Du må legge ved følgende dokumentasjon",
+        "omsorgsstønad": "Kopi av inngått avtale om omsorgsstønad.",
+        "fosterhjemsgodtgjørelse": "Dokumentasjon av fosterhjemsgodtgjørelse.",
+        "utlandsStønad": "Dokumentasjon av ytelser fra utenlandske myndigheter.",
+        "andreGoder": "Kopi av inngått sluttpakke, avtale om etterlønn eller lignende."
+      }
     },
     "barnetillegg": {
       "title": "Barnetillegg",
@@ -190,6 +201,13 @@
       "required": "Venligst velg et av alternativene"
     },
     "andreUtbetalinger": {
+      "sosialStønad": {
+        "legend": "Mottar du, eller har du nylig søkt om, noen av disse utbetalingene?",
+        "kvalifiseringsstønad": "Kvalifiseringsstønad",
+        "økonomiskSosialhjelp": "Økonomisk sosialhjelp",
+        "introduksjonsStønad": "Introduksjonssønad (introduksjonsprogrammet)",
+        "nei": "Nei, jeg hverken mottar, eller har nylig søkt om noen av disse utbetalingene"
+      },
       "stønad": {
         "legend": "Mottar du, eller har du nylig søkt om, noen av disse utbetalingene?",
         "omsorgsstønad": "Omsorgsstønad fra kommunen",
@@ -205,6 +223,42 @@
         "ja": "Ja, jeg har fått eller får sluttpakke, etterlønn eller andre goder fra nåværende eller tidligere arbeidsgivere",
         "nei": "Nei, jeg verken har fått eller får sluttpakke, etterlønn eller andre goder fra nåværende eller tidligere arbeidsgivere",
         "vetikke": "Vet ikke"
+      },
+      "utbetalingstype": {
+        "legend": "Hvordan mottar du utbetalingen eller godet?",
+        "engangsbeløp": "Engangsbeløp",
+        "løpende": "Løpende utbetaling (Dette er en utbetaling som kommer i flere delutbetalinger over en periode)"
+      },
+      "skalHaFerie": {
+        "legend": "Planlegger du å ta ferie fra arbeid i tiden som kommer?"
+      },
+      "ferieType": {
+        "legend": "Hvordan planlegger du å ta ut ferien?",
+        "periode": "Èn periode",
+        "dager": "Jeg vet antall dager, men er usikker på datoene",
+        "vetikke": "Vet ikke"
+      },
+      "ferieFraDato": {
+        "label": "Fra dato (dd.mm.åååå)"
+      },
+      "ferieTilDato": {
+        "label": "Til dato (dd.mm.åååå)"
+      },
+      "utenlandsTrygd": {
+        "ytelse": {
+          "label": "Hvilken ytelse?"
+        },
+        "land": {
+          "label": "Hvilket land?"
+        }
+      },
+      "annet": {
+        "utbetaling": {
+          "label": "Hvilken utbetaling?"
+        },
+        "utbetaler": {
+          "label": "Hvem utbetaler?"
+        }
       }
     },
     "ferie": {

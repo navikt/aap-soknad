@@ -35,6 +35,17 @@ type Student = {
 type AndreUtbetalinger = {
   lønn?: FieldAndLabel<string>;
   stønad?: FieldAndLabel<Array<string>>;
+  utbetaling?: {
+    utbetalingsType?: FieldAndLabel<string>;
+    ferie?: {
+      skalHaFerie?: FieldAndLabel<string>;
+      type?: FieldAndLabel<string>;
+      periode?: {
+        fraDato?: FieldAndLabel<string>;
+        tilDato?: FieldAndLabel<string>;
+      };
+    };
+  };
 };
 export type Barn = {
   navn: Navn;

@@ -1,15 +1,19 @@
-import { BodyLong, BodyShort, Checkbox, GuidePanel, Heading, Radio } from '@navikt/ds-react';
+import { Alert, BodyLong, BodyShort, Checkbox, GuidePanel, Heading, Radio } from '@navikt/ds-react';
 import React, { useEffect, useMemo } from 'react';
 import { GetText } from '../../../hooks/useTexts';
-import { Control, FieldErrors } from 'react-hook-form';
+import { Control, FieldErrors, FieldValues, UseFormWatch } from 'react-hook-form';
 import CheckboxGroupWrapper from '../../../components/input/CheckboxGroupWrapper';
 import RadioGroupWrapper from '../../../components/input/RadioGroupWrapper';
 import SoknadStandard from '../../../types/SoknadStandard';
 import TextFieldWrapper from '../../../components/input/TextFieldWrapper';
 import ColorPanel from '../../../components/panel/ColorPanel';
 import CountrySelector from '../../../components/input/CountrySelector';
+import { JaEllerNei } from '../../../types/Generic';
+import DatoVelgerWrapper from '../../../components/input/DatoVelgerWrapper';
+import * as classes from './AndreUtbetalinger.module.css';
 
 interface AndreUtbetalingerProps {
+  watch: UseFormWatch<FieldValues>;
   setValue: any;
   getText: GetText;
   errors: FieldErrors;
@@ -25,7 +29,12 @@ export const AndreUtbetalinger = ({
   errors,
   control,
   setValue,
+  watch,
 }: AndreUtbetalingerProps) => {
+  const lønnEtterlønnEllerSluttpakke = watch(`${ANDRE_UTBETALINGER}.${LØNN}.value`);
+  const stønadEllerVerv = watch(`${ANDRE_UTBETALINGER}.${STØNAD}.value`);
+  const skalHaFerie = watch(`${ANDRE_UTBETALINGER}.utbetaling.ferie.skalHaFerie.value`);
+  const ferieAvviklingsType = watch(`${ANDRE_UTBETALINGER}.utbetaling.ferie.type.value`);
   const LønnsAlternativer = useMemo(
     () => ({
       JA: getText(`form.${ANDRE_UTBETALINGER}.${LØNN}.ja`),
@@ -62,6 +71,71 @@ export const AndreUtbetalinger = ({
     }),
     [getText]
   );
+  const UtbetalingsType = useMemo(
+    () => ({
+      ENGANGSBELØP: getText(`form.${ANDRE_UTBETALINGER}.utbetalingstype.engangsbeløp`),
+      LØPENDE: getText(`form.${ANDRE_UTBETALINGER}.utbetalingstype.løpende`),
+    }),
+    [getText]
+  );
+  const FerieType = useMemo(
+    () => ({
+      PERIODE: getText(`form.${ANDRE_UTBETALINGER}.ferieType.periode`),
+      DAGER: getText(`form.${ANDRE_UTBETALINGER}.ferieType.dager`),
+      VET_IKKE: getText(`form.${ANDRE_UTBETALINGER}.ferieType.vetikke`),
+    }),
+    [getText]
+  );
+  const AlertInfo = useMemo(() => {
+    let infoList: Array<string> = [];
+    if (stønadEllerVerv?.includes(StønadAlternativer.OMSORGSSTØNAD)) {
+      infoList = [...infoList, getText(`steps.andre_utbetalinger.alertInfo.omsorgsstønad`)];
+    }
+    if (stønadEllerVerv?.includes(StønadAlternativer.VERV)) {
+      infoList = [...infoList, getText(`steps.andre_utbetalinger.alertInfo.verv`)];
+    }
+    return infoList;
+  }, [stønadEllerVerv]);
+  const Attachments = useMemo(() => {
+    let attachments: Array<{ type: string; description: string }> = [];
+    if (stønadEllerVerv?.includes(StønadAlternativer.OMSORGSSTØNAD)) {
+      attachments = [
+        ...attachments,
+        {
+          type: 'omsorgsstønad',
+          description: getText(`steps.andre_utbetalinger.alertAttachments.omsorgsstønad`),
+        },
+      ];
+    }
+    if (stønadEllerVerv?.includes(StønadAlternativer.FOSTERHJEMSGODTGJØRELSE)) {
+      attachments = [
+        ...attachments,
+        {
+          type: 'fosterhjemsgodtgjørelse',
+          description: getText(`steps.andre_utbetalinger.alertAttachments.fosterhjemsgodtgjørelse`),
+        },
+      ];
+    }
+    if (stønadEllerVerv?.includes(StønadAlternativer.UTLAND)) {
+      attachments = [
+        ...attachments,
+        {
+          type: 'utlandsStønad',
+          description: getText(`steps.andre_utbetalinger.alertAttachments.utlandsStønad`),
+        },
+      ];
+    }
+    if (lønnEtterlønnEllerSluttpakke === LønnsAlternativer.JA) {
+      attachments = [
+        ...attachments,
+        {
+          type: 'andreGoder',
+          description: getText(`steps.andre_utbetalinger.alertAttachments.andreGoder`),
+        },
+      ];
+    }
+    return attachments;
+  }, [stønadEllerVerv, lønnEtterlønnEllerSluttpakke]);
   useEffect(() => {
     setValue(
       `${ANDRE_UTBETALINGER}.${STØNAD}.label`,
@@ -114,6 +188,64 @@ export const AndreUtbetalinger = ({
           <BodyShort>{LønnsAlternativer.VET_IKKE}</BodyShort>
         </Radio>
       </RadioGroupWrapper>
+      {lønnEtterlønnEllerSluttpakke === LønnsAlternativer.JA && (
+        <ColorPanel>
+          <RadioGroupWrapper
+            legend={getText('form.andreUtbetalinger.utbetalingstype.legend')}
+            name={`${ANDRE_UTBETALINGER}.utbetaling.utbetalingsType`}
+            control={control}
+            error={errors?.[ANDRE_UTBETALINGER]?.message}
+          >
+            <Radio value={UtbetalingsType.ENGANGSBELØP}>{UtbetalingsType.ENGANGSBELØP}</Radio>
+            <Radio value={UtbetalingsType.LØPENDE}>{UtbetalingsType.LØPENDE}</Radio>
+          </RadioGroupWrapper>
+          <RadioGroupWrapper
+            legend={getText('form.andreUtbetalinger.skalHaFerie.legend')}
+            name={`${ANDRE_UTBETALINGER}.utbetaling.ferie.skalHaFerie.value`}
+            control={control}
+            error={errors?.[ANDRE_UTBETALINGER]?.[LØNN]?.message}
+          >
+            <Radio value={JaEllerNei.JA}>{JaEllerNei.JA}</Radio>
+            <Radio value={JaEllerNei.NEI}>{JaEllerNei.NEI}</Radio>
+          </RadioGroupWrapper>
+          {skalHaFerie === JaEllerNei.JA ? (
+            <RadioGroupWrapper
+              legend={getText('form.andreUtbetalinger.ferieType.legend')}
+              name={`${ANDRE_UTBETALINGER}.utbetaling.ferie.type.value`}
+              control={control}
+              error={errors?.[ANDRE_UTBETALINGER]?.[LØNN]?.message}
+            >
+              <Radio value={FerieType.PERIODE}>
+                <BodyShort>{FerieType.PERIODE}</BodyShort>
+              </Radio>
+              <Radio value={FerieType.DAGER}>
+                <BodyShort>{FerieType.DAGER}</BodyShort>
+              </Radio>
+              <Radio value={FerieType.VET_IKKE}>
+                <BodyShort>{FerieType.VET_IKKE}</BodyShort>
+              </Radio>
+            </RadioGroupWrapper>
+          ) : (
+            <></>
+          )}
+          {ferieAvviklingsType === FerieType.PERIODE ? (
+            <div className={classes?.datovelgerWrapper}>
+              <DatoVelgerWrapper
+                name={`${ANDRE_UTBETALINGER}.utbetaling.ferie.periode.fraDato.value`}
+                label={getText('form.andreUtbetalinger.ferieFraDato.label')}
+                control={control}
+              />
+              <DatoVelgerWrapper
+                name={`${ANDRE_UTBETALINGER}.utbetaling.ferie.periode.tilDato.value`}
+                label={getText('form.andreUtbetalinger.ferieTilDato.label')}
+                control={control}
+              />
+            </div>
+          ) : (
+            <></>
+          )}
+        </ColorPanel>
+      )}
       <CheckboxGroupWrapper
         name={`${ANDRE_UTBETALINGER}.${STØNAD}.value`}
         control={control}
@@ -129,13 +261,50 @@ export const AndreUtbetalinger = ({
         </Checkbox>
         <Checkbox value={StønadAlternativer.VERV}>{StønadAlternativer.VERV}</Checkbox>
         <Checkbox value={StønadAlternativer.UTLAND}>{StønadAlternativer.UTLAND}</Checkbox>
-        <ColorPanel>
-          <TextFieldWrapper name={'ytelse'} label={'Hvilken ytelse?'} control={control} />
-          <CountrySelector name={'utenlandsTrygd.land'} label={'Hvilket land?'} control={control} />
-        </ColorPanel>
+        {stønadEllerVerv?.includes(StønadAlternativer.UTLAND) && (
+          <ColorPanel>
+            <TextFieldWrapper
+              name={`${ANDRE_UTBETALINGER}.utenlandsTrygd.ytelse.value`}
+              label={getText('form.andreUtbetalinger.utenlandsTrygd.ytelse.label')}
+              control={control}
+            />
+            <CountrySelector
+              name={`${ANDRE_UTBETALINGER}.utenlandsTrygd.land.value`}
+              label={getText('form.andreUtbetalinger.utenlandsTrygd.land.label')}
+              control={control}
+            />
+          </ColorPanel>
+        )}
         <Checkbox value={StønadAlternativer.ANNET}>{StønadAlternativer.ANNET}</Checkbox>
+        {stønadEllerVerv?.includes(StønadAlternativer.ANNET) && (
+          <ColorPanel>
+            <TextFieldWrapper
+              name={`${ANDRE_UTBETALINGER}.annet.utbetalingsNavn.value`}
+              label={getText('form.andreUtbetalinger.annet.utbetaling.label')}
+              control={control}
+            />
+            <TextFieldWrapper
+              name={`${ANDRE_UTBETALINGER}.annet.utbetalerNavn.value`}
+              label={getText('form.andreUtbetalinger.annet.utbetaler.label')}
+              control={control}
+            />
+          </ColorPanel>
+        )}
         <Checkbox value={StønadAlternativer.NEI}>{StønadAlternativer.NEI}</Checkbox>
       </CheckboxGroupWrapper>
+      {Attachments.length > 0 && AlertInfo.length > 0 && (
+        <Alert variant={'info'}>
+          <BodyShort>{getText('form.andreUtbetalinger.alertInfo.attachmentTitle')}</BodyShort>
+          <ul>
+            {Attachments.map((attachment) => (
+              <li>{attachment?.description}</li>
+            ))}
+          </ul>
+          {AlertInfo.map((info) => (
+            <BodyLong>{info}</BodyLong>
+          ))}
+        </Alert>
+      )}
     </>
   );
 };
