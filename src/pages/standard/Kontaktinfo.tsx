@@ -2,21 +2,14 @@ import { BodyShort, GuidePanel, Heading, Label } from '@navikt/ds-react';
 import React from 'react';
 import { getLinks, GetText } from '../../hooks/useTexts';
 import TextWithLink from '../../components/TextWithLink';
+import { SøkerView } from '../../context/sokerOppslagContext';
 
 interface KontaktinfoProps {
   getText: GetText;
-  søkerFulltNavn: string;
-  personident: string;
-  adresseFull: string;
+  søker: SøkerView;
   pageTitle?: string;
 }
-export const Kontaktinfo = ({
-  getText,
-  søkerFulltNavn,
-  personident,
-  adresseFull,
-  pageTitle,
-}: KontaktinfoProps) => {
+export const Kontaktinfo = ({ getText, søker, pageTitle }: KontaktinfoProps) => {
   return (
     <>
       <GuidePanel>
@@ -33,15 +26,15 @@ export const Kontaktinfo = ({
       </div>
       <div>
         <Label>{getText('steps.kontaktinfo.fullname')}</Label>
-        <BodyShort>{søkerFulltNavn}</BodyShort>
+        <BodyShort>{søker?.fulltNavn}</BodyShort>
       </div>
       <div>
         <Label>{getText('steps.kontaktinfo.personident')}</Label>
-        <BodyShort>{personident}</BodyShort>
+        <BodyShort>{'TODO: fnr'}</BodyShort>
       </div>
       <div>
         <Label>{getText('steps.kontaktinfo.adresse')}</Label>
-        <BodyShort>{adresseFull}</BodyShort>
+        <BodyShort>{søker?.fullAdresse}</BodyShort>
       </div>
     </>
   );

@@ -52,7 +52,7 @@ export const StandardPage = (): JSX.Element => {
   const [oppslagLoading, setOppslagLoading] = useState<boolean>(true);
   const [showVeiledning, setShowVeiledning] = useState<boolean>(true);
   const { søknadState, søknadDispatch } = useSoknadContext();
-  const { oppslagDispatch, søkerFulltNavn, fastlege, adresseFull, personident } = useSokerOppslag();
+  const { oppslagDispatch, søker, fastlege } = useSokerOppslag();
   const { currentStep, currentStepIndex, stepWizardDispatch } = useStepWizard();
   const { getText } = useTexts(tekster);
   const StepSchemas = getStepSchemas(getText);
@@ -117,7 +117,7 @@ export const StandardPage = (): JSX.Element => {
           getText={getText}
           errors={errors}
           control={control}
-          søkerFulltNavn={søkerFulltNavn}
+          søker={søker}
           loading={oppslagLoading}
         />
         <Button variant="primary" type="submit" onClick={() => setShowVeiledning(false)}>
@@ -136,13 +136,7 @@ export const StandardPage = (): JSX.Element => {
         >
           <FormErrorSummary errors={errors} />
           <Step order={1} name={StepNames.KONTAKTINFO} label={'Personalia'}>
-            <Kontaktinfo
-              adresseFull={adresseFull}
-              personident={personident}
-              søkerFulltNavn={søkerFulltNavn}
-              getText={getText}
-              pageTitle={pageTitle}
-            />
+            <Kontaktinfo søker={søker} getText={getText} pageTitle={pageTitle} />
           </Step>
           <Step order={2} name={StepNames.MEDLEMSKAP} label={'Tilknytning til Norge'}>
             <Medlemskap

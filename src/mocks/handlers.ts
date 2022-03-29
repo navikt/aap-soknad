@@ -109,6 +109,13 @@ export const handlers = [
             mellomnavn: 'Fra',
             etternavn: 'Oppslag',
           },
+          adresse: {
+            adressenavn: 'Tulleveien',
+            husbokstav: 'A',
+            husnummer: '239',
+            postnr: '0472',
+            poststed: 'Oslo',
+          },
           fødseldato: '2022-02-14',
           barn: [
             {

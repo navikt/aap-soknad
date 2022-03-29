@@ -10,6 +10,13 @@ type Navn = {
   mellomnavn: string;
   etternavn: string;
 };
+type Adresse = {
+  adressenavn?: string;
+  husbokstav?: string;
+  husnummer?: string;
+  postnr?: string;
+  poststed?: string;
+};
 export type OppslagBarn = {
   navn: Navn;
   fødselsdato: string;
@@ -29,6 +36,10 @@ export type FastlegeView = {
   adresse?: string;
   telefon?: string;
 };
+export type SøkerView = {
+  fulltNavn?: string;
+  fullAdresse?: string;
+};
 export type SokerOppslagState = {
   søker: Soker;
   fastlege: Fastlege;
@@ -39,9 +50,7 @@ const søkerOppslagInitialValue = {
 type SokerOppslagContextState = {
   oppslagState: SokerOppslagState;
   oppslagDispatch: Dispatch<DispatchSokerOppslagAction>;
-  søkerFulltNavn: string;
-  adresseFull: string;
-  personident: string;
+  søker: SøkerView;
   fastlege?: FastlegeView;
 };
 const SokerOppslagContext = createContext<SokerOppslagContextState | undefined>(undefined);
@@ -65,12 +74,11 @@ function SokerOppslagProvider({ children }: Props) {
     `${navn?.fornavn || ''}${navn?.mellomnavn ? ` ${navn?.mellomnavn}` : ''} ${
       navn?.etternavn || ''
     }`;
+  const getFullAdresse = (adresse: Adresse) =>
+    `${adresse?.adressenavn} ${adresse?.husnummer}${adresse?.husbokstav}, ${adresse?.postnr} ${adresse?.poststed}`;
   const getAddressDescription = (kontaktInfo: any) =>
     `${kontaktInfo?.adresse}, ${kontaktInfo?.postnr} ${kontaktInfo?.poststed}`;
   const [state, dispatch] = useReducer(stateReducer, søkerOppslagInitialValue);
-  const søkerFulltNavn = useMemo(() => getFulltNavn(state?.søker?.navn), [state]);
-  const adresseFull = useMemo(() => 'Veiveien 4, 0659 Huttiheita', [state]);
-  const personident = useMemo(() => '10029045645', [state]);
   const fastlege: FastlegeView | undefined = useMemo(() => {
     const fastlege = state?.behandlere?.find((e: any) => e?.type === 'FASTLEGE');
     if (!fastlege) return;
@@ -81,13 +89,18 @@ function SokerOppslagProvider({ children }: Props) {
       telefon: fastlege?.kontaktinformasjon?.telefon,
     };
   }, [state]);
+  const søker: SøkerView | undefined = useMemo(
+    () => ({
+      fulltNavn: getFulltNavn(state?.søker?.navn),
+      fullAdresse: getFullAdresse(state?.søker?.adresse),
+    }),
+    [state]
+  );
   const contextValue = useMemo(() => {
     return {
       oppslagState: state,
       oppslagDispatch: dispatch,
-      søkerFulltNavn,
-      adresseFull,
-      personident,
+      søker,
       fastlege,
     };
   }, [state, dispatch]);

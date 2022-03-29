@@ -6,21 +6,16 @@ import ConfirmationPanelWrapper from '../../components/input/ConfirmationPanelWr
 import SoknadStandard from '../../types/SoknadStandard';
 import HeadingHelloName from '../../components/async/HeadingHelloName';
 import TextWithLink from '../../components/TextWithLink';
+import { SøkerView } from '../../context/sokerOppslagContext';
 
 interface VeiledningProps {
   getText: GetText;
   errors: FieldErrors;
   control: Control<SoknadStandard>;
   loading: boolean;
-  søkerFulltNavn: string;
+  søker: SøkerView;
 }
-export const Veiledning = ({
-  getText,
-  errors,
-  control,
-  søkerFulltNavn,
-  loading,
-}: VeiledningProps) => {
+export const Veiledning = ({ getText, errors, control, søker, loading }: VeiledningProps) => {
   const getParagraphs = (path: string) => {
     const paragraphs = getText(path);
     return Array.isArray(paragraphs) ? paragraphs : [];
@@ -28,7 +23,7 @@ export const Veiledning = ({
   return (
     <>
       <GuidePanel>
-        <HeadingHelloName size={'large'} level={'2'} name={søkerFulltNavn} loading={loading} />
+        <HeadingHelloName size={'large'} level={'2'} name={søker?.fulltNavn} loading={loading} />
         {getParagraphs('steps.veiledning.guide.paragraphs').map((e: string, index: number) => (
           <BodyLong key={`${index}`}>{e}</BodyLong>
         ))}
