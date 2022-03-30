@@ -1,0 +1,43 @@
+.dropZone{
+  padding: 30px;
+  border: 2px dashed var(--navds-semantic-color-interaction-primary);
+  background-color: var(--navds-semantic-color-interaction-primary-hover-subtle);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.dragOver {
+  opacity: 0.5;
+}
+.fileCard {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+.fileCardLeftContent {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  column-gap: 10px;
+}
+.deleteAttachment {
+  color: var(--navds-global-color-nav-red);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.fileSuccess {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  width: 3rem;
+  height: 3rem;
+  font-size: 1.5rem;
+  border-radius: 50%;
+  background-color: var(--navds-semantic-color-feedback-success-background);
+}
