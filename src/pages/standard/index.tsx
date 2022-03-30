@@ -34,6 +34,7 @@ import * as classes from './standard.module.css';
 import Oppsummering from './Oppsummering/Oppsummering';
 import Tilleggsopplysninger from './Tilleggsopplysninger';
 import { Kontaktinfo } from './Kontaktinfo';
+import Vedlegg from '../Vedlegg/Vedlegg';
 export enum StepNames {
   VEILEDNING = 'VEILEDNING',
   KONTAKTINFO = 'KONTAKTINFO',
@@ -43,6 +44,7 @@ export enum StepNames {
   STUDENT = 'STUDENT',
   ANDRE_UTBETALINGER = 'ANDRE_UTBETALINGER',
   BARNETILLEGG = 'BARNETILLEGG',
+  VEDLEGG = 'VEDLEGG',
   TILLEGGSOPPLYSNINGER = 'TILLEGGSOPPLYSNINGER',
   OPPSUMMERING = 'OPPSUMMERING',
 }
@@ -172,7 +174,10 @@ export const StandardPage = (): JSX.Element => {
           <Step order={6} name={StepNames.BARNETILLEGG} label={'Barnetilleggg'}>
             <Barnetillegg getText={getText} errors={errors} control={control} />
           </Step>
-          <Step order={7} name={StepNames.TILLEGGSOPPLYSNINGER} label={'Tilleggsopplysninger'}>
+          <Step order={7} name={StepNames.VEDLEGG} label={'Vedlegg'}>
+            <Vedlegg getText={getText} control={control} />
+          </Step>
+          <Step order={8} name={StepNames.TILLEGGSOPPLYSNINGER} label={'Tilleggsopplysninger'}>
             <Tilleggsopplysninger
               getText={getText}
               errors={errors}
@@ -180,7 +185,7 @@ export const StandardPage = (): JSX.Element => {
               setValue={setValue}
             />
           </Step>
-          <Step order={8} name={StepNames.OPPSUMMERING} label={'Oppsummering'}>
+          <Step order={9} name={StepNames.OPPSUMMERING} label={'Oppsummering'}>
             <Oppsummering getText={getText} errors={errors} control={control} />
           </Step>
           <div className={classes?.buttonWrapper}>

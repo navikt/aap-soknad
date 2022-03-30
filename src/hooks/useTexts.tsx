@@ -15,7 +15,13 @@ interface Tekstpakker {
 }
 
 const getLink = (link: { href: string; name: string }) => {
-  return link?.href && link?.name ? <Link href={link.href}>{link?.name}</Link> : <></>;
+  return link?.href && link?.name ? (
+    <Link href={link.href} target={'_blank'}>
+      {link?.name}
+    </Link>
+  ) : (
+    <></>
+  );
 };
 export const getLinks = (path: string, getText: (path: string) => any) => {
   const linkList = getText(path);

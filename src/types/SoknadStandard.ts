@@ -64,6 +64,11 @@ interface SoknadStandard {
   andreUtbetalinger?: AndreUtbetalinger;
   barnetillegg?: Barn[];
   tilleggsopplysninger?: FieldAndLabel<string>;
+  vedlegg?: {
+    name: string;
+    size: string;
+    data: FormData;
+  }[];
 }
 
 export default SoknadStandard;

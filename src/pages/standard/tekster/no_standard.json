@@ -132,6 +132,17 @@
     },
     "oppsummering": {
       "title": "Oppsummering"
+    },
+    "vedlegg": {
+      "title": "Vedlegg",
+      "guide": "Legger du ved alle vedleggene med én gang, kan du få en kortere saksbehandlingstid. $",
+      "guideLinks": [
+        {
+          "name": "Her kan du sjekke saksbehandlingstidene i fylket ditt (åpnes i ny fane).",
+          "href": "https://www.nav.no/no/nav-og-samfunn/om-nav/saksbehandlingstider-i-nav"
+        }
+      ],
+      "alertInfo": "Dersom du må ettersende vedlegg, må du sende disse innen 14 dager. Hvis vi ikke mottar vedleggene innen fristen, mangler vi nødvendige opplysninger for å behandle saken din. Vi kan da avgjøre saken din med de opplysningene vi har tilgjengelig og du kan da risikere å få avslag."
     }
   },
   "form": {
