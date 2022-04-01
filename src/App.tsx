@@ -3,7 +3,6 @@ import './App.less';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { Button, Heading } from '@navikt/ds-react';
 import { ErrorBoundary } from 'react-error-boundary';
-import { FormProvider, useForm } from 'react-hook-form';
 import { captureException } from '@sentry/react';
 import { SoknadContextProvider } from './context/soknadContext';
 import { StepWizardProvider } from './context/stepWizardContextV2';
@@ -16,9 +15,9 @@ import { Hovedsoknad } from './pages/hovedsoknad/Hovedsoknad';
 import StandardPage from './pages/standard';
 import { Feilviser } from './components/Feilviser/Feilviser';
 import { logError } from './utils/clientLogger';
+import { VedleggContextProvider } from './context/vedleggContext';
 
 const App = (): JSX.Element => {
-  const methods = useForm();
   return (
     <ErrorBoundary
       FallbackComponent={Feilviser}
@@ -29,7 +28,7 @@ const App = (): JSX.Element => {
       <div className="app">
         <SoknadContextProvider>
           <SokerOppslagProvider>
-            <FormProvider {...methods}>
+            <VedleggContextProvider>
               <StepWizardProvider>
                 <BrowserRouter>
                   <Routes>
@@ -41,7 +40,7 @@ const App = (): JSX.Element => {
                       path="*"
                       element={
                         <>
-                          <Heading size={'2xlarge'} level={'1'} spacing={true}>
+                          <Heading size={'xlarge'} level={'1'} spacing={true}>
                             AAP App
                           </Heading>
                           <Button
@@ -59,7 +58,7 @@ const App = (): JSX.Element => {
                   </Routes>
                 </BrowserRouter>
               </StepWizardProvider>
-            </FormProvider>
+            </VedleggContextProvider>
           </SokerOppslagProvider>
         </SoknadContextProvider>
       </div>

@@ -11,6 +11,7 @@ import CountrySelector from '../../../components/input/CountrySelector';
 import { JaEllerNei } from '../../../types/Generic';
 import DatoVelgerWrapper from '../../../components/input/DatoVelgerWrapper';
 import * as classes from './AndreUtbetalinger.module.css';
+import { useVedleggContext, addRequiredVedlegg } from '../../../context/vedleggContext';
 
 interface AndreUtbetalingerProps {
   watch: UseFormWatch<FieldValues>;
@@ -31,6 +32,7 @@ export const AndreUtbetalinger = ({
   setValue,
   watch,
 }: AndreUtbetalingerProps) => {
+  const { vedleggDispatch } = useVedleggContext();
   const lønnEtterlønnEllerSluttpakke = watch(`${ANDRE_UTBETALINGER}.${LØNN}.value`);
   const stønadEllerVerv = watch(`${ANDRE_UTBETALINGER}.${STØNAD}.value`);
   const skalHaFerie = watch(`${ANDRE_UTBETALINGER}.utbetaling.ferie.skalHaFerie.value`);
@@ -146,6 +148,25 @@ export const AndreUtbetalinger = ({
       getText(`form.${ANDRE_UTBETALINGER}.${LØNN}.legend`)
     );
   }, [getText]);
+  useEffect(() => {
+    setValue(
+      `${ANDRE_UTBETALINGER}.utbetaling.utbetalingsType.label`,
+      getText('form.andreUtbetalinger.utbetalingstype.legend')
+    );
+    setValue(
+      `${ANDRE_UTBETALINGER}.utbetaling.ferie.skalHaFerie.label`,
+      getText('form.andreUtbetalinger.skalHaFerie.legend')
+    );
+  }, [skalHaFerie]);
+  useEffect(() => {
+    setValue(
+      `${ANDRE_UTBETALINGER}.utbetaling.ferie.type.value`,
+      getText('form.andreUtbetalinger.ferieType.legend')
+    );
+  }, [ferieAvviklingsType]);
+  useEffect(() => {
+    addRequiredVedlegg(Attachments, vedleggDispatch);
+  }, [Attachments]);
   return (
     <>
       <GuidePanel>
@@ -192,7 +213,7 @@ export const AndreUtbetalinger = ({
         <ColorPanel>
           <RadioGroupWrapper
             legend={getText('form.andreUtbetalinger.utbetalingstype.legend')}
-            name={`${ANDRE_UTBETALINGER}.utbetaling.utbetalingsType`}
+            name={`${ANDRE_UTBETALINGER}.utbetaling.utbetalingsType.value`}
             control={control}
             error={errors?.[ANDRE_UTBETALINGER]?.message}
           >

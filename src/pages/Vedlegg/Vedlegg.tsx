@@ -5,6 +5,8 @@ import React from 'react';
 import { Alert, BodyShort, GuidePanel, Heading, ReadMore } from '@navikt/ds-react';
 import FileInput from '../../components/input/FileInput/FileInput';
 import TextWithLink from '../../components/TextWithLink';
+import { useVedleggContext } from '../../context/vedleggContext';
+import ScanningGuide from '../../components/ScanningGuide/ScanningGuide';
 
 interface Props {
   control: Control<SoknadStandard>;
@@ -12,6 +14,7 @@ interface Props {
 }
 
 const Vedlegg = ({ getText, control }: Props) => {
+  const { vedleggState } = useVedleggContext();
   const { fields, append, remove } = useFieldArray({
     name: 'vedlegg',
     control,
@@ -26,13 +29,16 @@ const Vedlegg = ({ getText, control }: Props) => {
       <Heading size="large" level="2">
         {getText('steps.vedlegg.title')}
       </Heading>
-      <BodyShort>{'Dette er dokumentene du må legge ved søknaden'}</BodyShort>
-      <ul>
-        <li>{'Arbeidsgiver evt. kopi av inngått sluttpakke'}</li>
-        <li>{'Omso'}</li>
-      </ul>
-      <ReadMore header={'Slik tar du et godt bilde av dokumentet'} type={'button'}>
-        <Alert variant={'info'}>{'Gjør sånn her...'}</Alert>
+      <BodyShort>
+        {getText('steps.vedlegg.attachmentListDescription')}
+        <ul>
+          {vedleggState?.requiredVedlegg?.map((vedlegg, index) => (
+            <li key={index}>{vedlegg?.description}</li>
+          ))}
+        </ul>
+      </BodyShort>
+      <ReadMore header={getText('steps.vedlegg.taBildeReadMore')} type={'button'}>
+        <ScanningGuide getText={getText} />
       </ReadMore>
       <FileInput name={'vedlegg'} fields={fields} append={append} remove={remove} />
       <Alert variant={'info'}>{getText('steps.vedlegg.alertInfo')}</Alert>

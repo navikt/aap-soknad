@@ -142,6 +142,8 @@
           "href": "https://www.nav.no/no/nav-og-samfunn/om-nav/saksbehandlingstider-i-nav"
         }
       ],
+      "attachmentListDescription": "Dette er dokumentene du må legge ved søknaden:",
+      "taBildeReadMore": "Slik tar du et godt bilde av dokumentet",
       "alertInfo": "Dersom du må ettersende vedlegg, må du sende disse innen 14 dager. Hvis vi ikke mottar vedleggene innen fristen, mangler vi nødvendige opplysninger for å behandle saken din. Vi kan da avgjøre saken din med de opplysningene vi har tilgjengelig og du kan da risikere å få avslag."
     }
   },
@@ -321,5 +323,38 @@
   },
   "innsending": {
     "feil": "En feil oppstod. Vennligst vent litt, og forsøk å sende meldingen på nytt."
+  },
+  "scanningGuide": {
+    "before": {
+      "heading": "Slik tar du et godt bilde",
+      "bullet1": "Hold mobilen eller kameraet direkte over dokumentet.",
+      "bullet2": "Dokumentet skal fylle hele bildet. Bildet skal ikke inneholde annen dokumentasjon eller gjenstander.",
+      "bullet3": "Bildet må inneholde all tekst i dokumentet. Hvis dokumentet er på mer enn èn side, bør du laste opp flere bilder."
+    },
+    "after": {
+      "heading": "Etter at du har tatt bildet, sjekk følgende før du laster opp:",
+      "bullet1": "Dokumentet har riktig retning.",
+      "bullet2": "Teksten til dokumentet er godt leselig.",
+      "bullet3": "Bildet er godt opplyst, uten skygger."
+    },
+    "examples": {
+      "heading": "Bra og dårlige eksempler på bilder av dokumenter",
+      "good": {
+        "label": "Bra",
+        "description": "Dokumentet fyller hele bildet"
+      },
+      "keystone": {
+        "label": "Dårlig",
+        "description": "Bildet er ikke tatt ovenfra"
+      },
+      "horizontal": {
+        "label": "Dårlig",
+        "description": "Bildet har ikke riktig retning"
+      },
+      "shadow": {
+        "label": "Dårlig",
+        "description": "Bildet har skygge på dokumentet"
+      }
+    }
   }
 }
