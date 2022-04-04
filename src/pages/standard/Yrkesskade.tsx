@@ -1,7 +1,7 @@
 import { GetText } from '../../hooks/useTexts';
 import { Control, FieldErrors } from 'react-hook-form';
-import React, { useEffect, useMemo, useState } from 'react';
-import { Accordion, BodyLong, BodyShort, GuidePanel, Heading, Link, Radio } from '@navikt/ds-react';
+import React, { useEffect, useMemo } from 'react';
+import { ReadMore, BodyLong, BodyShort, GuidePanel, Heading, Link, Radio } from '@navikt/ds-react';
 import RadioGroupWrapper from '../../components/input/RadioGroupWrapper';
 import SoknadStandard from '../../types/SoknadStandard';
 import TextWithLink from '../../components/TextWithLink';
@@ -24,7 +24,6 @@ type YrkesSkader = {
 const YRKESSKADE = 'yrkesskade';
 
 export const Yrkesskade = ({ getText, errors, control, setValue, pageTitle }: YrkesskadeProps) => {
-  const [infoAccordian, setInfoAccordian] = useState<boolean>(false);
   const GodkjentYrkesskadeStatus: YrkesSkader = useMemo(
     () => ({
       JA: getText(`form.${YRKESSKADE}.ja`),
@@ -52,32 +51,20 @@ export const Yrkesskade = ({ getText, errors, control, setValue, pageTitle }: Yr
             {getText('steps.yrkesskade.guide.application.link.name')}
           </Link>
         </TextWithLink>
-        <Accordion>
-          <Accordion.Item open={infoAccordian}>
-            <Accordion.Header
-              onClick={(e) => {
-                e.preventDefault();
-                setInfoAccordian(!infoAccordian);
-              }}
-            >
-              <Link>{getText('steps.yrkesskade.guide.legal.title')}</Link>
-            </Accordion.Header>
-            <Accordion.Content>
-              <BodyLong>{getText('steps.yrkesskade.guide.legal.text')}</BodyLong>
-              <ul>
-                <li>
-                  <BodyShort>{getText('steps.yrkesskade.guide.legal.bullet1')}</BodyShort>
-                </li>
-                <li>
-                  <BodyShort>{getText('steps.yrkesskade.guide.legal.bullet2')}</BodyShort>
-                </li>
-                <li>
-                  <BodyShort>{getText('steps.yrkesskade.guide.legal.bullet3')}</BodyShort>
-                </li>
-              </ul>
-            </Accordion.Content>
-          </Accordion.Item>
-        </Accordion>
+        <ReadMore header={getText('steps.yrkesskade.guide.legal.title')} type={'button'}>
+          <BodyLong>{getText('steps.yrkesskade.guide.legal.text')}</BodyLong>
+          <ul>
+            <li>
+              <BodyShort>{getText('steps.yrkesskade.guide.legal.bullet1')}</BodyShort>
+            </li>
+            <li>
+              <BodyShort>{getText('steps.yrkesskade.guide.legal.bullet2')}</BodyShort>
+            </li>
+            <li>
+              <BodyShort>{getText('steps.yrkesskade.guide.legal.bullet3')}</BodyShort>
+            </li>
+          </ul>
+        </ReadMore>
       </GuidePanel>
       <Heading size="large" level="2">
         {pageTitle}
