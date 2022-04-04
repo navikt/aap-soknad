@@ -120,7 +120,13 @@
     },
     "barnetillegg": {
       "title": "Barnetillegg",
-      "guide": "Du får barnetillegg for barn under 18 år som du har forsørgeransvar for, med noen unntak. Dette gjelder også for adoptivbarn, fosterbarn og andre barn som du forsørger. Du kan få barnetillegg selv om barnet ikke bor sammen med deg, så lenge du forsørger barnet. Du kan lese mer om barnetillegg her.",
+      "guideOne": "Du får barnetillegg for barn under 18 år som du har forsørgeransvar for, med noen unntak. Dette gjelder også for adoptivbarn, fosterbarn og andre barn som du forsørger.",
+      "guideTwo": "Du kan få barnetillegg selv om barnet ikke bor sammen med deg, så lenge du forsørger barnet. $",
+      "guideReadMoreLink": {
+        "name": "Du kan lese mer om barnetillegg her (åpnes i ny fane).",
+        "href": "https://www.nav.no/aap"
+
+      },
       "leggTil": {
         "title": "Legg til barn",
         "description": "Du kan legge til barn under 18 år som du har forsørgeransvar for."
@@ -301,13 +307,13 @@
         "title": "Legg til barn",
         "ingress": "Du kan legge til adoptivbarn, fosterbarn og andre barn som du forsørger.",
         "fornavn": {
-          "label": "Fornavn"
+          "label": "Barnets fornavn"
         },
         "mellomnavn": {
-          "label": "Mellomnavn"
+          "label": "Barnets mellomnavn"
         },
         "etternavn": {
-          "label": "Etternavn"
+          "label": "Barnets etternavn"
         },
         "fnr": {
           "label": "Fødselsnummer / D-nummer"

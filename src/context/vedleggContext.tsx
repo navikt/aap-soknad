@@ -1,10 +1,19 @@
 import React, { createContext, Dispatch, ReactNode, useReducer, useContext, useMemo } from 'react';
 
-interface DispatchVedleggAction {
-  payload?: RequiredVedlegg[];
-  error?: any;
-  type: 'ADD_VEDLEGG';
+export enum VedleggActionKeys {
+  ADD_VEDLEGG = 'ADD_VEDLEGG',
+  REMOVE_VEDLEGG = 'REMOVE_VEDLEGG',
 }
+type AddVedlegg = {
+  type: VedleggActionKeys.ADD_VEDLEGG;
+  payload?: RequiredVedlegg[];
+};
+type RemoveVedlegg = {
+  type: VedleggActionKeys.REMOVE_VEDLEGG;
+  payload?: string;
+};
+export type VedleggAction = AddVedlegg | RemoveVedlegg;
+
 type RequiredVedlegg = {
   type: string;
   description: string;
@@ -14,21 +23,32 @@ type VedleggState = {
 };
 type VedleggContextState = {
   vedleggState: VedleggState;
-  vedleggDispatch: Dispatch<DispatchVedleggAction>;
+  vedleggDispatch: Dispatch<VedleggAction>;
 };
 const VedleggContext = createContext<VedleggContextState | undefined>(undefined);
 
-function stateReducer(state: VedleggState, action: DispatchVedleggAction) {
-  console.log(action.type, action.payload);
+function stateReducer(state: VedleggState, action: VedleggAction) {
   switch (action.type) {
     case 'ADD_VEDLEGG': {
       const vedleggList =
         action?.payload?.filter(
-          (vedlegg) => !state?.requiredVedlegg?.find((e) => e?.type === vedlegg?.type)
+          (vedlegg) =>
+            !state?.requiredVedlegg?.find((e) => {
+              return e?.type === vedlegg?.type;
+            })
         ) || [];
       return {
         ...state,
         requiredVedlegg: [...state?.requiredVedlegg, ...vedleggList],
+      };
+    }
+    case 'REMOVE_VEDLEGG': {
+      const newVedleggList = state?.requiredVedlegg?.filter((e) => {
+        return !(e?.type === action?.payload);
+      });
+      return {
+        ...state,
+        requiredVedlegg: [...newVedleggList],
       };
     }
     default: {
@@ -52,9 +72,15 @@ function VedleggContextProvider({ children }: Props) {
 
 export const addRequiredVedlegg = async (
   vedlegg: RequiredVedlegg[],
-  dispatch: Dispatch<DispatchVedleggAction>
+  dispatch: Dispatch<VedleggAction>
 ) => {
-  if (vedlegg) dispatch({ type: 'ADD_VEDLEGG', payload: vedlegg });
+  if (vedlegg) dispatch({ type: VedleggActionKeys.ADD_VEDLEGG, payload: vedlegg });
+};
+export const removeRequiredVedlegg = async (
+  vedleggType: string,
+  dispatch: Dispatch<VedleggAction>
+) => {
+  if (vedleggType) dispatch({ type: VedleggActionKeys.REMOVE_VEDLEGG, payload: vedleggType });
 };
 
 function useVedleggContext() {
