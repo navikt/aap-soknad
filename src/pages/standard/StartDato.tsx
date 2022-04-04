@@ -1,0 +1,33 @@
+import { Control, FieldErrors } from 'react-hook-form';
+import SoknadStandard from '../../types/SoknadStandard';
+import { GetText } from '../../hooks/useTexts';
+import React, { useEffect } from 'react';
+import DatoVelgerWrapper from '../../components/input/DatoVelgerWrapper';
+import { GuidePanel, Heading } from '@navikt/ds-react';
+
+const STARTDATO = 'startDato';
+interface Props {
+  control: Control<SoknadStandard>;
+  getText: GetText;
+  errors: FieldErrors;
+  setValue: any;
+}
+
+const StartDato = ({ getText, errors, control, setValue }: Props) => {
+  useEffect(() => setValue(`${STARTDATO}.label`, getText(`form.${STARTDATO}.label`)), [getText]);
+  return (
+    <>
+      <Heading size="large" level="2">
+        {getText('steps.startDato.title')}
+      </Heading>
+      <GuidePanel>{getText('steps.startDato.guide')}</GuidePanel>
+      <DatoVelgerWrapper
+        name="startDato.value"
+        label={getText(`form.${STARTDATO}.label`)}
+        control={control}
+        error={errors.startDato?.value?.message}
+      />
+    </>
+  );
+};
+export default StartDato;

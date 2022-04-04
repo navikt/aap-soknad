@@ -145,6 +145,10 @@
       "attachmentListDescription": "Dette er dokumentene du må legge ved søknaden:",
       "taBildeReadMore": "Slik tar du et godt bilde av dokumentet",
       "alertInfo": "Dersom du må ettersende vedlegg, må du sende disse innen 14 dager. Hvis vi ikke mottar vedleggene innen fristen, mangler vi nødvendige opplysninger for å behandle saken din. Vi kan da avgjøre saken din med de opplysningene vi har tilgjengelig og du kan da risikere å få avslag."
+    },
+    "startDato": {
+      "title": "Søknadsdato",
+      "guide": "Du kan tidligst motta AAP fra dagen du sender inn søknad. Du kan søke om AAP frem i tid."
     }
   },
   "form": {
@@ -319,6 +323,9 @@
     },
     "tilleggsopplysninger": {
       "label": "Hvis du har flere opplysninger du mener er viktig for søknaden din, kan du skrive dem her."
+    },
+    "startDato": {
+      "label": "Fra hvilken dato søker du AAP?"
     }
   },
   "innsending": {

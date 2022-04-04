@@ -33,11 +33,12 @@ import { Barnetillegg } from './Barnetillegg/Barnetillegg';
 import * as classes from './standard.module.css';
 import Oppsummering from './Oppsummering/Oppsummering';
 import Tilleggsopplysninger from './Tilleggsopplysninger';
-import { Kontaktinfo } from './Kontaktinfo';
 import Vedlegg from '../Vedlegg/Vedlegg';
+import StartDato from './StartDato';
 export enum StepNames {
   VEILEDNING = 'VEILEDNING',
   KONTAKTINFO = 'KONTAKTINFO',
+  STARTDATO = 'STARTDATO',
   FASTLEGE = 'FASTLEGE',
   MEDLEMSKAP = 'MEDLEMSKAP',
   YRKESSKADE = 'YRKESSKADE',
@@ -137,8 +138,8 @@ export const StandardPage = (): JSX.Element => {
           autoComplete="off"
         >
           <FormErrorSummary errors={errors} />
-          <Step order={1} name={StepNames.KONTAKTINFO} label={'Personalia'}>
-            <Kontaktinfo søker={søker} getText={getText} pageTitle={pageTitle} />
+          <Step order={1} name={StepNames.STARTDATO} label={'Søknadsdato'}>
+            <StartDato control={control} getText={getText} setValue={setValue} errors={errors} />
           </Step>
           <Step order={2} name={StepNames.MEDLEMSKAP} label={'Tilknytning til Norge'}>
             <Medlemskap
