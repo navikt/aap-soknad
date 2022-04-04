@@ -19,6 +19,7 @@ type Yrkesskade = FieldAndLabel<string>;
 type Medlemskap = {
   harBoddINorgeSiste5År?: FieldAndLabel<JaEllerNei>;
   harArbeidetINorgeSiste5År?: FieldAndLabel<JaEllerNei>;
+  arbeidetUtenforNorgeFørSykdom?: FieldAndLabel<JaEllerNei>;
   utenlandsOpphold?: UtenlandsPeriode[];
 };
 export type Behandler = {

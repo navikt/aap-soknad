@@ -46,7 +46,9 @@
     },
     "medlemskap": {
       "title": "Medlem i folketrygden",
-      "guide": "Nå lurer vi på om du oppfyller kravene til medlemskap i folketrygden. Har du bodd eller jobbet utenfor Norge de siste 5 årene, er det ikke alltid du har nok medlemskap i folketrygden til å kunne få AAP.",
+      "guide": "Det er viktig for oss å få vite hvilke perioder du har jobbet eller bodd i utlandet, for å finne ut",
+      "guideBullet1": "om du oppfuller kravene til medlemskap i folketrygden",
+      "guideBullet2": "om du har inntekt fra utlandet som skal legges til når vi beregner hva du kan få utbetalt i AAP",
       "opphold": {
         "title": "Opphold i Norge de siste 5 årene",
         "ingress": "Som hovedregel må du ha bodd eller arbeidet sammenhengende i Norge de siste 5 årene før du søker om arbeidsavklaringspenger."
@@ -58,7 +60,7 @@
       "utenlandsPeriode": {
         "title": "Utenlandsopphold",
         "ingress": "Oppgi hvilket land og hvilken periode du har bodd i utlandet de siste fem årene",
-        "info": "Nå må du oppgi i hvilke perioder du har bodd eller jobbet utenfor Norge.  Oppgi også hvilket land du var i. Ta med alle perioder siden du var 16 år. Vi vil beregne om du oppfyller kravene til medlemskap basert på opplysningene du gir oss. "
+        "info": "Nå må du oppgi i hvilke perioder du har bodd eller jobbet utenfor Norge.  Oppgi også hvilket land du var i. Ta med alle perioder siden du var 16 år."
       }
     },
     "yrkesskade": {
@@ -213,11 +215,23 @@
         "legend": "Jobbet du i dette landet i denne perioden?"
       }
     },
-    "utenlandsopphold": {
-      "radiolegend": "Har du bodd sammenhengende i Norge de siste 5 årene?"
-    },
-    "utenlandsarbeid": {
-      "radiolegend": "Har du jobbet sammenhengende i Norge de siste 5 årene?"
+    "medlemskap": {
+      "boddINorge": {
+        "legend": "Har du bodd sammenhengende i Norge de siste 5 årene?",
+        "description": "Dette betyr at du både har hatt folkeregistrert adresse i Norge, og faktisk har oppholdt deg her mesteparten av hvert av disse årene. "
+      },
+      "arbeidUtenforNorge": {
+        "legend": "Har du jobbet utenfor Norge før du ble syk?",
+        "description": "Hvis du har jobbet utenfor Norge før du ble syk, kan det i noen tilfeller gjøre at du får mer utbetalt i AAP.",
+        "readMore": {
+          "header": "Hva hvis jeg har fått dagpenger, sykepenger eller tilsvarende?",
+          "text": "Med 'jobb' menes også offentlige ytelser du har fått som erstatning for arbeid utenfor Norge, for eksempel dagpenger og sykepenger. Foreldrepenger og pensjon regnes ikke som en erstatning for jobb."
+        }
+      },
+      "arbeidINorge": {
+        "legend": "Har du jobbet sammenhengende i Norge de siste 5 årene?",
+        "description": "Med “jobb” menes også offentlige ytelser du har fått som erstatning for arbeid, for eksempel dagpenger og sykepenger. Foreldrepenger og pensjon regnes ikke som erstatning for jobb."
+      }
     },
     "yrkesskade": {
       "legend": "Har du en yrkesskade eller yrkessykdom?",

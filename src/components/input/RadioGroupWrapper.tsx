@@ -4,6 +4,7 @@ import { Controller, FieldError, FieldValues, UseControllerProps } from 'react-h
 
 export interface RadioProps<T> extends UseControllerProps<T> {
   legend?: string;
+  description?: string;
   error: FieldError | undefined;
   children?: React.ReactChild | React.ReactChild[];
 }
@@ -11,6 +12,7 @@ const RadioGroupWrapper = <T extends FieldValues>({
   children,
   name,
   legend,
+  description,
   control,
   error,
 }: RadioProps<T>) => (
@@ -25,6 +27,7 @@ const RadioGroupWrapper = <T extends FieldValues>({
         value={value}
         name={name}
         legend={legend}
+        description={description}
         error={error}
         onChange={onChange}
       >
