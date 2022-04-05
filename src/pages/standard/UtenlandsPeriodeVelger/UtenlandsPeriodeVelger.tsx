@@ -1,14 +1,16 @@
-import React from 'react';
+import React, { useMemo } from 'react';
+const { eeaMember } = require('is-european');
 import { GetText } from '../../../hooks/useTexts';
 import { FieldValues, useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as classes from './UtenlandsPeriode.module.css';
 import DatoVelgerWrapper from '../../../components/input/DatoVelgerWrapper';
-import { BodyShort, Button, Heading, Ingress, Modal, Radio } from '@navikt/ds-react';
+import { Label, BodyShort, Button, Heading, Ingress, Modal, Radio } from '@navikt/ds-react';
 import { JaEllerNei } from '../../../types/Generic';
 import RadioGroupWrapper from '../../../components/input/RadioGroupWrapper';
 import CountrySelector from '../../../components/input/CountrySelector';
+import TextFieldWrapper from '../../../components/input/TextFieldWrapper';
 
 interface UtenlandsPeriodeProps {
   getText: GetText;
@@ -16,8 +18,9 @@ interface UtenlandsPeriodeProps {
   onCancel: () => void;
   onClose: () => void;
   open: boolean;
+  hideIArbeid?: boolean;
   heading: string;
-  ingress: string;
+  ingress?: string;
 }
 const initFieldVals: FieldValues = {
   land: '',
@@ -31,6 +34,7 @@ const UtenlandsPeriodeVelger = ({
   onCancel,
   onClose,
   open,
+  hideIArbeid,
   heading,
   ingress,
 }: UtenlandsPeriodeProps) => {
@@ -51,6 +55,7 @@ const UtenlandsPeriodeVelger = ({
   });
   const {
     control,
+    watch,
     formState: { errors },
     getValues,
     _getFieldState,
@@ -60,65 +65,86 @@ const UtenlandsPeriodeVelger = ({
     resolver: yupResolver(schema),
     defaultValues: { ...initFieldVals },
   });
+  const valgtLand = watch('land.value');
+  const showUtenlandsId = useMemo(() => {
+    const landKode = valgtLand?.split(':')?.[0];
+    return landKode === 'GB' || eeaMember(landKode);
+  }, [valgtLand]);
   return (
-    <Modal open={open} onClose={onClose} className={classes.utenlandsPeriodeVelger}>
-      <Modal.Content>
+    <Modal open={open} onClose={onClose}>
+      <Modal.Content className={classes.utenlandsPeriodeVelger}>
         <Heading size={'small'} level={'2'}>
           {heading}
         </Heading>
-        <Ingress>{ingress}</Ingress>
+        {ingress && <Ingress>{ingress}</Ingress>}
         <CountrySelector
           name={'land.value'}
           label={getText('form.utenlandsperiode.land.label')}
           control={control}
           error={errors?.land?.value?.message}
         />
-        <DatoVelgerWrapper
-          name="fraDato.value"
-          label={getText('form.utenlandsperiode.fraDato.label')}
-          control={control}
-          error={errors.fraDato?.value?.message}
-        />
-        <DatoVelgerWrapper
-          name="tilDato.value"
-          label={getText('form.utenlandsperiode.tilDato.label')}
-          control={control}
-          error={errors.tilDato?.value?.message}
-        />
-        <RadioGroupWrapper
-          name={'iArbeid.value'}
-          legend={getText('form.utenlandsperiode.iArbeid.legend')}
-          control={control}
-          error={errors?.iArbeid?.value?.message}
-        >
-          <Radio value={JaEllerNei.JA}>
-            <BodyShort>Ja</BodyShort>
-          </Radio>
-          <Radio value={JaEllerNei.NEI}>
-            <BodyShort>Nei</BodyShort>
-          </Radio>
-        </RadioGroupWrapper>
-        <Button
-          type="button"
-          onClick={async () => {
-            const isValid = await trigger(['land.value', 'fraDato.value', 'tilDato.value']);
-            if (isValid) {
-              setValue('land.label', getText('form.utenlandsperiode.land.label'));
-              setValue('fraDato.label', getText('form.utenlandsperiode.fraDato.label'));
-              setValue('tilDato.label', getText('form.utenlandsperiode.tilDato.label'));
-              setValue('iArbeid.label', getText('form.utenlandsperiode.iArbeid.legend'));
-              const data = { ...getValues() };
-              console.log('data', data);
-              console.log('land', _getFieldState('land'));
-              onSave(data);
-            }
-          }}
-        >
-          Lagre
-        </Button>
-        <Button type="button" variant={'secondary'} onClick={() => onCancel()}>
-          Avbryt
-        </Button>
+        <div>
+          <Label>{getText('form.utenlandsperiode.datoLabel')}</Label>
+          <div className={classes?.datoWrapper}>
+            <DatoVelgerWrapper
+              name="fraDato.value"
+              label={getText('form.utenlandsperiode.fraDato.label')}
+              control={control}
+              error={errors.fraDato?.value?.message}
+            />
+            <DatoVelgerWrapper
+              name="tilDato.value"
+              label={getText('form.utenlandsperiode.tilDato.label')}
+              control={control}
+              error={errors.tilDato?.value?.message}
+            />
+          </div>
+        </div>
+        {!hideIArbeid && (
+          <RadioGroupWrapper
+            name={'iArbeid.value'}
+            legend={getText('form.utenlandsperiode.iArbeid.legend')}
+            control={control}
+            error={errors?.iArbeid?.value?.message}
+          >
+            <Radio value={JaEllerNei.JA}>
+              <BodyShort>Ja</BodyShort>
+            </Radio>
+            <Radio value={JaEllerNei.NEI}>
+              <BodyShort>Nei</BodyShort>
+            </Radio>
+          </RadioGroupWrapper>
+        )}
+        {showUtenlandsId && (
+          <TextFieldWrapper
+            name={'utenlandsId.value'}
+            label={getText('form.utenlandsperiode.utenlandsId.label')}
+            control={control}
+          />
+        )}
+        <div className={classes?.horizontalButtonWrapper}>
+          <Button type="button" variant={'secondary'} onClick={() => onCancel()}>
+            {getText('form.utenlandsperiode.avbryt')}
+          </Button>
+          <Button
+            type="button"
+            onClick={async () => {
+              const isValid = await trigger(['land.value', 'fraDato.value', 'tilDato.value']);
+              if (isValid) {
+                setValue('land.label', getText('form.utenlandsperiode.land.label'));
+                setValue('fraDato.label', getText('form.utenlandsperiode.fraDato.label'));
+                setValue('tilDato.label', getText('form.utenlandsperiode.tilDato.label'));
+                setValue('iArbeid.label', getText('form.utenlandsperiode.iArbeid.legend'));
+                const data = { ...getValues() };
+                console.log('data', data);
+                console.log('land', _getFieldState('land'));
+                onSave(data);
+              }
+            }}
+          >
+            {getText('form.utenlandsperiode.lagre')}
+          </Button>
+        </div>
       </Modal.Content>
     </Modal>
   );

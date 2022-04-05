@@ -3,7 +3,7 @@ import SoknadStandard from '../../types/SoknadStandard';
 import { GetText } from '../../hooks/useTexts';
 import React, { useEffect } from 'react';
 import DatoVelgerWrapper from '../../components/input/DatoVelgerWrapper';
-import { GuidePanel, Heading } from '@navikt/ds-react';
+import { BodyLong, GuidePanel, Heading, ReadMore } from '@navikt/ds-react';
 
 const STARTDATO = 'startDato';
 interface Props {
@@ -20,7 +20,12 @@ const StartDato = ({ getText, errors, control, setValue }: Props) => {
       <Heading size="large" level="2">
         {getText('steps.startDato.title')}
       </Heading>
-      <GuidePanel>{getText('steps.startDato.guide')}</GuidePanel>
+      <GuidePanel>
+        {getText('steps.startDato.guide')}
+        <ReadMore header={getText('steps.startDato.guideReadMore.heading')} type={'button'}>
+          <BodyLong>{getText('steps.startDato.guideReadMore.text')}</BodyLong>
+        </ReadMore>
+      </GuidePanel>
       <DatoVelgerWrapper
         name="startDato.value"
         label={getText(`form.${STARTDATO}.label`)}

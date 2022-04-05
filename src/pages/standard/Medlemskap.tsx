@@ -8,7 +8,7 @@ import {
   Heading,
   ReadMore,
 } from '@navikt/ds-react';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { GetText } from '../../hooks/useTexts';
 import { Control, FieldErrors, FieldValues, useFieldArray, UseFormWatch } from 'react-hook-form';
 import { JaEllerNei } from '../../types/Generic';
@@ -48,6 +48,12 @@ export const Medlemskap = ({
   const boddINorge = watch(`${MEDLEMSKAP}.${BODD_I_NORGE}.value`);
   const arbeidINorge = watch(`${MEDLEMSKAP}.${ARBEID_I_NORGE}.value`);
   const arbeidUtenforNorge = watch(`${MEDLEMSKAP}.${ARBEID_UTENFOR_NORGE_FØR_SYKDOM}.value`);
+  const hideArbeidInUtenlandsPeriode = useMemo(() => {
+    if (boddINorge === JaEllerNei.NEI && arbeidINorge === JaEllerNei.NEI) {
+      return false;
+    }
+    return true;
+  }, [boddINorge, arbeidINorge]);
   useEffect(() => {
     setValue(`${MEDLEMSKAP}.${BODD_I_NORGE}.label`, getText('form.utenlandsopphold.radiolegend'));
     setValue(
@@ -132,11 +138,11 @@ export const Medlemskap = ({
           utenlandsOppholdFieldArray.append({ ...data });
           setShowUtenlandsPeriodeModal(false);
         }}
+        hideIArbeid={hideArbeidInUtenlandsPeriode}
         onCancel={() => setShowUtenlandsPeriodeModal(false)}
         onClose={() => setShowUtenlandsPeriodeModal(false)}
         getText={getText}
         heading={getText('steps.medlemskap.utenlandsPeriode.title')}
-        ingress={getText('steps.medlemskap.utenlandsPeriode.ingress')}
       />
 
       {arbeidUtenforNorge === JaEllerNei.JA &&

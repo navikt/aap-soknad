@@ -4863,6 +4863,13 @@ is-docker@^2.0.0:
   resolved "https://registry.yarnpkg.com/is-docker/-/is-docker-2.2.1.tgz#33eeabe23cfe86f14bde4408a02c0cfb853acdaa"
   integrity sha512-F+i2BKsFrH66iaUFc0woD8sLy8getkwTwtOBjvs56Cx4CgJDeKQeqfz8wAYiSb8JOprWhHH5p77PbmYCvvUuXQ==
 
+is-european@1.0.3:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/is-european/-/is-european-1.0.3.tgz#d8ea356a3bf14bca46d36baa2b22cee38f28230a"
+  integrity sha512-UdmgfunJloE3dMxeCjAaX0fvwB4IxC3kIlIkfLgtmxRGjaPf4OFbEkzltydvMS2edktldAik9rtA/QFSe8LDFA==
+  dependencies:
+    iso-3166 "~3.1.0"
+
 is-extglob@^2.1.1:
   version "2.1.1"
   resolved "https://registry.yarnpkg.com/is-extglob/-/is-extglob-2.1.1.tgz#a88c02535791f02ed37c76a1b9ea9773c833f8c2"
@@ -5046,6 +5053,11 @@ isexe@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/isexe/-/isexe-2.0.0.tgz#e8fbf374dc556ff8947a10dcb0572d633f2cfa10"
   integrity sha1-6PvzdNxVb/iUehDcsFctYz8s+hA=
+
+iso-3166@~3.1.0:
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/iso-3166/-/iso-3166-3.1.0.tgz#0581492579d9513fa87381acbc6ad736ad2d9f16"
+  integrity sha512-evfmpa/xssMZ00Av6CyLXeqy8jfWC+eNrEYnqLNk6GspAPaXewQD1zoVyAy26sj1nTUhu+HInevnk6vI+Tufig==
 
 isstream@~0.1.2:
   version "0.1.2"

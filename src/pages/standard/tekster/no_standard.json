@@ -58,8 +58,7 @@
         "ingress": "Hvis du har arbeidet utenfor Norge før du ble syk, kan du i noen tilgeller få arbeidsperioder med, når vi beregner arbeidsavklaringspengene dine."
       },
       "utenlandsPeriode": {
-        "title": "Utenlandsopphold",
-        "ingress": "Oppgi hvilket land og hvilken periode du har bodd i utlandet de siste fem årene",
+        "title": "Legg til utenlandsopphold",
         "info": "Nå må du oppgi i hvilke perioder du har bodd eller jobbet utenfor Norge.  Oppgi også hvilket land du var i. Ta med alle perioder siden du var 16 år."
       }
     },
@@ -156,7 +155,11 @@
     },
     "startDato": {
       "title": "Søknadsdato",
-      "guide": "Du kan tidligst motta AAP fra dagen du sender inn søknad. Du kan søke om AAP frem i tid."
+      "guide": "Du kan tidligst motta AAP fra dagen du sender inn søknad. Du kan søke om AAP frem i tid, for eksempel hvis du har mer igjen av sykepengene dine.",
+      "guideReadMore": {
+        "heading": "Har du vært forhindret fra å søke tidligere?",
+        "text": "Hvis du av helsemessige årsaker ikke har kunnet søke tidligere, kan du få innvilget AAP tilbake i tid. Dette gjelder for eksempel hvis du har vært i koma. Du kan også få AAP tilbake i tid hvis du har fått feil informasjon fra NAV og dette er grunnen til at du ikke har søkt tidligere."
+      }
     }
   },
   "form": {
@@ -199,9 +202,10 @@
     },
     "utenlandsperiode": {
       "land": {
-        "label": "Land",
+        "label": "Hvilket land var du i?",
         "required": "Vennligst oppgi land"
       },
+      "datoLabel": "I hvilken periode var du der?",
       "fraDato": {
         "label": "Fra og med dato",
         "required": "Vennligst oppgi fra dato"
@@ -213,7 +217,12 @@
       },
       "iArbeid": {
         "legend": "Jobbet du i dette landet i denne perioden?"
-      }
+      },
+      "utenlandsId": {
+        "label": "ID-nummer/personnummer for det landet du har jobbet i (valgfritt)"
+      },
+      "avbryt": "Avbryt",
+      "lagre": "Lagre utenlandsopphold"
     },
     "medlemskap": {
       "boddINorge": {
