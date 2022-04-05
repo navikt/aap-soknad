@@ -1,0 +1,7 @@
+.fieldArrayMainContent {
+  display: flex;
+  flex-direction: column;
+  gap: var(--navds-spacing-10);
+  box-shadow: 0 1px 3px 0 rgba(38,38,38,0.2);
+  padding: var(--navds-spacing-10)
+}
