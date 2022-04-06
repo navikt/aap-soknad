@@ -4,17 +4,18 @@ import {
   Button,
   GuidePanel,
   Heading,
+  Link,
   ReadMore,
-  Table,
   TextField,
 } from '@navikt/ds-react';
 import React, { useState } from 'react';
 import { GetText } from '../../hooks/useTexts';
 import { Control, useFieldArray } from 'react-hook-form';
 import { FastlegeView } from '../../context/sokerOppslagContext';
-import { Delete, AddCircle } from '@navikt/ds-icons';
+import { Delete, Add } from '@navikt/ds-icons';
 import SoknadStandard from '../../types/SoknadStandard';
 import FieldArrayWrapper from '../../components/input/FieldArrayWrapper/FieldArrayWrapper';
+import ButtonPanel from '../../components/ButtonPanel/ButtonPanel';
 
 interface BehandlereProps {
   getText: GetText;
@@ -25,6 +26,7 @@ const FIELD_ARRAY_NAME = 'behandlere';
 
 export const Behandlere = ({ getText, fastlege, control }: BehandlereProps) => {
   const [showNyBehandler, setShowNyBehandler] = useState<boolean>(false);
+  const [selectedBehandler, setSelectedBehandler] = useState<number | undefined>(undefined);
   const [name, setName] = useState<string>('');
   const [legekontor, setLegekontor] = useState<string>('');
   const [gateadresse, setGateadresse] = useState<string>('');
@@ -39,10 +41,35 @@ export const Behandlere = ({ getText, fastlege, control }: BehandlereProps) => {
     setPoststed('');
     setTelefon('');
   };
-  const { fields, append, remove } = useFieldArray({
+  const { fields, append, remove, update } = useFieldArray({
     name: FIELD_ARRAY_NAME,
     control,
   });
+  const editNyBehandler = (index: number) => {
+    setSelectedBehandler(index);
+    const behandler = fields[index];
+    setName(behandler?.name);
+    setLegekontor(behandler?.legekontor);
+    setGateadresse(behandler?.gateadresse);
+    setPostnummer(behandler?.postnummer);
+    setPoststed(behandler?.poststed);
+    setTelefon(behandler?.telefon);
+    setShowNyBehandler(true);
+  };
+  const saveNyBehandler = () => {
+    if (!selectedBehandler) {
+      append({ name, legekontor, gateadresse, postnummer, poststed, telefon });
+    } else {
+      update(selectedBehandler, { name, legekontor, gateadresse, postnummer, poststed, telefon });
+    }
+    resetNyBehandler();
+    setShowNyBehandler(false);
+  };
+  const slettSelectedBehandler = () => {
+    remove(selectedBehandler);
+    resetNyBehandler();
+    setShowNyBehandler(false);
+  };
   return (
     <>
       <Heading size="large" level="2">
@@ -52,8 +79,8 @@ export const Behandlere = ({ getText, fastlege, control }: BehandlereProps) => {
         <BodyLong>{getText('steps.fastlege.guide1')}</BodyLong>
         <BodyLong>{getText('steps.fastlege.guide2')}</BodyLong>
       </GuidePanel>
+      <Heading size={'small'} level={'3'}>{`Fastlege`}</Heading>
       <article>
-        <Heading size={'small'} level={'3'}>{`Fastlege`}</Heading>
         <BodyShort>{fastlege?.fulltNavn}</BodyShort>
         <BodyShort>{fastlege?.legekontor}</BodyShort>
         <BodyShort>{fastlege?.adresse}</BodyShort>
@@ -62,74 +89,94 @@ export const Behandlere = ({ getText, fastlege, control }: BehandlereProps) => {
           <BodyLong>{getText('steps.fastlege.readMore.text')}</BodyLong>
         </ReadMore>
       </article>
-      <BodyLong>{getText('steps.fastlege.annenBehandler')}</BodyLong>
+      <Heading size={'small'} level={'3'}>
+        {getText('steps.fastlege.annenBehandler.heading')}
+      </Heading>
+      <BodyLong>{getText('steps.fastlege.annenBehandler.info')}</BodyLong>
       {fields.length > 0 && (
-        <Table size="medium">
-          <Table.Body>
-            {fields.map((field, index) => (
-              <Table.Row key={field.id}>
-                <Table.DataCell>{`${field?.name}, ${field?.legekontor}`}</Table.DataCell>
-                <Table.DataCell>{<Delete onClick={() => remove(index)} />}</Table.DataCell>
-              </Table.Row>
-            ))}
-          </Table.Body>
-        </Table>
+        <>
+          <Heading size={'small'} level={'3'}>
+            {getText('steps.fastlege.andreBehandlere.heading')}
+          </Heading>
+          {fields.map((field, index) => (
+            <ButtonPanel key={field.id} onClick={() => editNyBehandler(index)}>
+              <Link>{`${field?.name}, ${field?.legekontor}`}</Link>
+            </ButtonPanel>
+          ))}
+        </>
       )}
-      <Button variant="tertiary" type="button" onClick={() => setShowNyBehandler(true)}>
-        <AddCircle />
-        Legg til lege/behandler
-      </Button>
+      {!showNyBehandler && (
+        <div>
+          <Button variant="tertiary" type="button" onClick={() => setShowNyBehandler(true)}>
+            <Add />
+            {getText('steps.fastlege.buttonAddNyBehandler')}
+          </Button>
+        </div>
+      )}
       {showNyBehandler && (
         <FieldArrayWrapper>
+          <Heading size={'small'} level={'3'}>
+            {'Legg til annen lege eller behandler'}
+          </Heading>
           <TextField
+            value={name}
             label={getText('form.fastlege.annenbehandler.name.label')}
             name={'name'}
             onChange={(e) => e?.target?.value && setName(e?.target?.value)}
           />
           <TextField
+            value={legekontor}
             label={getText('form.fastlege.annenbehandler.legekontor.label')}
             name={'legekontor'}
             onChange={(e) => e?.target?.value && setLegekontor(e?.target?.value)}
           />
           <TextField
+            value={gateadresse}
             label={getText('form.fastlege.annenbehandler.gateadresse.label')}
             name={'gateadresse'}
             onChange={(e) => e?.target?.value && setGateadresse(e?.target?.value)}
           />
           <TextField
+            value={postnummer}
             label={getText('form.fastlege.annenbehandler.postnummer.label')}
             name={'postnummer'}
             onChange={(e) => e?.target?.value && setPostnummer(e?.target?.value)}
           />
           <TextField
+            value={poststed}
             label={getText('form.fastlege.annenbehandler.poststed.label')}
             name={'poststed'}
             onChange={(e) => e?.target?.value && setPoststed(e?.target?.value)}
           />
           <TextField
+            value={telefon}
             label={getText('form.fastlege.annenbehandler.telefon.label')}
             name={'telefon'}
             onChange={(e) => e?.target?.value && setTelefon(e?.target?.value)}
           />
-          <Button
-            type="button"
-            onClick={() => {
-              append({ name, legekontor, gateadresse, postnummer, poststed, telefon });
-              resetNyBehandler();
-              setShowNyBehandler(false);
-            }}
-          >
-            Lagre
-          </Button>
-          <Button
-            type="button"
-            variant={'secondary'}
-            onClick={() => {
-              setShowNyBehandler(false);
-            }}
-          >
-            Avbryt
-          </Button>
+          <div>
+            <Button type="button" onClick={saveNyBehandler}>
+              Lagre lege/behandler
+            </Button>
+            {selectedBehandler !== undefined && (
+              <Button variant={'danger'} type="button" onClick={slettSelectedBehandler}>
+                <BodyShort>Slett lege/behandler</BodyShort>
+                <Delete />
+              </Button>
+            )}
+          </div>
+          <div>
+            <Button
+              type="button"
+              variant={'secondary'}
+              onClick={() => {
+                resetNyBehandler();
+                setShowNyBehandler(false);
+              }}
+            >
+              Avbryt
+            </Button>
+          </div>
         </FieldArrayWrapper>
       )}
     </>

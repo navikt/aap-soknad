@@ -43,7 +43,14 @@
       "title": "Kontaktperson for helseopplysninger",
       "guide1": "NAV henter helseopplysninger fra fastlegen din når vi skal behandle søknaden din. Ved behov kan vi også hente inn opplysninger fra andre  behandlere eller leger.",
       "guide2": "Hvis vi allerede har tilsrekkelig med opplysninger om deg fra tidligere, innhenter vi ikke legeerklæring.",
-      "annenBehandler": "Hvis  du har en annen lege eller behandler, som du vil NAV skal vite om eller som du vil at vi skal innhente legeerklæringen din fra, kan du legge til denne her.",
+      "annenBehandler": {
+        "heading": "Annen lege eller behandler",
+        "info": "Hvis  du har en annen lege eller behandler, som du vil NAV skal vite om eller som du vil at vi skal innhente legeerklæringen din fra, kan du legge til denne her."
+      },
+      "buttonAddNyBehandler": "Legg til lege/behandler",
+      "andreBehandlere": {
+        "heading": "Dine leger/behandlere"
+      },
       "readMore": {
         "header": "Hva gjør jeg hvis jeg har en annen fastlege?",
         "text": "Logg inn på helsenorge for å bytte fastlege. Du kan sende inn din AAP søknad selv om du ikke ser endringen her enda."
