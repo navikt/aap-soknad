@@ -139,7 +139,13 @@ export const StandardPage = (): JSX.Element => {
         >
           <FormErrorSummary errors={errors} />
           <Step order={1} name={StepNames.STARTDATO} label={'Søknadsdato'}>
-            <StartDato control={control} getText={getText} setValue={setValue} errors={errors} />
+            <StartDato
+              control={control}
+              watch={watch}
+              getText={getText}
+              setValue={setValue}
+              errors={errors}
+            />
           </Step>
           <Step order={2} name={StepNames.MEDLEMSKAP} label={'Tilknytning til Norge'}>
             <Medlemskap

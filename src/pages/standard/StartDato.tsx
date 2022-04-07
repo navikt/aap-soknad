@@ -1,20 +1,64 @@
-import { Control, FieldErrors } from 'react-hook-form';
+import { Control, FieldErrors, FieldValues, UseFormWatch } from 'react-hook-form';
 import SoknadStandard from '../../types/SoknadStandard';
 import { GetText } from '../../hooks/useTexts';
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import DatoVelgerWrapper from '../../components/input/DatoVelgerWrapper';
-import { BodyLong, GuidePanel, Heading, ReadMore } from '@navikt/ds-react';
+import {
+  Grid,
+  BodyLong,
+  GuidePanel,
+  Heading,
+  Radio,
+  ReadMore,
+  BodyShort,
+  Cell,
+} from '@navikt/ds-react';
+import RadioGroupWrapper from '../../components/input/RadioGroupWrapper';
+import { JaNeiVetIkke } from '../../types/Generic';
+import TextFieldWrapper from '../../components/input/TextFieldWrapper';
+import ColorPanel from '../../components/panel/ColorPanel';
 
 const STARTDATO = 'startDato';
+const FERIE = 'ferie';
 interface Props {
+  watch: UseFormWatch<FieldValues>;
   control: Control<SoknadStandard>;
   getText: GetText;
   errors: FieldErrors;
   setValue: any;
 }
 
-const StartDato = ({ getText, errors, control, setValue }: Props) => {
-  useEffect(() => setValue(`${STARTDATO}.label`, getText(`form.${STARTDATO}.label`)), [getText]);
+const StartDato = ({ getText, errors, watch, control, setValue }: Props) => {
+  const skalHaFerie = watch(`${FERIE}.skalHaFerie.value`);
+  const ferieType = watch(`${FERIE}.type.value`);
+  const antallDager = watch(`${FERIE}.antallDager.value`);
+  const FerieType = useMemo(
+    () => ({
+      PERIODE: getText(`form.${FERIE}.ferieType.periode`),
+      DAGER: getText(`form.${FERIE}.ferieType.dager`),
+    }),
+    [getText]
+  );
+  useEffect(() => {
+    setValue(`${STARTDATO}.label`, getText(`form.${STARTDATO}.label`));
+    setValue(`${FERIE}.skalHaFerie.label`, getText('form.ferie.skalHaFerie.legend'));
+  }, [getText]);
+  useEffect(() => {
+    setValue(`${FERIE}.type.value`, undefined);
+    setValue(`${FERIE}.type.label`, undefined);
+  }, [skalHaFerie]);
+  useEffect(() => {
+    setValue(`${FERIE}.type.label`, getText('form.ferie.ferieType.legend'));
+    setValue(`${FERIE}.periode.fraDato.value`, undefined);
+    setValue(`${FERIE}.periode.fraDato.label`, undefined);
+    setValue(`${FERIE}.periode.tilDato.value`, undefined);
+    setValue(`${FERIE}.periode.tilDato.label`, undefined);
+    setValue(`${FERIE}.antallDager.value`, undefined);
+    setValue(`${FERIE}.antallDager.label`, undefined);
+  }, [ferieType]);
+  useEffect(() => {
+    setValue(`${FERIE}.antallDager.label`, getText('form.andreUtbetalinger.ferieTilDato.label'));
+  }, [antallDager]);
   return (
     <>
       <Heading size="large" level="2">
@@ -27,11 +71,67 @@ const StartDato = ({ getText, errors, control, setValue }: Props) => {
         </ReadMore>
       </GuidePanel>
       <DatoVelgerWrapper
-        name="startDato.value"
+        name={`${STARTDATO}.value`}
         label={getText(`form.${STARTDATO}.label`)}
         control={control}
         error={errors.startDato?.value?.message}
       />
+      <RadioGroupWrapper
+        legend={getText('form.ferie.skalHaFerie.legend')}
+        name={`${FERIE}.skalHaFerie.value`}
+        control={control}
+        error={errors?.[`${FERIE}`]?.skalHaFerie?.value?.message}
+      >
+        <Radio value={JaNeiVetIkke.JA}>{JaNeiVetIkke.JA}</Radio>
+        <Radio value={JaNeiVetIkke.NEI}>{JaNeiVetIkke.NEI}</Radio>
+        <Radio value={JaNeiVetIkke.VET_IKKE}>{JaNeiVetIkke.VET_IKKE}</Radio>
+      </RadioGroupWrapper>
+      {skalHaFerie === JaNeiVetIkke.JA && (
+        <ColorPanel>
+          <RadioGroupWrapper
+            legend={getText('form.ferie.ferieType.legend')}
+            name={`${FERIE}.type.value`}
+            control={control}
+            error={errors?.[`${FERIE}`]?.type?.value?.message}
+          >
+            <Radio value={FerieType.PERIODE}>
+              <BodyShort>{FerieType.PERIODE}</BodyShort>
+            </Radio>
+            <Radio value={FerieType.DAGER}>
+              <BodyShort>{FerieType.DAGER}</BodyShort>
+            </Radio>
+          </RadioGroupWrapper>
+          {ferieType === FerieType.PERIODE ? (
+            <Grid>
+              <Cell xs={6}>
+                <DatoVelgerWrapper
+                  name={`${FERIE}.periode.fraDato.value`}
+                  label={getText('form.andreUtbetalinger.ferieFraDato.label')}
+                  control={control}
+                />
+              </Cell>
+              <Cell xs={6}>
+                <DatoVelgerWrapper
+                  name={`${FERIE}.periode.tilDato.value`}
+                  label={getText('form.andreUtbetalinger.ferieTilDato.label')}
+                  control={control}
+                />
+              </Cell>
+            </Grid>
+          ) : (
+            <></>
+          )}
+          {ferieType === FerieType.DAGER ? (
+            <TextFieldWrapper
+              name={`${FERIE}.antallDager.value`}
+              label={getText('form.ferie.antallDager.label')}
+              control={control}
+            />
+          ) : (
+            <></>
+          )}
+        </ColorPanel>
+      )}
     </>
   );
 };

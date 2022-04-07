@@ -319,21 +319,6 @@
         }
       }
     },
-    "ferie": {
-      "legend": "Planlegger du å ta ferie i tiden som kommer?",
-      "ja_datoer": "Ja, jeg skal ta ferie, og vet hvilke datoer.",
-      "ja_dager": "Ja, jeg vet antall dager, men er usikker på datoene",
-      "nei": "Nei, jeg skal ikke ta ferie.",
-      "vetikke": "Jeg vet ikke om jeg skal ta ferie.",
-      "fromdate": {
-        "label": "Fra og med dato",
-        "required": "Vennligst angi fra dato"
-      },
-      "todate": {
-        "label": "Til og med dato",
-        "required": "Vennligst angi til dato"
-      }
-    },
     "barnetillegg": {
       "legend": "Forsørger du barnet?",
       "ja": "Ja",
@@ -367,7 +352,28 @@
     },
     "startDato": {
       "label": "Fra hvilken dato søker du AAP?"
-    }
+    },
+    "ferie": {
+      "skalHaFerie": {
+        "legend": "Planlegger du å ta ferie før startdato på AAP?"
+      },
+      "ferieType": {
+        "legend": "Vet du hvilken periode du skal ta ferie?",
+        "periode": "Ja",
+        "dager": "Nei, men jeg vet antall feriedager"
+      },
+      "antallDager": {
+        "label": "Skriv inn antall dager du skal ha ferie"
+      },
+      "fromdate": {
+        "label": "Fra dato",
+        "required": "Vennligst angi fra dato"
+      },
+      "todate": {
+        "label": "Til dato",
+        "required": "Vennligst angi til dato"
+      }
+  }
   },
   "innsending": {
     "feil": "En feil oppstod. Vennligst vent litt, og forsøk å sende meldingen på nytt."

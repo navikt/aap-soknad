@@ -2,13 +2,13 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  gap: 20px;
+  gap: var(--navds-spacing-10)
 }
 .buttonWrapper {
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
-  gap: 20px;
+  gap: var(--navds-spacing-5)
 }
 .cancelButtonWrapper {
   display: flex;

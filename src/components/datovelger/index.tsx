@@ -3,7 +3,6 @@ import DayPickerInput from 'react-day-picker/DayPickerInput';
 import { parse } from 'date-fns';
 import { nb } from 'date-fns/locale';
 import 'react-day-picker/lib/style.css';
-import './datovelger.less';
 import { TextField } from '@navikt/ds-react';
 import { formatDate } from '../../utils/date';
 import { DateUtils } from 'react-day-picker';
@@ -33,7 +32,15 @@ interface DatovelgerProps {
 
 const datovelger = ({ onChange, error, name, label, id, value }: DatovelgerProps) => {
   const TextFieldInput = forwardRef((props, ref) => (
-    <TextField label={label} id={id} name={name} error={error} {...props} {...ref} />
+    <TextField
+      label={label}
+      id={id}
+      name={name}
+      style={{ maxWidth: '255px' }}
+      error={error}
+      {...props}
+      {...ref}
+    />
   ));
   return (
     <div className="datovelger navds-form-field">
