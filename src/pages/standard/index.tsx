@@ -35,6 +35,7 @@ import Oppsummering from './Oppsummering/Oppsummering';
 import Tilleggsopplysninger from './Tilleggsopplysninger';
 import Vedlegg from '../Vedlegg/Vedlegg';
 import StartDato from './StartDato';
+import Student from './Student';
 export enum StepNames {
   VEILEDNING = 'VEILEDNING',
   KONTAKTINFO = 'KONTAKTINFO',
@@ -181,10 +182,13 @@ export const StandardPage = (): JSX.Element => {
           <Step order={6} name={StepNames.BARNETILLEGG} label={'Barnetilleggg'}>
             <Barnetillegg getText={getText} errors={errors} control={control} />
           </Step>
-          <Step order={7} name={StepNames.VEDLEGG} label={'Vedlegg'}>
+          <Step order={7} name={StepNames.STUDENT} label={'Student'}>
+            <Student getText={getText} errors={errors} control={control} setValue={setValue} />
+          </Step>
+          <Step order={8} name={StepNames.VEDLEGG} label={'Vedlegg'}>
             <Vedlegg getText={getText} control={control} />
           </Step>
-          <Step order={8} name={StepNames.TILLEGGSOPPLYSNINGER} label={'Tilleggsopplysninger'}>
+          <Step order={9} name={StepNames.TILLEGGSOPPLYSNINGER} label={'Tilleggsopplysninger'}>
             <Tilleggsopplysninger
               getText={getText}
               errors={errors}
@@ -192,7 +196,7 @@ export const StandardPage = (): JSX.Element => {
               setValue={setValue}
             />
           </Step>
-          <Step order={9} name={StepNames.OPPSUMMERING} label={'Oppsummering'}>
+          <Step order={10} name={StepNames.OPPSUMMERING} label={'Oppsummering'}>
             <Oppsummering getText={getText} errors={errors} control={control} />
           </Step>
           <div className={classes?.buttonWrapper}>
