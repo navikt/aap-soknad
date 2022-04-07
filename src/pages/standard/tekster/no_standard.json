@@ -54,6 +54,13 @@
       "readMore": {
         "header": "Hva gjør jeg hvis jeg har en annen fastlege?",
         "text": "Logg inn på helsenorge for å bytte fastlege. Du kan sende inn din AAP søknad selv om du ikke ser endringen her enda."
+      },
+      "ingenFastlege": {
+        "text": "Vi finner ingen informasjon om fastlege registrert på deg. På $$ kan du legge til fastlege",
+        "link": {
+          "name": "helsenorge.no (åpnes i ny fane)",
+          "href": "https://www.helsenorge.no"
+        }
       }
     },
     "medlemskap": {

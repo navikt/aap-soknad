@@ -16,6 +16,7 @@ import { Delete, Add } from '@navikt/ds-icons';
 import SoknadStandard from '../../types/SoknadStandard';
 import FieldArrayWrapper from '../../components/input/FieldArrayWrapper/FieldArrayWrapper';
 import ButtonPanel from '../../components/ButtonPanel/ButtonPanel';
+import TextWithLink from '../../components/TextWithLink';
 
 interface BehandlereProps {
   getText: GetText;
@@ -80,15 +81,23 @@ export const Behandlere = ({ getText, fastlege, control }: BehandlereProps) => {
         <BodyLong>{getText('steps.fastlege.guide2')}</BodyLong>
       </GuidePanel>
       <Heading size={'small'} level={'3'}>{`Fastlege`}</Heading>
-      <article>
-        <BodyShort>{fastlege?.fulltNavn}</BodyShort>
-        <BodyShort>{fastlege?.legekontor}</BodyShort>
-        <BodyShort>{fastlege?.adresse}</BodyShort>
-        <BodyShort>{`Telefon: ${fastlege?.telefon}`}</BodyShort>
-        <ReadMore header={getText('steps.fastlege.readMore.header')} type={'button'}>
-          <BodyLong>{getText('steps.fastlege.readMore.text')}</BodyLong>
-        </ReadMore>
-      </article>
+      {!fastlege ? (
+        <TextWithLink text={getText('steps.fastlege.ingenFastlege.text')}>
+          <Link target={'_blank'} href={getText('steps.fastlege.ingenFastlege.link.href')}>
+            {getText('steps.fastlege.ingenFastlege.link.name')}
+          </Link>
+        </TextWithLink>
+      ) : (
+        <div>
+          <BodyShort>{fastlege?.fulltNavn}</BodyShort>
+          <BodyShort>{fastlege?.legekontor}</BodyShort>
+          <BodyShort>{fastlege?.adresse}</BodyShort>
+          <BodyShort>{`Telefon: ${fastlege?.telefon}`}</BodyShort>
+          <ReadMore header={getText('steps.fastlege.readMore.header')} type={'button'}>
+            <BodyLong>{getText('steps.fastlege.readMore.text')}</BodyLong>
+          </ReadMore>
+        </div>
+      )}
       <Heading size={'small'} level={'3'}>
         {getText('steps.fastlege.annenBehandler.heading')}
       </Heading>
