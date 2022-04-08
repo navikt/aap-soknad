@@ -12,6 +12,7 @@ import {
   ReadMore,
   BodyShort,
   Cell,
+  Alert,
 } from '@navikt/ds-react';
 import RadioGroupWrapper from '../../components/input/RadioGroupWrapper';
 import { JaNeiVetIkke } from '../../types/Generic';
@@ -29,6 +30,10 @@ interface Props {
 }
 
 const StartDato = ({ getText, errors, watch, control, setValue }: Props) => {
+  const getParagraphs = (path: string) => {
+    const paragraphs = getText(path);
+    return Array.isArray(paragraphs) ? paragraphs : [];
+  };
   const skalHaFerie = watch(`${FERIE}.skalHaFerie.value`);
   const ferieType = watch(`${FERIE}.type.value`);
   const antallDager = watch(`${FERIE}.antallDager.value`);
@@ -66,7 +71,9 @@ const StartDato = ({ getText, errors, watch, control, setValue }: Props) => {
         {getText('steps.startDato.title')}
       </Heading>
       <GuidePanel>
-        {getText('steps.startDato.guide')}
+        {getParagraphs('steps.startDato.guide.paragraphs').map((e: string, index: number) => (
+          <BodyLong key={`${index}`}>{e}</BodyLong>
+        ))}
         <ReadMore header={getText('steps.startDato.guideReadMore.heading')} type={'button'}>
           <BodyLong>{getText('steps.startDato.guideReadMore.text')}</BodyLong>
         </ReadMore>
@@ -132,6 +139,12 @@ const StartDato = ({ getText, errors, watch, control, setValue }: Props) => {
             <></>
           )}
         </ColorPanel>
+      )}
+      {skalHaFerie === JaNeiVetIkke.VET_IKKE && (
+        <Alert variant={'info'}>
+          Det er viktig at du gir oss beskjed hvis du bestemmer deg for å ta ferie, fordi det kan
+          påvirke startdatoen din. Dette påvirker spesielt deg som får sykepenger.
+        </Alert>
       )}
     </>
   );

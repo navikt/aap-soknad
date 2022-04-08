@@ -1,6 +1,6 @@
 import { BodyShort, GuidePanel, Heading, Label } from '@navikt/ds-react';
 import React from 'react';
-import { getLinks, GetText } from '../../hooks/useTexts';
+import { GetText } from '../../hooks/useTexts';
 import TextWithLink from '../../components/TextWithLink';
 import { SøkerView } from '../../context/sokerOppslagContext';
 
@@ -13,9 +13,10 @@ export const Kontaktinfo = ({ getText, søker, pageTitle }: KontaktinfoProps) =>
   return (
     <>
       <GuidePanel>
-        <TextWithLink text={getText(`steps.kontaktinfo.guide`)}>
-          {getLinks(`steps.kontaktinfo.guideLinks`, getText)}
-        </TextWithLink>
+        <TextWithLink
+          text={getText(`steps.kontaktinfo.guide`)}
+          links={[getText(`steps.kontaktinfo.guideLink`)]}
+        />
       </GuidePanel>
       <Heading size="large" level="2">
         {pageTitle}

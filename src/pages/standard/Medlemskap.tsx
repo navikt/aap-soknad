@@ -94,10 +94,16 @@ export const Medlemskap = ({
       <RadioGroupWrapper
         name={`${MEDLEMSKAP}.${BODD_I_NORGE}.value`}
         legend={getText('form.medlemskap.boddINorge.legend')}
-        description={getText('form.medlemskap.boddINorge.description')}
         control={control}
         error={errors?.[MEDLEMSKAP]?.[BODD_I_NORGE]?.message}
       >
+        <ReadMore header={'Hva menes med å ha "bodd sammenhengende"?'} type={'button'}>
+          Dette betyr at du både
+          <ul>
+            <li>har hatt folkeregistrert adresse i Norge, og</li>
+            <li>har oppholdt deg i Norge mesteparten av hver av disse årene</li>
+          </ul>
+        </ReadMore>
         <Radio value={JaEllerNei.JA}>
           <BodyShort>Ja</BodyShort>
         </Radio>
@@ -109,10 +115,19 @@ export const Medlemskap = ({
         <RadioGroupWrapper
           name={`${MEDLEMSKAP}.${ARBEID_I_NORGE}.value`}
           legend={getText('form.medlemskap.arbeidINorge.legend')}
-          description={getText('form.medlemskap.arbeidINorge.description')}
           control={control}
           error={errors?.[MEDLEMSKAP]?.[ARBEID_I_NORGE]?.message}
         >
+          <ReadMore
+            header={
+              'Hva hvis jeg har fått dagpenger, sykepenger, foreldrepenger eller tilsvarende?'
+            }
+            type={'button'}
+          >
+            Med “jobb” menes også offentlige ytelser du har fått som erstatning for arbeid, for
+            eksempel dagpenger, sykepenger og foreldrepenger. Pensjon regnes ikke som erstatning for
+            jobb.
+          </ReadMore>
           <Radio value={JaEllerNei.JA}>
             <BodyShort>Ja</BodyShort>
           </Radio>
@@ -125,7 +140,6 @@ export const Medlemskap = ({
         <RadioGroupWrapper
           name={`${MEDLEMSKAP}.${ARBEID_UTENFOR_NORGE_FØR_SYKDOM}.value`}
           legend={getText('form.medlemskap.arbeidUtenforNorge.legend')}
-          description={getText('form.medlemskap.arbeidUtenforNorge.description')}
           control={control}
           error={errors?.[MEDLEMSKAP]?.[ARBEID_UTENFOR_NORGE_FØR_SYKDOM]?.message}
         >
@@ -172,7 +186,11 @@ export const Medlemskap = ({
         ))}
       {(arbeidUtenforNorge === JaEllerNei.JA || arbeidINorge === JaEllerNei.NEI) && (
         <>
-          <BodyLong>{getText('steps.medlemskap.utenlandsPeriode.info')}</BodyLong>
+          <BodyLong>
+            {boddINorge === JaEllerNei.JA && arbeidUtenforNorge === JaEllerNei.JA
+              ? getText('steps.medlemskap.utenlandsPeriode.infoJaJa')
+              : getText('steps.medlemskap.utenlandsPeriode.info')}
+          </BodyLong>
           <Button
             variant="secondary"
             type="button"

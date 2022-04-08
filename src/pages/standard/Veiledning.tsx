@@ -1,4 +1,4 @@
-import { BodyLong, GuidePanel, Heading, Link, ReadMore } from '@navikt/ds-react';
+import { BodyLong, GuidePanel, Heading, ReadMore } from '@navikt/ds-react';
 import React from 'react';
 import { GetText } from '../../hooks/useTexts';
 import { Control, FieldErrors } from 'react-hook-form';
@@ -22,15 +22,15 @@ export const Veiledning = ({ getText, errors, control, søker, loading }: Veiled
   };
   return (
     <>
+      <Heading size="large" level="2">
+        {getText(`steps.veiledning.title`)}
+      </Heading>
       <GuidePanel>
         <HeadingHelloName size={'large'} level={'2'} name={søker?.fulltNavn} loading={loading} />
         {getParagraphs('steps.veiledning.guide.paragraphs').map((e: string, index: number) => (
           <BodyLong key={`${index}`}>{e}</BodyLong>
         ))}
       </GuidePanel>
-      <Heading size="large" level="2">
-        {getText(`steps.veiledning.title`)}
-      </Heading>
       <article>
         <Heading size={'small'} level={'2'}>
           {getText('steps.veiledning.søknadsdato.title')}
@@ -46,11 +46,10 @@ export const Veiledning = ({ getText, errors, control, søker, loading }: Veiled
           {getText('steps.veiledning.opplysninger.title')}
         </Heading>
         <BodyLong>
-          <TextWithLink text={getText('steps.veiledning.opplysninger.text')}>
-            <Link target={'_blank'} href={getText('steps.veiledning.opplysninger.link.href')}>
-              {getText('steps.veiledning.opplysninger.link.name')}
-            </Link>
-          </TextWithLink>
+          <TextWithLink
+            text={getText('steps.veiledning.opplysninger.text')}
+            links={[getText('steps.veiledning.opplysninger.link')]}
+          />
         </BodyLong>
       </article>
       <article>
@@ -58,7 +57,30 @@ export const Veiledning = ({ getText, errors, control, søker, loading }: Veiled
           {getText('steps.veiledning.rettogplikt.title')}
         </Heading>
         <ReadMore header={getText('steps.veiledning.rettogplikt.readMore.title')}>
-          <BodyLong>{getText('steps.veiledning.rettogplikt.readMore.text')}</BodyLong>
+          <BodyLong>
+            {getText('steps.veiledning.rettogplikt.readMore.text')}
+            <ul>
+              <li>{getText('steps.veiledning.rettogplikt.readMore.bullet1')}</li>
+              <li>
+                <TextWithLink
+                  text={getText('steps.veiledning.rettogplikt.readMore.bullet2')}
+                  links={[getText('steps.veiledning.rettogplikt.readMore.bullet2Link')]}
+                />
+              </li>
+              <li>
+                <TextWithLink
+                  text={getText('steps.veiledning.rettogplikt.readMore.bullet3')}
+                  links={[getText('steps.veiledning.rettogplikt.readMore.bullet3Link')]}
+                />
+              </li>
+              <li>
+                <TextWithLink
+                  text={getText('steps.veiledning.rettogplikt.readMore.bullet4')}
+                  links={[getText('steps.veiledning.rettogplikt.readMore.bullet4Link')]}
+                />
+              </li>
+            </ul>
+          </BodyLong>
         </ReadMore>
       </article>
       <ConfirmationPanelWrapper
@@ -70,14 +92,10 @@ export const Veiledning = ({ getText, errors, control, søker, loading }: Veiled
         <Heading size={'small'} level={'2'}>
           {getText('steps.veiledning.rettogpliktConfirmation.title')}
         </Heading>
-        <TextWithLink text={getText('steps.veiledning.rettogpliktConfirmation.description')}>
-          <Link
-            href={getText('steps.veiledning.rettogpliktConfirmation.link.href')}
-            target={'_blank'}
-          >
-            {getText('steps.veiledning.rettogpliktConfirmation.link.name')}
-          </Link>
-        </TextWithLink>
+        <TextWithLink
+          text={getText('steps.veiledning.rettogpliktConfirmation.description')}
+          links={[getText('steps.veiledning.rettogpliktConfirmation.link')]}
+        />
       </ConfirmationPanelWrapper>
     </>
   );

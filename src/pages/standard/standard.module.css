@@ -1,3 +1,6 @@
+.soknadForm h2{
+  text-align: center;
+}
 .soknadForm {
   display: flex;
   flex-direction: column;

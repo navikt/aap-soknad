@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { onLanguageSelect } from '@navikt/nav-dekoratoren-moduler';
-import { Link } from '@navikt/ds-react';
 
 export interface GetText {
   (str: string): string;
@@ -13,20 +12,6 @@ type Tekst = {
 interface Tekstpakker {
   [key: string]: Tekst;
 }
-
-const getLink = (link: { href: string; name: string }) => {
-  return link?.href && link?.name ? (
-    <Link href={link.href} target={'_blank'}>
-      {link?.name}
-    </Link>
-  ) : (
-    <></>
-  );
-};
-export const getLinks = (path: string, getText: (path: string) => any) => {
-  const linkList = getText(path);
-  return Array.isArray(linkList) ? linkList.map((link) => getLink(link)) : [];
-};
 
 export const useTexts = (tekstpakke: Tekstpakker) => {
   const [language, setLanguage] = useState<string>('nb');
@@ -55,7 +40,7 @@ export const useTexts = (tekstpakke: Tekstpakker) => {
       return '';
     }
   };
-  return { language, pageTexts: filteredTexts, getText, getLinks };
+  return { language, pageTexts: filteredTexts, getText };
 };
 
 export default useTexts;

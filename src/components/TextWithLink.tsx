@@ -1,16 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { BodyLong } from '@navikt/ds-react';
+import { Link } from '@navikt/ds-react';
 
-type Props = {
-  text?: string;
-  children?: React.ReactChild | React.ReactChild[];
-};
-
-const TextWithLink = ({ text, children }: Props) => {
+const TextWithLink = ({ text, links = [] }: { text: string; links: any[] }) => {
   const [childrenList, setChildrenList] = useState<Array<any>>([]);
   useEffect(() => {
-    setChildrenList(Array.isArray(children) ? [...children] : [children]);
-  }, [children]);
+    setChildrenList([...links]);
+  }, [links]);
   const textArray = text?.split('$') || [];
   return (
     <>
@@ -18,7 +13,12 @@ const TextWithLink = ({ text, children }: Props) => {
         if (el) {
           return el;
         } else {
-          return childrenList.shift();
+          const link = childrenList.shift();
+          return (
+            <Link target={'_blank'} href={link?.href}>
+              {link?.name}
+            </Link>
+          );
         }
       })}
     </>

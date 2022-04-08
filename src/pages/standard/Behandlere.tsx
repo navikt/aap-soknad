@@ -82,11 +82,10 @@ export const Behandlere = ({ getText, fastlege, control }: BehandlereProps) => {
       </GuidePanel>
       <Heading size={'small'} level={'3'}>{`Fastlege`}</Heading>
       {!fastlege ? (
-        <TextWithLink text={getText('steps.fastlege.ingenFastlege.text')}>
-          <Link target={'_blank'} href={getText('steps.fastlege.ingenFastlege.link.href')}>
-            {getText('steps.fastlege.ingenFastlege.link.name')}
-          </Link>
-        </TextWithLink>
+        <TextWithLink
+          text={getText('steps.fastlege.ingenFastlege.text')}
+          links={[getText('steps.fastlege.ingenFastlege.link')]}
+        />
       ) : (
         <div>
           <BodyShort>{fastlege?.fulltNavn}</BodyShort>

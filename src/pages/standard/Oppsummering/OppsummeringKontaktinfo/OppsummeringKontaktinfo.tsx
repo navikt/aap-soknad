@@ -1,5 +1,5 @@
 import React from 'react';
-import { BodyShort, Label, Link, ReadMore } from '@navikt/ds-react';
+import { BodyShort, Label, ReadMore } from '@navikt/ds-react';
 import { SøkerView } from '../../../../context/sokerOppslagContext';
 import { GetText } from '../../../../hooks/useTexts';
 import TextWithLink from '../../../../components/TextWithLink';
@@ -24,14 +24,10 @@ const OppsummeringKontaktinfo = ({ getText, søker }: Props) => {
         <Label>{getText('steps.oppsummering.kontaktinfo.adresse')}</Label>
         <BodyShort>{søker?.fullAdresse}</BodyShort>
         <ReadMore header={getText('steps.oppsummering.kontaktinfo.adresseReadmore.title')}>
-          <TextWithLink text={getText('steps.oppsummering.kontaktinfo.adresseReadmore.text')}>
-            <Link
-              target={'_blank'}
-              href={getText('steps.oppsummering.kontaktinfo.adresseReadmore.link.href')}
-            >
-              {getText('steps.oppsummering.kontaktinfo.adresseReadmore.link.name')}
-            </Link>
-          </TextWithLink>
+          <TextWithLink
+            text={getText('steps.oppsummering.kontaktinfo.adresseReadmore.text')}
+            links={[getText('steps.oppsummering.kontaktinfo.adresseReadmore.link')]}
+          />
         </ReadMore>
       </div>
     </>

@@ -6,7 +6,6 @@ import {
   GuidePanel,
   Heading,
   Ingress,
-  Link,
   Modal,
   Radio,
   TextField,
@@ -61,11 +60,10 @@ export const Barnetillegg = ({ getText, errors, control }: BarnetilleggProps) =>
       </Heading>
       <GuidePanel>
         <BodyLong>{getText('steps.barnetillegg.guideOne')}</BodyLong>
-        <TextWithLink text={getText('steps.barnetillegg.guideTwo')}>
-          <Link href={getText('steps.barnetillegg.guideReadMoreLink.href')}>
-            {getText('steps.barnetillegg.guideReadMoreLink.name')}
-          </Link>
-        </TextWithLink>
+        <TextWithLink
+          text={getText('steps.barnetillegg.guideTwo')}
+          links={[getText('steps.barnetillegg.guideReadMoreLink')]}
+        />
       </GuidePanel>
       {fields.map((barn, index) => {
         return (

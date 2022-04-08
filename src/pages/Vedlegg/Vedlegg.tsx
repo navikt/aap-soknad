@@ -1,6 +1,6 @@
 import { Control, useFieldArray } from 'react-hook-form';
 import SoknadStandard from '../../types/SoknadStandard';
-import { getLinks, GetText } from '../../hooks/useTexts';
+import { GetText } from '../../hooks/useTexts';
 import React from 'react';
 import { Alert, BodyShort, GuidePanel, Heading, ReadMore } from '@navikt/ds-react';
 import FileInput from '../../components/input/FileInput/FileInput';
@@ -22,9 +22,10 @@ const Vedlegg = ({ getText, control }: Props) => {
   return (
     <>
       <GuidePanel>
-        <TextWithLink text={getText(`steps.vedlegg.guide`)}>
-          {getLinks(`steps.vedlegg.guideLinks`, getText)}
-        </TextWithLink>
+        <TextWithLink
+          text={getText(`steps.vedlegg.guide`)}
+          links={[getText(`steps.vedlegg.guideLink`)]}
+        />
       </GuidePanel>
       <Heading size="large" level="2">
         {getText('steps.vedlegg.title')}

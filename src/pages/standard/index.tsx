@@ -36,6 +36,7 @@ import Tilleggsopplysninger from './Tilleggsopplysninger';
 import Vedlegg from '../Vedlegg/Vedlegg';
 import StartDato from './StartDato';
 import Student from './Student';
+import Kvittering from './Kvittering';
 export enum StepNames {
   VEILEDNING = 'VEILEDNING',
   KONTAKTINFO = 'KONTAKTINFO',
@@ -49,6 +50,7 @@ export enum StepNames {
   VEDLEGG = 'VEDLEGG',
   TILLEGGSOPPLYSNINGER = 'TILLEGGSOPPLYSNINGER',
   OPPSUMMERING = 'OPPSUMMERING',
+  KVITTERING = 'KVITTERING',
 }
 const initFieldVals: SoknadStandard = {};
 export const StandardPage = (): JSX.Element => {
@@ -198,6 +200,9 @@ export const StandardPage = (): JSX.Element => {
           </Step>
           <Step order={10} name={StepNames.OPPSUMMERING} label={'Oppsummering'}>
             <Oppsummering getText={getText} errors={errors} control={control} />
+          </Step>
+          <Step order={11} name={StepNames.KVITTERING} label={'Kvittering'}>
+            <Kvittering getText={getText} />
           </Step>
           <div className={classes?.buttonWrapper}>
             <Button

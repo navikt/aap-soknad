@@ -1,7 +1,7 @@
 import { GetText } from '../../hooks/useTexts';
 import { Control, FieldErrors } from 'react-hook-form';
 import React, { useEffect } from 'react';
-import { ReadMore, BodyLong, BodyShort, GuidePanel, Heading, Link, Radio } from '@navikt/ds-react';
+import { ReadMore, BodyLong, BodyShort, GuidePanel, Heading, Radio } from '@navikt/ds-react';
 import RadioGroupWrapper from '../../components/input/RadioGroupWrapper';
 import SoknadStandard from '../../types/SoknadStandard';
 import TextWithLink from '../../components/TextWithLink';
@@ -30,11 +30,10 @@ export const Yrkesskade = ({ getText, errors, control, setValue, pageTitle }: Yr
             <BodyShort>{getText('steps.yrkesskade.guide.info.bullet2')}</BodyShort>
           </li>
         </ul>
-        <TextWithLink text={getText('steps.yrkesskade.guide.application.text')}>
-          <Link href={getText('steps.yrkesskade.guide.application.link.href')}>
-            {getText('steps.yrkesskade.guide.application.link.name')}
-          </Link>
-        </TextWithLink>
+        <TextWithLink
+          text={getText('steps.yrkesskade.guide.application.text')}
+          links={[getText('steps.yrkesskade.guide.application.link')]}
+        />
         <ReadMore header={getText('steps.yrkesskade.guide.legal.title')} type={'button'}>
           <BodyLong>{getText('steps.yrkesskade.guide.legal.text')}</BodyLong>
           <ul>
