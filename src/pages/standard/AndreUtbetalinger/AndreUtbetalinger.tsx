@@ -8,9 +8,6 @@ import SoknadStandard from '../../../types/SoknadStandard';
 import TextFieldWrapper from '../../../components/input/TextFieldWrapper';
 import ColorPanel from '../../../components/panel/ColorPanel';
 import CountrySelector from '../../../components/input/CountrySelector';
-import { JaEllerNei } from '../../../types/Generic';
-import DatoVelgerWrapper from '../../../components/input/DatoVelgerWrapper';
-import * as classes from './AndreUtbetalinger.module.css';
 import { useVedleggContext, addRequiredVedlegg } from '../../../context/vedleggContext';
 
 interface AndreUtbetalingerProps {
@@ -35,8 +32,6 @@ export const AndreUtbetalinger = ({
   const { vedleggDispatch } = useVedleggContext();
   const lønnEtterlønnEllerSluttpakke = watch(`${ANDRE_UTBETALINGER}.${LØNN}.value`);
   const stønadEllerVerv = watch(`${ANDRE_UTBETALINGER}.${STØNAD}.value`);
-  const skalHaFerie = watch(`${ANDRE_UTBETALINGER}.utbetaling.ferie.skalHaFerie.value`);
-  const ferieAvviklingsType = watch(`${ANDRE_UTBETALINGER}.utbetaling.ferie.type.value`);
   const LønnsAlternativer = useMemo(
     () => ({
       JA: getText(`form.${ANDRE_UTBETALINGER}.${LØNN}.ja`),
@@ -77,14 +72,6 @@ export const AndreUtbetalinger = ({
     () => ({
       ENGANGSBELØP: getText(`form.${ANDRE_UTBETALINGER}.utbetalingstype.engangsbeløp`),
       LØPENDE: getText(`form.${ANDRE_UTBETALINGER}.utbetalingstype.løpende`),
-    }),
-    [getText]
-  );
-  const FerieType = useMemo(
-    () => ({
-      PERIODE: getText(`form.${ANDRE_UTBETALINGER}.ferieType.periode`),
-      DAGER: getText(`form.${ANDRE_UTBETALINGER}.ferieType.dager`),
-      VET_IKKE: getText(`form.${ANDRE_UTBETALINGER}.ferieType.vetikke`),
     }),
     [getText]
   );
@@ -149,22 +136,6 @@ export const AndreUtbetalinger = ({
     );
   }, [getText]);
   useEffect(() => {
-    setValue(
-      `${ANDRE_UTBETALINGER}.utbetaling.utbetalingsType.label`,
-      getText('form.andreUtbetalinger.utbetalingstype.legend')
-    );
-    setValue(
-      `${ANDRE_UTBETALINGER}.utbetaling.ferie.skalHaFerie.label`,
-      getText('form.andreUtbetalinger.skalHaFerie.legend')
-    );
-  }, [skalHaFerie]);
-  useEffect(() => {
-    setValue(
-      `${ANDRE_UTBETALINGER}.utbetaling.ferie.type.value`,
-      getText('form.andreUtbetalinger.ferieType.legend')
-    );
-  }, [ferieAvviklingsType]);
-  useEffect(() => {
     addRequiredVedlegg(Attachments, vedleggDispatch);
   }, [Attachments]);
   return (
@@ -220,51 +191,6 @@ export const AndreUtbetalinger = ({
             <Radio value={UtbetalingsType.ENGANGSBELØP}>{UtbetalingsType.ENGANGSBELØP}</Radio>
             <Radio value={UtbetalingsType.LØPENDE}>{UtbetalingsType.LØPENDE}</Radio>
           </RadioGroupWrapper>
-          <RadioGroupWrapper
-            legend={getText('form.andreUtbetalinger.skalHaFerie.legend')}
-            name={`${ANDRE_UTBETALINGER}.utbetaling.ferie.skalHaFerie.value`}
-            control={control}
-            error={errors?.[ANDRE_UTBETALINGER]?.[LØNN]?.message}
-          >
-            <Radio value={JaEllerNei.JA}>{JaEllerNei.JA}</Radio>
-            <Radio value={JaEllerNei.NEI}>{JaEllerNei.NEI}</Radio>
-          </RadioGroupWrapper>
-          {skalHaFerie === JaEllerNei.JA ? (
-            <RadioGroupWrapper
-              legend={getText('form.andreUtbetalinger.ferieType.legend')}
-              name={`${ANDRE_UTBETALINGER}.utbetaling.ferie.type.value`}
-              control={control}
-              error={errors?.[ANDRE_UTBETALINGER]?.[LØNN]?.message}
-            >
-              <Radio value={FerieType.PERIODE}>
-                <BodyShort>{FerieType.PERIODE}</BodyShort>
-              </Radio>
-              <Radio value={FerieType.DAGER}>
-                <BodyShort>{FerieType.DAGER}</BodyShort>
-              </Radio>
-              <Radio value={FerieType.VET_IKKE}>
-                <BodyShort>{FerieType.VET_IKKE}</BodyShort>
-              </Radio>
-            </RadioGroupWrapper>
-          ) : (
-            <></>
-          )}
-          {ferieAvviklingsType === FerieType.PERIODE ? (
-            <div className={classes?.datovelgerWrapper}>
-              <DatoVelgerWrapper
-                name={`${ANDRE_UTBETALINGER}.utbetaling.ferie.periode.fraDato.value`}
-                label={getText('form.andreUtbetalinger.ferieFraDato.label')}
-                control={control}
-              />
-              <DatoVelgerWrapper
-                name={`${ANDRE_UTBETALINGER}.utbetaling.ferie.periode.tilDato.value`}
-                label={getText('form.andreUtbetalinger.ferieTilDato.label')}
-                control={control}
-              />
-            </div>
-          ) : (
-            <></>
-          )}
         </ColorPanel>
       )}
       <CheckboxGroupWrapper

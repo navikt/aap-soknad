@@ -1,10 +1,11 @@
 import { GetText } from '../../hooks/useTexts';
 import { Control, FieldErrors } from 'react-hook-form';
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect } from 'react';
 import { ReadMore, BodyLong, BodyShort, GuidePanel, Heading, Link, Radio } from '@navikt/ds-react';
 import RadioGroupWrapper from '../../components/input/RadioGroupWrapper';
 import SoknadStandard from '../../types/SoknadStandard';
 import TextWithLink from '../../components/TextWithLink';
+import { JaNeiVetIkke } from '../../types/Generic';
 
 interface YrkesskadeProps {
   setValue: any;
@@ -13,26 +14,9 @@ interface YrkesskadeProps {
   control: Control<SoknadStandard>;
   pageTitle?: string;
 }
-enum YrkesskadeStatuser {
-  JA = 'JA',
-  NEI = 'NEI',
-  VET_IKKE = 'VET_IKKE',
-}
-type YrkesSkader = {
-  [key in YrkesskadeStatuser]: string;
-};
 const YRKESSKADE = 'yrkesskade';
 
 export const Yrkesskade = ({ getText, errors, control, setValue, pageTitle }: YrkesskadeProps) => {
-  const GodkjentYrkesskadeStatus: YrkesSkader = useMemo(
-    () => ({
-      JA: getText(`form.${YRKESSKADE}.ja`),
-      NEI: getText(`form.${YRKESSKADE}.nei`),
-      SØKNAD_UNDER_BEHANDLING: getText(`form.${YRKESSKADE}.søknadsendt`),
-      VET_IKKE: getText(`form.${YRKESSKADE}.vetikke`),
-    }),
-    [getText]
-  );
   useEffect(() => setValue(`${YRKESSKADE}.label`, getText(`form.${YRKESSKADE}.legend`)), [getText]);
   return (
     <>
@@ -75,14 +59,14 @@ export const Yrkesskade = ({ getText, errors, control, setValue, pageTitle }: Yr
         control={control}
         error={errors?.[YRKESSKADE]?.message}
       >
-        <Radio value={GodkjentYrkesskadeStatus.JA}>
-          <BodyShort>{'Ja'}</BodyShort>
+        <Radio value={JaNeiVetIkke.JA}>
+          <BodyShort>{JaNeiVetIkke.JA}</BodyShort>
         </Radio>
-        <Radio value={GodkjentYrkesskadeStatus.NEI}>
-          <BodyShort>{'Nei'}</BodyShort>
+        <Radio value={JaNeiVetIkke.NEI}>
+          <BodyShort>{JaNeiVetIkke.NEI}</BodyShort>
         </Radio>
-        <Radio value={GodkjentYrkesskadeStatus.VET_IKKE}>
-          <BodyShort>{'Vet ikke'}</BodyShort>
+        <Radio value={JaNeiVetIkke.VET_IKKE}>
+          <BodyShort>{JaNeiVetIkke.VET_IKKE}</BodyShort>
         </Radio>
       </RadioGroupWrapper>
     </>

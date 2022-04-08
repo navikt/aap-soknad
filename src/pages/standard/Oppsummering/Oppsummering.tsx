@@ -1,13 +1,18 @@
 import { Control, FieldErrors } from 'react-hook-form';
 import SoknadStandard from '../../../types/SoknadStandard';
 import { GetText } from '../../../hooks/useTexts';
-import { Accordion } from '@navikt/ds-react';
+import { Accordion, BodyShort, Heading, Label } from '@navikt/ds-react';
 import React from 'react';
 import ConfirmationPanelWrapper from '../../../components/input/ConfirmationPanelWrapper';
 import { useSoknadContext } from '../../../context/soknadContext';
 import AccordianItemOppsummering from './AccordianItemOppsummering/AccordianItemOppsummering';
-import AccordianNestedItemOppsummering from './AccordianItemOppsummering/AccordianNestedItemOppsummering';
-import OppsummeringBarn from './OppsummeringBarn';
+import OppsummeringBarn from './OppsummeringBarn/OppsummeringBarn';
+import { isNonEmptyPeriode } from '../../../utils/periode';
+import OppsummeringPeriode from './OppsummeringPeriode/OppsummeringPeriode';
+import OppsummeringKontaktinfo from './OppsummeringKontaktinfo/OppsummeringKontaktinfo';
+import { useSokerOppslag } from '../../../context/sokerOppslagContext';
+import OppsummeringUtenlandsopphold from './OppsummeringUtenlandsopphold/OppsummeringUtenlandsopphold';
+import OppsummeringBehandler from './OppsummeringBehandler/OppsummeringBehandler';
 
 interface OppsummeringProps {
   control: Control<SoknadStandard>;
@@ -17,52 +22,95 @@ interface OppsummeringProps {
 
 const Oppsummering = ({ getText, errors, control }: OppsummeringProps) => {
   const { søknadState } = useSoknadContext();
+  const { søker, fastlege } = useSokerOppslag();
   return (
     <>
+      <Heading size="large" level="2">
+        {getText('steps.oppsummering.title')}
+      </Heading>
       <Accordion>
+        <AccordianItemOppsummering data={{}} title={'Om deg'}>
+          <OppsummeringKontaktinfo getText={getText} søker={søker} />
+        </AccordianItemOppsummering>
         <AccordianItemOppsummering
-          data={{ yrkesskade: søknadState?.søknad?.yrkesskade }}
-          title={getText('steps.yrkesskade.title')}
-        />
+          data={{
+            startDato: søknadState?.søknad?.startDato,
+            ...søknadState?.søknad?.ferie,
+          }}
+          title={'Startdato og ferie'}
+        >
+          {isNonEmptyPeriode(søknadState?.søknad?.ferie?.periode) ? (
+            <div>
+              <Label>{'Planlagt ferie'}</Label>
+              <OppsummeringPeriode periode={søknadState?.søknad?.ferie?.periode} />
+            </div>
+          ) : (
+            <></>
+          )}
+        </AccordianItemOppsummering>
         <AccordianItemOppsummering
           data={søknadState?.søknad?.medlemskap}
           title={getText('steps.medlemskap.title')}
         >
           {søknadState?.søknad?.medlemskap?.utenlandsOpphold ? (
-            <AccordianNestedItemOppsummering
-              title={'Utenlandsopphold'}
-              data={søknadState.søknad.medlemskap.utenlandsOpphold}
+            <OppsummeringUtenlandsopphold
+              getText={getText}
+              opphold={søknadState?.søknad?.medlemskap?.utenlandsOpphold}
             />
           ) : (
             <></>
           )}
         </AccordianItemOppsummering>
         <AccordianItemOppsummering
-          data={søknadState?.søknad?.student}
-          title={getText('steps.student.title')}
+          data={{ yrkesskade: søknadState?.søknad?.yrkesskade }}
+          title={getText('steps.yrkesskade.title')}
         />
-        <AccordianItemOppsummering
-          data={søknadState?.søknad?.andreUtbetalinger}
-          title={getText('steps.andre_utbetalinger.title')}
-        />
-        <AccordianItemOppsummering
-          data={{ barnetillegg: søknadState?.søknad?.barnetillegg }}
-          title={getText('steps.barnetillegg.title')}
-        >
-          {søknadState?.søknad?.barnetillegg?.map((barn, index) => (
-            <OppsummeringBarn key={index} barn={barn} />
+        <AccordianItemOppsummering data={{}} title={getText('steps.fastlege.title')}>
+          <>
+            <article>
+              <Heading size={'small'} level={'3'}>
+                {getText('steps.oppsummering.helseopplysninger.fastlege')}
+              </Heading>
+              <BodyShort>{fastlege?.fulltNavn}</BodyShort>
+              <BodyShort>{fastlege?.legekontor}</BodyShort>
+              <BodyShort>{fastlege?.adresse}</BodyShort>
+              <BodyShort>{`Telefon: ${fastlege?.telefon}`}</BodyShort>
+            </article>
+            {søknadState?.søknad?.behandlere?.map((behandler) => (
+              <OppsummeringBehandler getText={getText} behandler={behandler} />
+            ))}
+          </>
+        </AccordianItemOppsummering>
+        <AccordianItemOppsummering data={{}} title={getText('steps.barnetillegg.title')}>
+          {søknadState?.søknad?.barnetillegg?.map((barn) => (
+            <OppsummeringBarn barn={barn} />
           ))}
         </AccordianItemOppsummering>
         <AccordianItemOppsummering
-          data={{ tilleggsopplysninger: søknadState?.søknad?.tilleggsopplysninger }}
-          title={getText('steps.tilleggsopplysninger.title')}
+          data={søknadState?.søknad?.student}
+          title={getText('steps.student.title')}
         />
+        {søknadState?.søknad?.vedlegg && søknadState?.søknad?.vedlegg?.length > 0 && (
+          <AccordianItemOppsummering data={{}} title={getText('steps.vedlegg.title')}>
+            <>
+              {søknadState?.søknad?.vedlegg?.map((vedlegg) => (
+                <BodyShort>{vedlegg?.name}</BodyShort>
+              ))}
+            </>
+          </AccordianItemOppsummering>
+        )}
+        {søknadState?.søknad?.tilleggsopplysninger?.value && (
+          <AccordianItemOppsummering
+            data={{ tilleggsopplysninger: søknadState?.søknad?.tilleggsopplysninger }}
+            title={getText('steps.tilleggsopplysninger.title')}
+          />
+        )}
       </Accordion>
       <ConfirmationPanelWrapper
-        label={getText('steps.veiledning.rettogplikt')}
+        label={getText('steps.oppsummering.confirmation')}
         control={control}
         name="søknadBekreft"
-        error={errors?.rettogplikt?.message}
+        error={errors?.søknadBekreft?.message}
       />
     </>
   );

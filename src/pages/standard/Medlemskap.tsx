@@ -55,19 +55,30 @@ export const Medlemskap = ({
     return true;
   }, [boddINorge, arbeidINorge]);
   useEffect(() => {
-    setValue(`${MEDLEMSKAP}.${BODD_I_NORGE}.label`, getText('form.utenlandsopphold.radiolegend'));
-    setValue(
-      `${MEDLEMSKAP}.${ARBEID_UTENFOR_NORGE_FØR_SYKDOM}.label`,
-      getText('form.utenlandsarbeid.radiolegend')
-    );
+    setValue(`${MEDLEMSKAP}.${BODD_I_NORGE}.label`, getText('form.medlemskap.boddINorge.legend'));
   }, [getText]);
   useEffect(() => {
     setValue(`${MEDLEMSKAP}.${ARBEID_UTENFOR_NORGE_FØR_SYKDOM}.value`, undefined);
+    setValue(`${MEDLEMSKAP}.${ARBEID_UTENFOR_NORGE_FØR_SYKDOM}.label`, undefined);
     setValue(`${MEDLEMSKAP}.${ARBEID_I_NORGE}.value`, undefined);
+    setValue(`${MEDLEMSKAP}.${ARBEID_I_NORGE}.label`, undefined);
   }, [boddINorge]);
   useEffect(() => {
+    if (arbeidINorge)
+      setValue(
+        `${MEDLEMSKAP}.${ARBEID_I_NORGE}.label`,
+        getText('form.medlemskap.arbeidINorge.legend')
+      );
     setValue(`${MEDLEMSKAP}.${ARBEID_UTENFOR_NORGE_FØR_SYKDOM}.value`, undefined);
+    setValue(`${MEDLEMSKAP}.${ARBEID_UTENFOR_NORGE_FØR_SYKDOM}.label`, undefined);
   }, [arbeidINorge]);
+  useEffect(() => {
+    if (arbeidUtenforNorge)
+      setValue(
+        `${MEDLEMSKAP}.${ARBEID_UTENFOR_NORGE_FØR_SYKDOM}.label`,
+        getText('form.medlemskap.arbeidUtenforNorge.legend')
+      );
+  }, [arbeidUtenforNorge]);
   return (
     <>
       <Heading size="large" level="2">

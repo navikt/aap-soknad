@@ -53,11 +53,12 @@ const StartDato = ({ getText, errors, watch, control, setValue }: Props) => {
     setValue(`${FERIE}.periode.fraDato.label`, undefined);
     setValue(`${FERIE}.periode.tilDato.value`, undefined);
     setValue(`${FERIE}.periode.tilDato.label`, undefined);
-    setValue(`${FERIE}.antallDager.value`, undefined);
-    setValue(`${FERIE}.antallDager.label`, undefined);
+    setValue(`${FERIE}.antallDager.value`, '');
+    setValue(`${FERIE}.antallDager.label`, '');
   }, [ferieType]);
   useEffect(() => {
-    setValue(`${FERIE}.antallDager.label`, getText('form.andreUtbetalinger.ferieTilDato.label'));
+    if (antallDager)
+      setValue(`${FERIE}.antallDager.label`, getText('form.ferie.antallDager.label'));
   }, [antallDager]);
   return (
     <>
@@ -106,14 +107,14 @@ const StartDato = ({ getText, errors, watch, control, setValue }: Props) => {
               <Cell xs={6}>
                 <DatoVelgerWrapper
                   name={`${FERIE}.periode.fraDato.value`}
-                  label={getText('form.andreUtbetalinger.ferieFraDato.label')}
+                  label={getText('form.ferie.fraDato.label')}
                   control={control}
                 />
               </Cell>
               <Cell xs={6}>
                 <DatoVelgerWrapper
                   name={`${FERIE}.periode.tilDato.value`}
-                  label={getText('form.andreUtbetalinger.ferieTilDato.label')}
+                  label={getText('form.ferie.tilDato.label')}
                   control={control}
                 />
               </Cell>

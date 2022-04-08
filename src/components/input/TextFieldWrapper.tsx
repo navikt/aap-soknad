@@ -13,6 +13,7 @@ const TextFieldWrapper = ({ name, label, control, error }: TextFieldProps) => (
   <Controller
     name={name}
     control={control}
+    defaultValue={''}
     render={({ field: { name, value, onChange } }) => (
       <TextField
         id={name}

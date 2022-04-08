@@ -101,7 +101,7 @@ export const handlers = [
   rest.get('/aap/soknad-api/oppslag/soeker', (req, res, ctx) => {
     return res(
       ctx.status(200),
-      ctx.delay(3000),
+      ctx.delay(500),
       ctx.json({
         søker: {
           navn: {
@@ -109,6 +109,7 @@ export const handlers = [
             mellomnavn: 'Fra',
             etternavn: 'Oppslag',
           },
+          fødselsnummer: '10029099999',
           adresse: {
             adressenavn: 'Tulleveien',
             husbokstav: 'A',
