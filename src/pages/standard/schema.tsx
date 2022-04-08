@@ -83,4 +83,6 @@ export const getStepSchemas = (getText: any) => [
   yup.object().shape({}),
   yup.object().shape({}),
   yup.object().shape({}),
+  yup.object().shape({}),
+  yup.object().shape({}),
 ];

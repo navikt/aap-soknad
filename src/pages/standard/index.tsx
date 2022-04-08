@@ -37,6 +37,8 @@ import Vedlegg from '../Vedlegg/Vedlegg';
 import StartDato from './StartDato';
 import Student from './Student';
 import Kvittering from './Kvittering';
+import SoknadForm from '../../types/SoknadForm';
+import { fetchPOST } from '../../api/fetch';
 export enum StepNames {
   VEILEDNING = 'VEILEDNING',
   KONTAKTINFO = 'KONTAKTINFO',
@@ -57,6 +59,7 @@ export const StandardPage = (): JSX.Element => {
   const [isLoading] = useState<boolean>(false);
   const [oppslagLoading, setOppslagLoading] = useState<boolean>(true);
   const [showVeiledning, setShowVeiledning] = useState<boolean>(true);
+  const [showKvittering, setShowKvittering] = useState<boolean>(false);
   const { søknadState, søknadDispatch } = useSoknadContext();
   const { oppslagDispatch, søker, fastlege } = useSokerOppslag();
   const { currentStep, currentStepIndex, stepWizardDispatch } = useStepWizard();
@@ -100,8 +103,21 @@ export const StandardPage = (): JSX.Element => {
   const myHandleSubmit: SubmitHandler<SoknadStandard> = async (data) => {
     console.log(data);
     setSøknadData(søknadDispatch, data);
-    completeAndGoToNextStep(stepWizardDispatch);
+    if (currentStep?.name === StepNames.OPPSUMMERING) {
+      const postResponse = await postSøknad(søknadState?.søknad);
+      if (postResponse?.ok) {
+        setShowKvittering(true);
+      } else {
+        // show post error
+      }
+    } else {
+      completeAndGoToNextStep(stepWizardDispatch);
+    }
   };
+  const postSøknad = async (data?: SoknadForm<SoknadStandard>) =>
+    fetchPOST('/aap/soknad-api/innsending/standard', {
+      ...data,
+    });
   const onDeleteSøknad = async () => {
     if (søknadState.type) {
       const deleteRes = await slettLagretSoknadState(søknadDispatch, søknadState.type);
@@ -112,6 +128,13 @@ export const StandardPage = (): JSX.Element => {
       }
     }
   };
+  if (showKvittering)
+    return (
+      <>
+        <PageHeader align="center">{getText('pagetitle')}</PageHeader>
+        <Kvittering getText={getText} />
+      </>
+    );
   if (showVeiledning)
     return (
       <form
@@ -126,9 +149,14 @@ export const StandardPage = (): JSX.Element => {
           søker={søker}
           loading={oppslagLoading}
         />
-        <Button variant="primary" type="submit" onClick={() => setShowVeiledning(false)}>
-          <BodyShort>{getText(`steps.veiledning.buttonText`, 'buttontext')}</BodyShort>
-        </Button>
+        <div className={classes?.buttonWrapper}>
+          <Button variant="primary" type="submit" onClick={() => setShowVeiledning(false)}>
+            <BodyShort>{getText(`steps.veiledning.buttonText`, 'buttontext')}</BodyShort>
+          </Button>
+          <Button variant="tertiary" type="button" onClick={() => console.log('TODO')}>
+            {getText('cancelButtonText')}
+          </Button>
+        </div>
       </form>
     );
   return (
@@ -200,9 +228,6 @@ export const StandardPage = (): JSX.Element => {
           </Step>
           <Step order={10} name={StepNames.OPPSUMMERING} label={'Oppsummering'}>
             <Oppsummering getText={getText} errors={errors} control={control} />
-          </Step>
-          <Step order={11} name={StepNames.KVITTERING} label={'Kvittering'}>
-            <Kvittering getText={getText} />
           </Step>
           <div className={classes?.buttonWrapper}>
             <Button

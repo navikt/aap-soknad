@@ -236,6 +236,10 @@
         "heading": "Har du vært forhindret fra å søke tidligere?",
         "text": "Hvis du av helsemessige årsaker ikke har kunnet søke tidligere, kan du få innvilget AAP tilbake i tid. Du kan også få AAP tilbake i tid hvis du har fått feil informasjon fra NAV og dette er grunnen til at du ikke har søkt tidligere."
       }
+    },
+    "kvittering": {
+      "heading": "Takk for søknaden",
+      "alertSuccess": "Vi har nå mottatt din søknad om arbeidsavklaringspenger. Saken din ligger nå til behandling hos NAV. Vi tar kontakt hvis vi trenger flere opplysninger fra deg"
     }
   },
   "form": {
