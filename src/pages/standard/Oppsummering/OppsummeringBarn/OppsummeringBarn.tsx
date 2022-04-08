@@ -1,7 +1,7 @@
 import { BodyShort, Label } from '@navikt/ds-react';
 import React from 'react';
-import { Barn } from '../../../types/SoknadStandard';
-import { formatNavn } from '../../../utils/StringFormatters';
+import { Barn } from '../../../../types/SoknadStandard';
+import { formatNavn } from '../../../../utils/StringFormatters';
 import * as classes from './OppsummeringBarn.module.css';
 
 type OppsummeringBarnProps = {

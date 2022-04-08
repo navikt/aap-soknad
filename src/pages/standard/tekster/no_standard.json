@@ -14,15 +14,30 @@
       "title": "Søknad om arbeidsavklaringspenger (AAP)",
       "opplysninger": {
         "title": "Innhenting av opplysninger",
-        "text": "Når vi behandler søknaden din, henter vi opplysninger fra blant annet Folkeregisteret, Skatteetaten og legen din. Ved behov sender vi opplysninger til andre offentlige og private virksomheter. $$."
+        "text": "Når vi behandler søknaden din, henter vi opplysninger fra blant annet Folkeregisteret, Skatteetaten og legen din. Ved behov sender vi opplysninger til andre offentlige og private virksomheter. $$.",
+        "link": {
+          "name": "Les om hvordan NAV behandler personopplysninger (åpnes i ny fane)",
+          "href": "https://www.nav.no/no/nav-og-samfunn/om-nav/personvern-i-arbeids-og-velferdsetaten/personopplysninger-i-soknader-til-nav"
+        }
       },
       "søknadsdato": {
         "title": "Søknadsdato er viktig for eventuell utbetaling av AAP ",
-        "paragraphs": ["Du kan tidligst få arbeidsavklaringspenger fra og med den dagen vi mottar søknaden din."]
+        "paragraphs": ["Du kan tidligst få AAP fra og med den dagen vi mottar søknaden din. Det er ikke et krav at du har mottatt sykepenger før du søker om AAP."]
       },
       "rettogplikt": {
-        "label": "Jeg bekrefter at jeg har lest og forstått.",
-        "description": "Jeg bekrefter at jeg har lest og forstått mine $$."
+        "title": "Dine rettigheter og plikter",
+        "readMore": {
+          "title": "Les om dine rettigheter og plikter"
+        }
+      },
+      "rettogpliktConfirmation": {
+        "title": "Vi stoler på deg",
+        "description": "For å gå videre med søknaden må du bekrefte at du har lest og forstått $$.",
+        "link": {
+          "name": "dine rettigheter og plikter (åpnes i ny fane)",
+          "href": "https://www.nav.no/aap#aktivitetsplikt"
+        },
+        "label": "Jeg bekrefter at jeg har lest og forstått mine rettigheter og plikter, og at opplysningene jeg gir er så riktige som mulig."
       },
       "buttonText": "Start søknad"
     },
@@ -159,7 +174,26 @@
       "guide": "Nå har NAV fått opplysningene vi trenger for å begynne å behandle søknaden din. Hvis vi trenger mer informasjon, vil vi kontakte deg."
     },
     "oppsummering": {
-      "title": "Oppsummering"
+      "title": "Oppsummering",
+      "confirmation": "Jeg er kjent med at hvis opplysningene jeg har oppgitt ikke er riktige og fullstendige, kan jeg miste retten til stønad. Jeg er også klar over at jeg må betale tilbake det jeg har fått feilaktig utbetalt, og at jeg kan bli anmeldt politiet. Videre er jeg kjent med og aksepterer at NAV kan innhente opplysninger som er nødvendige for å behandle søknaden.",
+      "kontaktinfo": {
+        "navn": "Navn",
+        "adresse": "Folkeregistrert adresse",
+        "fnr": "Personnummer",
+        "adresseReadmore": {
+          "title": "Hva gjør jeg hvis jeg har en annen adresse?",
+          "text": "Hvis adressen ikke stemmer, kan du legge til en midlertidig adresse i $$. Du kan også legge inn eller endre kontonummer, telefonnummer og e-post der.",
+          "link": {
+            "name": "Din profil (åpnes i ny fane)",
+            "href": "https://www.nav.no/no/ditt-nav"
+          }
+        }
+      },
+      "periode": "Periode",
+      "helseopplysninger": {
+        "fastlege": "Fastlege",
+        "behandler": "Behandler"
+      }
     },
     "vedlegg": {
       "title": "Vedlegg",
@@ -374,12 +408,12 @@
       "antallDager": {
         "label": "Skriv inn antall dager du skal ha ferie"
       },
-      "fromdate": {
-        "label": "Fra dato",
+      "fraDato": {
+        "label": "Fra dato (dd.mm.yyyy)",
         "required": "Vennligst angi fra dato"
       },
-      "todate": {
-        "label": "Til dato",
+      "tilDato": {
+        "label": "Til dato (dd.mm.yyyy)",
         "required": "Vennligst angi til dato"
       }
   }

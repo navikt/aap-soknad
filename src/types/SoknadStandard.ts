@@ -9,7 +9,7 @@ export type Navn = {
   mellomnavn?: string;
   etternavn: string;
 };
-type Periode = {
+export type Periode = {
   fraDato?: FieldAndLabel<string>;
   tilDato?: FieldAndLabel<string>;
 };
@@ -18,6 +18,7 @@ export type UtenlandsPeriode = {
   tilDato: FieldAndLabel<Date>;
   fraDato: FieldAndLabel<Date>;
   iArbeid: FieldAndLabel<boolean>;
+  utenlandsId?: FieldAndLabel<string>;
 };
 type Yrkesskade = FieldAndLabel<string>;
 type Medlemskap = {
@@ -65,6 +66,7 @@ type Ferie = {
 };
 interface SoknadStandard {
   bekreftOpplysninger?: JaEllerNei;
+  startDato: FieldAndLabel<Date>;
   yrkesskade?: Yrkesskade;
   medlemskap?: Medlemskap;
   behandlere?: Behandler[];
@@ -78,6 +80,7 @@ interface SoknadStandard {
     size: string;
     data: FormData;
   }[];
+  søknadBekreft: FieldAndLabel<boolean>;
 }
 
 export default SoknadStandard;

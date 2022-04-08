@@ -39,6 +39,7 @@ export type FastlegeView = {
 export type SøkerView = {
   fulltNavn?: string;
   fullAdresse?: string;
+  fødselsnummer?: string;
 };
 export type SokerOppslagState = {
   søker: Soker;
@@ -93,6 +94,7 @@ function SokerOppslagProvider({ children }: Props) {
     () => ({
       fulltNavn: getFulltNavn(state?.søker?.navn),
       fullAdresse: getFullAdresse(state?.søker?.adresse),
+      fødselsnummer: state?.søker?.fødselsnummer,
     }),
     [state]
   );

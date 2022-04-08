@@ -1,0 +1,6 @@
+.oppsummeringContent {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  gap: var(--navds-spacing-5);
+}

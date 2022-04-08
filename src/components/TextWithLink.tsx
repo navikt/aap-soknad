@@ -13,7 +13,7 @@ const TextWithLink = ({ text, children }: Props) => {
   }, [children]);
   const textArray = text?.split('$') || [];
   return (
-    <BodyLong>
+    <>
       {textArray.map((el: any) => {
         if (el) {
           return el;
@@ -21,7 +21,7 @@ const TextWithLink = ({ text, children }: Props) => {
           return childrenList.shift();
         }
       })}
-    </BodyLong>
+    </>
   );
 };
 
