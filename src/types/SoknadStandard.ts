@@ -66,7 +66,7 @@ type Ferie = {
 };
 interface SoknadStandard {
   bekreftOpplysninger?: JaEllerNei;
-  startDato: FieldAndLabel<Date>;
+  startDato?: FieldAndLabel<Date>;
   yrkesskade?: Yrkesskade;
   medlemskap?: Medlemskap;
   behandlere?: Behandler[];
@@ -80,7 +80,7 @@ interface SoknadStandard {
     size: string;
     data: FormData;
   }[];
-  søknadBekreft: FieldAndLabel<boolean>;
+  søknadBekreft?: FieldAndLabel<boolean>;
 }
 
 export default SoknadStandard;
