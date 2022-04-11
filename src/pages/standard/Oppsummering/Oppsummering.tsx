@@ -1,7 +1,7 @@
 import { Control, FieldErrors } from 'react-hook-form';
 import SoknadStandard from '../../../types/SoknadStandard';
 import { GetText } from '../../../hooks/useTexts';
-import { Accordion, BodyShort, Heading, Label } from '@navikt/ds-react';
+import { Accordion, BodyShort, Cell, Grid, Heading, Label } from '@navikt/ds-react';
 import React from 'react';
 import ConfirmationPanelWrapper from '../../../components/input/ConfirmationPanelWrapper';
 import { useSoknadContext } from '../../../context/soknadContext';
@@ -60,6 +60,28 @@ const Oppsummering = ({ getText, errors, control }: OppsummeringProps) => {
           ) : (
             <></>
           )}
+        </AccordianItemOppsummering>
+        <AccordianItemOppsummering
+          data={søknadState?.søknad?.andreUtbetalinger}
+          title={getText('steps.andre_utbetalinger.title')}
+        >
+          <>
+            {[søknadState?.søknad?.andreUtbetalinger?.annet]?.map((e) => (
+              <div>
+                <Label>{'Annet:'}</Label>
+                <Grid>
+                  <Cell xs={4}>
+                    <Label>{e?.utbetalerNavn?.label}</Label>
+                    <BodyShort>{e?.utbetalerNavn?.value}</BodyShort>
+                  </Cell>
+                  <Cell xs={4}>
+                    <Label>{e?.utbetalingsNavn?.label}</Label>
+                    <BodyShort>{e?.utbetalingsNavn?.value}</BodyShort>
+                  </Cell>
+                </Grid>
+              </div>
+            ))}
+          </>
         </AccordianItemOppsummering>
         <AccordianItemOppsummering
           data={{ yrkesskade: søknadState?.søknad?.yrkesskade }}

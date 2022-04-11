@@ -99,6 +99,21 @@ export const AndreUtbetalinger = ({
     );
   }, [getText]);
   useEffect(() => {
+    if (stønadEllerVerv?.includes(StønadAlternativer.ANNET)) {
+      setValue(
+        `${ANDRE_UTBETALINGER}.annet.utbetalingsNavn.label`,
+        getText('form.andreUtbetalinger.annet.utbetaling.label')
+      );
+      setValue(
+        `${ANDRE_UTBETALINGER}.annet.utbetalerNavn.label`,
+        getText('form.andreUtbetalinger.annet.utbetaler.label')
+      );
+    } else {
+      setValue(`${ANDRE_UTBETALINGER}.annet.utbetalingsNavn.label`, undefined);
+      setValue(`${ANDRE_UTBETALINGER}.annet.utbetalerNavn.label`, undefined);
+    }
+  }, [stønadEllerVerv]);
+  useEffect(() => {
     addRequiredVedlegg(Attachments, vedleggDispatch);
   }, [Attachments]);
   return (
