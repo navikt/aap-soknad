@@ -1,0 +1,8 @@
+.veiledningContent {
+  display: flex;
+  flex-direction: column;
+  gap: var(--navds-spacing-10);
+}
+.veiledningContent h1 {
+  text-align: center;
+}

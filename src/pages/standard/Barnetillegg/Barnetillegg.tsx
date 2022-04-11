@@ -2,6 +2,8 @@ import {
   Alert,
   BodyShort,
   Button,
+  Cell,
+  Grid,
   GuidePanel,
   Heading,
   Ingress,
@@ -112,11 +114,11 @@ export const Barnetillegg = ({ getText, errors, control }: BarnetilleggProps) =>
         Legg til barn
       </Button>
       <Modal open={showModal} onClose={() => setShowModal(false)}>
-        <Modal.Content>
+        <Modal.Content className={classes?.leggTilBarnModalContent}>
           <Heading size={'medium'} level={'2'}>
             {getText('form.barnetillegg.add.title')}
           </Heading>
-          <Ingress>{getText('form.barnetillegg.add.ingress')}</Ingress>
+          <Ingress>{getText('steps.barnetillegg.leggTil.description')}</Ingress>
           <TextField
             label={getText('form.barnetillegg.add.fornavn.label')}
             name={'fornavn'}
@@ -156,38 +158,44 @@ export const Barnetillegg = ({ getText, errors, control }: BarnetilleggProps) =>
             </ul>
             {getText('form.barnetillegg.add.alertInfo')}
           </Alert>
-          <Button
-            type="button"
-            variant={'secondary'}
-            onClick={() => {
-              setShowModal(false);
-            }}
-          >
-            Avbryt
-          </Button>
-          <Button
-            type="button"
-            onClick={() => {
-              append({
-                navn: { fornavn, mellomnavn, etternavn },
-                fnr,
-                harInntekt,
-                manueltOpprettet: true,
-              });
-              addRequiredVedlegg(
-                [
-                  {
-                    type: `barn${fnr}`,
-                    description: `Fødselsattest eller bostedsbevis for barn: ${fornavn} ${etternavn}`,
-                  },
-                ],
-                vedleggDispatch
-              );
-              setShowModal(false);
-            }}
-          >
-            Lagre
-          </Button>
+          <Grid>
+            <Cell xs={3}>
+              <Button
+                type="button"
+                variant={'secondary'}
+                onClick={() => {
+                  setShowModal(false);
+                }}
+              >
+                Avbryt
+              </Button>
+            </Cell>
+            <Cell xs={3}>
+              <Button
+                type="button"
+                onClick={() => {
+                  append({
+                    navn: { fornavn, mellomnavn, etternavn },
+                    fnr,
+                    harInntekt,
+                    manueltOpprettet: true,
+                  });
+                  addRequiredVedlegg(
+                    [
+                      {
+                        type: `barn${fnr}`,
+                        description: `Fødselsattest eller bostedsbevis for barn: ${fornavn} ${etternavn}`,
+                      },
+                    ],
+                    vedleggDispatch
+                  );
+                  setShowModal(false);
+                }}
+              >
+                Lagre
+              </Button>
+            </Cell>
+          </Grid>
         </Modal.Content>
       </Modal>
     </>

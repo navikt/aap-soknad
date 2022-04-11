@@ -36,7 +36,7 @@ import Tilleggsopplysninger from './Tilleggsopplysninger';
 import Vedlegg from '../Vedlegg/Vedlegg';
 import StartDato from './StartDato';
 import Student from './Student';
-import Kvittering from './Kvittering';
+import Kvittering from './Kvittering/Kvittering';
 import SoknadForm from '../../types/SoknadForm';
 import { fetchPOST } from '../../api/fetch';
 export enum StepNames {
@@ -56,7 +56,7 @@ export enum StepNames {
 }
 const initFieldVals: SoknadStandard = {};
 export const StandardPage = (): JSX.Element => {
-  const [isLoading] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [oppslagLoading, setOppslagLoading] = useState<boolean>(true);
   const [showVeiledning, setShowVeiledning] = useState<boolean>(true);
   const [showKvittering, setShowKvittering] = useState<boolean>(false);
@@ -101,15 +101,19 @@ export const StandardPage = (): JSX.Element => {
     reset({ ...søknadState.søknad });
   }, [currentStep, reset]);
   const myHandleSubmit: SubmitHandler<SoknadStandard> = async (data) => {
-    console.log(data);
     setSøknadData(søknadDispatch, data);
     if (currentStep?.name === StepNames.OPPSUMMERING) {
-      const postResponse = await postSøknad(søknadState?.søknad);
-      if (postResponse?.ok) {
+      // const postResponse = await postSøknad(søknadState?.søknad);
+      // if (postResponse?.ok) {
+      //   setShowKvittering(true);
+      // } else {
+      //   // show post error
+      // }
+      setIsLoading(true);
+      setTimeout(() => {
+        setIsLoading(false);
         setShowKvittering(true);
-      } else {
-        // show post error
-      }
+      }, 2000);
     } else {
       completeAndGoToNextStep(stepWizardDispatch);
     }
@@ -132,7 +136,7 @@ export const StandardPage = (): JSX.Element => {
     return (
       <>
         <PageHeader align="center">{getText('pagetitle')}</PageHeader>
-        <Kvittering getText={getText} />
+        <Kvittering getText={getText} søker={søker} />
       </>
     );
   if (showVeiledning)

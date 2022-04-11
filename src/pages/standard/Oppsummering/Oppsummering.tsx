@@ -62,6 +62,10 @@ const Oppsummering = ({ getText, errors, control }: OppsummeringProps) => {
           )}
         </AccordianItemOppsummering>
         <AccordianItemOppsummering
+          data={{ yrkesskade: søknadState?.søknad?.yrkesskade }}
+          title={getText('steps.yrkesskade.title')}
+        />
+        <AccordianItemOppsummering
           data={søknadState?.søknad?.andreUtbetalinger}
           title={getText('steps.andre_utbetalinger.title')}
         >
@@ -83,10 +87,6 @@ const Oppsummering = ({ getText, errors, control }: OppsummeringProps) => {
             ))}
           </>
         </AccordianItemOppsummering>
-        <AccordianItemOppsummering
-          data={{ yrkesskade: søknadState?.søknad?.yrkesskade }}
-          title={getText('steps.yrkesskade.title')}
-        />
         <AccordianItemOppsummering data={{}} title={getText('steps.fastlege.title')}>
           <>
             <article>
@@ -112,6 +112,10 @@ const Oppsummering = ({ getText, errors, control }: OppsummeringProps) => {
           data={søknadState?.søknad?.student}
           title={getText('steps.student.title')}
         />
+        <AccordianItemOppsummering
+          data={{ tilleggsopplysninger: søknadState?.søknad?.tilleggsopplysninger }}
+          title={getText('steps.tilleggsopplysninger.title')}
+        />
         <AccordianItemOppsummering data={{}} title={getText('steps.vedlegg.title')}>
           <>
             {søknadState?.søknad?.vedlegg?.map((vedlegg) => (
@@ -119,10 +123,6 @@ const Oppsummering = ({ getText, errors, control }: OppsummeringProps) => {
             ))}
           </>
         </AccordianItemOppsummering>
-        <AccordianItemOppsummering
-          data={{ tilleggsopplysninger: søknadState?.søknad?.tilleggsopplysninger }}
-          title={getText('steps.tilleggsopplysninger.title')}
-        />
       </Accordion>
       <ConfirmationPanelWrapper
         label={getText('steps.oppsummering.confirmation')}

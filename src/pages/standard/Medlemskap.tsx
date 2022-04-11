@@ -41,7 +41,7 @@ export const Medlemskap = ({
   pageTitle,
 }: TilknytningTilNorgeProps) => {
   const [showUtenlandsPeriodeModal, setShowUtenlandsPeriodeModal] = useState<boolean>(false);
-  const utenlandsOppholdFieldArray = useFieldArray({
+  const { fields, append, remove } = useFieldArray({
     name: `${MEDLEMSKAP}.${UTENLANDSOPPHOLD}`,
     control,
   });
@@ -62,6 +62,7 @@ export const Medlemskap = ({
     setValue(`${MEDLEMSKAP}.${ARBEID_UTENFOR_NORGE_FØR_SYKDOM}.label`, undefined);
     setValue(`${MEDLEMSKAP}.${ARBEID_I_NORGE}.value`, undefined);
     setValue(`${MEDLEMSKAP}.${ARBEID_I_NORGE}.label`, undefined);
+    remove();
   }, [boddINorge]);
   useEffect(() => {
     if (arbeidINorge)
@@ -71,6 +72,7 @@ export const Medlemskap = ({
       );
     setValue(`${MEDLEMSKAP}.${ARBEID_UTENFOR_NORGE_FØR_SYKDOM}.value`, undefined);
     setValue(`${MEDLEMSKAP}.${ARBEID_UTENFOR_NORGE_FØR_SYKDOM}.label`, undefined);
+    remove();
   }, [arbeidINorge]);
   useEffect(() => {
     if (arbeidUtenforNorge)
@@ -78,7 +80,15 @@ export const Medlemskap = ({
         `${MEDLEMSKAP}.${ARBEID_UTENFOR_NORGE_FØR_SYKDOM}.label`,
         getText('form.medlemskap.arbeidUtenforNorge.legend')
       );
+    remove();
   }, [arbeidUtenforNorge]);
+  const utenlandsPeriodeInfo = useMemo(
+    () =>
+      arbeidUtenforNorge === JaEllerNei.JA
+        ? getText('steps.medlemskap.utenlandsPeriode.infoJaJa')
+        : getText('steps.medlemskap.utenlandsPeriode.info'),
+    [arbeidUtenforNorge]
+  );
   return (
     <>
       <Heading size="large" level="2">
@@ -160,7 +170,7 @@ export const Medlemskap = ({
       <UtenlandsPeriodeVelger
         open={showUtenlandsPeriodeModal}
         onSave={(data) => {
-          utenlandsOppholdFieldArray.append({ ...data });
+          append({ ...data });
           setShowUtenlandsPeriodeModal(false);
         }}
         hideIArbeid={hideArbeidInUtenlandsPeriode}
@@ -168,32 +178,26 @@ export const Medlemskap = ({
         onClose={() => setShowUtenlandsPeriodeModal(false)}
         getText={getText}
         heading={getText('steps.medlemskap.utenlandsPeriode.title')}
+        ingress={utenlandsPeriodeInfo}
       />
 
       {(arbeidUtenforNorge === JaEllerNei.JA || arbeidINorge === JaEllerNei.NEI) && (
-        <BodyLong>
-          {arbeidUtenforNorge === JaEllerNei.JA
-            ? getText('steps.medlemskap.utenlandsPeriode.infoJaJa')
-            : getText('steps.medlemskap.utenlandsPeriode.info')}
-        </BodyLong>
+        <BodyLong>{utenlandsPeriodeInfo}</BodyLong>
       )}
-      <Heading size="small" level="3">
+      <Heading size="xsmall" level="3">
         Dine utenlandsopphold
       </Heading>
-      {arbeidUtenforNorge === JaEllerNei.JA &&
-        utenlandsOppholdFieldArray?.fields?.map((field, index) => (
-          <Table.Row key={field.id}>
-            <Table.DataCell>{`${field?.land?.value?.split(':')?.[1]} ${formatDate(
-              field?.fraDato?.value,
-              'dd.MM.yyyy'
-            )} - ${formatDate(field?.tilDato?.value, 'dd.MM.yyyy')}${
-              field?.iArbeid?.value ? '(Jobb)' : ''
-            }`}</Table.DataCell>
-            <Table.DataCell>
-              {<Delete onClick={() => utenlandsOppholdFieldArray.remove(index)} />}
-            </Table.DataCell>
-          </Table.Row>
-        ))}
+      {fields?.map((field, index) => (
+        <Table.Row key={field.id}>
+          <Table.DataCell>{`${field?.land?.value?.split(':')?.[1]} ${formatDate(
+            field?.fraDato?.value,
+            'dd.MM.yyyy'
+          )} - ${formatDate(field?.tilDato?.value, 'dd.MM.yyyy')}${
+            field?.iArbeid?.value ? '(Jobb)' : ''
+          }`}</Table.DataCell>
+          <Table.DataCell>{<Delete onClick={() => remove(index)} />}</Table.DataCell>
+        </Table.Row>
+      ))}
       {(arbeidUtenforNorge === JaEllerNei.JA || arbeidINorge === JaEllerNei.NEI) && (
         <Button
           variant="secondary"

@@ -1,4 +1,13 @@
-import { BodyLong, Button, GuidePanel, Heading, Label, ReadMore } from '@navikt/ds-react';
+import {
+  BodyLong,
+  Button,
+  Cell,
+  Grid,
+  GuidePanel,
+  Heading,
+  Label,
+  ReadMore,
+} from '@navikt/ds-react';
 import React, { useEffect } from 'react';
 import { GetText } from '../../../hooks/useTexts';
 import { useForm } from 'react-hook-form';
@@ -6,9 +15,9 @@ import ConfirmationPanelWrapper from '../../../components/input/ConfirmationPane
 import HeadingHelloName from '../../../components/async/HeadingHelloName';
 import TextWithLink from '../../../components/TextWithLink';
 import { SøkerView } from '../../../context/sokerOppslagContext';
-import * as classes from '../standard.module.css';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
+import * as classes from './Veiledning.module.css';
 
 const VEILEDNING_CONFIRM = 'veiledningConfirm';
 type VeiledningType = {
@@ -45,8 +54,8 @@ export const Veiledning = ({ getText, søker, loading, onSubmit }: VeiledningPro
     onSubmit();
   };
   return (
-    <>
-      <Heading size="large" level="2">
+    <div className={classes?.veiledningContent}>
+      <Heading size="large" level="1">
         {getText(`steps.veiledning.title`)}
       </Heading>
       <GuidePanel>
@@ -107,7 +116,7 @@ export const Veiledning = ({ getText, søker, loading, onSubmit }: VeiledningPro
       </article>
       <form
         onSubmit={handleSubmit(veiledningHandleSubmit)}
-        className={classes?.soknadForm}
+        className={classes?.veiledningContent}
         autoComplete="off"
       >
         <ConfirmationPanelWrapper
@@ -122,15 +131,19 @@ export const Veiledning = ({ getText, søker, loading, onSubmit }: VeiledningPro
             links={[getText('steps.veiledning.rettogpliktConfirmation.link')]}
           />
         </ConfirmationPanelWrapper>
-        <div className={classes?.buttonWrapper}>
-          <Button variant="primary" type="submit">
-            {getText(`steps.veiledning.buttonText`)}
-          </Button>
-          <Button variant="tertiary" type="button" onClick={() => console.log('TODO')}>
-            {getText('cancelButtonText')}
-          </Button>
-        </div>
+        <Grid>
+          <Cell xs={3}>
+            <Button variant="primary" type="submit">
+              {getText(`steps.veiledning.buttonText`)}
+            </Button>
+          </Cell>
+          <Cell xs={3}>
+            <Button variant="tertiary" type="button" onClick={() => console.log('TODO')}>
+              {getText('cancelButtonText')}
+            </Button>
+          </Cell>
+        </Grid>
       </form>
-    </>
+    </div>
   );
 };

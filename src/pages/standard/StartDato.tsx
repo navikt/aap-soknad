@@ -18,6 +18,7 @@ import RadioGroupWrapper from '../../components/input/RadioGroupWrapper';
 import { JaNeiVetIkke } from '../../types/Generic';
 import TextFieldWrapper from '../../components/input/TextFieldWrapper';
 import ColorPanel from '../../components/panel/ColorPanel';
+import * as classes from './standard.module.css';
 
 const STARTDATO = 'startDato';
 const FERIE = 'ferie';
@@ -70,7 +71,7 @@ const StartDato = ({ getText, errors, watch, control, setValue }: Props) => {
       <Heading size="large" level="2">
         {getText('steps.startDato.title')}
       </Heading>
-      <GuidePanel>
+      <GuidePanel className={classes?.tuvaContainer}>
         {getParagraphs('steps.startDato.guide.paragraphs').map((e: string, index: number) => (
           <BodyLong key={`${index}`}>{e}</BodyLong>
         ))}
@@ -111,14 +112,14 @@ const StartDato = ({ getText, errors, watch, control, setValue }: Props) => {
           </RadioGroupWrapper>
           {ferieType === FerieType.PERIODE ? (
             <Grid>
-              <Cell xs={6}>
+              <Cell xs={5}>
                 <DatoVelgerWrapper
                   name={`${FERIE}.periode.fraDato.value`}
                   label={getText('form.ferie.fraDato.label')}
                   control={control}
                 />
               </Cell>
-              <Cell xs={6}>
+              <Cell xs={5}>
                 <DatoVelgerWrapper
                   name={`${FERIE}.periode.tilDato.value`}
                   label={getText('form.ferie.tilDato.label')}

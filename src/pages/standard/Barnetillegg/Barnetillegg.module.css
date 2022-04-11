@@ -8,3 +8,13 @@
   justify-content: space-between;
   align-items: center;
 }
+.leggTilBarnModalContent {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: var(--navds-spacing-10);
+  max-width: 600px;
+}
+.leggTilBarnModalContent button {
+  min-width: 115px;
+}

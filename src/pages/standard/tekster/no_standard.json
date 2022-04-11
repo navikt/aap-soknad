@@ -310,10 +310,12 @@
     },
     "utenlandsperiode": {
       "land": {
+        "labelArbeid": "Hvilket land jobbet du i?",
         "label": "Hvilket land var du i?",
         "required": "Vennligst oppgi land"
       },
       "datoLabel": "I hvilken periode var du der?",
+      "datoLabelArbeid": "I hvilken periode jobbet du der?",
       "fraDato": {
         "label": "Fra og med dato (dd.mm.åååå)",
         "required": "Vennligst oppgi fra dato"

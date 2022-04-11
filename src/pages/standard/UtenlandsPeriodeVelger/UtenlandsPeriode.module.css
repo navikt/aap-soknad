@@ -2,17 +2,6 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  gap: 40px;
-}
-.datoWrapper {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  gap: 40px;
-}
-.horizontalButtonWrapper {
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-  gap: 40px;
+  gap: var(--navds-spacing-10);
+  max-width: 600px;
 }
