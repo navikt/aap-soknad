@@ -23,11 +23,16 @@ const OppsummeringKontaktinfo = ({ getText, søker }: Props) => {
       <div>
         <Label>{getText('steps.oppsummering.kontaktinfo.adresse')}</Label>
         <BodyShort>{søker?.fullAdresse}</BodyShort>
-        <ReadMore header={getText('steps.oppsummering.kontaktinfo.adresseReadmore.title')}>
-          <TextWithLink
-            text={getText('steps.oppsummering.kontaktinfo.adresseReadmore.text')}
-            links={[getText('steps.oppsummering.kontaktinfo.adresseReadmore.link')]}
-          />
+        <ReadMore
+          header={getText('steps.oppsummering.kontaktinfo.adresseReadmore.title')}
+          type={'button'}
+        >
+          <span>
+            <TextWithLink
+              text={getText('steps.oppsummering.kontaktinfo.adresseReadmore.text')}
+              links={[getText('steps.oppsummering.kontaktinfo.adresseReadmore.link')]}
+            />
+          </span>
         </ReadMore>
       </div>
     </>

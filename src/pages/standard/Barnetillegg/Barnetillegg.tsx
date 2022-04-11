@@ -1,6 +1,5 @@
 import {
   Alert,
-  BodyLong,
   BodyShort,
   Button,
   GuidePanel,
@@ -8,6 +7,7 @@ import {
   Ingress,
   Modal,
   Radio,
+  RadioGroup,
   TextField,
 } from '@navikt/ds-react';
 import React, { useEffect, useState } from 'react';
@@ -39,17 +39,17 @@ export const Barnetillegg = ({ getText, errors, control }: BarnetilleggProps) =>
   const [mellomnavn] = useState<string>('');
   const [etternavn, setEtternavn] = useState<string>('');
   const [fnr, setFnr] = useState<string>('');
-  const [adoptertEllerFosterBarn] = useState<string>('');
+  const [harInntekt, setHarInntekt] = useState<string>('');
   const { fields, append, remove, update } = useFieldArray({
     name: BARNETILLEGG,
     control,
   });
   useEffect(() => {
     fields.forEach((field, index) => {
-      if (!field?.erForsørger?.label)
+      if (!field?.harInntekt?.label)
         update(index, {
           ...field,
-          erForsørger: { ...field?.erForsørger, label: getText('form.barnetillegg.legend') },
+          harInntekt: { ...field?.harInntekt, label: getText('form.barnetillegg.legend') },
         });
     });
   }, [fields]);
@@ -59,11 +59,18 @@ export const Barnetillegg = ({ getText, errors, control }: BarnetilleggProps) =>
         {getText('steps.barnetillegg.title')}
       </Heading>
       <GuidePanel>
-        <BodyLong>{getText('steps.barnetillegg.guideOne')}</BodyLong>
-        <TextWithLink
-          text={getText('steps.barnetillegg.guideTwo')}
-          links={[getText('steps.barnetillegg.guideReadMoreLink')]}
-        />
+        <BodyShort>
+          <TextWithLink
+            text={getText('steps.barnetillegg.guide')}
+            links={[getText('steps.barnetillegg.guideReadMoreLink')]}
+          />
+        </BodyShort>
+        <BodyShort>
+          <TextWithLink
+            text={getText('steps.barnetillegg.grunnbeløp.title')}
+            links={[getText('steps.barnetillegg.grunnbeløp.link')]}
+          />
+        </BodyShort>
       </GuidePanel>
       {fields.map((barn, index) => {
         return (
@@ -85,7 +92,7 @@ export const Barnetillegg = ({ getText, errors, control }: BarnetilleggProps) =>
             <BodyShort>{`Fødselsnummer: ${barn?.fnr}`}</BodyShort>
             <RadioGroupWrapper
               legend={getText('form.barnetillegg.legend')}
-              name={`${BARNETILLEGG}.${index}.erForsørger.value`}
+              name={`${BARNETILLEGG}.${index}.harInntekt.value`}
               control={control}
               error={errors?.[BARNETILLEGG]?.[index]?.erForsørger?.message}
             >
@@ -99,9 +106,6 @@ export const Barnetillegg = ({ getText, errors, control }: BarnetilleggProps) =>
           </article>
         );
       })}
-      <Heading size={'small'} level={'2'}>
-        {getText('steps.barnetillegg.leggTil.title')}
-      </Heading>
       <BodyShort>{getText('steps.barnetillegg.leggTil.description')}</BodyShort>
       <Button variant="secondary" type="button" onClick={() => setShowModal(true)}>
         <Add />
@@ -133,20 +137,24 @@ export const Barnetillegg = ({ getText, errors, control }: BarnetilleggProps) =>
             name={'fnr'}
             onChange={(e) => e?.target?.value && setFnr(e?.target?.value)}
           />
-          {/*<RadioGroup*/}
-          {/*  legend={getText('form.barnetillegg.add.adoptertEllerFosterbarn.label')}*/}
-          {/*  name={'adoptertEllerFosterBarn'}*/}
-          {/*  onChange={(e) => e && setAdoptertEllerFosterBarn(e)}*/}
-          {/*>*/}
-          {/*  <Radio value={JaEllerNei.JA}>*/}
-          {/*    <BodyShort>{JaEllerNei.JA}</BodyShort>*/}
-          {/*  </Radio>*/}
-          {/*  <Radio value={JaEllerNei.NEI}>*/}
-          {/*    <BodyShort>{JaEllerNei.NEI}</BodyShort>*/}
-          {/*  </Radio>*/}
-          {/*</RadioGroup>*/}
+          <RadioGroup
+            legend={getText('form.barnetillegg.legend')}
+            name={'harInntekt'}
+            onChange={(e) => e && setHarInntekt(e)}
+          >
+            <Radio value={JaEllerNei.JA}>
+              <BodyShort>{JaEllerNei.JA}</BodyShort>
+            </Radio>
+            <Radio value={JaEllerNei.NEI}>
+              <BodyShort>{JaEllerNei.NEI}</BodyShort>
+            </Radio>
+          </RadioGroup>
           <Alert variant={'info'}>
-            <BodyShort>{getText('form.barnetillegg.add.alert')}</BodyShort>
+            {getText('form.barnetillegg.add.alertTitle')}
+            <ul>
+              <li>{getText('form.barnetillegg.add.alertBullet')}</li>
+            </ul>
+            {getText('form.barnetillegg.add.alertInfo')}
           </Alert>
           <Button
             type="button"
@@ -163,10 +171,7 @@ export const Barnetillegg = ({ getText, errors, control }: BarnetilleggProps) =>
               append({
                 navn: { fornavn, mellomnavn, etternavn },
                 fnr,
-                adoptertEllerFosterBarn: {
-                  label: getText('form.barnetillegg.add.adoptertEllerFosterbarn.label'),
-                  value: adoptertEllerFosterBarn,
-                },
+                harInntekt,
                 manueltOpprettet: true,
               });
               addRequiredVedlegg(

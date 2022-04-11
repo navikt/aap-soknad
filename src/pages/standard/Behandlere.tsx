@@ -2,6 +2,8 @@ import {
   BodyLong,
   BodyShort,
   Button,
+  Cell,
+  Grid,
   GuidePanel,
   Heading,
   Link,
@@ -28,14 +30,16 @@ const FIELD_ARRAY_NAME = 'behandlere';
 export const Behandlere = ({ getText, fastlege, control }: BehandlereProps) => {
   const [showNyBehandler, setShowNyBehandler] = useState<boolean>(false);
   const [selectedBehandler, setSelectedBehandler] = useState<number | undefined>(undefined);
-  const [name, setName] = useState<string>('');
+  const [firstname, setFirstname] = useState<string>('');
+  const [lastname, setLastname] = useState<string>('');
   const [legekontor, setLegekontor] = useState<string>('');
   const [gateadresse, setGateadresse] = useState<string>('');
   const [postnummer, setPostnummer] = useState<string>('');
   const [poststed, setPoststed] = useState<string>('');
   const [telefon, setTelefon] = useState<string>('');
   const resetNyBehandler = () => {
-    setName('');
+    setFirstname('');
+    setLastname('');
     setLegekontor('');
     setGateadresse('');
     setPostnummer('');
@@ -49,7 +53,8 @@ export const Behandlere = ({ getText, fastlege, control }: BehandlereProps) => {
   const editNyBehandler = (index: number) => {
     setSelectedBehandler(index);
     const behandler = fields[index];
-    setName(behandler?.name);
+    setFirstname(behandler?.firstname);
+    setLastname(behandler?.lastname);
     setLegekontor(behandler?.legekontor);
     setGateadresse(behandler?.gateadresse);
     setPostnummer(behandler?.postnummer);
@@ -59,9 +64,17 @@ export const Behandlere = ({ getText, fastlege, control }: BehandlereProps) => {
   };
   const saveNyBehandler = () => {
     if (!selectedBehandler) {
-      append({ name, legekontor, gateadresse, postnummer, poststed, telefon });
+      append({ firstname, lastname, legekontor, gateadresse, postnummer, poststed, telefon });
     } else {
-      update(selectedBehandler, { name, legekontor, gateadresse, postnummer, poststed, telefon });
+      update(selectedBehandler, {
+        firstname,
+        lastname,
+        legekontor,
+        gateadresse,
+        postnummer,
+        poststed,
+        telefon,
+      });
     }
     resetNyBehandler();
     setShowNyBehandler(false);
@@ -82,10 +95,12 @@ export const Behandlere = ({ getText, fastlege, control }: BehandlereProps) => {
       </GuidePanel>
       <Heading size={'small'} level={'3'}>{`Fastlege`}</Heading>
       {!fastlege ? (
-        <TextWithLink
-          text={getText('steps.fastlege.ingenFastlege.text')}
-          links={[getText('steps.fastlege.ingenFastlege.link')]}
-        />
+        <BodyLong>
+          <TextWithLink
+            text={getText('steps.fastlege.ingenFastlege.text')}
+            links={[getText('steps.fastlege.ingenFastlege.link')]}
+          />
+        </BodyLong>
       ) : (
         <div>
           <BodyShort>{fastlege?.fulltNavn}</BodyShort>
@@ -93,7 +108,10 @@ export const Behandlere = ({ getText, fastlege, control }: BehandlereProps) => {
           <BodyShort>{fastlege?.adresse}</BodyShort>
           <BodyShort>{`Telefon: ${fastlege?.telefon}`}</BodyShort>
           <ReadMore header={getText('steps.fastlege.readMore.header')} type={'button'}>
-            <BodyLong>{getText('steps.fastlege.readMore.text')}</BodyLong>
+            <TextWithLink
+              text={getText('steps.fastlege.readMore.text')}
+              links={[getText('steps.fastlege.readMore.link')]}
+            />
           </ReadMore>
         </div>
       )}
@@ -103,12 +121,12 @@ export const Behandlere = ({ getText, fastlege, control }: BehandlereProps) => {
       <BodyLong>{getText('steps.fastlege.annenBehandler.info')}</BodyLong>
       {fields.length > 0 && (
         <>
-          <Heading size={'small'} level={'3'}>
+          <Heading size={'xsmall'} level={'4'}>
             {getText('steps.fastlege.andreBehandlere.heading')}
           </Heading>
           {fields.map((field, index) => (
             <ButtonPanel key={field.id} onClick={() => editNyBehandler(index)}>
-              <Link>{`${field?.name}, ${field?.legekontor}`}</Link>
+              <Link>{`${field?.firstname} ${field?.lastname}, ${field?.legekontor}`}</Link>
             </ButtonPanel>
           ))}
         </>
@@ -127,10 +145,16 @@ export const Behandlere = ({ getText, fastlege, control }: BehandlereProps) => {
             {'Legg til annen lege eller behandler'}
           </Heading>
           <TextField
-            value={name}
-            label={getText('form.fastlege.annenbehandler.name.label')}
-            name={'name'}
-            onChange={(e) => e?.target?.value && setName(e?.target?.value)}
+            value={firstname}
+            label={getText('form.fastlege.annenbehandler.firstname.label')}
+            name={'firstname'}
+            onChange={(e) => e?.target?.value && setFirstname(e?.target?.value)}
+          />
+          <TextField
+            value={lastname}
+            label={getText('form.fastlege.annenbehandler.lastname.label')}
+            name={'lastname'}
+            onChange={(e) => e?.target?.value && setLastname(e?.target?.value)}
           />
           <TextField
             value={legekontor}
@@ -144,35 +168,45 @@ export const Behandlere = ({ getText, fastlege, control }: BehandlereProps) => {
             name={'gateadresse'}
             onChange={(e) => e?.target?.value && setGateadresse(e?.target?.value)}
           />
-          <TextField
-            value={postnummer}
-            label={getText('form.fastlege.annenbehandler.postnummer.label')}
-            name={'postnummer'}
-            onChange={(e) => e?.target?.value && setPostnummer(e?.target?.value)}
-          />
-          <TextField
-            value={poststed}
-            label={getText('form.fastlege.annenbehandler.poststed.label')}
-            name={'poststed'}
-            onChange={(e) => e?.target?.value && setPoststed(e?.target?.value)}
-          />
+          <Grid>
+            <Cell xs={6}>
+              <TextField
+                value={postnummer}
+                label={getText('form.fastlege.annenbehandler.postnummer.label')}
+                name={'postnummer'}
+                onChange={(e) => e?.target?.value && setPostnummer(e?.target?.value)}
+              />
+            </Cell>
+            <Cell xs={6}>
+              <TextField
+                value={poststed}
+                label={getText('form.fastlege.annenbehandler.poststed.label')}
+                name={'poststed'}
+                onChange={(e) => e?.target?.value && setPoststed(e?.target?.value)}
+              />
+            </Cell>
+          </Grid>
           <TextField
             value={telefon}
             label={getText('form.fastlege.annenbehandler.telefon.label')}
             name={'telefon'}
             onChange={(e) => e?.target?.value && setTelefon(e?.target?.value)}
           />
-          <div>
-            <Button type="button" onClick={saveNyBehandler}>
-              Lagre lege/behandler
-            </Button>
-            {selectedBehandler !== undefined && (
-              <Button variant={'danger'} type="button" onClick={slettSelectedBehandler}>
-                <BodyShort>Slett lege/behandler</BodyShort>
-                <Delete />
+          <Grid>
+            <Cell xs={6}>
+              <Button type="button" onClick={saveNyBehandler}>
+                Lagre lege/behandler
               </Button>
-            )}
-          </div>
+            </Cell>
+            <Cell xs={6}>
+              {selectedBehandler !== undefined && (
+                <Button variant={'danger'} type="button" onClick={slettSelectedBehandler}>
+                  <BodyShort>Slett lege/behandler</BodyShort>
+                  <Delete />
+                </Button>
+              )}
+            </Cell>
+          </Grid>
           <div>
             <Button
               type="button"

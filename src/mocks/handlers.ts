@@ -162,7 +162,7 @@ export const handlers = [
         },
         behandlere: [
           {
-            type: 'FASTLEGE',
+            type: 'FASTLEGEhei',
             navn: { fornavn: 'Nina Unni', etternavn: 'Borge' },
             kontaktinformasjon: {
               behandlerRef: 'd182f24b-ebca-4f44-bf86-65901ec6141b',

@@ -1,4 +1,4 @@
-import { Alert, BodyLong, BodyShort, Checkbox, GuidePanel, Heading, Radio } from '@navikt/ds-react';
+import { Alert, BodyShort, Checkbox, GuidePanel, Heading, Radio, ReadMore } from '@navikt/ds-react';
 import React, { useEffect, useMemo } from 'react';
 import { GetText } from '../../../hooks/useTexts';
 import { Control, FieldErrors, FieldValues, UseFormWatch } from 'react-hook-form';
@@ -7,8 +7,8 @@ import RadioGroupWrapper from '../../../components/input/RadioGroupWrapper';
 import SoknadStandard from '../../../types/SoknadStandard';
 import TextFieldWrapper from '../../../components/input/TextFieldWrapper';
 import ColorPanel from '../../../components/panel/ColorPanel';
-import CountrySelector from '../../../components/input/CountrySelector';
 import { useVedleggContext, addRequiredVedlegg } from '../../../context/vedleggContext';
+import { JaEllerNei } from '../../../types/Generic';
 
 interface AndreUtbetalingerProps {
   watch: UseFormWatch<FieldValues>;
@@ -20,7 +20,6 @@ interface AndreUtbetalingerProps {
 const ANDRE_UTBETALINGER = 'andreUtbetalinger';
 const LØNN = 'lønn';
 const STØNAD = 'stønad';
-const STØNAD_SOSIAL = 'sosialStønad';
 
 export const AndreUtbetalinger = ({
   getText,
@@ -32,32 +31,12 @@ export const AndreUtbetalinger = ({
   const { vedleggDispatch } = useVedleggContext();
   const lønnEtterlønnEllerSluttpakke = watch(`${ANDRE_UTBETALINGER}.${LØNN}.value`);
   const stønadEllerVerv = watch(`${ANDRE_UTBETALINGER}.${STØNAD}.value`);
-  const LønnsAlternativer = useMemo(
-    () => ({
-      JA: getText(`form.${ANDRE_UTBETALINGER}.${LØNN}.ja`),
-      NEI: getText(`form.${ANDRE_UTBETALINGER}.${LØNN}.nei`),
-      VET_IKKE: getText(`form.${ANDRE_UTBETALINGER}.${LØNN}.vetikke`),
-    }),
-    [getText]
-  );
-  const SosialStønadAlternativer = useMemo(
-    () => ({
-      KVALIFISERINGSSTØNAD: getText(
-        `form.${ANDRE_UTBETALINGER}.${STØNAD_SOSIAL}.kvalifiseringsstønad`
-      ),
-      ØKONOMISK_SOSIALHJELP: getText(
-        `form.${ANDRE_UTBETALINGER}.${STØNAD_SOSIAL}.økonomiskSosialhjelp`
-      ),
-      INTRODUKSJONSSTØNAD: getText(
-        `form.${ANDRE_UTBETALINGER}.${STØNAD_SOSIAL}.introduksjonsStønad`
-      ),
-      NEI: getText(`form.${ANDRE_UTBETALINGER}.${STØNAD_SOSIAL}.nei`),
-    }),
-    [getText]
-  );
   const StønadAlternativer = useMemo(
     () => ({
+      ØKONOMISK_SOSIALHJELP: getText(`form.${ANDRE_UTBETALINGER}.${STØNAD}.økonomiskSosialhjelp`),
       OMSORGSSTØNAD: getText(`form.${ANDRE_UTBETALINGER}.${STØNAD}.omsorgsstønad`),
+      INTRODUKSJONSSTØNAD: getText(`form.${ANDRE_UTBETALINGER}.${STØNAD}.introduksjonsStønad`),
+      KVALIFISERINGSSTØNAD: getText(`form.${ANDRE_UTBETALINGER}.${STØNAD}.kvalifiseringsstønad`),
       FOSTERHJEMSGODTGJØRELSE: getText(
         `form.${ANDRE_UTBETALINGER}.${STØNAD}.fosterhjemsgodtgjørelse`
       ),
@@ -68,25 +47,9 @@ export const AndreUtbetalinger = ({
     }),
     [getText]
   );
-  const UtbetalingsType = useMemo(
-    () => ({
-      ENGANGSBELØP: getText(`form.${ANDRE_UTBETALINGER}.utbetalingstype.engangsbeløp`),
-      LØPENDE: getText(`form.${ANDRE_UTBETALINGER}.utbetalingstype.løpende`),
-    }),
-    [getText]
-  );
-  const AlertInfo = useMemo(() => {
-    let infoList: Array<string> = [];
-    if (stønadEllerVerv?.includes(StønadAlternativer.OMSORGSSTØNAD)) {
-      infoList = [...infoList, getText(`steps.andre_utbetalinger.alertInfo.omsorgsstønad`)];
-    }
-    if (stønadEllerVerv?.includes(StønadAlternativer.VERV)) {
-      infoList = [...infoList, getText(`steps.andre_utbetalinger.alertInfo.verv`)];
-    }
-    return infoList;
-  }, [stønadEllerVerv]);
   const Attachments = useMemo(() => {
     let attachments: Array<{ type: string; description: string }> = [];
+
     if (stønadEllerVerv?.includes(StønadAlternativer.OMSORGSSTØNAD)) {
       attachments = [
         ...attachments,
@@ -114,7 +77,7 @@ export const AndreUtbetalinger = ({
         },
       ];
     }
-    if (lønnEtterlønnEllerSluttpakke === LønnsAlternativer.JA) {
+    if (lønnEtterlønnEllerSluttpakke === JaEllerNei.JA) {
       attachments = [
         ...attachments,
         {
@@ -140,59 +103,29 @@ export const AndreUtbetalinger = ({
   }, [Attachments]);
   return (
     <>
-      <GuidePanel>
-        <BodyLong>{getText(`steps.andre_utbetalinger.guide`)}</BodyLong>
-      </GuidePanel>
       <Heading size="large" level="2">
         {getText(`steps.andre_utbetalinger.title`)}
       </Heading>
-      <CheckboxGroupWrapper
-        name={`${ANDRE_UTBETALINGER}.${STØNAD_SOSIAL}.value`}
-        control={control}
-        size="medium"
-        legend={getText(`form.${ANDRE_UTBETALINGER}.${STØNAD_SOSIAL}.legend`)}
-        error={errors?.[ANDRE_UTBETALINGER]?.[STØNAD_SOSIAL]?.message}
-      >
-        <Checkbox value={SosialStønadAlternativer.KVALIFISERINGSSTØNAD}>
-          {SosialStønadAlternativer.KVALIFISERINGSSTØNAD}
-        </Checkbox>
-        <Checkbox value={SosialStønadAlternativer.ØKONOMISK_SOSIALHJELP}>
-          {SosialStønadAlternativer.ØKONOMISK_SOSIALHJELP}
-        </Checkbox>
-        <Checkbox value={SosialStønadAlternativer.INTRODUKSJONSSTØNAD}>
-          {SosialStønadAlternativer.INTRODUKSJONSSTØNAD}
-        </Checkbox>
-        <Checkbox value={SosialStønadAlternativer.NEI}>{SosialStønadAlternativer.NEI}</Checkbox>
-      </CheckboxGroupWrapper>
+      <GuidePanel>{getText(`steps.andre_utbetalinger.guide`)}</GuidePanel>
       <RadioGroupWrapper
         legend={getText(`form.${ANDRE_UTBETALINGER}.${LØNN}.legend`)}
         name={`${ANDRE_UTBETALINGER}.${LØNN}.value`}
         control={control}
         error={errors?.[ANDRE_UTBETALINGER]?.[LØNN]?.message}
       >
-        <Radio value={LønnsAlternativer.JA}>
-          <BodyShort>{LønnsAlternativer.JA}</BodyShort>
+        <ReadMore
+          header={getText('steps.andre_utbetalinger.ekstraUtbetalingerReadMore.title')}
+          type={'button'}
+        >
+          {getText('steps.andre_utbetalinger.ekstraUtbetalingerReadMore.text')}
+        </ReadMore>
+        <Radio value={JaEllerNei.JA}>
+          <BodyShort>{JaEllerNei.JA}</BodyShort>
         </Radio>
-        <Radio value={LønnsAlternativer.NEI}>
-          <BodyShort>{LønnsAlternativer.NEI}</BodyShort>
-        </Radio>
-        <Radio value={LønnsAlternativer.VET_IKKE}>
-          <BodyShort>{LønnsAlternativer.VET_IKKE}</BodyShort>
+        <Radio value={JaEllerNei.NEI}>
+          <BodyShort>{JaEllerNei.NEI}</BodyShort>
         </Radio>
       </RadioGroupWrapper>
-      {lønnEtterlønnEllerSluttpakke === LønnsAlternativer.JA && (
-        <ColorPanel>
-          <RadioGroupWrapper
-            legend={getText('form.andreUtbetalinger.utbetalingstype.legend')}
-            name={`${ANDRE_UTBETALINGER}.utbetaling.utbetalingsType.value`}
-            control={control}
-            error={errors?.[ANDRE_UTBETALINGER]?.message}
-          >
-            <Radio value={UtbetalingsType.ENGANGSBELØP}>{UtbetalingsType.ENGANGSBELØP}</Radio>
-            <Radio value={UtbetalingsType.LØPENDE}>{UtbetalingsType.LØPENDE}</Radio>
-          </RadioGroupWrapper>
-        </ColorPanel>
-      )}
       <CheckboxGroupWrapper
         name={`${ANDRE_UTBETALINGER}.${STØNAD}.value`}
         control={control}
@@ -200,28 +133,23 @@ export const AndreUtbetalinger = ({
         legend={getText(`form.${ANDRE_UTBETALINGER}.${STØNAD}.legend`)}
         error={errors?.[ANDRE_UTBETALINGER]?.[STØNAD]?.message}
       >
+        <Checkbox value={StønadAlternativer.ØKONOMISK_SOSIALHJELP}>
+          {StønadAlternativer.ØKONOMISK_SOSIALHJELP}
+        </Checkbox>
         <Checkbox value={StønadAlternativer.OMSORGSSTØNAD}>
           {StønadAlternativer.OMSORGSSTØNAD}
+        </Checkbox>
+        <Checkbox value={StønadAlternativer.INTRODUKSJONSSTØNAD}>
+          {StønadAlternativer.INTRODUKSJONSSTØNAD}
+        </Checkbox>
+        <Checkbox value={StønadAlternativer.KVALIFISERINGSSTØNAD}>
+          {StønadAlternativer.KVALIFISERINGSSTØNAD}
         </Checkbox>
         <Checkbox value={StønadAlternativer.FOSTERHJEMSGODTGJØRELSE}>
           {StønadAlternativer.FOSTERHJEMSGODTGJØRELSE}
         </Checkbox>
         <Checkbox value={StønadAlternativer.VERV}>{StønadAlternativer.VERV}</Checkbox>
         <Checkbox value={StønadAlternativer.UTLAND}>{StønadAlternativer.UTLAND}</Checkbox>
-        {stønadEllerVerv?.includes(StønadAlternativer.UTLAND) && (
-          <ColorPanel>
-            <TextFieldWrapper
-              name={`${ANDRE_UTBETALINGER}.utenlandsTrygd.ytelse.value`}
-              label={getText('form.andreUtbetalinger.utenlandsTrygd.ytelse.label')}
-              control={control}
-            />
-            <CountrySelector
-              name={`${ANDRE_UTBETALINGER}.utenlandsTrygd.land.value`}
-              label={getText('form.andreUtbetalinger.utenlandsTrygd.land.label')}
-              control={control}
-            />
-          </ColorPanel>
-        )}
         <Checkbox value={StønadAlternativer.ANNET}>{StønadAlternativer.ANNET}</Checkbox>
         {stønadEllerVerv?.includes(StønadAlternativer.ANNET) && (
           <ColorPanel>
@@ -239,17 +167,15 @@ export const AndreUtbetalinger = ({
         )}
         <Checkbox value={StønadAlternativer.NEI}>{StønadAlternativer.NEI}</Checkbox>
       </CheckboxGroupWrapper>
-      {Attachments.length > 0 && AlertInfo.length > 0 && (
+      {Attachments.length > 0 && (
         <Alert variant={'info'}>
-          <BodyShort>{getText('form.andreUtbetalinger.alertInfo.attachmentTitle')}</BodyShort>
+          {getText('steps.andre_utbetalinger.alertAttachments.title')}
           <ul>
             {Attachments.map((attachment) => (
               <li>{attachment?.description}</li>
             ))}
           </ul>
-          {AlertInfo.map((info) => (
-            <BodyLong>{info}</BodyLong>
-          ))}
+          {'Dokumentene laster du opp senere i søknaden. Du kan også ettersende vedlegg.'}
         </Alert>
       )}
     </>

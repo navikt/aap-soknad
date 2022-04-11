@@ -170,6 +170,16 @@ export const Medlemskap = ({
         heading={getText('steps.medlemskap.utenlandsPeriode.title')}
       />
 
+      {(arbeidUtenforNorge === JaEllerNei.JA || arbeidINorge === JaEllerNei.NEI) && (
+        <BodyLong>
+          {arbeidUtenforNorge === JaEllerNei.JA
+            ? getText('steps.medlemskap.utenlandsPeriode.infoJaJa')
+            : getText('steps.medlemskap.utenlandsPeriode.info')}
+        </BodyLong>
+      )}
+      <Heading size="small" level="3">
+        Dine utenlandsopphold
+      </Heading>
       {arbeidUtenforNorge === JaEllerNei.JA &&
         utenlandsOppholdFieldArray?.fields?.map((field, index) => (
           <Table.Row key={field.id}>
@@ -185,21 +195,14 @@ export const Medlemskap = ({
           </Table.Row>
         ))}
       {(arbeidUtenforNorge === JaEllerNei.JA || arbeidINorge === JaEllerNei.NEI) && (
-        <>
-          <BodyLong>
-            {boddINorge === JaEllerNei.JA && arbeidUtenforNorge === JaEllerNei.JA
-              ? getText('steps.medlemskap.utenlandsPeriode.infoJaJa')
-              : getText('steps.medlemskap.utenlandsPeriode.info')}
-          </BodyLong>
-          <Button
-            variant="secondary"
-            type="button"
-            onClick={() => setShowUtenlandsPeriodeModal(true)}
-          >
-            <Add />
-            Legg til periode
-          </Button>
-        </>
+        <Button
+          variant="secondary"
+          type="button"
+          onClick={() => setShowUtenlandsPeriodeModal(true)}
+        >
+          <Add />
+          Legg til utenlandsopphold
+        </Button>
       )}
     </>
   );

@@ -2,7 +2,7 @@ import { Control, FieldErrors } from 'react-hook-form';
 import SoknadStandard from '../../types/SoknadStandard';
 import { GetText } from '../../hooks/useTexts';
 import RadioGroupWrapper from '../../components/input/RadioGroupWrapper';
-import { BodyLong, BodyShort, GuidePanel, Radio } from '@navikt/ds-react';
+import { BodyLong, BodyShort, GuidePanel, Heading, Radio } from '@navikt/ds-react';
 import { JaEllerNei } from '../../types/Generic';
 import React, { useEffect } from 'react';
 
@@ -22,9 +22,12 @@ const Student = ({ getText, errors, control, setValue }: StudentProps) => {
   );
   return (
     <>
+      <Heading size="large" level="2">
+        {getText('steps.student.title')}
+      </Heading>
       <GuidePanel>
-        <BodyLong>{getText('steps.fastlege.guide1')}</BodyLong>
-        <BodyLong>{getText('steps.fastlege.guide2')}</BodyLong>
+        <BodyLong>{getText('steps.student.guide1')}</BodyLong>
+        <BodyLong>{getText('steps.student.guide2')}</BodyLong>
       </GuidePanel>
       <RadioGroupWrapper
         name={`${STUDENT}.${ER_STUDENT}.value`}

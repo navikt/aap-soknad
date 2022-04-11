@@ -74,21 +74,25 @@
     "fastlege": {
       "title": "Kontaktperson for helseopplysninger",
       "guide1": "NAV henter helseopplysninger fra fastlegen din når vi skal behandle søknaden din. Ved behov kan vi også hente inn opplysninger fra andre  behandlere eller leger.",
-      "guide2": "Hvis vi allerede har tilsrekkelig med opplysninger om deg fra tidligere, innhenter vi ikke legeerklæring.",
+      "guide2": "Hvis vi allerede har tilstrekkelig med opplysninger om deg fra tidligere, innhenter vi ikke legeerklæring.",
       "annenBehandler": {
         "heading": "Annen lege eller behandler",
-        "info": "Hvis  du har en annen lege eller behandler, som du vil NAV skal vite om eller som du vil at vi skal innhente legeerklæringen din fra, kan du legge til denne her."
+        "info": "Hvis du har en annen lege eller behandler som du ønsker at NAV skal kunne kontakte for helseopplysninger, kan du legge til denne her."
       },
       "buttonAddNyBehandler": "Legg til lege/behandler",
       "andreBehandlere": {
         "heading": "Dine leger/behandlere"
       },
       "readMore": {
-        "header": "Hva gjør jeg hvis jeg har en annen fastlege?",
-        "text": "Logg inn på helsenorge for å bytte fastlege. Du kan sende inn din AAP søknad selv om du ikke ser endringen her enda."
+        "header": "Hva gjør jeg hvis dette er feil fastlege?",
+        "text": "På $$ kan du registrere nye helsekontakter og bytte fastlege. Du kan sende inn AAP-søknaden din selv om du ikke ser endringen her enda.",
+        "link": {
+          "name": "helsenorge.no (åpnes i ny fane)",
+          "href": "https://www.helsenorge.no"
+        }
       },
       "ingenFastlege": {
-        "text": "Vi finner ingen informasjon om fastlege registrert på deg. På $$ kan du legge til fastlege",
+        "text": "Vi finner ingen informasjon om fastlege registrert på deg. På $$ kan du registrere helsekontakter eller finne en fastlege.",
         "link": {
           "name": "helsenorge.no (åpnes i ny fane)",
           "href": "https://www.helsenorge.no"
@@ -116,25 +120,40 @@
     },
     "yrkesskade": {
       "title": "Yrkesskade",
+      "yrkesskadeReadMore": {
+        "title": "Hva menes med en yrkesskade eller en yrkessykdom?",
+        "skade": "Med en yrkesskade mener vi en skade du har fått som følge av en arbeidsulykke, både alvorlige og mindre alvorlige.",
+        "sykdom": {
+          "text": "Med yrkessykdom mener vi en sykdom du har fått på grunn av skadelig påvirkning fra arbeidsmiljøet. I tillegg må sykdommen være nevnt i $$.",
+          "link": {
+            "name": "forskrift om yrkessykdommer (åpnes i ny fane)",
+            "href": "https://lovdata.no/dokument/SF/forskrift/1960-02-19-6"
+          }
+        },
+        "lesMerLink": {
+          "name": "Les mer om yrkesskader og yrkessykdommer (åpnes i ny fane)",
+          "href": "https://www.nav.no/no/person/arbeid/yrkesskade-og-yrkessykdom"
+        }
+      },
       "guide": {
         "info": {
-          "text": "Er arbeidsevnen din nedsatt som følge av en yrkesskade eller yrkessykdom blir saken din behandlet etter egne regler. Dette kan gi deg noen fordeler. Da må yrkessaken/ yrkessykdommen din være:",
+          "text": "Er arbeidsevnen din nedsatt som følge av en yrkesskade eller yrkessykdom blir saken din behandlet etter egne regler. Dette kan gi deg noen fordeler. Da må yrkesskaden/yrkessykdommen være:",
           "bullet1": "godkjent av NAV",
-          "bullet2": "årsaken til din nedsatte arbeidsevne"
+          "bullet2": "årsaken til den nedsatte arbeidsevnen din"
         },
         "application": {
           "text": "Hvis en yrkesskade eller yrkessykdom er årsaken til at du har nedsatt arbeidsevne, bør du $$ og vurdert i saken din.",
           "link": {
             "name": "søke om å få din yrkesskade eller yrkessykdom godkjent av NAV",
-            "href": "https://www.nav.no/no/person/arbeid/yrkesskade-og-yrkessykdom"
+            "href": "https://www.nav.no/soknader/nb/bedrift/yrkesskade/paa-landterritorium#NAV130705"
           }
         },
         "legal": {
           "title": "Hva er reglene ved en yrkesskade eller en yrkessykdom?",
-          "text": "Disse reglene gjelder hvis NAV godkjenner en yrkesskade eller yrkessykdom som helt eller delvis årsak til at arbeidsevnen din er nedsatt:",
-          "bullet1": "NAV kan bruke inntekten du hadde på skadetidspunktet som grunnlag når vi beregner hele eller deler av arbeidsavklaringspengene. Dette gjør vi bare hvis det lønner seg for deg.",
-          "bullet2": "Kravet til forutgående medlemskap i folketrygden gjelder ikke.",
-          "bullet3": "Du kan få AAP hvis arbeidsevnen din er redusert med 30 prosent eller mer."
+          "text": "Hvis NAV godkjenner at yrkesskaden/yrkessykdommen er helt eller delvis årsak til at arbeidsevnen din er nedsatt, gjelder dette:",
+          "bullet1": "Det holder at du var medlem i folketrygden da du ble skadet, og nå når du søker om AAP",
+          "bullet2": "Du kan ha rett til AAP hvis arbeidsevnen din er redusert med 30 prosent eller mer.",
+          "bullet3": "Når NAV beregner hva du får i AAP, kan vi bruke inntekten du hadde da du fikk yrkessykdommen eller yrkesskaden som grunnlag. Dette gjør vi bare hvis det lønner seg for deg."
         }
       },
       "alert": {
@@ -155,55 +174,63 @@
     },
     "student": {
       "title": "Student",
-      "guide1": "Hvis du er student og skal tilbake til studiet ditt innen 6 måneder, stilles ikke like strenge krav til nedsatt arbeidsevne. Denne regelen brukes bare hvis den er til fordel for deg. ",
+      "guide1": "Hvis du er student og skal tilbake til studiet ditt innen 6 måneder, stilles ikke like strenge krav til nedsatt arbeidsevne. Denne regelen brukes bare hvis den er til fordel for deg.",
       "guide2": "Du regnes som student hvis du tar et studie som gir rett til lån fra Statens lånekasse for utdanning. Du trenger ikke å ha mottatt lån/stipend."
     },
     "andre_utbetalinger": {
-      "guide": "Hvis du får utbetalinger fra NAV, arbeidsgiver eller andre, kan arbeidsavklaringspengene reduseres eller falle bort i perioden du får utbetalingen.",
+      "guide": "Hvis du får utbetalinger fra NAV, arbeidsgiver eller andre, kan din AAP bli redusert. Vi spør om dette fordi du ikke alltid har krav på å få flere typer utbetalinger samtidig. Vi prøver å unngå feilutbetalinger.",
       "title": "Andre utbetalinger",
       "alertInfo": {
-        "omsorgsstønad": "Hvis du mottar omsorgsstønad som gir pensjonsopptjening, skal dette føres som arbeid på meldekortet.",
-        "verv": "På meldekortet skal du føre opp som arbeid alle timer som du bruker på verv, og som du får lønn eller godtgjørelse for."
+        "omsorgsstønad": "Hvis du mottar omsorgsstønad som gir pensjonsopptjening, skal dette føres som arbeid på meldekortet."
+      },
+      "ekstraUtbetalingerReadMore": {
+        "title": "Hva menes med \"ekstra utbetalinger\"?",
+        "text": "Dette kan for eksempel være sluttpakke, etterlønn eller andre goder. Du skal svare “nei” hvis du bare mottar vanlig lønn eller feriepenger."
       },
       "alertAttachments": {
-        "title": "Du må legge ved følgende dokumentasjon",
-        "omsorgsstønad": "Kopi av inngått avtale om omsorgsstønad.",
-        "fosterhjemsgodtgjørelse": "Dokumentasjon av fosterhjemsgodtgjørelse.",
-        "utlandsStønad": "Dokumentasjon av ytelser fra utenlandske myndigheter.",
-        "andreGoder": "Kopi av inngått sluttpakke, avtale om etterlønn eller lignende."
+        "title": "Du må legge ved:",
+        "omsorgsstønad": "Kopi av avtalen om omsorgsstønad fra kommunen din",
+        "fosterhjemsgodtgjørelse": "Dokumentasjon av fosterhjemsgodtgjørelse",
+        "utlandsStønad": "Dokumentasjon av ytelser fra utenlandske trygdemyndigheter",
+        "andreGoder": "Dokumentasjon av ekstra utbetalinger fra arbeidsgiver, for eksempel kopi av inngått sluttpakke, avtale om etterlønn eller andre goder. Både beløpet på utbetalingen og perioden den gjelder for bør være dokumentert"
       }
     },
     "barnetillegg": {
       "title": "Barnetillegg",
-      "guideOne": "Du får barnetillegg for barn under 18 år som du har forsørgeransvar for, med noen unntak. Dette gjelder også for adoptivbarn, fosterbarn og andre barn som du forsørger.",
-      "guideTwo": "Du kan få barnetillegg selv om barnet ikke bor sammen med deg, så lenge du forsørger barnet. $",
+      "guide": "Du kan få barnetillegg for barn under 18 år som du har forsørgeransvar for. Du kan også få barnetillegg selv om barnet ikke bor sammen med deg. Barnetillegget får du også for adoptivbarn, fosterbarn og andre barn som du har forsørgeransvar for. $",
       "guideReadMoreLink": {
         "name": "Du kan lese mer om barnetillegg her (åpnes i ny fane).",
-        "href": "https://www.nav.no/aap"
-
+        "href": "https://www.nav.no/aap#hvor-mye"
       },
       "leggTil": {
         "title": "Legg til barn",
-        "description": "Du kan legge til barn under 18 år som du har forsørgeransvar for."
+        "description": "Du kan legge til adoptivbarn, fosterbarn og andre barn under 18 år som du har forsørgeransvar for."
+      },
+      "grunnbeløp": {
+        "title": "Hvis barnet har en årlig inntekt over 1G (grunnbeløpet i folketrygden), får du vanligvis ikke barnetillegg for barnet. $",
+        "link": {
+          "href": "https://www.nav.no/no/nav-og-samfunn/kontakt-nav/utbetalinger/grunnbelopet-i-folketrygden",
+          "name": "Les mer om grunnbeløpet (G) i folketrygden."
+        }
       }
     },
     "tilleggsopplysninger": {
-      "title": "Har du noen tilleggsopplysninger? ",
-      "guide": "Nå har NAV fått opplysningene vi trenger for å begynne å behandle søknaden din. Hvis vi trenger mer informasjon, vil vi kontakte deg."
+      "title": "Tilleggsopplysninger",
+      "guide": "Hvis det er noe mer informasjon du ønsker å gi oss, kan du gjøre det her. Dette er helt valgfritt."
     },
     "oppsummering": {
       "title": "Oppsummering",
-      "confirmation": "Jeg er kjent med at hvis opplysningene jeg har oppgitt ikke er riktige og fullstendige, kan jeg miste retten til stønad. Jeg er også klar over at jeg må betale tilbake det jeg har fått feilaktig utbetalt, og at jeg kan bli anmeldt politiet. Videre er jeg kjent med og aksepterer at NAV kan innhente opplysninger som er nødvendige for å behandle søknaden.",
+      "confirmation": "Jeg er kjent med at jeg kan miste retten til stønad hvis opplysningene jeg har oppgitt ikke er riktige og fullstendige. Jeg er også klar over at jeg må betale tilbake hvis jeg får penger feilaktig utbetalt, og at jeg kan bli anmeldt til politiet. Videre er jeg kjent med og aksepterer at NAV kan innhente opplysninger som er nødvendige for å behandle søknaden.",
       "kontaktinfo": {
         "navn": "Navn",
         "adresse": "Folkeregistrert adresse",
         "fnr": "Personnummer",
         "adresseReadmore": {
           "title": "Hva gjør jeg hvis jeg har en annen adresse?",
-          "text": "Hvis adressen ikke stemmer, kan du legge til en midlertidig adresse i $$. Du kan også legge inn eller endre kontonummer, telefonnummer og e-post der.",
+          "text": "Hvis adressen ikke stemmer, kan du endre adresse i $$.",
           "link": {
-            "name": "Din profil (åpnes i ny fane)",
-            "href": "https://www.nav.no/no/ditt-nav"
+            "name": "Folkeregisteret (åpnes i ny fane)",
+            "href": "https://www.skatteetaten.no/person/folkeregister/flytte/"
           }
         }
       },
@@ -215,14 +242,11 @@
     },
     "vedlegg": {
       "title": "Vedlegg",
-      "guide": "Legger du ved alle vedleggene med én gang, kan du få en kortere saksbehandlingstid. $",
-      "guideLink": {
-        "name": "Her kan du sjekke saksbehandlingstidene i fylket ditt (åpnes i ny fane).",
-        "href": "https://www.nav.no/no/nav-og-samfunn/om-nav/saksbehandlingstider-i-nav"
-      },
-      "attachmentListDescription": "Dette er dokumentene du må legge ved søknaden:",
+      "guide": "Du kan tidligst få AAP fra og med den dagen vi mottar søknaden din. Det kan derfor være lurt å sende søknaden selv om du ikke har alle vedlegg vi ber om nå. Du kan ettersende vedlegg innen 14 dager.",
+      "attachmentListDescription": "Ut fra det du har svart i søknaden, må du legge ved dette:",
+      "taBildeInfo": "Hvis du har vedlegg på papir og ikke har skanner, kan du for eksempel ta bilde av dokumentet med mobiltelefonen din.",
       "taBildeReadMore": "Slik tar du et godt bilde av dokumentet",
-      "alertInfo": "Dersom du må ettersende vedlegg, må du sende disse innen 14 dager. Hvis vi ikke mottar vedleggene innen fristen, mangler vi nødvendige opplysninger for å behandle saken din. Vi kan da avgjøre saken din med de opplysningene vi har tilgjengelig og du kan da risikere å få avslag."
+      "alertInfo": "Hvis du skal ettersende vedlegg, må du sende disse innen 14 dager. Hvis vi ikke mottar vedleggene innen fristen, mangler vi nødvendige opplysninger for å behandle saken din. Vi kan da avgjøre saken din med de opplysningene vi har tilgjengelig, og du kan risikere å få avslag. Hvis du trenger mer enn 14 dager, bør du derfor be om lenger frist. "
     },
     "startDato": {
       "title": "Startdato",
@@ -239,7 +263,7 @@
     },
     "kvittering": {
       "heading": "Takk for søknaden",
-      "alertSuccess": "Vi har nå mottatt din søknad om arbeidsavklaringspenger. Saken din ligger nå til behandling hos NAV. Vi tar kontakt hvis vi trenger flere opplysninger fra deg"
+      "alertSuccess": "Vi har nå mottatt din søknad om arbeidsavklaringspenger. Saken din ligger nå til behandling hos NAV. Vi tar kontakt hvis vi trenger flere opplysninger fra deg."
     }
   },
   "form": {
@@ -254,8 +278,12 @@
     },
     "fastlege": {
       "annenbehandler": {
-        "name": {
-          "label": "Leges/behandlers navn",
+        "firstname": {
+          "label": "Fornavn",
+          "required": "Vennligst oppgi navn"
+        },
+        "lastname": {
+          "label": "Etternavn",
           "required": "Vennligst oppgi navn"
         },
         "legekontor": {
@@ -287,11 +315,11 @@
       },
       "datoLabel": "I hvilken periode var du der?",
       "fraDato": {
-        "label": "Fra og med dato",
+        "label": "Fra og med dato (dd.mm.åååå)",
         "required": "Vennligst oppgi fra dato"
       },
       "tilDato": {
-        "label": "Til og med dato",
+        "label": "Til og med dato (dd.mm.åååå)",
         "required": "Vennligst oppgi til dato",
         "etterFraDato": "Til dato må være etter fra dato"
       },
@@ -327,24 +355,20 @@
       "required": "Venligst velg et av alternativene"
     },
     "andreUtbetalinger": {
-      "sosialStønad": {
-        "legend": "Mottar du, eller har du nylig søkt om, noen av disse utbetalingene?",
-        "kvalifiseringsstønad": "Kvalifiseringsstønad",
-        "økonomiskSosialhjelp": "Økonomisk sosialhjelp",
-        "introduksjonsStønad": "Introduksjonssønad (introduksjonsprogrammet)",
-        "nei": "Nei, jeg hverken mottar, eller har nylig søkt om noen av disse utbetalingene"
-      },
       "stønad": {
-        "legend": "Mottar du, eller har du nylig søkt om, noen av disse utbetalingene?",
-        "omsorgsstønad": "Omsorgsstønad fra kommunen",
-        "fosterhjemsgodtgjørelse": "Fosterhjemsgodtgjørelse, enten til deg eller ektefellen/partneren/samboeren din",
+        "legend": "Kryss av for utbetalinger du får, eller nylig har søkt om:",
+        "økonomiskSosialhjelp": "Økonomisk sosialhjelp",
+        "omsorgsstønad": "Omsorgsstønad (tidligere omsorgslønn)",
+        "introduksjonsStønad": "Introduksjonssønad (introduksjonsprogrammet)",
+        "kvalifiseringsstønad": "Kvalifiseringsstønad (kvalifiseringsprogrammet)",
+        "fosterhjemsgodtgjørelse": "Fosterhjemsgodtgjørelse (enten til deg eller ektefellen/partneren/samboeren din)",
         "verv": "Godtgjørelse eller lønn for verv",
         "utland": "Ytelser fra utenlandske trygdemyndigheter",
-        "annet": "Annet, for eksempel pensjoner eller forsikringsordninger",
-        "nei": "Nei, jeg hverken mottar, eller har nylig søkt om noen av disse utbetalingene"
+        "annet": "Annet (for eksempel pensjoner eller forsikringsordninger)",
+        "nei": "Nei, ingen"
       },
       "lønn": {
-        "legend": "Har du fått eller får du sluttpakke, etterlønn eller andre goder fra nåværende eller tidligere arbeidsgivere?",
+        "legend": "Har du fått eller skal du få ekstra utbetalinger fra arbeidsgiver?",
         "required": "Venligst velg et av alternativene",
         "ja": "Ja, jeg har fått eller får sluttpakke, etterlønn eller andre goder fra nåværende eller tidligere arbeidsgivere",
         "nei": "Nei, jeg verken har fått eller får sluttpakke, etterlønn eller andre goder fra nåværende eller tidligere arbeidsgivere",
@@ -388,20 +412,17 @@
       }
     },
     "barnetillegg": {
-      "legend": "Forsørger du barnet?",
+      "legend": "Har barnet årlig inntekt over 1G?",
       "ja": "Ja",
       "nei": "Nei",
       "add": {
         "title": "Legg til barn",
-        "ingress": "Du kan legge til adoptivbarn, fosterbarn og andre barn som du forsørger.",
+        "ingress": "Du kan legge til adoptivbarn, fosterbarn og andre barn under 18 år som du har forsørgeransvar for.",
         "fornavn": {
-          "label": "Barnets fornavn"
-        },
-        "mellomnavn": {
-          "label": "Barnets mellomnavn"
+          "label": "Fornavn og mellomnavn"
         },
         "etternavn": {
-          "label": "Barnets etternavn"
+          "label": "Etternavn"
         },
         "fnr": {
           "label": "Fødselsnummer / D-nummer"
@@ -409,14 +430,16 @@
         "adoptertEllerFosterbarn": {
           "label": "Er dette et fosterbarn eller et barn du nylig har adoptert?"
         },
-        "alert": "Du må legge ved fødselsattest eller bostedbevis. Dette kan du laste opp senere i søknaden."
+        "alertTitle": "Du må legge ved:",
+        "alertBullet": "Fødselsattest eller bostedbevis.",
+        "alertInfo": "Dokumentene laster du opp senere i søknaden. Du kan også ettersende vedlegg."
       }
     },
     "student": {
       "legend": "Er du student nå?"
     },
     "tilleggsopplysninger": {
-      "label": "Hvis du har flere opplysninger du mener er viktig for søknaden din, kan du skrive dem her."
+      "label": "Hvis du har flere opplysninger du mener er viktig for søknaden din, kan du skrive dem her (valgfritt)"
     },
     "startDato": {
       "label": "Fra hvilken dato søker du AAP (dd.mm.åååå)?"

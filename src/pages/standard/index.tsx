@@ -23,7 +23,7 @@ import {
   setSøknadData,
   addBarnIfMissing,
 } from '../../context/soknadContext';
-import { Veiledning } from './Veiledning';
+import { Veiledning } from './Veiledning/Veiledning';
 import { hentSokerOppslag, useSokerOppslag } from '../../context/sokerOppslagContext';
 import { Behandlere } from './Behandlere';
 import { Medlemskap } from './Medlemskap';
@@ -137,27 +137,12 @@ export const StandardPage = (): JSX.Element => {
     );
   if (showVeiledning)
     return (
-      <form
-        onSubmit={handleSubmit(myHandleSubmit)}
-        className={classes?.soknadForm}
-        autoComplete="off"
-      >
-        <Veiledning
-          getText={getText}
-          errors={errors}
-          control={control}
-          søker={søker}
-          loading={oppslagLoading}
-        />
-        <div className={classes?.buttonWrapper}>
-          <Button variant="primary" type="submit" onClick={() => setShowVeiledning(false)}>
-            <BodyShort>{getText(`steps.veiledning.buttonText`, 'buttontext')}</BodyShort>
-          </Button>
-          <Button variant="tertiary" type="button" onClick={() => console.log('TODO')}>
-            {getText('cancelButtonText')}
-          </Button>
-        </div>
-      </form>
+      <Veiledning
+        onSubmit={() => setShowVeiledning(false)}
+        getText={getText}
+        søker={søker}
+        loading={oppslagLoading}
+      />
     );
   return (
     <>
@@ -191,6 +176,7 @@ export const StandardPage = (): JSX.Element => {
           <Step order={3} name={StepNames.YRKESSKADE} label={'Yrkesskade'}>
             <Yrkesskade
               getText={getText}
+              watch={watch}
               errors={errors}
               control={control}
               setValue={setValue}
@@ -215,16 +201,16 @@ export const StandardPage = (): JSX.Element => {
           <Step order={7} name={StepNames.STUDENT} label={'Student'}>
             <Student getText={getText} errors={errors} control={control} setValue={setValue} />
           </Step>
-          <Step order={8} name={StepNames.VEDLEGG} label={'Vedlegg'}>
-            <Vedlegg getText={getText} control={control} />
-          </Step>
-          <Step order={9} name={StepNames.TILLEGGSOPPLYSNINGER} label={'Tilleggsopplysninger'}>
+          <Step order={8} name={StepNames.TILLEGGSOPPLYSNINGER} label={'Tilleggsopplysninger'}>
             <Tilleggsopplysninger
               getText={getText}
               errors={errors}
               control={control}
               setValue={setValue}
             />
+          </Step>
+          <Step order={9} name={StepNames.VEDLEGG} label={'Vedlegg'}>
+            <Vedlegg getText={getText} control={control} errors={errors} />
           </Step>
           <Step order={10} name={StepNames.OPPSUMMERING} label={'Oppsummering'}>
             <Oppsummering getText={getText} errors={errors} control={control} />
@@ -234,7 +220,7 @@ export const StandardPage = (): JSX.Element => {
               variant="secondary"
               type="button"
               onClick={() => {
-                if (currentStep?.name === StepNames.KONTAKTINFO) {
+                if (currentStep?.name === StepNames.STARTDATO) {
                   setShowVeiledning(true);
                 } else {
                   goToPreviousStep(stepWizardDispatch);

@@ -90,21 +90,17 @@ const Oppsummering = ({ getText, errors, control }: OppsummeringProps) => {
           data={søknadState?.søknad?.student}
           title={getText('steps.student.title')}
         />
-        {søknadState?.søknad?.vedlegg && søknadState?.søknad?.vedlegg?.length > 0 && (
-          <AccordianItemOppsummering data={{}} title={getText('steps.vedlegg.title')}>
-            <>
-              {søknadState?.søknad?.vedlegg?.map((vedlegg) => (
-                <BodyShort>{vedlegg?.name}</BodyShort>
-              ))}
-            </>
-          </AccordianItemOppsummering>
-        )}
-        {søknadState?.søknad?.tilleggsopplysninger?.value && (
-          <AccordianItemOppsummering
-            data={{ tilleggsopplysninger: søknadState?.søknad?.tilleggsopplysninger }}
-            title={getText('steps.tilleggsopplysninger.title')}
-          />
-        )}
+        <AccordianItemOppsummering data={{}} title={getText('steps.vedlegg.title')}>
+          <>
+            {søknadState?.søknad?.vedlegg?.map((vedlegg) => (
+              <BodyShort>{vedlegg?.name}</BodyShort>
+            ))}
+          </>
+        </AccordianItemOppsummering>
+        <AccordianItemOppsummering
+          data={{ tilleggsopplysninger: søknadState?.søknad?.tilleggsopplysninger }}
+          title={getText('steps.tilleggsopplysninger.title')}
+        />
       </Accordion>
       <ConfirmationPanelWrapper
         label={getText('steps.oppsummering.confirmation')}

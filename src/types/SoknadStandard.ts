@@ -28,7 +28,8 @@ type Medlemskap = {
   utenlandsOpphold?: UtenlandsPeriode[];
 };
 export type Behandler = {
-  name: string;
+  firstname: string;
+  lastname: string;
   gateadresse: string;
   legekontor: string;
   postnummer: string;
@@ -54,7 +55,7 @@ export type Barn = {
   navn: Navn;
   fødselsdato?: string;
   fnr: string;
-  erForsørger?: FieldAndLabel<string>;
+  harInntekt?: FieldAndLabel<string>;
   manueltOpprettet?: boolean;
   adoptertEllerFosterBarn?: FieldAndLabel<string>;
 };

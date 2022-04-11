@@ -3,6 +3,7 @@ import SoknadStandard from '../../types/SoknadStandard';
 import { GetText } from '../../hooks/useTexts';
 import React, { useEffect } from 'react';
 import TextAreaWrapper from '../../components/input/TextAreaWrapper';
+import { BodyShort, GuidePanel, Heading } from '@navikt/ds-react';
 
 const TILLEGGSOPPLYSNINGER = 'tilleggsopplysninger';
 interface TilleggsopplysningerProps {
@@ -23,12 +24,20 @@ const Tilleggsopplysninger = ({
     [getText]
   );
   return (
-    <TextAreaWrapper
-      name={`${TILLEGGSOPPLYSNINGER}.value`}
-      label={getText(`form.${TILLEGGSOPPLYSNINGER}.label`)}
-      control={control}
-      error={errors?.[TILLEGGSOPPLYSNINGER]?.message}
-    />
+    <>
+      <Heading size="large" level="2">
+        {getText('steps.tilleggsopplysninger.title')}
+      </Heading>
+      <GuidePanel>
+        <BodyShort>{getText(`steps.tilleggsopplysninger.guide`)}</BodyShort>
+      </GuidePanel>
+      <TextAreaWrapper
+        name={`${TILLEGGSOPPLYSNINGER}.value`}
+        label={getText(`form.${TILLEGGSOPPLYSNINGER}.label`)}
+        control={control}
+        error={errors?.[TILLEGGSOPPLYSNINGER]?.message}
+      />
+    </>
   );
 };
 export default Tilleggsopplysninger;
