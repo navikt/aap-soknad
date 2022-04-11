@@ -1,5 +1,4 @@
 import React from 'react';
-import './App.less';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { Button, Heading } from '@navikt/ds-react';
 import { ErrorBoundary } from 'react-error-boundary';
