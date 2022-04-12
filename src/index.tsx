@@ -4,6 +4,7 @@ import * as Sentry from '@sentry/react';
 import { Integrations } from '@sentry/tracing';
 import App from './App';
 import '@navikt/ds-css';
+import { Modal } from '@navikt/ds-react';
 
 if (process.env.USE_MOCK === 'true') {
   const { worker } = require('./mocks/browser');
@@ -21,6 +22,11 @@ Sentry.init({
 });
 
 const app = document.getElementById('app');
+
+if (Modal.setAppElement) {
+  Modal.setAppElement(app);
+}
+
 render(
   <div className="app-container">
     <App />
