@@ -124,11 +124,6 @@ export const Barnetillegg = ({ getText, errors, control }: BarnetilleggProps) =>
             name={'fornavn'}
             onChange={(e) => e?.target?.value && setFornavn(e?.target?.value)}
           />
-          {/*<TextField*/}
-          {/*  label={getText('form.barnetillegg.add.mellomnavn.label')}*/}
-          {/*  name={'mellomnavn'}*/}
-          {/*  onChange={(e) => e?.target?.value && setMellomnavn(e?.target?.value)}*/}
-          {/*/>*/}
           <TextField
             label={getText('form.barnetillegg.add.etternavn.label')}
             name={'etternavn'}

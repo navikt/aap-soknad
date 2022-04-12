@@ -112,10 +112,21 @@
         "title": "Arbeid utenfor Norge",
         "ingress": "Hvis du har arbeidet utenfor Norge før du ble syk, kan du i noen tilgeller få arbeidsperioder med, når vi beregner arbeidsavklaringspengene dine."
       },
+      "perioderHeading": "Dine utenlandsopphold",
       "utenlandsPeriode": {
         "title": "Legg til utenlandsopphold",
         "infoJaJa": "Nå må du oppgi i hvilke perioder du har jobbet utenfor Norge før du ble syk. Oppgi også hvilket land du var i. Ta med alle perioder de siste 5 år.",
         "info": "Nå må du oppgi i hvilke perioder du har bodd eller jobbet utenfor Norge.  Oppgi også hvilket land du var i. Ta med alle perioder siden du var 16 år."
+      },
+      "andreYtelserReadMore": {
+        "title": "Hva hvis jeg har fått dagpenger, sykepenger, foreldrepenger eller tilsvarende?",
+        "text": "Med “jobb” menes også offentlige ytelser du har fått som erstatning for arbeid, for eksempel dagpenger, sykepenger og foreldrepenger. Pensjon regnes ikke som erstatning for jobb."
+      },
+      "boddINorgeReadMore": {
+        "title": "Hva menes med å ha \"bodd sammenhengende\"?",
+        "text": "Dette betyr at du både",
+        "bullet1": "har hatt folkeregistrert adresse i Norge, og",
+        "bullet2": "har oppholdt deg i Norge mesteparten av hver av disse årene"
       }
     },
     "yrkesskade": {
@@ -153,23 +164,17 @@
           "text": "Hvis NAV godkjenner at yrkesskaden/yrkessykdommen er helt eller delvis årsak til at arbeidsevnen din er nedsatt, gjelder dette:",
           "bullet1": "Det holder at du var medlem i folketrygden da du ble skadet, og nå når du søker om AAP",
           "bullet2": "Du kan ha rett til AAP hvis arbeidsevnen din er redusert med 30 prosent eller mer.",
-          "bullet3": "Når NAV beregner hva du får i AAP, kan vi bruke inntekten du hadde da du fikk yrkessykdommen eller yrkesskaden som grunnlag. Dette gjør vi bare hvis det lønner seg for deg."
+          "bullet3": "Når NAV beregner hva du får i AAP, kan vi bruke inntekten du hadde da du fikk yrkessykdommen eller yrkesskaden som grunnlag. Dette gjør vi bare hvis det lønner seg for deg.",
+          "readMoreLink": {
+            "name": "Les mer om yrkesskader og yrkessykdommer (åpnes i ny fane)",
+            "href": "https://www.nav.no/no/person/arbeid/yrkesskade-og-yrkessykdom"
+          }
         }
       },
-      "alert": {
-        "ja": {
-          "title": "Godkjent yrkessakde eller yrkessykdom må, helt eller delvis, være årsaken til at arbeidsevnen din er nedsatt. Da gjelder disse reglene:",
-          "bullet1": "Du kan få AAP hvis arbeidsevnen din er redusert med minst 30 prosent.",
-          "bullet2": "Det er ikke et krav at du må ha vært medlem i folketrygden før du fikk yrkesskaden/yrkessykdommen.",
-          "bullet3": "Når vi beregner arbeidsavklaringspengene dine, bruker vi inntekten du hadde på skadetidspunktet som grunnlag. Dette gjør vi bare hvis det lønner seg for deg."
-        },
-        "søknadsendt": {
-          "title": "Hvis NAV godkjenner yrkesskaden eller yrkessykdommen, og at den i tillegg er helt eller delvis årsaken til at arbeidsevnen din er nedsatt, gjelder dette:",
-          "bullet1": "Du kan få AAP hvis arbeidsevnen din er redusert med minst 30 prosent.",
-          "bullet2": "Det er ikke et krav at du må ha vært medlem i folketrygden før du fikk yrkesskaden/yrkessykdommen.",
-          "bullet3": "Når vi beregner arbeidsavklaringspengene dine, bruker vi inntekten du hadde på skadetidspunktet som grunnlag. Dette gjør vi bare hvis det lønner seg for deg."
-        },
-        "vetikke": "NAV vil undersøke om du har en godkjent yrkesskade eller yrkessykdom."
+      "alertInfo": {
+        "text": "NAV vil nå sjekke",
+        "bullet1": "om du har en godkjent yrkesskade eller yrkessykdom",
+        "bullet2": "om denne er årsaken til den nedsatte arbeidsevnen din"
       }
     },
     "student": {
@@ -192,7 +197,8 @@
         "omsorgsstønad": "Kopi av avtalen om omsorgsstønad fra kommunen din",
         "fosterhjemsgodtgjørelse": "Dokumentasjon av fosterhjemsgodtgjørelse",
         "utlandsStønad": "Dokumentasjon av ytelser fra utenlandske trygdemyndigheter",
-        "andreGoder": "Dokumentasjon av ekstra utbetalinger fra arbeidsgiver, for eksempel kopi av inngått sluttpakke, avtale om etterlønn eller andre goder. Både beløpet på utbetalingen og perioden den gjelder for bør være dokumentert"
+        "andreGoder": "Dokumentasjon av ekstra utbetalinger fra arbeidsgiver, for eksempel kopi av inngått sluttpakke, avtale om etterlønn eller andre goder. Både beløpet på utbetalingen og perioden den gjelder for bør være dokumentert",
+        "uploadInfo": "Dokumentene laster du opp senere i søknaden. Du kan også ettersende vedlegg."
       }
     },
     "barnetillegg": {
@@ -220,6 +226,7 @@
     },
     "oppsummering": {
       "title": "Oppsummering",
+      "buttontext": "Send søknad",
       "confirmation": "Jeg er kjent med at jeg kan miste retten til stønad hvis opplysningene jeg har oppgitt ikke er riktige og fullstendige. Jeg er også klar over at jeg må betale tilbake hvis jeg får penger feilaktig utbetalt, og at jeg kan bli anmeldt til politiet. Videre er jeg kjent med og aksepterer at NAV kan innhente opplysninger som er nødvendige for å behandle søknaden.",
       "kontaktinfo": {
         "navn": "Navn",
@@ -259,7 +266,8 @@
       "guideReadMore": {
         "heading": "Har du vært forhindret fra å søke tidligere?",
         "text": "Hvis du av helsemessige årsaker ikke har kunnet søke tidligere, kan du få innvilget AAP tilbake i tid. Du kan også få AAP tilbake i tid hvis du har fått feil informasjon fra NAV og dette er grunnen til at du ikke har søkt tidligere."
-      }
+      },
+      "alertInfo": "Det er viktig at du gir oss beskjed hvis du bestemmer deg for å ta ferie, fordi det kan påvirke startdatoen din. Dette påvirker spesielt deg som får sykepenger."
     },
     "kvittering": {
       "heading": "Takk for søknaden",

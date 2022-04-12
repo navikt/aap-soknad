@@ -190,7 +190,7 @@ export const AndreUtbetalinger = ({
               <li>{attachment?.description}</li>
             ))}
           </ul>
-          {'Dokumentene laster du opp senere i søknaden. Du kan også ettersende vedlegg.'}
+          {getText('steps.andre_utbetalinger.alertAttachments.uploadInfo')}
         </Alert>
       )}
     </>

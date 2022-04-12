@@ -68,11 +68,8 @@ export const Yrkesskade = ({
             text={getText('steps.yrkesskade.guide.application.text')}
             links={[getText('steps.yrkesskade.guide.application.link')]}
           />
-          <Link
-            target={'_blank'}
-            href={'https://www.nav.no/no/person/arbeid/yrkesskade-og-yrkessykdom'}
-          >
-            Les mer om yrkesskader og yrkessykdommer (åpnes i ny fane)
+          <Link target={'_blank'} href={getText('steps.yrkesskade.guide.legal.readMoreLink.href')}>
+            {getText('steps.yrkesskade.guide.legal.readMoreLink.name')}
           </Link>
         </ReadMore>
       </GuidePanel>
@@ -107,10 +104,10 @@ export const Yrkesskade = ({
       </RadioGroupWrapper>
       {harSkadeEllerSykdom && harSkadeEllerSykdom !== JaNeiVetIkke.NEI && (
         <Alert variant={'info'}>
-          {'NAV vil nå sjekke'}
+          {getText('steps.yrkesskade.alertInfo.text')}
           <ul>
-            <li>om du har en godkjent yrkesskade eller yrkessykdom</li>
-            <li>om denne er årsaken til den nedsatte arbeidsevnen din</li>
+            <li>{getText('steps.yrkesskade.alertInfo.bullet1')}</li>
+            <li>{getText('steps.yrkesskade.alertInfo.bullet2')}</li>
           </ul>
         </Alert>
       )}

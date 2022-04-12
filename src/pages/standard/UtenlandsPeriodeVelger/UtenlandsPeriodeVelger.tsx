@@ -174,8 +174,9 @@ const UtenlandsPeriodeVelger = ({
                   setValue('tilDato.label', getText('form.utenlandsperiode.tilDato.label'));
                   setValue('iArbeid.label', getText('form.utenlandsperiode.iArbeid.legend'));
                   const data = { ...getValues() };
-                  clearModal();
+                  console.log(data);
                   onSave(data);
+                  clearModal();
                 }
               }}
             >

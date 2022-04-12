@@ -142,10 +142,7 @@ const StartDato = ({ getText, errors, watch, control, setValue }: Props) => {
         </ColorPanel>
       )}
       {skalHaFerie === JaNeiVetIkke.VET_IKKE && (
-        <Alert variant={'info'}>
-          Det er viktig at du gir oss beskjed hvis du bestemmer deg for å ta ferie, fordi det kan
-          påvirke startdatoen din. Dette påvirker spesielt deg som får sykepenger.
-        </Alert>
+        <Alert variant={'info'}>{getText('steps.startDato.alertInfo')}</Alert>
       )}
     </>
   );

@@ -107,11 +107,11 @@ export const Medlemskap = ({
         control={control}
         error={errors?.[MEDLEMSKAP]?.[BODD_I_NORGE]?.message}
       >
-        <ReadMore header={'Hva menes med å ha "bodd sammenhengende"?'} type={'button'}>
-          Dette betyr at du både
+        <ReadMore header={getText('steps.medlemskap.boddINorgeReadMore.title')} type={'button'}>
+          {getText('steps.medlemskap.boddINorgeReadMore.text')}
           <ul>
-            <li>har hatt folkeregistrert adresse i Norge, og</li>
-            <li>har oppholdt deg i Norge mesteparten av hver av disse årene</li>
+            <li>{getText('steps.medlemskap.boddINorgeReadMore.bullet1')}</li>
+            <li>{getText('steps.medlemskap.boddINorgeReadMore.bullet2')}</li>
           </ul>
         </ReadMore>
         <Radio value={JaEllerNei.JA}>
@@ -128,15 +128,8 @@ export const Medlemskap = ({
           control={control}
           error={errors?.[MEDLEMSKAP]?.[ARBEID_I_NORGE]?.message}
         >
-          <ReadMore
-            header={
-              'Hva hvis jeg har fått dagpenger, sykepenger, foreldrepenger eller tilsvarende?'
-            }
-            type={'button'}
-          >
-            Med “jobb” menes også offentlige ytelser du har fått som erstatning for arbeid, for
-            eksempel dagpenger, sykepenger og foreldrepenger. Pensjon regnes ikke som erstatning for
-            jobb.
+          <ReadMore header={getText('steps.medlemskap.andreYtelserReadMore.title')} type={'button'}>
+            <BodyLong>{getText('steps.medlemskap.andreYtelserReadMore.text')}</BodyLong>
           </ReadMore>
           <Radio value={JaEllerNei.JA}>
             <BodyShort>Ja</BodyShort>
@@ -184,16 +177,18 @@ export const Medlemskap = ({
       {(arbeidUtenforNorge === JaEllerNei.JA || arbeidINorge === JaEllerNei.NEI) && (
         <BodyLong>{utenlandsPeriodeInfo}</BodyLong>
       )}
-      <Heading size="xsmall" level="3">
-        Dine utenlandsopphold
-      </Heading>
+      {fields?.length > 0 && (
+        <Heading size="xsmall" level="3">
+          {getText('steps.medlemskap.perioderHeading')}
+        </Heading>
+      )}
       {fields?.map((field, index) => (
         <Table.Row key={field.id}>
           <Table.DataCell>{`${field?.land?.value?.split(':')?.[1]} ${formatDate(
             field?.fraDato?.value,
             'dd.MM.yyyy'
           )} - ${formatDate(field?.tilDato?.value, 'dd.MM.yyyy')}${
-            field?.iArbeid?.value ? '(Jobb)' : ''
+            field?.iArbeid?.value ? ' (Jobb)' : ''
           }`}</Table.DataCell>
           <Table.DataCell>{<Delete onClick={() => remove(index)} />}</Table.DataCell>
         </Table.Row>

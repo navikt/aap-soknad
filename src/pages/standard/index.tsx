@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { useTexts } from '../../hooks/useTexts';
-import { BodyShort, Button, Loader, PageHeader } from '@navikt/ds-react';
+import { BodyShort, Button, PageHeader } from '@navikt/ds-react';
 import * as tekster from './tekster';
 import { Step, StepWizard } from '../../components/StepWizard';
 import { getStepSchemas } from './schema';
@@ -72,6 +72,10 @@ export const StandardPage = (): JSX.Element => {
     () => getText(`steps.${currentStep?.name.toLowerCase()}.title`),
     [getText, currentStep]
   );
+  const buttonText = useMemo(() => {
+    const path = `steps.${currentStep?.name.toLowerCase()}.buttontext`;
+    return getText(path, 'buttontext');
+  }, [getText, currentStep]);
   const {
     control,
     handleSubmit,
@@ -214,7 +218,7 @@ export const StandardPage = (): JSX.Element => {
             />
           </Step>
           <Step order={9} name={StepNames.VEDLEGG} label={'Vedlegg'}>
-            <Vedlegg getText={getText} control={control} errors={errors} />
+            <Vedlegg getText={getText} control={control} />
           </Step>
           <Step order={10} name={StepNames.OPPSUMMERING} label={'Oppsummering'}>
             <Oppsummering getText={getText} errors={errors} control={control} />
@@ -233,13 +237,8 @@ export const StandardPage = (): JSX.Element => {
             >
               {getText('backButtontext')}
             </Button>
-            <Button variant="primary" type="submit" disabled={isLoading}>
-              {!isLoading && (
-                <BodyShort>
-                  {getText(`${currentStep?.name.toLowerCase()}.buttontext`, 'buttontext')}
-                </BodyShort>
-              )}
-              {isLoading && <Loader />}
+            <Button variant="primary" type="submit" disabled={isLoading} loading={isLoading}>
+              {!isLoading && <BodyShort>{buttonText}</BodyShort>}
             </Button>
           </div>
           <div className={classes?.cancelButtonWrapper}>
