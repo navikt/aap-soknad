@@ -1,12 +1,12 @@
 .barneKort {
   padding: 20px;
-  background-color: #E9E7E7;
-}
-.headingWrapper {
   display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
+  flex-direction: column;
+  gap: var(--navds-spacing-5);
+  background-color: var(--navds-semantic-color-component-background-alternate);
+}
+.barneKort h2 {
+  text-align: left !important;
 }
 .leggTilBarnModalContent {
   display: flex;
