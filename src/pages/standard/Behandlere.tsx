@@ -15,7 +15,7 @@ import { GetText } from '../../hooks/useTexts';
 import { Control, useFieldArray } from 'react-hook-form';
 import { FastlegeView } from '../../context/sokerOppslagContext';
 import { Delete, Add } from '@navikt/ds-icons';
-import SoknadStandard from '../../types/SoknadStandard';
+import Soknad from '../../types/Soknad';
 import FieldArrayWrapper from '../../components/input/FieldArrayWrapper/FieldArrayWrapper';
 import ButtonPanel from '../../components/ButtonPanel/ButtonPanel';
 import TextWithLink from '../../components/TextWithLink';
@@ -23,7 +23,7 @@ import TextWithLink from '../../components/TextWithLink';
 interface BehandlereProps {
   getText: GetText;
   fastlege: FastlegeView | undefined;
-  control: Control<SoknadStandard>;
+  control: Control<Soknad>;
 }
 const FIELD_ARRAY_NAME = 'behandlere';
 

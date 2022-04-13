@@ -1,6 +1,6 @@
 import { Accordion, BodyShort, Label } from '@navikt/ds-react';
 import React, { useState } from 'react';
-import { FieldAndLabel } from '../../../../types/SoknadStandard';
+import { FieldAndLabel } from '../../../../types/Soknad';
 import { isDate } from 'date-fns';
 import { formatDate } from '../../../../utils/date';
 import * as classes from './AccordianItemOppsummering.module.css';

@@ -1,6 +1,6 @@
 import React from 'react';
 import { BodyShort } from '@navikt/ds-react';
-import { Periode } from '../../../../types/SoknadStandard';
+import { Periode } from '../../../../types/Soknad';
 import { formatDate } from '../../../../utils/date';
 
 interface Props {

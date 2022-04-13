@@ -1,6 +1,6 @@
 import { BodyShort, Heading } from '@navikt/ds-react';
 import React from 'react';
-import { Behandler } from '../../../../types/SoknadStandard';
+import { Behandler } from '../../../../types/Soknad';
 import { GetText } from '../../../../hooks/useTexts';
 
 type Props = {

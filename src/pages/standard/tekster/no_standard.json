@@ -275,7 +275,7 @@
     }
   },
   "form": {
-    "riktigeopplysninger": {
+    "veiledningConfirm": {
       "required": "Vennligst bekreft at du har lest og forstått dine rettigheter og plikter."
     },
     "kontaktinfo": {
@@ -452,11 +452,13 @@
       "label": "Hvis du har flere opplysninger du mener er viktig for søknaden din, kan du skrive dem her (valgfritt)"
     },
     "startDato": {
-      "label": "Fra hvilken dato søker du AAP (dd.mm.åååå)?"
+      "label": "Fra hvilken dato søker du AAP (dd.mm.åååå)?",
+      "required": "Venligst angi fra hvilken dato du søker AAP"
     },
     "ferie": {
       "skalHaFerie": {
-        "legend": "Planlegger du å ta ferie før startdato på AAP?"
+        "legend": "Planlegger du å ta ferie før startdato på AAP?",
+        "required": "Venligst svar på om du planlegger å ta ferie før AAP"
       },
       "ferieType": {
         "legend": "Vet du hvilken periode du skal ta ferie?",

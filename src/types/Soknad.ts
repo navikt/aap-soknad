@@ -10,8 +10,8 @@ export type Navn = {
   etternavn: string;
 };
 export type Periode = {
-  fraDato?: FieldAndLabel<string>;
-  tilDato?: FieldAndLabel<string>;
+  fraDato?: string;
+  tilDato?: string;
 };
 export type UtenlandsPeriode = {
   land: FieldAndLabel<string>;
@@ -59,15 +59,16 @@ export type Barn = {
   manueltOpprettet?: boolean;
   adoptertEllerFosterBarn?: FieldAndLabel<string>;
 };
-type Ferie = {
-  skalHaFerie?: FieldAndLabel<string>;
-  type?: FieldAndLabel<string>;
-  antallDager?: FieldAndLabel<string>;
+export type Ferie = {
+  skalHaFerie?: string;
+  type?: string;
+  antallDager?: string;
   periode?: Periode;
 };
-interface SoknadStandard {
-  bekreftOpplysninger?: JaEllerNei;
-  startDato?: FieldAndLabel<Date>;
+export type StartDato = Date;
+
+interface Soknad {
+  startDato?: StartDato;
   yrkesskade?: Yrkesskade;
   medlemskap?: Medlemskap;
   behandlere?: Behandler[];
@@ -84,4 +85,4 @@ interface SoknadStandard {
   søknadBekreft?: FieldAndLabel<boolean>;
 }
 
-export default SoknadStandard;
+export default Soknad;

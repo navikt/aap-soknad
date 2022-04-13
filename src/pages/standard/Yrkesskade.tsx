@@ -12,7 +12,7 @@ import {
   Alert,
 } from '@navikt/ds-react';
 import RadioGroupWrapper from '../../components/input/RadioGroupWrapper';
-import SoknadStandard from '../../types/SoknadStandard';
+import Soknad from '../../types/Soknad';
 import TextWithLink from '../../components/TextWithLink';
 import { JaNeiVetIkke } from '../../types/Generic';
 
@@ -21,7 +21,7 @@ interface YrkesskadeProps {
   watch: UseFormWatch<FieldValues>;
   getText: GetText;
   errors: FieldErrors;
-  control: Control<SoknadStandard>;
+  control: Control<Soknad>;
   pageTitle?: string;
 }
 const YRKESSKADE = 'yrkesskade';

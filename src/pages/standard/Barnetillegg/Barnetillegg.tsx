@@ -17,7 +17,7 @@ import { GetText } from '../../../hooks/useTexts';
 import { Control, FieldErrors, useFieldArray } from 'react-hook-form';
 import RadioGroupWrapper from '../../../components/input/RadioGroupWrapper';
 import { JaEllerNei } from '../../../types/Generic';
-import SoknadStandard from '../../../types/SoknadStandard';
+import Soknad from '../../../types/Soknad';
 import * as classes from './Barnetillegg.module.css';
 import { Add, Delete } from '@navikt/ds-icons';
 import TextWithLink from '../../../components/TextWithLink';
@@ -30,7 +30,7 @@ import {
 interface BarnetilleggProps {
   getText: GetText;
   errors: FieldErrors;
-  control: Control<SoknadStandard>;
+  control: Control<Soknad>;
 }
 const BARNETILLEGG = 'barnetillegg';
 

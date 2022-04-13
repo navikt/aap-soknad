@@ -13,7 +13,7 @@ import {
   resetStepWizard,
   goToPreviousStep,
 } from '../../context/stepWizardContextV2';
-import SoknadStandard from '../../types/SoknadStandard';
+import Soknad from '../../types/Soknad';
 import { FormErrorSummary } from '../../components/schema/FormErrorSummary';
 import {
   useSoknadContext,
@@ -34,10 +34,9 @@ import * as classes from './standard.module.css';
 import Oppsummering from './Oppsummering/Oppsummering';
 import Tilleggsopplysninger from './Tilleggsopplysninger';
 import Vedlegg from '../Vedlegg/Vedlegg';
-import StartDato from './StartDato';
+import StartDato from './StartDato/StartDato';
 import Student from './Student';
 import Kvittering from './Kvittering/Kvittering';
-import SoknadForm from '../../types/SoknadForm';
 import { fetchPOST } from '../../api/fetch';
 export enum StepNames {
   VEILEDNING = 'VEILEDNING',
@@ -54,7 +53,7 @@ export enum StepNames {
   OPPSUMMERING = 'OPPSUMMERING',
   KVITTERING = 'KVITTERING',
 }
-const initFieldVals: SoknadStandard = {};
+const initFieldVals: Soknad = {};
 export const StandardPage = (): JSX.Element => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [oppslagLoading, setOppslagLoading] = useState<boolean>(true);
@@ -83,7 +82,7 @@ export const StandardPage = (): JSX.Element => {
     formState: { errors },
     reset,
     setValue,
-  } = useForm<SoknadStandard>({
+  } = useForm<Soknad>({
     resolver: yupResolver(currentSchema),
     defaultValues: { ...initFieldVals },
   });
@@ -104,7 +103,7 @@ export const StandardPage = (): JSX.Element => {
   useEffect(() => {
     reset({ ...søknadState.søknad });
   }, [currentStep, reset]);
-  const myHandleSubmit: SubmitHandler<SoknadStandard> = async (data) => {
+  const myHandleSubmit: SubmitHandler<Soknad> = async (data) => {
     setSøknadData(søknadDispatch, data);
     if (currentStep?.name === StepNames.OPPSUMMERING) {
       // const postResponse = await postSøknad(søknadState?.søknad);
@@ -122,10 +121,17 @@ export const StandardPage = (): JSX.Element => {
       completeAndGoToNextStep(stepWizardDispatch);
     }
   };
-  const postSøknad = async (data?: SoknadForm<SoknadStandard>) =>
+  const postSøknad = async (data?: SoknadForm<Soknad>) =>
     fetchPOST('/aap/soknad-api/innsending/standard', {
       ...data,
     });
+  const onPreviousStep = () => {
+    if (currentStep?.name === StepNames.STARTDATO) {
+      setShowVeiledning(true);
+    } else {
+      goToPreviousStep(stepWizardDispatch);
+    }
+  };
   const onDeleteSøknad = async () => {
     if (søknadState.type) {
       const deleteRes = await slettLagretSoknadState(søknadDispatch, søknadState.type);
@@ -156,97 +162,96 @@ export const StandardPage = (): JSX.Element => {
     <>
       <PageHeader align="center">{getText('pagetitle')}</PageHeader>
       <StepWizard hideLabels={true}>
-        <form
-          onSubmit={handleSubmit(myHandleSubmit)}
-          className={classes?.soknadForm}
-          autoComplete="off"
-        >
-          <FormErrorSummary errors={errors} />
-          <Step order={1} name={StepNames.STARTDATO} label={'Søknadsdato'}>
-            <StartDato
-              control={control}
-              watch={watch}
-              getText={getText}
-              setValue={setValue}
-              errors={errors}
-            />
-          </Step>
-          <Step order={2} name={StepNames.MEDLEMSKAP} label={'Tilknytning til Norge'}>
-            <Medlemskap
-              getText={getText}
-              errors={errors}
-              control={control}
-              watch={watch}
-              setValue={setValue}
-              pageTitle={pageTitle}
-            />
-          </Step>
-          <Step order={3} name={StepNames.YRKESSKADE} label={'Yrkesskade'}>
-            <Yrkesskade
-              getText={getText}
-              watch={watch}
-              errors={errors}
-              control={control}
-              setValue={setValue}
-              pageTitle={pageTitle}
-            />
-          </Step>
-          <Step order={4} name={StepNames.ANDRE_UTBETALINGER} label={'Andre utbetalinger'}>
-            <AndreUtbetalinger
-              getText={getText}
-              errors={errors}
-              control={control}
-              setValue={setValue}
-              watch={watch}
-            />
-          </Step>
-          <Step order={5} name={StepNames.FASTLEGE} label={'Fastlege'}>
-            <Behandlere getText={getText} fastlege={fastlege} control={control} />
-          </Step>
-          <Step order={6} name={StepNames.BARNETILLEGG} label={'Barnetilleggg'}>
-            <Barnetillegg getText={getText} errors={errors} control={control} />
-          </Step>
-          <Step order={7} name={StepNames.STUDENT} label={'Student'}>
-            <Student getText={getText} errors={errors} control={control} setValue={setValue} />
-          </Step>
-          <Step order={8} name={StepNames.TILLEGGSOPPLYSNINGER} label={'Tilleggsopplysninger'}>
-            <Tilleggsopplysninger
-              getText={getText}
-              errors={errors}
-              control={control}
-              setValue={setValue}
-            />
-          </Step>
-          <Step order={9} name={StepNames.VEDLEGG} label={'Vedlegg'}>
-            <Vedlegg getText={getText} control={control} />
-          </Step>
-          <Step order={10} name={StepNames.OPPSUMMERING} label={'Oppsummering'}>
-            <Oppsummering getText={getText} errors={errors} control={control} />
-          </Step>
-          <div className={classes?.buttonWrapper}>
-            <Button
-              variant="secondary"
-              type="button"
-              onClick={() => {
-                if (currentStep?.name === StepNames.STARTDATO) {
-                  setShowVeiledning(true);
-                } else {
-                  goToPreviousStep(stepWizardDispatch);
-                }
-              }}
-            >
-              {getText('backButtontext')}
-            </Button>
-            <Button variant="primary" type="submit" disabled={isLoading} loading={isLoading}>
-              {!isLoading && <BodyShort>{buttonText}</BodyShort>}
-            </Button>
-          </div>
-          <div className={classes?.cancelButtonWrapper}>
-            <Button variant="tertiary" type="button" onClick={() => onDeleteSøknad()}>
-              {getText('cancelButtonText')}
-            </Button>
-          </div>
-        </form>
+        {/*<form*/}
+        {/*  onSubmit={handleSubmit(myHandleSubmit)}*/}
+        {/*  className={classes?.soknadForm}*/}
+        {/*  autoComplete="off"*/}
+        {/*>*/}
+        <FormErrorSummary errors={errors} />
+        <Step order={1} name={StepNames.STARTDATO} label={'Søknadsdato'}>
+          <StartDato
+            getText={getText}
+            onCancelClick={onDeleteSøknad}
+            onBackClick={onPreviousStep}
+            søknad={søknadState?.søknad}
+          />
+        </Step>
+        <Step order={2} name={StepNames.MEDLEMSKAP} label={'Tilknytning til Norge'}>
+          <Medlemskap
+            getText={getText}
+            errors={errors}
+            control={control}
+            watch={watch}
+            setValue={setValue}
+            pageTitle={pageTitle}
+          />
+        </Step>
+        <Step order={3} name={StepNames.YRKESSKADE} label={'Yrkesskade'}>
+          <Yrkesskade
+            getText={getText}
+            watch={watch}
+            errors={errors}
+            control={control}
+            setValue={setValue}
+            pageTitle={pageTitle}
+          />
+        </Step>
+        <Step order={4} name={StepNames.ANDRE_UTBETALINGER} label={'Andre utbetalinger'}>
+          <AndreUtbetalinger
+            getText={getText}
+            errors={errors}
+            control={control}
+            setValue={setValue}
+            watch={watch}
+          />
+        </Step>
+        <Step order={5} name={StepNames.FASTLEGE} label={'Fastlege'}>
+          <Behandlere getText={getText} fastlege={fastlege} control={control} />
+        </Step>
+        <Step order={6} name={StepNames.BARNETILLEGG} label={'Barnetilleggg'}>
+          <Barnetillegg getText={getText} errors={errors} control={control} />
+        </Step>
+        <Step order={7} name={StepNames.STUDENT} label={'Student'}>
+          <Student getText={getText} errors={errors} control={control} setValue={setValue} />
+        </Step>
+        <Step order={8} name={StepNames.TILLEGGSOPPLYSNINGER} label={'Tilleggsopplysninger'}>
+          <Tilleggsopplysninger
+            getText={getText}
+            errors={errors}
+            control={control}
+            setValue={setValue}
+          />
+        </Step>
+        <Step order={9} name={StepNames.VEDLEGG} label={'Vedlegg'}>
+          <Vedlegg getText={getText} control={control} />
+        </Step>
+        <Step order={10} name={StepNames.OPPSUMMERING} label={'Oppsummering'}>
+          <Oppsummering getText={getText} errors={errors} control={control} />
+        </Step>
+        {/*<div className={classes?.buttonWrapper}>*/}
+        {/*  <Button*/}
+        {/*    variant="secondary"*/}
+        {/*    type="button"*/}
+        {/*    onClick={() => {*/}
+        {/*      if (currentStep?.name === StepNames.STARTDATO) {*/}
+        {/*        setShowVeiledning(true);*/}
+        {/*      } else {*/}
+        {/*        goToPreviousStep(stepWizardDispatch);*/}
+        {/*      }*/}
+        {/*    }}*/}
+        {/*  >*/}
+        {/*    {getText('backButtontext')}*/}
+        {/*  </Button>*/}
+        {/*  <Button variant="primary" type="submit" disabled={isLoading} loading={isLoading}>*/}
+        {/*    {!isLoading && <BodyShort>{buttonText}</BodyShort>}*/}
+        {/*  </Button>*/}
+        {/*</div>*/}
+        {/*<div className={classes?.cancelButtonWrapper}>*/}
+        {/*  <Button variant="tertiary" type="button" onClick={() => onDeleteSøknad()}>*/}
+        {/*    {getText('cancelButtonText')}*/}
+        {/*  </Button>*/}
+        {/*</div>*/}
+        {/*</form>*/}
       </StepWizard>
     </>
   );

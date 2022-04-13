@@ -8,8 +8,8 @@ import {
   Label,
   ReadMore,
 } from '@navikt/ds-react';
-import React, { useEffect } from 'react';
-import { GetText } from '../../../hooks/useTexts';
+import React, { useMemo } from 'react';
+import { getParagraphs, GetText } from '../../../hooks/useTexts';
 import { useForm } from 'react-hook-form';
 import ConfirmationPanelWrapper from '../../../components/input/ConfirmationPanelWrapper';
 import HeadingHelloName from '../../../components/async/HeadingHelloName';
@@ -18,6 +18,7 @@ import { SøkerView } from '../../../context/sokerOppslagContext';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as classes from './Veiledning.module.css';
+import { FormErrorSummary } from '../../../components/schema/FormErrorSummary';
 
 const VEILEDNING_CONFIRM = 'veiledningConfirm';
 type VeiledningType = {
@@ -33,13 +34,16 @@ interface VeiledningProps {
   onSubmit: () => void;
 }
 export const Veiledning = ({ getText, søker, loading, onSubmit }: VeiledningProps) => {
-  const getParagraphs = (path: string) => {
-    const paragraphs = getText(path);
-    return Array.isArray(paragraphs) ? paragraphs : [];
-  };
-  const schema = yup.object().shape({
-    veiledningConfirm: yup.boolean().required('Du må bekrefte').oneOf([true], 'Du må bekrefte'),
-  });
+  const schema = useMemo(
+    () =>
+      yup.object().shape({
+        veiledningConfirm: yup
+          .boolean()
+          .required(getText('form.veiledningConfirm.required'))
+          .oneOf([true], getText('form.veiledningConfirm.required')),
+      }),
+    [getText]
+  );
   const {
     control,
     handleSubmit,
@@ -48,7 +52,6 @@ export const Veiledning = ({ getText, søker, loading, onSubmit }: VeiledningPro
     resolver: yupResolver(schema),
     defaultValues: { ...initVeiledning },
   });
-  useEffect(() => console.log('errors ', errors), [errors]);
   const veiledningHandleSubmit = (data: any) => {
     console.log('veiledning ok', data);
     onSubmit();
@@ -60,15 +63,17 @@ export const Veiledning = ({ getText, søker, loading, onSubmit }: VeiledningPro
       </Heading>
       <GuidePanel>
         <HeadingHelloName size={'large'} level={'2'} name={søker?.fulltNavn} loading={loading} />
-        {getParagraphs('steps.veiledning.guide.paragraphs').map((e: string, index: number) => (
-          <BodyLong key={`${index}`}>{e}</BodyLong>
-        ))}
+        {getParagraphs('steps.veiledning.guide.paragraphs', getText).map(
+          (e: string, index: number) => (
+            <BodyLong key={`${index}`}>{e}</BodyLong>
+          )
+        )}
       </GuidePanel>
       <article>
         <Heading size={'small'} level={'2'}>
           {getText('steps.veiledning.søknadsdato.title')}
         </Heading>
-        {getParagraphs('steps.veiledning.søknadsdato.paragraphs').map(
+        {getParagraphs('steps.veiledning.søknadsdato.paragraphs', getText).map(
           (e: string, index: number) => (
             <BodyLong key={`${index}`}>{e}</BodyLong>
           )
@@ -119,6 +124,7 @@ export const Veiledning = ({ getText, søker, loading, onSubmit }: VeiledningPro
         className={classes?.veiledningContent}
         autoComplete="off"
       >
+        <FormErrorSummary errors={errors} />
         <ConfirmationPanelWrapper
           label={getText('steps.veiledning.rettogpliktConfirmation.label')}
           control={control}

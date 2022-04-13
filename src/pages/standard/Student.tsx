@@ -1,5 +1,5 @@
 import { Control, FieldErrors } from 'react-hook-form';
-import SoknadStandard from '../../types/SoknadStandard';
+import Soknad from '../../types/Soknad';
 import { GetText } from '../../hooks/useTexts';
 import RadioGroupWrapper from '../../components/input/RadioGroupWrapper';
 import { BodyLong, BodyShort, GuidePanel, Heading, Radio } from '@navikt/ds-react';
@@ -9,7 +9,7 @@ import React, { useEffect } from 'react';
 const STUDENT = 'student';
 const ER_STUDENT = 'erStudent';
 interface StudentProps {
-  control: Control<SoknadStandard>;
+  control: Control<Soknad>;
   getText: GetText;
   errors: FieldErrors;
   setValue: any;

@@ -22,8 +22,3 @@
   flex-direction: row;
   justify-content: flex-start;
 }
-.tuvaContainer {
-  display: flex;
-  flex-direction: column;
-  gap: var(--navds-spacing-5);
-}

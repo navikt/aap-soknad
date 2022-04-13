@@ -1,5 +1,5 @@
 import { Control, FieldErrors } from 'react-hook-form';
-import SoknadStandard from '../../../types/SoknadStandard';
+import Soknad from '../../../types/Soknad';
 import { GetText } from '../../../hooks/useTexts';
 import { Accordion, BodyShort, Cell, Grid, Heading, Label } from '@navikt/ds-react';
 import React from 'react';
@@ -15,7 +15,7 @@ import OppsummeringUtenlandsopphold from './OppsummeringUtenlandsopphold/Oppsumm
 import OppsummeringBehandler from './OppsummeringBehandler/OppsummeringBehandler';
 
 interface OppsummeringProps {
-  control: Control<SoknadStandard>;
+  control: Control<Soknad>;
   getText: GetText;
   errors: FieldErrors;
 }

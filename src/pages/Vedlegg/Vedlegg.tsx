@@ -1,5 +1,5 @@
 import { Control, useFieldArray } from 'react-hook-form';
-import SoknadStandard from '../../types/SoknadStandard';
+import Soknad from '../../types/Soknad';
 import { GetText } from '../../hooks/useTexts';
 import React from 'react';
 import { Alert, BodyShort, GuidePanel, Heading, Label, ReadMore } from '@navikt/ds-react';
@@ -8,7 +8,7 @@ import { useVedleggContext } from '../../context/vedleggContext';
 import ScanningGuide from '../../components/ScanningGuide/ScanningGuide';
 
 interface Props {
-  control: Control<SoknadStandard>;
+  control: Control<Soknad>;
   getText: GetText;
 }
 

@@ -1,5 +1,5 @@
 import { Control, FieldErrors } from 'react-hook-form';
-import SoknadStandard from '../../types/SoknadStandard';
+import Soknad from '../../types/Soknad';
 import { GetText } from '../../hooks/useTexts';
 import React, { useEffect } from 'react';
 import TextAreaWrapper from '../../components/input/TextAreaWrapper';
@@ -7,7 +7,7 @@ import { BodyShort, GuidePanel, Heading } from '@navikt/ds-react';
 
 const TILLEGGSOPPLYSNINGER = 'tilleggsopplysninger';
 interface TilleggsopplysningerProps {
-  control: Control<SoknadStandard>;
+  control: Control<Soknad>;
   getText: GetText;
   errors: FieldErrors;
   setValue: any;

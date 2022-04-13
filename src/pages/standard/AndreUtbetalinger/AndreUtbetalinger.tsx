@@ -4,7 +4,7 @@ import { GetText } from '../../../hooks/useTexts';
 import { Control, FieldErrors, FieldValues, UseFormWatch } from 'react-hook-form';
 import CheckboxGroupWrapper from '../../../components/input/CheckboxGroupWrapper';
 import RadioGroupWrapper from '../../../components/input/RadioGroupWrapper';
-import SoknadStandard from '../../../types/SoknadStandard';
+import Soknad from '../../../types/Soknad';
 import TextFieldWrapper from '../../../components/input/TextFieldWrapper';
 import ColorPanel from '../../../components/panel/ColorPanel';
 import { useVedleggContext, addRequiredVedlegg } from '../../../context/vedleggContext';
@@ -15,7 +15,7 @@ interface AndreUtbetalingerProps {
   setValue: any;
   getText: GetText;
   errors: FieldErrors;
-  control: Control<SoknadStandard>;
+  control: Control<Soknad>;
 }
 const ANDRE_UTBETALINGER = 'andreUtbetalinger';
 const LØNN = 'lønn';

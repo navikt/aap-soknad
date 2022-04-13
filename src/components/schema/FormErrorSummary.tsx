@@ -5,18 +5,21 @@ import { ErrorSummary } from '@navikt/ds-react';
 import useTexts from '../../hooks/useTexts';
 
 import * as tekster from './tekster';
-
+type YupError = {
+  message?: string;
+};
 const FormErrorSummary = ({ errors }: FieldErrors) => {
-  const keyList = Object.keys(errors).filter((e) => e);
+  const flatErrors = flatObj(errors);
+  const keyList = Object.keys(flatErrors).filter((e) => e);
   const { getText } = useTexts(tekster);
   if (keyList.length < 1) return null;
   return (
-    <ErrorSummary heading={getText('skjemafeil')}>
+    <ErrorSummary heading={getText('skjemafeil')} role={'alert'}>
       {keyList.map((key) => (
         <ErrorSummary.Item key={key} href={`#${key}`}>
           {
             // @ts-ignore
-            errors[key]?.message
+            flatErrors[key]
           }
         </ErrorSummary.Item>
       ))}
@@ -24,4 +27,18 @@ const FormErrorSummary = ({ errors }: FieldErrors) => {
   );
 };
 
+const flatObj: any = (obj: any, prevKey = '') => {
+  return Object.entries(obj).reduce((flatted, [key, value]) => {
+    if (typeof value == 'object') {
+      // @ts-ignore
+      if (value?.message) {
+        // @ts-ignore
+        return { ...flatted, [`${prevKey ? prevKey + '.' : ''}${key}`]: value?.message };
+      } else {
+        return { ...flatted, ...flatObj(value, key) };
+      }
+    }
+    return flatted;
+  }, {});
+};
 export { FormErrorSummary };

@@ -16,13 +16,13 @@ import { Add, Delete } from '@navikt/ds-icons';
 import UtenlandsPeriodeVelger from './UtenlandsPeriodeVelger/UtenlandsPeriodeVelger';
 import { formatDate } from '../../utils/date';
 import RadioGroupWrapper from '../../components/input/RadioGroupWrapper';
-import SoknadStandard from '../../types/SoknadStandard';
+import Soknad from '../../types/Soknad';
 
 interface TilknytningTilNorgeProps {
   watch: UseFormWatch<FieldValues>;
   getText: GetText;
   errors: FieldErrors;
-  control: Control<SoknadStandard>;
+  control: Control<Soknad>;
   setValue: any;
   pageTitle?: string;
 }
