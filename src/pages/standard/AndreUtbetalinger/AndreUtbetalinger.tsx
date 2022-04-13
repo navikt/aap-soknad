@@ -1,4 +1,14 @@
-import { Alert, BodyShort, Checkbox, GuidePanel, Heading, Radio, ReadMore } from '@navikt/ds-react';
+import {
+  Alert,
+  BodyShort,
+  Cell,
+  Checkbox,
+  Grid,
+  GuidePanel,
+  Heading,
+  Radio,
+  ReadMore,
+} from '@navikt/ds-react';
 import React, { useEffect, useMemo } from 'react';
 import { GetText } from '../../../hooks/useTexts';
 import { Control, FieldErrors, FieldValues, UseFormWatch } from 'react-hook-form';
@@ -114,6 +124,11 @@ export const AndreUtbetalinger = ({
     }
   }, [stønadEllerVerv]);
   useEffect(() => {
+    if (stønadEllerVerv?.length > 1 && stønadEllerVerv?.includes(StønadAlternativer.NEI)) {
+      setValue(`${ANDRE_UTBETALINGER}.${STØNAD}.value`, [StønadAlternativer.NEI]);
+    }
+  }, [stønadEllerVerv]);
+  useEffect(() => {
     addRequiredVedlegg(Attachments, vedleggDispatch);
   }, [Attachments]);
   return (
@@ -168,16 +183,24 @@ export const AndreUtbetalinger = ({
         <Checkbox value={StønadAlternativer.ANNET}>{StønadAlternativer.ANNET}</Checkbox>
         {stønadEllerVerv?.includes(StønadAlternativer.ANNET) && (
           <ColorPanel>
-            <TextFieldWrapper
-              name={`${ANDRE_UTBETALINGER}.annet.utbetalingsNavn.value`}
-              label={getText('form.andreUtbetalinger.annet.utbetaling.label')}
-              control={control}
-            />
-            <TextFieldWrapper
-              name={`${ANDRE_UTBETALINGER}.annet.utbetalerNavn.value`}
-              label={getText('form.andreUtbetalinger.annet.utbetaler.label')}
-              control={control}
-            />
+            <Grid>
+              <Cell xs={7}>
+                <TextFieldWrapper
+                  name={`${ANDRE_UTBETALINGER}.annet.utbetalingsNavn.value`}
+                  label={getText('form.andreUtbetalinger.annet.utbetaling.label')}
+                  control={control}
+                />
+              </Cell>
+            </Grid>
+            <Grid>
+              <Cell xs={7}>
+                <TextFieldWrapper
+                  name={`${ANDRE_UTBETALINGER}.annet.utbetalerNavn.value`}
+                  label={getText('form.andreUtbetalinger.annet.utbetaler.label')}
+                  control={control}
+                />
+              </Cell>
+            </Grid>
           </ColorPanel>
         )}
         <Checkbox value={StønadAlternativer.NEI}>{StønadAlternativer.NEI}</Checkbox>
