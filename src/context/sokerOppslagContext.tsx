@@ -14,8 +14,10 @@ type Adresse = {
   adressenavn?: string;
   husbokstav?: string;
   husnummer?: string;
-  postnr?: string;
-  poststed?: string;
+  postnummer?: {
+    postnr?: string;
+    poststed?: string;
+  };
 };
 export type OppslagBarn = {
   navn: Navn;
@@ -76,9 +78,9 @@ function SokerOppslagProvider({ children }: Props) {
       navn?.etternavn || ''
     }`;
   const getFullAdresse = (adresse: Adresse) =>
-    `${adresse?.adressenavn} ${adresse?.husnummer}${adresse?.husbokstav}, ${adresse?.postnr} ${adresse?.poststed}`;
-  const getAddressDescription = (kontaktInfo: any) =>
-    `${kontaktInfo?.adresse}, ${kontaktInfo?.postnr} ${kontaktInfo?.poststed}`;
+    `${adresse?.adressenavn} ${adresse?.husnummer}${
+      adresse?.husbokstav ? adresse.husbokstav : ''
+    }, ${adresse?.postnummer?.postnr} ${adresse?.postnummer?.poststed}`;
   const [state, dispatch] = useReducer(stateReducer, søkerOppslagInitialValue);
   const fastlege: FastlegeView | undefined = useMemo(() => {
     const fastlege = state?.behandlere?.find((e: any) => e?.type === 'FASTLEGE');
@@ -86,7 +88,7 @@ function SokerOppslagProvider({ children }: Props) {
     return {
       fulltNavn: getFulltNavn(fastlege?.navn),
       legekontor: fastlege?.kontaktinformasjon?.kontor,
-      adresse: getAddressDescription(fastlege?.kontaktinformasjon),
+      adresse: getFullAdresse(fastlege?.kontaktinformasjon?.adresse),
       telefon: fastlege?.kontaktinformasjon?.telefon,
     };
   }, [state]);

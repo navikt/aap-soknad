@@ -117,8 +117,10 @@ export const handlers = [
             adressenavn: 'Tulleveien',
             husbokstav: 'A',
             husnummer: '239',
-            postnr: '0472',
-            poststed: 'Oslo',
+            postnummer: {
+              postnr: '0472',
+              poststed: 'Oslo',
+            },
           },
           fødseldato: '2022-02-14',
           barn: [
@@ -162,15 +164,20 @@ export const handlers = [
         },
         behandlere: [
           {
-            type: 'FASTLEGEhei',
+            type: 'FASTLEGE',
             navn: { fornavn: 'Nina Unni', etternavn: 'Borge' },
             kontaktinformasjon: {
               behandlerRef: 'd182f24b-ebca-4f44-bf86-65901ec6141b',
               kontor: 'ASKØY KOMMUNE SAMFUNNSMEDISINSK AVD ALMENNLEGETJENESTEN',
               orgnummer: '976673867',
-              adresse: 'Kleppeveien 17',
-              postnr: '5300',
-              poststed: 'KLEPPESTØ',
+              adresse: {
+                adressenavn: 'Kleppeveien',
+                husnummer: '17',
+                postnummer: {
+                  postnr: '5300',
+                  poststed: 'KLEPPESTØ',
+                },
+              },
               telefon: '56 15 83 10',
             },
           },
