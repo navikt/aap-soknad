@@ -17,7 +17,11 @@ import RadioGroupWrapper from '../../../components/input/RadioGroupWrapper';
 import SoknadStandard from '../../../types/SoknadStandard';
 import TextFieldWrapper from '../../../components/input/TextFieldWrapper';
 import ColorPanel from '../../../components/panel/ColorPanel';
-import { useVedleggContext, addRequiredVedlegg } from '../../../context/vedleggContext';
+import {
+  useVedleggContext,
+  addRequiredVedlegg,
+  removeRequiredVedlegg,
+} from '../../../context/vedleggContext';
 import { JaEllerNei } from '../../../types/Generic';
 
 interface AndreUtbetalingerProps {
@@ -129,6 +133,10 @@ export const AndreUtbetalinger = ({
     }
   }, [stønadEllerVerv]);
   useEffect(() => {
+    removeRequiredVedlegg('omsorgsstønad', vedleggDispatch);
+    removeRequiredVedlegg('fosterhjemsgodtgjørelse', vedleggDispatch);
+    removeRequiredVedlegg('utlandsStønad', vedleggDispatch);
+    removeRequiredVedlegg('andreGoder', vedleggDispatch);
     addRequiredVedlegg(Attachments, vedleggDispatch);
   }, [Attachments]);
   return (
