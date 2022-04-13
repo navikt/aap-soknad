@@ -64,7 +64,7 @@ export const Barnetillegg = ({ getText, errors, control }: BarnetilleggProps) =>
     setShowModal(true);
   };
   const saveNyttBarn = () => {
-    if (!selectedBarn) {
+    if (selectedBarn === undefined) {
       append({
         navn: { fornavn, mellomnavn, etternavn },
         fnr,
@@ -241,7 +241,7 @@ export const Barnetillegg = ({ getText, errors, control }: BarnetilleggProps) =>
                 Lagre
               </Button>
             </Cell>
-            {selectedBarn && (
+            {selectedBarn !== undefined && (
               <Cell xs={3}>
                 <Button
                   type="button"
