@@ -119,7 +119,7 @@ export const Behandlere = ({ getText, fastlege, control }: BehandlereProps) => {
         {getText('steps.fastlege.annenBehandler.heading')}
       </Heading>
       <BodyLong>{getText('steps.fastlege.annenBehandler.info')}</BodyLong>
-      {fields.length > 0 && (
+      {!showNyBehandler && fields.length > 0 && (
         <>
           <Heading size={'xsmall'} level={'4'}>
             {getText('steps.fastlege.andreBehandlere.heading')}

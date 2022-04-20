@@ -40,13 +40,13 @@ type Student = {
   erStudent?: FieldAndLabel<JaEllerNei>;
 };
 type AndreUtbetalinger = {
-  lønn?: FieldAndLabel<string>;
-  stønad?: FieldAndLabel<Array<string>>;
+  lønn?: string;
+  stønad?: Array<string>;
   utbetaling?: {
-    utbetalingsType?: FieldAndLabel<string>;
+    utbetalingsType?: string;
     ferie?: {
-      skalHaFerie?: FieldAndLabel<string>;
-      type?: FieldAndLabel<string>;
+      skalHaFerie?: string;
+      type?: string;
       periode?: Periode;
     };
   };

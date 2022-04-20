@@ -1,18 +1,32 @@
-import { Alert, BodyShort, Checkbox, GuidePanel, Heading, Radio, ReadMore } from '@navikt/ds-react';
+import {
+  Alert,
+  BodyShort,
+  Cell,
+  Checkbox,
+  Grid,
+  GuidePanel,
+  Heading,
+  Radio,
+  ReadMore,
+} from '@navikt/ds-react';
 import React, { useEffect, useMemo } from 'react';
 import { GetText } from '../../../hooks/useTexts';
 import { FieldValues, useForm } from 'react-hook-form';
 import CheckboxGroupWrapper from '../../../components/input/CheckboxGroupWrapper';
 import RadioGroupWrapper from '../../../components/input/RadioGroupWrapper';
-import Soknad from '../../../types/Soknad';
 import TextFieldWrapper from '../../../components/input/TextFieldWrapper';
 import ColorPanel from '../../../components/panel/ColorPanel';
-import { useVedleggContext, addRequiredVedlegg } from '../../../context/vedleggContext';
+import {
+  useVedleggContext,
+  addRequiredVedlegg,
+  removeRequiredVedlegg,
+} from '../../../context/vedleggContext';
 import { JaEllerNei } from '../../../types/Generic';
+import Soknad from '../../../types/Soknad';
 import * as yup from 'yup';
-import { yupResolver } from '@hookform/resolvers/yup';
 import { setSøknadData, useSoknadContext } from '../../../context/soknadContext';
 import { completeAndGoToNextStep, useStepWizard } from '../../../context/stepWizardContextV2';
+import { yupResolver } from '@hookform/resolvers/yup';
 import SoknadFormWrapper from '../../../components/SoknadFormWrapper/SoknadFormWrapper';
 
 interface Props {
@@ -27,13 +41,14 @@ const STØNAD = 'stønad';
 
 export const AndreUtbetalinger = ({ getText, onBackClick, onCancelClick, søknad }: Props) => {
   const schema = yup.object().shape({});
+  const { vedleggDispatch } = useVedleggContext();
   const { søknadDispatch } = useSoknadContext();
   const { stepWizardDispatch } = useStepWizard();
-  const { vedleggDispatch } = useVedleggContext();
   const {
     control,
     handleSubmit,
     watch,
+    setValue,
     formState: { errors },
   } = useForm<FieldValues>({
     resolver: yupResolver(schema),
@@ -101,6 +116,15 @@ export const AndreUtbetalinger = ({ getText, onBackClick, onCancelClick, søknad
     return attachments;
   }, [stønadEllerVerv, lønnEtterlønnEllerSluttpakke]);
   useEffect(() => {
+    if (stønadEllerVerv?.length > 1 && stønadEllerVerv?.includes(StønadAlternativer.NEI)) {
+      setValue(`${ANDRE_UTBETALINGER}.${STØNAD}`, [StønadAlternativer.NEI]);
+    }
+  }, [stønadEllerVerv]);
+  useEffect(() => {
+    removeRequiredVedlegg('omsorgsstønad', vedleggDispatch);
+    removeRequiredVedlegg('fosterhjemsgodtgjørelse', vedleggDispatch);
+    removeRequiredVedlegg('utlandsStønad', vedleggDispatch);
+    removeRequiredVedlegg('andreGoder', vedleggDispatch);
     addRequiredVedlegg(Attachments, vedleggDispatch);
   }, [Attachments]);
   return (
@@ -166,16 +190,24 @@ export const AndreUtbetalinger = ({ getText, onBackClick, onCancelClick, søknad
         <Checkbox value={StønadAlternativer.ANNET}>{StønadAlternativer.ANNET}</Checkbox>
         {stønadEllerVerv?.includes(StønadAlternativer.ANNET) && (
           <ColorPanel>
-            <TextFieldWrapper
-              name={`${ANDRE_UTBETALINGER}.annet.utbetalingsNavn`}
-              label={getText('form.andreUtbetalinger.annet.utbetaling.label')}
-              control={control}
-            />
-            <TextFieldWrapper
-              name={`${ANDRE_UTBETALINGER}.annet.utbetalerNavn`}
-              label={getText('form.andreUtbetalinger.annet.utbetaler.label')}
-              control={control}
-            />
+            <Grid>
+              <Cell xs={7}>
+                <TextFieldWrapper
+                  name={`${ANDRE_UTBETALINGER}.annet.utbetalingsNavn`}
+                  label={getText('form.andreUtbetalinger.annet.utbetaling.label')}
+                  control={control}
+                />
+              </Cell>
+            </Grid>
+            <Grid>
+              <Cell xs={7}>
+                <TextFieldWrapper
+                  name={`${ANDRE_UTBETALINGER}.annet.utbetalerNavn`}
+                  label={getText('form.andreUtbetalinger.annet.utbetaler.label')}
+                  control={control}
+                />
+              </Cell>
+            </Grid>
           </ColorPanel>
         )}
         <Checkbox value={StønadAlternativer.NEI}>{StønadAlternativer.NEI}</Checkbox>
