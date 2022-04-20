@@ -345,11 +345,13 @@
     "medlemskap": {
       "boddINorge": {
         "legend": "Har du bodd sammenhengende i Norge de siste 5 årene?",
-        "description": "Dette betyr at du både har hatt folkeregistrert adresse i Norge, og faktisk har oppholdt deg her mesteparten av hvert av disse årene. "
+        "description": "Dette betyr at du både har hatt folkeregistrert adresse i Norge, og faktisk har oppholdt deg her mesteparten av hvert av disse årene. ",
+        "required": "Venligst svar på om du har bodd i Norge de siste 5 årene"
       },
       "arbeidUtenforNorge": {
         "legend": "Har du jobbet utenfor Norge før du ble syk?",
         "description": "Hvis du har jobbet utenfor Norge før du ble syk, kan det i noen tilfeller gjøre at du får mer utbetalt i AAP.",
+        "required": "Venligst svar på om du har jobbet utenfor Norge før du ble syk",
         "readMore": {
           "header": "Hva hvis jeg har fått dagpenger, sykepenger, foreldrepenger eller tilsvarende fra utlandet?",
           "text": "Med “jobb” menes også offentlige ytelser du har fått som erstatning for arbeid utenfor Norge, for eksempel dagpenger, sykepenger og foreldrepenger. Pensjon regnes ikke som erstatning for jobb."
@@ -357,7 +359,8 @@
       },
       "arbeidINorge": {
         "legend": "Har du jobbet sammenhengende i Norge de siste 5 årene?",
-        "description": "Med “jobb” menes også offentlige ytelser du har fått som erstatning for arbeid, for eksempel dagpenger og sykepenger. Foreldrepenger og pensjon regnes ikke som erstatning for jobb."
+        "description": "Med “jobb” menes også offentlige ytelser du har fått som erstatning for arbeid, for eksempel dagpenger og sykepenger. Foreldrepenger og pensjon regnes ikke som erstatning for jobb.",
+        "required": "Venligst svar på om du har jobbet sammenhengende i Norge de siste 5 årene"
       }
     },
     "yrkesskade": {

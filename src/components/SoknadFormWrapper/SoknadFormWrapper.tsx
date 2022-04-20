@@ -1,27 +1,8 @@
-import { GetText } from '../hooks/useTexts';
-import Soknad, { Ferie } from '../types/Soknad';
-import * as yup from 'yup';
-import { FieldError, FieldErrors, useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
-import React, { useEffect, useMemo } from 'react';
-import {
-  Alert,
-  BodyLong,
-  BodyShort,
-  Button,
-  Cell,
-  Grid,
-  GuidePanel,
-  Heading,
-  Radio,
-  ReadMore,
-} from '@navikt/ds-react';
-import DatoVelgerWrapper from './input/DatoVelgerWrapper';
-import RadioGroupWrapper from './input/RadioGroupWrapper';
-import { JaNeiVetIkke } from '../types/Generic';
-import ColorPanel from './panel/ColorPanel';
-import TextFieldWrapper from './input/TextFieldWrapper';
-import { FormErrorSummary } from './schema/FormErrorSummary';
+import { FieldErrors } from 'react-hook-form';
+import React from 'react';
+import { Button, Cell, Grid } from '@navikt/ds-react';
+import { FormErrorSummary } from '../schema/FormErrorSummary';
+import * as classes from './SoknadFormWrapper.module.css';
 
 interface Props {
   children?: React.ReactNode;
@@ -47,8 +28,8 @@ const SøknadFormWrapper = ({
   nextIsLoading = false,
 }: Props) => {
   return (
-    <form onSubmit={onNext}>
-      <FormErrorSummary errors={errors} />
+    <form onSubmit={onNext} className={classes?.formContent}>
+      <FormErrorSummary errors={errors} data-testid={'error-summary'} />
       {children}
       <Grid>
         <Cell xs={3}>

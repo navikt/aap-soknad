@@ -5,16 +5,13 @@ import { ErrorSummary } from '@navikt/ds-react';
 import useTexts from '../../hooks/useTexts';
 
 import * as tekster from './tekster';
-type YupError = {
-  message?: string;
-};
-const FormErrorSummary = ({ errors }: FieldErrors) => {
-  const flatErrors = flatObj(errors);
+const FormErrorSummary = (props: FieldErrors) => {
+  const flatErrors = flatObj(props?.errors);
   const keyList = Object.keys(flatErrors).filter((e) => e);
   const { getText } = useTexts(tekster);
   if (keyList.length < 1) return null;
   return (
-    <ErrorSummary heading={getText('skjemafeil')} role={'alert'}>
+    <ErrorSummary heading={getText('skjemafeil')} role={'alert'} {...props}>
       {keyList.map((key) => (
         <ErrorSummary.Item key={key} href={`#${key}`}>
           {

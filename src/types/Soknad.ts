@@ -14,17 +14,17 @@ export type Periode = {
   tilDato?: string;
 };
 export type UtenlandsPeriode = {
-  land: FieldAndLabel<string>;
-  tilDato: FieldAndLabel<Date>;
-  fraDato: FieldAndLabel<Date>;
-  iArbeid: FieldAndLabel<boolean>;
-  utenlandsId?: FieldAndLabel<string>;
+  land: string;
+  tilDato: Date;
+  fraDato: Date;
+  iArbeid: boolean;
+  utenlandsId?: string;
 };
 type Yrkesskade = FieldAndLabel<string>;
 type Medlemskap = {
-  harBoddINorgeSiste5År?: FieldAndLabel<JaEllerNei>;
-  harArbeidetINorgeSiste5År?: FieldAndLabel<JaEllerNei>;
-  arbeidetUtenforNorgeFørSykdom?: FieldAndLabel<JaEllerNei>;
+  harBoddINorgeSiste5År?: JaEllerNei;
+  harArbeidetINorgeSiste5År?: JaEllerNei;
+  arbeidetUtenforNorgeFørSykdom?: JaEllerNei;
   utenlandsOpphold?: UtenlandsPeriode[];
 };
 export type Behandler = {

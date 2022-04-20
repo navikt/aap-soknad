@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { useTexts } from '../../hooks/useTexts';
-import { BodyShort, Button, PageHeader } from '@navikt/ds-react';
+import { PageHeader } from '@navikt/ds-react';
 import * as tekster from './tekster';
 import { Step, StepWizard } from '../../components/StepWizard';
 import { getStepSchemas } from './schema';
@@ -26,11 +26,10 @@ import {
 import { Veiledning } from './Veiledning/Veiledning';
 import { hentSokerOppslag, useSokerOppslag } from '../../context/sokerOppslagContext';
 import { Behandlere } from './Behandlere';
-import { Medlemskap } from './Medlemskap';
+import { Medlemskap } from './Medlemskap/Medlemskap';
 import { Yrkesskade } from './Yrkesskade';
 import { AndreUtbetalinger } from './AndreUtbetalinger/AndreUtbetalinger';
 import { Barnetillegg } from './Barnetillegg/Barnetillegg';
-import * as classes from './standard.module.css';
 import Oppsummering from './Oppsummering/Oppsummering';
 import Tilleggsopplysninger from './Tilleggsopplysninger';
 import Vedlegg from '../Vedlegg/Vedlegg';
@@ -55,7 +54,7 @@ export enum StepNames {
 }
 const initFieldVals: Soknad = {};
 export const StandardPage = (): JSX.Element => {
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [setIsLoading] = useState<boolean>(false);
   const [oppslagLoading, setOppslagLoading] = useState<boolean>(true);
   const [showVeiledning, setShowVeiledning] = useState<boolean>(true);
   const [showKvittering, setShowKvittering] = useState<boolean>(false);
@@ -179,11 +178,9 @@ export const StandardPage = (): JSX.Element => {
         <Step order={2} name={StepNames.MEDLEMSKAP} label={'Tilknytning til Norge'}>
           <Medlemskap
             getText={getText}
-            errors={errors}
-            control={control}
-            watch={watch}
-            setValue={setValue}
-            pageTitle={pageTitle}
+            onCancelClick={onDeleteSøknad}
+            onBackClick={onPreviousStep}
+            søknad={søknadState?.søknad}
           />
         </Step>
         <Step order={3} name={StepNames.YRKESSKADE} label={'Yrkesskade'}>

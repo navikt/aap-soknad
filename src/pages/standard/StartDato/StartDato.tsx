@@ -1,5 +1,5 @@
 import { FieldValues, useForm } from 'react-hook-form';
-import Soknad, { Ferie, StartDato } from '../../../types/Soknad';
+import Soknad from '../../../types/Soknad';
 import { getParagraphs, GetText } from '../../../hooks/useTexts';
 import React, { useEffect, useMemo } from 'react';
 import DatoVelgerWrapper from '../../../components/input/DatoVelgerWrapper';
@@ -20,8 +20,9 @@ import TextFieldWrapper from '../../../components/input/TextFieldWrapper';
 import ColorPanel from '../../../components/panel/ColorPanel';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
-import SoknadFormWrapper from '../../../components/SoknadFormWrapper';
+import SoknadFormWrapper from '../../../components/SoknadFormWrapper/SoknadFormWrapper';
 import { completeAndGoToNextStep, useStepWizard } from '../../../context/stepWizardContextV2';
+import { setSøknadData, useSoknadContext } from '../../../context/soknadContext';
 
 const STARTDATO = 'startDato';
 const FERIE = 'ferie';
@@ -60,10 +61,10 @@ const StartDato = ({ getText, onBackClick, onCancelClick, søknad }: Props) => {
     resolver: yupResolver(schema),
     defaultValues: { startDato: søknad?.startDato, ferie: søknad?.ferie },
   });
+  const { søknadDispatch } = useSoknadContext();
   const { stepWizardDispatch } = useStepWizard();
   const skalHaFerie = watch(`${FERIE}.skalHaFerie`);
   const ferieType = watch(`${FERIE}.type`);
-  const antallDager = watch(`${FERIE}.antallDager`);
   const FerieType = useMemo(
     () => ({
       PERIODE: getText(`form.${FERIE}.ferieType.periode`),
@@ -81,7 +82,10 @@ const StartDato = ({ getText, onBackClick, onCancelClick, søknad }: Props) => {
   }, [ferieType]);
   return (
     <SoknadFormWrapper
-      onNext={handleSubmit(() => completeAndGoToNextStep(stepWizardDispatch))}
+      onNext={handleSubmit((data) => {
+        setSøknadData(søknadDispatch, data);
+        completeAndGoToNextStep(stepWizardDispatch);
+      })}
       onBack={() => onBackClick()}
       onCancel={() => onCancelClick()}
       nextButtonText={'Neste steg'}
