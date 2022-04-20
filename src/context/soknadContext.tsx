@@ -67,6 +67,9 @@ export const slettLagretSoknadState = async (
 export const setSøknadData = (dispatch: Dispatch<SoknadAction>, data: Soknad) => {
   dispatch({ type: SoknadActionKeys.SET_SOKNAD, payload: data });
 };
+export const updateSøknadData = (dispatch: Dispatch<SoknadAction>, data: Soknad) => {
+  dispatch({ type: SoknadActionKeys.UPDATE_SOKNAD, payload: data });
+};
 export const addBarnIfMissing = (dispatch: Dispatch<SoknadAction>, data: OppslagBarn[]) => {
   dispatch({ type: SoknadActionKeys.ADD_BARN_IF_MISSING, payload: data });
 };

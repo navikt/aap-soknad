@@ -24,7 +24,7 @@ import {
 import { JaEllerNei } from '../../../types/Generic';
 import Soknad from '../../../types/Soknad';
 import * as yup from 'yup';
-import { setSøknadData, useSoknadContext } from '../../../context/soknadContext';
+import { updateSøknadData, useSoknadContext } from '../../../context/soknadContext';
 import { completeAndGoToNextStep, useStepWizard } from '../../../context/stepWizardContextV2';
 import { yupResolver } from '@hookform/resolvers/yup';
 import SoknadFormWrapper from '../../../components/SoknadFormWrapper/SoknadFormWrapper';
@@ -139,7 +139,7 @@ export const AndreUtbetalinger = ({ getText, onBackClick, onCancelClick, søknad
   return (
     <SoknadFormWrapper
       onNext={handleSubmit((data) => {
-        setSøknadData(søknadDispatch, data);
+        updateSøknadData(søknadDispatch, data);
         completeAndGoToNextStep(stepWizardDispatch);
       })}
       onBack={() => onBackClick()}

@@ -20,7 +20,7 @@ import FieldArrayWrapper from '../../../components/input/FieldArrayWrapper/Field
 import ButtonPanel from '../../../components/ButtonPanel/ButtonPanel';
 import TextWithLink from '../../../components/TextWithLink';
 import * as yup from 'yup';
-import { setSøknadData, useSoknadContext } from '../../../context/soknadContext';
+import { updateSøknadData, useSoknadContext } from '../../../context/soknadContext';
 import { completeAndGoToNextStep, useStepWizard } from '../../../context/stepWizardContextV2';
 import { yupResolver } from '@hookform/resolvers/yup';
 import SoknadFormWrapper from '../../../components/SoknadFormWrapper/SoknadFormWrapper';
@@ -107,7 +107,7 @@ export const Behandlere = ({ getText, onBackClick, onCancelClick, søknad, fastl
   return (
     <SoknadFormWrapper
       onNext={handleSubmit((data) => {
-        setSøknadData(søknadDispatch, data);
+        updateSøknadData(søknadDispatch, data);
         completeAndGoToNextStep(stepWizardDispatch);
       })}
       onBack={() => onBackClick()}

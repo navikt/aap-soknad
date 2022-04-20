@@ -21,7 +21,7 @@ import { completeAndGoToNextStep, useStepWizard } from '../../../context/stepWiz
 import SoknadFormWrapper from '../../../components/SoknadFormWrapper/SoknadFormWrapper';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
-import { setSøknadData, useSoknadContext } from '../../../context/soknadContext';
+import { updateSøknadData, useSoknadContext } from '../../../context/soknadContext';
 
 interface Props {
   getText: GetText;
@@ -141,7 +141,7 @@ export const Medlemskap = ({ getText, onBackClick, onCancelClick, søknad }: Pro
     <>
       <SoknadFormWrapper
         onNext={handleSubmit((data) => {
-          setSøknadData(søknadDispatch, data);
+          updateSøknadData(søknadDispatch, data);
           completeAndGoToNextStep(stepWizardDispatch);
         })}
         onBack={() => onBackClick()}

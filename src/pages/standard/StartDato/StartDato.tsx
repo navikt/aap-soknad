@@ -22,7 +22,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import SoknadFormWrapper from '../../../components/SoknadFormWrapper/SoknadFormWrapper';
 import { completeAndGoToNextStep, useStepWizard } from '../../../context/stepWizardContextV2';
-import { setSøknadData, useSoknadContext } from '../../../context/soknadContext';
+import { updateSøknadData, useSoknadContext } from '../../../context/soknadContext';
 
 const STARTDATO = 'startDato';
 const FERIE = 'ferie';
@@ -83,7 +83,7 @@ const StartDato = ({ getText, onBackClick, onCancelClick, søknad }: Props) => {
   return (
     <SoknadFormWrapper
       onNext={handleSubmit((data) => {
-        setSøknadData(søknadDispatch, data);
+        updateSøknadData(søknadDispatch, data);
         completeAndGoToNextStep(stepWizardDispatch);
       })}
       onBack={() => onBackClick()}

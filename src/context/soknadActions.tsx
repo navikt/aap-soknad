@@ -4,6 +4,7 @@ export enum SoknadActionKeys {
   SET_STATE_FROM_CACHE = 'SET_STATE_FROM_CACHE',
   SET_SOKNAD_TYPE = 'SET_SOKNAD_TYPE',
   SET_SOKNAD = 'SET_SOKNAD',
+  UPDATE_SOKNAD = 'UPDATE_SOKNAD',
   SET_CURRENT_STEP = 'SET_CURRENT_STEP',
   ADD_BARN_IF_MISSING = 'ADD_BARN_IF_MISSING',
 }
@@ -19,6 +20,10 @@ type SetSoknad = {
   type: SoknadActionKeys.SET_SOKNAD;
   payload?: any;
 };
+type UpdateSoknad = {
+  type: SoknadActionKeys.UPDATE_SOKNAD;
+  payload?: any;
+};
 type SetCurrentStep = {
   type: SoknadActionKeys.SET_CURRENT_STEP;
   payload?: string;
@@ -31,5 +36,6 @@ export type SoknadAction =
   | SetStateFromCache
   | SetSoknadType
   | SetSoknad
+  | UpdateSoknad
   | SetCurrentStep
   | AddBarnIfMissing;

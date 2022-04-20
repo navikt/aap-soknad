@@ -209,7 +209,12 @@ export const StandardPage = (): JSX.Element => {
           />
         </Step>
         <Step order={6} name={StepNames.BARNETILLEGG} label={'Barnetilleggg'}>
-          <Barnetillegg getText={getText} errors={errors} control={control} />
+          <Barnetillegg
+            getText={getText}
+            onCancelClick={onDeleteSøknad}
+            onBackClick={onPreviousStep}
+            søknad={søknadState?.søknad}
+          />
         </Step>
         <Step order={7} name={StepNames.STUDENT} label={'Student'}>
           <Student getText={getText} errors={errors} control={control} setValue={setValue} />

@@ -55,9 +55,8 @@ export type Barn = {
   navn: Navn;
   fødselsdato?: string;
   fnr: string;
-  harInntekt?: FieldAndLabel<string>;
+  harInntekt?: string;
   manueltOpprettet?: boolean;
-  adoptertEllerFosterBarn?: FieldAndLabel<string>;
 };
 export type Ferie = {
   skalHaFerie?: string;
@@ -82,7 +81,7 @@ interface Soknad {
     size: string;
     data: FormData;
   }[];
-  søknadBekreft?: FieldAndLabel<boolean>;
+  søknadBekreft?: boolean;
 }
 
 export default Soknad;
