@@ -25,7 +25,7 @@ import {
 } from '../../context/soknadContext';
 import { Veiledning } from './Veiledning/Veiledning';
 import { hentSokerOppslag, useSokerOppslag } from '../../context/sokerOppslagContext';
-import { Behandlere } from './Behandlere';
+import { Behandlere } from './Behandlere/Behandlere';
 import { Medlemskap } from './Medlemskap/Medlemskap';
 import { Yrkesskade } from './Yrkesskade/Yrkesskade';
 import { AndreUtbetalinger } from './AndreUtbetalinger/AndreUtbetalinger';
@@ -200,7 +200,13 @@ export const StandardPage = (): JSX.Element => {
           />
         </Step>
         <Step order={5} name={StepNames.FASTLEGE} label={'Fastlege'}>
-          <Behandlere getText={getText} fastlege={fastlege} control={control} />
+          <Behandlere
+            getText={getText}
+            onCancelClick={onDeleteSøknad}
+            onBackClick={onPreviousStep}
+            søknad={søknadState?.søknad}
+            fastlege={fastlege}
+          />
         </Step>
         <Step order={6} name={StepNames.BARNETILLEGG} label={'Barnetilleggg'}>
           <Barnetillegg getText={getText} errors={errors} control={control} />

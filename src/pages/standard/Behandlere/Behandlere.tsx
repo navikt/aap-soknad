@@ -11,23 +11,43 @@ import {
   TextField,
 } from '@navikt/ds-react';
 import React, { useState } from 'react';
-import { GetText } from '../../hooks/useTexts';
-import { Control, useFieldArray } from 'react-hook-form';
-import { FastlegeView } from '../../context/sokerOppslagContext';
+import { GetText } from '../../../hooks/useTexts';
+import { FieldValues, useFieldArray, useForm } from 'react-hook-form';
+import { FastlegeView } from '../../../context/sokerOppslagContext';
 import { Delete, Add } from '@navikt/ds-icons';
-import Soknad from '../../types/Soknad';
-import FieldArrayWrapper from '../../components/input/FieldArrayWrapper/FieldArrayWrapper';
-import ButtonPanel from '../../components/ButtonPanel/ButtonPanel';
-import TextWithLink from '../../components/TextWithLink';
+import Soknad from '../../../types/Soknad';
+import FieldArrayWrapper from '../../../components/input/FieldArrayWrapper/FieldArrayWrapper';
+import ButtonPanel from '../../../components/ButtonPanel/ButtonPanel';
+import TextWithLink from '../../../components/TextWithLink';
+import * as yup from 'yup';
+import { setSøknadData, useSoknadContext } from '../../../context/soknadContext';
+import { completeAndGoToNextStep, useStepWizard } from '../../../context/stepWizardContextV2';
+import { yupResolver } from '@hookform/resolvers/yup';
+import SoknadFormWrapper from '../../../components/SoknadFormWrapper/SoknadFormWrapper';
 
-interface BehandlereProps {
+interface Props {
   getText: GetText;
-  fastlege: FastlegeView | undefined;
-  control: Control<Soknad>;
+  søknad?: Soknad;
+  onBackClick: () => void;
+  onCancelClick: () => void;
+  fastlege?: FastlegeView;
 }
-const FIELD_ARRAY_NAME = 'behandlere';
+const BEHANDLERE = 'behandlere';
 
-export const Behandlere = ({ getText, fastlege, control }: BehandlereProps) => {
+export const Behandlere = ({ getText, onBackClick, onCancelClick, søknad, fastlege }: Props) => {
+  const schema = yup.object().shape({});
+  const { søknadDispatch } = useSoknadContext();
+  const { stepWizardDispatch } = useStepWizard();
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FieldValues>({
+    resolver: yupResolver(schema),
+    defaultValues: {
+      [BEHANDLERE]: søknad?.behandlere,
+    },
+  });
   const [showNyBehandler, setShowNyBehandler] = useState<boolean>(false);
   const [selectedBehandler, setSelectedBehandler] = useState<number | undefined>(undefined);
   const [firstname, setFirstname] = useState<string>('');
@@ -47,7 +67,7 @@ export const Behandlere = ({ getText, fastlege, control }: BehandlereProps) => {
     setTelefon('');
   };
   const { fields, append, remove, update } = useFieldArray({
-    name: FIELD_ARRAY_NAME,
+    name: BEHANDLERE,
     control,
   });
   const editNyBehandler = (index: number) => {
@@ -85,7 +105,18 @@ export const Behandlere = ({ getText, fastlege, control }: BehandlereProps) => {
     setShowNyBehandler(false);
   };
   return (
-    <>
+    <SoknadFormWrapper
+      onNext={handleSubmit((data) => {
+        setSøknadData(søknadDispatch, data);
+        completeAndGoToNextStep(stepWizardDispatch);
+      })}
+      onBack={() => onBackClick()}
+      onCancel={() => onCancelClick()}
+      nextButtonText={'Neste steg'}
+      backButtonText={'Forrige steg'}
+      cancelButtonText={'Avbryt søknad'}
+      errors={errors}
+    >
       <Heading size="large" level="2">
         {getText('steps.fastlege.title')}
       </Heading>
@@ -221,6 +252,6 @@ export const Behandlere = ({ getText, fastlege, control }: BehandlereProps) => {
           </div>
         </FieldArrayWrapper>
       )}
-    </>
+    </SoknadFormWrapper>
   );
 };

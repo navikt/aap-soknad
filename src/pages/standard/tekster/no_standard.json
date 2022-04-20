@@ -378,11 +378,12 @@
         "verv": "Godtgjørelse eller lønn for verv",
         "utland": "Ytelser fra utenlandske trygdemyndigheter",
         "annet": "Annet (for eksempel pensjoner eller forsikringsordninger)",
-        "nei": "Nei, ingen"
+        "nei": "Nei, ingen",
+        "required": "Venligst velg minst ett alternativ om utbetalinger du får eller nylig har søkt om"
       },
       "lønn": {
         "legend": "Har du fått eller skal du få ekstra utbetalinger fra arbeidsgiver?",
-        "required": "Venligst velg et av alternativene",
+        "required": "Venligst svar på om du har fått eller skal få ekstra utbetalinger fra arbeidsgiver",
         "ja": "Ja, jeg har fått eller får sluttpakke, etterlønn eller andre goder fra nåværende eller tidligere arbeidsgivere",
         "nei": "Nei, jeg verken har fått eller får sluttpakke, etterlønn eller andre goder fra nåværende eller tidligere arbeidsgivere",
         "vetikke": "Vet ikke"

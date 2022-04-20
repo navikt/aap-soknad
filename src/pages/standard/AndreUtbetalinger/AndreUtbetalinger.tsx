@@ -40,7 +40,16 @@ const LØNN = 'lønn';
 const STØNAD = 'stønad';
 
 export const AndreUtbetalinger = ({ getText, onBackClick, onCancelClick, søknad }: Props) => {
-  const schema = yup.object().shape({});
+  const schema = yup.object().shape({
+    [ANDRE_UTBETALINGER]: yup.object().shape({
+      [LØNN]: yup
+        .string()
+        .required(getText('form.andreUtbetalinger.lønn.required'))
+        .oneOf([JaEllerNei.JA, JaEllerNei.NEI], getText('form.andreUtbetalinger.lønn.required'))
+        .typeError(getText('form.andreUtbetalinger.lønn.required')),
+      [STØNAD]: yup.array().min(1, getText('form.andreUtbetalinger.stønad.required')),
+    }),
+  });
   const { vedleggDispatch } = useVedleggContext();
   const { søknadDispatch } = useSoknadContext();
   const { stepWizardDispatch } = useStepWizard();
