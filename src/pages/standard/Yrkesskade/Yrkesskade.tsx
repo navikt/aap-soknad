@@ -1,6 +1,6 @@
-import { GetText } from '../../hooks/useTexts';
-import { Control, FieldErrors, FieldValues, UseFormWatch } from 'react-hook-form';
-import React, { useEffect } from 'react';
+import { GetText } from '../../../hooks/useTexts';
+import { FieldValues, useForm } from 'react-hook-form';
+import React from 'react';
 import {
   ReadMore,
   BodyLong,
@@ -11,35 +11,64 @@ import {
   Link,
   Alert,
 } from '@navikt/ds-react';
-import RadioGroupWrapper from '../../components/input/RadioGroupWrapper';
-import Soknad from '../../types/Soknad';
-import TextWithLink from '../../components/TextWithLink';
-import { JaNeiVetIkke } from '../../types/Generic';
+import RadioGroupWrapper from '../../../components/input/RadioGroupWrapper';
+import Soknad from '../../../types/Soknad';
+import TextWithLink from '../../../components/TextWithLink';
+import { JaNeiVetIkke } from '../../../types/Generic';
+import * as yup from 'yup';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { setSøknadData, useSoknadContext } from '../../../context/soknadContext';
+import { completeAndGoToNextStep, useStepWizard } from '../../../context/stepWizardContextV2';
+import SoknadFormWrapper from '../../../components/SoknadFormWrapper/SoknadFormWrapper';
 
-interface YrkesskadeProps {
-  setValue: any;
-  watch: UseFormWatch<FieldValues>;
+interface Props {
   getText: GetText;
-  errors: FieldErrors;
-  control: Control<Soknad>;
-  pageTitle?: string;
+  søknad?: Soknad;
+  onBackClick: () => void;
+  onCancelClick: () => void;
 }
 const YRKESSKADE = 'yrkesskade';
 
-export const Yrkesskade = ({
-  getText,
-  watch,
-  errors,
-  control,
-  setValue,
-  pageTitle,
-}: YrkesskadeProps) => {
-  useEffect(() => setValue(`${YRKESSKADE}.label`, getText(`form.${YRKESSKADE}.legend`)), [getText]);
-  const harSkadeEllerSykdom = watch(`${YRKESSKADE}.value`);
+export const Yrkesskade = ({ getText, onBackClick, onCancelClick, søknad }: Props) => {
+  const schema = yup.object().shape({
+    [YRKESSKADE]: yup
+      .string()
+      .required(getText('form.yrkesskade.required'))
+      .oneOf(
+        [JaNeiVetIkke.JA, JaNeiVetIkke.NEI, JaNeiVetIkke.VET_IKKE],
+        getText('form.yrkesskade.required')
+      )
+      .typeError(getText('form.yrkesskade.required')),
+  });
+  const { søknadDispatch } = useSoknadContext();
+  const { stepWizardDispatch } = useStepWizard();
+  const {
+    control,
+    handleSubmit,
+    watch,
+    formState: { errors },
+  } = useForm<FieldValues>({
+    resolver: yupResolver(schema),
+    defaultValues: {
+      [YRKESSKADE]: søknad?.yrkesskade,
+    },
+  });
+  const harSkadeEllerSykdom = watch(`${YRKESSKADE}`);
   return (
-    <>
+    <SoknadFormWrapper
+      onNext={handleSubmit((data) => {
+        setSøknadData(søknadDispatch, data);
+        completeAndGoToNextStep(stepWizardDispatch);
+      })}
+      onBack={() => onBackClick()}
+      onCancel={() => onCancelClick()}
+      nextButtonText={'Neste steg'}
+      backButtonText={'Forrige steg'}
+      cancelButtonText={'Avbryt søknad'}
+      errors={errors}
+    >
       <Heading size="large" level="2">
-        {pageTitle}
+        {getText('steps.yrkesskade.title')}
       </Heading>
       <GuidePanel>
         <BodyLong>{getText('steps.yrkesskade.guide.info.text')}</BodyLong>
@@ -74,7 +103,7 @@ export const Yrkesskade = ({
         </ReadMore>
       </GuidePanel>
       <RadioGroupWrapper
-        name={`${YRKESSKADE}.value`}
+        name={`${YRKESSKADE}`}
         legend={getText(`form.${YRKESSKADE}.legend`)}
         control={control}
         error={errors?.[YRKESSKADE]?.message}
@@ -111,6 +140,6 @@ export const Yrkesskade = ({
           </ul>
         </Alert>
       )}
-    </>
+    </SoknadFormWrapper>
   );
 };

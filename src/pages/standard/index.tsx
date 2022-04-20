@@ -27,7 +27,7 @@ import { Veiledning } from './Veiledning/Veiledning';
 import { hentSokerOppslag, useSokerOppslag } from '../../context/sokerOppslagContext';
 import { Behandlere } from './Behandlere';
 import { Medlemskap } from './Medlemskap/Medlemskap';
-import { Yrkesskade } from './Yrkesskade';
+import { Yrkesskade } from './Yrkesskade/Yrkesskade';
 import { AndreUtbetalinger } from './AndreUtbetalinger/AndreUtbetalinger';
 import { Barnetillegg } from './Barnetillegg/Barnetillegg';
 import Oppsummering from './Oppsummering/Oppsummering';
@@ -186,11 +186,9 @@ export const StandardPage = (): JSX.Element => {
         <Step order={3} name={StepNames.YRKESSKADE} label={'Yrkesskade'}>
           <Yrkesskade
             getText={getText}
-            watch={watch}
-            errors={errors}
-            control={control}
-            setValue={setValue}
-            pageTitle={pageTitle}
+            onCancelClick={onDeleteSøknad}
+            onBackClick={onPreviousStep}
+            søknad={søknadState?.søknad}
           />
         </Step>
         <Step order={4} name={StepNames.ANDRE_UTBETALINGER} label={'Andre utbetalinger'}>

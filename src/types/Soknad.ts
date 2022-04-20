@@ -20,7 +20,7 @@ export type UtenlandsPeriode = {
   iArbeid: boolean;
   utenlandsId?: string;
 };
-type Yrkesskade = FieldAndLabel<string>;
+type Yrkesskade = string;
 type Medlemskap = {
   harBoddINorgeSiste5År?: JaEllerNei;
   harArbeidetINorgeSiste5År?: JaEllerNei;

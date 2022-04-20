@@ -365,7 +365,7 @@
     },
     "yrkesskade": {
       "legend": "Har du en yrkesskade eller yrkessykdom?",
-      "required": "Venligst velg et av alternativene"
+      "required": "Venligst svar på om du har en yrkesskade eller yrkessykdom"
     },
     "andreUtbetalinger": {
       "stønad": {
