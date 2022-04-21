@@ -233,7 +233,12 @@ export const StandardPage = (): JSX.Element => {
           />
         </Step>
         <Step order={9} name={StepNames.VEDLEGG} label={'Vedlegg'}>
-          <Vedlegg getText={getText} control={control} />
+          <Vedlegg
+            getText={getText}
+            onCancelClick={onDeleteSøknad}
+            onBackClick={onPreviousStep}
+            søknad={søknadState?.søknad}
+          />
         </Step>
         <Step order={10} name={StepNames.OPPSUMMERING} label={'Oppsummering'}>
           <Oppsummering getText={getText} errors={errors} control={control} />

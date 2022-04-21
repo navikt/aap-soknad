@@ -22,11 +22,13 @@ interface Props {
 
 const Student = ({ getText, onBackClick, onCancelClick, søknad }: Props) => {
   const schema = yup.object().shape({
-    [STUDENT]: yup
-      .string()
-      .required(getText('form.student.required'))
-      .oneOf([JaEllerNei.JA, JaEllerNei.NEI], getText('form.student.required'))
-      .typeError(getText('form.student.required')),
+    [STUDENT]: yup.object().shape({
+      [ER_STUDENT]: yup
+        .string()
+        .required(getText('form.student.required'))
+        .oneOf([JaEllerNei.JA, JaEllerNei.NEI], getText('form.student.required'))
+        .typeError(getText('form.student.required')),
+    }),
   });
   const { søknadDispatch } = useSoknadContext();
   const { stepWizardDispatch } = useStepWizard();
@@ -67,10 +69,10 @@ const Student = ({ getText, onBackClick, onCancelClick, søknad }: Props) => {
         error={errors?.[STUDENT]?.[ER_STUDENT]?.message}
       >
         <Radio value={JaEllerNei.JA}>
-          <BodyShort>Ja</BodyShort>
+          <BodyShort>{JaEllerNei.JA}</BodyShort>
         </Radio>
         <Radio value={JaEllerNei.NEI}>
-          <BodyShort>Nei</BodyShort>
+          <BodyShort>{JaEllerNei.NEI}</BodyShort>
         </Radio>
       </RadioGroupWrapper>
     </SoknadFormWrapper>
