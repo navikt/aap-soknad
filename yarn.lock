@@ -762,10 +762,33 @@
   resolved "https://registry.yarnpkg.com/@navikt/ds-css/-/ds-css-0.16.12.tgz#4e5b87f7145abd6fd2d301704d7b5d57ba3888c6"
   integrity sha512-I9LFGQo5zyR0xtzr5SIs8eU2bt8HEaACzxxPWwWgkSO9rM6vI4cLzqVQu8cxYsozSsRLGDPkfHjoucBptf14BQ==
 
+"@navikt/ds-css@^0.10.0":
+  version "0.10.0"
+  resolved "https://registry.yarnpkg.com/@navikt/ds-css/-/ds-css-0.10.0.tgz#6835cb70f5ee83581d4a0838ffe1e87558102f40"
+  integrity sha512-lqb3z/Zm9wz+dBcAGAC3Ign/nLu0Bo8RRSxdbzhH8l7CUPC084YLmKC/FlcAIyPhIKsLtkYXbIKp02/PTy/4Pw==
+
+"@navikt/ds-datepicker@2.0.0":
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/@navikt/ds-datepicker/-/ds-datepicker-2.0.0.tgz#bda6545c511efe137fdd94eb10777e29476c7262"
+  integrity sha512-BnyS2Hwu5r0L4uVP0+grlGplaqATTE2e35/i5lBkGwgG0SZhkRkKpzbhxx3VZskJQEen2J35RFOSw2HnpNjCbg==
+  dependencies:
+    "@navikt/ds-css" "^0.10.0"
+    "@navikt/ds-react" "^0.11.0"
+    focus-trap-react "^8.8.2"
+    less "^4.1.2"
+    uuid "^8.3.2"
+
 "@navikt/ds-icons@0.8.6", "@navikt/ds-icons@^0.8.6":
   version "0.8.6"
   resolved "https://registry.yarnpkg.com/@navikt/ds-icons/-/ds-icons-0.8.6.tgz#d5237b20a086c83291d5fcb02d6d5206c93bde45"
   integrity sha512-3s3fLI2Pg3xRdeiZdIePZoOoEIK/UuMzafZQHrSg57VhupPlZmf1jLYbR+i0bXmkeRuq7kT3hKdoakRMzDEYLw==
+  dependencies:
+    uuid "^8.3.2"
+
+"@navikt/ds-icons@^0.5.10":
+  version "0.5.10"
+  resolved "https://registry.yarnpkg.com/@navikt/ds-icons/-/ds-icons-0.5.10.tgz#9cf9dba666b96abb3d72494e8847849ab207f0d0"
+  integrity sha512-quBaILBT6mznJOUaSXH1bLx5Ao8LFW6Xj5wc/txy9zg07yOAl+60vxyADl2Uk5pl8hfXrflejV9bcxY6zWv/Lg==
   dependencies:
     uuid "^8.3.2"
 
@@ -779,6 +802,21 @@
     "@popperjs/core" "^2.10.1"
     "@radix-ui/react-tabs" "0.1.5"
     "@radix-ui/react-toggle-group" "0.1.5"
+    classnames "^2.2.6"
+    react-collapse "^5.1.0"
+    react-merge-refs "^1.1.0"
+    react-modal "3.14.3"
+    react-popper "^2.2.5"
+    uuid "^8.3.2"
+
+"@navikt/ds-react@^0.11.0":
+  version "0.11.10"
+  resolved "https://registry.yarnpkg.com/@navikt/ds-react/-/ds-react-0.11.10.tgz#f22c298d2792158ef0cf8d8fc261342f1718afff"
+  integrity sha512-dTgiGULXdYQfuoIdn98s3Q6OIg5x9sYIVntlKXx6+9wtZRbWZ1dCCzXYqrSiZd7vd6B5jkjodmxEfSlvEAGoQQ==
+  dependencies:
+    "@material-ui/core" "^4.12.3"
+    "@navikt/ds-icons" "^0.5.10"
+    "@popperjs/core" "^2.10.1"
     classnames "^2.2.6"
     react-collapse "^5.1.0"
     react-merge-refs "^1.1.0"
@@ -4228,6 +4266,20 @@ flatted@^3.1.0:
   resolved "https://registry.yarnpkg.com/flatted/-/flatted-3.2.4.tgz#28d9969ea90661b5134259f312ab6aa7929ac5e2"
   integrity sha512-8/sOawo8tJ4QOBX8YlQBMxL8+RLZfxMQOif9o0KUKTNTjMYElWPE0r/m5VNFxTRd0NSw8qSy8dajrwX4RYI1Hw==
 
+focus-trap-react@^8.8.2:
+  version "8.9.2"
+  resolved "https://registry.yarnpkg.com/focus-trap-react/-/focus-trap-react-8.9.2.tgz#af19c6d65bedeba925859d7ec51c41d8d2c30855"
+  integrity sha512-m6TQQHLcqkisc6Qq92q1yYzzOaxo34Szh5FQOXzky7028PXFEhuUxScTbT7EG9qL0QG7B+oR2ZbxyU0lK4kIwQ==
+  dependencies:
+    focus-trap "^6.7.3"
+
+focus-trap@^6.7.3:
+  version "6.8.0"
+  resolved "https://registry.yarnpkg.com/focus-trap/-/focus-trap-6.8.0.tgz#6b853176593cc68a511e54a6ca466bcbe9e5601b"
+  integrity sha512-VXObAEbVGSAV1FqeveDY1X4jegkl8qjewUCDU2VYk+smVgZHW9wcpfyEpD4UuTkmzg3y+r4Xx2x0gCSJVowMaw==
+  dependencies:
+    tabbable "5.3.0"
+
 follow-redirects@^1.0.0:
   version "1.14.7"
   resolved "https://registry.yarnpkg.com/follow-redirects/-/follow-redirects-1.14.7.tgz#2004c02eb9436eee9a21446a6477debf17e81685"
@@ -5773,7 +5825,7 @@ lazy-ass@^1.6.0:
   resolved "https://registry.yarnpkg.com/lazy-ass/-/lazy-ass-1.6.0.tgz#7999655e8646c17f089fdd187d150d3324d54513"
   integrity sha1-eZllXoZGwX8In90YfRUNMyTVRRM=
 
-less@^4.1.1:
+less@^4.1.1, less@^4.1.2:
   version "4.1.2"
   resolved "https://registry.yarnpkg.com/less/-/less-4.1.2.tgz#6099ee584999750c2624b65f80145f8674e4b4b0"
   integrity sha512-EoQp/Et7OSOVu0aJknJOtlXZsnr8XE8KwuzTHOLeVSEx8pVWUICc8Q0VYRHgzyjX78nMEyC/oztWFbgyhtNfDA==
@@ -7856,6 +7908,11 @@ symbol-tree@^3.2.4:
   version "3.2.4"
   resolved "https://registry.yarnpkg.com/symbol-tree/-/symbol-tree-3.2.4.tgz#430637d248ba77e078883951fb9aa0eed7c63fa2"
   integrity sha512-9QNk5KwDF+Bvz+PyObkmSYjI5ksVUYtjW7AU22r2NKcfLJcXp96hkDWU3+XndOsUb+AQ9QhfzfCT2O+CNWT5Tw==
+
+tabbable@5.3.0:
+  version "5.3.0"
+  resolved "https://registry.yarnpkg.com/tabbable/-/tabbable-5.3.0.tgz#1c745a67e8cbdc0a3e0c19e912f28ef90514a510"
+  integrity sha512-BS+sw22/pUGaIZr8Ro8E+NeJ3bhvYgMHJKEAhr9pGj22MqaD60qyrvGJBSe6AlrOHR8Y41nA0IvMmgf4lVWC9Q==
 
 term-size@^2.2.1:
   version "2.2.1"
