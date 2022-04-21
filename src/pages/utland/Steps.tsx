@@ -97,7 +97,7 @@ export const StepSummary = ({ getText, data, control, errors }: SummaryProps) =>
       <Heading size="medium" level="2">
         {getText('summary')}
       </Heading>
-      {Object.entries(data)
+      {Object.entries(data ?? {})
         .filter(([key, val]) => !!val)
         .map(([key, val]) => (
           <div key={key}>

@@ -24,7 +24,7 @@ interface Props {
   children: ReactNode;
 }
 
-const soknadContextInititalState = {
+export const soknadContextInititalState = {
   version: 1,
   type: undefined,
   currentStep: undefined,
