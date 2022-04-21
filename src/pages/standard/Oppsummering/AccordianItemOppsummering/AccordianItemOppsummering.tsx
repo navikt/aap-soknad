@@ -1,13 +1,16 @@
-import { Accordion, BodyShort, Label } from '@navikt/ds-react';
+import { Accordion, BodyShort, Button, Cell, Grid, Label } from '@navikt/ds-react';
 import React, { useState } from 'react';
 import { FieldAndLabel } from '../../../../types/SoknadStandard';
 import { isDate } from 'date-fns';
 import { formatDate } from '../../../../utils/date';
 import * as classes from './AccordianItemOppsummering.module.css';
+import { Edit } from '@navikt/ds-icons';
 
 type SummaryAccordianItemProps = {
   title: string;
   data: any;
+  onEdit?: () => void;
+  showEdit?: boolean;
   children?: React.ReactChild | React.ReactChild[];
 };
 const formatValue = (val: any) => {
@@ -16,7 +19,13 @@ const formatValue = (val: any) => {
   }
   return val;
 };
-const AccordianItemOppsummering = ({ data, title, children }: SummaryAccordianItemProps) => {
+const AccordianItemOppsummering = ({
+  data,
+  title,
+  children,
+  onEdit,
+  showEdit = true,
+}: SummaryAccordianItemProps) => {
   const [open, setOpen] = useState<boolean>(false);
   const list: Array<FieldAndLabel<any>> = Object.entries(data)
     .map(([, val]: [string, any]) => {
@@ -51,6 +60,16 @@ const AccordianItemOppsummering = ({ data, title, children }: SummaryAccordianIt
           </div>
         ))}
         {children}
+        {showEdit && (
+          <Grid>
+            <Cell xs={6}>
+              <Button variant={'tertiary'} onClick={onEdit}>
+                <Edit />
+                Endre opplysninger
+              </Button>
+            </Cell>
+          </Grid>
+        )}
       </Accordion.Content>
     </Accordion.Item>
   );
