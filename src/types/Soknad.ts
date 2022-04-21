@@ -37,7 +37,7 @@ export type Behandler = {
   telefon: string;
 };
 type Student = {
-  erStudent?: FieldAndLabel<JaEllerNei>;
+  erStudent?: JaEllerNei;
 };
 type AndreUtbetalinger = {
   lønn?: string;
@@ -74,7 +74,7 @@ interface Soknad {
   student?: Student;
   andreUtbetalinger?: AndreUtbetalinger;
   barnetillegg?: Barn[];
-  tilleggsopplysninger?: FieldAndLabel<string>;
+  tilleggsopplysninger?: string;
   ferie?: Ferie;
   vedlegg?: {
     name: string;

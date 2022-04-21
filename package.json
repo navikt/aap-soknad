@@ -67,7 +67,7 @@
     "lint": "yarn lint:jsts",
     "lint:jsts": "npx eslint .",
     "test": "jest",
-    "testtest": "jest StartDato.test.tsx",
+    "testtest": "jest Student.test.tsx",
     "cypress:run": "cypress run",
     "cypress:open": "cypress open"
   },

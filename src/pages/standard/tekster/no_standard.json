@@ -450,7 +450,8 @@
       }
     },
     "student": {
-      "legend": "Er du student nå?"
+      "legend": "Er du student nå?",
+      "required": "Venligst svar på om du er student nå"
     },
     "tilleggsopplysninger": {
       "label": "Hvis du har flere opplysninger du mener er viktig for søknaden din, kan du skrive dem her (valgfritt)"

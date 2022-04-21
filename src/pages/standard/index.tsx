@@ -31,10 +31,10 @@ import { Yrkesskade } from './Yrkesskade/Yrkesskade';
 import { AndreUtbetalinger } from './AndreUtbetalinger/AndreUtbetalinger';
 import { Barnetillegg } from './Barnetillegg/Barnetillegg';
 import Oppsummering from './Oppsummering/Oppsummering';
-import Tilleggsopplysninger from './Tilleggsopplysninger';
+import Tilleggsopplysninger from './Tilleggsopplysninger/Tilleggsopplysninger';
 import Vedlegg from '../Vedlegg/Vedlegg';
 import StartDato from './StartDato/StartDato';
-import Student from './Student';
+import Student from './Student/Student';
 import Kvittering from './Kvittering/Kvittering';
 import { fetchPOST } from '../../api/fetch';
 export enum StepNames {
@@ -217,14 +217,19 @@ export const StandardPage = (): JSX.Element => {
           />
         </Step>
         <Step order={7} name={StepNames.STUDENT} label={'Student'}>
-          <Student getText={getText} errors={errors} control={control} setValue={setValue} />
+          <Student
+            getText={getText}
+            onCancelClick={onDeleteSøknad}
+            onBackClick={onPreviousStep}
+            søknad={søknadState?.søknad}
+          />
         </Step>
         <Step order={8} name={StepNames.TILLEGGSOPPLYSNINGER} label={'Tilleggsopplysninger'}>
           <Tilleggsopplysninger
             getText={getText}
-            errors={errors}
-            control={control}
-            setValue={setValue}
+            onCancelClick={onDeleteSøknad}
+            onBackClick={onPreviousStep}
+            søknad={søknadState?.søknad}
           />
         </Step>
         <Step order={9} name={StepNames.VEDLEGG} label={'Vedlegg'}>
