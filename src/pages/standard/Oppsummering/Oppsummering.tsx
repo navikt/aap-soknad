@@ -104,10 +104,16 @@ const Oppsummering = ({ getText, errors, control }: OppsummeringProps) => {
               <Heading size={'small'} level={'3'}>
                 {getText('steps.oppsummering.helseopplysninger.fastlege')}
               </Heading>
-              <BodyShort>{fastlege?.fulltNavn}</BodyShort>
-              <BodyShort>{fastlege?.legekontor}</BodyShort>
-              <BodyShort>{fastlege?.adresse}</BodyShort>
-              <BodyShort>{`Telefon: ${fastlege?.telefon}`}</BodyShort>
+              {!fastlege ? (
+                <BodyShort>Ingen fastlege registrert</BodyShort>
+              ) : (
+                <>
+                  <BodyShort>{fastlege?.fulltNavn}</BodyShort>
+                  <BodyShort>{fastlege?.legekontor}</BodyShort>
+                  <BodyShort>{fastlege?.adresse}</BodyShort>
+                  <BodyShort>{`Telefon: ${fastlege?.telefon}`}</BodyShort>
+                </>
+              )}
             </article>
             {søknadState?.søknad?.behandlere?.map((behandler) => (
               <OppsummeringBehandler getText={getText} behandler={behandler} />
