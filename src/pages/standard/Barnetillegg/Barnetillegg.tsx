@@ -123,10 +123,9 @@ export const Barnetillegg = ({ getText, errors, control }: BarnetilleggProps) =>
       {fields.map((barn, index) => {
         return (
           <article key={barn?.fnr} className={classes.barneKort}>
-            <Heading
-              size={'xsmall'}
-              level={'2'}
-            >{`${barn?.navn?.fornavn} ${barn?.navn?.mellomnavn} ${barn?.navn?.etternavn}`}</Heading>
+            <Heading size={'xsmall'} level={'2'}>{`${barn?.navn?.fornavn} ${
+              barn?.navn?.mellomnavn ? barn?.navn?.mellomnavn : ''
+            } ${barn?.navn?.etternavn}`}</Heading>
             <BodyShort>{`Fødselsnummer: ${barn?.fnr}`}</BodyShort>
             {barn?.manueltOpprettet && barn?.harInntekt ? (
               <Grid>
