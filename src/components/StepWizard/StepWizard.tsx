@@ -83,7 +83,7 @@ const StepWizard = ({ children, hideLabels = false }: StepWizardProps) => {
           }}
           className={classes?.backLink}
         >
-          <Back />
+          <Back title={'Tilbake'} />
           Tilbake
         </Link>
       </div>
