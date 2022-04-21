@@ -59,7 +59,7 @@ export const StandardPage = (): JSX.Element => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [oppslagLoading, setOppslagLoading] = useState<boolean>(true);
   const [showVeiledning, setShowVeiledning] = useState<boolean>(true);
-  const [showKvittering, setShowKvittering] = useState<boolean>(false);
+  const [showKvittering, setShowKvittering] = useState<boolean>(true);
   const { søknadState, søknadDispatch } = useSoknadContext();
   const { oppslagDispatch, søker, fastlege } = useSokerOppslag();
   const { currentStep, currentStepIndex, stepWizardDispatch } = useStepWizard();
