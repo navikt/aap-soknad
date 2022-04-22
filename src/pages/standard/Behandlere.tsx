@@ -63,7 +63,7 @@ export const Behandlere = ({ getText, fastlege, control }: BehandlereProps) => {
     setShowNyBehandler(true);
   };
   const saveNyBehandler = () => {
-    if (!selectedBehandler) {
+    if (selectedBehandler === undefined) {
       append({ firstname, lastname, legekontor, gateadresse, postnummer, poststed, telefon });
     } else {
       update(selectedBehandler, {
@@ -133,7 +133,14 @@ export const Behandlere = ({ getText, fastlege, control }: BehandlereProps) => {
       )}
       {!showNyBehandler && (
         <div>
-          <Button variant="tertiary" type="button" onClick={() => setShowNyBehandler(true)}>
+          <Button
+            variant="tertiary"
+            type="button"
+            onClick={() => {
+              setSelectedBehandler(undefined);
+              setShowNyBehandler(true);
+            }}
+          >
             <Add />
             {getText('steps.fastlege.buttonAddNyBehandler')}
           </Button>
