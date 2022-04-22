@@ -26,7 +26,7 @@ const AccordianItemOppsummering = ({
   onEdit,
   showEdit = true,
 }: SummaryAccordianItemProps) => {
-  const [open, setOpen] = useState<boolean>(true);
+  const [open, setOpen] = useState<boolean>(false);
   const list: Array<FieldAndLabel<any>> = Object.entries(data)
     .map(([, val]: [string, any]) => {
       return { label: val?.label, value: val?.value };
