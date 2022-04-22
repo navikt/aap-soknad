@@ -35,6 +35,14 @@ const OppsummeringKontaktinfo = ({ getText, søker }: Props) => {
           </span>
         </ReadMore>
       </div>
+      <div>
+        <Label>{'E-post'}</Label>
+        <BodyShort>{'dinepost@online.no'}</BodyShort>
+      </div>
+      <div>
+        <Label>{'Telefonnummer'}</Label>
+        <BodyShort>{'+47 99999999'}</BodyShort>
+      </div>
     </>
   );
 };
