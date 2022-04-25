@@ -59,7 +59,11 @@ const Vedlegg = ({ getText, onBackClick, onCancelClick, søknad }: Props) => {
         <BodyShort>{getText(`steps.vedlegg.guide`)}</BodyShort>
       </GuidePanel>
       <BodyShort>
-        <Label>{getText('steps.vedlegg.attachmentListDescription')}</Label>
+        {vedleggState?.requiredVedlegg?.length > 0 ? (
+          <Label>{getText('steps.vedlegg.attachmentListDescription')}</Label>
+        ) : (
+          <Label>Ut fra dine svar har vi ikke registrert noen vedlegg som må lastes opp</Label>
+        )}
         <ReadMore header={'Kan jeg laste opp andre vedlegg?'} type={'button'}>
           {'Hvis du har noe annet du også ønsker å legge ved, kan du også laste opp dette her.'}
         </ReadMore>

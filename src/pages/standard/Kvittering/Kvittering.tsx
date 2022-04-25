@@ -1,9 +1,9 @@
 import { GetText } from '../../../hooks/useTexts';
-import { Alert, BodyLong, Heading, Link } from '@navikt/ds-react';
+import { Alert, BodyLong, Button, Heading, Link } from '@navikt/ds-react';
 import React from 'react';
-import TextWithLink from '../../../components/TextWithLink';
 import * as classes from './Kvittering.module.css';
 import { SøkerView } from '../../../context/sokerOppslagContext';
+import { Download } from '@navikt/ds-icons';
 
 interface StudentProps {
   getText: GetText;
@@ -26,18 +26,20 @@ const Kvittering = ({ getText, søker }: StudentProps) => {
           <li>E-post: dittnavn@online.no</li>
         </ul>
       </BodyLong>
-      <BodyLong>
-        <TextWithLink
-          text={'$ og få informasjon om veien videre.'}
-          links={[
-            {
-              name: 'Se søknaden din (åpnes i ny fane)',
-              href: 'https://www.nav.no',
-            },
-          ]}
-        />
-      </BodyLong>
-      <Link href={'https://www.nav.no/no/ditt-nav'}>Gå til DittNAV</Link>
+      <Link target={'_blank'} href={'https://www.nav.no'}>
+        Se søknaden din (åpnes i ny fane)
+      </Link>
+      <Link
+        target={'_blank'}
+        onClick={() => window && window.alert('vær så god')}
+        className={classes?.linkButton}
+      >
+        <Download />
+        Last ned søknaden som pdf
+      </Link>
+      <form action={'https://www.nav.no/no/ditt-nav'}>
+        <Button variant={'primary'}>Gå til Ditt NAV</Button>
+      </form>
     </div>
   );
 };

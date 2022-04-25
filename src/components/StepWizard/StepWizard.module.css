@@ -6,3 +6,12 @@
   align-items: center;
   justify-content: center;
 }
+.backButtonContainer {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  padding: var(--navds-spacing-5) 0;
+}
+.backLink {
+  cursor: pointer;
+}

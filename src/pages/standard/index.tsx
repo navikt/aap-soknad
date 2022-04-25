@@ -104,7 +104,9 @@ export const StandardPage = (): JSX.Element => {
   if (showKvittering)
     return (
       <>
-        <PageHeader align="center">{getText('pagetitle')}</PageHeader>
+        <PageHeader align="center" className={classes?.pageHeader}>
+          {getText('pagetitle')}
+        </PageHeader>
         <Kvittering getText={getText} søker={søker} />
       </>
     );

@@ -9,3 +9,6 @@
 .kvitteringContent h2 {
   text-align: center;
 }
+.linkButton {
+  cursor: pointer;
+}

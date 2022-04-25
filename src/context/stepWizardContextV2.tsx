@@ -17,6 +17,7 @@ interface DispatchStepWizardAction {
     | 'SET_ACTIVE_STEP'
     | 'COMPLETE_AND_GOTO_NEXT_STEP'
     | 'RESET_STEP_WIZARD'
+    | 'GOTO_NAMED_STEP'
     | 'GOTO_PREVIOUS_STEP';
 }
 type StepWizardState = {
@@ -82,6 +83,17 @@ function stateReducer(state: StepWizardState, action: DispatchStepWizardAction) 
         stepList: newStepList,
       };
     }
+    case 'GOTO_NAMED_STEP': {
+      const stepIndex = state.stepList.findIndex((e) => e.name === action.payload);
+      const newStepList = state.stepList.map((step, index) => ({
+        ...step,
+        active: index === stepIndex,
+      }));
+      return {
+        ...state,
+        stepList: newStepList,
+      };
+    }
     default: {
       throw new Error(`Unhandled action type: ${action.type}`);
     }
@@ -138,6 +150,9 @@ export const completeAndGoToNextStep = async (dispatch: Dispatch<DispatchStepWiz
 };
 export const goToPreviousStep = async (dispatch: Dispatch<DispatchStepWizardAction>) => {
   dispatch({ type: 'GOTO_PREVIOUS_STEP' });
+};
+export const goToNamedStep = async (dispatch: Dispatch<DispatchStepWizardAction>, name: string) => {
+  dispatch({ type: 'GOTO_NAMED_STEP', payload: name });
 };
 export const resetStepWizard = async (dispatch: Dispatch<DispatchStepWizardAction>) => {
   dispatch({ type: 'RESET_STEP_WIZARD' });
