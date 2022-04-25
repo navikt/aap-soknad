@@ -13,10 +13,8 @@ const OppsummeringBarn = ({ barn }: OppsummeringBarnProps) => {
     <article className={classes?.oppsummeringBarn}>
       <Label>{'Navn'}</Label>
       <BodyShort>{formatNavn(barn?.navn)}</BodyShort>
-      <Label>{barn?.erForsørger?.label}</Label>
-      <BodyShort>{barn?.erForsørger?.value}</BodyShort>
-      <Label>{barn?.adoptertEllerFosterBarn?.label}</Label>
-      <BodyShort>{barn?.adoptertEllerFosterBarn?.value}</BodyShort>
+      <Label>{'Har inntekt over 1G:'}</Label>
+      <BodyShort>{barn?.harInntekt}</BodyShort>
     </article>
   );
 };

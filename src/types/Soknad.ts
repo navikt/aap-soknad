@@ -10,8 +10,8 @@ export type Navn = {
   etternavn: string;
 };
 export type Periode = {
-  fraDato?: string;
-  tilDato?: string;
+  fraDato?: Date;
+  tilDato?: Date;
 };
 export type UtenlandsPeriode = {
   land: string;

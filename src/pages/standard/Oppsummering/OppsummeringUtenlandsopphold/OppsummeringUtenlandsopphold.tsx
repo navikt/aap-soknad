@@ -13,27 +13,27 @@ const OppsummeringUtenlandsopphold = ({ getText, opphold }: Props) => {
   return (
     <>
       {opphold?.map((etOpphold) => (
-        <div>
+        <div style={{ paddingLeft: '12px' }}>
           <div>
-            <Label>{etOpphold?.land?.label}</Label>
-            <BodyShort>{etOpphold?.land?.value}</BodyShort>
+            <Label>{'Land'}</Label>
+            <BodyShort>{etOpphold?.land}</BodyShort>
           </div>
           <div>
             <Label>{getText('steps.oppsummering.periode')}</Label>
-            <BodyShort>{`${formatDate(etOpphold?.fraDato?.value)} - ${formatDate(
-              etOpphold?.tilDato?.value
+            <BodyShort>{`${formatDate(etOpphold?.fraDato)} - ${formatDate(
+              etOpphold?.tilDato
             )}`}</BodyShort>
           </div>
-          {etOpphold?.iArbeid?.value && (
+          {etOpphold?.iArbeid !== undefined && (
             <div>
-              <Label>{etOpphold?.iArbeid?.label}</Label>
-              <BodyShort>{etOpphold?.iArbeid?.value}</BodyShort>
+              <Label>{'Jobbet i perioden'}</Label>
+              <BodyShort>{etOpphold?.iArbeid}</BodyShort>
             </div>
           )}
-          {etOpphold?.utenlandsId?.value && (
+          {etOpphold?.utenlandsId && (
             <div>
-              <Label>{etOpphold?.utenlandsId?.label}</Label>
-              <BodyShort>{etOpphold?.utenlandsId?.value}</BodyShort>
+              <Label>{getText('form.utenlandsperiode.utenlandsId.label')}</Label>
+              <BodyShort>{etOpphold?.utenlandsId}</BodyShort>
             </div>
           )}
         </div>

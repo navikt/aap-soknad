@@ -1,4 +1,4 @@
-import { Control, FieldErrors } from 'react-hook-form';
+import { FieldValues, useForm } from 'react-hook-form';
 import Soknad from '../../../types/Soknad';
 import { GetText } from '../../../hooks/useTexts';
 import { Accordion, BodyShort, Cell, Grid, Heading, Label } from '@navikt/ds-react';
@@ -13,18 +13,57 @@ import OppsummeringKontaktinfo from './OppsummeringKontaktinfo/OppsummeringKonta
 import { useSokerOppslag } from '../../../context/sokerOppslagContext';
 import OppsummeringUtenlandsopphold from './OppsummeringUtenlandsopphold/OppsummeringUtenlandsopphold';
 import OppsummeringBehandler from './OppsummeringBehandler/OppsummeringBehandler';
+import { formatDate } from '../../../utils/date';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from 'yup';
+import SoknadFormWrapper from '../../../components/SoknadFormWrapper/SoknadFormWrapper';
 
 interface OppsummeringProps {
-  control: Control<Soknad>;
   getText: GetText;
-  errors: FieldErrors;
+  onBackClick: () => void;
+  onCancelClick: () => void;
+  onSubmitSoknad: (data: Soknad) => void;
 }
 
-const Oppsummering = ({ getText, errors, control }: OppsummeringProps) => {
+const Oppsummering = ({
+  getText,
+  onBackClick,
+  onCancelClick,
+  onSubmitSoknad,
+}: OppsummeringProps) => {
   const { søknadState } = useSoknadContext();
   const { søker, fastlege } = useSokerOppslag();
+  const schema = yup.object().shape({});
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FieldValues>({
+    resolver: yupResolver(schema),
+    defaultValues: {},
+  });
+  const SummaryRowIfExists = ({ labelKey, value }: { labelKey: string; value?: any }) => {
+    return value ? (
+      <BodyShort>
+        <Label>{getText(labelKey)}</Label>
+        <span>{value}</span>
+      </BodyShort>
+    ) : (
+      <></>
+    );
+  };
   return (
-    <>
+    <SoknadFormWrapper
+      onNext={handleSubmit((data) => {
+        onSubmitSoknad(data);
+      })}
+      onBack={() => onBackClick()}
+      onCancel={() => onCancelClick()}
+      nextButtonText={'Neste steg'}
+      backButtonText={'Forrige steg'}
+      cancelButtonText={'Avbryt søknad'}
+      errors={errors}
+    >
       <Heading size="large" level="2">
         {getText('steps.oppsummering.title')}
       </Heading>
@@ -39,6 +78,26 @@ const Oppsummering = ({ getText, errors, control }: OppsummeringProps) => {
           }}
           title={'Startdato og ferie'}
         >
+          <SummaryRowIfExists
+            labelKey={'form.startDato.label'}
+            value={formatDate(søknadState?.søknad?.startDato)}
+          />
+          <SummaryRowIfExists
+            labelKey={'form.ferie.skalHaFerie.legend'}
+            value={søknadState?.søknad?.ferie?.skalHaFerie}
+          />
+          <div>
+            <Label>{getText('form.ferie.skalHaFerie.legend')}</Label>
+            <BodyShort>{søknadState?.søknad?.ferie?.skalHaFerie}</BodyShort>
+          </div>
+          <SummaryRowIfExists
+            labelKey={'form.ferie.ferieType.legend'}
+            value={søknadState?.søknad?.ferie?.type}
+          />
+          <SummaryRowIfExists
+            labelKey={'form.ferie.antallDager.label'}
+            value={søknadState?.søknad?.ferie?.antallDager}
+          />
           {isNonEmptyPeriode(søknadState?.søknad?.ferie?.periode) ? (
             <div>
               <Label>{'Planlagt ferie'}</Label>
@@ -52,11 +111,26 @@ const Oppsummering = ({ getText, errors, control }: OppsummeringProps) => {
           data={søknadState?.søknad?.medlemskap}
           title={getText('steps.medlemskap.title')}
         >
+          <SummaryRowIfExists
+            labelKey={'form.medlemskap.boddINorge.legend'}
+            value={søknadState?.søknad?.medlemskap?.harBoddINorgeSiste5År}
+          />
+          <SummaryRowIfExists
+            labelKey={'form.medlemskap.arbeidINorge.legend'}
+            value={søknadState?.søknad?.medlemskap?.harArbeidetINorgeSiste5År}
+          />
+          <SummaryRowIfExists
+            labelKey={'form.medlemskap.arbeidUtenforNorge.legend'}
+            value={søknadState?.søknad?.medlemskap?.arbeidetUtenforNorgeFørSykdom}
+          />
           {søknadState?.søknad?.medlemskap?.utenlandsOpphold ? (
-            <OppsummeringUtenlandsopphold
-              getText={getText}
-              opphold={søknadState?.søknad?.medlemskap?.utenlandsOpphold}
-            />
+            <>
+              <Label>{'Utenlandsopphold'}</Label>
+              <OppsummeringUtenlandsopphold
+                getText={getText}
+                opphold={søknadState?.søknad?.medlemskap?.utenlandsOpphold}
+              />
+            </>
           ) : (
             <></>
           )}
@@ -64,27 +138,44 @@ const Oppsummering = ({ getText, errors, control }: OppsummeringProps) => {
         <AccordianItemOppsummering
           data={{ yrkesskade: søknadState?.søknad?.yrkesskade }}
           title={getText('steps.yrkesskade.title')}
-        />
+        >
+          <SummaryRowIfExists
+            labelKey={`form.yrkesskade.legend`}
+            value={søknadState?.søknad?.yrkesskade}
+          />
+        </AccordianItemOppsummering>
         <AccordianItemOppsummering
           data={søknadState?.søknad?.andreUtbetalinger}
           title={getText('steps.andre_utbetalinger.title')}
         >
           <>
-            {[søknadState?.søknad?.andreUtbetalinger?.annet]?.map((e) => (
-              <div>
-                <Label>{'Annet:'}</Label>
-                <Grid>
-                  <Cell xs={4}>
-                    <Label>{e?.utbetalerNavn?.label}</Label>
-                    <BodyShort>{e?.utbetalerNavn?.value}</BodyShort>
-                  </Cell>
-                  <Cell xs={4}>
-                    <Label>{e?.utbetalingsNavn?.label}</Label>
-                    <BodyShort>{e?.utbetalingsNavn?.value}</BodyShort>
-                  </Cell>
-                </Grid>
-              </div>
-            ))}
+            <SummaryRowIfExists
+              labelKey={`form.andreUtbetalinger.lønn.legend`}
+              value={søknadState?.søknad?.andreUtbetalinger?.lønn}
+            />
+            <SummaryRowIfExists
+              labelKey={`form.andreUtbetalinger.stønad.legend`}
+              value={søknadState?.søknad?.andreUtbetalinger?.stønad?.join(', ')}
+            />
+            {søknadState?.søknad?.andreUtbetalinger?.annet ? (
+              [søknadState?.søknad?.andreUtbetalinger?.annet]?.map((e, index) => (
+                <div key={index}>
+                  <Label>{'Annet:'}</Label>
+                  <Grid>
+                    <Cell xs={4}>
+                      <Label>{getText('form.andreUtbetalinger.annet.utbetaling.label')}</Label>
+                      <BodyShort>{e?.utbetalingsNavn}</BodyShort>
+                    </Cell>
+                    <Cell xs={4}>
+                      <Label>{getText('form.andreUtbetalinger.annet.utbetaler.label')}</Label>
+                      <BodyShort>{e?.utbetalerNavn}</BodyShort>
+                    </Cell>
+                  </Grid>
+                </div>
+              ))
+            ) : (
+              <></>
+            )}
           </>
         </AccordianItemOppsummering>
         <AccordianItemOppsummering data={{}} title={getText('steps.fastlege.title')}>
@@ -111,11 +202,21 @@ const Oppsummering = ({ getText, errors, control }: OppsummeringProps) => {
         <AccordianItemOppsummering
           data={søknadState?.søknad?.student}
           title={getText('steps.student.title')}
-        />
+        >
+          <SummaryRowIfExists
+            labelKey={`form.student.legend`}
+            value={søknadState?.søknad?.student?.erStudent}
+          />
+        </AccordianItemOppsummering>
         <AccordianItemOppsummering
           data={{ tilleggsopplysninger: søknadState?.søknad?.tilleggsopplysninger }}
           title={getText('steps.tilleggsopplysninger.title')}
-        />
+        >
+          <SummaryRowIfExists
+            labelKey={`form.tilleggsopplysninger.label`}
+            value={søknadState?.søknad?.tilleggsopplysninger}
+          />
+        </AccordianItemOppsummering>
         <AccordianItemOppsummering data={{}} title={getText('steps.vedlegg.title')}>
           <>
             {søknadState?.søknad?.vedlegg?.map((vedlegg) => (
@@ -130,7 +231,7 @@ const Oppsummering = ({ getText, errors, control }: OppsummeringProps) => {
         name="søknadBekreft"
         error={errors?.søknadBekreft?.message}
       />
-    </>
+    </SoknadFormWrapper>
   );
 };
 export default Oppsummering;

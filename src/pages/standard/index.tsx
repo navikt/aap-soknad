@@ -1,26 +1,19 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTexts } from '../../hooks/useTexts';
 import { PageHeader } from '@navikt/ds-react';
 import * as tekster from './tekster';
 import { Step, StepWizard } from '../../components/StepWizard';
-import { getStepSchemas } from './schema';
-import { useForm, SubmitHandler } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
+import { SubmitHandler } from 'react-hook-form';
 import {
-  setStepList,
   completeAndGoToNextStep,
   useStepWizard,
   resetStepWizard,
   goToPreviousStep,
 } from '../../context/stepWizardContextV2';
 import Soknad from '../../types/Soknad';
-import { FormErrorSummary } from '../../components/schema/FormErrorSummary';
 import {
   useSoknadContext,
-  hentSoknadState,
-  SøknadType,
   slettLagretSoknadState,
-  setSøknadData,
   addBarnIfMissing,
 } from '../../context/soknadContext';
 import { Veiledning } from './Veiledning/Veiledning';
@@ -39,7 +32,6 @@ import Kvittering from './Kvittering/Kvittering';
 import { fetchPOST } from '../../api/fetch';
 export enum StepNames {
   VEILEDNING = 'VEILEDNING',
-  KONTAKTINFO = 'KONTAKTINFO',
   STARTDATO = 'STARTDATO',
   FASTLEGE = 'FASTLEGE',
   MEDLEMSKAP = 'MEDLEMSKAP',
@@ -50,41 +42,16 @@ export enum StepNames {
   VEDLEGG = 'VEDLEGG',
   TILLEGGSOPPLYSNINGER = 'TILLEGGSOPPLYSNINGER',
   OPPSUMMERING = 'OPPSUMMERING',
-  KVITTERING = 'KVITTERING',
 }
-const initFieldVals: Soknad = {};
+
 export const StandardPage = (): JSX.Element => {
-  const [setIsLoading] = useState<boolean>(false);
   const [oppslagLoading, setOppslagLoading] = useState<boolean>(true);
   const [showVeiledning, setShowVeiledning] = useState<boolean>(true);
   const [showKvittering, setShowKvittering] = useState<boolean>(false);
   const { søknadState, søknadDispatch } = useSoknadContext();
   const { oppslagDispatch, søker, fastlege } = useSokerOppslag();
-  const { currentStep, currentStepIndex, stepWizardDispatch } = useStepWizard();
+  const { currentStep, stepWizardDispatch } = useStepWizard();
   const { getText } = useTexts(tekster);
-  const StepSchemas = getStepSchemas(getText);
-  const currentSchema = useMemo(() => {
-    return StepSchemas[currentStepIndex];
-  }, [currentStepIndex, StepSchemas]);
-  const pageTitle = useMemo(
-    () => getText(`steps.${currentStep?.name.toLowerCase()}.title`),
-    [getText, currentStep]
-  );
-  const buttonText = useMemo(() => {
-    const path = `steps.${currentStep?.name.toLowerCase()}.buttontext`;
-    return getText(path, 'buttontext');
-  }, [getText, currentStep]);
-  const {
-    control,
-    handleSubmit,
-    watch,
-    formState: { errors },
-    reset,
-    setValue,
-  } = useForm<Soknad>({
-    resolver: yupResolver(currentSchema),
-    defaultValues: { ...initFieldVals },
-  });
   useEffect(() => {
     const getSoknadStateAndOppslag = async () => {
       // Wait to test cache
@@ -98,12 +65,7 @@ export const StandardPage = (): JSX.Element => {
     };
     getSoknadStateAndOppslag();
   }, []);
-  // Reset form to hydrate with data from søknadstate
-  useEffect(() => {
-    reset({ ...søknadState.søknad });
-  }, [currentStep, reset]);
-  const myHandleSubmit: SubmitHandler<Soknad> = async (data) => {
-    setSøknadData(søknadDispatch, data);
+  const submitSoknad: SubmitHandler<Soknad> = async (data) => {
     if (currentStep?.name === StepNames.OPPSUMMERING) {
       // const postResponse = await postSøknad(søknadState?.søknad);
       // if (postResponse?.ok) {
@@ -111,16 +73,14 @@ export const StandardPage = (): JSX.Element => {
       // } else {
       //   // show post error
       // }
-      setIsLoading(true);
       setTimeout(() => {
-        setIsLoading(false);
         setShowKvittering(true);
       }, 2000);
     } else {
       completeAndGoToNextStep(stepWizardDispatch);
     }
   };
-  const postSøknad = async (data?: SoknadForm<Soknad>) =>
+  const postSøknad = async (data?: Soknad) =>
     fetchPOST('/aap/soknad-api/innsending/standard', {
       ...data,
     });
@@ -161,12 +121,6 @@ export const StandardPage = (): JSX.Element => {
     <>
       <PageHeader align="center">{getText('pagetitle')}</PageHeader>
       <StepWizard hideLabels={true}>
-        {/*<form*/}
-        {/*  onSubmit={handleSubmit(myHandleSubmit)}*/}
-        {/*  className={classes?.soknadForm}*/}
-        {/*  autoComplete="off"*/}
-        {/*>*/}
-        <FormErrorSummary errors={errors} />
         <Step order={1} name={StepNames.STARTDATO} label={'Søknadsdato'}>
           <StartDato
             getText={getText}
@@ -241,32 +195,13 @@ export const StandardPage = (): JSX.Element => {
           />
         </Step>
         <Step order={10} name={StepNames.OPPSUMMERING} label={'Oppsummering'}>
-          <Oppsummering getText={getText} errors={errors} control={control} />
+          <Oppsummering
+            getText={getText}
+            onCancelClick={onDeleteSøknad}
+            onBackClick={onPreviousStep}
+            onSubmitSoknad={submitSoknad}
+          />
         </Step>
-        {/*<div className={classes?.buttonWrapper}>*/}
-        {/*  <Button*/}
-        {/*    variant="secondary"*/}
-        {/*    type="button"*/}
-        {/*    onClick={() => {*/}
-        {/*      if (currentStep?.name === StepNames.STARTDATO) {*/}
-        {/*        setShowVeiledning(true);*/}
-        {/*      } else {*/}
-        {/*        goToPreviousStep(stepWizardDispatch);*/}
-        {/*      }*/}
-        {/*    }}*/}
-        {/*  >*/}
-        {/*    {getText('backButtontext')}*/}
-        {/*  </Button>*/}
-        {/*  <Button variant="primary" type="submit" disabled={isLoading} loading={isLoading}>*/}
-        {/*    {!isLoading && <BodyShort>{buttonText}</BodyShort>}*/}
-        {/*  </Button>*/}
-        {/*</div>*/}
-        {/*<div className={classes?.cancelButtonWrapper}>*/}
-        {/*  <Button variant="tertiary" type="button" onClick={() => onDeleteSøknad()}>*/}
-        {/*    {getText('cancelButtonText')}*/}
-        {/*  </Button>*/}
-        {/*</div>*/}
-        {/*</form>*/}
       </StepWizard>
     </>
   );

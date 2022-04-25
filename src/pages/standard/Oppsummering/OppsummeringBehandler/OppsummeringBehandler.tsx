@@ -14,7 +14,7 @@ const OppsummeringBehandler = ({ getText, behandler }: Props) => {
       <Heading size={'small'} level={'3'}>
         {getText('steps.oppsummering.helseopplysninger.behandler')}
       </Heading>
-      <BodyShort>{behandler?.name}</BodyShort>
+      <BodyShort>{`${behandler?.firstname} ${behandler?.lastname}`}</BodyShort>
       <BodyShort>{behandler?.legekontor}</BodyShort>
       <BodyShort>{`${behandler?.gateadresse}, ${behandler?.postnummer} ${behandler?.poststed}`}</BodyShort>
       <BodyShort>{`Telefon: ${behandler?.telefon}`}</BodyShort>
