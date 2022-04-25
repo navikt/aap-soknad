@@ -1,15 +1,15 @@
 import React from 'react';
 import { BodyShort, Label, ReadMore } from '@navikt/ds-react';
-import { SøkerView } from '../../../../context/sokerOppslagContext';
+import { useSokerOppslag } from '../../../../context/sokerOppslagContext';
 import { GetText } from '../../../../hooks/useTexts';
 import TextWithLink from '../../../../components/TextWithLink';
 
 interface Props {
   getText: GetText;
-  søker?: SøkerView;
 }
 
-const OppsummeringKontaktinfo = ({ getText, søker }: Props) => {
+const OppsummeringKontaktinfo = ({ getText }: Props) => {
+  const { søker, kontaktInfo } = useSokerOppslag();
   return (
     <>
       <div>
@@ -34,6 +34,14 @@ const OppsummeringKontaktinfo = ({ getText, søker }: Props) => {
             />
           </span>
         </ReadMore>
+      </div>
+      <div>
+        <Label>{'Telefonnummer'}</Label>
+        <BodyShort>{kontaktInfo?.mobil}</BodyShort>
+      </div>
+      <div>
+        <Label>{'E-post adresse'}</Label>
+        <BodyShort>{kontaktInfo?.epost}</BodyShort>
       </div>
     </>
   );

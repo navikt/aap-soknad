@@ -32,7 +32,7 @@ const Oppsummering = ({
   onSubmitSoknad,
 }: OppsummeringProps) => {
   const { søknadState } = useSoknadContext();
-  const { søker, fastlege } = useSokerOppslag();
+  const { fastlege } = useSokerOppslag();
   const schema = yup.object().shape({});
   const {
     control,
@@ -69,7 +69,7 @@ const Oppsummering = ({
       </Heading>
       <Accordion>
         <AccordianItemOppsummering data={{}} title={'Om deg'}>
-          <OppsummeringKontaktinfo getText={getText} søker={søker} />
+          <OppsummeringKontaktinfo getText={getText} />
         </AccordianItemOppsummering>
         <AccordianItemOppsummering
           data={{

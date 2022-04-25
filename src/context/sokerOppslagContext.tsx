@@ -43,6 +43,10 @@ export type SøkerView = {
   fullAdresse?: string;
   fødselsnummer?: string;
 };
+export type KontaktInfoView = {
+  epost?: string;
+  mobil?: string;
+};
 export type SokerOppslagState = {
   søker: Soker;
   fastlege: Fastlege;
@@ -51,10 +55,11 @@ const søkerOppslagInitialValue = {
   barn: [],
 };
 type SokerOppslagContextState = {
-  oppslagState: SokerOppslagState;
+  // oppslagState: SokerOppslagState;
   oppslagDispatch: Dispatch<DispatchSokerOppslagAction>;
   søker: SøkerView;
   fastlege?: FastlegeView;
+  kontaktInfo?: KontaktInfoView;
 };
 const SokerOppslagContext = createContext<SokerOppslagContextState | undefined>(undefined);
 
@@ -100,12 +105,20 @@ function SokerOppslagProvider({ children }: Props) {
     }),
     [state]
   );
+  const kontaktInfo: KontaktInfoView | undefined = useMemo(
+    () => ({
+      epost: state?.kontaktinformasjon?.epost,
+      mobil: state?.kontaktinformasjon?.mobil,
+    }),
+    [state]
+  );
   const contextValue = useMemo(() => {
     return {
-      oppslagState: state,
+      // oppslagState: state,
       oppslagDispatch: dispatch,
       søker,
       fastlege,
+      kontaktInfo,
     };
   }, [state, dispatch]);
   return (
