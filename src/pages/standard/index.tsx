@@ -30,6 +30,7 @@ import StartDato from './StartDato/StartDato';
 import Student from './Student/Student';
 import Kvittering from './Kvittering/Kvittering';
 import { fetchPOST } from '../../api/fetch';
+import * as classes from './standard.module.css';
 export enum StepNames {
   VEILEDNING = 'VEILEDNING',
   STARTDATO = 'STARTDATO',

@@ -68,16 +68,10 @@ const Oppsummering = ({
         {getText('steps.oppsummering.title')}
       </Heading>
       <Accordion>
-        <AccordianItemOppsummering data={{}} title={'Om deg'}>
+        <AccordianItemOppsummering title={'Om deg'}>
           <OppsummeringKontaktinfo getText={getText} />
         </AccordianItemOppsummering>
-        <AccordianItemOppsummering
-          data={{
-            startDato: søknadState?.søknad?.startDato,
-            ...søknadState?.søknad?.ferie,
-          }}
-          title={'Startdato og ferie'}
-        >
+        <AccordianItemOppsummering title={'Startdato og ferie'}>
           <SummaryRowIfExists
             labelKey={'form.startDato.label'}
             value={formatDate(søknadState?.søknad?.startDato)}
@@ -107,10 +101,7 @@ const Oppsummering = ({
             <></>
           )}
         </AccordianItemOppsummering>
-        <AccordianItemOppsummering
-          data={søknadState?.søknad?.medlemskap}
-          title={getText('steps.medlemskap.title')}
-        >
+        <AccordianItemOppsummering title={getText('steps.medlemskap.title')}>
           <SummaryRowIfExists
             labelKey={'form.medlemskap.boddINorge.legend'}
             value={søknadState?.søknad?.medlemskap?.harBoddINorgeSiste5År}
@@ -135,19 +126,13 @@ const Oppsummering = ({
             <></>
           )}
         </AccordianItemOppsummering>
-        <AccordianItemOppsummering
-          data={{ yrkesskade: søknadState?.søknad?.yrkesskade }}
-          title={getText('steps.yrkesskade.title')}
-        >
+        <AccordianItemOppsummering title={getText('steps.yrkesskade.title')}>
           <SummaryRowIfExists
             labelKey={`form.yrkesskade.legend`}
             value={søknadState?.søknad?.yrkesskade}
           />
         </AccordianItemOppsummering>
-        <AccordianItemOppsummering
-          data={søknadState?.søknad?.andreUtbetalinger}
-          title={getText('steps.andre_utbetalinger.title')}
-        >
+        <AccordianItemOppsummering title={getText('steps.andre_utbetalinger.title')}>
           <>
             <SummaryRowIfExists
               labelKey={`form.andreUtbetalinger.lønn.legend`}
@@ -178,7 +163,7 @@ const Oppsummering = ({
             )}
           </>
         </AccordianItemOppsummering>
-        <AccordianItemOppsummering data={{}} title={getText('steps.fastlege.title')}>
+        <AccordianItemOppsummering title={getText('steps.fastlege.title')}>
           <>
             <article>
               <Heading size={'small'} level={'3'}>
@@ -194,30 +179,24 @@ const Oppsummering = ({
             ))}
           </>
         </AccordianItemOppsummering>
-        <AccordianItemOppsummering data={{}} title={getText('steps.barnetillegg.title')}>
+        <AccordianItemOppsummering title={getText('steps.barnetillegg.title')}>
           {søknadState?.søknad?.barnetillegg?.map((barn) => (
             <OppsummeringBarn barn={barn} />
           ))}
         </AccordianItemOppsummering>
-        <AccordianItemOppsummering
-          data={søknadState?.søknad?.student}
-          title={getText('steps.student.title')}
-        >
+        <AccordianItemOppsummering title={getText('steps.student.title')}>
           <SummaryRowIfExists
             labelKey={`form.student.legend`}
             value={søknadState?.søknad?.student?.erStudent}
           />
         </AccordianItemOppsummering>
-        <AccordianItemOppsummering
-          data={{ tilleggsopplysninger: søknadState?.søknad?.tilleggsopplysninger }}
-          title={getText('steps.tilleggsopplysninger.title')}
-        >
+        <AccordianItemOppsummering title={getText('steps.tilleggsopplysninger.title')}>
           <SummaryRowIfExists
             labelKey={`form.tilleggsopplysninger.label`}
             value={søknadState?.søknad?.tilleggsopplysninger}
           />
         </AccordianItemOppsummering>
-        <AccordianItemOppsummering data={{}} title={getText('steps.vedlegg.title')}>
+        <AccordianItemOppsummering title={getText('steps.vedlegg.title')}>
           <>
             {søknadState?.søknad?.vedlegg?.map((vedlegg) => (
               <BodyShort>{vedlegg?.name}</BodyShort>

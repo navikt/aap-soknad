@@ -5,3 +5,6 @@
   justify-content: space-between;
   gap: var(--navds-spacing-10)
 }
+.formContent h2{
+  text-align: center;
+}

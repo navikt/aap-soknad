@@ -12,8 +12,8 @@ interface Props {
 const OppsummeringUtenlandsopphold = ({ getText, opphold }: Props) => {
   return (
     <>
-      {opphold?.map((etOpphold) => (
-        <div style={{ paddingLeft: '12px' }}>
+      {opphold?.map((etOpphold, index) => (
+        <div key={index} style={{ paddingLeft: '12px' }}>
           <div>
             <Label>{'Land'}</Label>
             <BodyShort>{etOpphold?.land}</BodyShort>
@@ -24,7 +24,7 @@ const OppsummeringUtenlandsopphold = ({ getText, opphold }: Props) => {
               etOpphold?.tilDato
             )}`}</BodyShort>
           </div>
-          {etOpphold?.iArbeid !== undefined && (
+          {etOpphold?.iArbeid && (
             <div>
               <Label>{'Jobbet i perioden'}</Label>
               <BodyShort>{etOpphold?.iArbeid}</BodyShort>
