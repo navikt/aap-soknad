@@ -37,8 +37,8 @@ const ARBEID_UTENFOR_NORGE_FØR_SYKDOM = 'arbeidetUtenforNorgeFørSykdom';
 const ARBEID_I_NORGE = 'harArbeidetINorgeSiste5År';
 const MEDLEMSKAP = 'medlemskap';
 const validateArbeidINorge = (boddINorge: JaEllerNei) => boddINorge === JaEllerNei.NEI;
-const validateArbeidUtenforNorgeFørSykdom = (boddINorge: JaEllerNei, arbeidINorge: JaEllerNei) =>
-  boddINorge === JaEllerNei.JA || arbeidINorge === JaEllerNei.JA;
+const validateArbeidUtenforNorgeFørSykdom = (boddINorge: JaEllerNei) =>
+  boddINorge === JaEllerNei.JA;
 const validateUtenlandsPeriode = (arbeidINorge: JaEllerNei, arbeidUtenforNorge: JaEllerNei) => {
   return arbeidUtenforNorge === JaEllerNei.JA || arbeidINorge === JaEllerNei.NEI;
 };
@@ -159,13 +159,10 @@ export const Medlemskap = ({ getText, onBackClick, onCancelClick, søknad }: Pro
         <Heading size="large" level="2">
           {getText('steps.medlemskap.title')}
         </Heading>
-        <GuidePanel>
-          {getText(`steps.medlemskap.guide`)}
-          <ul>
-            <li>{getText('steps.medlemskap.guideBullet1')}</li>
-            <li>{getText('steps.medlemskap.guideBullet2')}</li>
-          </ul>
-        </GuidePanel>
+        <GuidePanel>{getText(`steps.medlemskap.guide`)}</GuidePanel>
+        <Heading size={'small'} level={'3'}>
+          Bo
+        </Heading>
         <RadioGroupWrapper
           name={`${MEDLEMSKAP}.${BODD_I_NORGE}`}
           legend={getText('form.medlemskap.boddINorge.legend')}
@@ -187,46 +184,58 @@ export const Medlemskap = ({ getText, onBackClick, onCancelClick, søknad }: Pro
           </Radio>
         </RadioGroupWrapper>
         {showArbeidINorge && (
-          <RadioGroupWrapper
-            name={`${MEDLEMSKAP}.${ARBEID_I_NORGE}`}
-            legend={getText('form.medlemskap.arbeidINorge.legend')}
-            control={control}
-            error={errors?.[MEDLEMSKAP]?.[ARBEID_I_NORGE]?.message}
-          >
-            <ReadMore
-              header={getText('steps.medlemskap.andreYtelserReadMore.title')}
-              type={'button'}
+          <>
+            <Heading size={'small'} level={'3'}>
+              Jobb
+            </Heading>
+            <RadioGroupWrapper
+              name={`${MEDLEMSKAP}.${ARBEID_I_NORGE}`}
+              legend={getText('form.medlemskap.arbeidINorge.legend')}
+              control={control}
+              error={errors?.[MEDLEMSKAP]?.[ARBEID_I_NORGE]?.message}
             >
-              <BodyLong>{getText('steps.medlemskap.andreYtelserReadMore.text')}</BodyLong>
-            </ReadMore>
-            <Radio value={JaEllerNei.JA}>
-              <BodyShort>Ja</BodyShort>
-            </Radio>
-            <Radio value={JaEllerNei.NEI}>
-              <BodyShort>Nei</BodyShort>
-            </Radio>
-          </RadioGroupWrapper>
+              <ReadMore
+                header={getText('steps.medlemskap.andreYtelserReadMore.title')}
+                type={'button'}
+              >
+                <BodyLong>{getText('steps.medlemskap.andreYtelserReadMore.text')}</BodyLong>
+              </ReadMore>
+              <Radio value={JaEllerNei.JA}>
+                <BodyShort>Ja</BodyShort>
+              </Radio>
+              <Radio value={JaEllerNei.NEI}>
+                <BodyShort>Nei</BodyShort>
+              </Radio>
+            </RadioGroupWrapper>
+          </>
         )}
         {showArbeidUtenforNorgeFørSykdom && (
-          <RadioGroupWrapper
-            name={`${MEDLEMSKAP}.${ARBEID_UTENFOR_NORGE_FØR_SYKDOM}`}
-            legend={getText('form.medlemskap.arbeidUtenforNorge.legend')}
-            control={control}
-            error={errors?.[MEDLEMSKAP]?.[ARBEID_UTENFOR_NORGE_FØR_SYKDOM]?.message}
-          >
-            <ReadMore
-              header={getText('form.medlemskap.arbeidUtenforNorge.readMore.header')}
-              type={'button'}
+          // Gjelder §11-19 og beregning av utbetaling. Skal kun komme opp hvis §11-2 er oppfyltt
+          <>
+            <Heading size={'small'} level={'3'}>
+              Jobb
+            </Heading>
+            <RadioGroupWrapper
+              name={`${MEDLEMSKAP}.${ARBEID_UTENFOR_NORGE_FØR_SYKDOM}`}
+              legend={getText('form.medlemskap.arbeidUtenforNorge.legend')}
+              description={getText('form.medlemskap.arbeidUtenforNorge.helpText')}
+              control={control}
+              error={errors?.[MEDLEMSKAP]?.[ARBEID_UTENFOR_NORGE_FØR_SYKDOM]?.message}
             >
-              <BodyLong>{getText('form.medlemskap.arbeidUtenforNorge.readMore.text')}</BodyLong>
-            </ReadMore>
-            <Radio value={JaEllerNei.JA}>
-              <BodyShort>Ja</BodyShort>
-            </Radio>
-            <Radio value={JaEllerNei.NEI}>
-              <BodyShort>Nei</BodyShort>
-            </Radio>
-          </RadioGroupWrapper>
+              <ReadMore
+                header={getText('form.medlemskap.arbeidUtenforNorge.readMore.header')}
+                type={'button'}
+              >
+                <BodyLong>{getText('form.medlemskap.arbeidUtenforNorge.readMore.text')}</BodyLong>
+              </ReadMore>
+              <Radio value={JaEllerNei.JA}>
+                <BodyShort>Ja</BodyShort>
+              </Radio>
+              <Radio value={JaEllerNei.NEI}>
+                <BodyShort>Nei</BodyShort>
+              </Radio>
+            </RadioGroupWrapper>
+          </>
         )}
 
         {showLeggTilUtenlandsPeriode && <BodyLong>{utenlandsPeriodeInfo}</BodyLong>}
