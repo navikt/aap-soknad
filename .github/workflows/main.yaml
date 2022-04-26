@@ -1,5 +1,6 @@
 name: "Build and deploy aap-soknad"
 on:
+  workflow_dispatch:
   push:
     branches:
       - "main"
