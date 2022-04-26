@@ -23,8 +23,10 @@
       },
       "søknadsdato": {
         "title": "Søknadsdato er viktig for eventuell utbetaling av AAP ",
-        "paragraphs": ["Du kan tidligst få AAP fra og med den dagen vi mottar søknaden din. Derfor kan det være lurt å sende søknaden, selv om du ikke har alle dokumenter som du får beskjed om å legge ved. Du kan ettersende vedlegg.",
-        "Det er ikke et krav at du har mottatt sykepenger før du søker om AAP."]
+        "paragraphs": [
+          "Du kan tidligst få AAP fra og med den dagen vi mottar søknaden din. Derfor kan det være lurt å sende søknaden, selv om du ikke har alle dokumenter som du får beskjed om å legge ved. Du kan ettersende vedlegg.",
+          "Det er ikke et krav at du har mottatt sykepenger før du søker om AAP."
+        ]
       },
       "rettogplikt": {
         "title": "Dine rettigheter og plikter",
@@ -426,7 +428,7 @@
       }
     },
     "barnetillegg": {
-      "legend": "Har barnet årlig inntekt over 1G?",
+      "legend": "Har barnet årlig inntekt over ANTALL_KRONERkr (1G)?",
       "ja": "Ja",
       "nei": "Nei",
       "add": {
@@ -481,7 +483,7 @@
         "label": "Til dato (dd.mm.åååå)",
         "required": "Vennligst angi til dato"
       }
-  }
+    }
   },
   "innsending": {
     "feil": "En feil oppstod. Vennligst vent litt, og forsøk å sende meldingen på nytt."
