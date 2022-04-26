@@ -7,6 +7,8 @@ import {
   GuidePanel,
   Heading,
   ReadMore,
+  Cell,
+  Grid,
 } from '@navikt/ds-react';
 import React, { useState, useEffect, useMemo } from 'react';
 import { GetText } from '../../../hooks/useTexts';
@@ -71,14 +73,17 @@ export const Medlemskap = ({ getText, onBackClick, onCancelClick, søknad }: Pro
             ),
         otherwise: (yupSchema) => yupSchema.notRequired(),
       }),
-      // [UTENLANDSOPPHOLD]: yup
-      //   .array()
-      //   .notRequired()
-      //   .when(ARBEID_I_NORGE, {
-      //     is: validateUtenlandsPeriode,
-      //     then: (yupSchema) => yupSchema.min(1, 'Legg til utenlandsopphold'),
-      //     otherwise: (yupSchema) => yupSchema.notRequired(),
-      //   }),
+      [UTENLANDSOPPHOLD]: yup.array().when([ARBEID_I_NORGE, ARBEID_UTENFOR_NORGE_FØR_SYKDOM], {
+        is: validateUtenlandsPeriode,
+        then: (yupSchema) => {
+          console.log('validate array');
+          return yupSchema.min(1, 'Legg til utenlandsopphold');
+        },
+        otherwise: (yupSchema) => {
+          console.log('notrequired');
+          return yupSchema.notRequired();
+        },
+      }),
     }),
   });
   const {
@@ -242,14 +247,18 @@ export const Medlemskap = ({ getText, onBackClick, onCancelClick, søknad }: Pro
           </Table.Row>
         ))}
         {showLeggTilUtenlandsPeriode && (
-          <Button
-            variant="tertiary"
-            type="button"
-            onClick={() => setShowUtenlandsPeriodeModal(true)}
-          >
-            <Add />
-            Legg til utenlandsopphold
-          </Button>
+          <Grid>
+            <Cell xs={6}>
+              <Button
+                variant="tertiary"
+                type="button"
+                onClick={() => setShowUtenlandsPeriodeModal(true)}
+              >
+                <Add />
+                Legg til utenlandsopphold
+              </Button>
+            </Cell>
+          </Grid>
         )}
         {errors?.[MEDLEMSKAP]?.[UTENLANDSOPPHOLD]?.message && (
           <div className={'navds-error-message navds-error-message--medium navds-label'}>
