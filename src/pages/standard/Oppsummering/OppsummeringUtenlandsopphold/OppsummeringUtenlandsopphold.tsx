@@ -3,6 +3,7 @@ import { BodyShort, Label } from '@navikt/ds-react';
 import { UtenlandsPeriode } from '../../../../types/Soknad';
 import { formatDate } from '../../../../utils/date';
 import { GetText } from '../../../../hooks/useTexts';
+import { landNavnFraSelector } from '../../../../utils/StringFormatters';
 
 interface Props {
   getText: GetText;
@@ -16,7 +17,7 @@ const OppsummeringUtenlandsopphold = ({ getText, opphold }: Props) => {
         <div key={index} style={{ paddingLeft: '12px' }}>
           <div>
             <Label>{'Land'}</Label>
-            <BodyShort>{etOpphold?.land}</BodyShort>
+            <BodyShort>{landNavnFraSelector(etOpphold?.land)}</BodyShort>
           </div>
           <div>
             <Label>{getText('steps.oppsummering.periode')}</Label>
