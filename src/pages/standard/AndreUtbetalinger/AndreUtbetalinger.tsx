@@ -11,10 +11,9 @@ import {
 } from '@navikt/ds-react';
 import React, { useEffect, useMemo } from 'react';
 import { GetText } from '../../../hooks/useTexts';
-import { Control, FieldErrors, FieldValues, UseFormWatch } from 'react-hook-form';
+import { FieldValues, useForm } from 'react-hook-form';
 import CheckboxGroupWrapper from '../../../components/input/CheckboxGroupWrapper';
 import RadioGroupWrapper from '../../../components/input/RadioGroupWrapper';
-import SoknadStandard from '../../../types/SoknadStandard';
 import TextFieldWrapper from '../../../components/input/TextFieldWrapper';
 import ColorPanel from '../../../components/panel/ColorPanel';
 import {
@@ -23,28 +22,51 @@ import {
   removeRequiredVedlegg,
 } from '../../../context/vedleggContext';
 import { JaEllerNei } from '../../../types/Generic';
+import Soknad from '../../../types/Soknad';
+import * as yup from 'yup';
+import { updateSøknadData, useSoknadContext } from '../../../context/soknadContext';
+import { completeAndGoToNextStep, useStepWizard } from '../../../context/stepWizardContextV2';
+import { yupResolver } from '@hookform/resolvers/yup';
+import SoknadFormWrapper from '../../../components/SoknadFormWrapper/SoknadFormWrapper';
 
-interface AndreUtbetalingerProps {
-  watch: UseFormWatch<FieldValues>;
-  setValue: any;
+interface Props {
   getText: GetText;
-  errors: FieldErrors;
-  control: Control<SoknadStandard>;
+  søknad?: Soknad;
+  onBackClick: () => void;
+  onCancelClick: () => void;
 }
 const ANDRE_UTBETALINGER = 'andreUtbetalinger';
 const LØNN = 'lønn';
 const STØNAD = 'stønad';
 
-export const AndreUtbetalinger = ({
-  getText,
-  errors,
-  control,
-  setValue,
-  watch,
-}: AndreUtbetalingerProps) => {
+export const AndreUtbetalinger = ({ getText, onBackClick, onCancelClick, søknad }: Props) => {
+  const schema = yup.object().shape({
+    [ANDRE_UTBETALINGER]: yup.object().shape({
+      [LØNN]: yup
+        .string()
+        .required(getText('form.andreUtbetalinger.lønn.required'))
+        .oneOf([JaEllerNei.JA, JaEllerNei.NEI], getText('form.andreUtbetalinger.lønn.required'))
+        .typeError(getText('form.andreUtbetalinger.lønn.required')),
+      [STØNAD]: yup.array().min(1, getText('form.andreUtbetalinger.stønad.required')),
+    }),
+  });
   const { vedleggDispatch } = useVedleggContext();
-  const lønnEtterlønnEllerSluttpakke = watch(`${ANDRE_UTBETALINGER}.${LØNN}.value`);
-  const stønadEllerVerv = watch(`${ANDRE_UTBETALINGER}.${STØNAD}.value`);
+  const { søknadDispatch } = useSoknadContext();
+  const { stepWizardDispatch } = useStepWizard();
+  const {
+    control,
+    handleSubmit,
+    watch,
+    setValue,
+    formState: { errors },
+  } = useForm<FieldValues>({
+    resolver: yupResolver(schema),
+    defaultValues: {
+      [ANDRE_UTBETALINGER]: søknad?.andreUtbetalinger,
+    },
+  });
+  const lønnEtterlønnEllerSluttpakke = watch(`${ANDRE_UTBETALINGER}.${LØNN}`);
+  const stønadEllerVerv = watch(`${ANDRE_UTBETALINGER}.${STØNAD}`);
   const StønadAlternativer = useMemo(
     () => ({
       ØKONOMISK_SOSIALHJELP: getText(`form.${ANDRE_UTBETALINGER}.${STØNAD}.økonomiskSosialhjelp`),
@@ -103,33 +125,8 @@ export const AndreUtbetalinger = ({
     return attachments;
   }, [stønadEllerVerv, lønnEtterlønnEllerSluttpakke]);
   useEffect(() => {
-    setValue(
-      `${ANDRE_UTBETALINGER}.${STØNAD}.label`,
-      getText(`form.${ANDRE_UTBETALINGER}.${STØNAD}.legend`)
-    );
-    setValue(
-      `${ANDRE_UTBETALINGER}.${LØNN}.label`,
-      getText(`form.${ANDRE_UTBETALINGER}.${LØNN}.legend`)
-    );
-  }, [getText]);
-  useEffect(() => {
-    if (stønadEllerVerv?.includes(StønadAlternativer.ANNET)) {
-      setValue(
-        `${ANDRE_UTBETALINGER}.annet.utbetalingsNavn.label`,
-        getText('form.andreUtbetalinger.annet.utbetaling.label')
-      );
-      setValue(
-        `${ANDRE_UTBETALINGER}.annet.utbetalerNavn.label`,
-        getText('form.andreUtbetalinger.annet.utbetaler.label')
-      );
-    } else {
-      setValue(`${ANDRE_UTBETALINGER}.annet.utbetalingsNavn.label`, undefined);
-      setValue(`${ANDRE_UTBETALINGER}.annet.utbetalerNavn.label`, undefined);
-    }
-  }, [stønadEllerVerv]);
-  useEffect(() => {
     if (stønadEllerVerv?.length > 1 && stønadEllerVerv?.includes(StønadAlternativer.NEI)) {
-      setValue(`${ANDRE_UTBETALINGER}.${STØNAD}.value`, [StønadAlternativer.NEI]);
+      setValue(`${ANDRE_UTBETALINGER}.${STØNAD}`, [StønadAlternativer.NEI]);
     }
   }, [stønadEllerVerv]);
   useEffect(() => {
@@ -140,14 +137,25 @@ export const AndreUtbetalinger = ({
     addRequiredVedlegg(Attachments, vedleggDispatch);
   }, [Attachments]);
   return (
-    <>
+    <SoknadFormWrapper
+      onNext={handleSubmit((data) => {
+        updateSøknadData(søknadDispatch, data);
+        completeAndGoToNextStep(stepWizardDispatch);
+      })}
+      onBack={() => onBackClick()}
+      onCancel={() => onCancelClick()}
+      nextButtonText={'Neste steg'}
+      backButtonText={'Forrige steg'}
+      cancelButtonText={'Avbryt søknad'}
+      errors={errors}
+    >
       <Heading size="large" level="2">
         {getText(`steps.andre_utbetalinger.title`)}
       </Heading>
       <GuidePanel>{getText(`steps.andre_utbetalinger.guide`)}</GuidePanel>
       <RadioGroupWrapper
         legend={getText(`form.${ANDRE_UTBETALINGER}.${LØNN}.legend`)}
-        name={`${ANDRE_UTBETALINGER}.${LØNN}.value`}
+        name={`${ANDRE_UTBETALINGER}.${LØNN}`}
         control={control}
         error={errors?.[ANDRE_UTBETALINGER]?.[LØNN]?.message}
       >
@@ -165,7 +173,7 @@ export const AndreUtbetalinger = ({
         </Radio>
       </RadioGroupWrapper>
       <CheckboxGroupWrapper
-        name={`${ANDRE_UTBETALINGER}.${STØNAD}.value`}
+        name={`${ANDRE_UTBETALINGER}.${STØNAD}`}
         control={control}
         size="medium"
         legend={getText(`form.${ANDRE_UTBETALINGER}.${STØNAD}.legend`)}
@@ -194,7 +202,7 @@ export const AndreUtbetalinger = ({
             <Grid>
               <Cell xs={7}>
                 <TextFieldWrapper
-                  name={`${ANDRE_UTBETALINGER}.annet.utbetalingsNavn.value`}
+                  name={`${ANDRE_UTBETALINGER}.annet.utbetalingsNavn`}
                   label={getText('form.andreUtbetalinger.annet.utbetaling.label')}
                   control={control}
                 />
@@ -203,7 +211,7 @@ export const AndreUtbetalinger = ({
             <Grid>
               <Cell xs={7}>
                 <TextFieldWrapper
-                  name={`${ANDRE_UTBETALINGER}.annet.utbetalerNavn.value`}
+                  name={`${ANDRE_UTBETALINGER}.annet.utbetalerNavn`}
                   label={getText('form.andreUtbetalinger.annet.utbetaler.label')}
                   control={control}
                 />
@@ -224,6 +232,6 @@ export const AndreUtbetalinger = ({
           {getText('steps.andre_utbetalinger.alertAttachments.uploadInfo')}
         </Alert>
       )}
-    </>
+    </SoknadFormWrapper>
   );
 };

@@ -1,0 +1,10 @@
+.formContent {
+  display: flex;
+  max-width: 600px;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: var(--navds-spacing-10)
+}
+.formContent h2{
+  text-align: center;
+}

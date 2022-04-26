@@ -1,25 +1,57 @@
-import { Control, useFieldArray } from 'react-hook-form';
-import SoknadStandard from '../../types/SoknadStandard';
+import { FieldValues, useFieldArray, useForm } from 'react-hook-form';
+import Soknad from '../../types/Soknad';
 import { GetText } from '../../hooks/useTexts';
 import React from 'react';
 import { Alert, BodyShort, GuidePanel, Heading, Label, ReadMore } from '@navikt/ds-react';
 import FileInput from '../../components/input/FileInput/FileInput';
 import { useVedleggContext } from '../../context/vedleggContext';
 import ScanningGuide from '../../components/ScanningGuide/ScanningGuide';
+import * as yup from 'yup';
+import { updateSøknadData, useSoknadContext } from '../../context/soknadContext';
+import { completeAndGoToNextStep, useStepWizard } from '../../context/stepWizardContextV2';
+import { yupResolver } from '@hookform/resolvers/yup';
+import SoknadFormWrapper from '../../components/SoknadFormWrapper/SoknadFormWrapper';
 
 interface Props {
-  control: Control<SoknadStandard>;
   getText: GetText;
+  søknad?: Soknad;
+  onBackClick: () => void;
+  onCancelClick: () => void;
 }
+const VEDLEGG = 'vedlegg';
 
-const Vedlegg = ({ getText, control }: Props) => {
+const Vedlegg = ({ getText, onBackClick, onCancelClick, søknad }: Props) => {
+  const schema = yup.object().shape({});
   const { vedleggState } = useVedleggContext();
+  const { søknadDispatch } = useSoknadContext();
+  const { stepWizardDispatch } = useStepWizard();
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FieldValues>({
+    resolver: yupResolver(schema),
+    defaultValues: {
+      [VEDLEGG]: søknad?.vedlegg,
+    },
+  });
   const { fields, append, remove } = useFieldArray({
-    name: 'vedlegg',
+    name: VEDLEGG,
     control,
   });
   return (
-    <>
+    <SoknadFormWrapper
+      onNext={handleSubmit((data) => {
+        updateSøknadData(søknadDispatch, data);
+        completeAndGoToNextStep(stepWizardDispatch);
+      })}
+      onBack={() => onBackClick()}
+      onCancel={() => onCancelClick()}
+      nextButtonText={'Neste steg'}
+      backButtonText={'Forrige steg'}
+      cancelButtonText={'Avbryt søknad'}
+      errors={errors}
+    >
       <Heading size="large" level="2">
         {getText('steps.vedlegg.title')}
       </Heading>
@@ -45,9 +77,9 @@ const Vedlegg = ({ getText, control }: Props) => {
       <ReadMore header={getText('steps.vedlegg.taBildeReadMore')} type={'button'}>
         <ScanningGuide getText={getText} />
       </ReadMore>
-      <FileInput name={'vedlegg'} fields={fields} append={append} remove={remove} />
+      <FileInput name={VEDLEGG} fields={fields} append={append} remove={remove} />
       <Alert variant={'info'}>{getText('steps.vedlegg.alertInfo')}</Alert>
-    </>
+    </SoknadFormWrapper>
   );
 };
 export default Vedlegg;

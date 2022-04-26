@@ -1,6 +1,6 @@
 import { BodyShort, Label } from '@navikt/ds-react';
 import React from 'react';
-import { Barn } from '../../../../types/SoknadStandard';
+import { Barn } from '../../../../types/Soknad';
 import { formatNavn } from '../../../../utils/StringFormatters';
 import * as classes from './OppsummeringBarn.module.css';
 
@@ -13,8 +13,8 @@ const OppsummeringBarn = ({ barn }: OppsummeringBarnProps) => {
     <article className={classes?.oppsummeringBarn}>
       <Label>{'Navn'}</Label>
       <BodyShort>{formatNavn(barn?.navn)}</BodyShort>
-      <Label>{barn?.harInntekt?.label}</Label>
-      <BodyShort>{barn?.harInntekt?.value}</BodyShort>
+      <Label>{'Har inntekt over 1G:'}</Label>
+      <BodyShort>{barn?.harInntekt}</BodyShort>
     </article>
   );
 };

@@ -1,6 +1,6 @@
 import React from 'react';
 import { BodyShort } from '@navikt/ds-react';
-import { Periode } from '../../../../types/SoknadStandard';
+import { Periode } from '../../../../types/Soknad';
 import { formatDate } from '../../../../utils/date';
 
 interface Props {
@@ -8,10 +8,9 @@ interface Props {
 }
 
 const OppsummeringPeriode = ({ periode }: Props) => {
+  console.log('periode', periode);
   return (
-    <BodyShort>{`${formatDate(periode?.fraDato?.value)} - ${formatDate(
-      periode?.tilDato?.value
-    )}`}</BodyShort>
+    <BodyShort>{`${formatDate(periode?.fraDato)} - ${formatDate(periode?.tilDato)}`}</BodyShort>
   );
 };
 export default OppsummeringPeriode;

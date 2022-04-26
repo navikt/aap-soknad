@@ -182,6 +182,13 @@ export const handlers = [
             },
           },
         ],
+        kontaktinformasjon: {
+          målform: 'NB',
+          reservert: true,
+          kanVarsles: true,
+          epost: 'navn@epost.no',
+          mobil: '99999999',
+        },
       })
     );
   }),

@@ -275,7 +275,7 @@
     }
   },
   "form": {
-    "riktigeopplysninger": {
+    "veiledningConfirm": {
       "required": "Vennligst bekreft at du har lest og forstått dine rettigheter og plikter."
     },
     "kontaktinfo": {
@@ -345,11 +345,13 @@
     "medlemskap": {
       "boddINorge": {
         "legend": "Har du bodd sammenhengende i Norge de siste 5 årene?",
-        "description": "Dette betyr at du både har hatt folkeregistrert adresse i Norge, og faktisk har oppholdt deg her mesteparten av hvert av disse årene. "
+        "description": "Dette betyr at du både har hatt folkeregistrert adresse i Norge, og faktisk har oppholdt deg her mesteparten av hvert av disse årene. ",
+        "required": "Venligst svar på om du har bodd i Norge de siste 5 årene"
       },
       "arbeidUtenforNorge": {
         "legend": "Har du jobbet utenfor Norge før du ble syk?",
         "description": "Hvis du har jobbet utenfor Norge før du ble syk, kan det i noen tilfeller gjøre at du får mer utbetalt i AAP.",
+        "required": "Venligst svar på om du har jobbet utenfor Norge før du ble syk",
         "readMore": {
           "header": "Hva hvis jeg har fått dagpenger, sykepenger, foreldrepenger eller tilsvarende fra utlandet?",
           "text": "Med “jobb” menes også offentlige ytelser du har fått som erstatning for arbeid utenfor Norge, for eksempel dagpenger, sykepenger og foreldrepenger. Pensjon regnes ikke som erstatning for jobb."
@@ -357,12 +359,13 @@
       },
       "arbeidINorge": {
         "legend": "Har du jobbet sammenhengende i Norge de siste 5 årene?",
-        "description": "Med “jobb” menes også offentlige ytelser du har fått som erstatning for arbeid, for eksempel dagpenger og sykepenger. Foreldrepenger og pensjon regnes ikke som erstatning for jobb."
+        "description": "Med “jobb” menes også offentlige ytelser du har fått som erstatning for arbeid, for eksempel dagpenger og sykepenger. Foreldrepenger og pensjon regnes ikke som erstatning for jobb.",
+        "required": "Venligst svar på om du har jobbet sammenhengende i Norge de siste 5 årene"
       }
     },
     "yrkesskade": {
       "legend": "Har du en yrkesskade eller yrkessykdom?",
-      "required": "Venligst velg et av alternativene"
+      "required": "Venligst svar på om du har en yrkesskade eller yrkessykdom"
     },
     "andreUtbetalinger": {
       "stønad": {
@@ -375,11 +378,12 @@
         "verv": "Godtgjørelse eller lønn for verv",
         "utland": "Ytelser fra utenlandske trygdemyndigheter",
         "annet": "Annet (for eksempel pensjoner eller forsikringsordninger)",
-        "nei": "Nei, ingen"
+        "nei": "Nei, ingen",
+        "required": "Venligst velg minst ett alternativ om utbetalinger du får eller nylig har søkt om"
       },
       "lønn": {
         "legend": "Har du fått eller skal du få ekstra utbetalinger fra arbeidsgiver?",
-        "required": "Venligst velg et av alternativene",
+        "required": "Venligst svar på om du har fått eller skal få ekstra utbetalinger fra arbeidsgiver",
         "ja": "Ja, jeg har fått eller får sluttpakke, etterlønn eller andre goder fra nåværende eller tidligere arbeidsgivere",
         "nei": "Nei, jeg verken har fått eller får sluttpakke, etterlønn eller andre goder fra nåværende eller tidligere arbeidsgivere",
         "vetikke": "Vet ikke"
@@ -446,17 +450,20 @@
       }
     },
     "student": {
-      "legend": "Er du student nå?"
+      "legend": "Er du student nå?",
+      "required": "Venligst svar på om du er student nå"
     },
     "tilleggsopplysninger": {
       "label": "Hvis du har flere opplysninger du mener er viktig for søknaden din, kan du skrive dem her (valgfritt)"
     },
     "startDato": {
-      "label": "Fra hvilken dato søker du AAP (dd.mm.åååå)?"
+      "label": "Fra hvilken dato søker du AAP (dd.mm.åååå)?",
+      "required": "Venligst angi fra hvilken dato du søker AAP"
     },
     "ferie": {
       "skalHaFerie": {
-        "legend": "Planlegger du å ta ferie før startdato på AAP?"
+        "legend": "Planlegger du å ta ferie før startdato på AAP?",
+        "required": "Venligst svar på om du planlegger å ta ferie før AAP"
       },
       "ferieType": {
         "legend": "Vet du hvilken periode du skal ta ferie?",

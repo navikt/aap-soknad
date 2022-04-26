@@ -43,4 +43,9 @@ export const useTexts = (tekstpakke: Tekstpakker) => {
   return { language, pageTexts: filteredTexts, getText };
 };
 
+export const getParagraphs = (path: string, getText: GetText) => {
+  const paragraphs = getText(path);
+  return Array.isArray(paragraphs) ? paragraphs : [];
+};
+
 export default useTexts;

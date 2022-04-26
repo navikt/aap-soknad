@@ -1,8 +1,9 @@
 import React from 'react';
 import { BodyShort, Label } from '@navikt/ds-react';
-import { UtenlandsPeriode } from '../../../../types/SoknadStandard';
+import { UtenlandsPeriode } from '../../../../types/Soknad';
 import { formatDate } from '../../../../utils/date';
 import { GetText } from '../../../../hooks/useTexts';
+import { landNavnFraSelector } from '../../../../utils/StringFormatters';
 
 interface Props {
   getText: GetText;
@@ -12,28 +13,28 @@ interface Props {
 const OppsummeringUtenlandsopphold = ({ getText, opphold }: Props) => {
   return (
     <>
-      {opphold?.map((etOpphold) => (
-        <div>
+      {opphold?.map((etOpphold, index) => (
+        <div key={index} style={{ paddingLeft: '12px' }}>
           <div>
-            <Label>{etOpphold?.land?.label}</Label>
-            <BodyShort>{etOpphold?.land?.value}</BodyShort>
+            <Label>{'Land'}</Label>
+            <BodyShort>{landNavnFraSelector(etOpphold?.land)}</BodyShort>
           </div>
           <div>
             <Label>{getText('steps.oppsummering.periode')}</Label>
-            <BodyShort>{`${formatDate(etOpphold?.fraDato?.value)} - ${formatDate(
-              etOpphold?.tilDato?.value
+            <BodyShort>{`${formatDate(etOpphold?.fraDato)} - ${formatDate(
+              etOpphold?.tilDato
             )}`}</BodyShort>
           </div>
-          {etOpphold?.iArbeid?.value && (
+          {etOpphold?.iArbeid && (
             <div>
-              <Label>{etOpphold?.iArbeid?.label}</Label>
-              <BodyShort>{etOpphold?.iArbeid?.value}</BodyShort>
+              <Label>{'Jobbet i perioden'}</Label>
+              <BodyShort>{etOpphold?.iArbeid}</BodyShort>
             </div>
           )}
-          {etOpphold?.utenlandsId?.value && (
+          {etOpphold?.utenlandsId && (
             <div>
-              <Label>{etOpphold?.utenlandsId?.label}</Label>
-              <BodyShort>{etOpphold?.utenlandsId?.value}</BodyShort>
+              <Label>{getText('form.utenlandsperiode.utenlandsId.label')}</Label>
+              <BodyShort>{etOpphold?.utenlandsId}</BodyShort>
             </div>
           )}
         </div>

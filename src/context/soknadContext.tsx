@@ -3,7 +3,7 @@ import soknadReducer from './soknadReducer';
 import { SoknadAction, SoknadActionKeys } from './soknadActions';
 import { fetchPOST } from '../api/fetch';
 import { StepType } from '../components/StepWizard/Step';
-import SoknadStandard from '../types/SoknadStandard';
+import Soknad from '../types/Soknad';
 import { OppslagBarn } from './sokerOppslagContext';
 export enum SøknadType {
   UTLAND = 'UTLAND',
@@ -13,7 +13,7 @@ export interface SoknadContextState {
   version: number;
   type?: SøknadType;
   lagretCurrentStep?: string;
-  søknad?: SoknadStandard;
+  søknad?: Soknad;
   lagretStepList?: Array<StepType>;
 }
 export interface SoknadContextData {
@@ -64,8 +64,11 @@ export const slettLagretSoknadState = async (
   return !!deleteResponse?.ok;
 };
 
-export const setSøknadData = (dispatch: Dispatch<SoknadAction>, data: SoknadStandard) => {
+export const setSøknadData = (dispatch: Dispatch<SoknadAction>, data: Soknad) => {
   dispatch({ type: SoknadActionKeys.SET_SOKNAD, payload: data });
+};
+export const updateSøknadData = (dispatch: Dispatch<SoknadAction>, data: Soknad) => {
+  dispatch({ type: SoknadActionKeys.UPDATE_SOKNAD, payload: data });
 };
 export const addBarnIfMissing = (dispatch: Dispatch<SoknadAction>, data: OppslagBarn[]) => {
   dispatch({ type: SoknadActionKeys.ADD_BARN_IF_MISSING, payload: data });

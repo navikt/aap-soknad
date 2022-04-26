@@ -9,13 +9,13 @@ const TextWithLink = ({ text, links = [] }: { text: string; links: any[] }) => {
   const textArray = text?.split('$') || [];
   return (
     <>
-      {textArray.map((el: any) => {
+      {textArray.map((el: any, index) => {
         if (el) {
           return el;
         } else {
           const link = childrenList.shift();
           return (
-            <Link target={'_blank'} href={link?.href}>
+            <Link key={index} target={'_blank'} href={link?.href}>
               {link?.name}
             </Link>
           );

@@ -2,13 +2,13 @@ import React, { useEffect, useState } from 'react';
 import countries from 'i18n-iso-countries';
 import SelectWrapper from './SelectWrapper';
 import { Control } from 'react-hook-form';
-import SoknadStandard from '../../types/SoknadStandard';
+import Soknad from '../../types/Soknad';
 
 interface Props {
   name: string;
   label: string;
   error?: string;
-  control: Control<SoknadStandard>;
+  control: Control<Soknad>;
 }
 const CountrySelector = ({ name, label, error, control }: Props) => {
   const [countryList, setCountryList] = useState<string[][]>([]);

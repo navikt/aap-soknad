@@ -451,6 +451,26 @@
     minimatch "^3.0.4"
     strip-json-comments "^3.1.1"
 
+"@floating-ui/core@^0.6.2":
+  version "0.6.2"
+  resolved "https://registry.yarnpkg.com/@floating-ui/core/-/core-0.6.2.tgz#f2813f0e5f3d5ed7af5029e1a082203dadf02b7d"
+  integrity sha512-jktYRmZwmau63adUG3GKOAVCofBXkk55S/zQ94XOorAHhwqFIOFAy1rSp2N0Wp6/tGbe9V3u/ExlGZypyY17rg==
+
+"@floating-ui/dom@^0.4.0":
+  version "0.4.5"
+  resolved "https://registry.yarnpkg.com/@floating-ui/dom/-/dom-0.4.5.tgz#2e88d16646119cc67d44683f75ee99840475bbfa"
+  integrity sha512-b+prvQgJt8pieaKYMSJBXHxX/DYwdLsAWxKYqnO5dO2V4oo/TYBZJAUQCVNjTWWsrs6o4VDrNcP9+E70HAhJdw==
+  dependencies:
+    "@floating-ui/core" "^0.6.2"
+
+"@floating-ui/react-dom@0.6.0":
+  version "0.6.0"
+  resolved "https://registry.yarnpkg.com/@floating-ui/react-dom/-/react-dom-0.6.0.tgz#e58abf75bec1eac01f0adfff1454106bf9d3dd50"
+  integrity sha512-/dF+jpAUtoonjs2lO0F+miqEQlzA9XJGOxWBiJsq/COhK2kz7XzryyJdxfaNEH+RN63vRs9osDolOJXlst50hg==
+  dependencies:
+    "@floating-ui/dom" "^0.4.0"
+    use-isomorphic-layout-effect "^1.1.1"
+
 "@hookform/resolvers@^2.8.4":
   version "2.8.8"
   resolved "https://registry.yarnpkg.com/@hookform/resolvers/-/resolvers-2.8.8.tgz#17cf806485435877fdafce9f3bee6ff68f7f87b6"
@@ -757,10 +777,10 @@
     outvariant "^1.2.0"
     strict-event-emitter "^0.2.0"
 
-"@navikt/ds-css@0.16.12":
-  version "0.16.12"
-  resolved "https://registry.yarnpkg.com/@navikt/ds-css/-/ds-css-0.16.12.tgz#4e5b87f7145abd6fd2d301704d7b5d57ba3888c6"
-  integrity sha512-I9LFGQo5zyR0xtzr5SIs8eU2bt8HEaACzxxPWwWgkSO9rM6vI4cLzqVQu8cxYsozSsRLGDPkfHjoucBptf14BQ==
+"@navikt/ds-css@0.16.20":
+  version "0.16.20"
+  resolved "https://registry.yarnpkg.com/@navikt/ds-css/-/ds-css-0.16.20.tgz#089bb224b80acb0cb7a31f1817b6fc5c74243cdc"
+  integrity sha512-rbpdeelCO/DZ87GDP+rksx+lHIbJdiG1NHmNBPDVpaaZNU8tYTqCGDNRIruzek9mYQcbXAtX2WYllXh1C2TXzA==
 
 "@navikt/ds-css@^0.10.0":
   version "0.10.0"
@@ -778,7 +798,7 @@
     less "^4.1.2"
     uuid "^8.3.2"
 
-"@navikt/ds-icons@0.8.6", "@navikt/ds-icons@^0.8.6":
+"@navikt/ds-icons@0.8.6":
   version "0.8.6"
   resolved "https://registry.yarnpkg.com/@navikt/ds-icons/-/ds-icons-0.8.6.tgz#d5237b20a086c83291d5fcb02d6d5206c93bde45"
   integrity sha512-3s3fLI2Pg3xRdeiZdIePZoOoEIK/UuMzafZQHrSg57VhupPlZmf1jLYbR+i0bXmkeRuq7kT3hKdoakRMzDEYLw==
@@ -792,13 +812,21 @@
   dependencies:
     uuid "^8.3.2"
 
-"@navikt/ds-react@0.17.16":
-  version "0.17.16"
-  resolved "https://registry.yarnpkg.com/@navikt/ds-react/-/ds-react-0.17.16.tgz#4cb7c90c85865dd5fd01a138aa1670af32c726be"
-  integrity sha512-fxh/gXGQjKf/skDiXoBZzceqLR0sd3xv1v2+aui/Z8hy2mr2sepn2wiiWcYKDMu+yR7KIjdrUb7DIvifForjmw==
+"@navikt/ds-icons@^0.8.11":
+  version "0.8.11"
+  resolved "https://registry.yarnpkg.com/@navikt/ds-icons/-/ds-icons-0.8.11.tgz#b9e2e62d0c6145f86c9688a59c97049657af80cb"
+  integrity sha512-1oO4hp1wnJUgLlw/YqT5w+N2UAhEBNuoOD+ngY3QhoQAyj6MLsIkw/778hD93qZAB5f2msfFvDqLUsYOSCHCdQ==
   dependencies:
+    uuid "^8.3.2"
+
+"@navikt/ds-react@0.17.27":
+  version "0.17.27"
+  resolved "https://registry.yarnpkg.com/@navikt/ds-react/-/ds-react-0.17.27.tgz#d826baf51bb8693b30ce0f84de041eb97bb6eeed"
+  integrity sha512-AIB2z+SdK8d/NSsEhuhEsMV1sPFn5em+LcWPdm4nmrPJ3Son7RckKcW2smRkMfrPaaJGzSlqvYTLDkK9z+W3BA==
+  dependencies:
+    "@floating-ui/react-dom" "0.6.0"
     "@material-ui/core" "^4.12.3"
-    "@navikt/ds-icons" "^0.8.6"
+    "@navikt/ds-icons" "^0.8.11"
     "@popperjs/core" "^2.10.1"
     "@radix-ui/react-tabs" "0.1.5"
     "@radix-ui/react-toggle-group" "0.1.5"
@@ -8198,6 +8226,11 @@ url@^0.11.0:
   dependencies:
     punycode "1.3.2"
     querystring "0.2.0"
+
+use-isomorphic-layout-effect@^1.1.1:
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/use-isomorphic-layout-effect/-/use-isomorphic-layout-effect-1.1.2.tgz#497cefb13d863d687b08477d9e5a164ad8c1a6fb"
+  integrity sha512-49L8yCO3iGT/ZF9QttjwLF/ZD9Iwto5LnH5LmEdk/6cFmXddqi2ulF0edxTwjj+7mqvpVVGQWvbXZdn32wRSHA==
 
 util-deprecate@^1.0.1, util-deprecate@^1.0.2, util-deprecate@~1.0.1:
   version "1.0.2"
