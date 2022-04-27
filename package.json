@@ -17,6 +17,7 @@
     "express": "^4.17.1",
     "i18n-iso-countries": "^7.1.0",
     "is-european": "1.0.3",
+    "next": "^12.1.5",
     "prop-types": "^15.7.2",
     "react": "^17.0.2",
     "react-day-picker": "^7.4.10",
@@ -70,7 +71,10 @@
     "test": "jest",
     "testtest": "jest Student.test.tsx",
     "cypress:run": "cypress run",
-    "cypress:open": "cypress open"
+    "cypress:open": "cypress open",
+    "next:dev": "next dev",
+    "next:build": "next build",
+    "next:start": "next start"
   },
   "husky": {
     "hooks": {

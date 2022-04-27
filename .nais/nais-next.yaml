@@ -1,0 +1,43 @@
+apiVersion: "nais.io/v1alpha1"
+kind: "Application"
+metadata:
+  name: "soknad-next"
+  namespace: "aap"
+  labels:
+    "team": "aap"
+spec:
+  image: {{image}}
+  port: 3000
+  liveness:
+    path: "/aap/soknad/api/internal/isAlive"
+    initialDelay: 20
+    timeout: 60
+  readiness:
+    path: "/aap/soknad/api/internal/isReady"
+    initialDelay: 20
+    timeout: 60
+  replicas:
+    min: 2
+    max: 2
+  idporten:
+    enabled: true
+    sidecar:
+      enabled: true
+      level: Level4
+  ingresses:
+    - https://aap-soknad-next.dev.nav.no
+  env:
+  {{#each env}}
+    - name: {{this.name }}
+      value: {{this.value}}
+  {{/each}}
+  tokenx:
+    enabled: true
+  accessPolicy:
+    outbound:
+      rules:
+        - application: aap-soknad-api
+      external:
+        {{#each externals as |host|}}
+        - host: {{host}}
+        {{/each}}
