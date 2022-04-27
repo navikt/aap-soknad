@@ -11,6 +11,10 @@ const moduleExports = {
   typescript: {
     ignoreBuildErrors: true, // Ignorerer feil frem til vi har løst TS-feil i parcel-app
   },
+
+  experimental: {
+    outputStandalone: true,
+  },
 };
 
 module.exports = moduleExports;
