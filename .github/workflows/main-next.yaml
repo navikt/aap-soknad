@@ -47,7 +47,8 @@ jobs:
       - name: "Build and push Docker"
         uses: "docker/build-push-action@v2"
         with:
-          context: Dockerfile-next
+          context: .
+          file: Dockerfile-next
           tags: "${{ env.IMAGE }}"
           push: "true"
           cache-from: "type=gha"
