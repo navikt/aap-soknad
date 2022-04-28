@@ -77,6 +77,10 @@ interface Soknad {
   barnetillegg?: Barn[];
   tilleggsopplysninger?: string;
   ferie?: Ferie;
+  startDatoTilbakeITid?: {
+    hvorfor?: string;
+    begrunnelse?: string;
+  };
   vedlegg?: {
     name: string;
     size: string;

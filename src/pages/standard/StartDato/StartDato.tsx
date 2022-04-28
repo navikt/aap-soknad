@@ -23,7 +23,8 @@ import * as yup from 'yup';
 import SoknadFormWrapper from '../../../components/SoknadFormWrapper/SoknadFormWrapper';
 import { completeAndGoToNextStep, useStepWizard } from '../../../context/stepWizardContextV2';
 import { updateSøknadData, useSoknadContext } from '../../../context/soknadContext';
-import { isAfter, isBefore } from 'date-fns';
+import { isAfter, isBefore, isPast } from 'date-fns';
+import TextAreaWrapper from '../../../components/input/TextAreaWrapper';
 
 const STARTDATO = 'startDato';
 const FERIE = 'ferie';
@@ -41,6 +42,16 @@ const StartDato = ({ getText, onBackClick, onCancelClick, søknad }: Props) => {
       .date()
       .required(getText('form.startDato.required'))
       .typeError(getText('form.startDato.required')),
+    /*['startDatoTilbakeITid']: yup.object().shape({
+      ['hvorfor']: yup
+        .string()
+        .when([STARTDATO], (startDato) => {
+          console.log('startDato', startDato);
+          return startDato && isPast(new Date(startDato));
+        })
+        .required('Påkrevd')
+        .oneOf(['Sykdom', 'Manglende informasjon'], 'Påkrevd'),
+    }),*/
     [FERIE]: yup.object().shape({
       [SKALHAFERIE]: yup
         .string()
@@ -83,7 +94,11 @@ const StartDato = ({ getText, onBackClick, onCancelClick, søknad }: Props) => {
     formState: { errors },
   } = useForm<FieldValues>({
     resolver: yupResolver(schema),
-    defaultValues: { startDato: søknad?.startDato, ferie: søknad?.ferie },
+    defaultValues: {
+      startDato: søknad?.startDato,
+      startDatoTilbakeITid: søknad?.startDatoTilbakeITid,
+      ferie: søknad?.ferie,
+    },
   });
 
   const { søknadDispatch } = useSoknadContext();
@@ -147,9 +162,26 @@ const StartDato = ({ getText, onBackClick, onCancelClick, søknad }: Props) => {
         error={errors.startDato?.message}
       />
       {startDatoEldreEnnDagensDato && (
-        <Alert variant="warning">
-          Når du søker AAP tilbake i tid må du gi dokumentasjon på hvorfor
-        </Alert>
+        <>
+          <Alert variant="info">Du kan kun søke 3 år tilbake i tid</Alert>
+          <RadioGroupWrapper
+            legend="Hvorfor søker du tilbake i tid?"
+            name={'startDatoTilbakeITid.hvorfor'}
+            control={control}
+            error={errors?.startDatoTilbakeITid?.hvorfor?.message}
+          >
+            <Radio value="Sykdom">Helsemessige grunner gjorde at jeg ikke kunne søke før</Radio>
+            <Radio value="Manglende informasjon">
+              Feilinformasjon fra NAV gjorde at jeg ikke søkte før
+            </Radio>
+          </RadioGroupWrapper>
+          <TextAreaWrapper
+            name={'startDatoTilbakeITid.begrunnelse'}
+            label={'Kan du beskrive nærmere hva som har skjedd?'}
+            control={control}
+            error={errors?.startDatoTilbakeITid?.begrunnelse?.message}
+          />
+        </>
       )}
       <RadioGroupWrapper
         legend={getText('form.ferie.skalHaFerie.legend')}
