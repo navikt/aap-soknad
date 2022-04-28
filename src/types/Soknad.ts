@@ -62,7 +62,8 @@ export type Ferie = {
   skalHaFerie?: string;
   type?: string;
   antallDager?: string;
-  periode?: Periode;
+  fraDato?: Date;
+  tilDato?: Date;
 };
 export type StartDato = Date;
 

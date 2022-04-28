@@ -1,7 +1,7 @@
 import { FieldValues, useForm } from 'react-hook-form';
 import Soknad from '../../../types/Soknad';
 import { getParagraphs, GetText } from '../../../hooks/useTexts';
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import DatoVelgerWrapper from '../../../components/input/DatoVelgerWrapper';
 import {
   Alert,
@@ -23,6 +23,7 @@ import * as yup from 'yup';
 import SoknadFormWrapper from '../../../components/SoknadFormWrapper/SoknadFormWrapper';
 import { completeAndGoToNextStep, useStepWizard } from '../../../context/stepWizardContextV2';
 import { updateSøknadData, useSoknadContext } from '../../../context/soknadContext';
+import { isAfter, isBefore } from 'date-fns';
 
 const STARTDATO = 'startDato';
 const FERIE = 'ferie';
@@ -49,8 +50,31 @@ const StartDato = ({ getText, onBackClick, onCancelClick, søknad }: Props) => {
           getText('form.ferie.skalHaFerie.required')
         )
         .typeError(getText('form.ferie.skalHaFerie.required')),
+      ['type']: yup.string().when([SKALHAFERIE], {
+        is: JaNeiVetIkke.JA,
+        then: yup.string().required('Påkrevd'),
+      }),
+
+      ['fraDato']: yup.string().when(['type'], {
+        is: 'Ja',
+        then: yup.string().required('Påkrevd'),
+      }),
+      ['tilDato']: yup.string().when(['type'], {
+        is: 'Ja',
+        then: yup.string().required('Påkrevd'),
+      }),
+
+      // TODO: mangler sjekk på om tilDato er eldre enn fraDato
+
+      ['antallDager']: yup.string().when(['type'], {
+        is: 'Nei, men jeg vet antall feriedager',
+        then: yup.string().required('Påkrevd'),
+      }),
     }),
   });
+
+  const [startDatoEldreEnnDagensDato, setStartDatoEldreEnnDagensDato] = useState(false);
+
   const {
     control,
     handleSubmit,
@@ -61,8 +85,11 @@ const StartDato = ({ getText, onBackClick, onCancelClick, søknad }: Props) => {
     resolver: yupResolver(schema),
     defaultValues: { startDato: søknad?.startDato, ferie: søknad?.ferie },
   });
+
   const { søknadDispatch } = useSoknadContext();
   const { stepWizardDispatch } = useStepWizard();
+
+  const startDato = watch(STARTDATO);
   const skalHaFerie = watch(`${FERIE}.skalHaFerie`);
   const ferieType = watch(`${FERIE}.type`);
   const FerieType = useMemo(
@@ -72,17 +99,24 @@ const StartDato = ({ getText, onBackClick, onCancelClick, søknad }: Props) => {
     }),
     [getText]
   );
+
   useEffect(() => {
     setValue(`${FERIE}.type`, undefined);
   }, [skalHaFerie]);
   useEffect(() => {
-    setValue(`${FERIE}.periode.fraDato`, undefined);
-    setValue(`${FERIE}.periode.tilDato`, undefined);
+    setValue(`${FERIE}.fraDato`, undefined);
+    setValue(`${FERIE}.tilDato`, undefined);
     setValue(`${FERIE}.antallDager`, '');
   }, [ferieType]);
+  useEffect(() => {
+    const currentDate = new Date();
+    setStartDatoEldreEnnDagensDato(isBefore(new Date(startDato), currentDate));
+  }, [startDato]);
+
   return (
     <SoknadFormWrapper
       onNext={handleSubmit((data) => {
+        console.log('data', data);
         updateSøknadData(søknadDispatch, data);
         completeAndGoToNextStep(stepWizardDispatch);
       })}
@@ -112,6 +146,11 @@ const StartDato = ({ getText, onBackClick, onCancelClick, søknad }: Props) => {
         control={control}
         error={errors.startDato?.message}
       />
+      {startDatoEldreEnnDagensDato && (
+        <Alert variant="warning">
+          Når du søker AAP tilbake i tid må du gi dokumentasjon på hvorfor
+        </Alert>
+      )}
       <RadioGroupWrapper
         legend={getText('form.ferie.skalHaFerie.legend')}
         name={`${FERIE}.${SKALHAFERIE}`}
@@ -141,16 +180,18 @@ const StartDato = ({ getText, onBackClick, onCancelClick, søknad }: Props) => {
             <Grid>
               <Cell xs={5}>
                 <DatoVelgerWrapper
-                  name={`${FERIE}.periode.fraDato`}
+                  name={`${FERIE}.fraDato`}
                   label={getText('form.ferie.fraDato.label')}
                   control={control}
+                  error={errors?.[`${FERIE}`]?.fraDato?.message}
                 />
               </Cell>
               <Cell xs={5}>
                 <DatoVelgerWrapper
-                  name={`${FERIE}.periode.tilDato`}
+                  name={`${FERIE}.tilDato`}
                   label={getText('form.ferie.tilDato.label')}
                   control={control}
+                  error={errors?.[`${FERIE}`]?.tilDato?.message}
                 />
               </Cell>
             </Grid>
@@ -162,6 +203,7 @@ const StartDato = ({ getText, onBackClick, onCancelClick, søknad }: Props) => {
               name={`${FERIE}.antallDager`}
               label={getText('form.ferie.antallDager.label')}
               control={control}
+              error={errors?.[`${FERIE}`]?.antallDager?.message}
             />
           ) : (
             <></>
