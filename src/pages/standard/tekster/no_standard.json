@@ -458,7 +458,20 @@
     },
     "startDato": {
       "label": "Fra hvilken dato søker du AAP (dd.mm.åååå)?",
-      "required": "Venligst angi fra hvilken dato du søker AAP"
+      "required": "Venligst angi fra hvilken dato du søker AAP",
+      "eldreEnnTreÅr": "Det er kun mulig å søke 3 år tilbake i tid"
+    },
+    "startDatoFørDagensDato": {
+      "hvorfor": {
+        "label": "Hvorfor søker du tilbake i tid?",
+        "helse": "Helsemessige grunner gjorde at jeg ikke kunne søker før",
+        "feilinformasjon": "Feilinformasjon fra NAV gjorde at jeg ikke søkte før",
+        "required": "Venligst svar på hvorfor du søker tilbake i tid"
+      },
+      "begrunnelse": {
+        "label": "Kan du beskrive nærmere hva som har skjedd?",
+        "required": "Venligst beskriv hva som har skjedd"
+      }
     },
     "ferie": {
       "skalHaFerie": {
@@ -468,10 +481,12 @@
       "ferieType": {
         "legend": "Vet du hvilken periode du skal ta ferie?",
         "periode": "Ja",
-        "dager": "Nei, men jeg vet antall feriedager"
+        "dager": "Nei, men jeg vet antall feriedager",
+        "required": "Venligst angi om du vet hvilken periode du skal ha ferie"
       },
       "antallDager": {
-        "label": "Skriv inn antall dager du skal ha ferie"
+        "label": "Skriv inn antall dager du skal ha ferie",
+        "required": "Venligst skriv antall dager du skal ha ferie"
       },
       "fraDato": {
         "label": "Fra dato (dd.mm.åååå)",
@@ -479,7 +494,8 @@
       },
       "tilDato": {
         "label": "Til dato (dd.mm.åååå)",
-        "required": "Vennligst angi til dato"
+        "required": "Vennligst angi til dato",
+        "fraDatoEtterTilDato": "Fra dato kan ikke være nyere enn til dato"
       }
     }
   },

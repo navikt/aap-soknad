@@ -69,6 +69,8 @@ export type StartDato = Date;
 
 interface Soknad {
   startDato?: StartDato;
+  hvorfor?: string;
+  begrunnelse?: string;
   yrkesskade?: Yrkesskade;
   medlemskap?: Medlemskap;
   behandlere?: Behandler[];
@@ -77,10 +79,6 @@ interface Soknad {
   barnetillegg?: Barn[];
   tilleggsopplysninger?: string;
   ferie?: Ferie;
-  startDatoTilbakeITid?: {
-    hvorfor?: string;
-    begrunnelse?: string;
-  };
   vedlegg?: {
     name: string;
     size: string;

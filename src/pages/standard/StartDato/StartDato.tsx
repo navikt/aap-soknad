@@ -23,12 +23,16 @@ import * as yup from 'yup';
 import SoknadFormWrapper from '../../../components/SoknadFormWrapper/SoknadFormWrapper';
 import { completeAndGoToNextStep, useStepWizard } from '../../../context/stepWizardContextV2';
 import { updateSøknadData, useSoknadContext } from '../../../context/soknadContext';
-import { isBefore, isPast } from 'date-fns';
+import { isBefore, isPast, subYears } from 'date-fns';
 import TextAreaWrapper from '../../../components/input/TextAreaWrapper';
 
 const STARTDATO = 'startDato';
 const FERIE = 'ferie';
+const FERIETYPE = 'ferieType';
 const SKALHAFERIE = 'skalHaFerie';
+const HVORFOR = 'hvorfor';
+const BEGRUNNELSE = 'begrunnelse';
+
 interface Props {
   getText: GetText;
   søknad?: Soknad;
@@ -41,19 +45,23 @@ const StartDato = ({ getText, onBackClick, onCancelClick, søknad }: Props) => {
     [STARTDATO]: yup
       .date()
       .required(getText('form.startDato.required'))
+      .min(subYears(new Date(), 3), 'form.startDato.eldreEnnTreÅr')
       .typeError(getText('form.startDato.required')),
 
-    ['hvorfor']: yup.string().when([STARTDATO], {
+    [HVORFOR]: yup.string().when([STARTDATO], {
       is: (startDato: string) => startDato && isPast(new Date(startDato)),
       then: yup
         .string()
-        .required('Påkrevd')
-        .oneOf(['Sykdom', 'Manglende informasjon'], 'Påkrevd')
-        .typeError('Påkrevd type'),
+        .required(getText('form.startDatoFørDagensDato.hvorfor.required'))
+        .oneOf(
+          ['Sykdom', 'Manglende informasjon'],
+          getText('form.startDatoFørDagensDato.hvorfor.required')
+        )
+        .typeError(getText('form.startDatoFørDagensDato.hvorfor.required')),
     }),
-    ['begrunnelse']: yup.string().when([STARTDATO], {
+    [BEGRUNNELSE]: yup.string().when([STARTDATO], {
       is: (startDato: string) => startDato && isPast(new Date(startDato)),
-      then: yup.string().required('Påkrevd'),
+      then: yup.string().required(getText('form.startDatoFørDagensDato.begrunnelse.required')),
     }),
 
     [FERIE]: yup.object().shape({
@@ -65,26 +73,26 @@ const StartDato = ({ getText, onBackClick, onCancelClick, søknad }: Props) => {
           getText('form.ferie.skalHaFerie.required')
         )
         .typeError(getText('form.ferie.skalHaFerie.required')),
-      ['type']: yup.string().when([SKALHAFERIE], {
+      [FERIETYPE]: yup.string().when([SKALHAFERIE], {
         is: JaNeiVetIkke.JA,
-        then: yup.string().required('Påkrevd'),
+        then: yup.string().required(getText('form.ferie.ferieType.required')),
       }),
 
-      ['fraDato']: yup.date().when(['type'], {
+      ['fraDato']: yup.date().when([FERIETYPE], {
         is: 'Ja',
-        then: yup.date().required('Påkrevd'),
+        then: yup.date().required(getText('form.ferie.fraDato.required')),
       }),
-      ['tilDato']: yup.date().when(['type'], {
+      ['tilDato']: yup.date().when([FERIETYPE], {
         is: 'Ja',
         then: yup
           .date()
-          .required('Påkrevd')
-          .min(yup.ref('fraDato'), 'Fra dato kan ikke være nyere enn til dato'),
+          .required(getText('form.ferie.tilDato.required'))
+          .min(yup.ref('fraDato'), getText('form.ferie.fraDato.fraDatoEtterTilDato')),
       }),
 
-      ['antallDager']: yup.string().when(['type'], {
+      ['antallDager']: yup.string().when([FERIETYPE], {
         is: 'Nei, men jeg vet antall feriedager',
-        then: yup.string().required('Påkrevd'),
+        then: yup.string().required(getText('form.ferie.antallDager.required')),
       }),
     }),
   });
@@ -101,7 +109,8 @@ const StartDato = ({ getText, onBackClick, onCancelClick, søknad }: Props) => {
     resolver: yupResolver(schema),
     defaultValues: {
       startDato: søknad?.startDato,
-      startDatoTilbakeITid: søknad?.startDatoTilbakeITid,
+      hvorfor: søknad?.hvorfor,
+      begrunnelse: søknad?.begrunnelse,
       ferie: søknad?.ferie,
     },
   });
@@ -111,7 +120,8 @@ const StartDato = ({ getText, onBackClick, onCancelClick, søknad }: Props) => {
 
   const startDato = watch(STARTDATO);
   const skalHaFerie = watch(`${FERIE}.skalHaFerie`);
-  const ferieType = watch(`${FERIE}.type`);
+  const ferieType = watch(`${FERIE}.${FERIETYPE}`);
+
   const FerieType = useMemo(
     () => ({
       PERIODE: getText(`form.${FERIE}.ferieType.periode`),
@@ -121,7 +131,7 @@ const StartDato = ({ getText, onBackClick, onCancelClick, søknad }: Props) => {
   );
 
   useEffect(() => {
-    setValue(`${FERIE}.type`, undefined);
+    setValue(`${FERIE}.${FERIETYPE}`, undefined);
   }, [skalHaFerie]);
   useEffect(() => {
     setValue(`${FERIE}.fraDato`, undefined);
@@ -129,14 +139,17 @@ const StartDato = ({ getText, onBackClick, onCancelClick, søknad }: Props) => {
     setValue(`${FERIE}.antallDager`, '');
   }, [ferieType]);
   useEffect(() => {
-    const currentDate = new Date();
-    setStartDatoEldreEnnDagensDato(isBefore(new Date(startDato), currentDate));
+    const startDateIsInPast = isPast(new Date(startDato));
+    if (!startDateIsInPast) {
+      setValue(HVORFOR, undefined);
+      setValue(BEGRUNNELSE, undefined);
+    }
+    setStartDatoEldreEnnDagensDato(startDateIsInPast);
   }, [startDato]);
 
   return (
     <SoknadFormWrapper
       onNext={handleSubmit((data) => {
-        console.log('data', data);
         updateSøknadData(søknadDispatch, data);
         completeAndGoToNextStep(stepWizardDispatch);
       })}
@@ -170,19 +183,19 @@ const StartDato = ({ getText, onBackClick, onCancelClick, søknad }: Props) => {
         <>
           <Alert variant="info">Du kan kun søke 3 år tilbake i tid</Alert>
           <RadioGroupWrapper
-            legend="Hvorfor søker du tilbake i tid?"
-            name={'hvorfor'}
+            legend={getText('form.startDatoFørDagensDato.hvorfor.label')}
+            name={HVORFOR}
             control={control}
             error={errors?.hvorfor?.message}
           >
-            <Radio value="Sykdom">Helsemessige grunner gjorde at jeg ikke kunne søke før</Radio>
+            <Radio value="Sykdom">{getText('form.startDatoFørDagensDato.hvorfor.helse')}</Radio>
             <Radio value="Manglende informasjon">
-              Feilinformasjon fra NAV gjorde at jeg ikke søkte før
+              {getText('form.startDatoFørDagensDato.hvorfor.feilinformasjon')}
             </Radio>
           </RadioGroupWrapper>
           <TextAreaWrapper
-            name={'begrunnelse'}
-            label={'Kan du beskrive nærmere hva som har skjedd?'}
+            name={BEGRUNNELSE}
+            label={getText('form.startDatoFørDagensDato.begrunnelse.label')}
             control={control}
             error={errors?.begrunnelse?.message}
           />
@@ -202,9 +215,9 @@ const StartDato = ({ getText, onBackClick, onCancelClick, søknad }: Props) => {
         <ColorPanel>
           <RadioGroupWrapper
             legend={getText('form.ferie.ferieType.legend')}
-            name={`${FERIE}.type`}
+            name={`${FERIE}.${FERIETYPE}`}
             control={control}
-            error={errors?.[`${FERIE}`]?.type?.message}
+            error={errors?.[`${FERIE}`]?.ferieType?.message}
           >
             <Radio value={FerieType.PERIODE}>
               <BodyShort>{FerieType.PERIODE}</BodyShort>
