@@ -23,7 +23,7 @@ import * as yup from 'yup';
 import SoknadFormWrapper from '../../../components/SoknadFormWrapper/SoknadFormWrapper';
 import { completeAndGoToNextStep, useStepWizard } from '../../../context/stepWizardContextV2';
 import { updateSøknadData, useSoknadContext } from '../../../context/soknadContext';
-import { isAfter, isBefore, isPast } from 'date-fns';
+import { isBefore, isPast } from 'date-fns';
 import TextAreaWrapper from '../../../components/input/TextAreaWrapper';
 
 const STARTDATO = 'startDato';
@@ -42,16 +42,20 @@ const StartDato = ({ getText, onBackClick, onCancelClick, søknad }: Props) => {
       .date()
       .required(getText('form.startDato.required'))
       .typeError(getText('form.startDato.required')),
-    /*['startDatoTilbakeITid']: yup.object().shape({
-      ['hvorfor']: yup
+
+    ['hvorfor']: yup.string().when([STARTDATO], {
+      is: (startDato: string) => startDato && isPast(new Date(startDato)),
+      then: yup
         .string()
-        .when([STARTDATO], (startDato) => {
-          console.log('startDato', startDato);
-          return startDato && isPast(new Date(startDato));
-        })
         .required('Påkrevd')
-        .oneOf(['Sykdom', 'Manglende informasjon'], 'Påkrevd'),
-    }),*/
+        .oneOf(['Sykdom', 'Manglende informasjon'], 'Påkrevd')
+        .typeError('Påkrevd type'),
+    }),
+    ['begrunnelse']: yup.string().when([STARTDATO], {
+      is: (startDato: string) => startDato && isPast(new Date(startDato)),
+      then: yup.string().required('Påkrevd'),
+    }),
+
     [FERIE]: yup.object().shape({
       [SKALHAFERIE]: yup
         .string()
@@ -66,16 +70,17 @@ const StartDato = ({ getText, onBackClick, onCancelClick, søknad }: Props) => {
         then: yup.string().required('Påkrevd'),
       }),
 
-      ['fraDato']: yup.string().when(['type'], {
+      ['fraDato']: yup.date().when(['type'], {
         is: 'Ja',
-        then: yup.string().required('Påkrevd'),
+        then: yup.date().required('Påkrevd'),
       }),
-      ['tilDato']: yup.string().when(['type'], {
+      ['tilDato']: yup.date().when(['type'], {
         is: 'Ja',
-        then: yup.string().required('Påkrevd'),
+        then: yup
+          .date()
+          .required('Påkrevd')
+          .min(yup.ref('fraDato'), 'Fra dato kan ikke være nyere enn til dato'),
       }),
-
-      // TODO: mangler sjekk på om tilDato er eldre enn fraDato
 
       ['antallDager']: yup.string().when(['type'], {
         is: 'Nei, men jeg vet antall feriedager',
@@ -166,9 +171,9 @@ const StartDato = ({ getText, onBackClick, onCancelClick, søknad }: Props) => {
           <Alert variant="info">Du kan kun søke 3 år tilbake i tid</Alert>
           <RadioGroupWrapper
             legend="Hvorfor søker du tilbake i tid?"
-            name={'startDatoTilbakeITid.hvorfor'}
+            name={'hvorfor'}
             control={control}
-            error={errors?.startDatoTilbakeITid?.hvorfor?.message}
+            error={errors?.hvorfor?.message}
           >
             <Radio value="Sykdom">Helsemessige grunner gjorde at jeg ikke kunne søke før</Radio>
             <Radio value="Manglende informasjon">
@@ -176,10 +181,10 @@ const StartDato = ({ getText, onBackClick, onCancelClick, søknad }: Props) => {
             </Radio>
           </RadioGroupWrapper>
           <TextAreaWrapper
-            name={'startDatoTilbakeITid.begrunnelse'}
+            name={'begrunnelse'}
             label={'Kan du beskrive nærmere hva som har skjedd?'}
             control={control}
-            error={errors?.startDatoTilbakeITid?.begrunnelse?.message}
+            error={errors?.begrunnelse?.message}
           />
         </>
       )}
