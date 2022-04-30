@@ -1,5 +1,5 @@
 import { BodyShort, Button, Cell, Grid, GuidePanel, Heading, Label, Radio } from '@navikt/ds-react';
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { GetText } from '../../../hooks/useTexts';
 import { FieldValues, useFieldArray, useForm } from 'react-hook-form';
 import RadioGroupWrapper from '../../../components/input/RadioGroupWrapper';
@@ -28,6 +28,11 @@ interface Props {
 }
 const BARNETILLEGG = 'barnetillegg';
 
+interface GResponse {
+  dato: string;
+  grunnbeløp: number;
+}
+
 export const Barnetillegg = ({ getText, onBackClick, onCancelClick, søknad }: Props) => {
   const schema = yup.object().shape({});
   const { søknadDispatch } = useSoknadContext();
@@ -49,6 +54,19 @@ export const Barnetillegg = ({ getText, onBackClick, onCancelClick, søknad }: P
     name: BARNETILLEGG,
     control,
   });
+
+  const [g, setG] = useState<number | undefined>(undefined);
+
+  useEffect(() => {
+    fetch('https://g.nav.no/api/v1/grunnbeløp')
+      .then((res) => {
+        return res.json();
+      })
+      .then((json: GResponse) => {
+        setG(json.grunnbeløp);
+      });
+  }, [setG]);
+
   const selectedBarn = useMemo(() => {
     if (selectedBarnIndex === undefined) return undefined;
     return fields[selectedBarnIndex];
@@ -124,7 +142,7 @@ export const Barnetillegg = ({ getText, onBackClick, onCancelClick, søknad }: P
               {barn?.manueltOpprettet && barn?.harInntekt ? (
                 <Grid>
                   <Cell xs={4}>
-                    <Label>{'Har inntekt over 1G:'}</Label>
+                    <Label>{`Har inntekt over ${g}kr (1G):`}</Label>
                   </Cell>
                   <Cell xs={3}>
                     <BodyShort>{barn?.harInntekt}</BodyShort>
@@ -132,7 +150,11 @@ export const Barnetillegg = ({ getText, onBackClick, onCancelClick, søknad }: P
                 </Grid>
               ) : (
                 <RadioGroupWrapper
-                  legend={getText('form.barnetillegg.legend')}
+                  // TODO: Finne en bedre måte å injecte antall kroner for G i tekst
+                  legend={getText('form.barnetillegg.legend').replace(
+                    'ANTALL_KRONER',
+                    g ? g.toString() : ''
+                  )}
                   name={`${BARNETILLEGG}.${index}.harInntekt`}
                   control={control}
                   error={errors?.[BARNETILLEGG]?.[index]?.erForsørger?.message}

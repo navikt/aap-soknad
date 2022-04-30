@@ -426,7 +426,7 @@
       }
     },
     "barnetillegg": {
-      "legend": "Har barnet årlig inntekt over 1G?",
+      "legend": "Har barnet årlig inntekt over ANTALL_KRONERkr (1G)?",
       "ja": "Ja",
       "nei": "Nei",
       "add": {
