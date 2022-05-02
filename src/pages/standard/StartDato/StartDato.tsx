@@ -61,7 +61,7 @@ const StartDato = ({ getText, onBackClick, onCancelClick, søknad }: Props) => {
     }),
     [BEGRUNNELSE]: yup.string().when([STARTDATO], {
       is: (startDato: string) => startDato && isPast(new Date(startDato)),
-      then: yup.string().required(getText('form.startDatoFørDagensDato.begrunnelse.required')),
+      then: yup.string().nullable(),
     }),
 
     [FERIE]: yup.object().shape({
@@ -181,7 +181,6 @@ const StartDato = ({ getText, onBackClick, onCancelClick, søknad }: Props) => {
       />
       {startDatoEldreEnnDagensDato && (
         <>
-          <Alert variant="info">Du kan kun søke 3 år tilbake i tid</Alert>
           <RadioGroupWrapper
             legend={getText('form.startDatoFørDagensDato.hvorfor.label')}
             name={HVORFOR}
@@ -203,6 +202,7 @@ const StartDato = ({ getText, onBackClick, onCancelClick, søknad }: Props) => {
       )}
       <RadioGroupWrapper
         legend={getText('form.ferie.skalHaFerie.legend')}
+        description={getText('form.ferie.skalHaFerie.description')}
         name={`${FERIE}.${SKALHAFERIE}`}
         control={control}
         error={errors?.[FERIE]?.[SKALHAFERIE]?.message}

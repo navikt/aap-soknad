@@ -29,8 +29,8 @@ const SøknadFormWrapper = ({
 }: Props) => {
   return (
     <form onSubmit={onNext} className={classes?.formContent}>
-      <FormErrorSummary errors={errors} data-testid={'error-summary'} />
       {children}
+      <FormErrorSummary errors={errors} data-testid={'error-summary'} />
       <Grid>
         <Cell xs={3}>
           <Button variant="secondary" type="button" onClick={onBack}>

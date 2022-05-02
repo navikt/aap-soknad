@@ -464,38 +464,40 @@
     "startDatoFørDagensDato": {
       "hvorfor": {
         "label": "Hvorfor søker du tilbake i tid?",
-        "helse": "Helsemessige grunner gjorde at jeg ikke kunne søker før",
+        "helse": "Helsemessige grunner gjorde at jeg ikke kunne søke før",
         "feilinformasjon": "Feilinformasjon fra NAV gjorde at jeg ikke søkte før",
-        "required": "Venligst svar på hvorfor du søker tilbake i tid"
+        "required": "Når du søker om AAP tilbake i tid, må du krysse av for hvorfor"
       },
       "begrunnelse": {
-        "label": "Kan du beskrive nærmere hva som har skjedd?",
-        "required": "Venligst beskriv hva som har skjedd"
+        "label": "Her kan du beskrive nærmere hvorfor du søker tilbake i tid (Valgfri)"
       }
     },
     "ferie": {
       "skalHaFerie": {
         "legend": "Planlegger du å ta ferie før startdato på AAP?",
-        "required": "Venligst svar på om du planlegger å ta ferie før AAP"
+        "description": "Hvis du tar ut ferie kan startdatoen forskyve seg",
+        "required": "Du må svare på om du planlegger å ta ferie"
       },
       "ferieType": {
-        "legend": "Vet du hvilken periode du skal ta ferie?",
+        "legend": "Vet du når du skal ta ut ferie?",
         "periode": "Ja",
         "dager": "Nei, men jeg vet antall feriedager",
-        "required": "Venligst angi om du vet hvilken periode du skal ha ferie"
+        "required": "Du må svare på om du vet når du skal ta ut ferie"
       },
       "antallDager": {
         "label": "Skriv inn antall dager du skal ha ferie",
-        "required": "Venligst skriv antall dager du skal ha ferie"
+        "required": "Du må skrive inn antall dager du skal ha ferie"
       },
       "fraDato": {
         "label": "Fra dato (dd.mm.åååå)",
-        "required": "Vennligst angi fra dato"
+        "required": "Du må fylle ut feriens fra-dato. Fyll inn slik: dd.mm.åååå",
+        "feilFormat": "Du må fylle ut feriens fra-dato på riktig måte. Fyll inn slik: dd.mm.åååå"
       },
       "tilDato": {
         "label": "Til dato (dd.mm.åååå)",
-        "required": "Vennligst angi til dato",
-        "fraDatoEtterTilDato": "Fra dato kan ikke være nyere enn til dato"
+        "required": "Du må fylle ut feriens til-dato. Fyll inn slik: dd.mm.åååå",
+        "feilFormat": "Du må fylle ut feriens til-dato på riktig måte. Fyll inn slik: dd.mm.åååå",
+        "fraDatoEtterTilDato": "Fra-dato må være eldre enn til-dato"
       }
     }
   },
