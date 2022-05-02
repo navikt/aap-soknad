@@ -33,12 +33,15 @@ interface Props {
 }
 const UTENLANDSOPPHOLD = 'utenlandsOpphold';
 const BODD_I_NORGE = 'harBoddINorgeSiste5År';
-const ARBEID_UTENFOR_NORGE_FØR_SYKDOM = 'arbeidetUtenforNorgeFørSykdom';
+const ARBEID_UTENFOR_NORGE_FØR_SYKDOM = 'arbeidUtenforNorge';
+const OGSÅ_ARBEID_UTENFOR_NORGE = 'iTilleggArbeidUtenforNorge';
 const ARBEID_I_NORGE = 'harArbeidetINorgeSiste5År';
 const MEDLEMSKAP = 'medlemskap';
 const validateArbeidINorge = (boddINorge: JaEllerNei) => boddINorge === JaEllerNei.NEI;
 const validateArbeidUtenforNorgeFørSykdom = (boddINorge: JaEllerNei) =>
   boddINorge === JaEllerNei.JA;
+const valideOgsåArbeidetUtenforNorge = (boddINorge: JaEllerNei, JobbINorge: JaEllerNei) =>
+  boddINorge === JaEllerNei.NEI && JobbINorge === JaEllerNei.JA;
 const validateUtenlandsPeriode = (arbeidINorge: JaEllerNei, arbeidUtenforNorge: JaEllerNei) => {
   return arbeidUtenforNorge === JaEllerNei.JA || arbeidINorge === JaEllerNei.NEI;
 };
@@ -59,25 +62,39 @@ export const Medlemskap = ({ getText, onBackClick, onCancelClick, søknad }: Pro
             .oneOf(
               [JaNeiVetIkke.JA, JaNeiVetIkke.NEI],
               getText('form.medlemskap.arbeidINorge.required')
-            ),
+            )
+            .typeError(getText('form.medlemskap.arbeidINorge.required')),
         otherwise: (yupSchema) => yupSchema.notRequired(),
       }),
       [ARBEID_UTENFOR_NORGE_FØR_SYKDOM]: yup.string().when([BODD_I_NORGE, ARBEID_I_NORGE], {
         is: validateArbeidUtenforNorgeFørSykdom,
         then: (yupSchema) =>
           yupSchema
-            .required()
+            .required(getText('form.medlemskap.arbeidUtenforNorge.required'))
             .oneOf(
               [JaNeiVetIkke.JA, JaNeiVetIkke.NEI],
               getText('form.medlemskap.arbeidUtenforNorge.required')
-            ),
+            )
+            .typeError(getText('form.medlemskap.arbeidUtenforNorge.required')),
+        otherwise: (yupSchema) => yupSchema.notRequired(),
+      }),
+      [OGSÅ_ARBEID_UTENFOR_NORGE]: yup.string().when([BODD_I_NORGE, ARBEID_I_NORGE], {
+        is: valideOgsåArbeidetUtenforNorge,
+        then: (yupSchema) =>
+          yupSchema
+            .required()
+            .oneOf(
+              [JaEllerNei.JA, JaEllerNei.NEI],
+              getText('form.medlemskap.iTilleggArbeidUtenforNorge.required')
+            )
+            .typeError(getText('form.medlemskap.iTilleggArbeidUtenforNorge.required')),
         otherwise: (yupSchema) => yupSchema.notRequired(),
       }),
       [UTENLANDSOPPHOLD]: yup.array().when([ARBEID_I_NORGE, ARBEID_UTENFOR_NORGE_FØR_SYKDOM], {
         is: validateUtenlandsPeriode,
         then: (yupSchema) => {
           console.log('validate array');
-          return yupSchema.min(1, 'Legg til utenlandsopphold');
+          return yupSchema.min(1, 'Du må legge til minst én periode med jobb utenfor Norge');
         },
         otherwise: (yupSchema) => {
           console.log('notrequired');
@@ -110,7 +127,11 @@ export const Medlemskap = ({ getText, onBackClick, onCancelClick, søknad }: Pro
   const arbeidUtenforNorge = watch(`${MEDLEMSKAP}.${ARBEID_UTENFOR_NORGE_FØR_SYKDOM}`);
   const showArbeidINorge = useMemo(() => validateArbeidINorge(boddINorge), [boddINorge]);
   const showArbeidUtenforNorgeFørSykdom = useMemo(
-    () => validateArbeidUtenforNorgeFørSykdom(boddINorge, arbeidINorge),
+    () => validateArbeidUtenforNorgeFørSykdom(boddINorge),
+    [boddINorge]
+  );
+  const showOgsåArbeidetUtenforNorge = useMemo(
+    () => valideOgsåArbeidetUtenforNorge(boddINorge, arbeidINorge),
     [boddINorge, arbeidINorge]
   );
   const showLeggTilUtenlandsPeriode = useMemo(
@@ -160,9 +181,6 @@ export const Medlemskap = ({ getText, onBackClick, onCancelClick, søknad }: Pro
           {getText('steps.medlemskap.title')}
         </Heading>
         <GuidePanel>{getText(`steps.medlemskap.guide`)}</GuidePanel>
-        <Heading size={'small'} level={'3'}>
-          Bo
-        </Heading>
         <RadioGroupWrapper
           name={`${MEDLEMSKAP}.${BODD_I_NORGE}`}
           legend={getText('form.medlemskap.boddINorge.legend')}
@@ -185,9 +203,6 @@ export const Medlemskap = ({ getText, onBackClick, onCancelClick, søknad }: Pro
         </RadioGroupWrapper>
         {showArbeidINorge && (
           <>
-            <Heading size={'small'} level={'3'}>
-              Jobb
-            </Heading>
             <RadioGroupWrapper
               name={`${MEDLEMSKAP}.${ARBEID_I_NORGE}`}
               legend={getText('form.medlemskap.arbeidINorge.legend')}
@@ -212,9 +227,6 @@ export const Medlemskap = ({ getText, onBackClick, onCancelClick, søknad }: Pro
         {showArbeidUtenforNorgeFørSykdom && (
           // Gjelder §11-19 og beregning av utbetaling. Skal kun komme opp hvis §11-2 er oppfyltt
           <>
-            <Heading size={'small'} level={'3'}>
-              Jobb
-            </Heading>
             <RadioGroupWrapper
               name={`${MEDLEMSKAP}.${ARBEID_UTENFOR_NORGE_FØR_SYKDOM}`}
               legend={getText('form.medlemskap.arbeidUtenforNorge.legend')}
@@ -237,7 +249,32 @@ export const Medlemskap = ({ getText, onBackClick, onCancelClick, søknad }: Pro
             </RadioGroupWrapper>
           </>
         )}
-
+        {showOgsåArbeidetUtenforNorge && (
+          <>
+            <RadioGroupWrapper
+              name={`${MEDLEMSKAP}.${OGSÅ_ARBEID_UTENFOR_NORGE}`}
+              legend={getText('form.medlemskap.iTilleggArbeidUtenforNorge.legend')}
+              description={getText('form.medlemskap.iTilleggArbeidUtenforNorge.description')}
+              control={control}
+              error={errors?.[MEDLEMSKAP]?.[OGSÅ_ARBEID_UTENFOR_NORGE]?.message}
+            >
+              <ReadMore
+                header={getText('form.medlemskap.iTilleggArbeidUtenforNorge.readMore.header')}
+                type={'button'}
+              >
+                <BodyLong>
+                  {getText('form.medlemskap.iTilleggArbeidUtenforNorge.readMore.text')}
+                </BodyLong>
+              </ReadMore>
+              <Radio value={JaEllerNei.JA}>
+                <BodyShort>Ja</BodyShort>
+              </Radio>
+              <Radio value={JaEllerNei.NEI}>
+                <BodyShort>Nei</BodyShort>
+              </Radio>
+            </RadioGroupWrapper>
+          </>
+        )}
         {showLeggTilUtenlandsPeriode && <BodyLong>{utenlandsPeriodeInfo}</BodyLong>}
         {fields?.length > 0 && (
           <Heading size="xsmall" level="3">
@@ -257,14 +294,14 @@ export const Medlemskap = ({ getText, onBackClick, onCancelClick, søknad }: Pro
         ))}
         {showLeggTilUtenlandsPeriode && (
           <Grid>
-            <Cell xs={6}>
+            <Cell xs={12}>
               <Button
                 variant="tertiary"
                 type="button"
                 onClick={() => setShowUtenlandsPeriodeModal(true)}
               >
                 <Add />
-                Legg til utenlandsopphold
+                Legg til periode med jobb utenfor Norge
               </Button>
             </Cell>
           </Grid>

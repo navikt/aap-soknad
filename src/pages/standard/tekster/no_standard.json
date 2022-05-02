@@ -103,7 +103,7 @@
     },
     "medlemskap": {
       "title": "Medlem i folketrygden",
-      "guide": "Vi trenger å vite om du har jobbet eller bodd i utlandet, for å finne ut om du oppfyller kravene til medlemskap i folketrygden",
+      "guide": "Vi trenger å vite om du har jobbet eller bodd i utlandet, for å finne ut om du oppfyller kravene til medlemskap i folketrygden.",
       "opphold": {
         "title": "Opphold i Norge de siste 5 årene",
         "ingress": "Som hovedregel må du ha bodd eller arbeidet sammenhengende i Norge de siste 5 årene før du søker om arbeidsavklaringspenger."
@@ -119,7 +119,7 @@
         "info": "Nå må du oppgi i hvilke perioder du har bodd eller jobbet utenfor Norge.  Oppgi også hvilket land du var i. Ta med alle perioder siden du var 16 år."
       },
       "andreYtelserReadMore": {
-        "title": "Hva hvis jeg har fått dagpenger, sykepenger, foreldrepenger eller tilsvarende?",
+        "title": "Regnes ytelser fra norske myndigheter som jobb?",
         "text": "Med “jobb” menes også offentlige ytelser du har fått som erstatning for arbeid, for eksempel dagpenger, sykepenger og foreldrepenger. Pensjon regnes ikke som erstatning for jobb."
       },
       "boddINorgeReadMore": {
@@ -344,23 +344,31 @@
     },
     "medlemskap": {
       "boddINorge": {
-        "legend": "Har du bodd sammenhengende i Norge de siste fem årene?",
-        "description": "Dette betyr at du både har hatt folkeregistrert adresse i Norge, og faktisk har oppholdt deg her mesteparten av hvert av disse årene. ",
-        "required": "Venligst svar på om du har bodd i Norge de siste fem årene"
+        "legend": "Har du bodd sammenhengende i Norge de fem siste årene?",
+        "description": "Dette betyr at du både har hatt folkeregistrert adresse i Norge, og faktisk har oppholdt deg her mesteparten av hvert av disse årene.",
+        "required": "Du må svare på om du har bodd sammenhengende i Norge de fem siste årene"
       },
       "arbeidUtenforNorge": {
         "legend": "Har du jobbet utenfor Norge de fem siste årene?",
-        "helpText": "Hvis du har jobbet utenfor Norge, kan du i noen tilfeller få mer utbetalt i AAP. Nav bruker bare denne inntekten hvis det er til fordel for",
-        "required": "Venligst svar på om du har jobbet utenfor Norge de siste fem årene",
+        "helpText": "Hvis du har jobbet utenfor Norge, kan du i noen tilfeller få mer utbetalt i AAP. NAV bruker bare denne inntekten hvis det er til fordel for deg.",
+        "required": "Du må svare på om du har jobbet utenfor Norge de fem siste årene",
         "readMore": {
-          "header": "Hva hvis jeg har fått dagpenger, sykepenger, foreldrepenger eller tilsvarende fra utlandet?",
-          "text": "Med “jobb” menes også offentlige ytelser du har fått som erstatning for arbeid utenfor Norge, for eksempel dagpenger, sykepenger og foreldrepenger. Pensjon regnes ikke som erstatning for jobb."
+          "header": "Regnes ytelser fra utenlandske myndigheter som jobb i utlandet?",
+          "text": "Hvis du har mottatt ytelser (for eksempel dagpenger, sykepenger og foreldrepenger) fra utenlandske myndigheter, regnes dette som jobb utenfor Norge. Pensjon regnes ikke som erstatning for jobb."
+        }
+      },
+      "iTilleggArbeidUtenforNorge": {
+        "legend": "Har du i tillegg til jobb i Norge, også jobbet i et annet land de fem siste årene?",
+        "description": "Hvis du har jobbet i et annet land, kan du i noen tilfeller få mer utbetalt i AAP. NAV bruker bare denne inntekten hvis det er til fordel for deg.",
+        "required": "Du må svare på om du i tillegg til jobb i Norge, også har jobbet i et annet land de fem siste årene",
+        "readMore": {
+          "header": "Regnes ytelser fra utenlandske myndigheter som jobb i et annet land?",
+          "text": "Hvis du har mottatt ytelser (for eksempel dagpenger, sykepenger og foreldrepenger) fra utenlandske myndigheter, regnes dette som jobb utenfor Norge. Pensjon regnes ikke som erstatning for jobb."
         }
       },
       "arbeidINorge": {
-        "legend": "Har du jobbet sammenhengende i Norge de siste fem årene?",
-        "description": "Med “jobb” menes også offentlige ytelser du har fått som erstatning for arbeid, for eksempel dagpenger og sykepenger. Foreldrepenger og pensjon regnes ikke som erstatning for jobb.",
-        "required": "Venligst svar på om du har jobbet sammenhengende i Norge de siste fem årene"
+        "legend": "Har du jobbet sammenhengende i Norge de fem siste årene?",
+        "required": "Du må svare på om du har jobbet sammenhengende i Norge de fem siste årene"
       }
     },
     "yrkesskade": {
