@@ -83,7 +83,7 @@ export const StandardPage = (): JSX.Element => {
     }
   };
   const postSøknad = async (data?: Soknad) =>
-    fetchPOST('/aap/soknad-api/innsending/standard', {
+    fetchPOST('/aap/soknad-api/innsending/soknad', {
       ...data,
     });
   const onPreviousStep = () => {

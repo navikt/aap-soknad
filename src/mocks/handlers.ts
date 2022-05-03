@@ -98,7 +98,7 @@ export const handlers = [
   rest.post('/aap/soknad-api/innsending/soknad', (req, res, ctx) => {
     return res(ctx.status(200), ctx.delay(1200), ctx.json({}));
   }),
-  rest.post('/aap/soknad-api/innsending/standard', (req, res, ctx) => {
+  rest.post('/aap/soknad-api/innsending/soknad', (req, res, ctx) => {
     return res(ctx.status(200), ctx.json({ id: 12345, ok: true }), ctx.delay(3000));
   }),
   rest.get('/aap/soknad-api/oppslag/soeker', (req, res, ctx) => {
