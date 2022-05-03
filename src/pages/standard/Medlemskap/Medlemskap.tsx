@@ -94,7 +94,7 @@ export const Medlemskap = ({ getText, onBackClick, onCancelClick, søknad }: Pro
         is: validateUtenlandsPeriode,
         then: (yupSchema) => {
           console.log('validate array');
-          return yupSchema.min(1, 'Du må legge til minst én periode med jobb utenfor Norge');
+          return yupSchema.min(1, 'Du må legge til minst én periode med jobb utenfor Norge.');
         },
         otherwise: (yupSchema) => {
           console.log('notrequired');

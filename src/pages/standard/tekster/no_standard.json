@@ -105,17 +105,11 @@
             "name": "forskrift om yrkessykdommer (åpnes i ny fane)",
             "href": "https://lovdata.no/dokument/SF/forskrift/1960-02-19-6"
           }
-        },
-        "lesMerLink": {
-          "name": "Les mer om yrkesskader og yrkessykdommer (åpnes i ny fane)",
-          "href": "https://www.nav.no/no/person/arbeid/yrkesskade-og-yrkessykdom"
         }
       },
       "guide": {
         "info": {
-          "text": "Er arbeidsevnen din nedsatt som følge av en yrkesskade eller yrkessykdom blir saken din behandlet etter egne regler. Dette kan gi deg noen fordeler. Da må yrkesskaden/yrkessykdommen være:",
-          "bullet1": "godkjent av NAV",
-          "bullet2": "årsaken til den nedsatte arbeidsevnen din"
+          "text": "Er arbeidsevnen din nedsatt som følge av en yrkesskade eller yrkessykdom blir saken din behandlet etter egne regler. Dette kan gi deg noen fordeler."
         },
         "application": {
           "text": "Hvis en yrkesskade eller yrkessykdom er årsaken til at du har nedsatt arbeidsevne, bør du $$ og vurdert i saken din.",
@@ -123,33 +117,25 @@
             "name": "søke om å få din yrkesskade eller yrkessykdom godkjent av NAV",
             "href": "https://www.nav.no/soknader/nb/bedrift/yrkesskade/paa-landterritorium#NAV130705"
           }
-        },
-        "legal": {
-          "title": "Hva er reglene ved en yrkesskade eller en yrkessykdom?",
-          "text": "Hvis NAV godkjenner at yrkesskaden/yrkessykdommen er helt eller delvis årsak til at arbeidsevnen din er nedsatt, gjelder dette:",
-          "bullet1": "Det holder at du var medlem i folketrygden da du ble skadet, og nå når du søker om AAP",
-          "bullet2": "Du kan ha rett til AAP hvis arbeidsevnen din er redusert med 30 prosent eller mer.",
-          "bullet3": "Når NAV beregner hva du får i AAP, kan vi bruke inntekten du hadde da du fikk yrkessykdommen eller yrkesskaden som grunnlag. Dette gjør vi bare hvis det lønner seg for deg.",
-          "readMoreLink": {
-            "name": "Les mer om yrkesskader og yrkessykdommer (åpnes i ny fane)",
-            "href": "https://www.nav.no/no/person/arbeid/yrkesskade-og-yrkessykdom"
-          }
         }
       },
       "alertInfo": {
-        "text": "NAV vil nå sjekke",
-        "bullet1": "om du har en godkjent yrkesskade eller yrkessykdom",
-        "bullet2": "om denne er årsaken til den nedsatte arbeidsevnen din"
+        "text": "NAV vil nå sjekke om yrkesskaden/yrkessykdommen din er:",
+        "bullet1": "godkjent av NAV",
+        "bullet2": "helt eller delvis årsak til at arbeidsevnen din er nedsatt.",
+        "text2": "Da gjelder dette:",
+        "bullet3": "Det holder at du var medlem i folketrygden da du ble skadet/syk, og er det når du søker AAP.",
+        "bullet4": "Arbeidsevnen din trenger ikke være redusert med mer enn 30 prosent.",
+        "bullet5": "Når NAV beregner hva du får i AAP, kan vi bruke inntekten du hadde da du fikk skaden/sykdommen som grunnlag. Dette gjør vi bare hvis det lønner seg for deg."
       }
     },
     "student": {
       "title": "Student",
-      "guide1": "Hvis du er student og skal tilbake til studiet ditt innen 6 måneder, stilles ikke like strenge krav til nedsatt arbeidsevne. Denne regelen brukes bare hvis den er til fordel for deg.",
-      "guide2": "Du regnes som student hvis du tar et studie som gir rett til lån fra Statens lånekasse for utdanning. Du trenger ikke å ha mottatt lån/stipend."
+      "guide1": "Hvis du er student og skal tilbake til studiet ditt innen 6 måneder, stilles ikke like strenge krav til nedsatt arbeidsevne. Denne regelen brukes bare hvis den er til fordel for deg."
     },
     "andre_utbetalinger": {
       "guide": "Hvis du får utbetalinger fra NAV, arbeidsgiver eller andre, kan din AAP bli redusert. Vi spør om dette fordi du ikke alltid har krav på å få flere typer utbetalinger samtidig. Vi prøver å unngå feilutbetalinger.",
-      "title": "Andre utbetalinger",
+      "title": "Utbetalinger",
       "alertInfo": {
         "omsorgsstønad": "Hvis du mottar omsorgsstønad som gir pensjonsopptjening, skal dette føres som arbeid på meldekortet."
       },
@@ -168,21 +154,11 @@
     },
     "barnetillegg": {
       "title": "Barnetillegg",
-      "guide": "Du kan få barnetillegg for barn under 18 år som du har forsørgeransvar for. Du kan også få barnetillegg selv om barnet ikke bor sammen med deg. Barnetillegget får du også for adoptivbarn, fosterbarn og andre barn som du har forsørgeransvar for. $",
-      "guideReadMoreLink": {
-        "name": "Du kan lese mer om barnetillegg her (åpnes i ny fane).",
-        "href": "https://www.nav.no/aap#hvor-mye"
-      },
+      "guide": "Du kan få barnetillegg for barn under 18 år som du har forsørgeransvar for.",
+      "guide2": " Du kan få barnetillegg selv om barnet ikke bor sammen med deg. Barnetillegget får du også for adoptivbarn, fosterbarn og andre barn som du har forsørgeransvar for.",
       "leggTil": {
         "title": "Legg til barn",
         "description": "Du kan legge til adoptivbarn, fosterbarn og andre barn under 18 år som du har forsørgeransvar for."
-      },
-      "grunnbeløp": {
-        "title": "Hvis barnet har en årlig inntekt over 1G (grunnbeløpet i folketrygden), får du vanligvis ikke barnetillegg for barnet. $",
-        "link": {
-          "href": "https://www.nav.no/no/nav-og-samfunn/kontakt-nav/utbetalinger/grunnbelopet-i-folketrygden",
-          "name": "Les mer om grunnbeløpet (G) i folketrygden."
-        }
       }
     },
     "tilleggsopplysninger": {
@@ -192,17 +168,35 @@
     "oppsummering": {
       "title": "Oppsummering",
       "buttontext": "Send søknad",
-      "confirmation": "Jeg er kjent med at jeg kan miste retten til stønad hvis opplysningene jeg har oppgitt ikke er riktige og fullstendige. Jeg er også klar over at jeg må betale tilbake hvis jeg får penger feilaktig utbetalt, og at jeg kan bli anmeldt til politiet. Videre er jeg kjent med og aksepterer at NAV kan innhente opplysninger som er nødvendige for å behandle søknaden.",
+      "confirmation": "Jeg har svart så godt jeg kan på spørsmålene i søknaden. Får jeg penger jeg ikke har rett til, er jeg forberedt på at jeg må betale tilbake. Jeg vet at jeg kan miste retten til AAP hvis jeg med vilje gir urikte opplysninger.",
+      "confirmation2": "Jeg gir beskjed hvis situasjonen min endrer seg.",
+      "required": "",
       "kontaktinfo": {
         "navn": "Navn",
         "adresse": "Folkeregistrert adresse",
         "fnr": "Personnummer",
         "adresseReadmore": {
           "title": "Hva gjør jeg hvis jeg har en annen adresse?",
-          "text": "Hvis adressen ikke stemmer, kan du endre adresse i $$.",
+          "text": "Hvis adressen ikke stemmer, kan du endre denne i $$.",
           "link": {
             "name": "Folkeregisteret (åpnes i ny fane)",
             "href": "https://www.skatteetaten.no/person/folkeregister/flytte/"
+          }
+        },
+        "telefonReadmore": {
+          "title": "Hva gjør jeg hvis jeg har et annet telefonnummer?",
+          "text": "Hvis telefonnummeret ikke stemmer, kan du endre dette i $$.",
+          "link": {
+            "name": "Kontakt- og reservasjonsregisteret (åpnes i ny fane)",
+            "href": "https://www.norge.no/oppdater-kontaktinformasjon"
+          }
+        },
+        "epostReadmore": {
+          "title": "Hva gjør jeg hvis jeg har en annen e-post adresse?",
+          "text": "Hvis e-post adressen ikke stemmer, kan du endre denne i $$.",
+          "link": {
+            "name": "Kontakt- og reservasjonsregisteret (åpnes i ny fane)",
+            "href": "https://www.norge.no/oppdater-kontaktinformasjon"
           }
         }
       },
@@ -214,29 +208,30 @@
     },
     "vedlegg": {
       "title": "Vedlegg",
-      "guide": "Du kan tidligst få AAP fra og med den dagen vi mottar søknaden din. Det kan derfor være lurt å sende søknaden selv om du ikke har alle vedlegg vi ber om nå. Du kan ettersende vedlegg innen 14 dager.",
+      "guide": "Du kan tidligst få AAP fra og med den dagen vi mottar søknaden din. Det kan derfor være lurt å sende søknaden selv om du ikke har alle vedlegg vi ber om nå.",
+      "guide2": "Du kan ettersende vedlegg innen 14 dager.",
       "attachmentListDescription": "Ut fra det du har svart i søknaden, må du legge ved dette:",
       "taBildeInfo": "Hvis du har vedlegg på papir og ikke har skanner, kan du for eksempel ta bilde av dokumentet med mobiltelefonen din.",
       "taBildeReadMore": "Slik tar du et godt bilde av dokumentet",
       "alertInfo": "Hvis du skal ettersende vedlegg, må du sende disse innen 14 dager. Hvis vi ikke mottar vedleggene innen fristen, mangler vi nødvendige opplysninger for å behandle saken din. Vi kan da avgjøre saken din med de opplysningene vi har tilgjengelig, og du kan risikere å få avslag. Hvis du trenger mer enn 14 dager, bør du derfor be om lenger frist. "
     },
     "startDato": {
-      "title": "Startdato",
+      "title": "Ønsket startdato",
       "guide": {
         "paragraphs": [
-          "Du kan tidligst få AAP fra den dagen du søker. Du kan søke om AAP frem i tid, for eksempel hvis du har mer igjen av sykepengene dine.",
-          "Hvis du planlegger å ta ut ferie, kan dette påvirke startdatoen din."
+          "Du kan søke om AAP frem i tid, for eksempel hvis du har mer igjen av sykepengene dine."
         ]
       },
       "guideReadMore": {
-        "heading": "Har du vært forhindret fra å søke tidligere?",
+        "heading": "an jeg søke om AAP tilbake i tid?",
         "text": "Hvis du av helsemessige årsaker ikke har kunnet søke tidligere, kan du få innvilget AAP tilbake i tid. Du kan også få AAP tilbake i tid hvis du har fått feil informasjon fra NAV og dette er grunnen til at du ikke har søkt tidligere."
       },
       "alertInfo": "Det er viktig at du gir oss beskjed hvis du bestemmer deg for å ta ferie, fordi det kan påvirke startdatoen din. Dette påvirker spesielt deg som får sykepenger."
     },
     "kvittering": {
       "heading": "Takk for søknaden",
-      "alertSuccess": "Vi har nå mottatt din søknad om arbeidsavklaringspenger. Saken din ligger nå til behandling hos NAV. Vi tar kontakt hvis vi trenger flere opplysninger fra deg."
+      "alertSuccess": "Vi har nå mottatt søknaden din om AAP. Saken din ligger nå til behandling hos NAV.",
+      "saksbehandlingstid": "Forventet saksbehandlingstid:"
     }
   },
   "form": {
@@ -311,12 +306,12 @@
       "boddINorge": {
         "legend": "Har du bodd sammenhengende i Norge de fem siste årene?",
         "description": "Dette betyr at du både har hatt folkeregistrert adresse i Norge, og faktisk har oppholdt deg her mesteparten av hvert av disse årene.",
-        "required": "Du må svare på om du har bodd sammenhengende i Norge de fem siste årene"
+        "required": "Du må svare på om du har bodd sammenhengende i Norge de fem siste årene."
       },
       "arbeidUtenforNorge": {
         "legend": "Har du jobbet utenfor Norge de fem siste årene?",
         "helpText": "Hvis du har jobbet utenfor Norge, kan du i noen tilfeller få mer utbetalt i AAP. NAV bruker bare denne inntekten hvis det er til fordel for deg.",
-        "required": "Du må svare på om du har jobbet utenfor Norge de fem siste årene",
+        "required": "Du må svare på om du har jobbet utenfor Norge de fem siste årene.",
         "readMore": {
           "header": "Regnes ytelser fra utenlandske myndigheter som jobb i utlandet?",
           "text": "Hvis du har mottatt ytelser (for eksempel dagpenger, sykepenger og foreldrepenger) fra utenlandske myndigheter, regnes dette som jobb utenfor Norge. Pensjon regnes ikke som erstatning for jobb."
@@ -325,7 +320,7 @@
       "iTilleggArbeidUtenforNorge": {
         "legend": "Har du i tillegg til jobb i Norge, også jobbet i et annet land de fem siste årene?",
         "description": "Hvis du har jobbet i et annet land, kan du i noen tilfeller få mer utbetalt i AAP. NAV bruker bare denne inntekten hvis det er til fordel for deg.",
-        "required": "Du må svare på om du i tillegg til jobb i Norge, også har jobbet i et annet land de fem siste årene",
+        "required": "Du må svare på om du i tillegg til jobb i Norge, også har jobbet i et annet land de fem siste årene.",
         "readMore": {
           "header": "Regnes ytelser fra utenlandske myndigheter som jobb i et annet land?",
           "text": "Hvis du har mottatt ytelser (for eksempel dagpenger, sykepenger og foreldrepenger) fra utenlandske myndigheter, regnes dette som jobb utenfor Norge. Pensjon regnes ikke som erstatning for jobb."
@@ -333,12 +328,12 @@
       },
       "arbeidINorge": {
         "legend": "Har du jobbet sammenhengende i Norge de fem siste årene?",
-        "required": "Du må svare på om du har jobbet sammenhengende i Norge de fem siste årene"
+        "required": "Du må svare på om du har jobbet sammenhengende i Norge de fem siste årene."
       }
     },
     "yrkesskade": {
       "legend": "Har du en yrkesskade eller yrkessykdom?",
-      "required": "Venligst svar på om du har en yrkesskade eller yrkessykdom"
+      "required": "Du må svare på om du har en yrkesskade eller yrkessykdom."
     },
     "andreUtbetalinger": {
       "stønad": {
@@ -347,16 +342,16 @@
         "omsorgsstønad": "Omsorgsstønad (tidligere omsorgslønn)",
         "introduksjonsStønad": "Introduksjonssønad (introduksjonsprogrammet)",
         "kvalifiseringsstønad": "Kvalifiseringsstønad (kvalifiseringsprogrammet)",
-        "fosterhjemsgodtgjørelse": "Fosterhjemsgodtgjørelse (enten til deg eller ektefellen/partneren/samboeren din)",
+        "fosterhjemsgodtgjørelse": "Fosterhjemsgodtgjørelse (til deg eller ektefelle/partner/samboer)",
         "verv": "Godtgjørelse eller lønn for verv",
         "utland": "Ytelser fra utenlandske trygdemyndigheter",
-        "annet": "Annet (for eksempel pensjoner eller forsikringsordninger)",
+        "annet": "Annet (for eksempel aksjeutbytte, leieinntekter, pensjoner eller forsikringsordninger)",
         "nei": "Nei, ingen",
-        "required": "Venligst velg minst ett alternativ om utbetalinger du får eller nylig har søkt om"
+        "required": "Du må krysse av for om du får eller nylig har søkt om noen av utbetalingene over."
       },
       "lønn": {
         "legend": "Har du fått eller skal du få ekstra utbetalinger fra arbeidsgiver?",
-        "required": "Venligst svar på om du har fått eller skal få ekstra utbetalinger fra arbeidsgiver",
+        "required": "Du må krysse av for om du har fått eller skal få ekstra utbetalinger fra arbeidsgiver.",
         "ja": "Ja, jeg har fått eller får sluttpakke, etterlønn eller andre goder fra nåværende eller tidligere arbeidsgivere",
         "nei": "Nei, jeg verken har fått eller får sluttpakke, etterlønn eller andre goder fra nåværende eller tidligere arbeidsgivere",
         "vetikke": "Vet ikke"
@@ -391,10 +386,12 @@
       },
       "annet": {
         "utbetaling": {
-          "label": "Hvilken utbetaling?"
+          "label": "Hvilken type utbetaling?",
+          "required": "Du må fylle ut hvilken type utbetaling du får."
         },
         "utbetaler": {
-          "label": "Hvem utbetaler?"
+          "label": "Hvem utbetaler?",
+          "required": "Du må fylle ut hvem som utbetaler."
         }
       }
     },
@@ -418,59 +415,61 @@
           "label": "Er dette et fosterbarn eller et barn du nylig har adoptert?"
         },
         "alertTitle": "Du må legge ved:",
-        "alertBullet": "Fødselsattest eller bostedbevis.",
-        "alertInfo": "Dokumentene laster du opp senere i søknaden. Du kan også ettersende vedlegg."
+        "alertBullet": "Fødselsattest eller bostedbevis for barnet.",
+        "alertInfo": "Dette laster du opp senere i søknaden. Du kan også ettersende vedlegg."
       }
     },
     "student": {
       "legend": "Er du student nå?",
-      "required": "Venligst svar på om du er student nå"
+      "description": "Du regnes som student hvis du tar et studie som gir rett til lån fra Statens lånekasse for utdanning. Du trenger ikke å ha mottatt lån/stipend.",
+      "required": "Du må svare på om du er student."
     },
     "tilleggsopplysninger": {
-      "label": "Hvis du har flere opplysninger du mener er viktig for søknaden din, kan du skrive dem her (valgfritt)"
+      "label": "Hvis du har flere opplysninger du mener er viktig for søknaden din, kan du skrive dem her (valgfritt):"
     },
     "startDato": {
-      "label": "Fra hvilken dato søker du AAP (dd.mm.åååå)?",
-      "required": "Venligst angi fra hvilken dato du søker AAP",
+      "label": "Fra hvilken dato ønsker du AAP (dd.mm.åååå)?",
+      "required": "Du må oppgi hvilken dato du ønsker AAP fra. Fyll inn slik: dd.mm.åååå.",
+      "feilFormat": "Du må oppgi dato du ønsker AAP fra på riktig måte. Fyll inn slik: dd.mm.åååå.",
       "eldreEnnTreÅr": "Det er kun mulig å søke 3 år tilbake i tid"
     },
     "startDatoFørDagensDato": {
       "hvorfor": {
-        "label": "Hvorfor søker du tilbake i tid?",
-        "helse": "Helsemessige grunner gjorde at jeg ikke kunne søke før",
+        "label": "Hvorfor søker du om AAP tilbake i tid?",
+        "helse": "Helsemessige grunner gjorde at jeg ikke søkte før",
         "feilinformasjon": "Feilinformasjon fra NAV gjorde at jeg ikke søkte før",
-        "required": "Når du søker om AAP tilbake i tid, må du krysse av for hvorfor"
+        "required": "Når du søker om AAP tilbake i tid, må du krysse av for hvorfor."
       },
       "begrunnelse": {
-        "label": "Her kan du beskrive nærmere hvorfor du søker tilbake i tid (Valgfri)"
+        "label": "Her kan du beskrive nærmere hvorfor du søker tilbake i tid (valgfritt):"
       }
     },
     "ferie": {
       "skalHaFerie": {
         "legend": "Planlegger du å ta ferie før startdato på AAP?",
-        "description": "Hvis du tar ut ferie kan startdatoen forskyve seg",
-        "required": "Du må svare på om du planlegger å ta ferie"
+        "description": "Hvis du tar ut ferie kan startdatoen forskyve seg.",
+        "required": "Du må svare på om du planlegger å ta ferie."
       },
       "ferieType": {
         "legend": "Vet du når du skal ta ut ferie?",
         "periode": "Ja",
         "dager": "Nei, men jeg vet antall feriedager",
-        "required": "Du må svare på om du vet når du skal ta ut ferie"
+        "required": "Du må svare på om du vet når du skal ta ut ferie."
       },
       "antallDager": {
         "label": "Skriv inn antall dager du skal ha ferie",
-        "required": "Du må skrive inn antall dager du skal ha ferie"
+        "required": "Du må skrive inn antall dager du skal ha ferie."
       },
       "fraDato": {
         "label": "Fra dato (dd.mm.åååå)",
-        "required": "Du må fylle ut feriens fra-dato. Fyll inn slik: dd.mm.åååå",
-        "feilFormat": "Du må fylle ut feriens fra-dato på riktig måte. Fyll inn slik: dd.mm.åååå"
+        "required": "Du må fylle ut feriens fra-dato. Fyll inn slik: dd.mm.åååå.",
+        "feilFormat": "Du må fylle ut feriens fra-dato på riktig måte. Fyll inn slik: dd.mm.åååå."
       },
       "tilDato": {
         "label": "Til dato (dd.mm.åååå)",
-        "required": "Du må fylle ut feriens til-dato. Fyll inn slik: dd.mm.åååå",
-        "feilFormat": "Du må fylle ut feriens til-dato på riktig måte. Fyll inn slik: dd.mm.åååå",
-        "fraDatoEtterTilDato": "Fra-dato må være eldre enn til-dato"
+        "required": "Du må fylle ut feriens til-dato. Fyll inn slik: dd.mm.åååå.",
+        "feilFormat": "Du må fylle ut feriens til-dato på riktig måte. Fyll inn slik: dd.mm.åååå.",
+        "fraDatoEtterTilDato": "Fra-dato må være eldre enn til-dato. Fyll inn slik: dd.mm.åååå."
       }
     }
   },

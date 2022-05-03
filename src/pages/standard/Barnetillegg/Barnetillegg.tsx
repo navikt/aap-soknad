@@ -1,4 +1,14 @@
-import { BodyShort, Button, Cell, Grid, GuidePanel, Heading, Label, Radio } from '@navikt/ds-react';
+import {
+  BodyShort,
+  Button,
+  Cell,
+  Grid,
+  GuidePanel,
+  Heading,
+  Label,
+  Radio,
+  ReadMore,
+} from '@navikt/ds-react';
 import React, { useMemo, useState } from 'react';
 import { GetText } from '../../../hooks/useTexts';
 import { FieldValues, useFieldArray, useForm } from 'react-hook-form';
@@ -68,7 +78,7 @@ export const Barnetillegg = ({ getText, onBackClick, onCancelClick, søknad }: P
         [
           {
             type: `barn${barn?.fnr}`,
-            description: `Fødselsattest eller bostedsbevis for barn: ${barn?.fornavn} ${barn?.etternavn}`,
+            description: `Fødselsattest eller bostedsbevis for: ${barn?.fornavn} ${barn?.etternavn}`,
           },
         ],
         vedleggDispatch
@@ -100,18 +110,8 @@ export const Barnetillegg = ({ getText, onBackClick, onCancelClick, søknad }: P
           {getText('steps.barnetillegg.title')}
         </Heading>
         <GuidePanel>
-          <BodyShort>
-            <TextWithLink
-              text={getText('steps.barnetillegg.guide')}
-              links={[getText('steps.barnetillegg.guideReadMoreLink')]}
-            />
-          </BodyShort>
-          <BodyShort>
-            <TextWithLink
-              text={getText('steps.barnetillegg.grunnbeløp.title')}
-              links={[getText('steps.barnetillegg.grunnbeløp.link')]}
-            />
-          </BodyShort>
+          <BodyShort spacing>{getText('steps.barnetillegg.guide')}</BodyShort>
+          <BodyShort>{getText('steps.barnetillegg.guide2')}</BodyShort>
         </GuidePanel>
         {fields.map((barn, index) => {
           return (
@@ -133,10 +133,17 @@ export const Barnetillegg = ({ getText, onBackClick, onCancelClick, søknad }: P
               ) : (
                 <RadioGroupWrapper
                   legend={getText('form.barnetillegg.legend')}
+                  description={
+                    'Med inntekt mener vi arbeidsinntekt, kapitalinntekt og barnepensjon.'
+                  }
                   name={`${BARNETILLEGG}.${index}.harInntekt`}
                   control={control}
                   error={errors?.[BARNETILLEGG]?.[index]?.erForsørger?.message}
                 >
+                  <ReadMore header="Hvorfor spør vi om dette?">
+                    Hvis barnet har en årlig inntekt over 1G (1G = XXXkr), får du vanligvis ikke
+                    barnetillegg for barnet.
+                  </ReadMore>
                   <Radio value={JaEllerNei.JA}>
                     <BodyShort>{JaEllerNei.JA}</BodyShort>
                   </Radio>

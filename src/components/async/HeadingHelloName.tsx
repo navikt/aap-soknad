@@ -11,7 +11,7 @@ type Props = {
 
 const HeadingHelloName = ({ level, size, name, loading }: Props) => {
   return (
-    <Heading size={size} level={level}>
+    <Heading size={size} level={level} spacing>
       {`Hei, ${name}`}
       {loading && <Loader />}
       {`!`}

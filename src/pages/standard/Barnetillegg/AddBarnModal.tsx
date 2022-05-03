@@ -8,6 +8,7 @@ import {
   Ingress,
   Modal,
   Radio,
+  ReadMore,
 } from '@navikt/ds-react';
 import * as classes from './Barnetillegg.module.css';
 import { JaEllerNei } from '../../../types/Generic';
@@ -95,9 +96,14 @@ export const AddBarnModal = ({
           </Grid>
           <RadioGroupWrapper
             control={control}
+            description={'Med inntekt mener vi arbeidsinntekt, kapitalinntekt og barnepensjon.'}
             legend={getText('form.barnetillegg.legend')}
             name={'harInntekt'}
           >
+            <ReadMore header="Hvorfor spør vi om dette?">
+              Hvis barnet har en årlig inntekt over 1G (1G = XXXkr), får du vanligvis ikke
+              barnetillegg for barnet.
+            </ReadMore>
             <Radio value={JaEllerNei.JA}>
               <BodyShort>{JaEllerNei.JA}</BodyShort>
             </Radio>

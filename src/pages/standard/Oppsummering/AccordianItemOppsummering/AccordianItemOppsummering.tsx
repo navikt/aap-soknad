@@ -1,21 +1,25 @@
-import { Accordion, Button, Cell, Grid } from '@navikt/ds-react';
+import { Accordion, Button, Cell, Grid, Link } from '@navikt/ds-react';
 import React, { useState } from 'react';
 import * as classes from './AccordianItemOppsummering.module.css';
-import { Edit } from '@navikt/ds-icons';
+import { Back } from '@navikt/ds-icons';
 
 type SummaryAccordianItemProps = {
   title: string;
   onEdit?: () => void;
+  defaultOpen?: boolean;
   showEdit?: boolean;
+  editText?: string;
   children?: React.ReactChild | React.ReactChild[];
 };
 const AccordianItemOppsummering = ({
   title,
   children,
+  defaultOpen,
   onEdit,
   showEdit = true,
+  editText,
 }: SummaryAccordianItemProps) => {
-  const [open, setOpen] = useState<boolean>(false);
+  const [open, setOpen] = useState<boolean>(defaultOpen ?? false);
   return (
     <Accordion.Item open={open}>
       <Accordion.Header
@@ -30,11 +34,11 @@ const AccordianItemOppsummering = ({
         {children}
         {showEdit && (
           <Grid>
-            <Cell xs={6}>
-              <Button variant={'tertiary'} onClick={onEdit}>
-                <Edit />
-                Endre opplysninger
-              </Button>
+            <Cell xs={12}>
+              <Link href="#" onClick={onEdit}>
+                <Back />
+                {editText}
+              </Link>
             </Cell>
           </Grid>
         )}

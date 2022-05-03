@@ -64,12 +64,12 @@ export const Veiledning = ({ getText, søker, loading, onSubmit }: VeiledningPro
         {getText(`steps.veiledning.title`)}
       </Heading>
       <GuidePanel>
-        <HeadingHelloName size={'large'} level={'2'} name={søker?.fulltNavn} loading={loading} />
+        <HeadingHelloName size={'medium'} level={'2'} name={søker?.fulltNavn} loading={loading} />
         {getParagraphs('steps.veiledning.guide.paragraphs', getText).map(
           (e: string, index: number) => (
-            <BodyLong key={`${index}`} spacing>
+            <BodyShort key={`${index}`} spacing>
               {e}
-            </BodyLong>
+            </BodyShort>
           )
         )}
       </GuidePanel>
@@ -79,9 +79,9 @@ export const Veiledning = ({ getText, søker, loading, onSubmit }: VeiledningPro
         </Heading>
         {getParagraphs('steps.veiledning.søknadsdato.paragraphs', getText).map(
           (e: string, index: number) => (
-            <BodyLong key={`${index}`} spacing>
+            <BodyShort key={`${index}`} spacing>
               {e}
-            </BodyLong>
+            </BodyShort>
           )
         )}
       </article>
@@ -126,7 +126,6 @@ export const Veiledning = ({ getText, søker, loading, onSubmit }: VeiledningPro
         className={classes?.veiledningContent}
         autoComplete="off"
       >
-        <FormErrorSummary data-testid="error-summary" errors={errors} />
         <ConfirmationPanelWrapper
           label={getText('steps.veiledning.rettogpliktConfirmation.label')}
           control={control}
@@ -135,6 +134,7 @@ export const Veiledning = ({ getText, søker, loading, onSubmit }: VeiledningPro
         >
           <Label>{getText('steps.veiledning.rettogpliktConfirmation.title')}</Label>
         </ConfirmationPanelWrapper>
+        <FormErrorSummary data-testid="error-summary" errors={errors} />
         <Grid>
           <Cell xs={3}>
             <Button variant="primary" type="submit">

@@ -72,35 +72,6 @@ export const Yrkesskade = ({ getText, onBackClick, onCancelClick, søknad }: Pro
       </Heading>
       <GuidePanel>
         <BodyLong>{getText('steps.yrkesskade.guide.info.text')}</BodyLong>
-        <ul>
-          <li>
-            <BodyShort>{getText('steps.yrkesskade.guide.info.bullet1')}</BodyShort>
-          </li>
-          <li>
-            <BodyShort>{getText('steps.yrkesskade.guide.info.bullet2')}</BodyShort>
-          </li>
-        </ul>
-        <ReadMore header={getText('steps.yrkesskade.guide.legal.title')} type={'button'}>
-          <BodyLong>{getText('steps.yrkesskade.guide.legal.text')}</BodyLong>
-          <ul>
-            <li>
-              <BodyShort>{getText('steps.yrkesskade.guide.legal.bullet1')}</BodyShort>
-            </li>
-            <li>
-              <BodyShort>{getText('steps.yrkesskade.guide.legal.bullet2')}</BodyShort>
-            </li>
-            <li>
-              <BodyShort>{getText('steps.yrkesskade.guide.legal.bullet3')}</BodyShort>
-            </li>
-          </ul>
-          <TextWithLink
-            text={getText('steps.yrkesskade.guide.application.text')}
-            links={[getText('steps.yrkesskade.guide.application.link')]}
-          />
-          <Link target={'_blank'} href={getText('steps.yrkesskade.guide.legal.readMoreLink.href')}>
-            {getText('steps.yrkesskade.guide.legal.readMoreLink.name')}
-          </Link>
-        </ReadMore>
       </GuidePanel>
       <RadioGroupWrapper
         name={`${YRKESSKADE}`}
@@ -114,12 +85,6 @@ export const Yrkesskade = ({ getText, onBackClick, onCancelClick, søknad }: Pro
             text={getText('steps.yrkesskade.yrkesskadeReadMore.sykdom.text')}
             links={[getText('steps.yrkesskade.yrkesskadeReadMore.sykdom.link')]}
           />
-          <Link
-            target={'_blank'}
-            href={getText('steps.yrkesskade.yrkesskadeReadMore.lesMerLink.href')}
-          >
-            {getText('steps.yrkesskade.yrkesskadeReadMore.lesMerLink.name')}
-          </Link>
         </ReadMore>
         <Radio value={JaNeiVetIkke.JA}>
           <BodyShort>{JaNeiVetIkke.JA}</BodyShort>
@@ -137,6 +102,12 @@ export const Yrkesskade = ({ getText, onBackClick, onCancelClick, søknad }: Pro
           <ul>
             <li>{getText('steps.yrkesskade.alertInfo.bullet1')}</li>
             <li>{getText('steps.yrkesskade.alertInfo.bullet2')}</li>
+          </ul>
+          {getText('steps.yrkesskade.alertInfo.text2')}
+          <ul>
+            <li>{getText('steps.yrkesskade.alertInfo.bullet3')}</li>
+            <li>{getText('steps.yrkesskade.alertInfo.bullet4')}</li>
+            <li>{getText('steps.yrkesskade.alertInfo.bullet5')}</li>
           </ul>
         </Alert>
       )}

@@ -1,7 +1,16 @@
 import { FieldValues, useForm } from 'react-hook-form';
 import Soknad from '../../../types/Soknad';
 import { GetText } from '../../../hooks/useTexts';
-import { Accordion, BodyShort, Cell, Grid, Heading, Label } from '@navikt/ds-react';
+import {
+  Accordion,
+  BodyShort,
+  Cell,
+  Grid,
+  GuidePanel,
+  Heading,
+  Label,
+  Switch,
+} from '@navikt/ds-react';
 import React from 'react';
 import ConfirmationPanelWrapper from '../../../components/input/ConfirmationPanelWrapper';
 import { useSoknadContext } from '../../../context/soknadContext';
@@ -67,11 +76,23 @@ const Oppsummering = ({
       <Heading size="large" level="2">
         {getText('steps.oppsummering.title')}
       </Heading>
+      <GuidePanel>
+        <BodyShort>
+          Alt du har fylt inn er nå lagret. Her kan du se over at alt er riktig, og ved behov endre
+          opplysninger, før du sender inn søknaden.
+        </BodyShort>
+      </GuidePanel>
+      <Switch position="right" size="medium">
+        Åpne alle
+      </Switch>
       <Accordion>
-        <AccordianItemOppsummering title={'Om deg'}>
+        <AccordianItemOppsummering title={'Om deg'} defaultOpen={true} showEdit={false}>
           <OppsummeringKontaktinfo getText={getText} />
         </AccordianItemOppsummering>
-        <AccordianItemOppsummering title={'Startdato og ferie'}>
+        <AccordianItemOppsummering
+          title={'Ønsket startdato'}
+          editText="Endre opplysninger om startdato"
+        >
           <SummaryRowIfExists
             labelKey={'form.startDato.label'}
             value={formatDate(søknadState?.søknad?.startDato)}
@@ -101,7 +122,10 @@ const Oppsummering = ({
             <></>
           )}
         </AccordianItemOppsummering>
-        <AccordianItemOppsummering title={getText('steps.medlemskap.title')}>
+        <AccordianItemOppsummering
+          title={getText('steps.medlemskap.title')}
+          editText="Endre opplysninger om hvor du har bodd og jobbet"
+        >
           <SummaryRowIfExists
             labelKey={'form.medlemskap.boddINorge.legend'}
             value={søknadState?.søknad?.medlemskap?.harBoddINorgeSiste5År}
@@ -126,13 +150,19 @@ const Oppsummering = ({
             <></>
           )}
         </AccordianItemOppsummering>
-        <AccordianItemOppsummering title={getText('steps.yrkesskade.title')}>
+        <AccordianItemOppsummering
+          title={getText('steps.yrkesskade.title')}
+          editText="Endre opplysninger om yrkesskade"
+        >
           <SummaryRowIfExists
             labelKey={`form.yrkesskade.legend`}
             value={søknadState?.søknad?.yrkesskade}
           />
         </AccordianItemOppsummering>
-        <AccordianItemOppsummering title={getText('steps.andre_utbetalinger.title')}>
+        <AccordianItemOppsummering
+          title={getText('steps.andre_utbetalinger.title')}
+          editText="Endre opplysninger om utbetalinger"
+        >
           <>
             <SummaryRowIfExists
               labelKey={`form.andreUtbetalinger.lønn.legend`}
@@ -163,7 +193,10 @@ const Oppsummering = ({
             )}
           </>
         </AccordianItemOppsummering>
-        <AccordianItemOppsummering title={getText('steps.fastlege.title')}>
+        <AccordianItemOppsummering
+          title={getText('steps.fastlege.title')}
+          editText="Endre informasjon om kontaktperson for helseopplysninger"
+        >
           <>
             <article>
               <Heading size={'small'} level={'3'}>
@@ -179,25 +212,37 @@ const Oppsummering = ({
             ))}
           </>
         </AccordianItemOppsummering>
-        <AccordianItemOppsummering title={getText('steps.barnetillegg.title')}>
+        <AccordianItemOppsummering
+          title={getText('steps.barnetillegg.title')}
+          editText="Endre opplysninger om barn"
+        >
           {søknadState?.søknad?.barnetillegg?.map((barn) => (
             <OppsummeringBarn barn={barn} />
           ))}
         </AccordianItemOppsummering>
-        <AccordianItemOppsummering title={getText('steps.student.title')}>
+        <AccordianItemOppsummering
+          title={getText('steps.student.title')}
+          editText="Endre på om du er student"
+        >
           <SummaryRowIfExists
             labelKey={`form.student.legend`}
             value={søknadState?.søknad?.student?.erStudent}
           />
         </AccordianItemOppsummering>
-        <AccordianItemOppsummering title={getText('steps.tilleggsopplysninger.title')}>
+        <AccordianItemOppsummering
+          title={getText('steps.tilleggsopplysninger.title')}
+          editText="Endre tilleggsopplysninger"
+        >
           <SummaryRowIfExists
             labelKey={`form.tilleggsopplysninger.label`}
             value={søknadState?.søknad?.tilleggsopplysninger}
           />
         </AccordianItemOppsummering>
-        <AccordianItemOppsummering title={getText('steps.vedlegg.title')}>
+        <AccordianItemOppsummering title={getText('steps.vedlegg.title')} editText="Endre vedlegg">
           <>
+            {søknadState?.søknad?.vedlegg?.length === 0 && (
+              <BodyShort>Du har ikke lastet opp noen vedlegg.</BodyShort>
+            )}
             {søknadState?.søknad?.vedlegg?.map((vedlegg) => (
               <BodyShort>{vedlegg?.name}</BodyShort>
             ))}
@@ -209,7 +254,9 @@ const Oppsummering = ({
         control={control}
         name="søknadBekreft"
         error={errors?.søknadBekreft?.message}
-      />
+      >
+        <Label>{getText('steps.veiledning.rettogpliktConfirmation.title')}</Label>
+      </ConfirmationPanelWrapper>
     </SoknadFormWrapper>
   );
 };

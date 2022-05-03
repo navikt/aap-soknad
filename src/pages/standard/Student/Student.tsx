@@ -59,12 +59,12 @@ const Student = ({ getText, onBackClick, onCancelClick, søknad }: Props) => {
         {getText('steps.student.title')}
       </Heading>
       <GuidePanel>
-        <BodyLong>{getText('steps.student.guide1')}</BodyLong>
-        <BodyLong>{getText('steps.student.guide2')}</BodyLong>
+        <BodyShort>{getText('steps.student.guide1')}</BodyShort>
       </GuidePanel>
       <RadioGroupWrapper
         name={`${STUDENT}.${ER_STUDENT}`}
         legend={getText(`form.${STUDENT}.legend`)}
+        description={getText(`form.${STUDENT}.description`)}
         control={control}
         error={errors?.[STUDENT]?.[ER_STUDENT]?.message}
       >

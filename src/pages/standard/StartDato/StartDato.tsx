@@ -169,16 +169,19 @@ const StartDato = ({ getText, onBackClick, onCancelClick, søknad }: Props) => {
             <BodyLong key={`${index}`}>{e}</BodyLong>
           )
         )}
-        <ReadMore header={getText('steps.startDato.guideReadMore.heading')} type={'button'}>
-          <BodyLong>{getText('steps.startDato.guideReadMore.text')}</BodyLong>
-        </ReadMore>
       </GuidePanel>
       <DatoVelgerWrapper
         name={`${STARTDATO}`}
+        /*description={
+          <ReadMore header={getText('steps.startDato.guideReadMore.heading')} type={'button'}>
+            <BodyLong>{getText('steps.startDato.guideReadMore.text')}</BodyLong>
+          </ReadMore>
+        }*/
         label={getText(`form.${STARTDATO}.label`)}
         control={control}
         error={errors.startDato?.message}
       />
+
       {startDatoEldreEnnDagensDato && (
         <>
           <RadioGroupWrapper
@@ -200,6 +203,7 @@ const StartDato = ({ getText, onBackClick, onCancelClick, søknad }: Props) => {
           />
         </>
       )}
+
       <RadioGroupWrapper
         legend={getText('form.ferie.skalHaFerie.legend')}
         description={getText('form.ferie.skalHaFerie.description')}

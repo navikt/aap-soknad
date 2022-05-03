@@ -179,6 +179,10 @@ export const AndreUtbetalinger = ({ getText, onBackClick, onCancelClick, søknad
         legend={getText(`form.${ANDRE_UTBETALINGER}.${STØNAD}.legend`)}
         error={errors?.[ANDRE_UTBETALINGER]?.[STØNAD]?.message}
       >
+        <Checkbox value={StønadAlternativer.FOSTERHJEMSGODTGJØRELSE}>
+          {StønadAlternativer.FOSTERHJEMSGODTGJØRELSE}
+        </Checkbox>
+        <Checkbox value={StønadAlternativer.VERV}>{StønadAlternativer.VERV}</Checkbox>
         <Checkbox value={StønadAlternativer.ØKONOMISK_SOSIALHJELP}>
           {StønadAlternativer.ØKONOMISK_SOSIALHJELP}
         </Checkbox>
@@ -191,10 +195,6 @@ export const AndreUtbetalinger = ({ getText, onBackClick, onCancelClick, søknad
         <Checkbox value={StønadAlternativer.KVALIFISERINGSSTØNAD}>
           {StønadAlternativer.KVALIFISERINGSSTØNAD}
         </Checkbox>
-        <Checkbox value={StønadAlternativer.FOSTERHJEMSGODTGJØRELSE}>
-          {StønadAlternativer.FOSTERHJEMSGODTGJØRELSE}
-        </Checkbox>
-        <Checkbox value={StønadAlternativer.VERV}>{StønadAlternativer.VERV}</Checkbox>
         <Checkbox value={StønadAlternativer.UTLAND}>{StønadAlternativer.UTLAND}</Checkbox>
         <Checkbox value={StønadAlternativer.ANNET}>{StønadAlternativer.ANNET}</Checkbox>
         {stønadEllerVerv?.includes(StønadAlternativer.ANNET) && (
@@ -202,8 +202,8 @@ export const AndreUtbetalinger = ({ getText, onBackClick, onCancelClick, søknad
             <Grid>
               <Cell xs={7}>
                 <TextFieldWrapper
-                  name={`${ANDRE_UTBETALINGER}.annet.utbetalingsNavn`}
-                  label={getText('form.andreUtbetalinger.annet.utbetaling.label')}
+                  name={`${ANDRE_UTBETALINGER}.annet.utbetalerNavn`}
+                  label={getText('form.andreUtbetalinger.annet.utbetaler.label')}
                   control={control}
                 />
               </Cell>
@@ -211,8 +211,8 @@ export const AndreUtbetalinger = ({ getText, onBackClick, onCancelClick, søknad
             <Grid>
               <Cell xs={7}>
                 <TextFieldWrapper
-                  name={`${ANDRE_UTBETALINGER}.annet.utbetalerNavn`}
-                  label={getText('form.andreUtbetalinger.annet.utbetaler.label')}
+                  name={`${ANDRE_UTBETALINGER}.annet.utbetalingsNavn`}
+                  label={getText('form.andreUtbetalinger.annet.utbetaling.label')}
                   control={control}
                 />
               </Cell>

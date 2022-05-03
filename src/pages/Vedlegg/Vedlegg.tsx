@@ -56,28 +56,36 @@ const Vedlegg = ({ getText, onBackClick, onCancelClick, søknad }: Props) => {
         {getText('steps.vedlegg.title')}
       </Heading>
       <GuidePanel>
-        <BodyShort>{getText(`steps.vedlegg.guide`)}</BodyShort>
+        <BodyShort spacing>{getText(`steps.vedlegg.guide`)}</BodyShort>
+        <BodyShort>{getText(`steps.vedlegg.guide2`)}</BodyShort>
       </GuidePanel>
       <BodyShort>
         {vedleggState?.requiredVedlegg?.length > 0 ? (
-          <Label>{getText('steps.vedlegg.attachmentListDescription')}</Label>
+          <>
+            <Label>{getText('steps.vedlegg.attachmentListDescription')}</Label>
+            <ul>
+              {vedleggState?.requiredVedlegg?.map((vedlegg, index) => (
+                <li key={index}>{vedlegg?.description}</li>
+              ))}
+            </ul>
+          </>
         ) : (
-          <Label>Ut fra dine svar har vi ikke registrert noen vedlegg som må lastes opp</Label>
+          <>
+            <Label spacing>
+              Ut fra dine svar har vi ikke registrert noen vedlegg som må lastes opp.
+            </Label>
+            <ReadMore header={'Kan jeg laste opp andre vedlegg?'} type={'button'}>
+              {'Hvis du har noe annet du også ønsker å legge ved, kan du også laste opp dette her.'}
+            </ReadMore>
+          </>
         )}
-        <ReadMore header={'Kan jeg laste opp andre vedlegg?'} type={'button'}>
-          {'Hvis du har noe annet du også ønsker å legge ved, kan du også laste opp dette her.'}
-        </ReadMore>
-        <ul>
-          {vedleggState?.requiredVedlegg?.map((vedlegg, index) => (
-            <li key={index}>{vedlegg?.description}</li>
-          ))}
-        </ul>
       </BodyShort>
       <BodyShort>{getText('steps.vedlegg.taBildeInfo')}</BodyShort>
       <ReadMore header={getText('steps.vedlegg.taBildeReadMore')} type={'button'}>
         <ScanningGuide getText={getText} />
       </ReadMore>
       <FileInput name={VEDLEGG} fields={fields} append={append} remove={remove} />
+
       <Alert variant={'info'}>{getText('steps.vedlegg.alertInfo')}</Alert>
     </SoknadFormWrapper>
   );

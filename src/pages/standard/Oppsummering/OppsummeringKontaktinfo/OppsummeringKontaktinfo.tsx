@@ -38,10 +38,32 @@ const OppsummeringKontaktinfo = ({ getText }: Props) => {
       <div>
         <Label>{'Telefonnummer'}</Label>
         <BodyShort>{kontaktInfo?.mobil}</BodyShort>
+        <ReadMore
+          header={getText('steps.oppsummering.kontaktinfo.telefonReadmore.title')}
+          type={'button'}
+        >
+          <span>
+            <TextWithLink
+              text={getText('steps.oppsummering.kontaktinfo.telefonReadmore.text')}
+              links={[getText('steps.oppsummering.kontaktinfo.telefonReadmore.link')]}
+            />
+          </span>
+        </ReadMore>
       </div>
       <div>
         <Label>{'E-post adresse'}</Label>
         <BodyShort>{kontaktInfo?.epost}</BodyShort>
+        <ReadMore
+          header={getText('steps.oppsummering.kontaktinfo.epostReadmore.title')}
+          type={'button'}
+        >
+          <span>
+            <TextWithLink
+              text={getText('steps.oppsummering.kontaktinfo.epostReadmore.text')}
+              links={[getText('steps.oppsummering.kontaktinfo.epostReadmore.link')]}
+            />
+          </span>
+        </ReadMore>
       </div>
     </>
   );
