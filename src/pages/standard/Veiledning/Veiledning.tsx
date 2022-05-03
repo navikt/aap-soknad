@@ -1,5 +1,7 @@
 import {
+  Accordion,
   BodyLong,
+  BodyShort,
   Button,
   Cell,
   Grid,
@@ -65,60 +67,60 @@ export const Veiledning = ({ getText, søker, loading, onSubmit }: VeiledningPro
         <HeadingHelloName size={'large'} level={'2'} name={søker?.fulltNavn} loading={loading} />
         {getParagraphs('steps.veiledning.guide.paragraphs', getText).map(
           (e: string, index: number) => (
-            <BodyLong key={`${index}`}>{e}</BodyLong>
+            <BodyLong key={`${index}`} spacing>
+              {e}
+            </BodyLong>
           )
         )}
       </GuidePanel>
       <article>
-        <Heading size={'small'} level={'2'}>
+        <Heading size={'small'} level={'2'} spacing>
           {getText('steps.veiledning.søknadsdato.title')}
         </Heading>
         {getParagraphs('steps.veiledning.søknadsdato.paragraphs', getText).map(
           (e: string, index: number) => (
-            <BodyLong key={`${index}`}>{e}</BodyLong>
+            <BodyLong key={`${index}`} spacing>
+              {e}
+            </BodyLong>
           )
         )}
       </article>
       <article>
-        <Heading size={'small'} level={'2'}>
-          {getText('steps.veiledning.opplysninger.title')}
-        </Heading>
-        <BodyLong>
-          <TextWithLink
-            text={getText('steps.veiledning.opplysninger.text')}
-            links={[getText('steps.veiledning.opplysninger.link')]}
-          />
-        </BodyLong>
+        <Accordion>
+          <Accordion.Item>
+            <Accordion.Header>Hvis du får AAP gjelder dette</Accordion.Header>
+            <Accordion.Content>
+              <BodyShort spacing>
+                <ul>
+                  <li>Du har rett til oppfølging fra NAV</li>
+                  <li>
+                    Du har plikt til å bidra til å avklare om du kan beholde eller komme i jobb
+                  </li>
+                  <li>Du må sende inn meldekort hver 14. dag</li>
+                  <li>Du har plikt til å gi beskjed hvis situasjonen din endrer seg</li>
+                </ul>
+              </BodyShort>
+            </Accordion.Content>
+          </Accordion.Item>
+        </Accordion>
+        <Accordion>
+          <Accordion.Item>
+            <Accordion.Header>Vi vil hente informasjon om deg</Accordion.Header>
+            <Accordion.Content>
+              <BodyLong spacing>
+                I tillegg til den informasjonen du oppgir i søknaden, henter vi:
+                <ul>
+                  <li>personinformasjon om deg og barna dine</li>
+                  <li>inntektsinformasjon fra Skatteetaten</li>
+                  <li>helseinformasjon fra lege/behandler for å kartlegge arbeidsevnen din</li>
+                  <li>opplysninger om arbeidsforholdet ditt fra Aa-registeret</li>
+                </ul>
+              </BodyLong>
+            </Accordion.Content>
+          </Accordion.Item>
+        </Accordion>
       </article>
-      <article>
-        <Heading size={'small'} level={'2'}>
-          {getText('steps.veiledning.rettogplikt.title')}
-        </Heading>
-        <ReadMore header={getText('steps.veiledning.rettogplikt.readMore.title')}>
-          {getText('steps.veiledning.rettogplikt.readMore.text')}
-          <ul>
-            <li>{getText('steps.veiledning.rettogplikt.readMore.bullet1')}</li>
-            <li>
-              <TextWithLink
-                text={getText('steps.veiledning.rettogplikt.readMore.bullet2')}
-                links={[getText('steps.veiledning.rettogplikt.readMore.bullet2Link')]}
-              />
-            </li>
-            <li>
-              <TextWithLink
-                text={getText('steps.veiledning.rettogplikt.readMore.bullet3')}
-                links={[getText('steps.veiledning.rettogplikt.readMore.bullet3Link')]}
-              />
-            </li>
-            <li>
-              <TextWithLink
-                text={getText('steps.veiledning.rettogplikt.readMore.bullet4')}
-                links={[getText('steps.veiledning.rettogplikt.readMore.bullet4Link')]}
-              />
-            </li>
-          </ul>
-        </ReadMore>
-      </article>
+
       <form
         onSubmit={handleSubmit(veiledningHandleSubmit)}
         className={classes?.veiledningContent}
@@ -132,10 +134,6 @@ export const Veiledning = ({ getText, søker, loading, onSubmit }: VeiledningPro
           error={errors?.[VEILEDNING_CONFIRM]?.message}
         >
           <Label>{getText('steps.veiledning.rettogpliktConfirmation.title')}</Label>
-          <TextWithLink
-            text={getText('steps.veiledning.rettogpliktConfirmation.description')}
-            links={[getText('steps.veiledning.rettogpliktConfirmation.link')]}
-          />
         </ConfirmationPanelWrapper>
         <Grid>
           <Cell xs={3}>

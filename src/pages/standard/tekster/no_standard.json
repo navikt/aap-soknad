@@ -8,57 +8,22 @@
       "guide": {
         "paragraphs": [
           "Jeg er her for å veilede deg gjennom søknaden.",
-          "Arbeidsavklaringspenger forkortes ofte med “AAP”.",
-          "AAP skal sikre deg inntekt når du på grunn av sykdom eller skade har behov for å få avklart mulighetene dine til å jobbe."
+          "Arbeidsavklaringspenger forkortes ofte med “AAP”. AAP skal sikre deg inntekt når du på grunn av sykdom eller skade har behov for å få avklart mulighetene dine til å jobbe."
         ]
       },
       "title": "Søknad om arbeidsavklaringspenger (AAP)",
-      "opplysninger": {
-        "title": "Innhenting av opplysninger",
-        "text": "Når vi behandler søknaden din, henter vi opplysninger fra blant annet Folkeregisteret, Skatteetaten og legen din. Ved behov sender vi opplysninger til andre offentlige og private virksomheter. $$.",
-        "link": {
-          "name": "Les om hvordan NAV behandler personopplysninger (åpnes i ny fane)",
-          "href": "https://www.nav.no/no/nav-og-samfunn/om-nav/personvern-i-arbeids-og-velferdsetaten/personopplysninger-i-soknader-til-nav"
-        }
-      },
+
       "søknadsdato": {
         "title": "Søknadsdato er viktig for eventuell utbetaling av AAP ",
         "paragraphs": [
-          "Du kan tidligst få AAP fra og med den dagen vi mottar søknaden din. Derfor kan det være lurt å sende søknaden, selv om du ikke har alle dokumenter som du får beskjed om å legge ved. Du kan ettersende vedlegg.",
-          "Det er ikke et krav at du har mottatt sykepenger før du søker om AAP."
+          "Du kan tidligst få AAP fra dagen du søker.",
+          "Hvis du ikke har mottatt sykepenger, kan du likevel søke om AAP."
         ]
       },
-      "rettogplikt": {
-        "title": "Dine rettigheter og plikter",
-        "readMore": {
-          "title": "Les om dine rettigheter og plikter",
-          "text": "Når du får AAP gjelder dette",
-          "bullet1": "Du har rett til oppfølging og veiledning fra NAV.",
-          "bullet2": "Du har plikt til $$, for eksempel å planlegge og gjennomføre aktiviteter i dialog med NAV.",
-          "bullet2Link": {
-            "name": "å bidra til å avklare om du kan beholde eller komme i jobb (åpnes i ny fane)",
-            "href": "https://www.nav.no/aap#aktivitetsplikt"
-          },
-          "bullet3": "Du må $$.",
-          "bullet3Link": {
-            "name": "sende inn meldekort hver 14. dag (åpnes i ny fane)",
-            "href": "https://www.nav.no/aap#meldekort"
-          },
-          "bullet4": "Du har plikt til å gi $$.",
-          "bullet4Link": {
-            "name": "beskjed hvis situasjonen din endrer seg (åpnes i ny fane)",
-            "href": "https://www.nav.no/aap#opplysningsplikt"
-          }
-        }
-      },
+
       "rettogpliktConfirmation": {
         "title": "Vi stoler på deg",
-        "description": "For å gå videre med søknaden må du bekrefte at du har lest og forstått $$.",
-        "link": {
-          "name": "dine rettigheter og plikter (åpnes i ny fane)",
-          "href": "https://www.nav.no/aap#aktivitetsplikt"
-        },
-        "label": "Jeg bekrefter at jeg har lest og forstått mine rettigheter og plikter, og at opplysningene jeg gir er så riktige som mulig."
+        "label": "Jeg bekrefter at jeg vil gi så riktige og fullstendige opplysninger som mulig."
       },
       "buttonText": "Start søknad"
     },
@@ -276,7 +241,7 @@
   },
   "form": {
     "veiledningConfirm": {
-      "required": "Vennligst bekreft at du har lest og forstått dine rettigheter og plikter."
+      "required": "Du må bekrefte at du vil gi så riktige opplysninger som mulig."
     },
     "kontaktinfo": {
       "bekreftOpplysninger": {
