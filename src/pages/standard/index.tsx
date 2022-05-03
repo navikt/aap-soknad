@@ -68,12 +68,13 @@ export const StandardPage = (): JSX.Element => {
   }, []);
   const submitSoknad: SubmitHandler<Soknad> = async (data) => {
     if (currentStep?.name === StepNames.OPPSUMMERING) {
-      // const postResponse = await postSøknad(søknadState?.søknad);
-      // if (postResponse?.ok) {
-      //   setShowKvittering(true);
-      // } else {
-      //   // show post error
-      // }
+      console.log('post søknad', søknadState?.søknad);
+      const postResponse = await postSøknad(søknadState?.søknad);
+      if (postResponse?.ok) {
+        setShowKvittering(true);
+      } else {
+        // show post error
+      }
       setTimeout(() => {
         setShowKvittering(true);
       }, 2000);
