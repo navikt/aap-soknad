@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen, fireEvent, findAllByRole, queryAllByRole } from '@testing-library/react';
+import { render, screen, fireEvent, findAllByRole } from '@testing-library/react';
 import { Veiledning } from './Veiledning';
 import useTexts from '../../../hooks/useTexts';
 import * as tekster from '../tekster';
@@ -18,7 +18,7 @@ describe('Veiledning', () => {
     render(<Component />);
 
     fireEvent.submit(screen.getByRole('button', { name: 'Start søknad' }));
-    const errorSummary = await screen.findByRole('region');
+    const errorSummary = await screen.findByTestId('error-summary');
 
     expect(await findAllByRole(errorSummary, 'link')).toHaveLength(1);
   });
@@ -30,6 +30,6 @@ describe('Veiledning', () => {
         value: true,
       },
     });
-    expect(await screen.queryByRole('region')).toBeNull();
+    expect(await screen.queryByTestId('error-summary')).toBeNull();
   });
 });

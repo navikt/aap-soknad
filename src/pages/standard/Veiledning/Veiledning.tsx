@@ -126,7 +126,7 @@ export const Veiledning = ({ getText, søker, loading, onSubmit }: VeiledningPro
         className={classes?.veiledningContent}
         autoComplete="off"
       >
-        <FormErrorSummary errors={errors} />
+        <FormErrorSummary data-testid="error-summary" errors={errors} />
         <ConfirmationPanelWrapper
           label={getText('steps.veiledning.rettogpliktConfirmation.label')}
           control={control}
