@@ -47,7 +47,7 @@ export enum StepNames {
 }
 
 const formatDate = (date?: Date): string | undefined =>
-  date ? format(date, 'yyyy-mm-dd') : undefined;
+  date ? format(date, 'yyyy-MM-dd') : undefined;
 
 export const StandardPage = (): JSX.Element => {
   const [oppslagLoading, setOppslagLoading] = useState<boolean>(true);
