@@ -31,6 +31,7 @@ import Student from './Student/Student';
 import Kvittering from './Kvittering/Kvittering';
 import { fetchPOST } from '../../api/fetch';
 import * as classes from './standard.module.css';
+import { format, parse } from 'date-fns';
 export enum StepNames {
   VEILEDNING = 'VEILEDNING',
   STARTDATO = 'STARTDATO',
@@ -44,6 +45,9 @@ export enum StepNames {
   TILLEGGSOPPLYSNINGER = 'TILLEGGSOPPLYSNINGER',
   OPPSUMMERING = 'OPPSUMMERING',
 }
+
+const formatDate = (date?: Date): string | undefined =>
+  date ? format(date, 'yyyy-mm-dd') : undefined;
 
 export const StandardPage = (): JSX.Element => {
   const [oppslagLoading, setOppslagLoading] = useState<boolean>(true);
@@ -69,7 +73,44 @@ export const StandardPage = (): JSX.Element => {
   const submitSoknad: SubmitHandler<Soknad> = async (data) => {
     if (currentStep?.name === StepNames.OPPSUMMERING) {
       console.log('post søknad', søknadState?.søknad);
-      const postResponse = await postSøknad(søknadState?.søknad);
+
+      // Må massere dataene litt før vi sender de inn
+      const søknad = {
+        type: søknadState?.søknad?.student ? 'STUDENT' : 'STANDARD',
+        startDato: {
+          fom: formatDate(søknadState?.søknad?.startDato),
+          hvorfor: søknadState?.søknad?.hvorfor,
+          beskrivelse: søknadState?.søknad?.begrunnelse,
+        },
+        ferie: {
+          periode: {
+            fom: formatDate(søknadState?.søknad?.ferie?.fraDato),
+            tom: formatDate(søknadState?.søknad?.ferie?.tilDato),
+          },
+          dager: søknadState?.søknad?.ferie?.antallDager ?? 0,
+        },
+        medlemskap: {
+          boddINorgeSammenhengendeSiste5: søknadState?.søknad?.medlemskap?.harBoddINorgeSiste5År,
+          jobbetUtenforNorgeFørSyk: søknadState?.søknad?.medlemskap?.arbeidetUtenforNorgeFørSykdom,
+          jobbetSammenhengendeINorgeSiste5:
+            søknadState?.søknad?.medlemskap?.harArbeidetINorgeSiste5År,
+          utenlandsopphold: [], // TODO: Mappe utenlandsopphold
+        },
+        behandlere: [], // TODO: Mappe behandlere
+        yrkesskadeType: 'JA', // søknadState?.søknad?.yrkesskade TODO: Mappe yrkesskade
+        utbetalinger: {
+          fraArbeidsgiver: true, // TODO: Mappe søknadState?.søknad?.andreUtbetalinger?.lønn ? true : false
+          stønadstyper: [],
+          andreUtbetalinger: [],
+        },
+        registrerteBarn: [],
+        andreBarn: [],
+        tilleggsopplysninger: søknadState?.søknad?.tilleggsopplysninger,
+      };
+
+      console.log('søknad', søknad);
+
+      const postResponse = await postSøknad(søknad);
       if (postResponse?.ok) {
         setShowKvittering(true);
       } else {
@@ -82,7 +123,7 @@ export const StandardPage = (): JSX.Element => {
       completeAndGoToNextStep(stepWizardDispatch);
     }
   };
-  const postSøknad = async (data?: Soknad) =>
+  const postSøknad = async (data?: any) =>
     fetchPOST('/aap/soknad-api/innsending/soknad', {
       ...data,
     });
