@@ -33,7 +33,11 @@ const SKALHAFERIE = 'skalHaFerie';
 const HVORFOR = 'hvorfor';
 const BEGRUNNELSE = 'begrunnelse';
 
-const validateStartDate = (startDate: Date) => !isToday(startDate) && isPast(startDate);
+const validateStartDate = (startDate: Date) => {
+  const val = !isToday(startDate) && isPast(startDate);
+  console.log('validate', { startDate, val });
+  return val;
+};
 
 interface Props {
   getText: GetText;
@@ -67,7 +71,7 @@ const StartDato = ({ getText, onBackClick, onCancelClick, søknad }: Props) => {
     }),
 
     [FERIE]: yup.object().when([STARTDATO], {
-      is: !validateStartDate,
+      is: (val: Date) => val === undefined || !validateStartDate(val),
       then: yup.object().shape({
         [SKALHAFERIE]: yup
           .string()
@@ -124,7 +128,7 @@ const StartDato = ({ getText, onBackClick, onCancelClick, søknad }: Props) => {
   const { stepWizardDispatch } = useStepWizard();
 
   const startDato = watch(STARTDATO);
-  const skalHaFerie = watch(`${FERIE}.skalHaFerie`);
+  const skalHaFerie = watch(`${FERIE}.${SKALHAFERIE}`);
   const ferieType = watch(`${FERIE}.${FERIETYPE}`);
 
   const FerieType = useMemo(
@@ -148,6 +152,12 @@ const StartDato = ({ getText, onBackClick, onCancelClick, søknad }: Props) => {
     if (!startDateIsInPast) {
       setValue(HVORFOR, undefined);
       setValue(BEGRUNNELSE, undefined);
+    } else {
+      setValue(`${FERIE}.${FERIETYPE}`, undefined);
+      setValue(`${FERIE}.${SKALHAFERIE}`, undefined);
+      setValue(`${FERIE}.fraDato`, undefined);
+      setValue(`${FERIE}.tilDato`, undefined);
+      setValue(`${FERIE}.antallDager`, '');
     }
     setStartDatoEldreEnnDagensDato(startDateIsInPast);
   }, [startDato]);
@@ -210,69 +220,71 @@ const StartDato = ({ getText, onBackClick, onCancelClick, søknad }: Props) => {
       )}
 
       {!startDatoEldreEnnDagensDato && (
-        <RadioGroupWrapper
-          legend={getText('form.ferie.skalHaFerie.legend')}
-          description={getText('form.ferie.skalHaFerie.description')}
-          name={`${FERIE}.${SKALHAFERIE}`}
-          control={control}
-          error={errors?.[FERIE]?.[SKALHAFERIE]?.message}
-        >
-          <Radio value={JaNeiVetIkke.JA}>{JaNeiVetIkke.JA}</Radio>
-          <Radio value={JaNeiVetIkke.NEI}>{JaNeiVetIkke.NEI}</Radio>
-          <Radio value={JaNeiVetIkke.VET_IKKE}>{JaNeiVetIkke.VET_IKKE}</Radio>
-        </RadioGroupWrapper>
-      )}
-      {skalHaFerie === JaNeiVetIkke.JA && (
-        <ColorPanel>
+        <>
           <RadioGroupWrapper
-            legend={getText('form.ferie.ferieType.legend')}
-            name={`${FERIE}.${FERIETYPE}`}
+            legend={getText('form.ferie.skalHaFerie.legend')}
+            description={getText('form.ferie.skalHaFerie.description')}
+            name={`${FERIE}.${SKALHAFERIE}`}
             control={control}
-            error={errors?.[`${FERIE}`]?.ferieType?.message}
+            error={errors?.[FERIE]?.[SKALHAFERIE]?.message}
           >
-            <Radio value={FerieType.PERIODE}>
-              <BodyShort>{FerieType.PERIODE}</BodyShort>
-            </Radio>
-            <Radio value={FerieType.DAGER}>
-              <BodyShort>{FerieType.DAGER}</BodyShort>
-            </Radio>
+            <Radio value={JaNeiVetIkke.JA}>{JaNeiVetIkke.JA}</Radio>
+            <Radio value={JaNeiVetIkke.NEI}>{JaNeiVetIkke.NEI}</Radio>
+            <Radio value={JaNeiVetIkke.VET_IKKE}>{JaNeiVetIkke.VET_IKKE}</Radio>
           </RadioGroupWrapper>
-          {ferieType === FerieType.PERIODE ? (
-            <Grid>
-              <Cell xs={5}>
-                <DatoVelgerWrapper
-                  name={`${FERIE}.fraDato`}
-                  label={getText('form.ferie.fraDato.label')}
+          {skalHaFerie === JaNeiVetIkke.JA && (
+            <ColorPanel>
+              <RadioGroupWrapper
+                legend={getText('form.ferie.ferieType.legend')}
+                name={`${FERIE}.${FERIETYPE}`}
+                control={control}
+                error={errors?.[`${FERIE}`]?.ferieType?.message}
+              >
+                <Radio value={FerieType.PERIODE}>
+                  <BodyShort>{FerieType.PERIODE}</BodyShort>
+                </Radio>
+                <Radio value={FerieType.DAGER}>
+                  <BodyShort>{FerieType.DAGER}</BodyShort>
+                </Radio>
+              </RadioGroupWrapper>
+              {ferieType === FerieType.PERIODE ? (
+                <Grid>
+                  <Cell xs={5}>
+                    <DatoVelgerWrapper
+                      name={`${FERIE}.fraDato`}
+                      label={getText('form.ferie.fraDato.label')}
+                      control={control}
+                      error={errors?.[`${FERIE}`]?.fraDato?.message}
+                    />
+                  </Cell>
+                  <Cell xs={5}>
+                    <DatoVelgerWrapper
+                      name={`${FERIE}.tilDato`}
+                      label={getText('form.ferie.tilDato.label')}
+                      control={control}
+                      error={errors?.[`${FERIE}`]?.tilDato?.message}
+                    />
+                  </Cell>
+                </Grid>
+              ) : (
+                <></>
+              )}
+              {ferieType === FerieType.DAGER ? (
+                <TextFieldWrapper
+                  name={`${FERIE}.antallDager`}
+                  label={getText('form.ferie.antallDager.label')}
                   control={control}
-                  error={errors?.[`${FERIE}`]?.fraDato?.message}
+                  error={errors?.[`${FERIE}`]?.antallDager?.message}
                 />
-              </Cell>
-              <Cell xs={5}>
-                <DatoVelgerWrapper
-                  name={`${FERIE}.tilDato`}
-                  label={getText('form.ferie.tilDato.label')}
-                  control={control}
-                  error={errors?.[`${FERIE}`]?.tilDato?.message}
-                />
-              </Cell>
-            </Grid>
-          ) : (
-            <></>
+              ) : (
+                <></>
+              )}
+            </ColorPanel>
           )}
-          {ferieType === FerieType.DAGER ? (
-            <TextFieldWrapper
-              name={`${FERIE}.antallDager`}
-              label={getText('form.ferie.antallDager.label')}
-              control={control}
-              error={errors?.[`${FERIE}`]?.antallDager?.message}
-            />
-          ) : (
-            <></>
+          {skalHaFerie === JaNeiVetIkke.VET_IKKE && (
+            <Alert variant={'info'}>{getText('steps.startDato.alertInfo')}</Alert>
           )}
-        </ColorPanel>
-      )}
-      {skalHaFerie === JaNeiVetIkke.VET_IKKE && (
-        <Alert variant={'info'}>{getText('steps.startDato.alertInfo')}</Alert>
+        </>
       )}
     </SoknadFormWrapper>
   );

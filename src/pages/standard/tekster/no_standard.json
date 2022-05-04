@@ -168,8 +168,7 @@
     "oppsummering": {
       "title": "Oppsummering",
       "buttontext": "Send søknad",
-      "confirmation": "Jeg har svart så godt jeg kan på spørsmålene i søknaden. Får jeg penger jeg ikke har rett til, er jeg forberedt på at jeg må betale tilbake. Jeg vet at jeg kan miste retten til AAP hvis jeg med vilje gir urikte opplysninger.",
-      "confirmation2": "Jeg gir beskjed hvis situasjonen min endrer seg.",
+      "confirmation": "Jeg har svart så godt jeg kan på spørsmålene i søknaden. Får jeg penger jeg ikke har rett til, er jeg forberedt på at jeg må betale tilbake. Jeg vet at jeg kan miste retten til AAP hvis jeg med vilje gir urikte opplysninger. Jeg gir beskjed hvis situasjonen min endrer seg.",
       "required": "",
       "kontaktinfo": {
         "navn": "Navn",
