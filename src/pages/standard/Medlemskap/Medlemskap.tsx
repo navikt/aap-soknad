@@ -24,6 +24,7 @@ import SoknadFormWrapper from '../../../components/SoknadFormWrapper/SoknadFormW
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { updateSøknadData, useSoknadContext } from '../../../context/soknadContext';
+import ColorPanel from '../../../components/panel/ColorPanel';
 
 interface Props {
   getText: GetText;
@@ -90,7 +91,7 @@ export const Medlemskap = ({ getText, onBackClick, onCancelClick, søknad }: Pro
         is: valideOgsåArbeidetUtenforNorge,
         then: (yupSchema) =>
           yupSchema
-            .required()
+            .required(getText('form.medlemskap.iTilleggArbeidUtenforNorge.required'))
             .oneOf(
               [JaEllerNei.JA, JaEllerNei.NEI],
               getText('form.medlemskap.iTilleggArbeidUtenforNorge.required')
@@ -104,17 +105,26 @@ export const Medlemskap = ({ getText, onBackClick, onCancelClick, søknad }: Pro
           is: (boddINorge: JaEllerNei, arbeidUtenforNorge: JaEllerNei) =>
             boddINorge === JaEllerNei.JA && arbeidUtenforNorge === JaEllerNei.JA,
           then: (yupSchema) =>
-            yupSchema.min(1, 'Du må legge til minst én periode med jobb utenfor Norge.'),
+            yupSchema.min(
+              1,
+              'Du har svart at du har jobbet utenfor Norge de fem siste årene. Du må derfor legge til minst én periode med jobb utenfor Norge.'
+            ),
         })
         .when([OGSÅ_ARBEID_UTENFOR_NORGE], {
           is: (ogsåArbeidUtenforNorge: JaEllerNei) => ogsåArbeidUtenforNorge === JaEllerNei.JA,
           then: (yupSchema) =>
-            yupSchema.min(1, 'Du må legge til minst én periode med jobb utenfor Norge.'),
+            yupSchema.min(
+              1,
+              'Du har svart at du også har jobbet utenfor Norge de fem siste årene. Du må derfor legge til minst én periode med jobb utenfor Norge.'
+            ),
         })
         .when([ARBEID_I_NORGE], {
           is: (arbeidINorge: JaEllerNei) => arbeidINorge === JaEllerNei.NEI,
           then: (yupSchema) =>
-            yupSchema.min(1, 'Du må legge til minst én periode med utenlandsopphold.'),
+            yupSchema.min(
+              1,
+              'Du har svart at du ikke har jobbet sammenhengende i Norge de fem siste årene. Du må derfor legge til minst én periode med utenlandsopphold.'
+            ),
         }),
     }),
   });
@@ -169,7 +179,7 @@ export const Medlemskap = ({ getText, onBackClick, onCancelClick, søknad }: Pro
     remove();
   }, [boddINorge]);
   useEffect(() => {
-    setValue(`${MEDLEMSKAP}.${ARBEID_UTENFOR_NORGE_FØR_SYKDOM}`, undefined);
+    setValue(`${MEDLEMSKAP}.${OGSÅ_ARBEID_UTENFOR_NORGE}`, undefined);
     if (arbeidINorge === JaEllerNei.JA) remove();
     clearErrors();
   }, [arbeidINorge]);
@@ -189,10 +199,10 @@ export const Medlemskap = ({ getText, onBackClick, onCancelClick, søknad }: Pro
 
   const utenlandsPeriodeInfo = useMemo(
     () =>
-      arbeidUtenforNorge === JaEllerNei.JA
+      arbeidUtenforNorge === JaEllerNei.JA || iTilleggArbeidUtenforNorge === JaEllerNei.JA
         ? getText('steps.medlemskap.utenlandsPeriode.infoJaJa')
         : getText('steps.medlemskap.utenlandsPeriode.info'),
-    [arbeidUtenforNorge]
+    [arbeidUtenforNorge, iTilleggArbeidUtenforNorge]
   );
   return (
     <>
@@ -306,43 +316,47 @@ export const Medlemskap = ({ getText, onBackClick, onCancelClick, søknad }: Pro
             </RadioGroupWrapper>
           </>
         )}
-        {showLeggTilUtenlandsPeriode && <BodyLong>{utenlandsPeriodeInfo}</BodyLong>}
-        {fields?.length > 0 && (
-          <Heading size="xsmall" level="3">
-            {getText('steps.medlemskap.perioderHeading')}
-          </Heading>
-        )}
-        {fields?.map((field, index) => (
-          <Table.Row key={field.id}>
-            <Table.DataCell>{`${field?.land?.split(':')?.[1]} ${formatDate(
-              field?.fraDato,
-              'dd.MM.yyyy'
-            )} - ${formatDate(field?.tilDato, 'dd.MM.yyyy')}${
-              field?.iArbeid ? ' (Jobb)' : ''
-            }`}</Table.DataCell>
-            <Table.DataCell>{<Delete onClick={() => remove(index)} />}</Table.DataCell>
-          </Table.Row>
-        ))}
         {showLeggTilUtenlandsPeriode && (
-          <Grid>
-            <Cell xs={12}>
-              <Button
-                variant="tertiary"
-                type="button"
-                onClick={() => setShowUtenlandsPeriodeModal(true)}
-              >
-                <Add />
-                {arbeidINorge === JaEllerNei.NEI
-                  ? 'Legg til utenlandsopphold'
-                  : 'Legg til periode med jobb utenfor Norge'}
-              </Button>
-            </Cell>
-          </Grid>
-        )}
-        {errors?.[MEDLEMSKAP]?.[UTENLANDSOPPHOLD]?.message && (
-          <div className={'navds-error-message navds-error-message--medium navds-label'}>
-            {errors?.[MEDLEMSKAP]?.[UTENLANDSOPPHOLD]?.message}
-          </div>
+          <ColorPanel>
+            <BodyLong>{utenlandsPeriodeInfo}</BodyLong>
+            {fields?.length > 0 && (
+              <Heading size="xsmall" level="3">
+                {getText('steps.medlemskap.perioderHeading')}
+              </Heading>
+            )}
+            {fields?.map((field, index) => (
+              <Table.Row key={field.id}>
+                <Table.DataCell>{`${field?.land?.split(':')?.[1]} ${formatDate(
+                  field?.fraDato,
+                  'dd.MM.yyyy'
+                )} - ${formatDate(field?.tilDato, 'dd.MM.yyyy')}${
+                  field?.iArbeid ? ' (Jobb)' : ''
+                }`}</Table.DataCell>
+                <Table.DataCell>{<Delete onClick={() => remove(index)} />}</Table.DataCell>
+              </Table.Row>
+            ))}
+
+            <Grid>
+              <Cell xs={12}>
+                <Button
+                  variant="tertiary"
+                  type="button"
+                  onClick={() => setShowUtenlandsPeriodeModal(true)}
+                >
+                  <Add />
+                  {arbeidINorge === JaEllerNei.NEI
+                    ? 'Legg til utenlandsopphold'
+                    : 'Legg til periode med jobb utenfor Norge'}
+                </Button>
+              </Cell>
+            </Grid>
+
+            {errors?.[MEDLEMSKAP]?.[UTENLANDSOPPHOLD]?.message && (
+              <div className={'navds-error-message navds-error-message--medium navds-label'}>
+                {errors?.[MEDLEMSKAP]?.[UTENLANDSOPPHOLD]?.message}
+              </div>
+            )}
+          </ColorPanel>
         )}
       </SoknadFormWrapper>
       <UtenlandsPeriodeVelger
