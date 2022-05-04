@@ -23,7 +23,7 @@ import * as yup from 'yup';
 import SoknadFormWrapper from '../../../components/SoknadFormWrapper/SoknadFormWrapper';
 import { completeAndGoToNextStep, useStepWizard } from '../../../context/stepWizardContextV2';
 import { updateSøknadData, useSoknadContext } from '../../../context/soknadContext';
-import { isBefore, isPast, subYears } from 'date-fns';
+import { isBefore, isPast, isToday, subYears } from 'date-fns';
 import TextAreaWrapper from '../../../components/input/TextAreaWrapper';
 
 const STARTDATO = 'startDato';
@@ -32,6 +32,8 @@ const FERIETYPE = 'ferieType';
 const SKALHAFERIE = 'skalHaFerie';
 const HVORFOR = 'hvorfor';
 const BEGRUNNELSE = 'begrunnelse';
+
+const validateStartDate = (startDate: Date) => !isToday(startDate) && isPast(startDate);
 
 interface Props {
   getText: GetText;
@@ -49,7 +51,7 @@ const StartDato = ({ getText, onBackClick, onCancelClick, søknad }: Props) => {
       .typeError(getText('form.startDato.required')),
 
     [HVORFOR]: yup.string().when([STARTDATO], {
-      is: (startDato: string) => startDato && isPast(new Date(startDato)),
+      is: validateStartDate,
       then: yup
         .string()
         .required(getText('form.startDatoFørDagensDato.hvorfor.required'))
@@ -60,39 +62,42 @@ const StartDato = ({ getText, onBackClick, onCancelClick, søknad }: Props) => {
         .typeError(getText('form.startDatoFørDagensDato.hvorfor.required')),
     }),
     [BEGRUNNELSE]: yup.string().when([STARTDATO], {
-      is: (startDato: string) => startDato && isPast(new Date(startDato)),
+      is: validateStartDate,
       then: yup.string().nullable(),
     }),
 
-    [FERIE]: yup.object().shape({
-      [SKALHAFERIE]: yup
-        .string()
-        .required(getText('form.ferie.skalHaFerie.required'))
-        .oneOf(
-          [JaNeiVetIkke.JA, JaNeiVetIkke.NEI, JaNeiVetIkke.VET_IKKE],
-          getText('form.ferie.skalHaFerie.required')
-        )
-        .typeError(getText('form.ferie.skalHaFerie.required')),
-      [FERIETYPE]: yup.string().when([SKALHAFERIE], {
-        is: JaNeiVetIkke.JA,
-        then: yup.string().required(getText('form.ferie.ferieType.required')),
-      }),
+    [FERIE]: yup.object().when([STARTDATO], {
+      is: !validateStartDate,
+      then: yup.object().shape({
+        [SKALHAFERIE]: yup
+          .string()
+          .required(getText('form.ferie.skalHaFerie.required'))
+          .oneOf(
+            [JaNeiVetIkke.JA, JaNeiVetIkke.NEI, JaNeiVetIkke.VET_IKKE],
+            getText('form.ferie.skalHaFerie.required')
+          )
+          .typeError(getText('form.ferie.skalHaFerie.required')),
+        [FERIETYPE]: yup.string().when([SKALHAFERIE], {
+          is: JaNeiVetIkke.JA,
+          then: yup.string().required(getText('form.ferie.ferieType.required')),
+        }),
 
-      ['fraDato']: yup.date().when([FERIETYPE], {
-        is: 'Ja',
-        then: yup.date().required(getText('form.ferie.fraDato.required')),
-      }),
-      ['tilDato']: yup.date().when([FERIETYPE], {
-        is: 'Ja',
-        then: yup
-          .date()
-          .required(getText('form.ferie.tilDato.required'))
-          .min(yup.ref('fraDato'), getText('form.ferie.fraDato.fraDatoEtterTilDato')),
-      }),
+        ['fraDato']: yup.date().when([FERIETYPE], {
+          is: 'Ja',
+          then: yup.date().required(getText('form.ferie.fraDato.required')),
+        }),
+        ['tilDato']: yup.date().when([FERIETYPE], {
+          is: 'Ja',
+          then: yup
+            .date()
+            .required(getText('form.ferie.tilDato.required'))
+            .min(yup.ref('fraDato'), getText('form.ferie.tilDato.fraDatoEtterTilDato')),
+        }),
 
-      ['antallDager']: yup.string().when([FERIETYPE], {
-        is: 'Nei, men jeg vet antall feriedager',
-        then: yup.string().required(getText('form.ferie.antallDager.required')),
+        ['antallDager']: yup.string().when([FERIETYPE], {
+          is: 'Nei, men jeg vet antall feriedager',
+          then: yup.string().required(getText('form.ferie.antallDager.required')),
+        }),
       }),
     }),
   });
@@ -139,7 +144,7 @@ const StartDato = ({ getText, onBackClick, onCancelClick, søknad }: Props) => {
     setValue(`${FERIE}.antallDager`, '');
   }, [ferieType]);
   useEffect(() => {
-    const startDateIsInPast = isPast(new Date(startDato));
+    const startDateIsInPast = validateStartDate(new Date(startDato));
     if (!startDateIsInPast) {
       setValue(HVORFOR, undefined);
       setValue(BEGRUNNELSE, undefined);
@@ -204,17 +209,19 @@ const StartDato = ({ getText, onBackClick, onCancelClick, søknad }: Props) => {
         </>
       )}
 
-      <RadioGroupWrapper
-        legend={getText('form.ferie.skalHaFerie.legend')}
-        description={getText('form.ferie.skalHaFerie.description')}
-        name={`${FERIE}.${SKALHAFERIE}`}
-        control={control}
-        error={errors?.[FERIE]?.[SKALHAFERIE]?.message}
-      >
-        <Radio value={JaNeiVetIkke.JA}>{JaNeiVetIkke.JA}</Radio>
-        <Radio value={JaNeiVetIkke.NEI}>{JaNeiVetIkke.NEI}</Radio>
-        <Radio value={JaNeiVetIkke.VET_IKKE}>{JaNeiVetIkke.VET_IKKE}</Radio>
-      </RadioGroupWrapper>
+      {!startDatoEldreEnnDagensDato && (
+        <RadioGroupWrapper
+          legend={getText('form.ferie.skalHaFerie.legend')}
+          description={getText('form.ferie.skalHaFerie.description')}
+          name={`${FERIE}.${SKALHAFERIE}`}
+          control={control}
+          error={errors?.[FERIE]?.[SKALHAFERIE]?.message}
+        >
+          <Radio value={JaNeiVetIkke.JA}>{JaNeiVetIkke.JA}</Radio>
+          <Radio value={JaNeiVetIkke.NEI}>{JaNeiVetIkke.NEI}</Radio>
+          <Radio value={JaNeiVetIkke.VET_IKKE}>{JaNeiVetIkke.VET_IKKE}</Radio>
+        </RadioGroupWrapper>
+      )}
       {skalHaFerie === JaNeiVetIkke.JA && (
         <ColorPanel>
           <RadioGroupWrapper
