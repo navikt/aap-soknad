@@ -7,6 +7,7 @@ import StartDato from './StartDato';
 import { StepWizardContext, StepWizardContextState } from '../../../context/stepWizardContextV2';
 import { Step, StepWizard } from '../../../components/StepWizard';
 import { SoknadContext, SoknadContextData, SøknadType } from '../../../context/soknadContext';
+import { format } from 'date-fns';
 
 const STARTDATO = 'STARTDATO';
 const soknadContext: SoknadContextData = {
@@ -56,7 +57,7 @@ describe('StartDato', () => {
 
     fireEvent.input(screen.getByRole('textbox'), {
       target: {
-        value: '10.02.1990',
+        value: format(new Date(), 'dd.MM.yyyy'),
       },
     });
     fireEvent.click(screen.getByRole('radio', { name: JaNeiVetIkke.NEI }), {});
