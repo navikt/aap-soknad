@@ -42,8 +42,16 @@ const validateArbeidUtenforNorgeFørSykdom = (boddINorge: JaEllerNei) =>
   boddINorge === JaEllerNei.JA;
 const valideOgsåArbeidetUtenforNorge = (boddINorge: JaEllerNei, JobbINorge: JaEllerNei) =>
   boddINorge === JaEllerNei.NEI && JobbINorge === JaEllerNei.JA;
-const validateUtenlandsPeriode = (arbeidINorge: JaEllerNei, arbeidUtenforNorge: JaEllerNei) => {
-  return arbeidUtenforNorge === JaEllerNei.JA || arbeidINorge === JaEllerNei.NEI;
+const validateUtenlandsPeriode = (
+  arbeidINorge: JaEllerNei,
+  arbeidUtenforNorge: JaEllerNei,
+  iTilleggArbeidUtenforNorge: JaEllerNei
+) => {
+  return (
+    arbeidUtenforNorge === JaEllerNei.JA ||
+    arbeidINorge === JaEllerNei.NEI ||
+    iTilleggArbeidUtenforNorge === JaEllerNei.JA
+  );
 };
 
 export const Medlemskap = ({ getText, onBackClick, onCancelClick, søknad }: Props) => {
@@ -90,17 +98,24 @@ export const Medlemskap = ({ getText, onBackClick, onCancelClick, søknad }: Pro
             .typeError(getText('form.medlemskap.iTilleggArbeidUtenforNorge.required')),
         otherwise: (yupSchema) => yupSchema.notRequired(),
       }),
-      [UTENLANDSOPPHOLD]: yup.array().when([ARBEID_I_NORGE, ARBEID_UTENFOR_NORGE_FØR_SYKDOM], {
-        is: validateUtenlandsPeriode,
-        then: (yupSchema) => {
-          console.log('validate array');
-          return yupSchema.min(1, 'Du må legge til minst én periode med jobb utenfor Norge.');
-        },
-        otherwise: (yupSchema) => {
-          console.log('notrequired');
-          return yupSchema.notRequired();
-        },
-      }),
+      [UTENLANDSOPPHOLD]: yup
+        .array()
+        .when([BODD_I_NORGE, ARBEID_UTENFOR_NORGE_FØR_SYKDOM], {
+          is: (boddINorge: JaEllerNei, arbeidUtenforNorge: JaEllerNei) =>
+            boddINorge === JaEllerNei.JA && arbeidUtenforNorge === JaEllerNei.JA,
+          then: (yupSchema) =>
+            yupSchema.min(1, 'Du må legge til minst én periode med jobb utenfor Norge.'),
+        })
+        .when([OGSÅ_ARBEID_UTENFOR_NORGE], {
+          is: (ogsåArbeidUtenforNorge: JaEllerNei) => ogsåArbeidUtenforNorge === JaEllerNei.JA,
+          then: (yupSchema) =>
+            yupSchema.min(1, 'Du må legge til minst én periode med jobb utenfor Norge.'),
+        })
+        .when([ARBEID_I_NORGE], {
+          is: (arbeidINorge: JaEllerNei) => arbeidINorge === JaEllerNei.NEI,
+          then: (yupSchema) =>
+            yupSchema.min(1, 'Du må legge til minst én periode med utenlandsopphold.'),
+        }),
     }),
   });
   const {
@@ -108,6 +123,7 @@ export const Medlemskap = ({ getText, onBackClick, onCancelClick, søknad }: Pro
     handleSubmit,
     watch,
     setValue,
+    clearErrors,
     formState: { errors },
   } = useForm<FieldValues>({
     resolver: yupResolver(schema),
@@ -125,6 +141,7 @@ export const Medlemskap = ({ getText, onBackClick, onCancelClick, søknad }: Pro
   const boddINorge = watch(`${MEDLEMSKAP}.${BODD_I_NORGE}`);
   const arbeidINorge = watch(`${MEDLEMSKAP}.${ARBEID_I_NORGE}`);
   const arbeidUtenforNorge = watch(`${MEDLEMSKAP}.${ARBEID_UTENFOR_NORGE_FØR_SYKDOM}`);
+  const iTilleggArbeidUtenforNorge = watch(`${MEDLEMSKAP}.${OGSÅ_ARBEID_UTENFOR_NORGE}`);
   const showArbeidINorge = useMemo(() => validateArbeidINorge(boddINorge), [boddINorge]);
   const showArbeidUtenforNorgeFørSykdom = useMemo(
     () => validateArbeidUtenforNorgeFørSykdom(boddINorge),
@@ -135,8 +152,8 @@ export const Medlemskap = ({ getText, onBackClick, onCancelClick, søknad }: Pro
     [boddINorge, arbeidINorge]
   );
   const showLeggTilUtenlandsPeriode = useMemo(
-    () => validateUtenlandsPeriode(arbeidINorge, arbeidUtenforNorge),
-    [arbeidINorge, arbeidUtenforNorge]
+    () => validateUtenlandsPeriode(arbeidINorge, arbeidUtenforNorge, iTilleggArbeidUtenforNorge),
+    [arbeidINorge, arbeidUtenforNorge, iTilleggArbeidUtenforNorge]
   );
   const hideArbeidInUtenlandsPeriode = useMemo(() => {
     if (boddINorge === JaEllerNei.NEI && arbeidINorge === JaEllerNei.NEI) {
@@ -147,15 +164,29 @@ export const Medlemskap = ({ getText, onBackClick, onCancelClick, søknad }: Pro
   useEffect(() => {
     setValue(`${MEDLEMSKAP}.${ARBEID_UTENFOR_NORGE_FØR_SYKDOM}`, undefined);
     setValue(`${MEDLEMSKAP}.${ARBEID_I_NORGE}`, undefined);
+    setValue(`${MEDLEMSKAP}.${OGSÅ_ARBEID_UTENFOR_NORGE}`, undefined);
+    clearErrors();
     remove();
   }, [boddINorge]);
   useEffect(() => {
     setValue(`${MEDLEMSKAP}.${ARBEID_UTENFOR_NORGE_FØR_SYKDOM}`, undefined);
-    remove();
+    if (arbeidINorge === JaEllerNei.JA) remove();
+    clearErrors();
   }, [arbeidINorge]);
   useEffect(() => {
-    if (arbeidUtenforNorge) remove();
+    if (arbeidUtenforNorge === JaEllerNei.NEI) remove();
+    clearErrors();
   }, [arbeidUtenforNorge]);
+  useEffect(() => {
+    if (iTilleggArbeidUtenforNorge === JaEllerNei.NEI) remove();
+    clearErrors();
+  }, [iTilleggArbeidUtenforNorge]);
+  useEffect(() => {
+    if (fields.length > 0) {
+      clearErrors();
+    }
+  }, [fields]);
+
   const utenlandsPeriodeInfo = useMemo(
     () =>
       arbeidUtenforNorge === JaEllerNei.JA
@@ -301,7 +332,9 @@ export const Medlemskap = ({ getText, onBackClick, onCancelClick, søknad }: Pro
                 onClick={() => setShowUtenlandsPeriodeModal(true)}
               >
                 <Add />
-                Legg til periode med jobb utenfor Norge
+                {arbeidINorge === JaEllerNei.NEI
+                  ? 'Legg til utenlandsopphold'
+                  : 'Legg til periode med jobb utenfor Norge'}
               </Button>
             </Cell>
           </Grid>
