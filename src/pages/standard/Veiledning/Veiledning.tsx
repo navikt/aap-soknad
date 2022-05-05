@@ -134,7 +134,6 @@ export const Veiledning = ({ getText, søker, loading, onSubmit }: VeiledningPro
         >
           <Label>{getText('steps.veiledning.rettogpliktConfirmation.title')}</Label>
         </ConfirmationPanelWrapper>
-        <FormErrorSummary data-testid="error-summary" errors={errors} />
         <Grid>
           <Cell xs={3}>
             <Button variant="primary" type="submit">

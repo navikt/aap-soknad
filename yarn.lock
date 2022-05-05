@@ -694,10 +694,10 @@
   resolved "https://registry.yarnpkg.com/@navikt/ds-css/-/ds-css-0.10.0.tgz#6835cb70f5ee83581d4a0838ffe1e87558102f40"
   integrity sha512-lqb3z/Zm9wz+dBcAGAC3Ign/nLu0Bo8RRSxdbzhH8l7CUPC084YLmKC/FlcAIyPhIKsLtkYXbIKp02/PTy/4Pw==
 
-"@navikt/ds-css@^0.17.0":
-  version "0.17.0"
-  resolved "https://registry.yarnpkg.com/@navikt/ds-css/-/ds-css-0.17.0.tgz#49fbc36fd11d01bc5e9bd4a59e8387e903ac3002"
-  integrity sha512-dT28NGB0toDer5KsSnIib+ACP2n/AG11vFbwI9gTTuZNo6pP2VRP2WbiXUB7mUO7BJcleMXl7ALkILwv5q0aVw==
+"@navikt/ds-css@^0.17.1":
+  version "0.17.1"
+  resolved "https://registry.yarnpkg.com/@navikt/ds-css/-/ds-css-0.17.1.tgz#edaade6b3c027d233662f95709d8cd522d458433"
+  integrity sha512-GEr8jvkmKXja0cYIJYdyt7K/aE6FSlmb9VUNsl6BBlSNiSIsM7RO/lzRiF5QJOSHBJmdcY0cPqeaIUsAoyyUkg==
 
 "@navikt/ds-datepicker@2.0.0":
   version "2.0.0"
@@ -739,10 +739,10 @@
     react-popper "^2.2.5"
     uuid "^8.3.2"
 
-"@navikt/ds-react@^0.18.3":
-  version "0.18.3"
-  resolved "https://registry.yarnpkg.com/@navikt/ds-react/-/ds-react-0.18.3.tgz#ab2e997e589da412da138deef54d33947b0b2e4f"
-  integrity sha512-c+ffL3fMU4jVJGTdV9q/Q1YM4+xAa9280TlFRWIWGUzsodhiS0Bh4Dm+uuyMfvizPEz8Dfyyg4zOH0LA7aWdBg==
+"@navikt/ds-react@^0.18.5":
+  version "0.18.5"
+  resolved "https://registry.yarnpkg.com/@navikt/ds-react/-/ds-react-0.18.5.tgz#eff081e248b867e433ec188b38224d28435efe27"
+  integrity sha512-kXd0XRsS2OUijHbA0kqvfXOOt2XOJgsQ5pvjZI0/pj2v3LNxeW4Rzmy3UvYXY7Gkzupz9Z7vCCauXD04AI8bpw==
   dependencies:
     "@floating-ui/react-dom" "0.6.0"
     "@material-ui/core" "^4.12.3"
