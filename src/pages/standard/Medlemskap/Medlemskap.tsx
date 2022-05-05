@@ -321,7 +321,9 @@ export const Medlemskap = ({ getText, onBackClick, onCancelClick, søknad }: Pro
             <BodyLong>{utenlandsPeriodeInfo}</BodyLong>
             {fields?.length > 0 && (
               <Heading size="xsmall" level="3">
-                {getText('steps.medlemskap.perioderHeading')}
+                {arbeidINorge === JaEllerNei.NEI
+                  ? getText('steps.medlemskap.perioderOppholdHeading')
+                  : getText('steps.medlemskap.perioderJobbHeading')}
               </Heading>
             )}
             {fields?.map((field, index) => (

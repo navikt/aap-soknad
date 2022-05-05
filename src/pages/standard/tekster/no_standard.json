@@ -77,7 +77,8 @@
         "title": "Arbeid utenfor Norge",
         "ingress": "Hvis du har arbeidet utenfor Norge før du ble syk, kan du i noen tilgeller få arbeidsperioder med, når vi beregner arbeidsavklaringspengene dine."
       },
-      "perioderHeading": "Dine utenlandsopphold",
+      "perioderOppholdHeading": "Dine utenlandsopphold",
+      "perioderJobbHeading": "Dine perioder med jobb utenfor Norge",
       "utenlandsPeriode": {
         "title": "Legg til utenlandsopphold",
         "infoJaJa": "Nå må du oppgi i hvilke perioder du har jobbet utenfor Norge de fem siste årene. Oppgi også hvilket land du var i.",
