@@ -1,5 +1,12 @@
 import React from 'react';
-import { render, screen, fireEvent, findAllByRole } from '@testing-library/react';
+import {
+  render,
+  screen,
+  fireEvent,
+  findAllByRole,
+  findByText,
+  waitFor,
+} from '@testing-library/react';
 import { Veiledning } from './Veiledning';
 import useTexts from '../../../hooks/useTexts';
 import * as tekster from '../tekster';
@@ -15,12 +22,17 @@ describe('Veiledning', () => {
   };
 
   it('Feil hvis ikke vilkår er godkjent', async () => {
-    render(<Component />);
+    const { container } = render(<Component />);
 
-    fireEvent.submit(screen.getByRole('button', { name: 'Start søknad' }));
-    const errorSummary = await screen.findByTestId('error-summary');
+    await fireEvent.submit(screen.getByRole('button', { name: 'Start søknad' }));
 
-    expect(await findAllByRole(errorSummary, 'link')).toHaveLength(1);
+    console.log('innerHtml', container.innerHTML);
+
+    await waitFor(() => {
+      expect(
+        screen.getByText('Du må bekrefte at du vil gi så riktige opplysninger som mulig.')
+      ).toBeVisible();
+    });
   });
   it('Ingen feil hvis vilkår er godkjent', async () => {
     render(<Component />);
@@ -30,6 +42,8 @@ describe('Veiledning', () => {
         value: true,
       },
     });
-    expect(await screen.queryByTestId('error-summary')).toBeNull();
+    expect(
+      screen.queryByText('Du må bekrefte at du vil gi så riktige opplysninger som mulig.')
+    ).toBeNull();
   });
 });
