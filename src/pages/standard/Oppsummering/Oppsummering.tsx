@@ -11,7 +11,7 @@ import {
   Label,
   Switch,
 } from '@navikt/ds-react';
-import React from 'react';
+import React, { useState } from 'react';
 import ConfirmationPanelWrapper from '../../../components/input/ConfirmationPanelWrapper';
 import { useSoknadContext } from '../../../context/soknadContext';
 import AccordianItemOppsummering from './AccordianItemOppsummering/AccordianItemOppsummering';
@@ -51,6 +51,9 @@ const Oppsummering = ({
     resolver: yupResolver(schema),
     defaultValues: {},
   });
+
+  const [toggleAll, setToggleAll] = useState(undefined);
+
   const SummaryRowIfExists = ({ labelKey, value }: { labelKey: string; value?: any }) => {
     return value ? (
       <BodyShort>
@@ -82,16 +85,22 @@ const Oppsummering = ({
           opplysninger, før du sender inn søknaden.
         </BodyShort>
       </GuidePanel>
-      <Switch position="right" size="medium">
+      <Switch position="right" size="medium" onChange={() => setToggleAll(!toggleAll)}>
         Åpne alle
       </Switch>
       <Accordion>
-        <AccordianItemOppsummering title={'Om deg'} defaultOpen={true} showEdit={false}>
+        <AccordianItemOppsummering
+          title={'Om deg'}
+          defaultOpen={true}
+          showEdit={false}
+          toggleAll={toggleAll}
+        >
           <OppsummeringKontaktinfo getText={getText} />
         </AccordianItemOppsummering>
         <AccordianItemOppsummering
           title={'Ønsket startdato'}
           editText="Endre opplysninger om startdato"
+          toggleAll={toggleAll}
         >
           <SummaryRowIfExists
             labelKey={'form.startDato.label'}
@@ -125,6 +134,7 @@ const Oppsummering = ({
         <AccordianItemOppsummering
           title={getText('steps.medlemskap.title')}
           editText="Endre opplysninger om hvor du har bodd og jobbet"
+          toggleAll={toggleAll}
         >
           <SummaryRowIfExists
             labelKey={'form.medlemskap.boddINorge.legend'}
@@ -153,6 +163,7 @@ const Oppsummering = ({
         <AccordianItemOppsummering
           title={getText('steps.yrkesskade.title')}
           editText="Endre opplysninger om yrkesskade"
+          toggleAll={toggleAll}
         >
           <SummaryRowIfExists
             labelKey={`form.yrkesskade.legend`}
@@ -162,6 +173,7 @@ const Oppsummering = ({
         <AccordianItemOppsummering
           title={getText('steps.andre_utbetalinger.title')}
           editText="Endre opplysninger om utbetalinger"
+          toggleAll={toggleAll}
         >
           <>
             <SummaryRowIfExists
@@ -196,6 +208,7 @@ const Oppsummering = ({
         <AccordianItemOppsummering
           title={getText('steps.fastlege.title')}
           editText="Endre informasjon om kontaktperson for helseopplysninger"
+          toggleAll={toggleAll}
         >
           <>
             <article>
@@ -215,6 +228,7 @@ const Oppsummering = ({
         <AccordianItemOppsummering
           title={getText('steps.barnetillegg.title')}
           editText="Endre opplysninger om barn"
+          toggleAll={toggleAll}
         >
           {søknadState?.søknad?.barnetillegg?.map((barn) => (
             <OppsummeringBarn barn={barn} />
@@ -223,6 +237,7 @@ const Oppsummering = ({
         <AccordianItemOppsummering
           title={getText('steps.student.title')}
           editText="Endre på om du er student"
+          toggleAll={toggleAll}
         >
           <SummaryRowIfExists
             labelKey={`form.student.legend`}
@@ -232,13 +247,18 @@ const Oppsummering = ({
         <AccordianItemOppsummering
           title={getText('steps.tilleggsopplysninger.title')}
           editText="Endre tilleggsopplysninger"
+          toggleAll={toggleAll}
         >
           <SummaryRowIfExists
             labelKey={`form.tilleggsopplysninger.label`}
             value={søknadState?.søknad?.tilleggsopplysninger}
           />
         </AccordianItemOppsummering>
-        <AccordianItemOppsummering title={getText('steps.vedlegg.title')} editText="Endre vedlegg">
+        <AccordianItemOppsummering
+          title={getText('steps.vedlegg.title')}
+          editText="Endre vedlegg"
+          toggleAll={toggleAll}
+        >
           <>
             {søknadState?.søknad?.vedlegg?.length === 0 && (
               <BodyShort>Du har ikke lastet opp noen vedlegg.</BodyShort>
