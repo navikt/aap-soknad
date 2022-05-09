@@ -223,7 +223,7 @@
         ]
       },
       "guideReadMore": {
-        "heading": "an jeg søke om AAP tilbake i tid?",
+        "heading": "Kan jeg søke om AAP tilbake i tid?",
         "text": "Hvis du av helsemessige årsaker ikke har kunnet søke tidligere, kan du få innvilget AAP tilbake i tid. Du kan også få AAP tilbake i tid hvis du har fått feil informasjon fra NAV og dette er grunnen til at du ikke har søkt tidligere."
       },
       "alertInfo": "Det er viktig at du gir oss beskjed hvis du bestemmer deg for å ta ferie, fordi det kan påvirke startdatoen din. Dette påvirker spesielt deg som får sykepenger."
@@ -291,7 +291,7 @@
       "tilDato": {
         "label": "Til og med dato (dd.mm.åååå)",
         "required": "Vennligst oppgi til dato",
-        "etterFraDato": "Til dato må være etter fra dato"
+        "fraDatoEtterTilDato": "Fra-dato må være eldre enn til-dato. Fyll inn slik: dd.mm.åååå."
       },
       "iArbeid": {
         "legend": "Jobbet du i dette landet i denne perioden?"

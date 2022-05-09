@@ -28,9 +28,10 @@ interface DatovelgerProps {
   label?: string;
   error?: string;
   value?: string;
+  description?: React.ReactChild | React.ReactChild[];
 }
 
-const datovelger = ({ onChange, error, name, label, id, value }: DatovelgerProps) => {
+const datovelger = ({ onChange, error, name, label, id, value, description }: DatovelgerProps) => {
   const TextFieldInput = forwardRef((props, ref) => (
     <TextField
       label={label}
@@ -38,10 +39,13 @@ const datovelger = ({ onChange, error, name, label, id, value }: DatovelgerProps
       name={name}
       style={{ maxWidth: '255px' }}
       error={error}
+      description={description}
+      autoComplete={'off'}
       {...props}
       {...ref}
     />
   ));
+
   return (
     <div className="datovelger navds-form-field">
       <DayPickerInput

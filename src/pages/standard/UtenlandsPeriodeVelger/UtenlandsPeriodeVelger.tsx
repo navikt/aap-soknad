@@ -57,11 +57,7 @@ const UtenlandsPeriodeVelger = ({
     tilDato: yup
       .date()
       .required(getText('form.utenlandsperiode.tilDato.required'))
-      .when(
-        'fromDate',
-        (fromDate, yup) =>
-          fromDate && yup.min(fromDate, getText('form.utenlandsperiode.tilDato.etterFraDato'))
-      ),
+      .min(yup.ref('fraDato'), getText('form.utenlandsperiode.tilDato.fraDatoEtterTilDato')),
   });
   const {
     control,
@@ -76,13 +72,13 @@ const UtenlandsPeriodeVelger = ({
   const valgtLand = watch('land');
   const showUtenlandsId = useMemo(() => {
     const landKode = valgtLand?.split(':')?.[0];
-    return landKode === 'GB' || eeaMember(landKode);
+    return landKode === 'GB' || landKode === 'CH' || eeaMember(landKode);
   }, [valgtLand]);
   const clearModal = () => {
-    setValue('land', 'none');
-    setValue('fraDato', '');
-    setValue('tilDato', '');
-    setValue('iArbeid', null);
+    setValue('land', '');
+    setValue('fraDato', undefined);
+    setValue('tilDato', undefined);
+    setValue('iArbeid', false);
     setValue('utenlandsId', '');
   };
   return (

@@ -6,12 +6,13 @@ export interface DatoVelgerProps {
   name: string;
   label: string;
   control: any;
+  description?: React.ReactChild | React.ReactChild[];
   error?: string;
   required?: string;
   validate?: () => any;
 }
 
-const DatoVelgerWrapper = ({ name, label, control, error }: DatoVelgerProps) => (
+const DatoVelgerWrapper = ({ name, label, control, error, description }: DatoVelgerProps) => (
   <Controller
     name={name}
     control={control}
@@ -23,6 +24,7 @@ const DatoVelgerWrapper = ({ name, label, control, error }: DatoVelgerProps) => 
         value={value}
         onChange={onChange}
         error={error}
+        description={description}
       />
     )}
   />

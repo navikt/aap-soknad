@@ -187,11 +187,11 @@ const StartDato = ({ getText, onBackClick, onCancelClick, søknad }: Props) => {
       </GuidePanel>
       <DatoVelgerWrapper
         name={`${STARTDATO}`}
-        /*description={
+        description={
           <ReadMore header={getText('steps.startDato.guideReadMore.heading')} type={'button'}>
             <BodyLong>{getText('steps.startDato.guideReadMore.text')}</BodyLong>
           </ReadMore>
-        }*/
+        }
         label={getText(`form.${STARTDATO}.label`)}
         control={control}
         error={errors.startDato?.message}
