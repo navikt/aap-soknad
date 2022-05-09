@@ -124,14 +124,11 @@ export const Behandlere = ({ getText, onBackClick, onCancelClick, søknad, fastl
         <BodyLong>{getText('steps.fastlege.guide1')}</BodyLong>
         <BodyLong>{getText('steps.fastlege.guide2')}</BodyLong>
       </GuidePanel>
-      <Heading size={'small'} level={'3'}>{`Fastlege`}</Heading>
+      <Heading size={'small'} level={'3'}>
+        {getText('steps.fastlege.fastlege.heading')}
+      </Heading>
       {!fastlege ? (
-        <BodyLong>
-          <TextWithLink
-            text={getText('steps.fastlege.ingenFastlege.text')}
-            links={[getText('steps.fastlege.ingenFastlege.link')]}
-          />
-        </BodyLong>
+        <BodyLong>{getText('steps.fastlege.ingenFastlege.text')}</BodyLong>
       ) : (
         <div>
           <BodyShort>{fastlege?.fulltNavn}</BodyShort>
@@ -139,10 +136,7 @@ export const Behandlere = ({ getText, onBackClick, onCancelClick, søknad, fastl
           <BodyShort>{fastlege?.adresse}</BodyShort>
           <BodyShort>{`Telefon: ${fastlege?.telefon}`}</BodyShort>
           <ReadMore header={getText('steps.fastlege.readMore.header')} type={'button'}>
-            <TextWithLink
-              text={getText('steps.fastlege.readMore.text')}
-              links={[getText('steps.fastlege.readMore.link')]}
-            />
+            {getText('steps.fastlege.readMore.text')}
           </ReadMore>
         </div>
       )}

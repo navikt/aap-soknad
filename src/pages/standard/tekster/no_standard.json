@@ -40,10 +40,13 @@
     },
     "fastlege": {
       "title": "Kontaktperson for helseopplysninger",
-      "guide1": "NAV henter helseopplysninger fra fastlegen din når vi skal behandle søknaden din. Ved behov kan vi også hente inn opplysninger fra andre  behandlere eller leger.",
+      "guide1": "NAV henter helseopplysninger fra fastlegen din når vi skal behandle søknaden din. Ved behov kan vi også hente inn opplysninger fra andre behandlere eller leger.",
       "guide2": "Hvis vi allerede har tilstrekkelig med opplysninger om deg fra tidligere, innhenter vi ikke legeerklæring.",
+      "fastlege": {
+        "heading": "Din registrerte fastlege"
+      },
       "annenBehandler": {
-        "heading": "Annen lege eller behandler",
+        "heading": "Har du en annen lege eller behandler",
         "info": "Hvis du har en annen lege eller behandler som du ønsker at NAV skal kunne kontakte for helseopplysninger, kan du legge til denne her."
       },
       "buttonAddNyBehandler": "Legg til lege/behandler",
@@ -51,19 +54,15 @@
         "heading": "Dine leger/behandlere"
       },
       "readMore": {
-        "header": "Hva gjør jeg hvis dette er feil fastlege?",
-        "text": "På $$ kan du registrere nye helsekontakter og bytte fastlege. Du kan sende inn AAP-søknaden din selv om du ikke ser endringen her enda.",
+        "header": "Hva om disse opplysningene ikke stemmer?",
+        "text": "På helsenorge.no kan du bytte fastlege. Dette kan du gjøre etter at du har sendt inn AAP-søknaden.",
         "link": {
           "name": "helsenorge.no (åpnes i ny fane)",
           "href": "https://www.helsenorge.no"
         }
       },
       "ingenFastlege": {
-        "text": "Vi finner ingen informasjon om fastlege registrert på deg. På $$ kan du registrere helsekontakter eller finne en fastlege.",
-        "link": {
-          "name": "helsenorge.no (åpnes i ny fane)",
-          "href": "https://www.helsenorge.no"
-        }
+        "text": "Vi finner ingen informasjon om fastlege registrert på deg. På helsenorge.no kan du registrere helsekontakter, finne fastlege eller sette deg på venteliste. Dette kan du gjøre etter at du har sendt AAP-søknaden."
       }
     },
     "medlemskap": {
