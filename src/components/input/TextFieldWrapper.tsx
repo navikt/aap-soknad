@@ -22,7 +22,7 @@ const TextFieldWrapper = ({ name, label, control, error }: TextFieldProps) => (
         error={error}
         value={value}
         onChange={onChange}
-        style={{ maxWidth: '255px' }}
+        //style={{ maxWidth: '255px' }}
       />
     )}
   />

@@ -1,0 +1,7 @@
+.addBehandlerModalContent {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: var(--navds-spacing-10);
+  max-width: 600px;
+}
