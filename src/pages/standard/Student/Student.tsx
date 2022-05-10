@@ -2,17 +2,25 @@ import Soknad from '../../../types/Soknad';
 import { GetText } from '../../../hooks/useTexts';
 import RadioGroupWrapper from '../../../components/input/RadioGroupWrapper';
 import { BodyLong, BodyShort, GuidePanel, Heading, Radio } from '@navikt/ds-react';
-import { JaEllerNei } from '../../../types/Generic';
-import React from 'react';
+import { JaEllerNei, JaNeiVetIkke } from '../../../types/Generic';
+import React, { useEffect } from 'react';
 import * as yup from 'yup';
 import { updateSøknadData, useSoknadContext } from '../../../context/soknadContext';
 import { completeAndGoToNextStep, useStepWizard } from '../../../context/stepWizardContextV2';
 import { FieldValues, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import SoknadFormWrapper from '../../../components/SoknadFormWrapper/SoknadFormWrapper';
+import { watch } from 'fs';
 
 const STUDENT = 'student';
 const ER_STUDENT = 'erStudent';
+const KOMME_TILBAKE = 'kommeTilbake';
+
+enum JaNeiAvbrutt {
+  JA = 'Ja',
+  NEI = 'Nei',
+  AVBRUTT = 'Avbrutt',
+}
 interface Props {
   getText: GetText;
   søknad?: Soknad;
@@ -26,8 +34,22 @@ const Student = ({ getText, onBackClick, onCancelClick, søknad }: Props) => {
       [ER_STUDENT]: yup
         .string()
         .required(getText('form.student.required'))
-        .oneOf([JaEllerNei.JA, JaEllerNei.NEI], getText('form.student.required'))
+        .oneOf(
+          [JaNeiAvbrutt.JA, JaNeiAvbrutt.NEI, JaNeiAvbrutt.AVBRUTT],
+          getText('form.student.required')
+        )
         .typeError(getText('form.student.required')),
+      [KOMME_TILBAKE]: yup.string().when([ER_STUDENT], {
+        is: JaNeiAvbrutt.AVBRUTT,
+        then: yup
+          .string()
+          .required(getText('form.student.kommeTilbake.required'))
+          .oneOf(
+            [JaNeiVetIkke.JA, JaNeiVetIkke.NEI, JaNeiVetIkke.VET_IKKE],
+            getText('form.student.kommeTilbake.required')
+          )
+          .typeError(getText('form.student.kommeTilbake.required')),
+      }),
     }),
   });
   const { søknadDispatch } = useSoknadContext();
@@ -35,6 +57,9 @@ const Student = ({ getText, onBackClick, onCancelClick, søknad }: Props) => {
   const {
     control,
     handleSubmit,
+    setValue,
+    clearErrors,
+    watch,
     formState: { errors },
   } = useForm<FieldValues>({
     resolver: yupResolver(schema),
@@ -42,6 +67,14 @@ const Student = ({ getText, onBackClick, onCancelClick, søknad }: Props) => {
       [STUDENT]: søknad?.student,
     },
   });
+
+  const erStudent = watch(`${STUDENT}.${ER_STUDENT}`);
+
+  useEffect(() => {
+    setValue(`${STUDENT}.${KOMME_TILBAKE}`, undefined);
+    clearErrors();
+  }, [erStudent]);
+
   return (
     <SoknadFormWrapper
       onNext={handleSubmit((data) => {
@@ -68,13 +101,34 @@ const Student = ({ getText, onBackClick, onCancelClick, søknad }: Props) => {
         control={control}
         error={errors?.[STUDENT]?.[ER_STUDENT]?.message}
       >
-        <Radio value={JaEllerNei.JA}>
-          <BodyShort>{JaEllerNei.JA}</BodyShort>
+        <Radio value={JaNeiAvbrutt.JA}>
+          <BodyShort>Ja, helt eller delvis</BodyShort>
         </Radio>
-        <Radio value={JaEllerNei.NEI}>
-          <BodyShort>{JaEllerNei.NEI}</BodyShort>
+        <Radio value={JaNeiAvbrutt.AVBRUTT}>
+          <BodyShort>Ja, men har avbrutt studiet helt</BodyShort>
+        </Radio>
+        <Radio value={JaNeiAvbrutt.NEI}>
+          <BodyShort>{JaNeiAvbrutt.NEI}</BodyShort>
         </Radio>
       </RadioGroupWrapper>
+      {erStudent === JaNeiAvbrutt.AVBRUTT && (
+        <RadioGroupWrapper
+          name={`${STUDENT}.${KOMME_TILBAKE}`}
+          legend={getText(`form.${STUDENT}.${KOMME_TILBAKE}.legend`)}
+          control={control}
+          error={errors?.[STUDENT]?.[KOMME_TILBAKE]?.message}
+        >
+          <Radio value={JaNeiVetIkke.JA}>
+            <BodyShort>{JaNeiVetIkke.JA}</BodyShort>
+          </Radio>
+          <Radio value={JaNeiVetIkke.NEI}>
+            <BodyShort>{JaNeiVetIkke.NEI}</BodyShort>
+          </Radio>
+          <Radio value={JaNeiVetIkke.VET_IKKE}>
+            <BodyShort>{JaNeiVetIkke.VET_IKKE}</BodyShort>
+          </Radio>
+        </RadioGroupWrapper>
+      )}
     </SoknadFormWrapper>
   );
 };

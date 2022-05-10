@@ -421,7 +421,11 @@
     "student": {
       "legend": "Er du student nå?",
       "description": "Du regnes som student hvis du tar et studie som gir rett til lån fra Statens lånekasse for utdanning. Du trenger ikke å ha mottatt lån/stipend.",
-      "required": "Du må svare på om du er student."
+      "required": "Du må svare på om du er student.",
+      "kommeTilbake": {
+        "legend": "Har du planer om å komme tilbake til studiet?",
+        "required": "Du må svare på om du har planer om å komme tilbake til studiet."
+      }
     },
     "tilleggsopplysninger": {
       "label": "Hvis du har flere opplysninger du mener er viktig for søknaden din, kan du skrive dem her (valgfritt):"
