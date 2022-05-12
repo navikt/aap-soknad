@@ -23,7 +23,7 @@ import * as yup from 'yup';
 import SoknadFormWrapper from '../../../components/SoknadFormWrapper/SoknadFormWrapper';
 import { completeAndGoToNextStep, useStepWizard } from '../../../context/stepWizardContextV2';
 import { updateSøknadData, useSoknadContext } from '../../../context/soknadContext';
-import { isBefore, isPast, isToday, subYears } from 'date-fns';
+import { isFuture, isPast, isToday, subYears } from 'date-fns';
 import TextAreaWrapper from '../../../components/input/TextAreaWrapper';
 
 const STARTDATO = 'startDato';
@@ -33,10 +33,18 @@ const SKALHAFERIE = 'skalHaFerie';
 const HVORFOR = 'hvorfor';
 const BEGRUNNELSE = 'begrunnelse';
 
-const validateStartDate = (startDate: Date) => {
-  const val = !isToday(startDate) && isPast(startDate);
-  console.log('validate', { startDate, val });
-  return val;
+const startDateIsInPast = (startDate: Date) => {
+  return !isToday(startDate) && isPast(startDate);
+};
+
+const startDateIsInFuture = (startDate: Date) => {
+  return !isToday(startDate) && isFuture(startDate);
+};
+
+const getStartDatoType = (startDate: Date) => {
+  if (startDateIsInPast(startDate)) return 'FORTID';
+  if (startDateIsInFuture(startDate)) return 'FREMTID';
+  return 'I_DAG';
 };
 
 interface Props {
@@ -55,7 +63,7 @@ const StartDato = ({ getText, onBackClick, onCancelClick, søknad }: Props) => {
       .typeError(getText('form.startDato.required')),
 
     [HVORFOR]: yup.string().when([STARTDATO], {
-      is: validateStartDate,
+      is: startDateIsInPast,
       then: yup
         .string()
         .required(getText('form.startDatoFørDagensDato.hvorfor.required'))
@@ -66,12 +74,12 @@ const StartDato = ({ getText, onBackClick, onCancelClick, søknad }: Props) => {
         .typeError(getText('form.startDatoFørDagensDato.hvorfor.required')),
     }),
     [BEGRUNNELSE]: yup.string().when([STARTDATO], {
-      is: validateStartDate,
+      is: startDateIsInPast || startDateIsInFuture,
       then: yup.string().nullable(),
     }),
 
     [FERIE]: yup.object().when([STARTDATO], {
-      is: (val: Date) => val === undefined || !validateStartDate(val),
+      is: (val: Date) => val === undefined || !startDateIsInPast(val),
       then: yup.object().shape({
         [SKALHAFERIE]: yup
           .string()
@@ -106,7 +114,9 @@ const StartDato = ({ getText, onBackClick, onCancelClick, søknad }: Props) => {
     }),
   });
 
-  const [startDatoEldreEnnDagensDato, setStartDatoEldreEnnDagensDato] = useState(false);
+  const [tidspunktStartDato, setTidspunktStartDato] = useState<
+    'FORTID' | 'I_DAG' | 'FREMTID' | undefined
+  >(undefined);
 
   const {
     control,
@@ -148,8 +158,8 @@ const StartDato = ({ getText, onBackClick, onCancelClick, søknad }: Props) => {
     setValue(`${FERIE}.antallDager`, '');
   }, [ferieType]);
   useEffect(() => {
-    const startDateIsInPast = validateStartDate(new Date(startDato));
-    if (!startDateIsInPast) {
+    const startDatoType = getStartDatoType(new Date(startDato));
+    if (startDatoType !== 'I_DAG') {
       setValue(HVORFOR, undefined);
       setValue(BEGRUNNELSE, undefined);
     } else {
@@ -159,7 +169,7 @@ const StartDato = ({ getText, onBackClick, onCancelClick, søknad }: Props) => {
       setValue(`${FERIE}.tilDato`, undefined);
       setValue(`${FERIE}.antallDager`, '');
     }
-    setStartDatoEldreEnnDagensDato(startDateIsInPast);
+    setTidspunktStartDato(startDatoType);
   }, [startDato]);
 
   return (
@@ -181,24 +191,24 @@ const StartDato = ({ getText, onBackClick, onCancelClick, søknad }: Props) => {
       <GuidePanel>
         {getParagraphs('steps.startDato.guide.paragraphs', getText).map(
           (e: string, index: number) => (
-            <BodyLong key={`${index}`}>{e}</BodyLong>
+            <BodyShort key={`${index}`} spacing>
+              {e}
+            </BodyShort>
           )
         )}
+        <ReadMore header={getText('steps.startDato.guideReadMore.heading')} type={'button'}>
+          {getText('steps.startDato.guideReadMore.text')}
+        </ReadMore>
       </GuidePanel>
       <DatoVelgerWrapper
         name={`${STARTDATO}`}
-        description={
-          <ReadMore header={getText('steps.startDato.guideReadMore.heading')} type={'button'}>
-            <BodyLong>{getText('steps.startDato.guideReadMore.text')}</BodyLong>
-          </ReadMore>
-        }
         label={getText(`form.${STARTDATO}.label`)}
         control={control}
         error={errors.startDato?.message}
       />
 
-      {startDatoEldreEnnDagensDato && (
-        <>
+      {tidspunktStartDato === 'FORTID' && (
+        <ColorPanel>
           <RadioGroupWrapper
             legend={getText('form.startDatoFørDagensDato.hvorfor.label')}
             name={HVORFOR}
@@ -213,13 +223,26 @@ const StartDato = ({ getText, onBackClick, onCancelClick, søknad }: Props) => {
           <TextAreaWrapper
             name={BEGRUNNELSE}
             label={getText('form.startDatoFørDagensDato.begrunnelse.label')}
+            description="Vi ønsker å være sikre på at vi setter riktig startdato for deg."
             control={control}
             error={errors?.begrunnelse?.message}
           />
-        </>
+        </ColorPanel>
       )}
 
-      {!startDatoEldreEnnDagensDato && (
+      {tidspunktStartDato === 'FREMTID' && (
+        <ColorPanel>
+          <TextAreaWrapper
+            name={BEGRUNNELSE}
+            label={'Her kan du beskrive nærmere hvorfor du søker frem i tid (valgfritt):'}
+            description="Vi ønsker å være sikre på at vi setter riktig startdato for deg."
+            control={control}
+            error={errors?.begrunnelse?.message}
+          />
+        </ColorPanel>
+      )}
+
+      {tidspunktStartDato !== 'FORTID' && (
         <>
           <RadioGroupWrapper
             legend={getText('form.ferie.skalHaFerie.legend')}

@@ -85,9 +85,11 @@ const Oppsummering = ({
           opplysninger, før du sender inn søknaden.
         </BodyShort>
       </GuidePanel>
-      <Switch position="right" size="medium" onChange={() => setToggleAll(!toggleAll)}>
-        Åpne alle
-      </Switch>
+      <div style={{ display: 'flex', flexDirection: 'row-reverse' }}>
+        <Switch position="right" size="medium" onChange={() => setToggleAll(!toggleAll)}>
+          Åpne alle
+        </Switch>
+      </div>
       <Accordion>
         <AccordianItemOppsummering
           title={'Om deg'}

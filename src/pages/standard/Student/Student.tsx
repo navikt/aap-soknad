@@ -1,7 +1,7 @@
 import Soknad from '../../../types/Soknad';
 import { GetText } from '../../../hooks/useTexts';
 import RadioGroupWrapper from '../../../components/input/RadioGroupWrapper';
-import { BodyLong, BodyShort, GuidePanel, Heading, Radio } from '@navikt/ds-react';
+import { BodyLong, BodyShort, GuidePanel, Heading, Radio, Alert } from '@navikt/ds-react';
 import { JaEllerNei, JaNeiVetIkke } from '../../../types/Generic';
 import React, { useEffect } from 'react';
 import * as yup from 'yup';
@@ -11,6 +11,7 @@ import { FieldValues, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import SoknadFormWrapper from '../../../components/SoknadFormWrapper/SoknadFormWrapper';
 import { watch } from 'fs';
+import ColorPanel from '../../../components/panel/ColorPanel';
 
 const STUDENT = 'student';
 const ER_STUDENT = 'erStudent';
@@ -69,6 +70,7 @@ const Student = ({ getText, onBackClick, onCancelClick, søknad }: Props) => {
   });
 
   const erStudent = watch(`${STUDENT}.${ER_STUDENT}`);
+  const tilbakeTilStudie = watch(`${STUDENT}.${KOMME_TILBAKE}`);
 
   useEffect(() => {
     setValue(`${STUDENT}.${KOMME_TILBAKE}`, undefined);
@@ -92,7 +94,11 @@ const Student = ({ getText, onBackClick, onCancelClick, søknad }: Props) => {
         {getText('steps.student.title')}
       </Heading>
       <GuidePanel>
-        <BodyShort>{getText('steps.student.guide1')}</BodyShort>
+        <BodyShort spacing>{getText('steps.student.guide1')}</BodyShort>
+        <BodyShort>
+          Du regnes som student hvis du tar et studie som gir rett til lån fra Statens lånekasse for
+          utdanning. Du trenger ikke å ha mottatt lån/stipend.
+        </BodyShort>
       </GuidePanel>
       <RadioGroupWrapper
         name={`${STUDENT}.${ER_STUDENT}`}
@@ -105,29 +111,42 @@ const Student = ({ getText, onBackClick, onCancelClick, søknad }: Props) => {
           <BodyShort>Ja, helt eller delvis</BodyShort>
         </Radio>
         <Radio value={JaNeiAvbrutt.AVBRUTT}>
-          <BodyShort>Ja, men har avbrutt studiet helt</BodyShort>
+          <BodyShort>Ja, men har avbrutt studiet helt på grunn av sykdom</BodyShort>
         </Radio>
         <Radio value={JaNeiAvbrutt.NEI}>
           <BodyShort>{JaNeiAvbrutt.NEI}</BodyShort>
         </Radio>
       </RadioGroupWrapper>
       {erStudent === JaNeiAvbrutt.AVBRUTT && (
-        <RadioGroupWrapper
-          name={`${STUDENT}.${KOMME_TILBAKE}`}
-          legend={getText(`form.${STUDENT}.${KOMME_TILBAKE}.legend`)}
-          control={control}
-          error={errors?.[STUDENT]?.[KOMME_TILBAKE]?.message}
-        >
-          <Radio value={JaNeiVetIkke.JA}>
-            <BodyShort>{JaNeiVetIkke.JA}</BodyShort>
-          </Radio>
-          <Radio value={JaNeiVetIkke.NEI}>
-            <BodyShort>{JaNeiVetIkke.NEI}</BodyShort>
-          </Radio>
-          <Radio value={JaNeiVetIkke.VET_IKKE}>
-            <BodyShort>{JaNeiVetIkke.VET_IKKE}</BodyShort>
-          </Radio>
-        </RadioGroupWrapper>
+        <ColorPanel>
+          <RadioGroupWrapper
+            name={`${STUDENT}.${KOMME_TILBAKE}`}
+            legend={getText(`form.${STUDENT}.${KOMME_TILBAKE}.legend`)}
+            control={control}
+            error={errors?.[STUDENT]?.[KOMME_TILBAKE]?.message}
+          >
+            <Radio value={JaNeiVetIkke.JA}>
+              <BodyShort>{JaNeiVetIkke.JA}</BodyShort>
+            </Radio>
+            <Radio value={JaNeiVetIkke.NEI}>
+              <BodyShort>{JaNeiVetIkke.NEI}</BodyShort>
+            </Radio>
+            <Radio value={JaNeiVetIkke.VET_IKKE}>
+              <BodyShort>{JaNeiVetIkke.VET_IKKE}</BodyShort>
+            </Radio>
+          </RadioGroupWrapper>
+        </ColorPanel>
+      )}
+      {tilbakeTilStudie && (
+        <Alert variant="info">
+          <BodyShort>Du må legge ved:</BodyShort>
+          <ul>
+            <li>Bekreftelse fra studiested på hvilken dato studiet ble avbrutt fra.</li>
+          </ul>
+          <BodyShort>
+            Dokumentene laster du opp senere i søknaden. Du kan også ettersende vedlegg.
+          </BodyShort>
+        </Alert>
       )}
     </SoknadFormWrapper>
   );
