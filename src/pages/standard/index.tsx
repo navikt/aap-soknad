@@ -49,6 +49,19 @@ export enum StepNames {
 const formatDate = (date?: Date): string | undefined =>
   date ? format(date, 'yyyy-MM-dd') : undefined;
 
+const getHvorfor = (hvorfor?: string) => {
+  if (hvorfor === 'Sykdom') return 'HELSE';
+  if (hvorfor === 'Manglende informasjon') return 'FEILINFO';
+  return undefined;
+};
+
+const getYrkesskade = (yrkesskade?: string) => {
+  if (yrkesskade === 'Ja') return 'JA';
+  if (yrkesskade === 'Nei') return 'NEI';
+  if (yrkesskade === 'Vet ikke') return 'VET_IKKE';
+  return undefined;
+};
+
 export const StandardPage = (): JSX.Element => {
   const [oppslagLoading, setOppslagLoading] = useState<boolean>(true);
   const [showVeiledning, setShowVeiledning] = useState<boolean>(true);
@@ -79,7 +92,7 @@ export const StandardPage = (): JSX.Element => {
         type: søknadState?.søknad?.student ? 'STUDENT' : 'STANDARD',
         startDato: {
           fom: formatDate(søknadState?.søknad?.startDato),
-          hvorfor: søknadState?.søknad?.hvorfor,
+          hvorfor: getHvorfor(søknadState?.søknad?.hvorfor),
           beskrivelse: søknadState?.søknad?.begrunnelse,
         },
         ferie: {
@@ -94,10 +107,20 @@ export const StandardPage = (): JSX.Element => {
           jobbetUtenforNorgeFørSyk: søknadState?.søknad?.medlemskap?.arbeidetUtenforNorgeFørSykdom,
           jobbetSammenhengendeINorgeSiste5:
             søknadState?.søknad?.medlemskap?.harArbeidetINorgeSiste5År,
-          utenlandsopphold: [], // TODO: Mappe utenlandsopphold
+          utenlandsopphold:
+            søknadState?.søknad?.medlemskap?.utenlandsOpphold?.map((utenlandsopphold) => ({
+              land: utenlandsopphold.land,
+              periode: {
+                fom: formatDate(utenlandsopphold.fraDato),
+                tom: formatDate(utenlandsopphold.tilDato),
+              },
+              arbeidet: utenlandsopphold.iArbeid,
+              id: utenlandsopphold.utenlandsId,
+              landsNavn: '', // TODO: Hente navn fra landkode
+            })) ?? [],
         },
         behandlere: [], // TODO: Mappe behandlere
-        yrkesskadeType: 'JA', // søknadState?.søknad?.yrkesskade TODO: Mappe yrkesskade
+        yrkesskadeType: getYrkesskade(søknadState?.søknad?.yrkesskade),
         utbetalinger: {
           fraArbeidsgiver: true, // TODO: Mappe søknadState?.søknad?.andreUtbetalinger?.lønn ? true : false
           stønadstyper: [],
