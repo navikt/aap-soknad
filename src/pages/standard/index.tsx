@@ -55,11 +55,30 @@ const getHvorfor = (hvorfor?: string) => {
   return undefined;
 };
 
-const getYrkesskade = (yrkesskade?: string) => {
-  if (yrkesskade === 'Ja') return 'JA';
-  if (yrkesskade === 'Nei') return 'NEI';
-  if (yrkesskade === 'Vet ikke') return 'VET_IKKE';
+const getSkalHaFerie = (skalHaFerie?: string, ferieType?: string) => {
+  if (skalHaFerie === 'Ja' && ferieType === 'Ja') return 'PERIODE';
+  if (skalHaFerie === 'Ja' && ferieType === 'Nei, men jeg vet antall dager') return 'DAGER';
+  if (skalHaFerie === 'Nei') return 'NEI';
+  if (skalHaFerie === 'Vet ikke') return 'VET_IKKE';
   return undefined;
+};
+
+const getJaNei = (value?: string) => {
+  if (value === 'Ja') return 'JA';
+  if (value === 'Nei') return 'NEI';
+  return undefined;
+};
+
+const getJaNeiVetIkke = (value?: string) => {
+  if (value === 'Ja') return 'JA';
+  if (value === 'Nei') return 'NEI';
+  if (value === 'Vet ikke') return 'VET_IKKE';
+  return undefined;
+};
+
+const jaNeiToBoolean = (value?: string) => {
+  if (value === 'Ja') return true;
+  return false;
 };
 
 export const StandardPage = (): JSX.Element => {
@@ -87,6 +106,10 @@ export const StandardPage = (): JSX.Element => {
     if (currentStep?.name === StepNames.OPPSUMMERING) {
       console.log('post søknad', søknadState?.søknad);
 
+      const skalHaFerie = getSkalHaFerie(
+        søknadState?.søknad?.ferie?.skalHaFerie,
+        søknadState?.søknad?.ferie?.ferieType
+      );
       // Må massere dataene litt før vi sender de inn
       const søknad = {
         type: søknadState?.søknad?.student ? 'STUDENT' : 'STANDARD',
@@ -96,11 +119,12 @@ export const StandardPage = (): JSX.Element => {
           beskrivelse: søknadState?.søknad?.begrunnelse,
         },
         ferie: {
+          skalHaFerie,
           periode: {
             fom: formatDate(søknadState?.søknad?.ferie?.fraDato),
             tom: formatDate(søknadState?.søknad?.ferie?.tilDato),
           },
-          dager: søknadState?.søknad?.ferie?.antallDager ?? 0,
+          dager: søknadState?.søknad?.ferie?.antallDager,
         },
         medlemskap: {
           boddINorgeSammenhengendeSiste5: søknadState?.søknad?.medlemskap?.harBoddINorgeSiste5År,
@@ -120,7 +144,7 @@ export const StandardPage = (): JSX.Element => {
             })) ?? [],
         },
         behandlere: [], // TODO: Mappe behandlere
-        yrkesskadeType: getYrkesskade(søknadState?.søknad?.yrkesskade),
+        yrkesskadeType: getJaNeiVetIkke(søknadState?.søknad?.yrkesskade),
         utbetalinger: {
           fraArbeidsgiver: true, // TODO: Mappe søknadState?.søknad?.andreUtbetalinger?.lønn ? true : false
           stønadstyper: [],

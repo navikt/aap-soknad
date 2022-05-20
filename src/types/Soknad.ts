@@ -60,7 +60,7 @@ export type Barn = {
 };
 export type Ferie = {
   skalHaFerie?: string;
-  type?: string;
+  ferieType?: string;
   antallDager?: string;
   fraDato?: Date;
   tilDato?: Date;
