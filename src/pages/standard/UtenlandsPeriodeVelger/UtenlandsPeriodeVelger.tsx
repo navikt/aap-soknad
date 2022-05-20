@@ -72,7 +72,15 @@ const UtenlandsPeriodeVelger = ({
   const valgtLand = watch('land');
   const showUtenlandsId = useMemo(() => {
     const landKode = valgtLand?.split(':')?.[0];
-    return landKode === 'GB' || landKode === 'CH' || eeaMember(landKode);
+    console.log('landKode', landKode);
+
+    return (
+      landKode === 'GB' ||
+      landKode === 'CH' ||
+      landKode === 'IM' ||
+      landKode === 'JE' ||
+      eeaMember(landKode)
+    );
   }, [valgtLand]);
   const clearModal = () => {
     setValue('land', '');
