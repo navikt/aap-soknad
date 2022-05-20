@@ -72,8 +72,6 @@ const UtenlandsPeriodeVelger = ({
   const valgtLand = watch('land');
   const showUtenlandsId = useMemo(() => {
     const landKode = valgtLand?.split(':')?.[0];
-    console.log('landKode', landKode);
-
     return (
       landKode === 'GB' ||
       landKode === 'CH' ||

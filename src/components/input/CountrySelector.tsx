@@ -14,7 +14,11 @@ const CountrySelector = ({ name, label, error, control }: Props) => {
   const [countryList, setCountryList] = useState<string[][]>([]);
   useEffect(() => {
     const getCountries = () => {
-      const list = Object.entries(countries.getNames('nb', { select: 'official' }));
+      const list = Object.entries(countries.getNames('nb', { select: 'official' }))
+        .filter((country) => country[0] !== 'NO' && country[0] !== 'SJ')
+        .sort(
+          (a, b) => (a[1] > b[1] ? 1 : -1) // Sorterer alfabetisk på navn i stedet for landkode
+        );
       setCountryList(list);
     };
     getCountries();
