@@ -48,6 +48,7 @@ jobs:
         run: "yarn run build"
         working-directory: "server"
       - name: "Sentry release"
+        continue-on-error: true
         uses: "getsentry/action-release@v1"
         env:
           SENTRY_AUTH_TOKEN: "${{ secrets.SENTRY_AUTH_TOKEN }}"
