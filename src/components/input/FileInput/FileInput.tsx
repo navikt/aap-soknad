@@ -4,7 +4,6 @@ import SvgUpload from '@navikt/ds-icons/esm/Upload';
 import * as classes from './FileInput.module.css';
 import { FieldArray, FieldArrayMethodProps, FieldArrayWithId, FieldValues } from 'react-hook-form';
 import { Delete, FileSuccess } from '@navikt/ds-icons';
-import { fetchPOST } from '../../../api/fetch';
 
 export interface Props {
   fields: FieldArrayWithId[];
@@ -43,7 +42,10 @@ const FileInput = ({ fields, append, remove, name, heading, ingress }: Props) =>
     const data = new FormData();
     data.append(name, file, file.name);
     setLoading(true);
-    const vedlegg = await fetchPOST('/aap/soknad-api/vedlegg/lagre', data);
+    const vedlegg = await fetch('/aap/soknad-api/vedlegg/lagre', {
+      method: 'POST',
+      body: data,
+    });
     setLoading(false);
     if (vedlegg.ok) {
       append({ name: file?.name, size: file?.size, id: vedlegg?.data });
