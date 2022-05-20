@@ -49,6 +49,38 @@ export enum StepNames {
 const formatDate = (date?: Date): string | undefined =>
   date ? format(date, 'yyyy-MM-dd') : undefined;
 
+const getHvorfor = (hvorfor?: string) => {
+  if (hvorfor === 'Sykdom') return 'HELSE';
+  if (hvorfor === 'Manglende informasjon') return 'FEILINFO';
+  return undefined;
+};
+
+const getSkalHaFerie = (skalHaFerie?: string, ferieType?: string) => {
+  if (skalHaFerie === 'Ja' && ferieType === 'Ja') return 'PERIODE';
+  if (skalHaFerie === 'Ja' && ferieType === 'Nei, men jeg vet antall dager') return 'DAGER';
+  if (skalHaFerie === 'Nei') return 'NEI';
+  if (skalHaFerie === 'Vet ikke') return 'VET_IKKE';
+  return undefined;
+};
+
+const getJaNei = (value?: string) => {
+  if (value === 'Ja') return 'JA';
+  if (value === 'Nei') return 'NEI';
+  return undefined;
+};
+
+const getJaNeiVetIkke = (value?: string) => {
+  if (value === 'Ja') return 'JA';
+  if (value === 'Nei') return 'NEI';
+  if (value === 'Vet ikke') return 'VET_IKKE';
+  return undefined;
+};
+
+const jaNeiToBoolean = (value?: string) => {
+  if (value === 'Ja') return true;
+  return false;
+};
+
 export const StandardPage = (): JSX.Element => {
   const [oppslagLoading, setOppslagLoading] = useState<boolean>(true);
   const [showVeiledning, setShowVeiledning] = useState<boolean>(true);
@@ -74,30 +106,45 @@ export const StandardPage = (): JSX.Element => {
     if (currentStep?.name === StepNames.OPPSUMMERING) {
       console.log('post søknad', søknadState?.søknad);
 
+      const skalHaFerie = getSkalHaFerie(
+        søknadState?.søknad?.ferie?.skalHaFerie,
+        søknadState?.søknad?.ferie?.ferieType
+      );
       // Må massere dataene litt før vi sender de inn
       const søknad = {
         type: søknadState?.søknad?.student ? 'STUDENT' : 'STANDARD',
         startDato: {
           fom: formatDate(søknadState?.søknad?.startDato),
-          hvorfor: søknadState?.søknad?.hvorfor,
+          hvorfor: getHvorfor(søknadState?.søknad?.hvorfor),
           beskrivelse: søknadState?.søknad?.begrunnelse,
         },
         ferie: {
+          skalHaFerie,
           periode: {
             fom: formatDate(søknadState?.søknad?.ferie?.fraDato),
             tom: formatDate(søknadState?.søknad?.ferie?.tilDato),
           },
-          dager: søknadState?.søknad?.ferie?.antallDager ?? 0,
+          dager: søknadState?.søknad?.ferie?.antallDager,
         },
         medlemskap: {
           boddINorgeSammenhengendeSiste5: søknadState?.søknad?.medlemskap?.harBoddINorgeSiste5År,
           jobbetUtenforNorgeFørSyk: søknadState?.søknad?.medlemskap?.arbeidetUtenforNorgeFørSykdom,
           jobbetSammenhengendeINorgeSiste5:
             søknadState?.søknad?.medlemskap?.harArbeidetINorgeSiste5År,
-          utenlandsopphold: [], // TODO: Mappe utenlandsopphold
+          utenlandsopphold:
+            søknadState?.søknad?.medlemskap?.utenlandsOpphold?.map((utenlandsopphold) => ({
+              land: utenlandsopphold.land,
+              periode: {
+                fom: formatDate(utenlandsopphold.fraDato),
+                tom: formatDate(utenlandsopphold.tilDato),
+              },
+              arbeidet: utenlandsopphold.iArbeid,
+              id: utenlandsopphold.utenlandsId,
+              landsNavn: '', // TODO: Hente navn fra landkode
+            })) ?? [],
         },
         behandlere: [], // TODO: Mappe behandlere
-        yrkesskadeType: 'JA', // søknadState?.søknad?.yrkesskade TODO: Mappe yrkesskade
+        yrkesskadeType: getJaNeiVetIkke(søknadState?.søknad?.yrkesskade),
         utbetalinger: {
           fraArbeidsgiver: true, // TODO: Mappe søknadState?.søknad?.andreUtbetalinger?.lønn ? true : false
           stønadstyper: [],

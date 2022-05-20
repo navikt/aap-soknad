@@ -155,7 +155,7 @@ const StartDato = ({ getText, onBackClick, onCancelClick, søknad }: Props) => {
   useEffect(() => {
     setValue(`${FERIE}.fraDato`, undefined);
     setValue(`${FERIE}.tilDato`, undefined);
-    setValue(`${FERIE}.antallDager`, '');
+    setValue(`${FERIE}.antallDager`, undefined);
   }, [ferieType]);
   useEffect(() => {
     const startDatoType = getStartDatoType(new Date(startDato));
@@ -167,7 +167,7 @@ const StartDato = ({ getText, onBackClick, onCancelClick, søknad }: Props) => {
       setValue(`${FERIE}.${SKALHAFERIE}`, undefined);
       setValue(`${FERIE}.fraDato`, undefined);
       setValue(`${FERIE}.tilDato`, undefined);
-      setValue(`${FERIE}.antallDager`, '');
+      setValue(`${FERIE}.antallDager`, undefined);
     }
     setTidspunktStartDato(startDatoType);
   }, [startDato]);
