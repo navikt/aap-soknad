@@ -16,7 +16,7 @@ export interface Props {
   heading: string;
   ingress: string;
 }
-const FileInput = ({ fields, append, remove, name, heading, ingress }: Props) => {
+const FileInput = ({ fields, append, remove, heading, ingress }: Props) => {
   const [dragOver, setDragOver] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
   const handleDragLeave: DragEventHandler<HTMLDivElement> = (e) => {
@@ -40,7 +40,7 @@ const FileInput = ({ fields, append, remove, name, heading, ingress }: Props) =>
   };
   const uploadFile = async (file: any) => {
     const data = new FormData();
-    data.append(name, file, file.name);
+    data.append('vedlegg', file);
     setLoading(true);
     const vedlegg = await fetch('/aap/soknad-api/vedlegg/lagre', {
       method: 'POST',
