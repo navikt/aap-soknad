@@ -328,6 +328,11 @@
       "arbeidINorge": {
         "legend": "Har du jobbet sammenhengende i Norge de fem siste årene?",
         "required": "Du må svare på om du har jobbet sammenhengende i Norge de fem siste årene."
+      },
+      "utenlandsOpphold": {
+        "boddINorgeArbeidUtenforNorge": "Du har svart at du har jobbet utenfor Norge de fem siste årene. Du må derfor legge til minst én periode med jobb utenfor Norge.",
+        "ogsåArbeidUtenforNorge": "Du har svart at du også har jobbet utenfor Norge de fem siste årene. Du må derfor legge til minst én periode med jobb utenfor Norge.",
+        "arbeidINorge": "Du har svart at du ikke har jobbet sammenhengende i Norge de fem siste årene. Du må derfor legge til minst én periode med utenlandsopphold."
       }
     },
     "yrkesskade": {

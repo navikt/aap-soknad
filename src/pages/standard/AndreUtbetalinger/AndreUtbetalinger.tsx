@@ -35,6 +35,12 @@ interface Props {
   onBackClick: () => void;
   onCancelClick: () => void;
 }
+export enum AttachmentType {
+  LØNN_OG_ANDRE_GODER = 'LØNN_OG_ANDRE_GODER',
+  OMSORGSSTØNAD = 'OMSORGSSTØNAD',
+  UTLANDSSTØNAD = 'UTLANDSSTØNAD',
+  FOSTERHJEMSGODTGJØRELSE = 'FOSTERHJEMSGODTGJØRELSE',
+}
 const ANDRE_UTBETALINGER = 'andreUtbetalinger';
 const LØNN = 'lønn';
 const STØNAD = 'stønad';
@@ -90,7 +96,7 @@ export const AndreUtbetalinger = ({ getText, onBackClick, onCancelClick, søknad
       attachments = [
         ...attachments,
         {
-          type: 'omsorgsstønad',
+          type: AttachmentType.OMSORGSSTØNAD,
           description: getText(`steps.andre_utbetalinger.alertAttachments.omsorgsstønad`),
         },
       ];
@@ -99,7 +105,7 @@ export const AndreUtbetalinger = ({ getText, onBackClick, onCancelClick, søknad
       attachments = [
         ...attachments,
         {
-          type: 'fosterhjemsgodtgjørelse',
+          type: AttachmentType.FOSTERHJEMSGODTGJØRELSE,
           description: getText(`steps.andre_utbetalinger.alertAttachments.fosterhjemsgodtgjørelse`),
         },
       ];
@@ -108,7 +114,7 @@ export const AndreUtbetalinger = ({ getText, onBackClick, onCancelClick, søknad
       attachments = [
         ...attachments,
         {
-          type: 'utlandsStønad',
+          type: AttachmentType.UTLANDSSTØNAD,
           description: getText(`steps.andre_utbetalinger.alertAttachments.utlandsStønad`),
         },
       ];
@@ -117,7 +123,7 @@ export const AndreUtbetalinger = ({ getText, onBackClick, onCancelClick, søknad
       attachments = [
         ...attachments,
         {
-          type: 'andreGoder',
+          type: AttachmentType.LØNN_OG_ANDRE_GODER,
           description: getText(`steps.andre_utbetalinger.alertAttachments.andreGoder`),
         },
       ];

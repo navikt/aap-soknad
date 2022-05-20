@@ -107,24 +107,18 @@ export const Medlemskap = ({ getText, onBackClick, onCancelClick, søknad }: Pro
           then: (yupSchema) =>
             yupSchema.min(
               1,
-              'Du har svart at du har jobbet utenfor Norge de fem siste årene. Du må derfor legge til minst én periode med jobb utenfor Norge.'
+              getText('form.medlemskap.utenlandsOpphold.boddINorgeArbeidUtenforNorge')
             ),
         })
         .when([OGSÅ_ARBEID_UTENFOR_NORGE], {
           is: (ogsåArbeidUtenforNorge: JaEllerNei) => ogsåArbeidUtenforNorge === JaEllerNei.JA,
           then: (yupSchema) =>
-            yupSchema.min(
-              1,
-              'Du har svart at du også har jobbet utenfor Norge de fem siste årene. Du må derfor legge til minst én periode med jobb utenfor Norge.'
-            ),
+            yupSchema.min(1, getText('form.medlemskap.utenlandsOpphold.ogsåArbeidUtenforNorge')),
         })
         .when([ARBEID_I_NORGE], {
           is: (arbeidINorge: JaEllerNei) => arbeidINorge === JaEllerNei.NEI,
           then: (yupSchema) =>
-            yupSchema.min(
-              1,
-              'Du har svart at du ikke har jobbet sammenhengende i Norge de fem siste årene. Du må derfor legge til minst én periode med utenlandsopphold.'
-            ),
+            yupSchema.min(1, getText('form.medlemskap.utenlandsOpphold.arbeidINorge')),
         }),
     }),
   });
