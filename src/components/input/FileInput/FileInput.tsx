@@ -1,9 +1,10 @@
-import { BodyShort, Detail, Label, Panel } from '@navikt/ds-react';
+import { BodyShort, Detail, Heading, Label, Loader, Panel } from '@navikt/ds-react';
 import React, { DragEventHandler, useState } from 'react';
 import SvgUpload from '@navikt/ds-icons/esm/Upload';
 import * as classes from './FileInput.module.css';
 import { FieldArray, FieldArrayMethodProps, FieldArrayWithId, FieldValues } from 'react-hook-form';
 import { Delete, FileSuccess } from '@navikt/ds-icons';
+import { fetchPOST } from '../../../api/fetch';
 
 export interface Props {
   fields: FieldArrayWithId[];
@@ -13,9 +14,12 @@ export interface Props {
   ) => void;
   remove: (index?: number | number[] | undefined) => void;
   name: string;
+  heading: string;
+  ingress: string;
 }
-const FileInput = ({ fields, append, remove, name }: Props) => {
+const FileInput = ({ fields, append, remove, name, heading, ingress }: Props) => {
   const [dragOver, setDragOver] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
   const handleDragLeave: DragEventHandler<HTMLDivElement> = (e) => {
     setDragOver(false);
     return e;
@@ -35,43 +39,25 @@ const FileInput = ({ fields, append, remove, name }: Props) => {
   const handleFiles = (fileList: FileList) => {
     Array.from(fileList).forEach(uploadFile);
   };
-  const uploadFile = (file: any) => {
+  const uploadFile = async (file: any) => {
     const data = new FormData();
     data.append(name, file, file.name);
-    console.log(file);
-    append({ name: file.name, size: `${Math.round(file.size / 1024)} kB`, data });
+    setLoading(true);
+    const vedlegg = await fetchPOST('/aap/soknad-api/vedlegg/lagre', data);
+    setLoading(false);
+    if (vedlegg.ok) {
+      append({ name: file?.name, size: file?.size, id: vedlegg?.data });
+    }
     setDragOver(false);
   };
   return (
-    <>
-      <div
-        className={`${classes?.dropZone} ${dragOver ? classes?.dragOver : ''}`}
-        onDragEnter={handleDragEnter}
-        onDragLeave={handleDragLeave}
-        onDragOver={handleDragOver}
-        onDrop={(e) => handleDrop(e)}
-      >
-        <input
-          hidden
-          id={'file-upload-input'}
-          type="file"
-          value={''}
-          onChange={(e) => {
-            const file = e?.target?.files?.[0];
-            if (file) uploadFile(file);
-          }}
-        />
-        <BodyShort>{'Dra og slipp'}</BodyShort>
-        <BodyShort>{'eller'}</BodyShort>
-        <label htmlFor={'file-upload-input'}>
-          <span
-            className={'navds-button navds-button__inner navds-body-short navds-button--secondary'}
-          >
-            <SvgUpload />
-            {'Velg dine filer'}
-          </span>
-        </label>
-      </div>
+    <div className={classes?.fileInput}>
+      {heading && (
+        <Heading size={'large'} level={'3'}>
+          {heading}
+        </Heading>
+      )}
+      {ingress && <BodyShort>{ingress}</BodyShort>}
       {fields?.map((attachment, index) => {
         return (
           <Panel className={classes?.fileCard} key={attachment.id}>
@@ -95,7 +81,43 @@ const FileInput = ({ fields, append, remove, name }: Props) => {
           </Panel>
         );
       })}
-    </>
+      <div
+        className={`${classes?.dropZone} ${dragOver ? classes?.dragOver : ''}`}
+        onDragEnter={handleDragEnter}
+        onDragLeave={handleDragLeave}
+        onDragOver={handleDragOver}
+        onDrop={(e) => handleDrop(e)}
+      >
+        {loading ? (
+          <Loader />
+        ) : (
+          <>
+            <input
+              hidden
+              id={'file-upload-input'}
+              type="file"
+              value={''}
+              onChange={(e) => {
+                const file = e?.target?.files?.[0];
+                if (file) uploadFile(file);
+              }}
+            />
+            <BodyShort>{'Dra og slipp'}</BodyShort>
+            <BodyShort>{'eller'}</BodyShort>
+            <label htmlFor={'file-upload-input'}>
+              <span
+                className={
+                  'navds-button navds-button__inner navds-body-short navds-button--secondary'
+                }
+              >
+                <SvgUpload />
+                {'Velg dine filer'}
+              </span>
+            </label>
+          </>
+        )}
+      </div>
+    </div>
   );
 };
 export default FileInput;

@@ -192,4 +192,7 @@ export const handlers = [
       })
     );
   }),
+  rest.post('/aap/soknad-api/vedlegg/lagre', (req, res, ctx) => {
+    return res(ctx.status(200), ctx.json('1234-unikid-5678'), ctx.delay(3000));
+  }),
 ];

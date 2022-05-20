@@ -26,6 +26,7 @@ import { formatDate } from '../../../utils/date';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import SoknadFormWrapper from '../../../components/SoknadFormWrapper/SoknadFormWrapper';
+import { useVedleggContext } from '../../../context/vedleggContext';
 
 interface OppsummeringProps {
   getText: GetText;
@@ -41,6 +42,7 @@ const Oppsummering = ({
   onSubmitSoknad,
 }: OppsummeringProps) => {
   const { søknadState } = useSoknadContext();
+  const { vedleggState } = useVedleggContext();
   const { fastlege } = useSokerOppslag();
   const schema = yup.object().shape({});
   const {
@@ -262,12 +264,36 @@ const Oppsummering = ({
           toggleAll={toggleAll}
         >
           <>
-            {søknadState?.søknad?.vedlegg?.length === 0 && (
-              <BodyShort>Du har ikke lastet opp noen vedlegg.</BodyShort>
+            {vedleggState?.requiredVedlegg?.map((vedlegg) => {
+              if (vedlegg?.type?.split('-')?.[0] === 'barn') return <></>;
+              return (
+                <>
+                  <Label>{vedlegg?.description}</Label>
+                  {søknadState?.søknad?.vedlegg?.[vedlegg.type]?.map((vedleggFile) => (
+                    <BodyShort>{vedleggFile?.name}</BodyShort>
+                  ))}
+                </>
+              );
+            })}
+            {vedleggState?.requiredVedlegg?.find(
+              (vedlegg) => vedlegg?.type?.split('-')?.[0] === 'barn'
+            ) && (
+              <>
+                <Label>{'Fødselsattest eller bostedbevis for barn:'}</Label>
+                {søknadState?.søknad?.vedlegg?.barn?.map((vedleggFile) => (
+                  <BodyShort>{vedleggFile?.name}</BodyShort>
+                ))}
+              </>
             )}
-            {søknadState?.søknad?.vedlegg?.map((vedlegg) => (
-              <BodyShort>{vedlegg?.name}</BodyShort>
-            ))}
+            {søknadState?.søknad?.vedlegg?.annet &&
+              søknadState?.søknad?.vedlegg?.annet?.length > 0 && (
+                <>
+                  <Label>{'Annet:'}</Label>
+                  {søknadState?.søknad?.vedlegg?.annet?.map((vedleggFile) => (
+                    <BodyShort>{vedleggFile?.name}</BodyShort>
+                  ))}
+                </>
+              )}
           </>
         </AccordianItemOppsummering>
       </Accordion>

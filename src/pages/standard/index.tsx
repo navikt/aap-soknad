@@ -25,13 +25,13 @@ import { AndreUtbetalinger } from './AndreUtbetalinger/AndreUtbetalinger';
 import { Barnetillegg } from './Barnetillegg/Barnetillegg';
 import Oppsummering from './Oppsummering/Oppsummering';
 import Tilleggsopplysninger from './Tilleggsopplysninger/Tilleggsopplysninger';
-import Vedlegg from '../Vedlegg/Vedlegg';
+import Vedlegg from './Vedlegg/Vedlegg';
 import StartDato from './StartDato/StartDato';
 import Student from './Student/Student';
 import Kvittering from './Kvittering/Kvittering';
 import { fetchPOST } from '../../api/fetch';
 import * as classes from './standard.module.css';
-import { format, parse } from 'date-fns';
+import { format } from 'date-fns';
 export enum StepNames {
   VEILEDNING = 'VEILEDNING',
   STARTDATO = 'STARTDATO',

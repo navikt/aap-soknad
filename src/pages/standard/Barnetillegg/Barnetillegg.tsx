@@ -17,7 +17,6 @@ import { JaEllerNei } from '../../../types/Generic';
 import Soknad from '../../../types/Soknad';
 import * as classes from './Barnetillegg.module.css';
 import { Add } from '@navikt/ds-icons';
-import TextWithLink from '../../../components/TextWithLink';
 import {
   addRequiredVedlegg,
   removeRequiredVedlegg,
@@ -77,7 +76,7 @@ export const Barnetillegg = ({ getText, onBackClick, onCancelClick, søknad }: P
       addRequiredVedlegg(
         [
           {
-            type: `barn${barn?.fnr}`,
+            type: `barn-${barn?.fnr}`,
             description: `Fødselsattest eller bostedsbevis for: ${barn?.fornavn} ${barn?.etternavn}`,
           },
         ],
@@ -188,7 +187,7 @@ export const Barnetillegg = ({ getText, onBackClick, onCancelClick, søknad }: P
         onDeleteClick={() => {
           if (selectedBarnIndex) {
             const barn = fields[selectedBarnIndex];
-            removeRequiredVedlegg(`barn${barn?.fnr}`, vedleggDispatch);
+            removeRequiredVedlegg(`barn-${barn?.fnr}`, vedleggDispatch);
             remove(selectedBarnIndex);
           }
           setShowModal(false);
