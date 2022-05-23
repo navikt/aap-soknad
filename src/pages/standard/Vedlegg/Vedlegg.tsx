@@ -21,7 +21,6 @@ interface Props {
 }
 const VEDLEGG = 'vedlegg';
 const VEDLEGG_LØNN = `${VEDLEGG}.${AttachmentType.LØNN_OG_ANDRE_GODER}`;
-const VEDLEGG_FOSTERHJEMSGODTGJØRELSE = `${VEDLEGG}.${AttachmentType.FOSTERHJEMSGODTGJØRELSE}`;
 const VEDLEGG_OMSORGSSTØNAD = `${VEDLEGG}.${AttachmentType.OMSORGSSTØNAD}`;
 const VEDLEGG_UTLANDSSTØNAD = `${VEDLEGG}.${AttachmentType.UTLANDSSTØNAD}`;
 const VEDLEGG_BARN = `${VEDLEGG}.barn`;
@@ -44,10 +43,6 @@ const Vedlegg = ({ getText, onBackClick, onCancelClick, søknad }: Props) => {
   });
   const fieldArrayLønn = useFieldArray({
     name: VEDLEGG_LØNN,
-    control,
-  });
-  const fieldArrayFosterhjemsgodtgjørelse = useFieldArray({
-    name: VEDLEGG_FOSTERHJEMSGODTGJØRELSE,
     control,
   });
   const fieldArrayOmsorgsstønad = useFieldArray({
@@ -130,18 +125,6 @@ const Vedlegg = ({ getText, onBackClick, onCancelClick, søknad }: Props) => {
           append={fieldArrayOmsorgsstønad.append}
           remove={fieldArrayOmsorgsstønad.remove}
           heading={'Omsorgsstønad'}
-          ingress={'Hvis du har noe annet du ønsker å legge ved kan du laste det opp her'}
-        />
-      )}
-      {vedleggState?.requiredVedlegg?.find(
-        (e) => e.type === AttachmentType.FOSTERHJEMSGODTGJØRELSE
-      ) && (
-        <FileInput
-          name={VEDLEGG_FOSTERHJEMSGODTGJØRELSE}
-          fields={fieldArrayFosterhjemsgodtgjørelse.fields}
-          append={fieldArrayFosterhjemsgodtgjørelse.append}
-          remove={fieldArrayFosterhjemsgodtgjørelse.remove}
-          heading={'Fosterhjemsgodtgjørelse'}
           ingress={'Hvis du har noe annet du ønsker å legge ved kan du laste det opp her'}
         />
       )}

@@ -246,15 +246,8 @@ export const StandardPage = (): JSX.Element => {
             søknad={søknadState?.søknad}
           />
         </Step>
-        <Step order={4} name={StepNames.ANDRE_UTBETALINGER} label={'Andre utbetalinger'}>
-          <AndreUtbetalinger
-            getText={getText}
-            onCancelClick={onDeleteSøknad}
-            onBackClick={onPreviousStep}
-            søknad={søknadState?.søknad}
-          />
-        </Step>
-        <Step order={5} name={StepNames.FASTLEGE} label={'Fastlege'}>
+
+        <Step order={4} name={StepNames.FASTLEGE} label={'Fastlege'}>
           <Behandlere
             getText={getText}
             onCancelClick={onDeleteSøknad}
@@ -263,7 +256,7 @@ export const StandardPage = (): JSX.Element => {
             fastlege={fastlege}
           />
         </Step>
-        <Step order={6} name={StepNames.BARNETILLEGG} label={'Barnetilleggg'}>
+        <Step order={5} name={StepNames.BARNETILLEGG} label={'Barnetilleggg'}>
           <Barnetillegg
             getText={getText}
             onCancelClick={onDeleteSøknad}
@@ -271,8 +264,16 @@ export const StandardPage = (): JSX.Element => {
             søknad={søknadState?.søknad}
           />
         </Step>
-        <Step order={7} name={StepNames.STUDENT} label={'Student'}>
+        <Step order={6} name={StepNames.STUDENT} label={'Student'}>
           <Student
+            getText={getText}
+            onCancelClick={onDeleteSøknad}
+            onBackClick={onPreviousStep}
+            søknad={søknadState?.søknad}
+          />
+        </Step>
+        <Step order={7} name={StepNames.ANDRE_UTBETALINGER} label={'Andre utbetalinger'}>
+          <AndreUtbetalinger
             getText={getText}
             onCancelClick={onDeleteSøknad}
             onBackClick={onPreviousStep}

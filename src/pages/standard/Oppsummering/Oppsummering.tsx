@@ -175,41 +175,6 @@ const Oppsummering = ({
           />
         </AccordianItemOppsummering>
         <AccordianItemOppsummering
-          title={getText('steps.andre_utbetalinger.title')}
-          editText="Endre opplysninger om utbetalinger"
-          toggleAll={toggleAll}
-        >
-          <>
-            <SummaryRowIfExists
-              labelKey={`form.andreUtbetalinger.lønn.legend`}
-              value={søknadState?.søknad?.andreUtbetalinger?.lønn}
-            />
-            <SummaryRowIfExists
-              labelKey={`form.andreUtbetalinger.stønad.legend`}
-              value={søknadState?.søknad?.andreUtbetalinger?.stønad?.join(', ')}
-            />
-            {søknadState?.søknad?.andreUtbetalinger?.annet ? (
-              [søknadState?.søknad?.andreUtbetalinger?.annet]?.map((e, index) => (
-                <div key={index}>
-                  <Label>{'Annet:'}</Label>
-                  <Grid>
-                    <Cell xs={4}>
-                      <Label>{getText('form.andreUtbetalinger.annet.utbetaling.label')}</Label>
-                      <BodyShort>{e?.utbetalingsNavn}</BodyShort>
-                    </Cell>
-                    <Cell xs={4}>
-                      <Label>{getText('form.andreUtbetalinger.annet.utbetaler.label')}</Label>
-                      <BodyShort>{e?.utbetalerNavn}</BodyShort>
-                    </Cell>
-                  </Grid>
-                </div>
-              ))
-            ) : (
-              <></>
-            )}
-          </>
-        </AccordianItemOppsummering>
-        <AccordianItemOppsummering
           title={getText('steps.fastlege.title')}
           editText="Endre informasjon om kontaktperson for helseopplysninger"
           toggleAll={toggleAll}
@@ -246,6 +211,20 @@ const Oppsummering = ({
           <SummaryRowIfExists
             labelKey={`form.student.legend`}
             value={søknadState?.søknad?.student?.erStudent}
+          />
+        </AccordianItemOppsummering>
+        <AccordianItemOppsummering
+          title={getText('steps.andre_utbetalinger.title')}
+          editText="Endre opplysninger om utbetalinger"
+          toggleAll={toggleAll}
+        >
+          <SummaryRowIfExists
+            labelKey={`form.andreUtbetalinger.lønn.legend`}
+            value={søknadState?.søknad?.andreUtbetalinger?.lønn}
+          />
+          <SummaryRowIfExists
+            labelKey={`form.andreUtbetalinger.stønad.legend`}
+            value={søknadState?.søknad?.andreUtbetalinger?.stønad?.join(', ')}
           />
         </AccordianItemOppsummering>
         <AccordianItemOppsummering

@@ -146,7 +146,6 @@
       "alertAttachments": {
         "title": "Du må legge ved:",
         "omsorgsstønad": "Kopi av avtalen om omsorgsstønad fra kommunen din",
-        "fosterhjemsgodtgjørelse": "Dokumentasjon av fosterhjemsgodtgjørelse",
         "utlandsStønad": "Dokumentasjon av ytelser fra utenlandske trygdemyndigheter",
         "andreGoder": "Dokumentasjon av ekstra utbetalinger fra arbeidsgiver, for eksempel kopi av inngått sluttpakke, avtale om etterlønn eller andre goder. Både beløpet på utbetalingen og perioden den gjelder for bør være dokumentert",
         "uploadInfo": "Dokumentene laster du opp senere i søknaden. Du kan også ettersende vedlegg."
@@ -346,11 +345,11 @@
         "omsorgsstønad": "Omsorgsstønad (tidligere omsorgslønn)",
         "introduksjonsStønad": "Introduksjonssønad (introduksjonsprogrammet)",
         "kvalifiseringsstønad": "Kvalifiseringsstønad (kvalifiseringsprogrammet)",
-        "fosterhjemsgodtgjørelse": "Fosterhjemsgodtgjørelse (til deg eller ektefelle/partner/samboer)",
         "verv": "Godtgjørelse eller lønn for verv",
         "utland": "Ytelser fra utenlandske trygdemyndigheter",
-        "annet": "Annet (for eksempel aksjeutbytte, leieinntekter, pensjoner eller forsikringsordninger)",
-        "nei": "Nei, ingen",
+        "pensjon": "Pensjoner",
+        "stipend": "Lån, stipend eller sykestipend fra Lånekassen",
+        "nei": "Ingen av disse",
         "required": "Du må krysse av for om du får eller nylig har søkt om noen av utbetalingene over."
       },
       "lønn": {
@@ -386,16 +385,6 @@
         },
         "land": {
           "label": "Hvilket land?"
-        }
-      },
-      "annet": {
-        "utbetaling": {
-          "label": "Hvilken type utbetaling?",
-          "required": "Du må fylle ut hvilken type utbetaling du får."
-        },
-        "utbetaler": {
-          "label": "Hvem utbetaler?",
-          "required": "Du må fylle ut hvem som utbetaler."
         }
       }
     },
