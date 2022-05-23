@@ -127,10 +127,18 @@ export const StandardPage = (): JSX.Element => {
           dager: søknadState?.søknad?.ferie?.antallDager,
         },
         medlemskap: {
-          boddINorgeSammenhengendeSiste5: søknadState?.søknad?.medlemskap?.harBoddINorgeSiste5År,
-          jobbetUtenforNorgeFørSyk: søknadState?.søknad?.medlemskap?.arbeidetUtenforNorgeFørSykdom,
-          jobbetSammenhengendeINorgeSiste5:
-            søknadState?.søknad?.medlemskap?.harArbeidetINorgeSiste5År,
+          boddINorgeSammenhengendeSiste5: jaNeiToBoolean(
+            søknadState?.søknad?.medlemskap?.harBoddINorgeSiste5År
+          ),
+          jobbetUtenforNorgeFørSyk: jaNeiToBoolean(
+            søknadState?.søknad?.medlemskap?.arbeidetUtenforNorgeFørSykdom
+          ),
+          jobbetSammenhengendeINorgeSiste5: jaNeiToBoolean(
+            søknadState?.søknad?.medlemskap?.harArbeidetINorgeSiste5År
+          ),
+          iTilleggArbeidUtenforNorge: jaNeiToBoolean(
+            søknadState?.søknad?.medlemskap?.iTilleggArbeidUtenforNorge
+          ),
           utenlandsopphold:
             søknadState?.søknad?.medlemskap?.utenlandsOpphold?.map((utenlandsopphold) => ({
               land: utenlandsopphold.land,
