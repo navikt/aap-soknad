@@ -78,7 +78,8 @@ const getJaNeiVetIkke = (value?: string) => {
 
 const jaNeiToBoolean = (value?: string) => {
   if (value === 'Ja') return true;
-  return false;
+  if (value === 'Nei') return false;
+  return undefined;
 };
 
 export const StandardPage = (): JSX.Element => {
@@ -126,7 +127,7 @@ export const StandardPage = (): JSX.Element => {
           },
           dager: søknadState?.søknad?.ferie?.antallDager,
         },
-        medlemskap: {
+        medlemsskap: {
           boddINorgeSammenhengendeSiste5: jaNeiToBoolean(
             søknadState?.søknad?.medlemskap?.harBoddINorgeSiste5År
           ),
