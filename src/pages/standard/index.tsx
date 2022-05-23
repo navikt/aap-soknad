@@ -55,17 +55,11 @@ const getHvorfor = (hvorfor?: string) => {
   return undefined;
 };
 
-const getSkalHaFerie = (skalHaFerie?: string, ferieType?: string) => {
+const getFerieType = (skalHaFerie?: string, ferieType?: string) => {
   if (skalHaFerie === 'Ja' && ferieType === 'Ja') return 'PERIODE';
   if (skalHaFerie === 'Ja' && ferieType === 'Nei, men jeg vet antall dager') return 'DAGER';
   if (skalHaFerie === 'Nei') return 'NEI';
   if (skalHaFerie === 'Vet ikke') return 'VET_IKKE';
-  return undefined;
-};
-
-const getJaNei = (value?: string) => {
-  if (value === 'Ja') return 'JA';
-  if (value === 'Nei') return 'NEI';
   return undefined;
 };
 
@@ -78,7 +72,8 @@ const getJaNeiVetIkke = (value?: string) => {
 
 const jaNeiToBoolean = (value?: string) => {
   if (value === 'Ja') return true;
-  return false;
+  if (value === 'Nei') return false;
+  return undefined;
 };
 
 export const StandardPage = (): JSX.Element => {
@@ -106,7 +101,7 @@ export const StandardPage = (): JSX.Element => {
     if (currentStep?.name === StepNames.OPPSUMMERING) {
       console.log('post søknad', søknadState?.søknad);
 
-      const skalHaFerie = getSkalHaFerie(
+      const ferieType = getFerieType(
         søknadState?.søknad?.ferie?.skalHaFerie,
         søknadState?.søknad?.ferie?.ferieType
       );
@@ -119,18 +114,26 @@ export const StandardPage = (): JSX.Element => {
           beskrivelse: søknadState?.søknad?.begrunnelse,
         },
         ferie: {
-          skalHaFerie,
+          ferieType,
           periode: {
             fom: formatDate(søknadState?.søknad?.ferie?.fraDato),
             tom: formatDate(søknadState?.søknad?.ferie?.tilDato),
           },
           dager: søknadState?.søknad?.ferie?.antallDager,
         },
-        medlemskap: {
-          boddINorgeSammenhengendeSiste5: søknadState?.søknad?.medlemskap?.harBoddINorgeSiste5År,
-          jobbetUtenforNorgeFørSyk: søknadState?.søknad?.medlemskap?.arbeidetUtenforNorgeFørSykdom,
-          jobbetSammenhengendeINorgeSiste5:
-            søknadState?.søknad?.medlemskap?.harArbeidetINorgeSiste5År,
+        medlemsskap: {
+          boddINorgeSammenhengendeSiste5: jaNeiToBoolean(
+            søknadState?.søknad?.medlemskap?.harBoddINorgeSiste5År
+          ),
+          jobbetUtenforNorgeFørSyk: jaNeiToBoolean(
+            søknadState?.søknad?.medlemskap?.arbeidetUtenforNorgeFørSykdom
+          ),
+          jobbetSammenhengendeINorgeSiste5: jaNeiToBoolean(
+            søknadState?.søknad?.medlemskap?.harArbeidetINorgeSiste5År
+          ),
+          iTilleggArbeidUtenforNorge: jaNeiToBoolean(
+            søknadState?.søknad?.medlemskap?.iTilleggArbeidUtenforNorge
+          ),
           utenlandsopphold:
             søknadState?.søknad?.medlemskap?.utenlandsOpphold?.map((utenlandsopphold) => ({
               land: utenlandsopphold.land,
@@ -237,15 +240,8 @@ export const StandardPage = (): JSX.Element => {
             søknad={søknadState?.søknad}
           />
         </Step>
-        <Step order={4} name={StepNames.ANDRE_UTBETALINGER} label={'Andre utbetalinger'}>
-          <AndreUtbetalinger
-            getText={getText}
-            onCancelClick={onDeleteSøknad}
-            onBackClick={onPreviousStep}
-            søknad={søknadState?.søknad}
-          />
-        </Step>
-        <Step order={5} name={StepNames.FASTLEGE} label={'Fastlege'}>
+
+        <Step order={4} name={StepNames.FASTLEGE} label={'Fastlege'}>
           <Behandlere
             getText={getText}
             onCancelClick={onDeleteSøknad}
@@ -254,7 +250,7 @@ export const StandardPage = (): JSX.Element => {
             fastlege={fastlege}
           />
         </Step>
-        <Step order={6} name={StepNames.BARNETILLEGG} label={'Barnetilleggg'}>
+        <Step order={5} name={StepNames.BARNETILLEGG} label={'Barnetilleggg'}>
           <Barnetillegg
             getText={getText}
             onCancelClick={onDeleteSøknad}
@@ -262,8 +258,16 @@ export const StandardPage = (): JSX.Element => {
             søknad={søknadState?.søknad}
           />
         </Step>
-        <Step order={7} name={StepNames.STUDENT} label={'Student'}>
+        <Step order={6} name={StepNames.STUDENT} label={'Student'}>
           <Student
+            getText={getText}
+            onCancelClick={onDeleteSøknad}
+            onBackClick={onPreviousStep}
+            søknad={søknadState?.søknad}
+          />
+        </Step>
+        <Step order={7} name={StepNames.ANDRE_UTBETALINGER} label={'Andre utbetalinger'}>
+          <AndreUtbetalinger
             getText={getText}
             onCancelClick={onDeleteSøknad}
             onBackClick={onPreviousStep}

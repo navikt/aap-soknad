@@ -25,6 +25,7 @@ type Medlemskap = {
   harBoddINorgeSiste5År?: JaEllerNei;
   harArbeidetINorgeSiste5År?: JaEllerNei;
   arbeidetUtenforNorgeFørSykdom?: JaEllerNei;
+  iTilleggArbeidUtenforNorge?: JaEllerNei;
   utenlandsOpphold?: UtenlandsPeriode[];
 };
 export type Behandler = {

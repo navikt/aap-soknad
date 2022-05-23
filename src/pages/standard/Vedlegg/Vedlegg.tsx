@@ -21,7 +21,6 @@ interface Props {
 }
 const VEDLEGG = 'vedlegg';
 const VEDLEGG_LØNN = `${VEDLEGG}.${AttachmentType.LØNN_OG_ANDRE_GODER}`;
-const VEDLEGG_FOSTERHJEMSGODTGJØRELSE = `${VEDLEGG}.${AttachmentType.FOSTERHJEMSGODTGJØRELSE}`;
 const VEDLEGG_OMSORGSSTØNAD = `${VEDLEGG}.${AttachmentType.OMSORGSSTØNAD}`;
 const VEDLEGG_UTLANDSSTØNAD = `${VEDLEGG}.${AttachmentType.UTLANDSSTØNAD}`;
 const VEDLEGG_BARN = `${VEDLEGG}.barn`;
@@ -44,10 +43,6 @@ const Vedlegg = ({ getText, onBackClick, onCancelClick, søknad }: Props) => {
   });
   const fieldArrayLønn = useFieldArray({
     name: VEDLEGG_LØNN,
-    control,
-  });
-  const fieldArrayFosterhjemsgodtgjørelse = useFieldArray({
-    name: VEDLEGG_FOSTERHJEMSGODTGJØRELSE,
     control,
   });
   const fieldArrayOmsorgsstønad = useFieldArray({
@@ -101,8 +96,8 @@ const Vedlegg = ({ getText, onBackClick, onCancelClick, søknad }: Props) => {
             <Label spacing>
               Ut fra dine svar har vi ikke registrert noen vedlegg som må lastes opp.
             </Label>
-            <ReadMore header={getText('steps.vedlegg.readMore.heading')} type={'button'}>
-              {getText('steps.vedlegg.readMore.text')}
+            <ReadMore header={'Kan jeg laste opp andre vedlegg?'} type={'button'}>
+              {'Hvis du har noe annet du også ønsker å legge ved, kan du også laste opp dette her.'}
             </ReadMore>
           </>
         )}
@@ -119,8 +114,8 @@ const Vedlegg = ({ getText, onBackClick, onCancelClick, søknad }: Props) => {
           fields={fieldArrayLønn.fields}
           append={fieldArrayLønn.append}
           remove={fieldArrayLønn.remove}
-          heading={getText('form.vedlegg.lønnOgAndreGoder.heading')}
-          ingress={getText(`steps.andre_utbetalinger.alertAttachments.andreGoder`)}
+          heading={'Lønn og andre goder'}
+          ingress={'Hvis du har noe annet du ønsker å legge ved kan du laste det opp her'}
         />
       )}
       {vedleggState?.requiredVedlegg?.find((e) => e.type === AttachmentType.OMSORGSSTØNAD) && (
@@ -129,20 +124,8 @@ const Vedlegg = ({ getText, onBackClick, onCancelClick, søknad }: Props) => {
           fields={fieldArrayOmsorgsstønad.fields}
           append={fieldArrayOmsorgsstønad.append}
           remove={fieldArrayOmsorgsstønad.remove}
-          heading={getText('form.vedlegg.omsorgsstønad.heading')}
-          ingress={getText(`steps.andre_utbetalinger.alertAttachments.omsorgsstønad`)}
-        />
-      )}
-      {vedleggState?.requiredVedlegg?.find(
-        (e) => e.type === AttachmentType.FOSTERHJEMSGODTGJØRELSE
-      ) && (
-        <FileInput
-          name={VEDLEGG_FOSTERHJEMSGODTGJØRELSE}
-          fields={fieldArrayFosterhjemsgodtgjørelse.fields}
-          append={fieldArrayFosterhjemsgodtgjørelse.append}
-          remove={fieldArrayFosterhjemsgodtgjørelse.remove}
-          heading={getText('form.vedlegg.fosterhjemsgodtgjørelse.heading')}
-          ingress={getText(`steps.andre_utbetalinger.alertAttachments.fosterhjemsgodtgjørelse`)}
+          heading={'Omsorgsstønad'}
+          ingress={'Hvis du har noe annet du ønsker å legge ved kan du laste det opp her'}
         />
       )}
       {vedleggState?.requiredVedlegg?.find((e) => e.type === AttachmentType.UTLANDSSTØNAD) && (
@@ -151,8 +134,8 @@ const Vedlegg = ({ getText, onBackClick, onCancelClick, søknad }: Props) => {
           fields={fieldArrayUtlandsstønad.fields}
           append={fieldArrayUtlandsstønad.append}
           remove={fieldArrayUtlandsstønad.remove}
-          heading={getText('form.vedlegg.utlandsstønad.heading')}
-          ingress={getText(`steps.andre_utbetalinger.alertAttachments.utlandsStønad`)}
+          heading={'Utlandsstønad'}
+          ingress={'Hvis du har noe annet du ønsker å legge ved kan du laste det opp her'}
         />
       )}
       {vedleggState?.requiredVedlegg?.find((e) => e?.type?.split('-')?.[0] === 'barn') && (
@@ -161,8 +144,8 @@ const Vedlegg = ({ getText, onBackClick, onCancelClick, søknad }: Props) => {
           fields={fieldArrayBarn.fields}
           append={fieldArrayBarn.append}
           remove={fieldArrayBarn.remove}
-          heading={getText('form.vedlegg.barn.heading')}
-          ingress={getText('form.barnetillegg.add.alertBullet')}
+          heading={'Barn'}
+          ingress={'Hvis du har noe annet du ønsker å legge ved kan du laste det opp her'}
         />
       )}
       <FileInput
@@ -170,8 +153,8 @@ const Vedlegg = ({ getText, onBackClick, onCancelClick, søknad }: Props) => {
         fields={fieldArrayAnnet.fields}
         append={fieldArrayAnnet.append}
         remove={fieldArrayAnnet.remove}
-        heading={getText('form.vedlegg.annet.heading')}
-        ingress={getText('form.vedlegg.annet.ingress')}
+        heading={'Annen dokumentasjon'}
+        ingress={'Hvis du har noe annet du ønsker å legge ved kan du laste det opp her'}
       />
 
       <Alert variant={'info'}>{getText('steps.vedlegg.alertInfo')}</Alert>
