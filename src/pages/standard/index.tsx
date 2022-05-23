@@ -55,7 +55,7 @@ const getHvorfor = (hvorfor?: string) => {
   return undefined;
 };
 
-const getSkalHaFerie = (skalHaFerie?: string, ferieType?: string) => {
+const getFerieType = (skalHaFerie?: string, ferieType?: string) => {
   if (skalHaFerie === 'Ja' && ferieType === 'Ja') return 'PERIODE';
   if (skalHaFerie === 'Ja' && ferieType === 'Nei, men jeg vet antall dager') return 'DAGER';
   if (skalHaFerie === 'Nei') return 'NEI';
@@ -106,7 +106,7 @@ export const StandardPage = (): JSX.Element => {
     if (currentStep?.name === StepNames.OPPSUMMERING) {
       console.log('post søknad', søknadState?.søknad);
 
-      const skalHaFerie = getSkalHaFerie(
+      const ferieType = getFerieType(
         søknadState?.søknad?.ferie?.skalHaFerie,
         søknadState?.søknad?.ferie?.ferieType
       );
@@ -119,7 +119,7 @@ export const StandardPage = (): JSX.Element => {
           beskrivelse: søknadState?.søknad?.begrunnelse,
         },
         ferie: {
-          skalHaFerie,
+          ferieType,
           periode: {
             fom: formatDate(søknadState?.søknad?.ferie?.fraDato),
             tom: formatDate(søknadState?.søknad?.ferie?.tilDato),
