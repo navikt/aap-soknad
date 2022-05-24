@@ -76,6 +76,90 @@ const jaNeiToBoolean = (value?: string) => {
   return undefined;
 };
 
+interface SøknadBackendState {
+  type: 'STUDENT' | 'STANDARD';
+  startDato: {
+    fom?: string;
+    hvorfor?: string;
+    beskrivelse?: string;
+  };
+  ferie: {
+    ferieType?: 'PERIODE' | 'DAGER' | 'NEI' | 'VET_IKKE';
+    periode: {
+      fom?: string;
+      tom?: string;
+    };
+    dager?: number | string;
+  };
+  medlemsskap: {
+    boddINorgeSammenhengendeSiste5?: boolean;
+    jobbetUtenforNorgeFørSyk?: boolean;
+    jobbetSammenhengendeINorgeSiste5?: boolean;
+    iTilleggArbeidUtenforNorge?: boolean;
+    utenlandsopphold: {
+      land?: string;
+      periode: { fom?: string; tom?: string };
+      arbeidet?: boolean;
+      id?: string;
+      landsNavn?: string;
+    }[];
+  };
+  behandlere: [];
+  yrkesskadeType?: 'JA' | 'NEI' | 'VET_IKKE';
+  utbetalinger: {
+    fraArbeidsgiver?: boolean;
+    stønadstyper: [];
+    andreUtbetalinger: [];
+  };
+  registrerteBarn: [];
+  andreBarn: [];
+  tilleggsopplysninger?: string;
+}
+
+const mapSøknadToBackend = (søknad?: Soknad): SøknadBackendState => ({
+  type: søknad?.student ? 'STUDENT' : 'STANDARD',
+  startDato: {
+    fom: formatDate(søknad?.startDato),
+    hvorfor: getHvorfor(søknad?.hvorfor),
+    beskrivelse: søknad?.begrunnelse,
+  },
+  ferie: {
+    ferieType: getFerieType(søknad?.ferie?.skalHaFerie, søknad?.ferie?.ferieType),
+    periode: {
+      fom: formatDate(søknad?.ferie?.fraDato),
+      tom: formatDate(søknad?.ferie?.tilDato),
+    },
+    dager: søknad?.ferie?.antallDager,
+  },
+  medlemsskap: {
+    boddINorgeSammenhengendeSiste5: jaNeiToBoolean(søknad?.medlemskap?.harBoddINorgeSiste5År),
+    jobbetUtenforNorgeFørSyk: jaNeiToBoolean(søknad?.medlemskap?.arbeidetUtenforNorgeFørSykdom),
+    jobbetSammenhengendeINorgeSiste5: jaNeiToBoolean(søknad?.medlemskap?.harArbeidetINorgeSiste5År),
+    iTilleggArbeidUtenforNorge: jaNeiToBoolean(søknad?.medlemskap?.iTilleggArbeidUtenforNorge),
+    utenlandsopphold:
+      søknad?.medlemskap?.utenlandsOpphold?.map((utenlandsopphold) => ({
+        land: utenlandsopphold.land,
+        periode: {
+          fom: formatDate(utenlandsopphold.fraDato),
+          tom: formatDate(utenlandsopphold.tilDato),
+        },
+        arbeidet: utenlandsopphold.iArbeid,
+        id: utenlandsopphold.utenlandsId,
+        landsNavn: '', // TODO: Hente navn fra landkode
+      })) ?? [],
+  },
+  behandlere: [], // TODO: Mappe behandlere
+  yrkesskadeType: getJaNeiVetIkke(søknad?.yrkesskade),
+  utbetalinger: {
+    fraArbeidsgiver: true, // TODO: Mappe søknadState?.søknad?.andreUtbetalinger?.lønn ? true : false
+    stønadstyper: [],
+    andreUtbetalinger: [],
+  },
+  registrerteBarn: [],
+  andreBarn: [],
+  tilleggsopplysninger: søknad?.tilleggsopplysninger,
+});
+
 export const StandardPage = (): JSX.Element => {
   const [oppslagLoading, setOppslagLoading] = useState<boolean>(true);
   const [showVeiledning, setShowVeiledning] = useState<boolean>(true);
@@ -101,62 +185,8 @@ export const StandardPage = (): JSX.Element => {
     if (currentStep?.name === StepNames.OPPSUMMERING) {
       console.log('post søknad', søknadState?.søknad);
 
-      const ferieType = getFerieType(
-        søknadState?.søknad?.ferie?.skalHaFerie,
-        søknadState?.søknad?.ferie?.ferieType
-      );
       // Må massere dataene litt før vi sender de inn
-      const søknad = {
-        type: søknadState?.søknad?.student ? 'STUDENT' : 'STANDARD',
-        startDato: {
-          fom: formatDate(søknadState?.søknad?.startDato),
-          hvorfor: getHvorfor(søknadState?.søknad?.hvorfor),
-          beskrivelse: søknadState?.søknad?.begrunnelse,
-        },
-        ferie: {
-          ferieType,
-          periode: {
-            fom: formatDate(søknadState?.søknad?.ferie?.fraDato),
-            tom: formatDate(søknadState?.søknad?.ferie?.tilDato),
-          },
-          dager: søknadState?.søknad?.ferie?.antallDager,
-        },
-        medlemsskap: {
-          boddINorgeSammenhengendeSiste5: jaNeiToBoolean(
-            søknadState?.søknad?.medlemskap?.harBoddINorgeSiste5År
-          ),
-          jobbetUtenforNorgeFørSyk: jaNeiToBoolean(
-            søknadState?.søknad?.medlemskap?.arbeidetUtenforNorgeFørSykdom
-          ),
-          jobbetSammenhengendeINorgeSiste5: jaNeiToBoolean(
-            søknadState?.søknad?.medlemskap?.harArbeidetINorgeSiste5År
-          ),
-          iTilleggArbeidUtenforNorge: jaNeiToBoolean(
-            søknadState?.søknad?.medlemskap?.iTilleggArbeidUtenforNorge
-          ),
-          utenlandsopphold:
-            søknadState?.søknad?.medlemskap?.utenlandsOpphold?.map((utenlandsopphold) => ({
-              land: utenlandsopphold.land,
-              periode: {
-                fom: formatDate(utenlandsopphold.fraDato),
-                tom: formatDate(utenlandsopphold.tilDato),
-              },
-              arbeidet: utenlandsopphold.iArbeid,
-              id: utenlandsopphold.utenlandsId,
-              landsNavn: '', // TODO: Hente navn fra landkode
-            })) ?? [],
-        },
-        behandlere: [], // TODO: Mappe behandlere
-        yrkesskadeType: getJaNeiVetIkke(søknadState?.søknad?.yrkesskade),
-        utbetalinger: {
-          fraArbeidsgiver: true, // TODO: Mappe søknadState?.søknad?.andreUtbetalinger?.lønn ? true : false
-          stønadstyper: [],
-          andreUtbetalinger: [],
-        },
-        registrerteBarn: [],
-        andreBarn: [],
-        tilleggsopplysninger: søknadState?.søknad?.tilleggsopplysninger,
-      };
+      const søknad = mapSøknadToBackend(søknadState?.søknad);
 
       console.log('søknad', søknad);
 
