@@ -1,6 +1,6 @@
 import { FieldErrors } from 'react-hook-form';
 import React from 'react';
-import { Button, Cell, Grid } from '@navikt/ds-react';
+import { Button } from '@navikt/ds-react';
 import { FormErrorSummary } from '../schema/FormErrorSummary';
 import * as classes from './SoknadFormWrapper.module.css';
 
@@ -31,25 +31,19 @@ const SøknadFormWrapper = ({
     <form onSubmit={onNext} className={classes?.formContent}>
       {children}
       <FormErrorSummary errors={errors} data-testid={'error-summary'} />
-      <Grid>
-        <Cell xs={3}>
-          <Button variant="secondary" type="button" onClick={onBack}>
-            {backButtonText}
-          </Button>
-        </Cell>
-        <Cell xs={3}>
-          <Button variant="primary" type="submit" disabled={nextIsLoading} loading={nextIsLoading}>
-            {nextButtonText}
-          </Button>
-        </Cell>
-      </Grid>
-      <Grid>
-        <Cell xs={3}>
-          <Button variant="tertiary" type="button" onClick={onCancel}>
-            {cancelButtonText}
-          </Button>
-        </Cell>
-      </Grid>
+      <div className={classes?.buttonWrapper}>
+        <Button variant="secondary" type="button" onClick={onBack}>
+          {backButtonText}
+        </Button>
+        <Button variant="primary" type="submit" disabled={nextIsLoading} loading={nextIsLoading}>
+          {nextButtonText}
+        </Button>
+      </div>
+      <div className={classes?.buttonWrapper}>
+        <Button variant="tertiary" type="button" onClick={onCancel}>
+          {cancelButtonText}
+        </Button>
+      </div>
     </form>
   );
 };

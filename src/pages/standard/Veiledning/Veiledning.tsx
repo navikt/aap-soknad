@@ -3,24 +3,19 @@ import {
   BodyLong,
   BodyShort,
   Button,
-  Cell,
-  Grid,
   GuidePanel,
   Heading,
   Label,
-  ReadMore,
 } from '@navikt/ds-react';
 import React, { useMemo } from 'react';
 import { getParagraphs, GetText } from '../../../hooks/useTexts';
 import { useForm } from 'react-hook-form';
 import ConfirmationPanelWrapper from '../../../components/input/ConfirmationPanelWrapper';
 import HeadingHelloName from '../../../components/async/HeadingHelloName';
-import TextWithLink from '../../../components/TextWithLink';
 import { SøkerView } from '../../../context/sokerOppslagContext';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as classes from './Veiledning.module.css';
-import { FormErrorSummary } from '../../../components/schema/FormErrorSummary';
 
 const VEILEDNING_CONFIRM = 'veiledningConfirm';
 type VeiledningType = {
@@ -134,18 +129,14 @@ export const Veiledning = ({ getText, søker, loading, onSubmit }: VeiledningPro
         >
           <Label>{getText('steps.veiledning.rettogpliktConfirmation.title')}</Label>
         </ConfirmationPanelWrapper>
-        <Grid>
-          <Cell xs={3}>
-            <Button variant="primary" type="submit">
-              {getText(`steps.veiledning.buttonText`)}
-            </Button>
-          </Cell>
-          <Cell xs={3}>
-            <Button variant="tertiary" type="button" onClick={() => console.log('TODO')}>
-              {getText('cancelButtonText')}
-            </Button>
-          </Cell>
-        </Grid>
+        <div className={classes?.buttonWrapper}>
+          <Button variant="primary" type="submit">
+            {getText(`steps.veiledning.buttonText`)}
+          </Button>
+          <Button variant="tertiary" type="button" onClick={() => console.log('TODO')}>
+            {getText('cancelButtonText')}
+          </Button>
+        </div>
       </form>
     </div>
   );

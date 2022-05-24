@@ -1,0 +1,6 @@
+.buttonWrapper {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  gap: var(--navds-spacing-10);
+}

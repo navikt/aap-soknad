@@ -5,3 +5,6 @@
   justify-content: space-between;
   gap: var(--navds-spacing-10);
 }
+.buttonWrapper {
+  composes: buttonWrapper from '../../styles/layout.module.css';
+}

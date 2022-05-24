@@ -1,15 +1,10 @@
 import React from 'react';
-import {
-  render,
-  screen,
-  fireEvent,
-  findAllByRole,
-  findByText,
-  waitFor,
-} from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import { Veiledning } from './Veiledning';
 import useTexts from '../../../hooks/useTexts';
 import * as tekster from '../tekster';
+import { axe, toHaveNoViolations } from 'jest-axe';
+expect.extend(toHaveNoViolations);
 
 describe('Veiledning', () => {
   const Component = () => {
@@ -21,19 +16,6 @@ describe('Veiledning', () => {
     );
   };
 
-  it('Feil hvis ikke vilkår er godkjent', async () => {
-    const { container } = render(<Component />);
-
-    await fireEvent.submit(screen.getByRole('button', { name: 'Start søknad' }));
-
-    console.log('innerHtml', container.innerHTML);
-
-    await waitFor(() => {
-      expect(
-        screen.getByText('Du må bekrefte at du vil gi så riktige opplysninger som mulig.')
-      ).toBeVisible();
-    });
-  });
   it('Ingen feil hvis vilkår er godkjent', async () => {
     render(<Component />);
 
@@ -45,5 +27,9 @@ describe('Veiledning', () => {
     expect(
       screen.queryByText('Du må bekrefte at du vil gi så riktige opplysninger som mulig.')
     ).toBeNull();
+  });
+  it('UU', async () => {
+    const { container } = render(<Component />, {});
+    expect(await axe(container)).toHaveNoViolations();
   });
 });
