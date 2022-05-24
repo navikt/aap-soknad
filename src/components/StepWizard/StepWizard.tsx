@@ -1,7 +1,7 @@
 import React, { Children, useEffect } from 'react';
-import { BodyShort, StepIndicator } from '@navikt/ds-react';
+import { BodyShort } from '@navikt/ds-react';
 import { StepType } from './Step';
-import { setStepList, setCurrentStepIndex, useStepWizard } from '../../context/stepWizardContextV2';
+import { setStepList, useStepWizard } from '../../context/stepWizardContextV2';
 import * as classes from './StepWizard.module.css';
 
 type OrderedStepType = {
@@ -17,7 +17,7 @@ type StepWizardProps = {
   hideLabels?: boolean;
 };
 
-const StepWizard = ({ children, hideLabels = false }: StepWizardProps) => {
+const StepWizard = ({ children }: StepWizardProps) => {
   const { stepList, currentStepIndex, stepWizardDispatch } = useStepWizard();
   const isNamedStepCompleted = (name: StepType['name']) => {
     const step = stepList.find((e) => e.name === name);
@@ -63,27 +63,13 @@ const StepWizard = ({ children, hideLabels = false }: StepWizardProps) => {
     setStepList(sortedNewStepList, stepWizardDispatch);
     // eslint-disable-next-line
   }, []);
-  const onStepChange = (stepIndex: number) => {
-    if (stepIndex === 0) setCurrentStepIndex(stepIndex, stepWizardDispatch);
-    const stepBeforeDestinationStep = stepList[stepIndex - 1];
-    if (stepBeforeDestinationStep?.completed) setCurrentStepIndex(stepIndex, stepWizardDispatch);
-  };
   return (
     <main className={classes?.stepWizardMain}>
-      <StepIndicator
-        activeStep={currentStepIndex}
-        hideLabels={hideLabels}
-        responsive={true}
-        onStepChange={onStepChange}
-      >
-        {stepList.map((step: any) => (
-          <StepIndicator.Step
-            key={step.name}
-            tabIndex={-1}
-            children={<BodyShort>{step?.label}</BodyShort>}
-          />
-        ))}
-      </StepIndicator>
+      <div className={classes?.stepIndicatorWrapper}>
+        <BodyShort>{`Steg ${Number.isInteger(currentStepIndex) ? currentStepIndex + 1 : 0} av ${
+          stepList?.length
+        }`}</BodyShort>
+      </div>
       {children}
     </main>
   );

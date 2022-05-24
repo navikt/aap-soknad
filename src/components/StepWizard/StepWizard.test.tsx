@@ -72,7 +72,6 @@ describe('StepWizard', () => {
   it('render StepWizard med steg', () => {
     renderWithContext(<MyWizard />, {});
     expect(screen.getByText(stepNames.STEP_ONE)).toBeDefined();
-    expect(screen.getAllByRole('button')).toHaveLength(3);
   });
 
   it('uu-sjekk', async () => {
