@@ -18,6 +18,8 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import SoknadFormWrapper from '../../../components/SoknadFormWrapper/SoknadFormWrapper';
 import { useVedleggContext } from '../../../context/vedleggContext';
+import { goToNamedStep, useStepWizard } from '../../../context/stepWizardContextV2';
+import { StepNames } from '../index';
 
 interface OppsummeringProps {
   getText: GetText;
@@ -33,6 +35,7 @@ const Oppsummering = ({
   onSubmitSoknad,
 }: OppsummeringProps) => {
   const { søknadState } = useSoknadContext();
+  const { stepWizardDispatch } = useStepWizard();
   const { vedleggState } = useVedleggContext();
   const { fastlege } = useSokerOppslag();
   const schema = yup.object().shape({});
@@ -57,6 +60,7 @@ const Oppsummering = ({
       <></>
     );
   };
+  const editStep = (stepName: string) => goToNamedStep(stepWizardDispatch, stepName);
   return (
     <SoknadFormWrapper
       onNext={handleSubmit((data) => {
@@ -96,6 +100,7 @@ const Oppsummering = ({
           title={'Ønsket startdato'}
           editText="Endre opplysninger om startdato"
           toggleAll={toggleAll}
+          onEdit={() => editStep(StepNames.STARTDATO)}
         >
           <SummaryRowIfExists
             labelKey={'form.startDato.label'}
@@ -130,6 +135,7 @@ const Oppsummering = ({
           title={getText('steps.medlemskap.title')}
           editText="Endre opplysninger om hvor du har bodd og jobbet"
           toggleAll={toggleAll}
+          onEdit={() => editStep(StepNames.MEDLEMSKAP)}
         >
           <SummaryRowIfExists
             labelKey={'form.medlemskap.boddINorge.legend'}
@@ -159,6 +165,7 @@ const Oppsummering = ({
           title={getText('steps.yrkesskade.title')}
           editText="Endre opplysninger om yrkesskade"
           toggleAll={toggleAll}
+          onEdit={() => editStep(StepNames.YRKESSKADE)}
         >
           <SummaryRowIfExists
             labelKey={`form.yrkesskade.legend`}
@@ -169,6 +176,7 @@ const Oppsummering = ({
           title={getText('steps.fastlege.title')}
           editText="Endre informasjon om kontaktperson for helseopplysninger"
           toggleAll={toggleAll}
+          onEdit={() => editStep(StepNames.FASTLEGE)}
         >
           <>
             <article>
@@ -189,6 +197,7 @@ const Oppsummering = ({
           title={getText('steps.barnetillegg.title')}
           editText="Endre opplysninger om barn"
           toggleAll={toggleAll}
+          onEdit={() => editStep(StepNames.BARNETILLEGG)}
         >
           {søknadState?.søknad?.barnetillegg?.map((barn) => (
             <OppsummeringBarn barn={barn} />
@@ -198,6 +207,7 @@ const Oppsummering = ({
           title={getText('steps.student.title')}
           editText="Endre på om du er student"
           toggleAll={toggleAll}
+          onEdit={() => editStep(StepNames.STUDENT)}
         >
           <SummaryRowIfExists
             labelKey={`form.student.legend`}
@@ -208,6 +218,7 @@ const Oppsummering = ({
           title={getText('steps.andre_utbetalinger.title')}
           editText="Endre opplysninger om utbetalinger"
           toggleAll={toggleAll}
+          onEdit={() => editStep(StepNames.ANDRE_UTBETALINGER)}
         >
           <SummaryRowIfExists
             labelKey={`form.andreUtbetalinger.lønn.legend`}
@@ -222,6 +233,7 @@ const Oppsummering = ({
           title={getText('steps.tilleggsopplysninger.title')}
           editText="Endre tilleggsopplysninger"
           toggleAll={toggleAll}
+          onEdit={() => editStep(StepNames.TILLEGGSOPPLYSNINGER)}
         >
           <SummaryRowIfExists
             labelKey={`form.tilleggsopplysninger.label`}
@@ -232,6 +244,7 @@ const Oppsummering = ({
           title={getText('steps.vedlegg.title')}
           editText="Endre vedlegg"
           toggleAll={toggleAll}
+          onEdit={() => editStep(StepNames.VEDLEGG)}
         >
           <>
             {vedleggState?.requiredVedlegg?.map((vedlegg) => {
