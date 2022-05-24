@@ -9,6 +9,9 @@
 .veiledningContent h1 {
   text-align: center;
 }
+.veiledningHeader {
+  padding: var(--navds-spacing-10) 0;
+}
 .buttonWrapper {
   composes: buttonWrapper from '../../../styles/layout.module.css';
 }

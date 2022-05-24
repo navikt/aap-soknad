@@ -54,90 +54,94 @@ export const Veiledning = ({ getText, søker, loading, onSubmit }: VeiledningPro
     onSubmit();
   };
   return (
-    <div className={classes?.veiledningContent}>
-      <Heading size="large" level="1">
-        {getText(`steps.veiledning.title`)}
-      </Heading>
-      <GuidePanel>
-        <HeadingHelloName size={'medium'} level={'2'} name={søker?.fulltNavn} loading={loading} />
-        {getParagraphs('steps.veiledning.guide.paragraphs', getText).map(
-          (e: string, index: number) => (
-            <BodyShort key={`${index}`} spacing>
-              {e}
-            </BodyShort>
-          )
-        )}
-      </GuidePanel>
-      <article>
-        <Heading size={'small'} level={'2'} spacing>
-          {getText('steps.veiledning.søknadsdato.title')}
+    <>
+      <header className={classes?.veiledningHeader}>
+        <Heading size="large" level="1">
+          {getText(`steps.veiledning.title`)}
         </Heading>
-        {getParagraphs('steps.veiledning.søknadsdato.paragraphs', getText).map(
-          (e: string, index: number) => (
-            <BodyShort key={`${index}`} spacing>
-              {e}
-            </BodyShort>
-          )
-        )}
-      </article>
-      <article>
-        <Accordion>
-          <Accordion.Item>
-            <Accordion.Header>Hvis du får AAP gjelder dette</Accordion.Header>
-            <Accordion.Content>
-              <BodyShort spacing>
-                <ul>
-                  <li>Du har rett til oppfølging fra NAV</li>
-                  <li>
-                    Du har plikt til å bidra til å avklare om du kan beholde eller komme i jobb
-                  </li>
-                  <li>Du må sende inn meldekort hver 14. dag</li>
-                  <li>Du har plikt til å gi beskjed hvis situasjonen din endrer seg</li>
-                </ul>
+      </header>
+      <main className={classes?.veiledningContent}>
+        <GuidePanel>
+          <HeadingHelloName size={'medium'} level={'2'} name={søker?.fulltNavn} loading={loading} />
+          {getParagraphs('steps.veiledning.guide.paragraphs', getText).map(
+            (e: string, index: number) => (
+              <BodyShort key={`${index}`} spacing>
+                {e}
               </BodyShort>
-            </Accordion.Content>
-          </Accordion.Item>
-        </Accordion>
-        <Accordion>
-          <Accordion.Item>
-            <Accordion.Header>Vi vil hente informasjon om deg</Accordion.Header>
-            <Accordion.Content>
-              <BodyLong spacing>
-                I tillegg til den informasjonen du oppgir i søknaden, henter vi:
-                <ul>
-                  <li>personinformasjon om deg og barna dine</li>
-                  <li>inntektsinformasjon fra Skatteetaten</li>
-                  <li>helseinformasjon fra lege/behandler for å kartlegge arbeidsevnen din</li>
-                  <li>opplysninger om arbeidsforholdet ditt fra Aa-registeret</li>
-                </ul>
-              </BodyLong>
-            </Accordion.Content>
-          </Accordion.Item>
-        </Accordion>
-      </article>
+            )
+          )}
+        </GuidePanel>
+        <article>
+          <Heading size={'small'} level={'2'} spacing>
+            {getText('steps.veiledning.søknadsdato.title')}
+          </Heading>
+          {getParagraphs('steps.veiledning.søknadsdato.paragraphs', getText).map(
+            (e: string, index: number) => (
+              <BodyShort key={`${index}`} spacing>
+                {e}
+              </BodyShort>
+            )
+          )}
+        </article>
+        <article>
+          <Accordion>
+            <Accordion.Item>
+              <Accordion.Header>Hvis du får AAP gjelder dette</Accordion.Header>
+              <Accordion.Content>
+                <BodyShort spacing>
+                  <ul>
+                    <li>Du har rett til oppfølging fra NAV</li>
+                    <li>
+                      Du har plikt til å bidra til å avklare om du kan beholde eller komme i jobb
+                    </li>
+                    <li>Du må sende inn meldekort hver 14. dag</li>
+                    <li>Du har plikt til å gi beskjed hvis situasjonen din endrer seg</li>
+                  </ul>
+                </BodyShort>
+              </Accordion.Content>
+            </Accordion.Item>
+          </Accordion>
+          <Accordion>
+            <Accordion.Item>
+              <Accordion.Header>Vi vil hente informasjon om deg</Accordion.Header>
+              <Accordion.Content>
+                <BodyLong spacing>
+                  I tillegg til den informasjonen du oppgir i søknaden, henter vi:
+                  <ul>
+                    <li>personinformasjon om deg og barna dine</li>
+                    <li>inntektsinformasjon fra Skatteetaten</li>
+                    <li>helseinformasjon fra lege/behandler for å kartlegge arbeidsevnen din</li>
+                    <li>opplysninger om arbeidsforholdet ditt fra Aa-registeret</li>
+                  </ul>
+                </BodyLong>
+              </Accordion.Content>
+            </Accordion.Item>
+          </Accordion>
+        </article>
 
-      <form
-        onSubmit={handleSubmit(veiledningHandleSubmit)}
-        className={classes?.veiledningContent}
-        autoComplete="off"
-      >
-        <ConfirmationPanelWrapper
-          label={getText('steps.veiledning.rettogpliktConfirmation.label')}
-          control={control}
-          name={VEILEDNING_CONFIRM}
-          error={errors?.[VEILEDNING_CONFIRM]?.message}
+        <form
+          onSubmit={handleSubmit(veiledningHandleSubmit)}
+          className={classes?.veiledningContent}
+          autoComplete="off"
         >
-          <Label>{getText('steps.veiledning.rettogpliktConfirmation.title')}</Label>
-        </ConfirmationPanelWrapper>
-        <div className={classes?.buttonWrapper}>
-          <Button variant="primary" type="submit">
-            {getText(`steps.veiledning.buttonText`)}
-          </Button>
-          <Button variant="tertiary" type="button" onClick={() => console.log('TODO')}>
-            {getText('cancelButtonText')}
-          </Button>
-        </div>
-      </form>
-    </div>
+          <ConfirmationPanelWrapper
+            label={getText('steps.veiledning.rettogpliktConfirmation.label')}
+            control={control}
+            name={VEILEDNING_CONFIRM}
+            error={errors?.[VEILEDNING_CONFIRM]?.message}
+          >
+            <Label>{getText('steps.veiledning.rettogpliktConfirmation.title')}</Label>
+          </ConfirmationPanelWrapper>
+          <div className={classes?.buttonWrapper}>
+            <Button variant="primary" type="submit">
+              {getText(`steps.veiledning.buttonText`)}
+            </Button>
+            <Button variant="tertiary" type="button" onClick={() => console.log('TODO')}>
+              {getText('cancelButtonText')}
+            </Button>
+          </div>
+        </form>
+      </main>
+    </>
   );
 };
