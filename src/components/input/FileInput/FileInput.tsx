@@ -1,5 +1,5 @@
 import { BodyShort, Detail, Heading, Label, Loader, Panel } from '@navikt/ds-react';
-import React, { DragEventHandler, useState } from 'react';
+import React, { DragEventHandler, useRef, useState } from 'react';
 import SvgUpload from '@navikt/ds-icons/esm/Upload';
 import * as classes from './FileInput.module.css';
 import { FieldArray, FieldArrayMethodProps, FieldArrayWithId, FieldValues } from 'react-hook-form';
@@ -19,6 +19,7 @@ export interface Props {
 const FileInput = ({ fields, append, remove, heading, ingress }: Props) => {
   const [dragOver, setDragOver] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
+  const fileUploadInputElement = useRef(null);
   const handleDragLeave: DragEventHandler<HTMLDivElement> = (e) => {
     setDragOver(false);
     return e;
@@ -95,7 +96,6 @@ const FileInput = ({ fields, append, remove, heading, ingress }: Props) => {
         ) : (
           <>
             <input
-              hidden
               id={'file-upload-input'}
               type="file"
               value={''}
@@ -103,14 +103,24 @@ const FileInput = ({ fields, append, remove, heading, ingress }: Props) => {
                 const file = e?.target?.files?.[0];
                 if (file) uploadFile(file);
               }}
+              className={classes?.visuallyHidden}
+              tabIndex={-1}
+              ref={fileUploadInputElement}
             />
             <BodyShort>{'Dra og slipp'}</BodyShort>
             <BodyShort>{'eller'}</BodyShort>
             <label htmlFor={'file-upload-input'}>
               <span
-                className={
-                  'navds-button navds-button__inner navds-body-short navds-button--secondary'
-                }
+                /* eslint-disable-next-line max-len */
+                className={`${classes?.fileInputButton} navds-button navds-button__inner navds-body-short navds-button--secondary`}
+                role={'button'}
+                aria-controls={'file-upload-input'}
+                tabIndex={0}
+                onKeyPress={(event) => {
+                  if (event.key === 'Enter') {
+                    fileUploadInputElement?.current?.click();
+                  }
+                }}
               >
                 <SvgUpload />
                 {'Velg dine filer'}
