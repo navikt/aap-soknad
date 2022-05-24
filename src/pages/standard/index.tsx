@@ -244,7 +244,9 @@ export const StandardPage = (): JSX.Element => {
     );
   return (
     <>
-      <PageHeader align="center">{getText('pagetitle')}</PageHeader>
+      <header>
+        <PageHeader align="center">{getText('pagetitle')}</PageHeader>
+      </header>
       <StepWizard hideLabels={true}>
         <Step order={1} name={StepNames.STARTDATO} label={'Søknadsdato'}>
           <StartDato
