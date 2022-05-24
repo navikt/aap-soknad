@@ -1,14 +1,8 @@
 import React, { Children, useEffect } from 'react';
-import { BodyShort, Link, StepIndicator } from '@navikt/ds-react';
+import { BodyShort, StepIndicator } from '@navikt/ds-react';
 import { StepType } from './Step';
-import {
-  setStepList,
-  setCurrentStepIndex,
-  useStepWizard,
-  goToPreviousStep,
-} from '../../context/stepWizardContextV2';
+import { setStepList, setCurrentStepIndex, useStepWizard } from '../../context/stepWizardContextV2';
 import * as classes from './StepWizard.module.css';
-import { Back } from '@navikt/ds-icons';
 
 type OrderedStepType = {
   order: number;
@@ -76,17 +70,6 @@ const StepWizard = ({ children, hideLabels = false }: StepWizardProps) => {
   };
   return (
     <main className={classes?.stepWizardMain}>
-      <div className={classes?.backButtonContainer}>
-        <Link
-          onClick={() => {
-            if (currentStepIndex > 0) goToPreviousStep(stepWizardDispatch);
-          }}
-          className={classes?.backLink}
-        >
-          <Back title={'Tilbake'} />
-          Tilbake
-        </Link>
-      </div>
       <StepIndicator
         activeStep={currentStepIndex}
         hideLabels={hideLabels}
@@ -94,7 +77,11 @@ const StepWizard = ({ children, hideLabels = false }: StepWizardProps) => {
         onStepChange={onStepChange}
       >
         {stepList.map((step: any) => (
-          <StepIndicator.Step key={step.name} children={<BodyShort>{step?.label}</BodyShort>} />
+          <StepIndicator.Step
+            key={step.name}
+            tabIndex={-1}
+            children={<BodyShort>{step?.label}</BodyShort>}
+          />
         ))}
       </StepIndicator>
       {children}
