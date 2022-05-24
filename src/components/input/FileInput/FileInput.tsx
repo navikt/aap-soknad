@@ -19,6 +19,7 @@ export interface Props {
 const FileInput = ({ fields, append, remove, heading, ingress }: Props) => {
   const [dragOver, setDragOver] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
+  const [inputId] = useState<string>(`file-upload-input-${Math.floor(Math.random() * 100000)}`);
   const fileUploadInputElement = useRef(null);
   const handleDragLeave: DragEventHandler<HTMLDivElement> = (e) => {
     setDragOver(false);
@@ -96,7 +97,7 @@ const FileInput = ({ fields, append, remove, heading, ingress }: Props) => {
         ) : (
           <>
             <input
-              id={'file-upload-input'}
+              id={inputId}
               type="file"
               value={''}
               onChange={(e) => {
@@ -109,12 +110,12 @@ const FileInput = ({ fields, append, remove, heading, ingress }: Props) => {
             />
             <BodyShort>{'Dra og slipp'}</BodyShort>
             <BodyShort>{'eller'}</BodyShort>
-            <label htmlFor={'file-upload-input'}>
+            <label htmlFor={inputId}>
               <span
                 /* eslint-disable-next-line max-len */
                 className={`${classes?.fileInputButton} navds-button navds-button__inner navds-body-short navds-button--secondary`}
                 role={'button'}
-                aria-controls={'file-upload-input'}
+                aria-controls={inputId}
                 tabIndex={0}
                 onKeyPress={(event) => {
                   if (event.key === 'Enter') {
@@ -122,7 +123,7 @@ const FileInput = ({ fields, append, remove, heading, ingress }: Props) => {
                   }
                 }}
               >
-                <SvgUpload />
+                <SvgUpload title={'Last opp fil'} />
                 {'Velg dine filer'}
               </span>
             </label>

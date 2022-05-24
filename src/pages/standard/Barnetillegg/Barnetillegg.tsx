@@ -135,7 +135,7 @@ export const Barnetillegg = ({ getText, onBackClick, onCancelClick, søknad }: P
                   }
                   name={`${BARNETILLEGG}.${index}.harInntekt`}
                   control={control}
-                  error={errors?.[BARNETILLEGG]?.[index]?.erForsørger?.message}
+                  error={errors?.[BARNETILLEGG]?.[index]?.harInntekt?.message}
                 >
                   <ReadMore header="Hvorfor spør vi om dette?">
                     Hvis barnet har en årlig inntekt over 1G (1G = XXXkr), får du vanligvis ikke
@@ -172,7 +172,7 @@ export const Barnetillegg = ({ getText, onBackClick, onCancelClick, søknad }: P
                 setShowModal(true);
               }}
             >
-              <Add />
+              <Add title={'Legg til'} />
               Legg til barn
             </Button>
           </Cell>
