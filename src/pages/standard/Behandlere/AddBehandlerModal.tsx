@@ -5,7 +5,7 @@ import Soknad from '../../../types/Soknad';
 import * as yup from 'yup';
 import * as classes from './AddBehandlerModal.module.css';
 import { useEffect } from 'react';
-import { Button, Cell, Grid, Heading, Modal, TextField } from '@navikt/ds-react';
+import { Button, Cell, Grid, Heading, Modal } from '@navikt/ds-react';
 import TextFieldWrapper from '../../../components/input/TextFieldWrapper';
 
 interface Props {
@@ -40,10 +40,13 @@ export const AddBehandlerModal = ({
 
   const clearModal = () => {
     // TODO: Update med behandler props
-    setValue('navn.fornavn', '');
-    setValue('navn.etternavn', '');
-    setValue('fnr', '');
-    setValue('harInntekt', null);
+    setValue('firstname', '');
+    setValue('lastname', '');
+    setValue('legekontor', '');
+    setValue('gateadresse', '');
+    setValue('postnummer', '');
+    setValue('poststed', '');
+    setValue('telefon', '');
   };
 
   return (
@@ -54,8 +57,9 @@ export const AddBehandlerModal = ({
         </Heading>
         <form
           onSubmit={handleSubmit((data) => {
-            onSaveClick(data);
+            const newData = { ...data };
             clearModal();
+            onSaveClick(newData);
           })}
         >
           <TextFieldWrapper
@@ -105,7 +109,6 @@ export const AddBehandlerModal = ({
                 type="button"
                 variant={'secondary'}
                 onClick={() => {
-                  clearModal();
                   onCloseClick();
                 }}
               >

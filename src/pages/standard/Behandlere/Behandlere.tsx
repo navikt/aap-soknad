@@ -1,24 +1,10 @@
-import {
-  BodyLong,
-  BodyShort,
-  Button,
-  Cell,
-  Grid,
-  GuidePanel,
-  Heading,
-  Link,
-  ReadMore,
-  TextField,
-} from '@navikt/ds-react';
+import { BodyLong, BodyShort, Button, GuidePanel, Heading, ReadMore } from '@navikt/ds-react';
 import React, { useMemo, useState } from 'react';
 import { GetText } from '../../../hooks/useTexts';
 import { FieldValues, useFieldArray, useForm } from 'react-hook-form';
 import { FastlegeView } from '../../../context/sokerOppslagContext';
-import { Delete, Add } from '@navikt/ds-icons';
+import { Add } from '@navikt/ds-icons';
 import Soknad from '../../../types/Soknad';
-import FieldArrayWrapper from '../../../components/input/FieldArrayWrapper/FieldArrayWrapper';
-import ButtonPanel from '../../../components/ButtonPanel/ButtonPanel';
-import TextWithLink from '../../../components/TextWithLink';
 import * as yup from 'yup';
 import { updateSøknadData, useSoknadContext } from '../../../context/soknadContext';
 import { completeAndGoToNextStep, useStepWizard } from '../../../context/stepWizardContextV2';
@@ -51,7 +37,7 @@ export const Behandlere = ({ getText, onBackClick, onCancelClick, søknad, fastl
   });
 
   const [showModal, setShowModal] = useState(false);
-  const [selectedBehandlerIndex, setSelectedBehandleIndex] = useState<number | undefined>(
+  const [selectedBehandlerIndex, setSelectedBehandlerIndex] = useState<number | undefined>(
     undefined
   );
 
@@ -65,7 +51,7 @@ export const Behandlere = ({ getText, onBackClick, onCancelClick, søknad, fastl
   }, [selectedBehandlerIndex, fields]);
 
   const editNyBehandler = (index: number) => {
-    setSelectedBehandleIndex(index);
+    setSelectedBehandlerIndex(index);
     setShowModal(true);
   };
   const saveNyBehandler = (behandler) => {
@@ -81,7 +67,8 @@ export const Behandlere = ({ getText, onBackClick, onCancelClick, søknad, fastl
     setShowModal(false);
   };
   const slettSelectedBehandler = () => {
-    remove(selectedBehandler);
+    remove(selectedBehandlerIndex);
+    setSelectedBehandlerIndex(undefined);
   };
   return (
     <>
@@ -152,11 +139,11 @@ export const Behandlere = ({ getText, onBackClick, onCancelClick, søknad, fastl
             variant="tertiary"
             type="button"
             onClick={() => {
-              setSelectedBehandleIndex(undefined);
+              setSelectedBehandlerIndex(undefined);
               setShowModal(true);
             }}
           >
-            <Add />
+            <Add title={'Legg til'} />
             {getText('steps.fastlege.buttonAddNyBehandler')}
           </Button>
         </div>
@@ -167,11 +154,6 @@ export const Behandlere = ({ getText, onBackClick, onCancelClick, søknad, fastl
         onSaveClick={saveNyBehandler}
         onDeleteClick={() => {
           slettSelectedBehandler();
-          /*if (selectedBarnIndex) {
-            const barn = fields[selectedBarnIndex];
-            removeRequiredVedlegg(`barn${barn?.fnr}`, vedleggDispatch);
-            remove(selectedBarnIndex);
-          }*/
           setShowModal(false);
         }}
         showModal={showModal}
