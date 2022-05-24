@@ -108,9 +108,9 @@ export const handlers = [
       ctx.json({
         søker: {
           navn: {
-            fornavn: 'Fornavn',
-            mellomnavn: 'Fra',
-            etternavn: 'Oppslag',
+            fornavn: 'Anne',
+            mellomnavn: '',
+            etternavn: 'Olsen',
           },
           fødselsnummer: '10029099999',
           adresse: {
@@ -125,38 +125,26 @@ export const handlers = [
           fødseldato: '2022-02-14',
           barn: [
             {
-              fnr: '123',
-              navn: {
-                fornavn: 'Barn',
-                mellomnavn: 'Nummer',
-                etternavn: 'En',
-              },
-              fødseldato: '2022-02-14',
-            },
-            {
               fnr: '456',
               navn: {
-                fornavn: 'Barn',
-                mellomnavn: 'Nummer',
-                etternavn: 'To',
+                fornavn: 'Emma',
+                etternavn: 'Olsen',
               },
               fødseldato: '2022-02-14',
             },
             {
               fnr: '789',
               navn: {
-                fornavn: 'Barn',
-                mellomnavn: 'Nummer',
-                etternavn: 'Tre',
+                fornavn: 'Eira',
+                etternavn: 'Olsen',
               },
               fødseldato: '2022-02-14',
             },
             {
               fnr: '012',
               navn: {
-                fornavn: 'Barn',
-                mellomnavn: 'Nummer',
-                etternavn: 'Fire',
+                fornavn: 'Tobias',
+                etternavn: 'Olsen',
               },
               fødseldato: '2022-02-14',
             },
@@ -165,17 +153,17 @@ export const handlers = [
         behandlere: [
           {
             type: 'FASTLEGE',
-            navn: { fornavn: 'Nina Unni', etternavn: 'Borge' },
+            navn: { fornavn: 'Inger', etternavn: 'Johansen' },
             kontaktinformasjon: {
               behandlerRef: 'd182f24b-ebca-4f44-bf86-65901ec6141b',
-              kontor: 'ASKØY KOMMUNE SAMFUNNSMEDISINSK AVD ALMENNLEGETJENESTEN',
+              kontor: 'Askøy kommune samfunnsmedisinsk avd almennlegetjenesten',
               orgnummer: '976673867',
               adresse: {
                 adressenavn: 'Kleppeveien',
                 husnummer: '17',
                 postnummer: {
                   postnr: '5300',
-                  poststed: 'KLEPPESTØ',
+                  poststed: 'Kleppestø',
                 },
               },
               telefon: '56 15 83 10',

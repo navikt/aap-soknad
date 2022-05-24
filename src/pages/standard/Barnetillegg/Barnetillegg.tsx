@@ -28,6 +28,7 @@ import { completeAndGoToNextStep, useStepWizard } from '../../../context/stepWiz
 import { yupResolver } from '@hookform/resolvers/yup';
 import SoknadFormWrapper from '../../../components/SoknadFormWrapper/SoknadFormWrapper';
 import { AddBarnModal } from './AddBarnModal';
+import { formatNavn } from '../../../utils/StringFormatters';
 
 interface Props {
   getText: GetText;
@@ -115,10 +116,7 @@ export const Barnetillegg = ({ getText, onBackClick, onCancelClick, søknad }: P
         {fields.map((barn, index) => {
           return (
             <article key={barn?.fnr} className={classes.barneKort}>
-              <Heading
-                size={'xsmall'}
-                level={'2'}
-              >{`${barn?.navn?.fornavn} ${barn?.navn?.mellomnavn} ${barn?.navn?.etternavn}`}</Heading>
+              <Heading size={'xsmall'} level={'2'}>{`${formatNavn(barn?.navn)}`}</Heading>
               <BodyShort>{`Fødselsnummer: ${barn?.fnr}`}</BodyShort>
               {barn?.manueltOpprettet && barn?.harInntekt ? (
                 <Grid>

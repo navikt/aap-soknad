@@ -27,7 +27,7 @@ const ConfirmationPanelWrapper = ({
         label={label}
         checked={value}
         onChange={onChange}
-        error={error}
+        error={!!error}
       >
         {children}
       </ConfirmationPanel>
