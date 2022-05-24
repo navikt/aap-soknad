@@ -328,7 +328,21 @@ export const Medlemskap = ({ getText, onBackClick, onCancelClick, søknad }: Pro
                 )} - ${formatDate(field?.tilDato, 'dd.MM.yyyy')}${
                   field?.iArbeid ? ' (Jobb)' : ''
                 }`}</Table.DataCell>
-                <Table.DataCell>{<Delete onClick={() => remove(index)} />}</Table.DataCell>
+                <Table.DataCell>
+                  {
+                    <Delete
+                      onClick={() => remove(index)}
+                      title={'Slett utenlandsopphold'}
+                      role={'button'}
+                      tabIndex={0}
+                      onKeyPress={(event) => {
+                        if (event.key === 'Enter') {
+                          remove(index);
+                        }
+                      }}
+                    />
+                  }
+                </Table.DataCell>
               </Table.Row>
             ))}
 
@@ -339,7 +353,7 @@ export const Medlemskap = ({ getText, onBackClick, onCancelClick, søknad }: Pro
                   type="button"
                   onClick={() => setShowUtenlandsPeriodeModal(true)}
                 >
-                  <Add />
+                  <Add title={'Legg til'} />
                   {arbeidINorge === JaEllerNei.NEI
                     ? 'Legg til utenlandsopphold'
                     : 'Legg til periode med jobb utenfor Norge'}
