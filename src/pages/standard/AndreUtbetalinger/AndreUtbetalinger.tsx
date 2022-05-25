@@ -1,5 +1,5 @@
 import { Alert, BodyShort, Checkbox, GuidePanel, Heading, Radio, ReadMore } from '@navikt/ds-react';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { GetText } from '../../../hooks/useTexts';
 import { FieldValues, useForm } from 'react-hook-form';
 import CheckboxGroupWrapper from '../../../components/input/CheckboxGroupWrapper';
@@ -59,8 +59,6 @@ export const AndreUtbetalinger = ({ getText, onBackClick, onCancelClick, søknad
     },
   });
 
-  const [neiErValgt, setNeiErValgt] = useState(false);
-
   const lønnEtterlønnEllerSluttpakke = watch(`${ANDRE_UTBETALINGER}.${LØNN}`);
   const stønadEllerVerv = watch(`${ANDRE_UTBETALINGER}.${STØNAD}`);
   const StønadAlternativer = useMemo(
@@ -110,13 +108,13 @@ export const AndreUtbetalinger = ({ getText, onBackClick, onCancelClick, søknad
     return attachments;
   }, [stønadEllerVerv, lønnEtterlønnEllerSluttpakke]);
   useEffect(() => {
-    if (stønadEllerVerv?.length > 1 && stønadEllerVerv?.includes(StønadAlternativer.NEI)) {
-      setValue(`${ANDRE_UTBETALINGER}.${STØNAD}`, [StønadAlternativer.NEI]);
-    }
-    if (stønadEllerVerv?.includes(StønadAlternativer.NEI)) {
-      setNeiErValgt(true);
-    } else {
-      setNeiErValgt(false);
+    const lastChecked = stønadEllerVerv?.slice(-1)?.[0];
+    if (lastChecked === StønadAlternativer.NEI) {
+      if (stønadEllerVerv?.length > 1)
+        setValue(`${ANDRE_UTBETALINGER}.${STØNAD}`, [StønadAlternativer.NEI]);
+    } else if (stønadEllerVerv?.includes(StønadAlternativer.NEI)) {
+      const newList = [...stønadEllerVerv].filter((e) => e !== StønadAlternativer.NEI);
+      setValue(`${ANDRE_UTBETALINGER}.${STØNAD}`, newList);
     }
   }, [stønadEllerVerv]);
 
@@ -169,30 +167,22 @@ export const AndreUtbetalinger = ({ getText, onBackClick, onCancelClick, søknad
         legend={getText(`form.${ANDRE_UTBETALINGER}.${STØNAD}.legend`)}
         error={errors?.[ANDRE_UTBETALINGER]?.[STØNAD]?.message}
       >
-        <Checkbox disabled={neiErValgt} value={StønadAlternativer.VERV}>
-          {StønadAlternativer.VERV}
-        </Checkbox>
-        <Checkbox disabled={neiErValgt} value={StønadAlternativer.ØKONOMISK_SOSIALHJELP}>
+        <Checkbox value={StønadAlternativer.VERV}>{StønadAlternativer.VERV}</Checkbox>
+        <Checkbox value={StønadAlternativer.ØKONOMISK_SOSIALHJELP}>
           {StønadAlternativer.ØKONOMISK_SOSIALHJELP}
         </Checkbox>
-        <Checkbox disabled={neiErValgt} value={StønadAlternativer.OMSORGSSTØNAD}>
+        <Checkbox value={StønadAlternativer.OMSORGSSTØNAD}>
           {StønadAlternativer.OMSORGSSTØNAD}
         </Checkbox>
-        <Checkbox disabled={neiErValgt} value={StønadAlternativer.INTRODUKSJONSSTØNAD}>
+        <Checkbox value={StønadAlternativer.INTRODUKSJONSSTØNAD}>
           {StønadAlternativer.INTRODUKSJONSSTØNAD}
         </Checkbox>
-        <Checkbox disabled={neiErValgt} value={StønadAlternativer.KVALIFISERINGSSTØNAD}>
+        <Checkbox value={StønadAlternativer.KVALIFISERINGSSTØNAD}>
           {StønadAlternativer.KVALIFISERINGSSTØNAD}
         </Checkbox>
-        <Checkbox disabled={neiErValgt} value={StønadAlternativer.UTLAND}>
-          {StønadAlternativer.UTLAND}
-        </Checkbox>
-        <Checkbox disabled={neiErValgt} value={StønadAlternativer.PENSJON}>
-          {StønadAlternativer.PENSJON}
-        </Checkbox>
-        <Checkbox disabled={neiErValgt} value={StønadAlternativer.STIPEND}>
-          {StønadAlternativer.STIPEND}
-        </Checkbox>
+        <Checkbox value={StønadAlternativer.UTLAND}>{StønadAlternativer.UTLAND}</Checkbox>
+        <Checkbox value={StønadAlternativer.PENSJON}>{StønadAlternativer.PENSJON}</Checkbox>
+        <Checkbox value={StønadAlternativer.STIPEND}>{StønadAlternativer.STIPEND}</Checkbox>
         <Checkbox value={StønadAlternativer.NEI}>{StønadAlternativer.NEI}</Checkbox>
       </CheckboxGroupWrapper>
       {Attachments.length > 0 && (
