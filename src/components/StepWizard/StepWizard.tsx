@@ -1,5 +1,5 @@
 import React, { Children, useEffect } from 'react';
-import { BodyShort } from '@navikt/ds-react';
+import { Label } from '@navikt/ds-react';
 import { StepType } from './Step';
 import { setStepList, useStepWizard } from '../../context/stepWizardContextV2';
 import * as classes from './StepWizard.module.css';
@@ -66,9 +66,9 @@ const StepWizard = ({ children }: StepWizardProps) => {
   return (
     <main className={classes?.stepWizardMain}>
       <div className={classes?.stepIndicatorWrapper}>
-        <BodyShort>{`Steg ${Number.isInteger(currentStepIndex) ? currentStepIndex + 1 : 0} av ${
+        <Label>{`Steg ${Number.isInteger(currentStepIndex) ? currentStepIndex + 1 : 0} av ${
           stepList?.length
-        }`}</BodyShort>
+        }`}</Label>
       </div>
       {children}
     </main>
