@@ -1,5 +1,15 @@
-import { Alert, BodyShort, Checkbox, GuidePanel, Heading, Radio, ReadMore } from '@navikt/ds-react';
-import React, { useEffect, useMemo } from 'react';
+import {
+  Alert,
+  BodyShort,
+  Cell,
+  Checkbox,
+  Grid,
+  GuidePanel,
+  Heading,
+  Radio,
+  ReadMore,
+} from '@navikt/ds-react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { GetText } from '../../../hooks/useTexts';
 import { FieldValues, useForm } from 'react-hook-form';
 import CheckboxGroupWrapper from '../../../components/input/CheckboxGroupWrapper';
@@ -16,6 +26,8 @@ import { updateSøknadData, useSoknadContext } from '../../../context/soknadCont
 import { completeAndGoToNextStep, useStepWizard } from '../../../context/stepWizardContextV2';
 import { yupResolver } from '@hookform/resolvers/yup';
 import SoknadFormWrapper from '../../../components/SoknadFormWrapper/SoknadFormWrapper';
+import TextFieldWrapper from '../../../components/input/TextFieldWrapper';
+import ColorPanel from '../../../components/panel/ColorPanel';
 
 interface Props {
   getText: GetText;
@@ -28,6 +40,19 @@ export enum AttachmentType {
   OMSORGSSTØNAD = 'OMSORGSSTØNAD',
   UTLANDSSTØNAD = 'UTLANDSSTØNAD',
 }
+
+export enum StønadType {
+  ØKONOMISK_SOSIALHJELP = 'ØKONOMISK_SOSIALHJELP',
+  OMSORGSSTØNAD = 'OMSORGSSTØNAD',
+  INTRODUKSJONSSTØNAD = 'INTRODUKSJONSSTØNAD',
+  KVALIFISERINGSSTØNAD = 'KVALIFISERINGSSTØNAD',
+  VERV = 'VERV',
+  UTLAND = 'UTLAND',
+  AFP = 'AFP',
+  STIPEND = 'STIPEND',
+  NEI = 'NEI',
+}
+
 const ANDRE_UTBETALINGER = 'andreUtbetalinger';
 const LØNN = 'lønn';
 const STØNAD = 'stønad';
@@ -69,7 +94,7 @@ export const AndreUtbetalinger = ({ getText, onBackClick, onCancelClick, søknad
       KVALIFISERINGSSTØNAD: getText(`form.${ANDRE_UTBETALINGER}.${STØNAD}.kvalifiseringsstønad`),
       VERV: getText(`form.${ANDRE_UTBETALINGER}.${STØNAD}.verv`),
       UTLAND: getText(`form.${ANDRE_UTBETALINGER}.${STØNAD}.utland`),
-      PENSJON: getText(`form.${ANDRE_UTBETALINGER}.${STØNAD}.pensjon`),
+      AFP: getText(`form.${ANDRE_UTBETALINGER}.${STØNAD}.afp`),
       STIPEND: getText(`form.${ANDRE_UTBETALINGER}.${STØNAD}.stipend`),
       NEI: getText(`form.${ANDRE_UTBETALINGER}.${STØNAD}.nei`),
     }),
@@ -109,11 +134,11 @@ export const AndreUtbetalinger = ({ getText, onBackClick, onCancelClick, søknad
   }, [stønadEllerVerv, lønnEtterlønnEllerSluttpakke]);
   useEffect(() => {
     const lastChecked = stønadEllerVerv?.slice(-1)?.[0];
-    if (lastChecked === StønadAlternativer.NEI) {
+    if (lastChecked === StønadType.NEI) {
       if (stønadEllerVerv?.length > 1)
-        setValue(`${ANDRE_UTBETALINGER}.${STØNAD}`, [StønadAlternativer.NEI]);
-    } else if (stønadEllerVerv?.includes(StønadAlternativer.NEI)) {
-      const newList = [...stønadEllerVerv].filter((e) => e !== StønadAlternativer.NEI);
+        setValue(`${ANDRE_UTBETALINGER}.${STØNAD}`, [StønadType.NEI]);
+    } else if (stønadEllerVerv?.includes(StønadType.NEI)) {
+      const newList = [...stønadEllerVerv].filter((e) => e !== StønadType.NEI);
       setValue(`${ANDRE_UTBETALINGER}.${STØNAD}`, newList);
     }
   }, [stønadEllerVerv]);
@@ -167,23 +192,34 @@ export const AndreUtbetalinger = ({ getText, onBackClick, onCancelClick, søknad
         legend={getText(`form.${ANDRE_UTBETALINGER}.${STØNAD}.legend`)}
         error={errors?.[ANDRE_UTBETALINGER]?.[STØNAD]?.message}
       >
-        <Checkbox value={StønadAlternativer.VERV}>{StønadAlternativer.VERV}</Checkbox>
-        <Checkbox value={StønadAlternativer.ØKONOMISK_SOSIALHJELP}>
+        <Checkbox value={StønadType.VERV}>{StønadAlternativer.VERV}</Checkbox>
+        <Checkbox value={StønadType.ØKONOMISK_SOSIALHJELP}>
           {StønadAlternativer.ØKONOMISK_SOSIALHJELP}
         </Checkbox>
-        <Checkbox value={StønadAlternativer.OMSORGSSTØNAD}>
-          {StønadAlternativer.OMSORGSSTØNAD}
-        </Checkbox>
-        <Checkbox value={StønadAlternativer.INTRODUKSJONSSTØNAD}>
+        <Checkbox value={StønadType.OMSORGSSTØNAD}>{StønadAlternativer.OMSORGSSTØNAD}</Checkbox>
+        <Checkbox value={StønadType.INTRODUKSJONSSTØNAD}>
           {StønadAlternativer.INTRODUKSJONSSTØNAD}
         </Checkbox>
-        <Checkbox value={StønadAlternativer.KVALIFISERINGSSTØNAD}>
+        <Checkbox value={StønadType.KVALIFISERINGSSTØNAD}>
           {StønadAlternativer.KVALIFISERINGSSTØNAD}
         </Checkbox>
-        <Checkbox value={StønadAlternativer.UTLAND}>{StønadAlternativer.UTLAND}</Checkbox>
-        <Checkbox value={StønadAlternativer.PENSJON}>{StønadAlternativer.PENSJON}</Checkbox>
-        <Checkbox value={StønadAlternativer.STIPEND}>{StønadAlternativer.STIPEND}</Checkbox>
-        <Checkbox value={StønadAlternativer.NEI}>{StønadAlternativer.NEI}</Checkbox>
+        <Checkbox value={StønadType.UTLAND}>{StønadAlternativer.UTLAND}</Checkbox>
+        <Checkbox value={StønadType.AFP}>{StønadAlternativer.AFP}</Checkbox>
+        {stønadEllerVerv?.includes(StønadType.AFP) && (
+          <ColorPanel>
+            <Grid>
+              <Cell xs={7}>
+                <TextFieldWrapper
+                  name={`${ANDRE_UTBETALINGER}.afp.hvemBetaler`}
+                  label={getText('form.andreUtbetalinger.afp.legend')}
+                  control={control}
+                />
+              </Cell>
+            </Grid>
+          </ColorPanel>
+        )}
+        <Checkbox value={StønadType.STIPEND}>{StønadAlternativer.STIPEND}</Checkbox>
+        <Checkbox value={StønadType.NEI}>{StønadAlternativer.NEI}</Checkbox>
       </CheckboxGroupWrapper>
       {Attachments.length > 0 && (
         <Alert variant={'info'}>

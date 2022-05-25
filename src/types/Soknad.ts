@@ -1,4 +1,5 @@
-import { JaEllerNei } from './Generic';
+import { StønadType } from '../pages/standard/AndreUtbetalinger/AndreUtbetalinger';
+import { JaEllerNei, JaNeiVetIkke } from './Generic';
 
 export type FieldAndLabel<T> = {
   label?: string;
@@ -39,10 +40,14 @@ export type Behandler = {
 };
 type Student = {
   erStudent?: JaEllerNei;
+  kommeTilbake?: JaNeiVetIkke;
 };
 type AndreUtbetalinger = {
   lønn?: string;
-  stønad?: Array<string>;
+  stønad?: Array<StønadType>;
+  afp?: {
+    hvemBetaler?: string;
+  };
   utbetaling?: {
     utbetalingsType?: string;
     ferie?: {

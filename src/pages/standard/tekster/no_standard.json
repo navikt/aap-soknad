@@ -351,10 +351,14 @@
         "kvalifiseringsstønad": "Kvalifiseringsstønad (kvalifiseringsprogrammet)",
         "verv": "Godtgjørelse eller lønn for verv",
         "utland": "Ytelser fra utenlandske trygdemyndigheter",
-        "pensjon": "Pensjoner",
+        "afp": "Avtalefestet pensjon (AFP)",
         "stipend": "Lån, stipend eller sykestipend fra Lånekassen",
         "nei": "Ingen av disse",
         "required": "Du må krysse av for om du får eller nylig har søkt om noen av utbetalingene over."
+      },
+      "afp": {
+        "legend": "Hvem utbetaler avtalefestet pensjon (AFP)?",
+        "required": "Du må svare på hvem som utbetaler avtalefestet pensjon (AFP)"
       },
       "lønn": {
         "legend": "Har du fått eller skal du få ekstra utbetalinger fra arbeidsgiver?",

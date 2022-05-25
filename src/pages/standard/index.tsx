@@ -21,7 +21,7 @@ import { hentSokerOppslag, useSokerOppslag } from '../../context/sokerOppslagCon
 import { Behandlere } from './Behandlere/Behandlere';
 import { Medlemskap } from './Medlemskap/Medlemskap';
 import { Yrkesskade } from './Yrkesskade/Yrkesskade';
-import { AndreUtbetalinger } from './AndreUtbetalinger/AndreUtbetalinger';
+import { AndreUtbetalinger, StønadType } from './AndreUtbetalinger/AndreUtbetalinger';
 import { Barnetillegg } from './Barnetillegg/Barnetillegg';
 import Oppsummering from './Oppsummering/Oppsummering';
 import Tilleggsopplysninger from './Tilleggsopplysninger/Tilleggsopplysninger';
@@ -70,6 +70,13 @@ const getJaNeiVetIkke = (value?: string) => {
   return undefined;
 };
 
+const getJaNeiAvbrutt = (value?: string) => {
+  if (value === 'Ja') return 'JA';
+  if (value === 'Nei') return 'NEI';
+  if (value === 'Avbrutt') return 'AVBRUTT';
+  return undefined;
+};
+
 const jaNeiToBoolean = (value?: string) => {
   if (value === 'Ja') return true;
   if (value === 'Nei') return false;
@@ -77,7 +84,6 @@ const jaNeiToBoolean = (value?: string) => {
 };
 
 interface SøknadBackendState {
-  type: 'STUDENT' | 'STANDARD';
   startDato: {
     fom?: string;
     hvorfor?: string;
@@ -85,7 +91,7 @@ interface SøknadBackendState {
   };
   ferie: {
     ferieType?: 'PERIODE' | 'DAGER' | 'NEI' | 'VET_IKKE';
-    periode: {
+    periode?: {
       fom?: string;
       tom?: string;
     };
@@ -104,61 +110,84 @@ interface SøknadBackendState {
       landsNavn?: string;
     }[];
   };
+  studier: {
+    erStudent?: 'JA' | 'NEI' | 'AVBRUTT';
+    kommeTilbake?: 'JA' | 'NEI' | 'VET_IKKE';
+  };
   behandlere: [];
   yrkesskadeType?: 'JA' | 'NEI' | 'VET_IKKE';
   utbetalinger: {
     fraArbeidsgiver?: boolean;
-    stønadstyper: [];
-    andreUtbetalinger: [];
+    stønadstyper: Array<{ type: StønadType; hvemUtbetalerAFP?: string; vedlegg?: string }>;
+    hvemUtbetalerAFP?: string;
   };
   registrerteBarn: [];
   andreBarn: [];
   tilleggsopplysninger?: string;
 }
 
-const mapSøknadToBackend = (søknad?: Soknad): SøknadBackendState => ({
-  type: søknad?.student ? 'STUDENT' : 'STANDARD',
-  startDato: {
-    fom: formatDate(søknad?.startDato),
-    hvorfor: getHvorfor(søknad?.hvorfor),
-    beskrivelse: søknad?.begrunnelse,
-  },
-  ferie: {
-    ferieType: getFerieType(søknad?.ferie?.skalHaFerie, søknad?.ferie?.ferieType),
-    periode: {
-      fom: formatDate(søknad?.ferie?.fraDato),
-      tom: formatDate(søknad?.ferie?.tilDato),
+const mapSøknadToBackend = (søknad?: Soknad): SøknadBackendState => {
+  const ferieType = getFerieType(søknad?.ferie?.skalHaFerie, søknad?.ferie?.ferieType);
+  return {
+    startDato: {
+      fom: formatDate(søknad?.startDato),
+      hvorfor: getHvorfor(søknad?.hvorfor),
+      beskrivelse: søknad?.begrunnelse,
     },
-    dager: søknad?.ferie?.antallDager,
-  },
-  medlemsskap: {
-    boddINorgeSammenhengendeSiste5: jaNeiToBoolean(søknad?.medlemskap?.harBoddINorgeSiste5År),
-    jobbetUtenforNorgeFørSyk: jaNeiToBoolean(søknad?.medlemskap?.arbeidetUtenforNorgeFørSykdom),
-    jobbetSammenhengendeINorgeSiste5: jaNeiToBoolean(søknad?.medlemskap?.harArbeidetINorgeSiste5År),
-    iTilleggArbeidUtenforNorge: jaNeiToBoolean(søknad?.medlemskap?.iTilleggArbeidUtenforNorge),
-    utenlandsopphold:
-      søknad?.medlemskap?.utenlandsOpphold?.map((utenlandsopphold) => ({
-        land: utenlandsopphold.land,
+    ferie: {
+      ferieType,
+      ...(ferieType === 'PERIODE' && {
         periode: {
-          fom: formatDate(utenlandsopphold.fraDato),
-          tom: formatDate(utenlandsopphold.tilDato),
+          fom: formatDate(søknad?.ferie?.fraDato),
+          tom: formatDate(søknad?.ferie?.tilDato),
         },
-        arbeidet: utenlandsopphold.iArbeid,
-        id: utenlandsopphold.utenlandsId,
-        landsNavn: '', // TODO: Hente navn fra landkode
-      })) ?? [],
-  },
-  behandlere: [], // TODO: Mappe behandlere
-  yrkesskadeType: getJaNeiVetIkke(søknad?.yrkesskade),
-  utbetalinger: {
-    fraArbeidsgiver: true, // TODO: Mappe søknadState?.søknad?.andreUtbetalinger?.lønn ? true : false
-    stønadstyper: [],
-    andreUtbetalinger: [],
-  },
-  registrerteBarn: [],
-  andreBarn: [],
-  tilleggsopplysninger: søknad?.tilleggsopplysninger,
-});
+      }),
+      dager: søknad?.ferie?.antallDager,
+    },
+    medlemsskap: {
+      boddINorgeSammenhengendeSiste5: jaNeiToBoolean(søknad?.medlemskap?.harBoddINorgeSiste5År),
+      jobbetUtenforNorgeFørSyk: jaNeiToBoolean(søknad?.medlemskap?.arbeidetUtenforNorgeFørSykdom),
+      jobbetSammenhengendeINorgeSiste5: jaNeiToBoolean(
+        søknad?.medlemskap?.harArbeidetINorgeSiste5År
+      ),
+      iTilleggArbeidUtenforNorge: jaNeiToBoolean(søknad?.medlemskap?.iTilleggArbeidUtenforNorge),
+      utenlandsopphold:
+        søknad?.medlemskap?.utenlandsOpphold?.map((utenlandsopphold) => ({
+          land: utenlandsopphold.land,
+          periode: {
+            fom: formatDate(utenlandsopphold.fraDato),
+            tom: formatDate(utenlandsopphold.tilDato),
+          },
+          arbeidet: utenlandsopphold.iArbeid,
+          id: utenlandsopphold.utenlandsId,
+          landsNavn: '', // TODO: Hente navn fra landkode
+        })) ?? [],
+    },
+    studier: {
+      erStudent: getJaNeiAvbrutt(søknad?.student?.erStudent),
+      kommeTilbake: getJaNeiVetIkke(søknad?.student?.kommeTilbake),
+    },
+    behandlere: [], // TODO: Mappe behandlere
+    yrkesskadeType: getJaNeiVetIkke(søknad?.yrkesskade),
+    utbetalinger: {
+      fraArbeidsgiver: jaNeiToBoolean(søknad?.andreUtbetalinger?.lønn),
+      stønadstyper:
+        søknad?.andreUtbetalinger?.stønad?.map((stønad) => {
+          return {
+            type: stønad,
+            ...(stønad === StønadType.AFP && {
+              hvemUtbetalerAFP: søknad?.andreUtbetalinger?.afp?.hvemBetaler,
+            }),
+            vedlegg: undefined,
+          };
+        }) ?? [],
+      hvemUtbetalerAFP: søknad?.andreUtbetalinger?.afp?.hvemBetaler,
+    },
+    registrerteBarn: [],
+    andreBarn: [],
+    tilleggsopplysninger: søknad?.tilleggsopplysninger,
+  };
+};
 
 export const StandardPage = (): JSX.Element => {
   const [oppslagLoading, setOppslagLoading] = useState<boolean>(true);
