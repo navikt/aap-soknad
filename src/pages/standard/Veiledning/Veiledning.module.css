@@ -10,6 +10,7 @@
   text-align: center;
 }
 .veiledningHeader {
+  text-align: center;
   padding: var(--navds-spacing-10) 0;
 }
 .buttonWrapper {
