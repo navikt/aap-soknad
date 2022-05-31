@@ -49,10 +49,6 @@ export const Veiledning = ({ getText, søker, loading, onSubmit }: VeiledningPro
     resolver: yupResolver(schema),
     defaultValues: { ...initVeiledning },
   });
-  const veiledningHandleSubmit = (data: any) => {
-    console.log('veiledning ok', data);
-    onSubmit();
-  };
   return (
     <>
       <header className={classes?.veiledningHeader}>
@@ -120,7 +116,7 @@ export const Veiledning = ({ getText, søker, loading, onSubmit }: VeiledningPro
         </article>
 
         <form
-          onSubmit={handleSubmit(veiledningHandleSubmit)}
+          onSubmit={handleSubmit(() => onSubmit())}
           className={classes?.veiledningContent}
           autoComplete="off"
         >

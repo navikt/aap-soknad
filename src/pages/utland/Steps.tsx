@@ -1,6 +1,5 @@
-import { BodyShort, GuidePanel, Heading, Label } from '@navikt/ds-react';
-import { FieldErrors } from 'react-hook-form';
-import SelectWrapper from '../../components/input/SelectWrapper';
+import { BodyShort, Button, GuidePanel, Heading, Label } from '@navikt/ds-react';
+import { FieldValues, useForm } from 'react-hook-form';
 import DatoVelgerWrapper from '../../components/input/DatoVelgerWrapper';
 import countries from 'i18n-iso-countries';
 import ConfirmationPanelWrapper from '../../components/input/ConfirmationPanelWrapper';
@@ -8,75 +7,178 @@ import React from 'react';
 import { formatDate } from '../../utils/date';
 import { GetText } from '../../hooks/useTexts';
 import { parseISO, isDate } from 'date-fns';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from 'yup';
+import { updateSøknadData, useSoknadContext } from '../../context/soknadContext';
+import { completeAndGoToNextStep, useStepWizard } from '../../context/stepWizardContextV2';
+import CountrySelector from '../../components/input/CountrySelector';
+import SoknadFormWrapper from '../../components/SoknadFormWrapper/SoknadFormWrapper';
+import SoknadUtland from '../../types/SoknadUtland';
+import * as classes from '../standard/Veiledning/Veiledning.module.css';
+import Soknad from '../../types/Soknad';
 
 interface IntroductionProps {
   getText: GetText;
+  onSubmit: () => void;
 }
-export const StepIntroduction = ({ getText }: IntroductionProps) => (
-  <>
-    <GuidePanel poster>{getText('steps.introduction.guidetext')}</GuidePanel>
-  </>
-);
+export const StepIntroduction = ({ getText, onSubmit }: IntroductionProps) => {
+  return (
+    <>
+      <GuidePanel poster>{getText('steps.introduction.guidetext')}</GuidePanel>
+      <div className={classes?.buttonWrapper}>
+        <Button variant="primary" type="button" onClick={() => onSubmit()}>
+          {'Fortsett til søknaden'}
+        </Button>
+        <Button variant="tertiary" type="button" onClick={() => console.log('TODO')}>
+          {'Slett påbegynt søknad'}
+        </Button>
+      </div>
+    </>
+  );
+};
 
 interface SelectCountryProps {
   getText: GetText;
-  control: any;
-  errors: FieldErrors;
-  countries: string[][];
+  onBackClick: () => void;
+  onCancelClick: () => void;
 }
-export const StepSelectCountry = ({ getText, countries, control, errors }: SelectCountryProps) => (
-  <>
-    <GuidePanel poster>{getText('steps.country.guidetext')}</GuidePanel>
-    <SelectWrapper
-      name="country"
-      label={getText('form.country.label')}
-      control={control}
-      error={errors.country?.message}
-    >
-      {[
-        <option key="none" value="none">
-          Velg land
-        </option>,
-        ...countries.map(([key, val]) => (
-          <option key={key} value={key}>
-            {val}
-          </option>
-        )),
-      ]}
-    </SelectWrapper>
-  </>
-);
+export const StepSelectCountry = ({ getText, onBackClick, onCancelClick }: SelectCountryProps) => {
+  const LAND = 'country';
+  const schema = yup.object().shape({
+    country: yup
+      .string()
+      .required(getText('form.country.required'))
+      .notOneOf(['none'], getText('form.country.required')),
+  });
+  const { søknadState, søknadDispatch } = useSoknadContext();
+  const { stepWizardDispatch } = useStepWizard();
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FieldValues>({
+    resolver: yupResolver(schema),
+    defaultValues: {
+      [LAND]: søknadState?.søknad?.[LAND],
+    },
+  });
+  return (
+    <>
+      <GuidePanel poster>{getText('steps.country.guidetext')}</GuidePanel>
+      <SoknadFormWrapper
+        onNext={handleSubmit((data) => {
+          updateSøknadData(søknadDispatch, data);
+          completeAndGoToNextStep(stepWizardDispatch);
+        })}
+        onBack={() => onBackClick()}
+        onCancel={() => onCancelClick()}
+        nextButtonText={'Neste steg'}
+        backButtonText={'Forrige steg'}
+        cancelButtonText={'Avbryt søknad'}
+        errors={errors}
+      >
+        <CountrySelector
+          name={LAND}
+          label={getText('form.country.label')}
+          control={control}
+          error={errors.country?.message}
+        />
+      </SoknadFormWrapper>
+    </>
+  );
+};
 
 interface SelectTravelPeriodProps {
   getText: GetText;
-  control: any;
-  errors: FieldErrors;
-  getValues: (payload?: any) => any;
+  søknad?: SoknadUtland;
+  onBackClick: () => void;
+  onCancelClick: () => void;
 }
-export const StepSelectTravelPeriod = ({ getText, control, errors }: SelectTravelPeriodProps) => (
-  <>
-    <DatoVelgerWrapper
-      name="fromDate"
-      label={getText('form.fromdate.label')}
-      control={control}
-      error={errors.fromDate?.message}
-    />
-    <DatoVelgerWrapper
-      name="toDate"
-      label={getText('form.todate.label')}
-      control={control}
-      error={errors.toDate?.message}
-    />
-  </>
-);
+export const StepSelectTravelPeriod = ({
+  getText,
+  søknad,
+  onBackClick,
+  onCancelClick,
+}: SelectTravelPeriodProps) => {
+  const FRA_DATO = 'fromDate';
+  const TIL_DATO = 'toDate';
+  const schema = yup.object().shape({
+    [FRA_DATO]: yup.date().required(getText('form.fromdate.required')),
+    [TIL_DATO]: yup
+      .date()
+      .required(getText('form.todate.required'))
+      .when(
+        'fromDate',
+        (fromDate, yup) => fromDate && yup.min(fromDate, getText('form.todate.afterfromdate'))
+      ),
+  });
+  const { søknadDispatch } = useSoknadContext();
+  const { stepWizardDispatch } = useStepWizard();
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FieldValues>({
+    resolver: yupResolver(schema),
+    defaultValues: {
+      [FRA_DATO]: søknad?.[FRA_DATO],
+      [TIL_DATO]: søknad?.[TIL_DATO],
+    },
+  });
+  return (
+    <SoknadFormWrapper
+      onNext={handleSubmit((data) => {
+        updateSøknadData(søknadDispatch, data);
+        completeAndGoToNextStep(stepWizardDispatch);
+      })}
+      onBack={() => onBackClick()}
+      onCancel={() => onCancelClick()}
+      nextButtonText={'Neste steg'}
+      backButtonText={'Forrige steg'}
+      cancelButtonText={'Avbryt søknad'}
+      errors={errors}
+    >
+      <DatoVelgerWrapper
+        name={FRA_DATO}
+        label={getText('form.fromdate.label')}
+        control={control}
+        error={errors?.[FRA_DATO]?.message}
+      />
+      <DatoVelgerWrapper
+        name={TIL_DATO}
+        label={getText('form.todate.label')}
+        control={control}
+        error={errors?.[TIL_DATO]?.message}
+      />
+    </SoknadFormWrapper>
+  );
+};
 
 interface SummaryProps {
   getText: GetText;
-  control: any;
-  errors: FieldErrors;
   data: any;
+  onBackClick: () => void;
+  onCancelClick: () => void;
+  onSubmitSoknad: (data: Soknad) => void;
 }
-export const StepSummary = ({ getText, data, control, errors }: SummaryProps) => {
+export const StepSummary = ({ getText, data, onBackClick, onCancelClick }: SummaryProps) => {
+  const BEKREFT = 'fromDate';
+  const schema = yup.object().shape({
+    [BEKREFT]: yup
+      .boolean()
+      .required(getText('form.confirmationPanel.required'))
+      .oneOf([true], getText('form.confirmationPanel.required')),
+  });
+  const { søknadDispatch } = useSoknadContext();
+  const { stepWizardDispatch } = useStepWizard();
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FieldValues>({
+    resolver: yupResolver(schema),
+    defaultValues: {},
+  });
   const getFormInputLabel = (key: string) => getText(`form.${key}.label`);
   const getFormValueReadable = (key: string, val: any) => {
     switch (key) {
@@ -98,19 +200,32 @@ export const StepSummary = ({ getText, data, control, errors }: SummaryProps) =>
         {getText('summary')}
       </Heading>
       {Object.entries(data)
-        .filter(([key, val]) => !!val)
+        .filter(([, val]) => !!val)
         .map(([key, val]) => (
           <div key={key}>
             <Label>{getFormInputLabel(key)}</Label>
             <BodyShort>{getFormValueReadable(key, val)}</BodyShort>
           </div>
         ))}
-      <ConfirmationPanelWrapper
-        name="confirmationPanel"
-        label={getText('form.confirmationpanel.label')}
-        control={control}
-        error={errors.confirmationPanel?.message}
-      />
+      <SoknadFormWrapper
+        onNext={handleSubmit((data) => {
+          updateSøknadData(søknadDispatch, data);
+          completeAndGoToNextStep(stepWizardDispatch);
+        })}
+        onBack={() => onBackClick()}
+        onCancel={() => onCancelClick()}
+        nextButtonText={'Send søknad'}
+        backButtonText={'Forrige steg'}
+        cancelButtonText={'Avbryt søknad'}
+        errors={errors}
+      >
+        <ConfirmationPanelWrapper
+          name={BEKREFT}
+          label={getText('form.confirmationpanel.label')}
+          control={control}
+          error={errors.confirmationPanel?.message}
+        />
+      </SoknadFormWrapper>
     </>
   );
 };
