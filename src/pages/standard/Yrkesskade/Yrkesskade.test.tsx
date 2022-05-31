@@ -7,6 +7,8 @@ import StartDato from '../StartDato/StartDato';
 import { JaNeiVetIkke } from '../../../types/Generic';
 import React from 'react';
 import { SoknadContext, SoknadContextData, SøknadType } from '../../../context/soknadContext';
+import { axe, toHaveNoViolations } from 'jest-axe';
+expect.extend(toHaveNoViolations);
 
 const YRKESSKADE = 'yrkesskade';
 
@@ -56,5 +58,9 @@ describe('Yrkesskade', () => {
     renderWithContext(<Component />, {});
     fireEvent.click(screen.getByRole('radio', { name: JaNeiVetIkke.NEI }), {});
     expect(await screen.queryByRole('region')).toBeNull();
+  });
+  it('UU', async () => {
+    const { container } = renderWithContext(<Component />, {});
+    expect(await axe(container)).toHaveNoViolations();
   });
 });

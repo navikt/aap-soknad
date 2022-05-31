@@ -8,6 +8,8 @@ import { StepWizardContext, StepWizardContextState } from '../../../context/step
 import { Step, StepWizard } from '../../../components/StepWizard';
 import { SoknadContext, SoknadContextData, SøknadType } from '../../../context/soknadContext';
 import { format } from 'date-fns';
+import { axe, toHaveNoViolations } from 'jest-axe';
+expect.extend(toHaveNoViolations);
 
 const STARTDATO = 'STARTDATO';
 const soknadContext: SoknadContextData = {
@@ -62,5 +64,9 @@ describe('StartDato', () => {
     });
     fireEvent.click(screen.getByRole('radio', { name: JaNeiVetIkke.NEI }), {});
     expect(await screen.queryByRole('region')).toBeNull();
+  });
+  it('UU', async () => {
+    const { container } = renderWithContext(<Component />, {});
+    expect(await axe(container)).toHaveNoViolations();
   });
 });
