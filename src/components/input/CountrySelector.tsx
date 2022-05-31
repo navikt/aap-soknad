@@ -4,6 +4,10 @@ import SelectWrapper from './SelectWrapper';
 import { Control } from 'react-hook-form';
 import Soknad from '../../types/Soknad';
 
+// Support norwegian & english languages.
+countries.registerLocale(require('i18n-iso-countries/langs/en.json'));
+countries.registerLocale(require('i18n-iso-countries/langs/nb.json'));
+
 interface Props {
   name: string;
   label: string;
