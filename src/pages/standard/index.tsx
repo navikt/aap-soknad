@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useTexts } from '../../hooks/useTexts';
 import { PageHeader } from '@navikt/ds-react';
 import * as tekster from './tekster';
@@ -197,6 +197,7 @@ export const StandardPage = (): JSX.Element => {
   const { oppslagDispatch, søker, fastlege } = useSokerOppslag();
   const { currentStep, stepWizardDispatch } = useStepWizard();
   const { getText } = useTexts(tekster);
+  const pageHeading = useRef(null);
   useEffect(() => {
     const getSoknadStateAndOppslag = async () => {
       // Wait to test cache
@@ -212,6 +213,7 @@ export const StandardPage = (): JSX.Element => {
   }, []);
   useEffect(() => {
     window && window.scrollTo(0, 0);
+    pageHeading?.current?.focus();
   }, [currentStep]);
   const submitSoknad: SubmitHandler<Soknad> = async (data) => {
     if (currentStep?.name === StepNames.OPPSUMMERING) {
@@ -277,7 +279,9 @@ export const StandardPage = (): JSX.Element => {
   return (
     <>
       <header>
-        <PageHeader align="center">{getText('pagetitle')}</PageHeader>
+        <PageHeader tabIndex={-1} ref={pageHeading} align="center">
+          {getText('pagetitle')}
+        </PageHeader>
       </header>
       <StepWizard hideLabels={true}>
         <Step order={1} name={StepNames.STARTDATO} label={'Søknadsdato'}>
