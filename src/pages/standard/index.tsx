@@ -210,6 +210,9 @@ export const StandardPage = (): JSX.Element => {
     };
     getSoknadStateAndOppslag();
   }, []);
+  useEffect(() => {
+    window && window.scrollTo(0, 0);
+  }, [currentStep]);
   const submitSoknad: SubmitHandler<Soknad> = async (data) => {
     if (currentStep?.name === StepNames.OPPSUMMERING) {
       console.log('post søknad', søknadState?.søknad);
