@@ -1,18 +1,38 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { FieldErrors } from 'react-hook-form';
-
 import { ErrorSummary } from '@navikt/ds-react';
 import useTexts from '../../hooks/useTexts';
-
 import * as tekster from './tekster';
+import * as classes from './FormErrorSummary.module.css';
+
 const FormErrorSummary = (props: FieldErrors) => {
-  console.log('errors', props);
-  const flatErrors = flatObj(props?.errors);
+  const flatErrors = flatObj(props.errors);
   const keyList = Object.keys(flatErrors).filter((e) => e);
   const { getText } = useTexts(tekster);
-  if (keyList.length < 1) return null;
+  const errorSummaryElement = useRef(null);
+  if (keyList?.length < 1) {
+    return (
+      <ErrorSummary
+        ref={errorSummaryElement}
+        heading={getText('skjemafeil')}
+        role={'alert'}
+        aria-hidden={keyList?.length === 0}
+        className={keyList?.length === 0 ? classes?.visuallyHidden : ''}
+        {...props}
+      >
+        {'hidden'}
+      </ErrorSummary>
+    );
+  }
   return (
-    <ErrorSummary heading={getText('skjemafeil')} role={'alert'} {...props}>
+    <ErrorSummary
+      ref={errorSummaryElement}
+      heading={getText('skjemafeil')}
+      role={'alert'}
+      aria-hidden={keyList?.length === 0}
+      className={keyList?.length === 0 ? classes?.visuallyHidden : ''}
+      {...props}
+    >
       {keyList.map((key) => (
         <ErrorSummary.Item key={key} href={`#${key}`}>
           {
