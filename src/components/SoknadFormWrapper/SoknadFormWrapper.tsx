@@ -29,8 +29,8 @@ const SøknadFormWrapper = ({
 }: Props) => {
   return (
     <form onSubmit={onNext} className={classes?.formContent}>
-      {children}
       <FormErrorSummary errors={errors} data-testid={'error-summary'} />
+      {children}
       <div className={classes?.buttonWrapper}>
         <Button variant="secondary" type="button" onClick={onBack}>
           {backButtonText}

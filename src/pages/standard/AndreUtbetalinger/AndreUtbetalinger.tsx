@@ -9,11 +9,11 @@ import {
   Radio,
   ReadMore,
 } from '@navikt/ds-react';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { GetText } from '../../../hooks/useTexts';
 import { FieldValues, useForm } from 'react-hook-form';
 import CheckboxGroupWrapper from '../../../components/input/CheckboxGroupWrapper';
-import RadioGroupWrapper from '../../../components/input/RadioGroupWrapper';
+import RadioGroupWrapper from '../../../components/input/RadioGroupWrapper/RadioGroupWrapper';
 import {
   useVedleggContext,
   addRequiredVedlegg,

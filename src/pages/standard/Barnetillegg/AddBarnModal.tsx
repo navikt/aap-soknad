@@ -16,7 +16,7 @@ import React, { useEffect } from 'react';
 import { GetText } from '../../../hooks/useTexts';
 import Soknad from '../../../types/Soknad';
 import TextFieldWrapper from '../../../components/input/TextFieldWrapper';
-import RadioGroupWrapper from '../../../components/input/RadioGroupWrapper';
+import RadioGroupWrapper from '../../../components/input/RadioGroupWrapper/RadioGroupWrapper';
 import { FieldValues, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';

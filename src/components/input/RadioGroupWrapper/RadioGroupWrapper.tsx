@@ -1,6 +1,7 @@
 import React from 'react';
 import { RadioGroup } from '@navikt/ds-react';
-import { Controller, FieldError, FieldValues, UseControllerProps } from 'react-hook-form';
+import { Controller, FieldValues, UseControllerProps } from 'react-hook-form';
+import * as classes from './RadioGroupWrapper.module.css';
 
 export interface RadioProps<T> extends UseControllerProps<T> {
   legend?: string;
@@ -30,6 +31,8 @@ const RadioGroupWrapper = <T extends FieldValues>({
         description={description}
         error={error}
         onChange={onChange}
+        className={classes?.fieldsetFocus}
+        tabIndex={-1}
       >
         {children}
       </RadioGroup>

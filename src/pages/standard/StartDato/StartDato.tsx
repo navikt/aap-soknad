@@ -5,7 +5,6 @@ import React, { useEffect, useMemo, useState } from 'react';
 import DatoVelgerWrapper from '../../../components/input/DatoVelgerWrapper';
 import {
   Alert,
-  BodyLong,
   BodyShort,
   Cell,
   Grid,
@@ -14,7 +13,7 @@ import {
   Radio,
   ReadMore,
 } from '@navikt/ds-react';
-import RadioGroupWrapper from '../../../components/input/RadioGroupWrapper';
+import RadioGroupWrapper from '../../../components/input/RadioGroupWrapper/RadioGroupWrapper';
 import { JaNeiVetIkke } from '../../../types/Generic';
 import TextFieldWrapper from '../../../components/input/TextFieldWrapper';
 import ColorPanel from '../../../components/panel/ColorPanel';
@@ -77,7 +76,6 @@ const StartDato = ({ getText, onBackClick, onCancelClick, søknad }: Props) => {
       is: startDateIsInPast || startDateIsInFuture,
       then: yup.string().nullable(),
     }),
-
     [FERIE]: yup.object().when([STARTDATO], {
       is: (val: Date) => val === undefined || !startDateIsInPast(val),
       then: yup.object().shape({

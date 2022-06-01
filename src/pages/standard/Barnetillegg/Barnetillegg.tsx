@@ -12,7 +12,7 @@ import {
 import React, { useMemo, useState } from 'react';
 import { GetText } from '../../../hooks/useTexts';
 import { FieldValues, useFieldArray, useForm } from 'react-hook-form';
-import RadioGroupWrapper from '../../../components/input/RadioGroupWrapper';
+import RadioGroupWrapper from '../../../components/input/RadioGroupWrapper/RadioGroupWrapper';
 import { JaEllerNei } from '../../../types/Generic';
 import Soknad from '../../../types/Soknad';
 import * as classes from './Barnetillegg.module.css';

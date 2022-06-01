@@ -6,6 +6,7 @@ import useTexts from '../../hooks/useTexts';
 
 import * as tekster from './tekster';
 const FormErrorSummary = (props: FieldErrors) => {
+  console.log('errors', props);
   const flatErrors = flatObj(props?.errors);
   const keyList = Object.keys(flatErrors).filter((e) => e);
   const { getText } = useTexts(tekster);

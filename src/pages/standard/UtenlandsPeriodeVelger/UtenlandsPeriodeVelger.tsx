@@ -18,7 +18,7 @@ import {
   Grid,
 } from '@navikt/ds-react';
 import { JaEllerNei } from '../../../types/Generic';
-import RadioGroupWrapper from '../../../components/input/RadioGroupWrapper';
+import RadioGroupWrapper from '../../../components/input/RadioGroupWrapper/RadioGroupWrapper';
 import CountrySelector from '../../../components/input/CountrySelector';
 import TextFieldWrapper from '../../../components/input/TextFieldWrapper';
 

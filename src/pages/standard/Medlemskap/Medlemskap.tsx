@@ -17,7 +17,7 @@ import { JaEllerNei, JaNeiVetIkke } from '../../../types/Generic';
 import { Add, Delete } from '@navikt/ds-icons';
 import UtenlandsPeriodeVelger from '..//UtenlandsPeriodeVelger/UtenlandsPeriodeVelger';
 import { formatDate } from '../../../utils/date';
-import RadioGroupWrapper from '../../../components/input/RadioGroupWrapper';
+import RadioGroupWrapper from '../../../components/input/RadioGroupWrapper/RadioGroupWrapper';
 import Soknad from '../../../types/Soknad';
 import { completeAndGoToNextStep, useStepWizard } from '../../../context/stepWizardContextV2';
 import SoknadFormWrapper from '../../../components/SoknadFormWrapper/SoknadFormWrapper';

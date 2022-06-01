@@ -1,17 +1,8 @@
 import { GetText } from '../../../hooks/useTexts';
 import { FieldValues, useForm } from 'react-hook-form';
 import React from 'react';
-import {
-  ReadMore,
-  BodyLong,
-  BodyShort,
-  GuidePanel,
-  Heading,
-  Radio,
-  Link,
-  Alert,
-} from '@navikt/ds-react';
-import RadioGroupWrapper from '../../../components/input/RadioGroupWrapper';
+import { ReadMore, BodyLong, BodyShort, GuidePanel, Heading, Radio, Alert } from '@navikt/ds-react';
+import RadioGroupWrapper from '../../../components/input/RadioGroupWrapper/RadioGroupWrapper';
 import Soknad from '../../../types/Soknad';
 import TextWithLink from '../../../components/TextWithLink';
 import { JaNeiVetIkke } from '../../../types/Generic';

@@ -1,8 +1,8 @@
 import Soknad from '../../../types/Soknad';
 import { GetText } from '../../../hooks/useTexts';
-import RadioGroupWrapper from '../../../components/input/RadioGroupWrapper';
-import { BodyLong, BodyShort, GuidePanel, Heading, Radio, Alert } from '@navikt/ds-react';
-import { JaEllerNei, JaNeiVetIkke } from '../../../types/Generic';
+import RadioGroupWrapper from '../../../components/input/RadioGroupWrapper/RadioGroupWrapper';
+import { BodyShort, GuidePanel, Heading, Radio, Alert } from '@navikt/ds-react';
+import { JaNeiVetIkke } from '../../../types/Generic';
 import React, { useEffect } from 'react';
 import * as yup from 'yup';
 import { updateSøknadData, useSoknadContext } from '../../../context/soknadContext';
@@ -10,7 +10,6 @@ import { completeAndGoToNextStep, useStepWizard } from '../../../context/stepWiz
 import { FieldValues, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import SoknadFormWrapper from '../../../components/SoknadFormWrapper/SoknadFormWrapper';
-import { watch } from 'fs';
 import ColorPanel from '../../../components/panel/ColorPanel';
 
 const STUDENT = 'student';
