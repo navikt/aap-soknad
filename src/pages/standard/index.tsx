@@ -17,7 +17,7 @@ import {
   addBarnIfMissing,
 } from '../../context/soknadContext';
 import { Veiledning } from './Veiledning/Veiledning';
-import { hentSokerOppslag, useSokerOppslag } from '../../context/sokerOppslagContext';
+import { FastlegeView, hentSokerOppslag, useSokerOppslag } from '../../context/sokerOppslagContext';
 import { Behandlere } from './Behandlere/Behandlere';
 import { Medlemskap } from './Medlemskap/Medlemskap';
 import { Yrkesskade } from './Yrkesskade/Yrkesskade';
@@ -114,7 +114,7 @@ interface SøknadBackendState {
     erStudent?: 'JA' | 'NEI' | 'AVBRUTT';
     kommeTilbake?: 'JA' | 'NEI' | 'VET_IKKE';
   };
-  behandlere: [];
+  behandlere: Array<Behandler>;
   yrkesskadeType?: 'JA' | 'NEI' | 'VET_IKKE';
   utbetalinger: {
     fraArbeidsgiver?: boolean;
@@ -126,8 +126,71 @@ interface SøknadBackendState {
   tilleggsopplysninger?: string;
 }
 
-const mapSøknadToBackend = (søknad?: Soknad): SøknadBackendState => {
+interface Behandler {
+  type: 'FASTLEGE' | 'ANNEN_BEHANDLER';
+  navn: { fornavn?: string; mellomnavn?: string; etternavn?: string };
+  kontaktinformasjon: {
+    behandlerRef?: string;
+    kontor?: string;
+    orgnummer?: string;
+    adresse?: {
+      adressenavn?: string;
+      husbokstav?: string;
+      husnummer?: string;
+      postnummer?: { postnr: string; poststed?: string };
+    };
+    telefon?: string;
+  };
+}
+
+const mapFastlege = (fastlege?: FastlegeView): Behandler[] => {
+  if (fastlege) {
+    return [
+      {
+        type: 'FASTLEGE',
+        navn: fastlege.originalNavn,
+        kontaktinformasjon: {
+          behandlerRef: fastlege.behandlerRef,
+          kontor: fastlege.legekontor,
+          orgnummer: fastlege.orgnummer,
+          telefon: fastlege.telefon,
+          adresse: fastlege.originalAdresse,
+        },
+      },
+    ];
+  }
+  return [];
+};
+
+const mapSøknadToBackend = (søknad?: Soknad, fastlege?: FastlegeView): SøknadBackendState => {
   const ferieType = getFerieType(søknad?.ferie?.skalHaFerie, søknad?.ferie?.ferieType);
+  const mappedFastlege = mapFastlege(fastlege);
+
+  const behandlere = mappedFastlege.concat(
+    søknad?.behandlere?.map((behandler) => {
+      return {
+        type: 'FASTLEGE',
+        navn: {
+          fornavn: behandler.firstname,
+          etternavn: behandler.lastname,
+        },
+        kontaktinformasjon: {
+          behandlerRef: '', // TODO fiks
+          kontor: behandler.legekontor,
+          orgnummer: '', // TODO fiks
+          telefon: behandler.telefon,
+          adresse: {
+            adressenavn: behandler.gateadresse,
+            postnummer: {
+              postnr: behandler.postnummer,
+              poststed: behandler.poststed,
+            },
+          },
+        },
+      };
+    }) ?? []
+  );
+
   return {
     startDato: {
       fom: formatDate(søknad?.startDato),
@@ -167,7 +230,7 @@ const mapSøknadToBackend = (søknad?: Soknad): SøknadBackendState => {
       erStudent: getJaNeiAvbrutt(søknad?.student?.erStudent),
       kommeTilbake: getJaNeiVetIkke(søknad?.student?.kommeTilbake),
     },
-    behandlere: [], // TODO: Mappe behandlere
+    behandlere,
     yrkesskadeType: getJaNeiVetIkke(søknad?.yrkesskade),
     utbetalinger: {
       fraArbeidsgiver: jaNeiToBoolean(søknad?.andreUtbetalinger?.lønn),

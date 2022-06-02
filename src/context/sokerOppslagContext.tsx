@@ -34,8 +34,12 @@ type Fastlege = {
 };
 export type FastlegeView = {
   fulltNavn?: string;
+  originalNavn?: any;
+  orgnummer?: string;
+  behandlerRef?: string;
   legekontor?: string;
   adresse?: string;
+  originalAdresse?: any;
   telefon?: string;
 };
 export type SøkerView = {
@@ -92,8 +96,12 @@ function SokerOppslagProvider({ children }: Props) {
     if (!fastlege) return;
     return {
       fulltNavn: getFulltNavn(fastlege?.navn),
+      originalNavn: fastlege?.navn,
       legekontor: fastlege?.kontaktinformasjon?.kontor,
+      orgnummer: fastlege?.orgnummer,
+      behandlerRef: fastlege?.behandlerRef,
       adresse: getFullAdresse(fastlege?.kontaktinformasjon?.adresse),
+      originalAdresse: fastlege?.kontaktinformasjon?.adresse,
       telefon: fastlege?.kontaktinformasjon?.telefon,
     };
   }, [state]);
