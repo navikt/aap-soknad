@@ -1,5 +1,5 @@
 import { FormErrorSummary } from './FormErrorSummary';
-import { render, screen } from '@testing-library/react';
+import { render, screen, within } from '@testing-library/react';
 import { axe, toHaveNoViolations } from 'jest-axe';
 
 expect.extend(toHaveNoViolations);
@@ -14,9 +14,15 @@ describe('FormErrorSummary', () => {
     },
   };
 
-  it('tegner ingenting når vi ikke har feil', () => {
+  it('skjuler ErrorSummary når vi ikke har feil', () => {
     const { container } = render(<FormErrorSummary errors={[]} />);
-    expect(container.childElementCount).toBe(0);
+    console.log('container', container.innerHTML);
+    expect(within(container).getByRole('region', { hidden: true })).toHaveAttribute(
+      'aria-hidden',
+      'true'
+    );
+    expect(within(container).getByRole('list', { hidden: true }).childElementCount).toBe(1);
+    expect(within(container).getByRole('listitem', { hidden: true })).toHaveTextContent('hidden');
   });
 
   it('lister opp alle feil', () => {
