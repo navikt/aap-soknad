@@ -121,8 +121,25 @@ interface SøknadBackendState {
     stønadstyper: Array<{ type: StønadType; hvemUtbetalerAFP?: string; vedlegg?: string }>;
     hvemUtbetalerAFP?: string;
   };
-  registrerteBarn: [];
-  andreBarn: [];
+  registrerteBarn: Array<{
+    fnr: string;
+    merEnn1G?: boolean;
+    barnepensjon: boolean;
+  }>;
+  andreBarn: Array<{
+    barn: {
+      fnr: string;
+      navn: {
+        fornavn?: string;
+        mellomnavn?: string;
+        etternavn?: string;
+      };
+      fødselsdato?: string;
+    };
+    relasjon: 'FORELDER' | 'FOSTERFORELDER';
+    merEnn1G?: boolean;
+    barnepensjon: boolean;
+  }>;
   tilleggsopplysninger?: string;
 }
 
@@ -175,9 +192,7 @@ const mapSøknadToBackend = (søknad?: Soknad, fastlege?: FastlegeView): Søknad
           etternavn: behandler.lastname,
         },
         kontaktinformasjon: {
-          behandlerRef: '', // TODO fiks
           kontor: behandler.legekontor,
-          orgnummer: '', // TODO fiks
           telefon: behandler.telefon,
           adresse: {
             adressenavn: behandler.gateadresse,
@@ -246,8 +261,27 @@ const mapSøknadToBackend = (søknad?: Soknad, fastlege?: FastlegeView): Søknad
         }) ?? [],
       hvemUtbetalerAFP: søknad?.andreUtbetalinger?.afp?.hvemBetaler,
     },
-    registrerteBarn: [],
-    andreBarn: [],
+    registrerteBarn:
+      søknad?.barnetillegg
+        ?.filter((barn) => barn.manueltOpprettet !== true)
+        .map((barn) => ({
+          fnr: barn.fnr,
+          merEnn1G: jaNeiToBoolean(barn.harInntekt),
+          barnepensjon: false,
+        })) ?? [],
+    andreBarn:
+      søknad?.barnetillegg
+        ?.filter((barn) => barn.manueltOpprettet === true)
+        .map((barn) => ({
+          barn: {
+            fnr: barn.fnr,
+            navn: barn.navn,
+            fødselsdato: barn.fødselsdato,
+          },
+          relasjon: 'FORELDER',
+          merEnn1G: jaNeiToBoolean(barn.harInntekt),
+          barnepensjon: false,
+        })) ?? [],
     tilleggsopplysninger: søknad?.tilleggsopplysninger,
   };
 };
