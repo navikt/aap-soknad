@@ -169,7 +169,7 @@ const mapSøknadToBackend = (søknad?: Soknad, fastlege?: FastlegeView): Søknad
   const behandlere = mappedFastlege.concat(
     søknad?.behandlere?.map((behandler) => {
       return {
-        type: 'FASTLEGE',
+        type: 'ANNEN_BEHANDLER',
         navn: {
           fornavn: behandler.firstname,
           etternavn: behandler.lastname,
