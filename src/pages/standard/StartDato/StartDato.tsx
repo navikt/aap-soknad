@@ -24,6 +24,7 @@ import { completeAndGoToNextStep, useStepWizard } from '../../../context/stepWiz
 import { updateSøknadData, useSoknadContext } from '../../../context/soknadContext';
 import { isFuture, isPast, isToday, subYears } from 'date-fns';
 import TextAreaWrapper from '../../../components/input/TextAreaWrapper';
+import { setErrorSummaryFocus } from '../../../utils/dom';
 
 const STARTDATO = 'startDato';
 const FERIE = 'ferie';
@@ -172,10 +173,13 @@ const StartDato = ({ getText, onBackClick, onCancelClick, søknad }: Props) => {
 
   return (
     <SoknadFormWrapper
-      onNext={handleSubmit((data) => {
-        updateSøknadData(søknadDispatch, data);
-        completeAndGoToNextStep(stepWizardDispatch);
-      })}
+      onNext={handleSubmit(
+        (data) => {
+          updateSøknadData(søknadDispatch, data);
+          completeAndGoToNextStep(stepWizardDispatch);
+        },
+        () => setErrorSummaryFocus()
+      )}
       onBack={() => onBackClick()}
       onCancel={() => onCancelClick()}
       nextButtonText={'Neste steg'}
