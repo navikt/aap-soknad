@@ -123,7 +123,7 @@ interface SøknadBackendState {
   };
   registrerteBarn: Array<{
     fnr: string;
-    merEnn1G?: boolean;
+    merEnnIG?: boolean;
     barnepensjon: boolean;
   }>;
   andreBarn: Array<{
@@ -137,7 +137,7 @@ interface SøknadBackendState {
       fødselsdato?: string;
     };
     relasjon: 'FORELDER' | 'FOSTERFORELDER';
-    merEnn1G?: boolean;
+    merEnnIG?: boolean;
     barnepensjon: boolean;
   }>;
   tilleggsopplysninger?: string;
@@ -266,7 +266,7 @@ const mapSøknadToBackend = (søknad?: Soknad, fastlege?: FastlegeView): Søknad
         ?.filter((barn) => barn.manueltOpprettet !== true)
         .map((barn) => ({
           fnr: barn.fnr,
-          merEnn1G: jaNeiToBoolean(barn.harInntekt),
+          merEnnIG: jaNeiToBoolean(barn.harInntekt),
           barnepensjon: false,
         })) ?? [],
     andreBarn:
@@ -279,7 +279,7 @@ const mapSøknadToBackend = (søknad?: Soknad, fastlege?: FastlegeView): Søknad
             fødselsdato: barn.fødselsdato,
           },
           relasjon: 'FORELDER',
-          merEnn1G: jaNeiToBoolean(barn.harInntekt),
+          merEnnIG: jaNeiToBoolean(barn.harInntekt),
           barnepensjon: false,
         })) ?? [],
     tilleggsopplysninger: søknad?.tilleggsopplysninger,
