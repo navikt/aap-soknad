@@ -62,7 +62,9 @@ export type Barn = {
   fødselsdato?: string;
   fnr: string;
   harInntekt?: string;
+  barnepensjon?: string;
   manueltOpprettet?: boolean;
+  relasjon?: 'FORELDER' | 'FOSTERFORELDER';
 };
 export type Ferie = {
   skalHaFerie?: string;

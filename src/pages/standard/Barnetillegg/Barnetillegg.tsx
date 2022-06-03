@@ -9,12 +9,12 @@ import {
   Radio,
   ReadMore,
 } from '@navikt/ds-react';
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { GetText } from '../../../hooks/useTexts';
 import { FieldValues, useFieldArray, useForm } from 'react-hook-form';
 import RadioGroupWrapper from '../../../components/input/RadioGroupWrapper/RadioGroupWrapper';
 import { JaEllerNei } from '../../../types/Generic';
-import Soknad from '../../../types/Soknad';
+import Soknad, { Barn } from '../../../types/Soknad';
 import * as classes from './Barnetillegg.module.css';
 import { Add } from '@navikt/ds-icons';
 import {
@@ -46,6 +46,7 @@ export const Barnetillegg = ({ getText, onBackClick, onCancelClick, søknad }: P
     control,
     handleSubmit,
     formState: { errors },
+    watch,
   } = useForm<FieldValues>({
     resolver: yupResolver(schema),
     defaultValues: {
@@ -59,6 +60,29 @@ export const Barnetillegg = ({ getText, onBackClick, onCancelClick, søknad }: P
     name: BARNETILLEGG,
     control,
   });
+
+  const watchFieldArray = watch(BARNETILLEGG);
+  const controlledFields = fields.map((field, index) => {
+    return {
+      ...field,
+      ...watchFieldArray[index],
+    };
+  });
+
+  useEffect(() => {
+    controlledFields?.forEach((barn, index) => {
+      if (barn.barnepensjon === JaEllerNei.JA && barn.harInntekt) {
+        update(index, { ...barn, harInntekt: undefined });
+      }
+    });
+  }, [controlledFields]);
+
+  useEffect(() => {
+    if (showModal === false) {
+      setSelectedBarnIndex(undefined);
+    }
+  }, [showModal]);
+
   const selectedBarn = useMemo(() => {
     if (selectedBarnIndex === undefined) return undefined;
     return fields[selectedBarnIndex];
@@ -118,36 +142,80 @@ export const Barnetillegg = ({ getText, onBackClick, onCancelClick, søknad }: P
             <article key={barn?.fnr} className={classes.barneKort}>
               <Heading size={'xsmall'} level={'2'}>{`${formatNavn(barn?.navn)}`}</Heading>
               <BodyShort>{`Fødselsnummer: ${barn?.fnr}`}</BodyShort>
-              {barn?.manueltOpprettet && barn?.harInntekt ? (
-                <Grid>
-                  <Cell xs={4}>
-                    <Label>{'Har inntekt over 1G:'}</Label>
-                  </Cell>
-                  <Cell xs={3}>
-                    <BodyShort>{barn?.harInntekt}</BodyShort>
-                  </Cell>
-                </Grid>
+              {barn?.manueltOpprettet ? (
+                <>
+                  {barn?.relasjon && (
+                    <Grid>
+                      <Cell xs={4}>
+                        <Label>{'Relasjon:'}</Label>
+                      </Cell>
+                      <Cell xs={3}>
+                        <BodyShort>{barn?.relasjon}</BodyShort>
+                      </Cell>
+                    </Grid>
+                  )}
+                  {barn?.barnepensjon && (
+                    <Grid>
+                      <Cell xs={4}>
+                        <Label>{'Mottar barnepensjon:'}</Label>
+                      </Cell>
+                      <Cell xs={3}>
+                        <BodyShort>{barn?.barnepensjon}</BodyShort>
+                      </Cell>
+                    </Grid>
+                  )}
+                  {barn?.harInntekt && (
+                    <Grid>
+                      <Cell xs={4}>
+                        <Label>{'Har inntekt over 1G:'}</Label>
+                      </Cell>
+                      <Cell xs={3}>
+                        <BodyShort>{barn?.harInntekt}</BodyShort>
+                      </Cell>
+                    </Grid>
+                  )}
+                </>
               ) : (
-                <RadioGroupWrapper
-                  legend={getText('form.barnetillegg.legend')}
-                  description={
-                    'Med inntekt mener vi arbeidsinntekt, kapitalinntekt og barnepensjon.'
-                  }
-                  name={`${BARNETILLEGG}.${index}.harInntekt`}
-                  control={control}
-                  error={errors?.[BARNETILLEGG]?.[index]?.harInntekt?.message}
-                >
-                  <ReadMore header="Hvorfor spør vi om dette?">
-                    Hvis barnet har en årlig inntekt over 1G (1G = XXXkr), får du vanligvis ikke
-                    barnetillegg for barnet.
-                  </ReadMore>
-                  <Radio value={JaEllerNei.JA}>
-                    <BodyShort>{JaEllerNei.JA}</BodyShort>
-                  </Radio>
-                  <Radio value={JaEllerNei.NEI}>
-                    <BodyShort>{JaEllerNei.NEI}</BodyShort>
-                  </Radio>
-                </RadioGroupWrapper>
+                <>
+                  <RadioGroupWrapper
+                    legend={'Mottar barnet barnepensjon?'}
+                    name={`${BARNETILLEGG}.${index}.barnepensjon`}
+                    control={control}
+                    error={errors?.[BARNETILLEGG]?.[index]?.barnepensjon?.message}
+                  >
+                    <ReadMore header="Hvorfor spør vi om dette?">
+                      Hvis barnet mottar barnepensjon, får du ikke barnetillegg for barnet.
+                    </ReadMore>
+                    <Radio value={JaEllerNei.JA}>
+                      <BodyShort>{JaEllerNei.JA}</BodyShort>
+                    </Radio>
+                    <Radio value={JaEllerNei.NEI}>
+                      <BodyShort>{JaEllerNei.NEI}</BodyShort>
+                    </Radio>
+                  </RadioGroupWrapper>
+                  {controlledFields[index]?.barnepensjon === JaEllerNei.NEI && (
+                    <RadioGroupWrapper
+                      legend={getText('form.barnetillegg.legend')}
+                      description={
+                        'Med inntekt mener vi arbeidsinntekt, kapitalinntekt og barnepensjon.'
+                      }
+                      name={`${BARNETILLEGG}.${index}.harInntekt`}
+                      control={control}
+                      error={errors?.[BARNETILLEGG]?.[index]?.harInntekt?.message}
+                    >
+                      <ReadMore header="Hvorfor spør vi om dette?">
+                        Hvis barnet har en årlig inntekt over 1G (1G = XXXkr), får du vanligvis ikke
+                        barnetillegg for barnet.
+                      </ReadMore>
+                      <Radio value={JaEllerNei.JA}>
+                        <BodyShort>{JaEllerNei.JA}</BodyShort>
+                      </Radio>
+                      <Radio value={JaEllerNei.NEI}>
+                        <BodyShort>{JaEllerNei.NEI}</BodyShort>
+                      </Radio>
+                    </RadioGroupWrapper>
+                  )}
+                </>
               )}
               {barn?.manueltOpprettet && (
                 <Grid>

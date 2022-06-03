@@ -14,7 +14,7 @@ import * as classes from './Barnetillegg.module.css';
 import { JaEllerNei } from '../../../types/Generic';
 import React, { useEffect } from 'react';
 import { GetText } from '../../../hooks/useTexts';
-import Soknad from '../../../types/Soknad';
+import Soknad, { Barn } from '../../../types/Soknad';
 import TextFieldWrapper from '../../../components/input/TextFieldWrapper';
 import RadioGroupWrapper from '../../../components/input/RadioGroupWrapper/RadioGroupWrapper';
 import { FieldValues, useForm } from 'react-hook-form';
@@ -28,7 +28,7 @@ interface Props {
   onSaveClick: (data: any) => void;
   onDeleteClick: () => void;
   showModal: boolean;
-  barn?: any;
+  barn?: Barn;
 }
 export const AddBarnModal = ({
   getText,
@@ -39,21 +39,23 @@ export const AddBarnModal = ({
   barn,
 }: Props) => {
   const schema = yup.object().shape({});
-  const { control, handleSubmit, setValue, reset } = useForm<FieldValues>({
+  const { control, handleSubmit, setValue, reset, watch } = useForm<FieldValues>({
     resolver: yupResolver(schema),
     defaultValues: {
       ...(barn ? barn : {}),
     },
   });
+
+  const barnepensjon = watch('barnepensjon');
+
+  useEffect(() => {
+    if (barnepensjon === JaEllerNei.JA) setValue('harInntekt', undefined);
+  }, [barnepensjon]);
+
   useEffect(() => {
     reset({ ...barn });
   }, [barn, reset]);
-  const clearModal = () => {
-    setValue('navn.fornavn', '');
-    setValue('navn.etternavn', '');
-    setValue('fnr', '');
-    setValue('harInntekt', null);
-  };
+
   return (
     <Modal open={showModal} onClose={() => onCloseClick()}>
       <Modal.Content className={classes?.leggTilBarnModalContent}>
@@ -64,7 +66,6 @@ export const AddBarnModal = ({
         <form
           onSubmit={handleSubmit((data) => {
             onSaveClick(data);
-            clearModal();
           })}
         >
           <Grid>
@@ -96,13 +97,23 @@ export const AddBarnModal = ({
           </Grid>
           <RadioGroupWrapper
             control={control}
-            description={'Med inntekt mener vi arbeidsinntekt, kapitalinntekt og barnepensjon.'}
-            legend={getText('form.barnetillegg.legend')}
-            name={'harInntekt'}
+            legend={'Hvilken relasjon har du til barnet?'}
+            name={'relasjon'}
+          >
+            <Radio value="FORELDER">
+              <BodyShort>Forelder</BodyShort>
+            </Radio>
+            <Radio value="FOSTERFORELDER">
+              <BodyShort>Fosterforelder</BodyShort>
+            </Radio>
+          </RadioGroupWrapper>
+          <RadioGroupWrapper
+            control={control}
+            legend={'Mottar barnet barnepensjon?'}
+            name={'barnepensjon'}
           >
             <ReadMore header="Hvorfor spør vi om dette?">
-              Hvis barnet har en årlig inntekt over 1G (1G = XXXkr), får du vanligvis ikke
-              barnetillegg for barnet.
+              Hvis barnet mottar barnepensjon, får du ikke barnetillegg for barnet.
             </ReadMore>
             <Radio value={JaEllerNei.JA}>
               <BodyShort>{JaEllerNei.JA}</BodyShort>
@@ -111,6 +122,26 @@ export const AddBarnModal = ({
               <BodyShort>{JaEllerNei.NEI}</BodyShort>
             </Radio>
           </RadioGroupWrapper>
+          {barnepensjon === JaEllerNei.NEI && (
+            <RadioGroupWrapper
+              control={control}
+              description={'Med inntekt mener vi arbeidsinntekt, kapitalinntekt og barnepensjon.'}
+              legend={getText('form.barnetillegg.legend')}
+              name={'harInntekt'}
+            >
+              <ReadMore header="Hvorfor spør vi om dette?">
+                Hvis barnet har en årlig inntekt over 1G (1G = XXXkr), får du vanligvis ikke
+                barnetillegg for barnet.
+              </ReadMore>
+              <Radio value={JaEllerNei.JA}>
+                <BodyShort>{JaEllerNei.JA}</BodyShort>
+              </Radio>
+              <Radio value={JaEllerNei.NEI}>
+                <BodyShort>{JaEllerNei.NEI}</BodyShort>
+              </Radio>
+            </RadioGroupWrapper>
+          )}
+
           <Alert variant={'info'}>
             {getText('form.barnetillegg.add.alertTitle')}
             <ul>
@@ -124,7 +155,6 @@ export const AddBarnModal = ({
                 type="button"
                 variant={'secondary'}
                 onClick={() => {
-                  clearModal();
                   onCloseClick();
                 }}
               >
@@ -139,7 +169,6 @@ export const AddBarnModal = ({
                 type="button"
                 variant={'danger'}
                 onClick={() => {
-                  clearModal();
                   onDeleteClick();
                 }}
               >
