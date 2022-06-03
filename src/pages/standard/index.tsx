@@ -17,7 +17,7 @@ import {
   addBarnIfMissing,
 } from '../../context/soknadContext';
 import { Veiledning } from './Veiledning/Veiledning';
-import { hentSokerOppslag, useSokerOppslag } from '../../context/sokerOppslagContext';
+import { FastlegeView, hentSokerOppslag, useSokerOppslag } from '../../context/sokerOppslagContext';
 import { Behandlere } from './Behandlere/Behandlere';
 import { Medlemskap } from './Medlemskap/Medlemskap';
 import { Yrkesskade } from './Yrkesskade/Yrkesskade';
@@ -114,20 +114,98 @@ interface SøknadBackendState {
     erStudent?: 'JA' | 'NEI' | 'AVBRUTT';
     kommeTilbake?: 'JA' | 'NEI' | 'VET_IKKE';
   };
-  behandlere: [];
+  behandlere: Array<Behandler>;
   yrkesskadeType?: 'JA' | 'NEI' | 'VET_IKKE';
   utbetalinger: {
     fraArbeidsgiver?: boolean;
     stønadstyper: Array<{ type: StønadType; hvemUtbetalerAFP?: string; vedlegg?: string }>;
     hvemUtbetalerAFP?: string;
   };
-  registrerteBarn: [];
-  andreBarn: [];
+  registrerteBarn: Array<{
+    fnr: string;
+    merEnnIG?: boolean;
+    barnepensjon: boolean;
+  }>;
+  andreBarn: Array<{
+    barn: {
+      fnr: string;
+      navn: {
+        fornavn?: string;
+        mellomnavn?: string;
+        etternavn?: string;
+      };
+      fødselsdato?: string;
+    };
+    relasjon: 'FORELDER' | 'FOSTERFORELDER';
+    merEnnIG?: boolean;
+    barnepensjon: boolean;
+  }>;
   tilleggsopplysninger?: string;
 }
 
-const mapSøknadToBackend = (søknad?: Soknad): SøknadBackendState => {
+interface Behandler {
+  type: 'FASTLEGE' | 'ANNEN_BEHANDLER';
+  navn: { fornavn?: string; mellomnavn?: string; etternavn?: string };
+  kontaktinformasjon: {
+    behandlerRef?: string;
+    kontor?: string;
+    orgnummer?: string;
+    adresse?: {
+      adressenavn?: string;
+      husbokstav?: string;
+      husnummer?: string;
+      postnummer?: { postnr: string; poststed?: string };
+    };
+    telefon?: string;
+  };
+}
+
+const mapFastlege = (fastlege?: FastlegeView): Behandler[] => {
+  if (fastlege) {
+    return [
+      {
+        type: 'FASTLEGE',
+        navn: fastlege.originalNavn,
+        kontaktinformasjon: {
+          behandlerRef: fastlege.behandlerRef,
+          kontor: fastlege.legekontor,
+          orgnummer: fastlege.orgnummer,
+          telefon: fastlege.telefon,
+          adresse: fastlege.originalAdresse,
+        },
+      },
+    ];
+  }
+  return [];
+};
+
+const mapSøknadToBackend = (søknad?: Soknad, fastlege?: FastlegeView): SøknadBackendState => {
   const ferieType = getFerieType(søknad?.ferie?.skalHaFerie, søknad?.ferie?.ferieType);
+  const mappedFastlege = mapFastlege(fastlege);
+
+  const behandlere = mappedFastlege.concat(
+    søknad?.behandlere?.map((behandler) => {
+      return {
+        type: 'ANNEN_BEHANDLER',
+        navn: {
+          fornavn: behandler.firstname,
+          etternavn: behandler.lastname,
+        },
+        kontaktinformasjon: {
+          kontor: behandler.legekontor,
+          telefon: behandler.telefon,
+          adresse: {
+            adressenavn: behandler.gateadresse,
+            postnummer: {
+              postnr: behandler.postnummer,
+              poststed: behandler.poststed,
+            },
+          },
+        },
+      };
+    }) ?? []
+  );
+
   return {
     startDato: {
       fom: formatDate(søknad?.startDato),
@@ -167,7 +245,7 @@ const mapSøknadToBackend = (søknad?: Soknad): SøknadBackendState => {
       erStudent: getJaNeiAvbrutt(søknad?.student?.erStudent),
       kommeTilbake: getJaNeiVetIkke(søknad?.student?.kommeTilbake),
     },
-    behandlere: [], // TODO: Mappe behandlere
+    behandlere,
     yrkesskadeType: getJaNeiVetIkke(søknad?.yrkesskade),
     utbetalinger: {
       fraArbeidsgiver: jaNeiToBoolean(søknad?.andreUtbetalinger?.lønn),
@@ -183,8 +261,27 @@ const mapSøknadToBackend = (søknad?: Soknad): SøknadBackendState => {
         }) ?? [],
       hvemUtbetalerAFP: søknad?.andreUtbetalinger?.afp?.hvemBetaler,
     },
-    registrerteBarn: [],
-    andreBarn: [],
+    registrerteBarn:
+      søknad?.barnetillegg
+        ?.filter((barn) => barn.manueltOpprettet !== true)
+        .map((barn) => ({
+          fnr: barn.fnr,
+          merEnnIG: jaNeiToBoolean(barn.harInntekt),
+          barnepensjon: false,
+        })) ?? [],
+    andreBarn:
+      søknad?.barnetillegg
+        ?.filter((barn) => barn.manueltOpprettet === true)
+        .map((barn) => ({
+          barn: {
+            fnr: barn.fnr,
+            navn: barn.navn,
+            fødselsdato: barn.fødselsdato,
+          },
+          relasjon: 'FORELDER',
+          merEnnIG: jaNeiToBoolean(barn.harInntekt),
+          barnepensjon: false,
+        })) ?? [],
     tilleggsopplysninger: søknad?.tilleggsopplysninger,
   };
 };
