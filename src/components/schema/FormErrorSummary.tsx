@@ -6,7 +6,7 @@ import * as tekster from './tekster';
 import * as classes from './FormErrorSummary.module.css';
 
 const FormErrorSummary = (props: FieldErrors) => {
-  const flatErrors = flatObj(props.errors);
+  const flatErrors = flatObj(props?.errors);
   const keyList = Object.keys(flatErrors).filter((e) => e);
   const { getText } = useTexts(tekster);
   const errorSummaryElement = useRef(null);

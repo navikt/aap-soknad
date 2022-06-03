@@ -1,7 +1,7 @@
 import { FieldValues, useFieldArray, useForm } from 'react-hook-form';
 import Soknad from '../../../types/Soknad';
 import { GetText } from '../../../hooks/useTexts';
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Alert, BodyShort, GuidePanel, Heading, Label, ReadMore } from '@navikt/ds-react';
 import FileInput from '../../../components/input/FileInput/FileInput';
 import { useVedleggContext } from '../../../context/vedleggContext';
@@ -27,6 +27,8 @@ const VEDLEGG_BARN = `${VEDLEGG}.barn`;
 const VEDLEGG_ANNET = `${VEDLEGG}.annet`;
 
 const Vedlegg = ({ getText, onBackClick, onCancelClick, søknad }: Props) => {
+  const [scanningGuideOpen, setScanningGuideOpen] = useState(false);
+  const scanningGuideElement = useRef(null);
   const schema = yup.object().shape({});
   const { vedleggState } = useVedleggContext();
   const { søknadDispatch } = useSoknadContext();
@@ -41,6 +43,14 @@ const Vedlegg = ({ getText, onBackClick, onCancelClick, søknad }: Props) => {
       [VEDLEGG]: søknad?.vedlegg,
     },
   });
+  useEffect(() => {
+    if (scanningGuideOpen) {
+      scanningGuideElement?.current?.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [scanningGuideOpen]);
+  const scanningGuideOnClick = () => {
+    setScanningGuideOpen(!scanningGuideOpen);
+  };
   const fieldArrayLønn = useFieldArray({
     name: VEDLEGG_LØNN,
     control,
@@ -103,7 +113,13 @@ const Vedlegg = ({ getText, onBackClick, onCancelClick, søknad }: Props) => {
         )}
       </BodyShort>
       <BodyShort>{getText('steps.vedlegg.taBildeInfo')}</BodyShort>
-      <ReadMore header={getText('steps.vedlegg.taBildeReadMore')} type={'button'}>
+      <ReadMore
+        header={getText('steps.vedlegg.taBildeReadMore')}
+        type={'button'}
+        open={scanningGuideOpen}
+        onClick={scanningGuideOnClick}
+        ref={scanningGuideElement}
+      >
         <ScanningGuide getText={getText} />
       </ReadMore>
       {vedleggState?.requiredVedlegg?.find(
