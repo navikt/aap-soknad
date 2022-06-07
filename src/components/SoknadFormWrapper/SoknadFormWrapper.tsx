@@ -36,19 +36,39 @@ const SøknadFormWrapper = ({
       <form onSubmit={onNext} className={classes?.formContent}>
         <FormErrorSummary id="skjema-feil-liste" errors={errors} data-testid={'error-summary'} />
         {children}
-        <div className={classes?.buttonWrapper}>
-          <Button variant="secondary" type="button" onClick={onBack}>
+        <div className={classes?.fourButtonWrapper}>
+          <Button
+            className={classes?.buttonBack}
+            variant="secondary"
+            type="button"
+            onClick={onBack}
+          >
             {backButtonText}
           </Button>
-          <Button variant="primary" type="submit" disabled={nextIsLoading} loading={nextIsLoading}>
+          <Button
+            className={classes?.buttonNext}
+            variant="primary"
+            type="submit"
+            disabled={nextIsLoading}
+            loading={nextIsLoading}
+          >
             {nextButtonText}
           </Button>
-        </div>
-        <div className={classes?.buttonWrapper}>
-          <Button variant="tertiary" type="button" onClick={() => setShowLagreModal(true)}>
+          <span className={classes?.separatorLine} />
+          <Button
+            className={classes?.buttonSave}
+            variant="tertiary"
+            type="button"
+            onClick={() => setShowLagreModal(true)}
+          >
             {'Lagre og fortsett senere'}
           </Button>
-          <Button variant="tertiary" type="button" onClick={() => setShowAvbrytModal(true)}>
+          <Button
+            className={classes?.buttonCancel}
+            variant="tertiary"
+            type="button"
+            onClick={() => setShowAvbrytModal(true)}
+          >
             {'Avbryt og slett søknad'}
           </Button>
         </div>

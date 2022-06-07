@@ -5,6 +5,50 @@
   justify-content: space-between;
   gap: var(--navds-spacing-10);
 }
-.buttonWrapper {
-  composes: buttonWrapper from '../../styles/layout.module.css';
+.formContent h2 {
+  text-align: center;
 }
+.fourButtonWrapper > button {
+   min-width: 201px;
+ }
+.fourButtonWrapper {
+  display: grid;
+  grid-template-columns: auto 3% auto 1fr;
+  /*grid-column-gap: var(--navds-spacing-2);*/
+  grid-template-rows: auto 1px auto;
+  grid-row-gap: var(--navds-spacing-10);
+  grid-template-areas:
+    'buttonBack . buttonNext .'
+    'sep sep sep sep'
+    'buttonSave . buttonCancel .';
+}
+.separatorLine {
+  border-top: 1px solid var(--navds-semantic-color-border-muted);
+  grid-area: sep;
+}
+.buttonBack {
+  grid-area: buttonBack;
+}
+.buttonNext {
+  grid-area: buttonNext;
+}
+.buttonSave {
+  grid-area: buttonSave;
+}
+.buttonCancel {
+  grid-area: buttonCancel;
+}
+@media (max-width: 480px) {
+  .fourButtonWrapper {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto 1px auto auto;
+    grid-row-gap: var(--navds-spacing-5);
+    grid-template-areas:
+      'buttonBack'
+      'buttonNext'
+      'sep'
+      'buttonSave'
+      'buttonCancel';
+  }
+}
+
