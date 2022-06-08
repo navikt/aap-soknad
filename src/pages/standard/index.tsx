@@ -9,6 +9,7 @@ import {
   useStepWizard,
   resetStepWizard,
   goToPreviousStep,
+  setStepList,
 } from '../../context/stepWizardContextV2';
 import Soknad from '../../types/Soknad';
 import {
@@ -45,6 +46,18 @@ export enum StepNames {
   TILLEGGSOPPLYSNINGER = 'TILLEGGSOPPLYSNINGER',
   OPPSUMMERING = 'OPPSUMMERING',
 }
+const defaultStepList = [
+  { name: StepNames.STARTDATO, active: true },
+  { name: StepNames.MEDLEMSKAP },
+  { name: StepNames.YRKESSKADE },
+  { name: StepNames.FASTLEGE },
+  { name: StepNames.BARNETILLEGG },
+  { name: StepNames.STUDENT },
+  { name: StepNames.ANDRE_UTBETALINGER },
+  { name: StepNames.TILLEGGSOPPLYSNINGER },
+  { name: StepNames.VEDLEGG },
+  { name: StepNames.OPPSUMMERING },
+];
 
 const formatDate = (date?: Date): string | undefined =>
   date ? format(date, 'yyyy-MM-dd') : undefined;
@@ -300,8 +313,12 @@ export const StandardPage = (): JSX.Element => {
       // Wait to test cache
       // const cachedState = await hentSoknadState(søknadDispatch, SøknadType.HOVED);
       // if (cachedState?.lagretStepList) {
+      //   setShowVeiledning(false);
       //   setStepList([...cachedState.lagretStepList], stepWizardDispatch);
+      // } else {
+      //   setStepList([...defaultStepList], stepWizardDispatch);
       // }
+      setStepList([...defaultStepList], stepWizardDispatch);
       const oppslag = await hentSokerOppslag(oppslagDispatch);
       setOppslagLoading(false);
       if (oppslag?.søker?.barn) addBarnIfMissing(søknadDispatch, oppslag.søker.barn);
@@ -381,7 +398,7 @@ export const StandardPage = (): JSX.Element => {
         </PageHeader>
       </header>
       <StepWizard hideLabels={true}>
-        <Step order={1} name={StepNames.STARTDATO} label={'Søknadsdato'}>
+        <Step order={1} name={StepNames.STARTDATO}>
           <StartDato
             getText={getText}
             onCancelClick={onDeleteSøknad}
@@ -389,7 +406,7 @@ export const StandardPage = (): JSX.Element => {
             søknad={søknadState?.søknad}
           />
         </Step>
-        <Step order={2} name={StepNames.MEDLEMSKAP} label={'Tilknytning til Norge'}>
+        <Step order={2} name={StepNames.MEDLEMSKAP}>
           <Medlemskap
             getText={getText}
             onCancelClick={onDeleteSøknad}
@@ -397,7 +414,7 @@ export const StandardPage = (): JSX.Element => {
             søknad={søknadState?.søknad}
           />
         </Step>
-        <Step order={3} name={StepNames.YRKESSKADE} label={'Yrkesskade'}>
+        <Step order={3} name={StepNames.YRKESSKADE}>
           <Yrkesskade
             getText={getText}
             onCancelClick={onDeleteSøknad}
@@ -406,7 +423,7 @@ export const StandardPage = (): JSX.Element => {
           />
         </Step>
 
-        <Step order={4} name={StepNames.FASTLEGE} label={'Fastlege'}>
+        <Step order={4} name={StepNames.FASTLEGE}>
           <Behandlere
             getText={getText}
             onCancelClick={onDeleteSøknad}
@@ -415,7 +432,7 @@ export const StandardPage = (): JSX.Element => {
             fastlege={fastlege}
           />
         </Step>
-        <Step order={5} name={StepNames.BARNETILLEGG} label={'Barnetilleggg'}>
+        <Step order={5} name={StepNames.BARNETILLEGG}>
           <Barnetillegg
             getText={getText}
             onCancelClick={onDeleteSøknad}
@@ -423,7 +440,7 @@ export const StandardPage = (): JSX.Element => {
             søknad={søknadState?.søknad}
           />
         </Step>
-        <Step order={6} name={StepNames.STUDENT} label={'Student'}>
+        <Step order={6} name={StepNames.STUDENT}>
           <Student
             getText={getText}
             onCancelClick={onDeleteSøknad}
@@ -431,7 +448,7 @@ export const StandardPage = (): JSX.Element => {
             søknad={søknadState?.søknad}
           />
         </Step>
-        <Step order={7} name={StepNames.ANDRE_UTBETALINGER} label={'Andre utbetalinger'}>
+        <Step order={7} name={StepNames.ANDRE_UTBETALINGER}>
           <AndreUtbetalinger
             getText={getText}
             onCancelClick={onDeleteSøknad}
@@ -439,7 +456,7 @@ export const StandardPage = (): JSX.Element => {
             søknad={søknadState?.søknad}
           />
         </Step>
-        <Step order={8} name={StepNames.TILLEGGSOPPLYSNINGER} label={'Tilleggsopplysninger'}>
+        <Step order={8} name={StepNames.TILLEGGSOPPLYSNINGER}>
           <Tilleggsopplysninger
             getText={getText}
             onCancelClick={onDeleteSøknad}
@@ -447,7 +464,7 @@ export const StandardPage = (): JSX.Element => {
             søknad={søknadState?.søknad}
           />
         </Step>
-        <Step order={9} name={StepNames.VEDLEGG} label={'Vedlegg'}>
+        <Step order={9} name={StepNames.VEDLEGG}>
           <Vedlegg
             getText={getText}
             onCancelClick={onDeleteSøknad}
@@ -455,7 +472,7 @@ export const StandardPage = (): JSX.Element => {
             søknad={søknadState?.søknad}
           />
         </Step>
-        <Step order={10} name={StepNames.OPPSUMMERING} label={'Oppsummering'}>
+        <Step order={10} name={StepNames.OPPSUMMERING}>
           <Oppsummering
             getText={getText}
             onCancelClick={onDeleteSøknad}

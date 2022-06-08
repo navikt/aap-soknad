@@ -11,7 +11,12 @@ import {
 import { fetchPOST } from '../../api/fetch';
 import { formatDate } from '../../utils/date';
 import useTexts from '../../hooks/useTexts';
-import { hentSoknadState, SøknadType, useSoknadContext } from '../../context/soknadContext';
+import {
+  hentSoknadState,
+  lagreSoknadState,
+  SøknadType,
+  useSoknadContext,
+} from '../../context/soknadContext';
 import {
   useStepWizard,
   completeAndGoToNextStep,
@@ -27,10 +32,16 @@ enum StepNames {
   SUMMARY = 'SUMMARY',
   RECEIPT = 'RECEIPT',
 }
+const defaultStepList = [
+  { name: StepNames.DESTINATION, active: true },
+  { name: StepNames.TRAVEL_PERIOD },
+  { name: StepNames.SUMMARY },
+  { name: StepNames.RECEIPT },
+];
 
 const Utland = (): JSX.Element => {
   const { søknadState, søknadDispatch } = useSoknadContext();
-  const { stepWizardDispatch } = useStepWizard();
+  const { stepList, stepWizardDispatch } = useStepWizard();
   const [isVeiledning, setIsVeiledning] = useState<boolean>(true);
 
   const { getText } = useTexts(tekster);
@@ -38,11 +49,19 @@ const Utland = (): JSX.Element => {
     const getSoknadState = async () => {
       const cachedState = await hentSoknadState(søknadDispatch, SøknadType.UTLAND);
       if (cachedState?.lagretStepList) {
+        setIsVeiledning(false);
         setStepList([...cachedState.lagretStepList], stepWizardDispatch);
+      } else {
+        setStepList([...defaultStepList], stepWizardDispatch);
       }
     };
     getSoknadState();
   }, []);
+  useEffect(() => {
+    if (søknadState?.søknad) {
+      lagreSoknadState({ ...søknadState }, [...stepList]);
+    }
+  }, [søknadState]);
   const myHandleSubmit = async () => {
     const postResponse = await postSøknad(søknadState?.søknad);
     if (!postResponse.ok) {

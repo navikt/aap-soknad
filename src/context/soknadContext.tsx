@@ -30,15 +30,10 @@ const soknadContextInititalState = {
   currentStep: undefined,
   søknad: undefined,
 };
-export const lagreSoknadState = async (
-  state: SoknadContextState,
-  stepList: StepType[],
-  currentStep: string
-) => {
+export const lagreSoknadState = async (state: SoknadContextState, stepList: StepType[]) => {
   const payLoad: SoknadContextState = {
     ...state,
     lagretStepList: stepList,
-    lagretCurrentStep: currentStep,
   };
   fetchPOST(`/aap/soknad-api/buckets/lagre/${state.type}`, payLoad);
 };
@@ -68,7 +63,8 @@ export const setSøknadData = (dispatch: Dispatch<SoknadAction>, data: Soknad) =
   dispatch({ type: SoknadActionKeys.SET_SOKNAD, payload: data });
 };
 export const updateSøknadData = (dispatch: Dispatch<SoknadAction>, data: Soknad) => {
-  dispatch({ type: SoknadActionKeys.UPDATE_SOKNAD, payload: data });
+  const updatedData = dispatch({ type: SoknadActionKeys.UPDATE_SOKNAD, payload: data });
+  console.log('updatedData', updatedData);
 };
 export const addBarnIfMissing = (dispatch: Dispatch<SoknadAction>, data: OppslagBarn[]) => {
   dispatch({ type: SoknadActionKeys.ADD_BARN_IF_MISSING, payload: data });

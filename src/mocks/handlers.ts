@@ -24,18 +24,34 @@ export const handlers = [
   rest.get('/aap/soknad-api/buckets/les/UTLAND', (req, res, ctx) => {
     return res(
       ctx.status(200),
-      ctx.delay(100),
-      ctx.json({
-        version: 1,
-        type: 'UTLAND',
-        currentStep: 'DESTINATION',
-        søknad: {
-          country: 'AG',
-          fromDate: '2022-02-04T11:00:00.000Z',
-          toDate: '2022-02-18T11:00:00.000Z',
-        },
-        søkerinfo: 'test',
-      })
+      ctx.delay(2000),
+      ctx.json({})
+      // ctx.json({
+      //   version: 1,
+      //   type: 'UTLAND',
+      //   søknad: {
+      //     country: 'AG',
+      //     // fromDate: '2022-02-04T11:00:00.000Z',
+      //     // toDate: '2022-02-18T11:00:00.000Z',
+      //   },
+      //   lagretStepList: [
+      //     {
+      //       name: 'DESTINATION',
+      //       completed: true,
+      //     },
+      //     {
+      //       name: 'TRAVEL_PERIOD',
+      //       active: true,
+      //     },
+      //     {
+      //       name: 'SUMMARY',
+      //     },
+      //     {
+      //       name: 'RECEIPT',
+      //     },
+      //   ],
+      //   søkerinfo: 'test',
+      // })
     );
   }),
 
