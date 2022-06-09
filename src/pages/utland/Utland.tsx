@@ -18,14 +18,15 @@ import {
   useSoknadContext,
 } from '../../context/soknadContext';
 import {
-  useStepWizard,
   completeAndGoToNextStep,
   goToPreviousStep,
   setStepList,
+  useStepWizard,
 } from '../../context/stepWizardContextV2';
 import * as tekster from './tekster';
 
 import SoknadUtland from '../../types/SoknadUtland';
+
 enum StepNames {
   DESTINATION = 'DESTINATION',
   TRAVEL_PERIOD = 'TRAVEL_PERIOD',
@@ -59,7 +60,7 @@ const Utland = (): JSX.Element => {
   }, []);
   useEffect(() => {
     if (søknadState?.søknad) {
-      lagreSoknadState({ ...søknadState }, [...stepList]);
+      lagreSoknadState({ ...søknadState }, [...stepList], SøknadType.UTLAND);
     }
   }, [søknadState]);
   const myHandleSubmit = async () => {

@@ -30,12 +30,17 @@ const soknadContextInititalState = {
   currentStep: undefined,
   søknad: undefined,
 };
-export const lagreSoknadState = async (state: SoknadContextState, stepList: StepType[]) => {
+export const lagreSoknadState = async (
+  state: SoknadContextState,
+  stepList: StepType[],
+  søknadType: SøknadType
+) => {
+  console.log('lagre', state);
   const payLoad: SoknadContextState = {
     ...state,
     lagretStepList: stepList,
   };
-  fetchPOST(`/aap/soknad-api/buckets/lagre/${state.type}`, payLoad);
+  fetchPOST(`/aap/soknad-api/buckets/lagre/${søknadType}`, payLoad);
 };
 
 export const hentSoknadState = async (dispatch: Dispatch<SoknadAction>, søknadType: SøknadType) => {
