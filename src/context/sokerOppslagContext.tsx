@@ -136,7 +136,7 @@ function SokerOppslagProvider({ children }: Props) {
 
 export const hentSokerOppslag = async (dispatch: Dispatch<DispatchSokerOppslagAction>) => {
   const oppslag: SokerOppslagState = await fetch('/aap/soknad-api/oppslag/soeker').then((res) =>
-    res.json()
+    res.ok ? res.json() : undefined
   );
   if (oppslag) dispatch({ type: 'SET_SOKER_OPPSLAG', payload: oppslag });
   return oppslag;

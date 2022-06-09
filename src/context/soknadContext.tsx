@@ -41,7 +41,7 @@ export const lagreSoknadState = async (state: SoknadContextState, stepList: Step
 export const hentSoknadState = async (dispatch: Dispatch<SoknadAction>, søknadType: SøknadType) => {
   const cachedState: SoknadContextState = await fetch(
     `/aap/soknad-api/buckets/les/${søknadType}`
-  ).then((res) => res.json());
+  ).then((res) => (res.ok ? res.json() : undefined));
   console.log('bucket/les ', cachedState);
   cachedState && dispatch({ type: SoknadActionKeys.SET_STATE_FROM_CACHE, payload: cachedState });
   return cachedState;
