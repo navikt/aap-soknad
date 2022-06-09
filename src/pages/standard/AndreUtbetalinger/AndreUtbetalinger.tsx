@@ -103,7 +103,7 @@ export const AndreUtbetalinger = ({ getText, onBackClick, onCancelClick, søknad
   const Attachments = useMemo(() => {
     let attachments: Array<{ type: string; description: string }> = [];
 
-    if (stønadEllerVerv?.includes(StønadAlternativer.OMSORGSSTØNAD)) {
+    if (stønadEllerVerv?.includes(StønadType.OMSORGSSTØNAD)) {
       attachments = [
         ...attachments,
         {
@@ -112,7 +112,7 @@ export const AndreUtbetalinger = ({ getText, onBackClick, onCancelClick, søknad
         },
       ];
     }
-    if (stønadEllerVerv?.includes(StønadAlternativer.UTLAND)) {
+    if (stønadEllerVerv?.includes(StønadType.UTLAND)) {
       attachments = [
         ...attachments,
         {
