@@ -39,7 +39,7 @@ describe('Yrkesskade', () => {
     const { getText } = useTexts(tekster);
     return (
       <StepWizard>
-        <Step name={YRKESSKADE} label={''}>
+        <Step name={YRKESSKADE}>
           <StartDato getText={getText} onBackClick={jest.fn()} onCancelClick={jest.fn()} />
         </Step>
       </StepWizard>

@@ -22,7 +22,7 @@ const soknadContext: SoknadContextData = {
 };
 const wizardContext: StepWizardContextState = {
   stepList: [
-    { name: stepNames.STEP_ONE },
+    { name: stepNames.STEP_ONE, active: true },
     { name: stepNames.STEP_TWO },
     { name: stepNames.STEP_THREE },
   ],
@@ -41,13 +41,13 @@ const renderWithContext = (ui: any, { ...renderOptions }: any) => {
 };
 const MyWizard = () => (
   <StepWizard>
-    <Step name={stepNames.STEP_ONE} label={stepNames.STEP_ONE}>
+    <Step name={stepNames.STEP_ONE}>
       <BodyShort>{stepNames.STEP_ONE}</BodyShort>
     </Step>
-    <Step name={stepNames.STEP_TWO} label={stepNames.STEP_TWO}>
+    <Step name={stepNames.STEP_TWO}>
       <BodyShort>{stepNames.STEP_TWO}</BodyShort>
     </Step>
-    <Step name={stepNames.STEP_THREE} label={stepNames.STEP_THREE}>
+    <Step name={stepNames.STEP_THREE}>
       <BodyShort>{stepNames.STEP_THREE}</BodyShort>
     </Step>
   </StepWizard>

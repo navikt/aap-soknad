@@ -39,7 +39,7 @@ describe('Yrkesskade', () => {
     const { getText } = useTexts(tekster);
     return (
       <StepWizard>
-        <Step name={STUDENT} label={''}>
+        <Step name={STUDENT}>
           <Student getText={getText} onBackClick={jest.fn()} onCancelClick={jest.fn()} />
         </Step>
       </StepWizard>
