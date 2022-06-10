@@ -54,6 +54,10 @@ export const handlers = [
       // })
     );
   }),
+  rest.delete('/aap/soknad-api/buckets/slett/UTLAND', (req, res, ctx) => {
+    return res(ctx.status(200), ctx.delay(3000));
+    // return res(ctx.status(500), ctx.json({ ok: false }), ctx.delay(3000));
+  }),
 
   rest.get('/aap/soknad-api/buckets/les/HOVED', (req, res, ctx) => {
     return res(
@@ -63,7 +67,6 @@ export const handlers = [
       // ctx.json({
       //   version: 1,
       //   type: 'HOVED',
-      //   lagretCurrentStep: 'KONTAKTINFO',
       //   søknad: {
       //     firstname: 'Tor',
       //     lastname: 'Idland',

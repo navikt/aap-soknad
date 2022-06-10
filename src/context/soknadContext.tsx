@@ -12,7 +12,6 @@ export enum SøknadType {
 export interface SoknadContextState {
   version: number;
   type?: SøknadType;
-  lagretCurrentStep?: string;
   søknad?: Soknad;
   lagretStepList?: Array<StepType>;
 }
@@ -30,17 +29,23 @@ const soknadContextInititalState = {
   currentStep: undefined,
   søknad: undefined,
 };
-export const lagreSoknadState = async (
-  state: SoknadContextState,
-  stepList: StepType[],
-  søknadType: SøknadType
-) => {
-  console.log('lagre', state);
-  const payLoad: SoknadContextState = {
-    ...state,
-    lagretStepList: stepList,
-  };
-  fetchPOST(`/aap/soknad-api/buckets/lagre/${søknadType}`, payLoad);
+export const lagreSoknadState = async (state: SoknadContextState, stepList: StepType[]) => {
+  if (state?.type) {
+    const payLoad: SoknadContextState = {
+      ...state,
+      lagretStepList: stepList,
+    };
+    fetchPOST(`/aap/soknad-api/buckets/lagre/${state.type}`, payLoad);
+  }
+};
+export const lagrePartialSoknadState = async (state: SoknadContextState, partialSøknad: any) => {
+  if (state?.type) {
+    const payLoad: SoknadContextState = {
+      ...state,
+      søknad: { ...state.søknad, ...partialSøknad },
+    };
+    fetchPOST(`/aap/soknad-api/buckets/lagre/${state.type}`, payLoad);
+  }
 };
 
 export const hentSoknadState = async (dispatch: Dispatch<SoknadAction>, søknadType: SøknadType) => {
@@ -54,9 +59,9 @@ export const hentSoknadState = async (dispatch: Dispatch<SoknadAction>, søknadT
 
 export const slettLagretSoknadState = async (
   dispatch: Dispatch<SoknadAction>,
-  søknadType: SøknadType
+  state: SoknadContextState
 ) => {
-  const deleteResponse = await fetch(`/aap/soknad-api/buckets/slett/${søknadType}`, {
+  const deleteResponse = await fetch(`/aap/soknad-api/buckets/slett/${state.type}`, {
     method: 'DELETE',
   });
   deleteResponse?.ok &&
@@ -64,12 +69,11 @@ export const slettLagretSoknadState = async (
   return !!deleteResponse?.ok;
 };
 
-export const setSøknadData = (dispatch: Dispatch<SoknadAction>, data: Soknad) => {
-  dispatch({ type: SoknadActionKeys.SET_SOKNAD, payload: data });
+export const setSøknadType = (dispatch: Dispatch<SoknadAction>, søknadType: SøknadType) => {
+  dispatch({ type: SoknadActionKeys.SET_SOKNAD_TYPE, payload: søknadType });
 };
 export const updateSøknadData = (dispatch: Dispatch<SoknadAction>, data: Soknad) => {
-  const updatedData = dispatch({ type: SoknadActionKeys.UPDATE_SOKNAD, payload: data });
-  console.log('updatedData', updatedData);
+  dispatch({ type: SoknadActionKeys.UPDATE_SOKNAD, payload: data });
 };
 export const addBarnIfMissing = (dispatch: Dispatch<SoknadAction>, data: OppslagBarn[]) => {
   dispatch({ type: SoknadActionKeys.ADD_BARN_IF_MISSING, payload: data });

@@ -14,6 +14,7 @@ import useTexts from '../../hooks/useTexts';
 import {
   hentSoknadState,
   lagreSoknadState,
+  setSøknadType,
   SøknadType,
   useSoknadContext,
 } from '../../context/soknadContext';
@@ -42,10 +43,13 @@ const defaultStepList = [
 
 const Utland = (): JSX.Element => {
   const { søknadState, søknadDispatch } = useSoknadContext();
-  const { stepList, stepWizardDispatch } = useStepWizard();
+  const { currentStep, stepList, stepWizardDispatch } = useStepWizard();
   const [isVeiledning, setIsVeiledning] = useState<boolean>(true);
 
   const { getText } = useTexts(tekster);
+  useEffect(() => {
+    setSøknadType(søknadDispatch, SøknadType.UTLAND);
+  }, []);
   useEffect(() => {
     const getSoknadState = async () => {
       const cachedState = await hentSoknadState(søknadDispatch, SøknadType.UTLAND);
@@ -60,9 +64,9 @@ const Utland = (): JSX.Element => {
   }, []);
   useEffect(() => {
     if (søknadState?.søknad) {
-      lagreSoknadState({ ...søknadState }, [...stepList], SøknadType.UTLAND);
+      lagreSoknadState({ ...søknadState }, [...stepList]);
     }
-  }, [søknadState]);
+  }, [currentStep]);
   const myHandleSubmit = async () => {
     const postResponse = await postSøknad(søknadState?.søknad);
     if (!postResponse.ok) {

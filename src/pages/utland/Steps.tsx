@@ -3,13 +3,17 @@ import { FieldValues, useForm } from 'react-hook-form';
 import DatoVelgerWrapper from '../../components/input/DatoVelgerWrapper';
 import countries from 'i18n-iso-countries';
 import ConfirmationPanelWrapper from '../../components/input/ConfirmationPanelWrapper';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { formatDate } from '../../utils/date';
 import { GetText } from '../../hooks/useTexts';
-import { parseISO, isDate } from 'date-fns';
+import { isDate, parseISO } from 'date-fns';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
-import { updateSøknadData, useSoknadContext } from '../../context/soknadContext';
+import {
+  lagrePartialSoknadState,
+  updateSøknadData,
+  useSoknadContext,
+} from '../../context/soknadContext';
 import { completeAndGoToNextStep, useStepWizard } from '../../context/stepWizardContextV2';
 import CountrySelector from '../../components/input/CountrySelector';
 import SoknadFormWrapper from '../../components/SoknadFormWrapper/SoknadFormWrapper';
@@ -50,11 +54,12 @@ export const StepSelectCountry = ({ getText, onBackClick, onCancelClick }: Selec
       .required(getText('form.country.required'))
       .notOneOf(['none'], getText('form.country.required')),
   });
-  const { søknadState, søknadDispatch } = useSoknadContext();
+  const { søknadState } = useSoknadContext();
   const { stepWizardDispatch } = useStepWizard();
   const {
     control,
     handleSubmit,
+    watch,
     formState: { errors },
   } = useForm<FieldValues>({
     resolver: yupResolver(schema),
@@ -62,12 +67,16 @@ export const StepSelectCountry = ({ getText, onBackClick, onCancelClick }: Selec
       [LAND]: søknadState?.søknad?.[LAND],
     },
   });
+  const allFields = watch();
+  useEffect(() => {
+    lagrePartialSoknadState(søknadState, allFields);
+  }, [allFields]);
   return (
     <>
       <GuidePanel poster>{getText('steps.country.guidetext')}</GuidePanel>
       <SoknadFormWrapper
         onNext={handleSubmit((data) => {
-          updateSøknadData(søknadDispatch, data);
+          // updateSøknadData(søknadDispatch, data);
           completeAndGoToNextStep(stepWizardDispatch);
         })}
         onBack={() => onBackClick()}
