@@ -1,4 +1,5 @@
 import { StønadType } from '../pages/standard/AndreUtbetalinger/AndreUtbetalinger';
+import { Relasjon } from '../pages/standard/Barnetillegg/AddBarnModal';
 import { JaEllerNei, JaNeiVetIkke } from './Generic';
 
 export type FieldAndLabel<T> = {
@@ -66,6 +67,15 @@ export type Barn = {
   manueltOpprettet?: boolean;
   relasjon?: 'FORELDER' | 'FOSTERFORELDER';
 };
+
+export type ManuelleBarn = {
+  navn: Navn;
+  fnr: string;
+  harInntekt?: string;
+  barnepensjon?: string;
+  relasjon: Relasjon;
+};
+
 export type Ferie = {
   skalHaFerie?: string;
   ferieType?: string;
@@ -85,6 +95,7 @@ interface Soknad {
   student?: Student;
   andreUtbetalinger?: AndreUtbetalinger;
   barnetillegg?: Barn[];
+  manuelleBarn?: ManuelleBarn[];
   tilleggsopplysninger?: string;
   ferie?: Ferie;
   vedlegg?: {

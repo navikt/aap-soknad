@@ -20,6 +20,7 @@ import RadioGroupWrapper from '../../../components/input/RadioGroupWrapper/Radio
 import { FieldValues, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
+import * as classes from './Barnetillegg.module.css';
 
 interface Props {
   getText: GetText;
@@ -30,6 +31,12 @@ interface Props {
   showModal: boolean;
   barn?: Barn;
 }
+
+export enum Relasjon {
+  FORELDER = 'FORELDER',
+  FOSTERFORELDER = 'FOSTERFORELDER',
+}
+
 export const AddBarnModal = ({
   getText,
   showModal,
@@ -47,6 +54,7 @@ export const AddBarnModal = ({
   });
 
   const barnepensjon = watch('barnepensjon');
+  const relasjon = watch('relasjon');
 
   useEffect(() => {
     if (barnepensjon === JaEllerNei.JA) setValue('harInntekt', undefined);
@@ -68,42 +76,35 @@ export const AddBarnModal = ({
             onSaveClick(data);
           })}
         >
-          <Grid>
-            <Cell xs={6}>
-              <TextFieldWrapper
-                control={control}
-                label={getText('form.barnetillegg.add.fornavn.label')}
-                name={'navn.fornavn'}
-              />
-            </Cell>
-          </Grid>
-          <Grid>
-            <Cell xs={6}>
-              <TextFieldWrapper
-                control={control}
-                label={getText('form.barnetillegg.add.etternavn.label')}
-                name={'navn.etternavn'}
-              />
-            </Cell>
-          </Grid>
-          <Grid>
-            <Cell xs={6}>
-              <TextFieldWrapper
-                control={control}
-                label={getText('form.barnetillegg.add.fnr.label')}
-                name={'fnr'}
-              />
-            </Cell>
-          </Grid>
+          <TextFieldWrapper
+            control={control}
+            label={getText('form.barnetillegg.add.fornavn.label')}
+            name={'navn.fornavn'}
+          />
+
+          <TextFieldWrapper
+            control={control}
+            label={getText('form.barnetillegg.add.etternavn.label')}
+            name={'navn.etternavn'}
+          />
+
+          <div className={classes.leggTilBarnFnrInput}>
+            <TextFieldWrapper
+              control={control}
+              label={getText('form.barnetillegg.add.fnr.label')}
+              name={'fnr'}
+            />
+          </div>
+
           <RadioGroupWrapper
             control={control}
             legend={'Hvilken relasjon har du til barnet?'}
             name={'relasjon'}
           >
-            <Radio value="FORELDER">
+            <Radio value={Relasjon.FORELDER}>
               <BodyShort>Forelder</BodyShort>
             </Radio>
-            <Radio value="FOSTERFORELDER">
+            <Radio value={Relasjon.FOSTERFORELDER}>
               <BodyShort>Fosterforelder</BodyShort>
             </Radio>
           </RadioGroupWrapper>
@@ -125,12 +126,11 @@ export const AddBarnModal = ({
           {barnepensjon === JaEllerNei.NEI && (
             <RadioGroupWrapper
               control={control}
-              description={'Med inntekt mener vi arbeidsinntekt, kapitalinntekt og barnepensjon.'}
               legend={getText('form.barnetillegg.legend')}
               name={'harInntekt'}
             >
               <ReadMore header="Hvorfor spør vi om dette?">
-                Hvis barnet har en årlig inntekt over 1G (1G = XXXkr), får du vanligvis ikke
+                Hvis barnet har en årlig inntekt over 1G (1G = 111 477kr), får du vanligvis ikke
                 barnetillegg for barnet.
               </ReadMore>
               <Radio value={JaEllerNei.JA}>
@@ -142,13 +142,24 @@ export const AddBarnModal = ({
             </RadioGroupWrapper>
           )}
 
-          <Alert variant={'info'}>
-            {getText('form.barnetillegg.add.alertTitle')}
-            <ul>
-              <li>{getText('form.barnetillegg.add.alertBullet')}</li>
-            </ul>
-            {getText('form.barnetillegg.add.alertInfo')}
-          </Alert>
+          {relasjon === Relasjon.FORELDER && (
+            <Alert variant={'info'}>
+              {getText('form.barnetillegg.add.alertTitle')}
+              <ul>
+                <li>{getText('form.barnetillegg.add.alertBullet')}</li>
+              </ul>
+              {getText('form.barnetillegg.add.alertInfo')}
+            </Alert>
+          )}
+          {relasjon === Relasjon.FOSTERFORELDER && (
+            <Alert variant={'info'}>
+              {getText('form.barnetillegg.add.alertTitle')}
+              <ul>
+                <li>{getText('form.barnetillegg.add.alertBullettFosterforelder')}</li>
+              </ul>
+              {getText('form.barnetillegg.add.alertInfo')}
+            </Alert>
+          )}
           <Grid>
             <Cell xs={3}>
               <Button

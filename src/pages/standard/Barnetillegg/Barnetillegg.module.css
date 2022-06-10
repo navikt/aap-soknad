@@ -18,3 +18,7 @@
 .leggTilBarnModalContent button {
   min-width: 115px;
 }
+
+.leggTilBarnFnrInput {
+  max-width: 14rem;
+}
