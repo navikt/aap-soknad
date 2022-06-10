@@ -147,7 +147,6 @@ interface SøknadBackendState {
         mellomnavn?: string;
         etternavn?: string;
       };
-      fødselsdato?: string;
     };
     relasjon: 'FORELDER' | 'FOSTERFORELDER';
     merEnnIG?: boolean;
@@ -285,7 +284,6 @@ const mapSøknadToBackend = (søknad?: Soknad, fastlege?: FastlegeView): Søknad
         barn: {
           fnr: barn.fnr,
           navn: barn.navn,
-          fødselsdato: barn.fnr,
         },
         relasjon: barn.relasjon,
         merEnnIG: jaNeiToBoolean(barn.harInntekt),
