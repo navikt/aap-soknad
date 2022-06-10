@@ -27,7 +27,7 @@ import { updateSøknadData, useSoknadContext } from '../../../context/soknadCont
 import { completeAndGoToNextStep, useStepWizard } from '../../../context/stepWizardContextV2';
 import { yupResolver } from '@hookform/resolvers/yup';
 import SoknadFormWrapper from '../../../components/SoknadFormWrapper/SoknadFormWrapper';
-import { AddBarnModal } from './AddBarnModal';
+import { AddBarnModal, Relasjon } from './AddBarnModal';
 import { formatNavn } from '../../../utils/StringFormatters';
 
 interface Props {
@@ -37,6 +37,7 @@ interface Props {
   onCancelClick: () => void;
 }
 const BARNETILLEGG = 'barnetillegg';
+const MANUELLE_BARN = 'manuelleBarn';
 
 export const Barnetillegg = ({ getText, onBackClick, onCancelClick, søknad }: Props) => {
   const schema = yup.object().shape({});
@@ -51,6 +52,7 @@ export const Barnetillegg = ({ getText, onBackClick, onCancelClick, søknad }: P
     resolver: yupResolver(schema),
     defaultValues: {
       [BARNETILLEGG]: søknad?.barnetillegg,
+      [MANUELLE_BARN]: søknad?.manuelleBarn,
     },
   });
   const { vedleggDispatch } = useVedleggContext();
@@ -58,6 +60,16 @@ export const Barnetillegg = ({ getText, onBackClick, onCancelClick, søknad }: P
   const [showModal, setShowModal] = useState<boolean>(false);
   const { fields, append, remove, update } = useFieldArray({
     name: BARNETILLEGG,
+    control,
+  });
+
+  const {
+    fields: manuelleBarnFields,
+    append: manuelleBarnAppend,
+    remove: manuelleBarnRemove,
+    update: manuelleBarnUpdate,
+  } = useFieldArray({
+    name: MANUELLE_BARN,
     control,
   });
 
@@ -85,8 +97,8 @@ export const Barnetillegg = ({ getText, onBackClick, onCancelClick, søknad }: P
 
   const selectedBarn = useMemo(() => {
     if (selectedBarnIndex === undefined) return undefined;
-    return fields[selectedBarnIndex];
-  }, [selectedBarnIndex, fields]);
+    return manuelleBarnFields[selectedBarnIndex];
+  }, [selectedBarnIndex, manuelleBarnFields]);
 
   const editNyttBarn = (index: number) => {
     setSelectedBarnIndex(index);
@@ -94,7 +106,7 @@ export const Barnetillegg = ({ getText, onBackClick, onCancelClick, søknad }: P
   };
   const saveNyttBarn = (barn) => {
     if (selectedBarn === undefined) {
-      append({
+      manuelleBarnAppend({
         ...barn,
         manueltOpprettet: true,
       });
@@ -108,8 +120,8 @@ export const Barnetillegg = ({ getText, onBackClick, onCancelClick, søknad }: P
         vedleggDispatch
       );
     } else {
-      const gammeltBarn = fields[selectedBarnIndex];
-      update(selectedBarnIndex, {
+      const gammeltBarn = manuelleBarnFields[selectedBarnIndex];
+      manuelleBarnUpdate(selectedBarnIndex, {
         ...barn,
         manueltOpprettet: gammeltBarn?.manueltOpprettet,
       });
@@ -137,95 +149,90 @@ export const Barnetillegg = ({ getText, onBackClick, onCancelClick, søknad }: P
           <BodyShort spacing>{getText('steps.barnetillegg.guide')}</BodyShort>
           <BodyShort>{getText('steps.barnetillegg.guide2')}</BodyShort>
         </GuidePanel>
+        {fields.length > 0 && (
+          <Heading size="xsmall" level="2">
+            Barn vi har funnet som er registrert på deg:
+          </Heading>
+        )}
         {fields.map((barn, index) => {
           return (
             <article key={barn?.fnr} className={classes.barneKort}>
-              <Heading size={'xsmall'} level={'2'}>{`${formatNavn(barn?.navn)}`}</Heading>
-              <BodyShort>{`Fødselsnummer: ${barn?.fnr}`}</BodyShort>
-              {barn?.manueltOpprettet ? (
-                <>
-                  {barn?.relasjon && (
-                    <Grid>
-                      <Cell xs={4}>
-                        <Label>{'Relasjon:'}</Label>
-                      </Cell>
-                      <Cell xs={3}>
-                        <BodyShort>{barn?.relasjon}</BodyShort>
-                      </Cell>
-                    </Grid>
-                  )}
-                  {barn?.barnepensjon && (
-                    <Grid>
-                      <Cell xs={4}>
-                        <Label>{'Mottar barnepensjon:'}</Label>
-                      </Cell>
-                      <Cell xs={3}>
-                        <BodyShort>{barn?.barnepensjon}</BodyShort>
-                      </Cell>
-                    </Grid>
-                  )}
-                  {barn?.harInntekt && (
-                    <Grid>
-                      <Cell xs={4}>
-                        <Label>{'Har inntekt over 1G:'}</Label>
-                      </Cell>
-                      <Cell xs={3}>
-                        <BodyShort>{barn?.harInntekt}</BodyShort>
-                      </Cell>
-                    </Grid>
-                  )}
-                </>
-              ) : (
-                <>
-                  <RadioGroupWrapper
-                    legend={'Mottar barnet barnepensjon?'}
-                    name={`${BARNETILLEGG}.${index}.barnepensjon`}
-                    control={control}
-                    error={errors?.[BARNETILLEGG]?.[index]?.barnepensjon?.message}
-                  >
-                    <ReadMore header="Hvorfor spør vi om dette?">
-                      Hvis barnet mottar barnepensjon, får du ikke barnetillegg for barnet.
-                    </ReadMore>
-                    <Radio value={JaEllerNei.JA}>
-                      <BodyShort>{JaEllerNei.JA}</BodyShort>
-                    </Radio>
-                    <Radio value={JaEllerNei.NEI}>
-                      <BodyShort>{JaEllerNei.NEI}</BodyShort>
-                    </Radio>
-                  </RadioGroupWrapper>
-                  {controlledFields[index]?.barnepensjon === JaEllerNei.NEI && (
-                    <RadioGroupWrapper
-                      legend={getText('form.barnetillegg.legend')}
-                      description={
-                        'Med inntekt mener vi arbeidsinntekt, kapitalinntekt og barnepensjon.'
-                      }
-                      name={`${BARNETILLEGG}.${index}.harInntekt`}
-                      control={control}
-                      error={errors?.[BARNETILLEGG]?.[index]?.harInntekt?.message}
-                    >
-                      <ReadMore header="Hvorfor spør vi om dette?">
-                        Hvis barnet har en årlig inntekt over 1G (1G = XXXkr), får du vanligvis ikke
-                        barnetillegg for barnet.
-                      </ReadMore>
-                      <Radio value={JaEllerNei.JA}>
-                        <BodyShort>{JaEllerNei.JA}</BodyShort>
-                      </Radio>
-                      <Radio value={JaEllerNei.NEI}>
-                        <BodyShort>{JaEllerNei.NEI}</BodyShort>
-                      </Radio>
-                    </RadioGroupWrapper>
-                  )}
-                </>
+              <Label>{`${formatNavn(barn?.navn)}`}</Label>
+              <BodyShort>{`Fødselsnummer / D-nummer: ${barn?.fnr}`}</BodyShort>
+
+              <RadioGroupWrapper
+                legend={'Mottar barnet barnepensjon?'}
+                name={`${BARNETILLEGG}.${index}.barnepensjon`}
+                control={control}
+                error={errors?.[BARNETILLEGG]?.[index]?.barnepensjon?.message}
+              >
+                <ReadMore header="Hvorfor spør vi om dette?">
+                  Hvis barnet mottar barnepensjon, får du ikke barnetillegg for barnet.
+                </ReadMore>
+                <Radio value={JaEllerNei.JA}>
+                  <BodyShort>{JaEllerNei.JA}</BodyShort>
+                </Radio>
+                <Radio value={JaEllerNei.NEI}>
+                  <BodyShort>{JaEllerNei.NEI}</BodyShort>
+                </Radio>
+              </RadioGroupWrapper>
+              {controlledFields[index]?.barnepensjon === JaEllerNei.NEI && (
+                <RadioGroupWrapper
+                  legend={getText('form.barnetillegg.legend')}
+                  name={`${BARNETILLEGG}.${index}.harInntekt`}
+                  control={control}
+                  error={errors?.[BARNETILLEGG]?.[index]?.harInntekt?.message}
+                >
+                  <ReadMore header="Hvorfor spør vi om dette?">
+                    Hvis barnet har en årlig inntekt over 1G (1G = 111 477kr), får du vanligvis ikke
+                    barnetillegg for barnet.
+                  </ReadMore>
+                  <Radio value={JaEllerNei.JA}>
+                    <BodyShort>{JaEllerNei.JA}</BodyShort>
+                  </Radio>
+                  <Radio value={JaEllerNei.NEI}>
+                    <BodyShort>{JaEllerNei.NEI}</BodyShort>
+                  </Radio>
+                </RadioGroupWrapper>
               )}
-              {barn?.manueltOpprettet && (
-                <Grid>
-                  <Cell xs={4}>
-                    <Button variant="tertiary" type="button" onClick={() => editNyttBarn(index)}>
-                      Endre
-                    </Button>
-                  </Cell>
-                </Grid>
+            </article>
+          );
+        })}
+        {manuelleBarnFields.length > 0 && (
+          <Heading size="xsmall" level="2">
+            Barn som du har lagt til:
+          </Heading>
+        )}
+        {manuelleBarnFields.map((barn, index) => {
+          return (
+            <article key={barn?.fnr} className={classes.barneKort}>
+              <Label>{`${formatNavn(barn?.navn)}`}</Label>
+              <BodyShort>{`Fødselsnummer / D-nummer: ${barn?.fnr}`}</BodyShort>
+              {barn?.relasjon === Relasjon.FORELDER && (
+                <BodyShort>Du er forelder til barnet</BodyShort>
               )}
+              {barn?.relasjon === Relasjon.FOSTERFORELDER && (
+                <BodyShort>Du er fosterforelder til barnet</BodyShort>
+              )}
+              {barn?.barnepensjon === JaEllerNei.JA && (
+                <BodyShort>Barnet mottar barnepensjon</BodyShort>
+              )}
+              {barn?.barnepensjon === JaEllerNei.NEI && (
+                <BodyShort>Barnet mottar ikke barnepensjon</BodyShort>
+              )}
+              {barn?.harInntekt === JaEllerNei.JA && (
+                <BodyShort>Barnet har årlig inntekt over 1G</BodyShort>
+              )}
+              {barn?.harInntekt === JaEllerNei.NEI && (
+                <BodyShort>Barnet har ikke årlig inntekt over 1G</BodyShort>
+              )}
+              <Grid>
+                <Cell xs={4}>
+                  <Button variant="tertiary" type="button" onClick={() => editNyttBarn(index)}>
+                    Endre informasjon om barnet
+                  </Button>
+                </Cell>
+              </Grid>
             </article>
           );
         })}
@@ -252,9 +259,9 @@ export const Barnetillegg = ({ getText, onBackClick, onCancelClick, søknad }: P
         onSaveClick={saveNyttBarn}
         onDeleteClick={() => {
           if (selectedBarnIndex) {
-            const barn = fields[selectedBarnIndex];
+            const barn = manuelleBarnFields[selectedBarnIndex];
             removeRequiredVedlegg(`barn-${barn?.fnr}`, vedleggDispatch);
-            remove(selectedBarnIndex);
+            manuelleBarnRemove(selectedBarnIndex);
           }
           setShowModal(false);
         }}

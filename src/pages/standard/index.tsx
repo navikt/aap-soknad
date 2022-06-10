@@ -275,26 +275,22 @@ const mapSøknadToBackend = (søknad?: Soknad, fastlege?: FastlegeView): Søknad
       hvemUtbetalerAFP: søknad?.andreUtbetalinger?.afp?.hvemBetaler,
     },
     registrerteBarn:
-      søknad?.barnetillegg
-        ?.filter((barn) => barn.manueltOpprettet !== true)
-        .map((barn) => ({
-          fnr: barn.fnr,
-          merEnnIG: jaNeiToBoolean(barn.harInntekt),
-          barnepensjon: jaNeiToBoolean(barn.barnepensjon),
-        })) ?? [],
+      søknad?.barnetillegg?.map((barn) => ({
+        fnr: barn.fnr,
+        merEnnIG: jaNeiToBoolean(barn.harInntekt),
+        barnepensjon: jaNeiToBoolean(barn.barnepensjon),
+      })) ?? [],
     andreBarn:
-      søknad?.barnetillegg
-        ?.filter((barn) => barn.manueltOpprettet === true)
-        .map((barn) => ({
-          barn: {
-            fnr: barn.fnr,
-            navn: barn.navn,
-            fødselsdato: barn.fødselsdato,
-          },
-          relasjon: barn.relasjon,
-          merEnnIG: jaNeiToBoolean(barn.harInntekt),
-          barnepensjon: jaNeiToBoolean(barn.barnepensjon),
-        })) ?? [],
+      søknad?.manuelleBarn?.map((barn) => ({
+        barn: {
+          fnr: barn.fnr,
+          navn: barn.navn,
+          fødselsdato: barn.fnr,
+        },
+        relasjon: barn.relasjon,
+        merEnnIG: jaNeiToBoolean(barn.harInntekt),
+        barnepensjon: jaNeiToBoolean(barn.barnepensjon),
+      })) ?? [],
     tilleggsopplysninger: søknad?.tilleggsopplysninger,
   };
 };

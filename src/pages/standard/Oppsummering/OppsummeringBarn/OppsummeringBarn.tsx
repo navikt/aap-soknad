@@ -13,8 +13,24 @@ const OppsummeringBarn = ({ barn }: OppsummeringBarnProps) => {
     <article className={classes?.oppsummeringBarn}>
       <Label>{'Navn'}</Label>
       <BodyShort>{formatNavn(barn?.navn)}</BodyShort>
-      <Label>{'Har inntekt over 1G:'}</Label>
-      <BodyShort>{barn?.harInntekt}</BodyShort>
+      {barn?.relasjon && (
+        <>
+          <Label>Relasjon til barnet</Label>
+          <BodyShort>{barn?.relasjon}</BodyShort>
+        </>
+      )}
+      {barn?.barnepensjon && (
+        <>
+          <Label>Har barnepensjon:</Label>
+          <BodyShort>{barn?.barnepensjon}</BodyShort>
+        </>
+      )}
+      {barn?.harInntekt && (
+        <>
+          <Label>{'Har inntekt over 1G:'}</Label>
+          <BodyShort>{barn?.harInntekt}</BodyShort>
+        </>
+      )}
     </article>
   );
 };

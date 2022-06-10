@@ -199,9 +199,14 @@ const Oppsummering = ({
           toggleAll={toggleAll}
           onEdit={() => editStep(StepNames.BARNETILLEGG)}
         >
-          {søknadState?.søknad?.barnetillegg?.map((barn) => (
-            <OppsummeringBarn barn={barn} />
-          ))}
+          <>
+            {søknadState?.søknad?.barnetillegg?.map((barn) => (
+              <OppsummeringBarn barn={barn} />
+            ))}
+            {søknadState?.søknad?.manuelleBarn?.map((barn) => (
+              <OppsummeringBarn barn={barn} />
+            ))}
+          </>
         </AccordianItemOppsummering>
         <AccordianItemOppsummering
           title={getText('steps.student.title')}

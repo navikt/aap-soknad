@@ -416,8 +416,9 @@
           "label": "Er dette et fosterbarn eller et barn du nylig har adoptert?"
         },
         "alertTitle": "Du må legge ved:",
-        "alertBullet": "Fødselsattest eller bostedbevis for barnet.",
-        "alertInfo": "Dette laster du opp senere i søknaden. Du kan også ettersende vedlegg."
+        "alertBullet": "Bekreftelse på at du er forelder til barnet, og fra når (fødselstidspunkt eller adoptivtidspunkt). Dette kan for eksempel være fødselsattest eller adopsjonsdokumenter.",
+        "alertInfo": "Dette laster du opp senere i søknaden. Du kan også ettersende vedlegg.",
+        "alertBullettFosterforelder": "Dokumentasjon på at du er fosterforelder til barnet, og fra når. For eksempel en bekreftelse fra barneverntjenesten."
       }
     },
     "student": {
