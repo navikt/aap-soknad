@@ -131,8 +131,7 @@ interface SøknadBackendState {
   yrkesskadeType?: 'JA' | 'NEI' | 'VET_IKKE';
   utbetalinger: {
     fraArbeidsgiver?: boolean;
-    stønadstyper: Array<{ type: StønadType; hvemUtbetalerAFP?: string; vedlegg?: string }>;
-    hvemUtbetalerAFP?: string;
+    andreStønader: Array<{ type: StønadType; hvemUtbetalerAFP?: string; vedlegg?: string }>;
   };
   registrerteBarn: Array<{
     fnr: string;
@@ -261,7 +260,7 @@ const mapSøknadToBackend = (søknad?: Soknad, fastlege?: FastlegeView): Søknad
     yrkesskadeType: getJaNeiVetIkke(søknad?.yrkesskade),
     utbetalinger: {
       fraArbeidsgiver: jaNeiToBoolean(søknad?.andreUtbetalinger?.lønn),
-      stønadstyper:
+      andreStønader:
         søknad?.andreUtbetalinger?.stønad?.map((stønad) => {
           return {
             type: stønad,
@@ -271,7 +270,6 @@ const mapSøknadToBackend = (søknad?: Soknad, fastlege?: FastlegeView): Søknad
             vedlegg: undefined,
           };
         }) ?? [],
-      hvemUtbetalerAFP: søknad?.andreUtbetalinger?.afp?.hvemBetaler,
     },
     registrerteBarn:
       søknad?.barnetillegg?.map((barn) => ({
