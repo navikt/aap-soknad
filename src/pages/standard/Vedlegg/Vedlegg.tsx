@@ -131,7 +131,7 @@ const Vedlegg = ({ getText, onBackClick, onCancelClick, søknad }: Props) => {
           append={fieldArrayLønn.append}
           remove={fieldArrayLønn.remove}
           heading={'Lønn og andre goder'}
-          ingress={'Hvis du har noe annet du ønsker å legge ved kan du laste det opp her'}
+          ingress={getText(`steps.andre_utbetalinger.alertAttachments.andreGoder`)}
         />
       )}
       {vedleggState?.requiredVedlegg?.find((e) => e.type === AttachmentType.OMSORGSSTØNAD) && (
@@ -141,7 +141,7 @@ const Vedlegg = ({ getText, onBackClick, onCancelClick, søknad }: Props) => {
           append={fieldArrayOmsorgsstønad.append}
           remove={fieldArrayOmsorgsstønad.remove}
           heading={'Omsorgsstønad'}
-          ingress={'Hvis du har noe annet du ønsker å legge ved kan du laste det opp her'}
+          ingress={getText(`steps.andre_utbetalinger.alertAttachments.omsorgsstønad`)}
         />
       )}
       {vedleggState?.requiredVedlegg?.find((e) => e.type === AttachmentType.UTLANDSSTØNAD) && (
@@ -151,7 +151,7 @@ const Vedlegg = ({ getText, onBackClick, onCancelClick, søknad }: Props) => {
           append={fieldArrayUtlandsstønad.append}
           remove={fieldArrayUtlandsstønad.remove}
           heading={'Utlandsstønad'}
-          ingress={'Hvis du har noe annet du ønsker å legge ved kan du laste det opp her'}
+          ingress={getText(`steps.andre_utbetalinger.alertAttachments.utlandsStønad`)}
         />
       )}
       {vedleggState?.requiredVedlegg?.find((e) => e?.type?.split('-')?.[0] === 'barn') && (
@@ -161,7 +161,7 @@ const Vedlegg = ({ getText, onBackClick, onCancelClick, søknad }: Props) => {
           append={fieldArrayBarn.append}
           remove={fieldArrayBarn.remove}
           heading={'Barn'}
-          ingress={'Hvis du har noe annet du ønsker å legge ved kan du laste det opp her'}
+          ingress={'Fødselsattest eller bostedbevis for barn du har lagt til manuelt.'}
         />
       )}
       <FileInput
