@@ -54,7 +54,7 @@ export const StepSelectCountry = ({ getText, onBackClick, onCancelClick }: Selec
       .required(getText('form.country.required'))
       .notOneOf(['none'], getText('form.country.required')),
   });
-  const { søknadState } = useSoknadContext();
+  const { søknadState, søknadDispatch } = useSoknadContext();
   const { stepWizardDispatch } = useStepWizard();
   const {
     control,
@@ -76,7 +76,7 @@ export const StepSelectCountry = ({ getText, onBackClick, onCancelClick }: Selec
       <GuidePanel poster>{getText('steps.country.guidetext')}</GuidePanel>
       <SoknadFormWrapper
         onNext={handleSubmit((data) => {
-          // updateSøknadData(søknadDispatch, data);
+          updateSøknadData(søknadDispatch, data);
           completeAndGoToNextStep(stepWizardDispatch);
         })}
         onBack={() => onBackClick()}

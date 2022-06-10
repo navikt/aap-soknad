@@ -63,10 +63,10 @@ const Utland = (): JSX.Element => {
     getSoknadState();
   }, []);
   useEffect(() => {
-    if (søknadState?.søknad) {
+    if (søknadState?.søknad && Object.keys(søknadState?.søknad)?.length > 0) {
       lagreSoknadState({ ...søknadState }, [...stepList]);
     }
-  }, [currentStep]);
+  }, [currentStep, stepList]);
   const myHandleSubmit = async () => {
     const postResponse = await postSøknad(søknadState?.søknad);
     if (!postResponse.ok) {
