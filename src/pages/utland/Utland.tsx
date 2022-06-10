@@ -53,7 +53,7 @@ const Utland = (): JSX.Element => {
   useEffect(() => {
     const getSoknadState = async () => {
       const cachedState = await hentSoknadState(søknadDispatch, SøknadType.UTLAND);
-      if (cachedState?.lagretStepList) {
+      if (cachedState?.lagretStepList && cachedState?.lagretStepList?.length > 0) {
         setIsVeiledning(false);
         setStepList([...cachedState.lagretStepList], stepWizardDispatch);
       } else {
