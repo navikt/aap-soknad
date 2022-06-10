@@ -30,7 +30,7 @@ const soknadContextInititalState = {
   søknad: undefined,
 };
 export const lagreSoknadState = async (state: SoknadContextState, stepList: StepType[]) => {
-  if (state?.type) {
+  if (state?.type && state?.søknad && Object.keys(state.søknad)?.length > 0) {
     const payLoad: SoknadContextState = {
       ...state,
       lagretStepList: stepList,
@@ -39,7 +39,7 @@ export const lagreSoknadState = async (state: SoknadContextState, stepList: Step
   }
 };
 export const lagrePartialSoknadState = async (state: SoknadContextState, partialSøknad: any) => {
-  if (state?.type) {
+  if (state?.type && partialSøknad && Object.keys(partialSøknad)?.length > 0) {
     const payLoad: SoknadContextState = {
       ...state,
       søknad: { ...state.søknad, ...partialSøknad },
