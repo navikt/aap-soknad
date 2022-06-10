@@ -144,9 +144,9 @@ export const AndreUtbetalinger = ({ getText, onBackClick, onCancelClick, søknad
   }, [stønadEllerVerv]);
 
   useEffect(() => {
-    removeRequiredVedlegg('omsorgsstønad', vedleggDispatch);
-    removeRequiredVedlegg('utlandsStønad', vedleggDispatch);
-    removeRequiredVedlegg('andreGoder', vedleggDispatch);
+    removeRequiredVedlegg(AttachmentType.OMSORGSSTØNAD, vedleggDispatch);
+    removeRequiredVedlegg(AttachmentType.UTLANDSSTØNAD, vedleggDispatch);
+    removeRequiredVedlegg(AttachmentType.LØNN_OG_ANDRE_GODER, vedleggDispatch);
     addRequiredVedlegg(Attachments, vedleggDispatch);
   }, [Attachments]);
   return (
