@@ -14,7 +14,7 @@ import { GetText } from '../../../hooks/useTexts';
 import { FieldValues, useFieldArray, useForm } from 'react-hook-form';
 import RadioGroupWrapper from '../../../components/input/RadioGroupWrapper/RadioGroupWrapper';
 import { JaEllerNei } from '../../../types/Generic';
-import Soknad, { Barn } from '../../../types/Soknad';
+import Soknad from '../../../types/Soknad';
 import * as classes from './Barnetillegg.module.css';
 import { Add } from '@navikt/ds-icons';
 import {
@@ -102,7 +102,7 @@ export const Barnetillegg = ({ getText, onBackClick, onCancelClick, søknad }: P
         [
           {
             type: `barn-${barn?.fnr}`,
-            description: `Fødselsattest eller bostedsbevis for: ${barn?.fornavn} ${barn?.etternavn}`,
+            description: `Fødselsattest eller bostedsbevis for: ${barn?.navn?.fornavn} ${barn?.navn?.etternavn}`,
           },
         ],
         vedleggDispatch
