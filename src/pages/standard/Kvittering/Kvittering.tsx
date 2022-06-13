@@ -1,6 +1,6 @@
 import { GetText } from '../../../hooks/useTexts';
 import { Alert, BodyLong, Button, Heading, Link } from '@navikt/ds-react';
-import React from 'react';
+import React, { useMemo } from 'react';
 import * as classes from './Kvittering.module.css';
 import { SøkerView } from '../../../context/sokerOppslagContext';
 import { Download } from '@navikt/ds-icons';
@@ -12,6 +12,10 @@ interface StudentProps {
 }
 
 const Kvittering = ({ getText, søker }: StudentProps) => {
+  const dittNavUrl = window.location.href.includes('www.nav.no')
+    ? 'https://www.nav.no/person/dittnav/'
+    : 'https://www.dev.nav.no/person/dittnav/';
+
   return (
     <div className={classes?.kvitteringContent}>
       <SuccessStroke
@@ -46,7 +50,7 @@ const Kvittering = ({ getText, søker }: StudentProps) => {
         <Download />
         Last ned søknaden som pdf
       </Link>
-      <form action={'https://www.nav.no/no/ditt-nav'}>
+      <form action={dittNavUrl}>
         <Button variant={'primary'}>Se saken din på Ditt NAV</Button>
       </form>
     </div>
