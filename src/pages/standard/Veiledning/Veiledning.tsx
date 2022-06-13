@@ -1,12 +1,4 @@
-import {
-  Accordion,
-  BodyLong,
-  BodyShort,
-  Button,
-  GuidePanel,
-  Heading,
-  Label,
-} from '@navikt/ds-react';
+import { Accordion, BodyLong, BodyShort, Button, Heading, Label } from '@navikt/ds-react';
 import React, { useMemo } from 'react';
 import { getParagraphs, GetText } from '../../../hooks/useTexts';
 import { useForm } from 'react-hook-form';
@@ -16,6 +8,7 @@ import { SøkerView } from '../../../context/sokerOppslagContext';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as classes from './Veiledning.module.css';
+import { LucaGuidePanel } from '../../../components/LucaGuidePanel';
 
 const VEILEDNING_CONFIRM = 'veiledningConfirm';
 type VeiledningType = {
@@ -57,7 +50,7 @@ export const Veiledning = ({ getText, søker, loading, onSubmit }: VeiledningPro
         </Heading>
       </header>
       <main className={classes?.veiledningContent}>
-        <GuidePanel>
+        <LucaGuidePanel>
           <HeadingHelloName size={'medium'} level={'2'} name={søker?.fulltNavn} loading={loading} />
           {getParagraphs('steps.veiledning.guide.paragraphs', getText).map(
             (e: string, index: number) => (
@@ -66,7 +59,7 @@ export const Veiledning = ({ getText, søker, loading, onSubmit }: VeiledningPro
               </BodyShort>
             )
           )}
-        </GuidePanel>
+        </LucaGuidePanel>
         <article>
           <Heading size={'small'} level={'2'} spacing>
             {getText('steps.veiledning.søknadsdato.title')}

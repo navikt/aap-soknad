@@ -4,7 +4,6 @@ import {
   Button,
   Table,
   BodyLong,
-  GuidePanel,
   Heading,
   ReadMore,
   Cell,
@@ -25,6 +24,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { updateSøknadData, useSoknadContext } from '../../../context/soknadContext';
 import ColorPanel from '../../../components/panel/ColorPanel';
+import { LucaGuidePanel } from '../../../components/LucaGuidePanel';
 
 interface Props {
   getText: GetText;
@@ -215,7 +215,7 @@ export const Medlemskap = ({ getText, onBackClick, onCancelClick, søknad }: Pro
         <Heading size="large" level="2">
           {getText('steps.medlemskap.title')}
         </Heading>
-        <GuidePanel>{getText(`steps.medlemskap.guide`)}</GuidePanel>
+        <LucaGuidePanel>{getText(`steps.medlemskap.guide`)}</LucaGuidePanel>
         <RadioGroupWrapper
           name={`${MEDLEMSKAP}.${BODD_I_NORGE}`}
           legend={getText('form.medlemskap.boddINorge.legend')}

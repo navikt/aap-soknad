@@ -1,7 +1,7 @@
 import Soknad from '../../../types/Soknad';
 import { GetText } from '../../../hooks/useTexts';
 import RadioGroupWrapper from '../../../components/input/RadioGroupWrapper/RadioGroupWrapper';
-import { BodyShort, GuidePanel, Heading, Radio, Alert } from '@navikt/ds-react';
+import { BodyShort, Heading, Radio, Alert } from '@navikt/ds-react';
 import { JaNeiVetIkke } from '../../../types/Generic';
 import React, { useEffect } from 'react';
 import * as yup from 'yup';
@@ -11,6 +11,7 @@ import { FieldValues, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import SoknadFormWrapper from '../../../components/SoknadFormWrapper/SoknadFormWrapper';
 import ColorPanel from '../../../components/panel/ColorPanel';
+import { LucaGuidePanel } from '../../../components/LucaGuidePanel';
 
 const STUDENT = 'student';
 const ER_STUDENT = 'erStudent';
@@ -92,13 +93,13 @@ const Student = ({ getText, onBackClick, onCancelClick, søknad }: Props) => {
       <Heading size="large" level="2">
         {getText('steps.student.title')}
       </Heading>
-      <GuidePanel>
+      <LucaGuidePanel>
         <BodyShort spacing>{getText('steps.student.guide1')}</BodyShort>
         <BodyShort>
           Du regnes som student hvis du tar et studie som gir rett til lån fra Statens lånekasse for
           utdanning. Du trenger ikke å ha mottatt lån/stipend.
         </BodyShort>
-      </GuidePanel>
+      </LucaGuidePanel>
       <RadioGroupWrapper
         name={`${STUDENT}.${ER_STUDENT}`}
         legend={getText(`form.${STUDENT}.legend`)}

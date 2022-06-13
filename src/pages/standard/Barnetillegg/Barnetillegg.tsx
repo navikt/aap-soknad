@@ -1,14 +1,4 @@
-import {
-  BodyShort,
-  Button,
-  Cell,
-  Grid,
-  GuidePanel,
-  Heading,
-  Label,
-  Radio,
-  ReadMore,
-} from '@navikt/ds-react';
+import { BodyShort, Button, Cell, Grid, Heading, Label, Radio, ReadMore } from '@navikt/ds-react';
 import React, { useEffect, useMemo, useState } from 'react';
 import { GetText } from '../../../hooks/useTexts';
 import { FieldValues, useFieldArray, useForm } from 'react-hook-form';
@@ -29,6 +19,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import SoknadFormWrapper from '../../../components/SoknadFormWrapper/SoknadFormWrapper';
 import { AddBarnModal, Relasjon } from './AddBarnModal';
 import { formatNavn } from '../../../utils/StringFormatters';
+import { LucaGuidePanel } from '../../../components/LucaGuidePanel';
 
 interface Props {
   getText: GetText;
@@ -145,10 +136,10 @@ export const Barnetillegg = ({ getText, onBackClick, onCancelClick, søknad }: P
         <Heading size="large" level="2">
           {getText('steps.barnetillegg.title')}
         </Heading>
-        <GuidePanel>
+        <LucaGuidePanel>
           <BodyShort spacing>{getText('steps.barnetillegg.guide')}</BodyShort>
           <BodyShort>{getText('steps.barnetillegg.guide2')}</BodyShort>
-        </GuidePanel>
+        </LucaGuidePanel>
         {fields.length > 0 && (
           <Heading size="xsmall" level="2">
             Barn vi har funnet som er registrert på deg:

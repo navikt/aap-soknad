@@ -3,16 +3,7 @@ import Soknad from '../../../types/Soknad';
 import { getParagraphs, GetText } from '../../../hooks/useTexts';
 import React, { useEffect, useMemo, useState } from 'react';
 import DatoVelgerWrapper from '../../../components/input/DatoVelgerWrapper';
-import {
-  Alert,
-  BodyShort,
-  Cell,
-  Grid,
-  GuidePanel,
-  Heading,
-  Radio,
-  ReadMore,
-} from '@navikt/ds-react';
+import { Alert, BodyShort, Cell, Grid, Heading, Radio, ReadMore } from '@navikt/ds-react';
 import RadioGroupWrapper from '../../../components/input/RadioGroupWrapper/RadioGroupWrapper';
 import { JaNeiVetIkke } from '../../../types/Generic';
 import TextFieldWrapper from '../../../components/input/TextFieldWrapper';
@@ -25,6 +16,7 @@ import { updateSøknadData, useSoknadContext } from '../../../context/soknadCont
 import { isFuture, isPast, isToday, subYears } from 'date-fns';
 import TextAreaWrapper from '../../../components/input/TextAreaWrapper';
 import { setErrorSummaryFocus } from '../../../utils/dom';
+import { LucaGuidePanel } from '../../../components/LucaGuidePanel';
 
 const STARTDATO = 'startDato';
 const FERIE = 'ferie';
@@ -190,7 +182,7 @@ const StartDato = ({ getText, onBackClick, onCancelClick, søknad }: Props) => {
       <Heading size="large" level="2">
         {getText('steps.startDato.title')}
       </Heading>
-      <GuidePanel>
+      <LucaGuidePanel>
         {getParagraphs('steps.startDato.guide.paragraphs', getText).map(
           (e: string, index: number) => (
             <BodyShort key={`${index}`} spacing>
@@ -201,7 +193,7 @@ const StartDato = ({ getText, onBackClick, onCancelClick, søknad }: Props) => {
         <ReadMore header={getText('steps.startDato.guideReadMore.heading')} type={'button'}>
           {getText('steps.startDato.guideReadMore.text')}
         </ReadMore>
-      </GuidePanel>
+      </LucaGuidePanel>
       <DatoVelgerWrapper
         name={`${STARTDATO}`}
         label={getText(`form.${STARTDATO}.label`)}

@@ -1,4 +1,4 @@
-import { BodyLong, BodyShort, Button, GuidePanel, Heading, ReadMore } from '@navikt/ds-react';
+import { BodyLong, BodyShort, Button, Heading, ReadMore } from '@navikt/ds-react';
 import React, { useMemo, useState } from 'react';
 import { GetText } from '../../../hooks/useTexts';
 import { FieldValues, useFieldArray, useForm } from 'react-hook-form';
@@ -11,6 +11,7 @@ import { completeAndGoToNextStep, useStepWizard } from '../../../context/stepWiz
 import { yupResolver } from '@hookform/resolvers/yup';
 import SoknadFormWrapper from '../../../components/SoknadFormWrapper/SoknadFormWrapper';
 import { AddBehandlerModal } from './AddBehandlerModal';
+import { LucaGuidePanel } from '../../../components/LucaGuidePanel';
 
 interface Props {
   getText: GetText;
@@ -87,10 +88,10 @@ export const Behandlere = ({ getText, onBackClick, onCancelClick, søknad, fastl
         <Heading size="large" level="2">
           {getText('steps.fastlege.title')}
         </Heading>
-        <GuidePanel>
+        <LucaGuidePanel>
           <BodyLong>{getText('steps.fastlege.guide1')}</BodyLong>
           <BodyLong>{getText('steps.fastlege.guide2')}</BodyLong>
-        </GuidePanel>
+        </LucaGuidePanel>
         <Heading size={'small'} level={'3'}>
           {getText('steps.fastlege.fastlege.heading')}
         </Heading>

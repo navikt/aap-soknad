@@ -3,12 +3,13 @@ import Soknad from '../../../types/Soknad';
 import { GetText } from '../../../hooks/useTexts';
 import React from 'react';
 import TextAreaWrapper from '../../../components/input/TextAreaWrapper';
-import { BodyShort, GuidePanel, Heading } from '@navikt/ds-react';
+import { BodyShort, Heading } from '@navikt/ds-react';
 import { updateSøknadData, useSoknadContext } from '../../../context/soknadContext';
 import { completeAndGoToNextStep, useStepWizard } from '../../../context/stepWizardContextV2';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import SoknadFormWrapper from '../../../components/SoknadFormWrapper/SoknadFormWrapper';
+import { LucaGuidePanel } from '../../../components/LucaGuidePanel';
 
 const TILLEGGSOPPLYSNINGER = 'tilleggsopplysninger';
 interface Props {
@@ -48,9 +49,9 @@ const Tilleggsopplysninger = ({ getText, onBackClick, onCancelClick, søknad }: 
       <Heading size="large" level="2">
         {getText('steps.tilleggsopplysninger.title')}
       </Heading>
-      <GuidePanel>
+      <LucaGuidePanel>
         <BodyShort>{getText(`steps.tilleggsopplysninger.guide`)}</BodyShort>
-      </GuidePanel>
+      </LucaGuidePanel>
       <TextAreaWrapper
         name={`${TILLEGGSOPPLYSNINGER}`}
         label={getText(`form.${TILLEGGSOPPLYSNINGER}.label`)}
