@@ -105,17 +105,7 @@ export const AddBehandlerModal = ({
             name={'telefon'}
           />
           <ModalButtonWrapper>
-            <Button type={'submit'}>Lagre</Button>
-            <Button
-              type="button"
-              variant={'secondary'}
-              onClick={() => {
-                onCloseClick();
-              }}
-            >
-              Avbryt
-            </Button>
-            {behandler && (
+            {behandler ? (
               <Button
                 type="button"
                 variant={'danger'}
@@ -125,6 +115,30 @@ export const AddBehandlerModal = ({
                 }}
               >
                 Slett
+              </Button>
+            ) : (
+              <Button
+                type="button"
+                variant={'secondary'}
+                onClick={() => {
+                  onCloseClick();
+                }}
+              >
+                Avbryt
+              </Button>
+            )}
+
+            <Button type={'submit'}>Lagre</Button>
+
+            {behandler && (
+              <Button
+                type="button"
+                variant={'secondary'}
+                onClick={() => {
+                  onCloseClick();
+                }}
+              >
+                Avbryt
               </Button>
             )}
           </ModalButtonWrapper>

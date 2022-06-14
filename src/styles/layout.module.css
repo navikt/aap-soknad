@@ -1,8 +1,9 @@
 .buttonWrapper {
   display: flex;
   flex-direction: row;
-  justify-content: flex-start;
-  gap: 3%;
+  flex: 2;
+  height: 100%;
+  gap: 1.25rem;
 }
 @media (max-width: 480px) {
   .buttonWrapper {
@@ -16,4 +17,5 @@
 }
 .buttonWrapper > button {
   min-width: 201px;
+  flex-grow: 1;
 }

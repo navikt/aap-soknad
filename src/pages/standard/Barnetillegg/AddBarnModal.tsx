@@ -166,17 +166,7 @@ export const AddBarnModal = ({
             </Alert>
           )}
           <ModalButtonWrapper>
-            <Button type={'submit'}>Lagre</Button>
-            <Button
-              type="button"
-              variant={'secondary'}
-              onClick={() => {
-                onCloseClick();
-              }}
-            >
-              Avbryt
-            </Button>
-            {barn && (
+            {barn ? (
               <Button
                 type="button"
                 variant={'danger'}
@@ -185,6 +175,28 @@ export const AddBarnModal = ({
                 }}
               >
                 Slett
+              </Button>
+            ) : (
+              <Button
+                type="button"
+                variant={'secondary'}
+                onClick={() => {
+                  onCloseClick();
+                }}
+              >
+                Avbryt
+              </Button>
+            )}
+            <Button type={'submit'}>Lagre</Button>
+            {barn && (
+              <Button
+                type="button"
+                variant={'secondary'}
+                onClick={() => {
+                  onCloseClick();
+                }}
+              >
+                Avbryt
               </Button>
             )}
           </ModalButtonWrapper>
