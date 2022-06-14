@@ -1,0 +1,4 @@
+.modalButtonWrapper {
+  margin-top: 2rem;
+  composes: buttonWrapper from '../../styles/layout.module.css';
+}

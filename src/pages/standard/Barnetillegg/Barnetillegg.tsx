@@ -1,4 +1,14 @@
-import { BodyShort, Button, Cell, Grid, Heading, Label, Radio, ReadMore } from '@navikt/ds-react';
+import {
+  Alert,
+  BodyShort,
+  Button,
+  Cell,
+  Grid,
+  Heading,
+  Label,
+  Radio,
+  ReadMore,
+} from '@navikt/ds-react';
 import React, { useEffect, useMemo, useState } from 'react';
 import { GetText } from '../../../hooks/useTexts';
 import { FieldValues, useFieldArray, useForm } from 'react-hook-form';
@@ -91,6 +101,16 @@ export const Barnetillegg = ({ getText, onBackClick, onCancelClick, søknad }: P
     return manuelleBarnFields[selectedBarnIndex];
   }, [selectedBarnIndex, manuelleBarnFields]);
 
+  const erForelderTilManueltBarn = useMemo(() => {
+    return manuelleBarnFields.filter((barn) => barn.relasjon === Relasjon.FORELDER).length > 0;
+  }, [manuelleBarnFields]);
+
+  const erFosterforelderTilManueltBarn = useMemo(() => {
+    return (
+      manuelleBarnFields.filter((barn) => barn.relasjon === Relasjon.FOSTERFORELDER).length > 0
+    );
+  }, [manuelleBarnFields]);
+
   const editNyttBarn = (index: number) => {
     setSelectedBarnIndex(index);
     setShowModal(true);
@@ -147,7 +167,7 @@ export const Barnetillegg = ({ getText, onBackClick, onCancelClick, søknad }: P
         )}
         {fields.map((barn, index) => {
           return (
-            <article key={barn?.fnr} className={classes.barneKort}>
+            <article key={barn?.id} className={classes.barneKort}>
               <Label>{`${formatNavn(barn?.navn)}`}</Label>
               <BodyShort>{`Fødselsnummer / D-nummer: ${barn?.fnr}`}</BodyShort>
 
@@ -196,7 +216,7 @@ export const Barnetillegg = ({ getText, onBackClick, onCancelClick, søknad }: P
         )}
         {manuelleBarnFields.map((barn, index) => {
           return (
-            <article key={barn?.fnr} className={classes.barneKort}>
+            <article key={barn?.id} className={classes.barneKort}>
               <Label>{`${formatNavn(barn?.navn)}`}</Label>
               <BodyShort>{`Fødselsnummer / D-nummer: ${barn?.fnr}`}</BodyShort>
               {barn?.relasjon === Relasjon.FORELDER && (
@@ -243,6 +263,18 @@ export const Barnetillegg = ({ getText, onBackClick, onCancelClick, søknad }: P
             </Button>
           </Cell>
         </Grid>
+        {(erForelderTilManueltBarn || erFosterforelderTilManueltBarn) && (
+          <Alert variant={'info'}>
+            {getText('form.barnetillegg.add.alertTitle')}
+            <ul>
+              {erForelderTilManueltBarn && <li>{getText('form.barnetillegg.add.alertBullet')}</li>}
+              {erFosterforelderTilManueltBarn && (
+                <li>{getText('form.barnetillegg.add.alertBullettFosterforelder')}</li>
+              )}
+            </ul>
+            {getText('form.barnetillegg.add.alertInfo')}
+          </Alert>
+        )}
       </SoknadFormWrapper>
       <AddBarnModal
         getText={getText}
