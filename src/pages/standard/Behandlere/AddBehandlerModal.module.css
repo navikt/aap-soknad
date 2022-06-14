@@ -5,3 +5,7 @@
   gap: var(--navds-spacing-10);
   max-width: 600px;
 }
+
+.addBehandlerModalContent button {
+  min-width: 115px;
+}

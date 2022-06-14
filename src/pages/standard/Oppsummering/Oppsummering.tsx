@@ -69,7 +69,7 @@ const Oppsummering = ({
       })}
       onBack={() => onBackClick()}
       onCancel={() => onCancelClick()}
-      nextButtonText={'Neste steg'}
+      nextButtonText={'Send søknad'}
       backButtonText={'Forrige steg'}
       cancelButtonText={'Avbryt søknad'}
       errors={errors}

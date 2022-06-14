@@ -62,6 +62,8 @@ export const AddBarnModal = ({
     reset({ ...barn });
   }, [barn, showModal, reset]);
 
+  console.log('barn', barn);
+
   return (
     <Modal
       open={showModal}
@@ -174,15 +176,17 @@ export const AddBarnModal = ({
             >
               Avbryt
             </Button>
-            <Button
-              type="button"
-              variant={'danger'}
-              onClick={() => {
-                onDeleteClick();
-              }}
-            >
-              Slett
-            </Button>
+            {barn && (
+              <Button
+                type="button"
+                variant={'danger'}
+                onClick={() => {
+                  onDeleteClick();
+                }}
+              >
+                Slett
+              </Button>
+            )}
           </ModalButtonWrapper>
         </form>
       </Modal.Content>
