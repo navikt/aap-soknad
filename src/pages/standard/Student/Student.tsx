@@ -29,7 +29,7 @@ interface Props {
   onCancelClick: () => void;
 }
 
-const Student = ({ getText, onBackClick, onCancelClick, søknad }: Props) => {
+const Student = ({ getText, onBackClick, søknad }: Props) => {
   const schema = yup.object().shape({
     [STUDENT]: yup.object().shape({
       [ER_STUDENT]: yup
@@ -84,7 +84,6 @@ const Student = ({ getText, onBackClick, onCancelClick, søknad }: Props) => {
         completeAndGoToNextStep(stepWizardDispatch);
       })}
       onBack={() => onBackClick()}
-      onCancel={() => onCancelClick()}
       nextButtonText={'Neste steg'}
       backButtonText={'Forrige steg'}
       cancelButtonText={'Avbryt søknad'}

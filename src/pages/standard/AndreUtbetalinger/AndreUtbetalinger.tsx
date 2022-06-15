@@ -48,7 +48,7 @@ const ANDRE_UTBETALINGER = 'andreUtbetalinger';
 const LØNN = 'lønn';
 const STØNAD = 'stønad';
 
-export const AndreUtbetalinger = ({ getText, onBackClick, onCancelClick, søknad }: Props) => {
+export const AndreUtbetalinger = ({ getText, onBackClick, søknad }: Props) => {
   const schema = yup.object().shape({
     [ANDRE_UTBETALINGER]: yup.object().shape({
       [LØNN]: yup
@@ -147,7 +147,6 @@ export const AndreUtbetalinger = ({ getText, onBackClick, onCancelClick, søknad
         completeAndGoToNextStep(stepWizardDispatch);
       })}
       onBack={() => onBackClick()}
-      onCancel={() => onCancelClick()}
       nextButtonText={'Neste steg'}
       backButtonText={'Forrige steg'}
       cancelButtonText={'Avbryt søknad'}

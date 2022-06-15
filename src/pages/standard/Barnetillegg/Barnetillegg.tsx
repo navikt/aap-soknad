@@ -40,7 +40,7 @@ interface Props {
 const BARNETILLEGG = 'barnetillegg';
 const MANUELLE_BARN = 'manuelleBarn';
 
-export const Barnetillegg = ({ getText, onBackClick, onCancelClick, søknad }: Props) => {
+export const Barnetillegg = ({ getText, onBackClick, søknad }: Props) => {
   const schema = yup.object().shape({});
   const { søknadDispatch } = useSoknadContext();
   const { stepWizardDispatch } = useStepWizard();
@@ -59,7 +59,7 @@ export const Barnetillegg = ({ getText, onBackClick, onCancelClick, søknad }: P
   const { vedleggDispatch } = useVedleggContext();
   const [selectedBarnIndex, setSelectedBarnIndex] = useState<number | undefined>(undefined);
   const [showModal, setShowModal] = useState<boolean>(false);
-  const { fields, append, remove, update } = useFieldArray({
+  const { fields, update } = useFieldArray({
     name: BARNETILLEGG,
     control,
   });
@@ -147,7 +147,6 @@ export const Barnetillegg = ({ getText, onBackClick, onCancelClick, søknad }: P
           completeAndGoToNextStep(stepWizardDispatch);
         })}
         onBack={() => onBackClick()}
-        onCancel={() => onCancelClick()}
         nextButtonText={'Neste steg'}
         backButtonText={'Forrige steg'}
         cancelButtonText={'Avbryt søknad'}

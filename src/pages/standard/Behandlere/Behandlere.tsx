@@ -22,7 +22,7 @@ interface Props {
 }
 const BEHANDLERE = 'behandlere';
 
-export const Behandlere = ({ getText, onBackClick, onCancelClick, søknad, fastlege }: Props) => {
+export const Behandlere = ({ getText, onBackClick, søknad, fastlege }: Props) => {
   const schema = yup.object().shape({});
   const { søknadDispatch } = useSoknadContext();
   const { stepWizardDispatch } = useStepWizard();
@@ -79,7 +79,6 @@ export const Behandlere = ({ getText, onBackClick, onCancelClick, søknad, fastl
           completeAndGoToNextStep(stepWizardDispatch);
         })}
         onBack={() => onBackClick()}
-        onCancel={() => onCancelClick()}
         nextButtonText={'Neste steg'}
         backButtonText={'Forrige steg'}
         cancelButtonText={'Avbryt søknad'}

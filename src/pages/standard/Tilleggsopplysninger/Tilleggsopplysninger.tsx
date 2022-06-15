@@ -19,7 +19,7 @@ interface Props {
   onCancelClick: () => void;
 }
 
-const Tilleggsopplysninger = ({ getText, onBackClick, onCancelClick, søknad }: Props) => {
+const Tilleggsopplysninger = ({ getText, onBackClick, søknad }: Props) => {
   const schema = yup.object().shape({});
   const { søknadDispatch } = useSoknadContext();
   const { stepWizardDispatch } = useStepWizard();
@@ -40,7 +40,6 @@ const Tilleggsopplysninger = ({ getText, onBackClick, onCancelClick, søknad }: 
         completeAndGoToNextStep(stepWizardDispatch);
       })}
       onBack={() => onBackClick()}
-      onCancel={() => onCancelClick()}
       nextButtonText={'Neste steg'}
       backButtonText={'Forrige steg'}
       cancelButtonText={'Avbryt søknad'}
