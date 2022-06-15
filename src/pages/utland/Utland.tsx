@@ -45,7 +45,6 @@ const Utland = (): JSX.Element => {
   const { søknadState, søknadDispatch } = useSoknadContext();
   const { currentStep, stepList, stepWizardDispatch } = useStepWizard();
   const [isVeiledning, setIsVeiledning] = useState<boolean>(true);
-
   const { getText } = useTexts(tekster);
   useEffect(() => {
     setSøknadType(søknadDispatch, SøknadType.UTLAND);
@@ -82,16 +81,6 @@ const Utland = (): JSX.Element => {
         tom: formatDate(data?.toDate, 'yyyy-MM-dd'),
       },
     });
-  const onDeleteSøknad = async () => {
-    // if (søknadState.type) {
-    //   const deleteRes = await slettLagretSoknadState(søknadDispatch, søknadState.type);
-    //   if (deleteRes) {
-    //     resetStepWizard(stepWizardDispatch);
-    //   } else {
-    //     console.error('noe gikk galt med sletting av lagret søknad');
-    //   }
-    // }
-  };
   const onPreviousStep = () => {
     goToPreviousStep(stepWizardDispatch);
   };
@@ -104,32 +93,21 @@ const Utland = (): JSX.Element => {
         <PageHeader align="center">{'Søknad om Arbeidsavklaringspenger (AAP) utland'}</PageHeader>
       </header>
       <StepWizard hideLabels={false}>
-        <Step order={2} name={StepNames.DESTINATION} label="Destinasjon">
-          <StepSelectCountry
-            getText={getText}
-            søknad={søknadState?.søknad}
-            onCancelClick={onDeleteSøknad}
-            onBackClick={onPreviousStep}
-          />
+        <Step order={2} name={StepNames.DESTINATION}>
+          <StepSelectCountry getText={getText} onBackClick={onPreviousStep} />
         </Step>
-        <Step order={3} name={StepNames.TRAVEL_PERIOD} label="Periode">
-          <StepSelectTravelPeriod
-            getText={getText}
-            søknad={søknadState?.søknad}
-            onCancelClick={onDeleteSøknad}
-            onBackClick={onPreviousStep}
-          />
+        <Step order={3} name={StepNames.TRAVEL_PERIOD}>
+          <StepSelectTravelPeriod getText={getText} onBackClick={onPreviousStep} />
         </Step>
-        <Step order={4} name={StepNames.SUMMARY} label="Oppsummering">
+        <Step order={4} name={StepNames.SUMMARY}>
           <StepSummary
             getText={getText}
-            onCancelClick={onDeleteSøknad}
             onBackClick={onPreviousStep}
             onSubmitSoknad={myHandleSubmit}
             data={søknadState?.søknad}
           />
         </Step>
-        <Step order={5} name={StepNames.RECEIPT} label="Kvittering">
+        <Step order={5} name={StepNames.RECEIPT}>
           <StepKvittering getText={getText} />
         </Step>
       </StepWizard>

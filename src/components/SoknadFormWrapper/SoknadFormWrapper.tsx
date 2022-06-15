@@ -15,7 +15,6 @@ interface Props {
   cancelButtonText: string;
   onNext: (data: any) => void;
   onBack: () => void;
-  onCancel: () => void;
   nextIsLoading?: boolean;
   focusOnErrors?: boolean;
   errors: FieldErrors;
