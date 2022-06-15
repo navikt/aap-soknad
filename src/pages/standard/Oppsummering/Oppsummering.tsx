@@ -1,7 +1,7 @@
 import { FieldValues, useForm } from 'react-hook-form';
 import Soknad from '../../../types/Soknad';
 import { GetText } from '../../../hooks/useTexts';
-import { Accordion, BodyShort, GuidePanel, Heading, Label, Switch } from '@navikt/ds-react';
+import { Accordion, BodyShort, Heading, Label, Switch } from '@navikt/ds-react';
 import React, { useState } from 'react';
 import ConfirmationPanelWrapper from '../../../components/input/ConfirmationPanelWrapper';
 import { useSoknadContext } from '../../../context/soknadContext';
@@ -20,6 +20,7 @@ import SoknadFormWrapper from '../../../components/SoknadFormWrapper/SoknadFormW
 import { useVedleggContext } from '../../../context/vedleggContext';
 import { goToNamedStep, useStepWizard } from '../../../context/stepWizardContextV2';
 import { StepNames } from '../index';
+import { LucaGuidePanel } from '../../../components/LucaGuidePanel';
 
 interface OppsummeringProps {
   getText: GetText;
@@ -68,7 +69,7 @@ const Oppsummering = ({
       })}
       onBack={() => onBackClick()}
       onCancel={() => onCancelClick()}
-      nextButtonText={'Neste steg'}
+      nextButtonText={'Send søknad'}
       backButtonText={'Forrige steg'}
       cancelButtonText={'Avbryt søknad'}
       errors={errors}
@@ -76,12 +77,12 @@ const Oppsummering = ({
       <Heading size="large" level="2">
         {getText('steps.oppsummering.title')}
       </Heading>
-      <GuidePanel>
+      <LucaGuidePanel>
         <BodyShort>
           Alt du har fylt inn er nå lagret. Her kan du se over at alt er riktig, og ved behov endre
           opplysninger, før du sender inn søknaden.
         </BodyShort>
-      </GuidePanel>
+      </LucaGuidePanel>
       <div style={{ display: 'flex', flexDirection: 'row-reverse' }}>
         <Switch position="right" size="medium" onChange={() => setToggleAll(!toggleAll)}>
           Åpne alle

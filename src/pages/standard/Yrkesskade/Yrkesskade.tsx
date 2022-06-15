@@ -1,7 +1,7 @@
 import { GetText } from '../../../hooks/useTexts';
 import { FieldValues, useForm } from 'react-hook-form';
 import React from 'react';
-import { ReadMore, BodyLong, BodyShort, GuidePanel, Heading, Radio, Alert } from '@navikt/ds-react';
+import { ReadMore, BodyLong, BodyShort, Heading, Radio, Alert } from '@navikt/ds-react';
 import RadioGroupWrapper from '../../../components/input/RadioGroupWrapper/RadioGroupWrapper';
 import Soknad from '../../../types/Soknad';
 import TextWithLink from '../../../components/TextWithLink';
@@ -11,6 +11,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { updateSøknadData, useSoknadContext } from '../../../context/soknadContext';
 import { completeAndGoToNextStep, useStepWizard } from '../../../context/stepWizardContextV2';
 import SoknadFormWrapper from '../../../components/SoknadFormWrapper/SoknadFormWrapper';
+import { LucaGuidePanel } from '../../../components/LucaGuidePanel';
 
 interface Props {
   getText: GetText;
@@ -61,9 +62,9 @@ export const Yrkesskade = ({ getText, onBackClick, onCancelClick, søknad }: Pro
       <Heading size="large" level="2">
         {getText('steps.yrkesskade.title')}
       </Heading>
-      <GuidePanel>
+      <LucaGuidePanel>
         <BodyLong>{getText('steps.yrkesskade.guide.info.text')}</BodyLong>
-      </GuidePanel>
+      </LucaGuidePanel>
       <RadioGroupWrapper
         name={`${YRKESSKADE}`}
         legend={getText(`form.${YRKESSKADE}.legend`)}

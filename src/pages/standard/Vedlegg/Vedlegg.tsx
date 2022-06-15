@@ -2,7 +2,7 @@ import { FieldValues, useFieldArray, useForm } from 'react-hook-form';
 import Soknad from '../../../types/Soknad';
 import { GetText } from '../../../hooks/useTexts';
 import React, { useEffect, useRef, useState } from 'react';
-import { Alert, BodyShort, GuidePanel, Heading, Label, ReadMore } from '@navikt/ds-react';
+import { Alert, BodyShort, Heading, Label, ReadMore } from '@navikt/ds-react';
 import FileInput from '../../../components/input/FileInput/FileInput';
 import { useVedleggContext } from '../../../context/vedleggContext';
 import ScanningGuide from '../../../components/ScanningGuide/ScanningGuide';
@@ -12,6 +12,7 @@ import { completeAndGoToNextStep, useStepWizard } from '../../../context/stepWiz
 import { yupResolver } from '@hookform/resolvers/yup';
 import SoknadFormWrapper from '../../../components/SoknadFormWrapper/SoknadFormWrapper';
 import { AttachmentType } from '../AndreUtbetalinger/AndreUtbetalinger';
+import { LucaGuidePanel } from '../../../components/LucaGuidePanel';
 
 interface Props {
   getText: GetText;
@@ -87,10 +88,10 @@ const Vedlegg = ({ getText, onBackClick, onCancelClick, søknad }: Props) => {
       <Heading size="large" level="2">
         {getText('steps.vedlegg.title')}
       </Heading>
-      <GuidePanel>
+      <LucaGuidePanel>
         <BodyShort spacing>{getText(`steps.vedlegg.guide`)}</BodyShort>
         <BodyShort>{getText(`steps.vedlegg.guide2`)}</BodyShort>
-      </GuidePanel>
+      </LucaGuidePanel>
       <BodyShort>
         {vedleggState?.requiredVedlegg?.length > 0 ? (
           <>

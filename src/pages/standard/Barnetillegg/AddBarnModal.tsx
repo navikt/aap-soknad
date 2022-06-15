@@ -2,15 +2,12 @@ import {
   Alert,
   BodyShort,
   Button,
-  Cell,
-  Grid,
   Heading,
   Ingress,
   Modal,
   Radio,
   ReadMore,
 } from '@navikt/ds-react';
-import * as classes from './Barnetillegg.module.css';
 import { JaEllerNei } from '../../../types/Generic';
 import React, { useEffect } from 'react';
 import { GetText } from '../../../hooks/useTexts';
@@ -21,6 +18,7 @@ import { FieldValues, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import * as classes from './Barnetillegg.module.css';
+import { ModalButtonWrapper } from '../../../components/ButtonWrapper/ModalButtonWrapper';
 
 interface Props {
   getText: GetText;
@@ -62,10 +60,17 @@ export const AddBarnModal = ({
 
   useEffect(() => {
     reset({ ...barn });
-  }, [barn, reset]);
+  }, [barn, showModal, reset]);
+
+  console.log('barn', barn);
 
   return (
-    <Modal open={showModal} onClose={() => onCloseClick()}>
+    <Modal
+      open={showModal}
+      onClose={() => {
+        onCloseClick();
+      }}
+    >
       <Modal.Content className={classes?.leggTilBarnModalContent}>
         <Heading size={'medium'} level={'2'}>
           {getText('form.barnetillegg.add.title')}
@@ -160,22 +165,8 @@ export const AddBarnModal = ({
               {getText('form.barnetillegg.add.alertInfo')}
             </Alert>
           )}
-          <Grid>
-            <Cell xs={3}>
-              <Button
-                type="button"
-                variant={'secondary'}
-                onClick={() => {
-                  onCloseClick();
-                }}
-              >
-                Avbryt
-              </Button>
-            </Cell>
-            <Cell xs={3}>
-              <Button type={'submit'}>Lagre</Button>
-            </Cell>
-            <Cell xs={3}>
+          <ModalButtonWrapper>
+            {barn ? (
               <Button
                 type="button"
                 variant={'danger'}
@@ -185,8 +176,30 @@ export const AddBarnModal = ({
               >
                 Slett
               </Button>
-            </Cell>
-          </Grid>
+            ) : (
+              <Button
+                type="button"
+                variant={'secondary'}
+                onClick={() => {
+                  onCloseClick();
+                }}
+              >
+                Avbryt
+              </Button>
+            )}
+            <Button type={'submit'}>Lagre</Button>
+            {barn && (
+              <Button
+                type="button"
+                variant={'secondary'}
+                onClick={() => {
+                  onCloseClick();
+                }}
+              >
+                Avbryt
+              </Button>
+            )}
+          </ModalButtonWrapper>
         </form>
       </Modal.Content>
     </Modal>

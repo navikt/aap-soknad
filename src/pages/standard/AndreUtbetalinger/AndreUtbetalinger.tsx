@@ -1,14 +1,4 @@
-import {
-  Alert,
-  BodyShort,
-  Cell,
-  Checkbox,
-  Grid,
-  GuidePanel,
-  Heading,
-  Radio,
-  ReadMore,
-} from '@navikt/ds-react';
+import { Alert, BodyShort, Cell, Checkbox, Grid, Heading, Radio, ReadMore } from '@navikt/ds-react';
 import React, { useEffect, useMemo } from 'react';
 import { GetText } from '../../../hooks/useTexts';
 import { FieldValues, useForm } from 'react-hook-form';
@@ -28,6 +18,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import SoknadFormWrapper from '../../../components/SoknadFormWrapper/SoknadFormWrapper';
 import TextFieldWrapper from '../../../components/input/TextFieldWrapper';
 import ColorPanel from '../../../components/panel/ColorPanel';
+import { LucaGuidePanel } from '../../../components/LucaGuidePanel';
 
 interface Props {
   getText: GetText;
@@ -165,7 +156,7 @@ export const AndreUtbetalinger = ({ getText, onBackClick, onCancelClick, søknad
       <Heading size="large" level="2">
         {getText(`steps.andre_utbetalinger.title`)}
       </Heading>
-      <GuidePanel>{getText(`steps.andre_utbetalinger.guide`)}</GuidePanel>
+      <LucaGuidePanel>{getText(`steps.andre_utbetalinger.guide`)}</LucaGuidePanel>
       <RadioGroupWrapper
         legend={getText(`form.${ANDRE_UTBETALINGER}.${LØNN}.legend`)}
         name={`${ANDRE_UTBETALINGER}.${LØNN}`}

@@ -1,9 +1,9 @@
 import {
+  Alert,
   BodyShort,
   Button,
   Cell,
   Grid,
-  GuidePanel,
   Heading,
   Label,
   Radio,
@@ -29,6 +29,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import SoknadFormWrapper from '../../../components/SoknadFormWrapper/SoknadFormWrapper';
 import { AddBarnModal, Relasjon } from './AddBarnModal';
 import { formatNavn } from '../../../utils/StringFormatters';
+import { LucaGuidePanel } from '../../../components/LucaGuidePanel';
 
 interface Props {
   getText: GetText;
@@ -100,6 +101,16 @@ export const Barnetillegg = ({ getText, onBackClick, onCancelClick, søknad }: P
     return manuelleBarnFields[selectedBarnIndex];
   }, [selectedBarnIndex, manuelleBarnFields]);
 
+  const erForelderTilManueltBarn = useMemo(() => {
+    return manuelleBarnFields.filter((barn) => barn.relasjon === Relasjon.FORELDER).length > 0;
+  }, [manuelleBarnFields]);
+
+  const erFosterforelderTilManueltBarn = useMemo(() => {
+    return (
+      manuelleBarnFields.filter((barn) => barn.relasjon === Relasjon.FOSTERFORELDER).length > 0
+    );
+  }, [manuelleBarnFields]);
+
   const editNyttBarn = (index: number) => {
     setSelectedBarnIndex(index);
     setShowModal(true);
@@ -145,10 +156,10 @@ export const Barnetillegg = ({ getText, onBackClick, onCancelClick, søknad }: P
         <Heading size="large" level="2">
           {getText('steps.barnetillegg.title')}
         </Heading>
-        <GuidePanel>
+        <LucaGuidePanel>
           <BodyShort spacing>{getText('steps.barnetillegg.guide')}</BodyShort>
           <BodyShort>{getText('steps.barnetillegg.guide2')}</BodyShort>
-        </GuidePanel>
+        </LucaGuidePanel>
         {fields.length > 0 && (
           <Heading size="xsmall" level="2">
             Barn vi har funnet som er registrert på deg:
@@ -156,7 +167,7 @@ export const Barnetillegg = ({ getText, onBackClick, onCancelClick, søknad }: P
         )}
         {fields.map((barn, index) => {
           return (
-            <article key={barn?.fnr} className={classes.barneKort}>
+            <article key={barn?.id} className={classes.barneKort}>
               <Label>{`${formatNavn(barn?.navn)}`}</Label>
               <BodyShort>{`Fødselsnummer / D-nummer: ${barn?.fnr}`}</BodyShort>
 
@@ -205,7 +216,7 @@ export const Barnetillegg = ({ getText, onBackClick, onCancelClick, søknad }: P
         )}
         {manuelleBarnFields.map((barn, index) => {
           return (
-            <article key={barn?.fnr} className={classes.barneKort}>
+            <article key={barn?.id} className={classes.barneKort}>
               <Label>{`${formatNavn(barn?.navn)}`}</Label>
               <BodyShort>{`Fødselsnummer / D-nummer: ${barn?.fnr}`}</BodyShort>
               {barn?.relasjon === Relasjon.FORELDER && (
@@ -252,6 +263,18 @@ export const Barnetillegg = ({ getText, onBackClick, onCancelClick, søknad }: P
             </Button>
           </Cell>
         </Grid>
+        {(erForelderTilManueltBarn || erFosterforelderTilManueltBarn) && (
+          <Alert variant={'info'}>
+            {getText('form.barnetillegg.add.alertTitle')}
+            <ul>
+              {erForelderTilManueltBarn && <li>{getText('form.barnetillegg.add.alertBullet')}</li>}
+              {erFosterforelderTilManueltBarn && (
+                <li>{getText('form.barnetillegg.add.alertBullettFosterforelder')}</li>
+              )}
+            </ul>
+            {getText('form.barnetillegg.add.alertInfo')}
+          </Alert>
+        )}
       </SoknadFormWrapper>
       <AddBarnModal
         getText={getText}

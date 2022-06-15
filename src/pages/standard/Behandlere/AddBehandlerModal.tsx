@@ -7,6 +7,7 @@ import * as classes from './AddBehandlerModal.module.css';
 import { useEffect } from 'react';
 import { Button, Cell, Grid, Heading, Modal } from '@navikt/ds-react';
 import TextFieldWrapper from '../../../components/input/TextFieldWrapper';
+import { ModalButtonWrapper } from '../../../components/ButtonWrapper/ModalButtonWrapper';
 
 interface Props {
   getText: GetText;
@@ -103,22 +104,8 @@ export const AddBehandlerModal = ({
             label={getText('form.fastlege.annenbehandler.telefon.label')}
             name={'telefon'}
           />
-          <Grid>
-            <Cell xs={3}>
-              <Button
-                type="button"
-                variant={'secondary'}
-                onClick={() => {
-                  onCloseClick();
-                }}
-              >
-                Avbryt
-              </Button>
-            </Cell>
-            <Cell xs={3}>
-              <Button type={'submit'}>Lagre</Button>
-            </Cell>
-            <Cell xs={3}>
+          <ModalButtonWrapper>
+            {behandler ? (
               <Button
                 type="button"
                 variant={'danger'}
@@ -129,8 +116,32 @@ export const AddBehandlerModal = ({
               >
                 Slett
               </Button>
-            </Cell>
-          </Grid>
+            ) : (
+              <Button
+                type="button"
+                variant={'secondary'}
+                onClick={() => {
+                  onCloseClick();
+                }}
+              >
+                Avbryt
+              </Button>
+            )}
+
+            <Button type={'submit'}>Lagre</Button>
+
+            {behandler && (
+              <Button
+                type="button"
+                variant={'secondary'}
+                onClick={() => {
+                  onCloseClick();
+                }}
+              >
+                Avbryt
+              </Button>
+            )}
+          </ModalButtonWrapper>
         </form>
       </Modal.Content>
     </Modal>
