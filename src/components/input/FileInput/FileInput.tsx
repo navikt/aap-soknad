@@ -50,7 +50,8 @@ const FileInput = ({ fields, append, remove, heading, ingress }: Props) => {
     });
     setLoading(false);
     if (vedlegg.ok) {
-      append({ name: file?.name, size: file?.size, id: vedlegg?.data });
+      const id = await vedlegg.json();
+      append({ name: file?.name, size: file?.size, id });
     }
     setDragOver(false);
   };

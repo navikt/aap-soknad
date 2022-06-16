@@ -22,7 +22,11 @@ import { FastlegeView, hentSokerOppslag, useSokerOppslag } from '../../context/s
 import { Behandlere } from './Behandlere/Behandlere';
 import { Medlemskap } from './Medlemskap/Medlemskap';
 import { Yrkesskade } from './Yrkesskade/Yrkesskade';
-import { AndreUtbetalinger, StønadType } from './AndreUtbetalinger/AndreUtbetalinger';
+import {
+  AndreUtbetalinger,
+  AttachmentType,
+  StønadType,
+} from './AndreUtbetalinger/AndreUtbetalinger';
 import { Barnetillegg } from './Barnetillegg/Barnetillegg';
 import Oppsummering from './Oppsummering/Oppsummering';
 import Tilleggsopplysninger from './Tilleggsopplysninger/Tilleggsopplysninger';
@@ -262,13 +266,25 @@ const mapSøknadToBackend = (søknad?: Soknad, fastlege?: FastlegeView): Søknad
       fraArbeidsgiver: jaNeiToBoolean(søknad?.andreUtbetalinger?.lønn),
       andreStønader:
         søknad?.andreUtbetalinger?.stønad?.map((stønad) => {
-          return {
-            type: stønad,
-            ...(stønad === StønadType.AFP && {
-              hvemUtbetalerAFP: søknad?.andreUtbetalinger?.afp?.hvemBetaler,
-            }),
-            vedlegg: undefined,
-          };
+          switch (stønad) {
+            case StønadType.AFP:
+              return {
+                type: stønad,
+                hvemUtbetalerAFP: søknad?.andreUtbetalinger?.afp?.hvemBetaler,
+              };
+            case StønadType.OMSORGSSTØNAD:
+              return {
+                type: stønad,
+                vedlegg: søknad?.vedlegg?.[AttachmentType.OMSORGSSTØNAD]?.[0]?.id,
+              };
+            case StønadType.UTLAND:
+              return {
+                type: stønad,
+                vedlegg: søknad?.vedlegg?.[AttachmentType.UTLANDSSTØNAD]?.[0]?.id,
+              };
+            default:
+              return { type: stønad };
+          }
         }) ?? [],
     },
     registrerteBarn:
@@ -288,6 +304,7 @@ const mapSøknadToBackend = (søknad?: Soknad, fastlege?: FastlegeView): Søknad
         barnepensjon: jaNeiToBoolean(barn.barnepensjon),
       })) ?? [],
     tilleggsopplysninger: søknad?.tilleggsopplysninger,
+    ...(søknad?.vedlegg?.annet ? { vedlegg: søknad?.vedlegg?.annet?.map((e) => e?.id) } : {}),
   };
 };
 

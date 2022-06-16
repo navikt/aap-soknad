@@ -1,4 +1,4 @@
-import { StønadType } from '../pages/standard/AndreUtbetalinger/AndreUtbetalinger';
+import { AttachmentType, StønadType } from '../pages/standard/AndreUtbetalinger/AndreUtbetalinger';
 import { Relasjon } from '../pages/standard/Barnetillegg/AddBarnModal';
 import { JaEllerNei, JaNeiVetIkke } from './Generic';
 
@@ -83,6 +83,12 @@ export type Ferie = {
   fraDato?: Date;
   tilDato?: Date;
 };
+type Vedlegg = {
+  name: string;
+  size: string;
+  id: string;
+};
+
 export type StartDato = Date;
 
 interface Soknad {
@@ -99,10 +105,11 @@ interface Soknad {
   tilleggsopplysninger?: string;
   ferie?: Ferie;
   vedlegg?: {
-    name: string;
-    size: string;
-    data: FormData;
-  }[];
+    [AttachmentType.LØNN_OG_ANDRE_GODER]: Vedlegg[];
+    [AttachmentType.OMSORGSSTØNAD]: Vedlegg[];
+    [AttachmentType.UTLANDSSTØNAD]: Vedlegg[];
+    annet: Vedlegg[];
+  };
   søknadBekreft?: boolean;
 }
 
