@@ -1,8 +1,8 @@
 interface SoknadUtland {
-  country?: string;
-  fromDate?: string;
-  toDate?: string;
-  confirmationPanel?: boolean;
+  land?: string;
+  fraDato?: string;
+  tilDato?: string;
+  bekreftelse?: boolean;
 }
 
 export default SoknadUtland;

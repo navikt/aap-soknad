@@ -1,6 +1,7 @@
 import { PageHeader } from '@navikt/ds-react';
 import { Step, StepWizard } from '../../components/StepWizard';
 import React, { useEffect, useState } from 'react';
+import { useIntl } from 'react-intl';
 import {
   StepIntroduction,
   StepKvittering,
@@ -10,7 +11,6 @@ import {
 } from './Steps';
 import { fetchPOST } from '../../api/fetch';
 import { formatDate } from '../../utils/date';
-import useTexts from '../../hooks/useTexts';
 import {
   hentSoknadState,
   lagreSoknadState,
@@ -24,7 +24,6 @@ import {
   setStepList,
   useStepWizard,
 } from '../../context/stepWizardContextV2';
-import * as tekster from './tekster';
 
 import SoknadUtland from '../../types/SoknadUtland';
 
@@ -45,7 +44,7 @@ const Utland = (): JSX.Element => {
   const { søknadState, søknadDispatch } = useSoknadContext();
   const { currentStep, stepList, stepWizardDispatch } = useStepWizard();
   const [isVeiledning, setIsVeiledning] = useState<boolean>(true);
-  const { getText } = useTexts(tekster);
+  const intl = useIntl();
   useEffect(() => {
     setSøknadType(søknadDispatch, SøknadType.UTLAND);
   }, []);
@@ -85,30 +84,28 @@ const Utland = (): JSX.Element => {
     goToPreviousStep(stepWizardDispatch);
   };
 
-  if (isVeiledning)
-    return <StepIntroduction getText={getText} onSubmit={() => setIsVeiledning(false)} />;
+  if (isVeiledning) return <StepIntroduction onSubmit={() => setIsVeiledning(false)} />;
   return (
     <>
       <header>
-        <PageHeader align="center">{'Søknad om Arbeidsavklaringspenger (AAP) utland'}</PageHeader>
+        <PageHeader align="center">{intl.formatMessage({ id: 'utland.title' })}</PageHeader>
       </header>
       <StepWizard hideLabels={false}>
         <Step order={2} name={StepNames.DESTINATION}>
-          <StepSelectCountry getText={getText} onBackClick={onPreviousStep} />
+          <StepSelectCountry onBackClick={onPreviousStep} />
         </Step>
         <Step order={3} name={StepNames.TRAVEL_PERIOD}>
-          <StepSelectTravelPeriod getText={getText} onBackClick={onPreviousStep} />
+          <StepSelectTravelPeriod onBackClick={onPreviousStep} />
         </Step>
         <Step order={4} name={StepNames.SUMMARY}>
           <StepSummary
-            getText={getText}
             onBackClick={onPreviousStep}
             onSubmitSoknad={myHandleSubmit}
             data={søknadState?.søknad}
           />
         </Step>
         <Step order={5} name={StepNames.RECEIPT}>
-          <StepKvittering getText={getText} />
+          <StepKvittering />
         </Step>
       </StepWizard>
     </>

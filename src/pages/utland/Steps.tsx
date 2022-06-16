@@ -1,12 +1,9 @@
 import { BodyShort, Button, GuidePanel, Heading, Label } from '@navikt/ds-react';
 import { FieldValues, useForm } from 'react-hook-form';
 import DatoVelgerWrapper from '../../components/input/DatoVelgerWrapper';
-import countries from 'i18n-iso-countries';
 import ConfirmationPanelWrapper from '../../components/input/ConfirmationPanelWrapper';
 import React, { useEffect } from 'react';
 import { formatDate } from '../../utils/date';
-import { GetText } from '../../hooks/useTexts';
-import { isDate, parseISO } from 'date-fns';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { updateSøknadData, useSoknadContext } from '../../context/soknadContext';
@@ -17,15 +14,16 @@ import SoknadUtland from '../../types/SoknadUtland';
 import * as classes from '../standard/Veiledning/Veiledning.module.css';
 import Soknad from '../../types/Soknad';
 import { useLagrePartialSoknad } from '../../hooks/useLagreSoknad';
+import { useIntl } from 'react-intl';
 
 interface IntroductionProps {
-  getText: GetText;
   onSubmit: () => void;
 }
-export const StepIntroduction = ({ getText, onSubmit }: IntroductionProps) => {
+export const StepIntroduction = ({ onSubmit }: IntroductionProps) => {
+  const intl = useIntl();
   return (
     <>
-      <GuidePanel poster>{getText('steps.introduction.guidetext')}</GuidePanel>
+      <GuidePanel poster>{intl.formatMessage({ id: 'utland.veiledning.guide.text' })}</GuidePanel>
       <div className={classes?.buttonWrapper}>
         <Button variant="primary" type="button" onClick={() => onSubmit()}>
           {'Fortsett til søknaden'}
@@ -39,16 +37,16 @@ export const StepIntroduction = ({ getText, onSubmit }: IntroductionProps) => {
 };
 
 interface SelectCountryProps {
-  getText: GetText;
   onBackClick: () => void;
 }
-export const StepSelectCountry = ({ getText, onBackClick }: SelectCountryProps) => {
-  const LAND = 'country';
+export const StepSelectCountry = ({ onBackClick }: SelectCountryProps) => {
+  const LAND = 'land';
+  const intl = useIntl();
   const schema = yup.object().shape({
-    country: yup
+    [LAND]: yup
       .string()
-      .required(getText('form.country.required'))
-      .notOneOf(['none'], getText('form.country.required')),
+      .required(intl.formatMessage({ id: 'utland.land.select.required' }))
+      .notOneOf(['none'], intl.formatMessage({ id: 'utland.land.select.required' })),
   });
   const { søknadState, søknadDispatch } = useSoknadContext();
   const { stepList, stepWizardDispatch } = useStepWizard();
@@ -70,7 +68,7 @@ export const StepSelectCountry = ({ getText, onBackClick }: SelectCountryProps) 
   }, [allFields]);
   return (
     <>
-      <GuidePanel poster>{getText('steps.country.guidetext')}</GuidePanel>
+      <GuidePanel poster>{intl.formatMessage({ id: 'utland.land.guide.text' })}</GuidePanel>
       <SoknadFormWrapper
         onNext={handleSubmit((data) => {
           updateSøknadData(søknadDispatch, data);
@@ -84,7 +82,7 @@ export const StepSelectCountry = ({ getText, onBackClick }: SelectCountryProps) 
       >
         <CountrySelector
           name={LAND}
-          label={getText('form.country.label')}
+          label={intl.formatMessage({ id: 'utland.land.select.label' })}
           control={control}
           error={errors.country?.message}
         />
@@ -94,25 +92,23 @@ export const StepSelectCountry = ({ getText, onBackClick }: SelectCountryProps) 
 };
 
 interface SelectTravelPeriodProps {
-  getText: GetText;
   søknad?: SoknadUtland;
   onBackClick: () => void;
 }
-export const StepSelectTravelPeriod = ({
-  getText,
-  søknad,
-  onBackClick,
-}: SelectTravelPeriodProps) => {
-  const FRA_DATO = 'fromDate';
-  const TIL_DATO = 'toDate';
+export const StepSelectTravelPeriod = ({ søknad, onBackClick }: SelectTravelPeriodProps) => {
+  const FRA_DATO = 'fraDato';
+  const TIL_DATO = 'tilDato';
+  const intl = useIntl();
   const schema = yup.object().shape({
-    [FRA_DATO]: yup.date().required(getText('form.fromdate.required')),
+    [FRA_DATO]: yup.date().required(intl.formatMessage({ id: 'utland.periode.fraDato.label' })),
     [TIL_DATO]: yup
       .date()
-      .required(getText('form.todate.required'))
+      .required(intl.formatMessage({ id: 'utland.periode.tilDato.label' }))
       .when(
-        'fromDate',
-        (fromDate, yup) => fromDate && yup.min(fromDate, getText('form.todate.afterfromdate'))
+        FRA_DATO,
+        (fromDate, yup) =>
+          fromDate &&
+          yup.min(fromDate, intl.formatMessage({ id: 'utland.periode.tilDato.afterfromdate' }))
       ),
   });
   const lagrePartialSøknad = useLagrePartialSoknad();
@@ -148,13 +144,13 @@ export const StepSelectTravelPeriod = ({
     >
       <DatoVelgerWrapper
         name={FRA_DATO}
-        label={getText('form.fromdate.label')}
+        label={intl.formatMessage({ id: 'utland.periode.fraDato.label' })}
         control={control}
         error={errors?.[FRA_DATO]?.message}
       />
       <DatoVelgerWrapper
         name={TIL_DATO}
-        label={getText('form.todate.label')}
+        label={intl.formatMessage({ id: 'utland.periode.tilDato.label' })}
         control={control}
         error={errors?.[TIL_DATO]?.message}
       />
@@ -163,18 +159,18 @@ export const StepSelectTravelPeriod = ({
 };
 
 interface SummaryProps {
-  getText: GetText;
   data: any;
   onBackClick: () => void;
   onSubmitSoknad: (data: Soknad) => void;
 }
-export const StepSummary = ({ getText, data, onBackClick }: SummaryProps) => {
-  const BEKREFT = 'fromDate';
+export const StepSummary = ({ data, onBackClick }: SummaryProps) => {
+  const intl = useIntl();
+  const BEKREFT = 'bekreftelse';
   const schema = yup.object().shape({
     [BEKREFT]: yup
       .boolean()
-      .required(getText('form.confirmationPanel.required'))
-      .oneOf([true], getText('form.confirmationPanel.required')),
+      .required(intl.formatMessage({ id: 'utland.oppsummering.bekreftelse.required' }))
+      .oneOf([true], intl.formatMessage({ id: 'utland.oppsummering.bekreftelse.required' })),
   });
   const lagrePartialSøknad = useLagrePartialSoknad();
   const { søknadState, søknadDispatch } = useSoknadContext();
@@ -192,34 +188,18 @@ export const StepSummary = ({ getText, data, onBackClick }: SummaryProps) => {
   useEffect(() => {
     lagrePartialSøknad(søknadState, stepList, allFields);
   }, [allFields]);
-  const getFormInputLabel = (key: string) => getText(`form.${key}.label`);
-  const getFormValueReadable = (key: string, val: any) => {
-    switch (key) {
-      case 'country':
-        return countries.getName(`${val}`, 'nb', { select: 'official' });
-      case 'fromDate':
-      case 'toDate': {
-        const date = isDate(val) ? val : parseISO(val);
-        return formatDate(date, 'dd.MM.yyyy');
-      }
-      default:
-        return val;
-    }
-  };
 
   return (
     <>
       <Heading size="medium" level="2">
-        {getText('summary')}
+        {intl.formatMessage({ id: 'utland.oppsummering.title' })}
       </Heading>
-      {Object.entries(data)
-        .filter(([, val]) => !!val)
-        .map(([key, val]) => (
-          <div key={key}>
-            <Label>{getFormInputLabel(key)}</Label>
-            <BodyShort>{getFormValueReadable(key, val)}</BodyShort>
-          </div>
-        ))}
+      <Label>{intl.formatMessage({ id: 'utland.land.select.label' })}</Label>
+      <BodyShort>{data?.land?.split(':')?.[1]}</BodyShort>
+      <Label>{intl.formatMessage({ id: 'utland.periode.fraDato.label' })}</Label>
+      <BodyShort>{formatDate(data?.fraDato, 'dd.MM.yyyy')}</BodyShort>
+      <Label>{intl.formatMessage({ id: 'utland.periode.tilDato.label' })}</Label>
+      <BodyShort>{formatDate(data?.tilDato, 'dd.MM.yyyy')}</BodyShort>
       <SoknadFormWrapper
         onNext={handleSubmit((data) => {
           updateSøknadData(søknadDispatch, data);
@@ -233,7 +213,7 @@ export const StepSummary = ({ getText, data, onBackClick }: SummaryProps) => {
       >
         <ConfirmationPanelWrapper
           name={BEKREFT}
-          label={getText('form.confirmationpanel.label')}
+          label={intl.formatMessage({ id: 'utland.oppsummering.bekreftelse.label' })}
           control={control}
           error={errors.confirmationPanel?.message}
         />
@@ -241,6 +221,7 @@ export const StepSummary = ({ getText, data, onBackClick }: SummaryProps) => {
     </>
   );
 };
-export const StepKvittering = ({ getText }: any) => (
-  <GuidePanel>{getText('steps.kvittering.guidetext')}</GuidePanel>
-);
+export const StepKvittering = () => {
+  const intl = useIntl();
+  return <GuidePanel>{intl.formatMessage({ id: 'utland.kvittering.guide.text' })}</GuidePanel>;
+};
