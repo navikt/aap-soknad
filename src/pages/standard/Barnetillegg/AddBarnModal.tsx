@@ -35,6 +35,10 @@ export enum Relasjon {
   FOSTERFORELDER = 'FOSTERFORELDER',
 }
 
+const NAVN = 'navn';
+
+const validateHarInntekt = (barnepensjon: JaEllerNei) => barnepensjon === JaEllerNei.NEI;
+
 export const AddBarnModal = ({
   getText,
   showModal,
@@ -43,8 +47,42 @@ export const AddBarnModal = ({
   onSaveClick,
   barn,
 }: Props) => {
-  const schema = yup.object().shape({});
-  const { control, handleSubmit, setValue, reset, watch } = useForm<FieldValues>({
+  const schema = yup.object().shape({
+    [NAVN]: yup.object().shape({
+      fornavn: yup.string().required('Du må fylle inn barnets fornavn og mellomnavn.'),
+      etternavn: yup.string().required('Du må fylle inn barnets etternavn.'),
+    }),
+    fnr: yup
+      .string()
+      .required('Du må fylle inn barnets fødselsnummer / D-nummer.')
+      .length(11, 'Fødeslsnummer / D-nummer må være 11 siffer.'),
+    relasjon: yup
+      .string()
+      .required('Du må svare på hvilken relasjon du har til barnet.')
+      .oneOf([Relasjon.FORELDER, Relasjon.FOSTERFORELDER])
+      .nullable(),
+    barnepensjon: yup
+      .string()
+      .required('Du må svare på om barnet mottar barnepensjon.')
+      .oneOf([JaEllerNei.JA, JaEllerNei.NEI])
+      .nullable(),
+    harInntekt: yup.string().when('barnepensjon', {
+      is: validateHarInntekt,
+      then: (yupSchema) =>
+        yupSchema
+          .required('Du må svare på om barnet har en årlig inntekt over 1G.')
+          .oneOf([JaEllerNei.JA, JaEllerNei.NEI])
+          .nullable(),
+    }),
+  });
+  const {
+    control,
+    handleSubmit,
+    setValue,
+    reset,
+    watch,
+    formState: { errors },
+  } = useForm<FieldValues>({
     resolver: yupResolver(schema),
     defaultValues: {
       ...(barn ? barn : {}),
@@ -61,8 +99,6 @@ export const AddBarnModal = ({
   useEffect(() => {
     reset({ ...barn });
   }, [barn, showModal, reset]);
-
-  console.log('barn', barn);
 
   return (
     <Modal
@@ -85,12 +121,14 @@ export const AddBarnModal = ({
             control={control}
             label={getText('form.barnetillegg.add.fornavn.label')}
             name={'navn.fornavn'}
+            error={errors?.[NAVN]?.fornavn?.message}
           />
 
           <TextFieldWrapper
             control={control}
             label={getText('form.barnetillegg.add.etternavn.label')}
             name={'navn.etternavn'}
+            error={errors?.[NAVN]?.etternavn?.message}
           />
 
           <div className={classes.leggTilBarnFnrInput}>
@@ -98,6 +136,7 @@ export const AddBarnModal = ({
               control={control}
               label={getText('form.barnetillegg.add.fnr.label')}
               name={'fnr'}
+              error={errors?.fnr?.message}
             />
           </div>
 
@@ -105,6 +144,7 @@ export const AddBarnModal = ({
             control={control}
             legend={'Hvilken relasjon har du til barnet?'}
             name={'relasjon'}
+            error={errors?.relasjon?.message}
           >
             <Radio value={Relasjon.FORELDER}>
               <BodyShort>Forelder</BodyShort>
@@ -117,6 +157,7 @@ export const AddBarnModal = ({
             control={control}
             legend={'Mottar barnet barnepensjon?'}
             name={'barnepensjon'}
+            error={errors?.barnepensjon?.message}
           >
             <ReadMore header="Hvorfor spør vi om dette?">
               Hvis barnet mottar barnepensjon, får du ikke barnetillegg for barnet.
@@ -133,6 +174,7 @@ export const AddBarnModal = ({
               control={control}
               legend={getText('form.barnetillegg.legend')}
               name={'harInntekt'}
+              error={errors?.harInntekt?.message}
             >
               <ReadMore header="Hvorfor spør vi om dette?">
                 Hvis barnet har en årlig inntekt over 1G (1G = 111 477kr), får du vanligvis ikke
