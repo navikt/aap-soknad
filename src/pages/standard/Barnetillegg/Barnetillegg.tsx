@@ -26,7 +26,7 @@ import { updateSøknadData, useSoknadContext } from '../../../context/soknadCont
 import { completeAndGoToNextStep, useStepWizard } from '../../../context/stepWizardContextV2';
 import { yupResolver } from '@hookform/resolvers/yup';
 import SoknadFormWrapper from '../../../components/SoknadFormWrapper/SoknadFormWrapper';
-import { AddBarnModal, Relasjon } from './AddBarnModal';
+import { AddBarnModal, Relasjon, validateHarInntekt } from './AddBarnModal';
 import { formatNavn } from '../../../utils/StringFormatters';
 import { LucaGuidePanel } from '../../../components/LucaGuidePanel';
 import { useFeatureToggleIntl } from '../../../hooks/useFeatureToggleIntl';
@@ -44,7 +44,31 @@ const GRUNNBELØP = '111 477';
 export const Barnetillegg = ({ onBackClick, søknad }: Props) => {
   const { formatMessage } = useFeatureToggleIntl();
 
-  const schema = yup.object().shape({});
+  const schema = yup.object().shape({
+    [BARNETILLEGG]: yup.array().of(
+      yup.object().shape({
+        barnepensjon: yup
+          .string()
+          .required(
+            formatMessage('søknad.barnetillegg.leggTilBarn.modal.barnepensjon.validation.required')
+          )
+          .oneOf([JaEllerNei.JA, JaEllerNei.NEI])
+          .nullable(),
+        harInntekt: yup.string().when('barnepensjon', {
+          is: validateHarInntekt,
+          then: (yupSchema) =>
+            yupSchema
+              .required(
+                formatMessage(
+                  'søknad.barnetillegg.leggTilBarn.modal.harInntekt.validation.required'
+                )
+              )
+              .oneOf([JaEllerNei.JA, JaEllerNei.NEI])
+              .nullable(),
+        }),
+      })
+    ),
+  });
   const { søknadDispatch } = useSoknadContext();
   const { stepWizardDispatch } = useStepWizard();
   const {

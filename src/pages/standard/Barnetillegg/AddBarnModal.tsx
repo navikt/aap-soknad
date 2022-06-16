@@ -36,7 +36,7 @@ export enum Relasjon {
 
 const NAVN = 'navn';
 
-const validateHarInntekt = (barnepensjon: JaEllerNei) => barnepensjon === JaEllerNei.NEI;
+export const validateHarInntekt = (barnepensjon: JaEllerNei) => barnepensjon === JaEllerNei.NEI;
 
 export const AddBarnModal = ({
   showModal,
