@@ -281,11 +281,10 @@ export const Barnetillegg = ({ getText, onBackClick, onCancelClick, søknad }: P
         onCloseClick={() => setShowModal(false)}
         onSaveClick={saveNyttBarn}
         onDeleteClick={() => {
-          if (selectedBarnIndex) {
-            const barn = manuelleBarnFields[selectedBarnIndex];
-            removeRequiredVedlegg(`barn-${barn?.fnr}`, vedleggDispatch);
-            manuelleBarnRemove(selectedBarnIndex);
-          }
+          const barn = manuelleBarnFields[selectedBarnIndex];
+          removeRequiredVedlegg(`barn-${barn?.fnr}`, vedleggDispatch);
+          manuelleBarnRemove(selectedBarnIndex);
+
           setShowModal(false);
         }}
         showModal={showModal}
