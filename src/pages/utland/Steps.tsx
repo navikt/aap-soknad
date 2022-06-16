@@ -9,17 +9,14 @@ import { GetText } from '../../hooks/useTexts';
 import { isDate, parseISO } from 'date-fns';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
-import {
-  lagrePartialSoknadState,
-  updateSøknadData,
-  useSoknadContext,
-} from '../../context/soknadContext';
+import { updateSøknadData, useSoknadContext } from '../../context/soknadContext';
 import { completeAndGoToNextStep, useStepWizard } from '../../context/stepWizardContextV2';
 import CountrySelector from '../../components/input/CountrySelector';
 import SoknadFormWrapper from '../../components/SoknadFormWrapper/SoknadFormWrapper';
 import SoknadUtland from '../../types/SoknadUtland';
 import * as classes from '../standard/Veiledning/Veiledning.module.css';
 import Soknad from '../../types/Soknad';
+import { useLagrePartialSoknad } from '../../hooks/useLagreSoknad';
 
 interface IntroductionProps {
   getText: GetText;
@@ -44,9 +41,8 @@ export const StepIntroduction = ({ getText, onSubmit }: IntroductionProps) => {
 interface SelectCountryProps {
   getText: GetText;
   onBackClick: () => void;
-  onCancelClick: () => void;
 }
-export const StepSelectCountry = ({ getText, onBackClick, onCancelClick }: SelectCountryProps) => {
+export const StepSelectCountry = ({ getText, onBackClick }: SelectCountryProps) => {
   const LAND = 'country';
   const schema = yup.object().shape({
     country: yup
@@ -55,7 +51,8 @@ export const StepSelectCountry = ({ getText, onBackClick, onCancelClick }: Selec
       .notOneOf(['none'], getText('form.country.required')),
   });
   const { søknadState, søknadDispatch } = useSoknadContext();
-  const { stepWizardDispatch } = useStepWizard();
+  const { stepList, stepWizardDispatch } = useStepWizard();
+  const lagrePartialSøknad = useLagrePartialSoknad();
   const {
     control,
     handleSubmit,
@@ -69,7 +66,7 @@ export const StepSelectCountry = ({ getText, onBackClick, onCancelClick }: Selec
   });
   const allFields = watch();
   useEffect(() => {
-    lagrePartialSoknadState(søknadState, allFields);
+    lagrePartialSøknad(søknadState, stepList, allFields);
   }, [allFields]);
   return (
     <>
@@ -80,7 +77,6 @@ export const StepSelectCountry = ({ getText, onBackClick, onCancelClick }: Selec
           completeAndGoToNextStep(stepWizardDispatch);
         })}
         onBack={() => onBackClick()}
-        onCancel={() => onCancelClick()}
         nextButtonText={'Neste steg'}
         backButtonText={'Forrige steg'}
         cancelButtonText={'Avbryt søknad'}
@@ -101,13 +97,11 @@ interface SelectTravelPeriodProps {
   getText: GetText;
   søknad?: SoknadUtland;
   onBackClick: () => void;
-  onCancelClick: () => void;
 }
 export const StepSelectTravelPeriod = ({
   getText,
   søknad,
   onBackClick,
-  onCancelClick,
 }: SelectTravelPeriodProps) => {
   const FRA_DATO = 'fromDate';
   const TIL_DATO = 'toDate';
@@ -121,9 +115,11 @@ export const StepSelectTravelPeriod = ({
         (fromDate, yup) => fromDate && yup.min(fromDate, getText('form.todate.afterfromdate'))
       ),
   });
-  const { søknadDispatch } = useSoknadContext();
-  const { stepWizardDispatch } = useStepWizard();
+  const lagrePartialSøknad = useLagrePartialSoknad();
+  const { søknadState, søknadDispatch } = useSoknadContext();
+  const { stepList, stepWizardDispatch } = useStepWizard();
   const {
+    watch,
     control,
     handleSubmit,
     formState: { errors },
@@ -134,6 +130,10 @@ export const StepSelectTravelPeriod = ({
       [TIL_DATO]: søknad?.[TIL_DATO],
     },
   });
+  const allFields = watch();
+  useEffect(() => {
+    lagrePartialSøknad(søknadState, stepList, allFields);
+  }, [allFields]);
   return (
     <SoknadFormWrapper
       onNext={handleSubmit((data) => {
@@ -141,7 +141,6 @@ export const StepSelectTravelPeriod = ({
         completeAndGoToNextStep(stepWizardDispatch);
       })}
       onBack={() => onBackClick()}
-      onCancel={() => onCancelClick()}
       nextButtonText={'Neste steg'}
       backButtonText={'Forrige steg'}
       cancelButtonText={'Avbryt søknad'}
@@ -167,10 +166,9 @@ interface SummaryProps {
   getText: GetText;
   data: any;
   onBackClick: () => void;
-  onCancelClick: () => void;
   onSubmitSoknad: (data: Soknad) => void;
 }
-export const StepSummary = ({ getText, data, onBackClick, onCancelClick }: SummaryProps) => {
+export const StepSummary = ({ getText, data, onBackClick }: SummaryProps) => {
   const BEKREFT = 'fromDate';
   const schema = yup.object().shape({
     [BEKREFT]: yup
@@ -178,9 +176,11 @@ export const StepSummary = ({ getText, data, onBackClick, onCancelClick }: Summa
       .required(getText('form.confirmationPanel.required'))
       .oneOf([true], getText('form.confirmationPanel.required')),
   });
-  const { søknadDispatch } = useSoknadContext();
-  const { stepWizardDispatch } = useStepWizard();
+  const lagrePartialSøknad = useLagrePartialSoknad();
+  const { søknadState, søknadDispatch } = useSoknadContext();
+  const { stepList, stepWizardDispatch } = useStepWizard();
   const {
+    watch,
     control,
     handleSubmit,
     formState: { errors },
@@ -188,6 +188,10 @@ export const StepSummary = ({ getText, data, onBackClick, onCancelClick }: Summa
     resolver: yupResolver(schema),
     defaultValues: {},
   });
+  const allFields = watch();
+  useEffect(() => {
+    lagrePartialSøknad(søknadState, stepList, allFields);
+  }, [allFields]);
   const getFormInputLabel = (key: string) => getText(`form.${key}.label`);
   const getFormValueReadable = (key: string, val: any) => {
     switch (key) {
@@ -222,7 +226,6 @@ export const StepSummary = ({ getText, data, onBackClick, onCancelClick }: Summa
           completeAndGoToNextStep(stepWizardDispatch);
         })}
         onBack={() => onBackClick()}
-        onCancel={() => onCancelClick()}
         nextButtonText={'Send søknad'}
         backButtonText={'Forrige steg'}
         cancelButtonText={'Avbryt søknad'}

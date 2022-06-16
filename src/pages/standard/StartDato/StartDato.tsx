@@ -46,7 +46,7 @@ interface Props {
   onCancelClick: () => void;
 }
 
-const StartDato = ({ getText, onBackClick, onCancelClick, søknad }: Props) => {
+const StartDato = ({ getText, onBackClick, søknad }: Props) => {
   const schema = yup.object().shape({
     [STARTDATO]: yup
       .date()
@@ -173,7 +173,6 @@ const StartDato = ({ getText, onBackClick, onCancelClick, søknad }: Props) => {
         () => setErrorSummaryFocus()
       )}
       onBack={() => onBackClick()}
-      onCancel={() => onCancelClick()}
       nextButtonText={'Neste steg'}
       backButtonText={'Forrige steg'}
       cancelButtonText={'Avbryt søknad'}

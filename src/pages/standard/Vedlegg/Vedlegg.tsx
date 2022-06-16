@@ -27,7 +27,7 @@ const VEDLEGG_UTLANDSSTØNAD = `${VEDLEGG}.${AttachmentType.UTLANDSSTØNAD}`;
 const VEDLEGG_BARN = `${VEDLEGG}.barn`;
 const VEDLEGG_ANNET = `${VEDLEGG}.annet`;
 
-const Vedlegg = ({ getText, onBackClick, onCancelClick, søknad }: Props) => {
+const Vedlegg = ({ getText, onBackClick, søknad }: Props) => {
   const [scanningGuideOpen, setScanningGuideOpen] = useState(false);
   const scanningGuideElement = useRef(null);
   const schema = yup.object().shape({});
@@ -79,7 +79,6 @@ const Vedlegg = ({ getText, onBackClick, onCancelClick, søknad }: Props) => {
         completeAndGoToNextStep(stepWizardDispatch);
       })}
       onBack={() => onBackClick()}
-      onCancel={() => onCancelClick()}
       nextButtonText={'Neste steg'}
       backButtonText={'Forrige steg'}
       cancelButtonText={'Avbryt søknad'}

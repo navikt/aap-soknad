@@ -55,7 +55,7 @@ const validateUtenlandsPeriode = (
   );
 };
 
-export const Medlemskap = ({ getText, onBackClick, onCancelClick, søknad }: Props) => {
+export const Medlemskap = ({ getText, onBackClick, søknad }: Props) => {
   const schema = yup.object().shape({
     [MEDLEMSKAP]: yup.object().shape({
       [BODD_I_NORGE]: yup
@@ -206,7 +206,6 @@ export const Medlemskap = ({ getText, onBackClick, onCancelClick, søknad }: Pro
           completeAndGoToNextStep(stepWizardDispatch);
         })}
         onBack={() => onBackClick()}
-        onCancel={() => onCancelClick()}
         nextButtonText={'Neste steg'}
         backButtonText={'Forrige steg'}
         cancelButtonText={'Avbryt søknad'}

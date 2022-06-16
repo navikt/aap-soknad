@@ -21,7 +21,7 @@ interface Props {
 }
 const YRKESSKADE = 'yrkesskade';
 
-export const Yrkesskade = ({ getText, onBackClick, onCancelClick, søknad }: Props) => {
+export const Yrkesskade = ({ getText, onBackClick, søknad }: Props) => {
   const schema = yup.object().shape({
     [YRKESSKADE]: yup
       .string()
@@ -53,7 +53,6 @@ export const Yrkesskade = ({ getText, onBackClick, onCancelClick, søknad }: Pro
         completeAndGoToNextStep(stepWizardDispatch);
       })}
       onBack={() => onBackClick()}
-      onCancel={() => onCancelClick()}
       nextButtonText={'Neste steg'}
       backButtonText={'Forrige steg'}
       cancelButtonText={'Avbryt søknad'}
