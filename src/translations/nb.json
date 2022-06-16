@@ -1,5 +1,109 @@
 {
   "test": "Test",
+  "søknad": {
+    "barnetillegg": {
+      "title": "Barnetillegg",
+      "guide": {
+        "text1": "Du kan få barnetillegg for barn under 18 år som du har forsørgeransvar for.",
+        "text2": "Du kan få barnetillegg selv om barnet ikke bor sammen med deg. Barnetillegget får du også for adoptivbarn, fosterbarn og andre barn som du har forsørgeransvar for."
+      },
+      "registrerteBarn": {
+        "title": "Barn vi har funnet som er registrert på deg:",
+        "fødselsnummer": "Fødselsnummer / D-nummer",
+        "barnepensjon": {
+          "label": "Mottar barnet barnepensjon?",
+          "readMore": {
+            "title": "Hvorfor spør vi om dette?",
+            "text": "Hvis barnet mottar barnepensjon, får du ikke barnetillegg for barnet."
+          }
+        },
+        "harInntekt": {
+          "label": "Har barnet årlig inntekt over 1G?",
+          "readMore": {
+            "title": "Hvorfor spør vi om dette?",
+            "text": "Hvis barnet har en årlig inntekt over 1G (1G = {grunnbeløp}kr), får du vanligvis ikke barnetillegg for barnet."
+          }
+        }
+      },
+      "manuelleBarn": {
+        "title": "Barn som du har lagt til:",
+        "fødselsnummer": "Fødselsnummer / D-nummer",
+        "erForelder": "Du er forelder til barnet",
+        "erFosterforelder": "Du er fosterforelder til barnet",
+        "mottarBarnepensjon": "Barnet mottar barnepensjon",
+        "mottarIkkeBarnepensjon": "Barnet mottar ikke barnepensjon",
+        "inntektOver1G": "Barnet har årlig inntekt over 1G",
+        "inntektIkkeOver1G": "Barnet har ikke årlig inntekt over 1G",
+        "redigerBarn": "Endre informasjon om barnet"
+      },
+      "leggTilBarn": {
+        "description": "Du kan legge til adoptivbarn, fosterbarn og andre barn under 18 år som du har forsørgeransvar for.",
+        "buttonText": "Legg til barn",
+        "modal": {
+          "title": "Legg til barn",
+          "description": "Du kan legge til adoptivbarn, fosterbarn og andre barn under 18 år som du har forsørgeransvar for.",
+          "navn": {
+            "fornavn": {
+              "label": "Fornavn og mellomnavn",
+              "validation": {
+                "required": "Du må fylle inn barnets fornavn og mellomnavn."
+              }
+            },
+            "etternavn": {
+              "label": "Etternavn",
+              "validation": {
+                "required": "Du må fylle inn barnets etternavn."
+              }
+            }
+          },
+          "fødselsnummer": {
+            "label": "Fødselsnummer / D-nummer",
+            "validation": {
+              "required": "Du må fylle inn barnets fødselsnummer / D-nummer.",
+              "numberCharacters": "Fødeslsnummer / D-nummer må være 11 siffer."
+            }
+          },
+          "relasjon": {
+            "label": "Hvilken relasjon har du til barnet?",
+            "validation": {
+              "required": "Du må svare på hvilken relasjon du har til barnet."
+            }
+          },
+          "barnepensjon": {
+            "label": "Mottar barnet barnepensjon?",
+            "readMore": {
+              "title": "Hvorfor spør vi om dette?",
+              "text": "Hvis barnet mottar barnepensjon, får du ikke barnetillegg for barnet."
+            },
+            "validation": {
+              "required": "Du må svare på om barnet mottar barnepensjon."
+            }
+          },
+          "harInntekt": {
+            "label": "Har barnet årlig inntekt over 1G?",
+            "readMore": {
+              "title": "Hvorfor spør vi om dette?",
+              "text": "Hvis barnet har en årlig inntekt over 1G (1G = {grunnbeløp}kr), får du vanligvis ikke barnetillegg for barnet."
+            },
+            "validation": {
+              "required": "Du må svare på om barnet har en årlig inntekt over 1G."
+            }
+          },
+          "buttons": {
+            "lagre": "Lagre",
+            "avbryt": "Avbryt",
+            "slett": "Slett"
+          }
+        }
+      },
+      "alert": {
+        "leggeVedTekst": "Du må legge ved:",
+        "bulletPointVedleggForelder": "Bekreftelse på at du er forelder til barnet, og fra når (fødselstidspunkt eller adoptivtidspunkt). Dette kan for eksempel være fødselsattest eller adopsjonsdokumenter.",
+        "bulletPointVedleggFosterforelder": "Dokumentasjon på at du er fosterforelder til barnet, og fra når. For eksempel en bekreftelse fra barneverntjenesten.",
+        "lasteOppVedleggTekst": "Dette laster du opp senere i søknaden. Du kan også ettersende vedlegg."
+      }
+    }
+  },
   "utland": {
     "title": "Søknad om Arbeidsavklaringspenger (AAP) utland",
     "veiledning": {
@@ -39,5 +143,22 @@
         "text": "Takk, søknaden er mottatt. Nå tar vi oss av resten."
       }
     }
+  },
+  "answerOptions": {
+    "jaEllerNei": {
+      "Ja": "Ja",
+      "Nei": "Nei"
+    },
+    "relasjon": {
+      "FORELDER": "Forelder",
+      "FOSTERFORELDER": "Fosterforelder"
+    }
+  },
+  "navigation": {
+    "next": "Neste steg",
+    "back": "Forrige steg",
+    "send": "Send søknad",
+    "save": "Lagre og fortsett senere",
+    "cancel": "Avbryt og slett søknad"
   }
 }

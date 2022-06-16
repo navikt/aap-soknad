@@ -443,7 +443,6 @@ export const StandardPage = (): JSX.Element => {
         </Step>
         <Step order={5} name={StepNames.BARNETILLEGG}>
           <Barnetillegg
-            getText={getText}
             onCancelClick={onDeleteSøknad}
             onBackClick={onPreviousStep}
             søknad={søknadState?.søknad}

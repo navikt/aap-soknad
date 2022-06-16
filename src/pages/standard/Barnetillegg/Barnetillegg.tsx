@@ -10,7 +10,6 @@ import {
   ReadMore,
 } from '@navikt/ds-react';
 import React, { useEffect, useMemo, useState } from 'react';
-import { GetText } from '../../../hooks/useTexts';
 import { FieldValues, useFieldArray, useForm } from 'react-hook-form';
 import RadioGroupWrapper from '../../../components/input/RadioGroupWrapper/RadioGroupWrapper';
 import { JaEllerNei } from '../../../types/Generic';
@@ -27,12 +26,12 @@ import { updateSøknadData, useSoknadContext } from '../../../context/soknadCont
 import { completeAndGoToNextStep, useStepWizard } from '../../../context/stepWizardContextV2';
 import { yupResolver } from '@hookform/resolvers/yup';
 import SoknadFormWrapper from '../../../components/SoknadFormWrapper/SoknadFormWrapper';
-import { AddBarnModal, Relasjon } from './AddBarnModal';
+import { AddBarnModal, Relasjon, validateHarInntekt } from './AddBarnModal';
 import { formatNavn } from '../../../utils/StringFormatters';
 import { LucaGuidePanel } from '../../../components/LucaGuidePanel';
+import { useFeatureToggleIntl } from '../../../hooks/useFeatureToggleIntl';
 
 interface Props {
-  getText: GetText;
   søknad?: Soknad;
   onBackClick: () => void;
   onCancelClick: () => void;
@@ -40,8 +39,36 @@ interface Props {
 const BARNETILLEGG = 'barnetillegg';
 const MANUELLE_BARN = 'manuelleBarn';
 
-export const Barnetillegg = ({ getText, onBackClick, søknad }: Props) => {
-  const schema = yup.object().shape({});
+const GRUNNBELØP = '111 477';
+
+export const Barnetillegg = ({ onBackClick, søknad }: Props) => {
+  const { formatMessage } = useFeatureToggleIntl();
+
+  const schema = yup.object().shape({
+    [BARNETILLEGG]: yup.array().of(
+      yup.object().shape({
+        barnepensjon: yup
+          .string()
+          .required(
+            formatMessage('søknad.barnetillegg.leggTilBarn.modal.barnepensjon.validation.required')
+          )
+          .oneOf([JaEllerNei.JA, JaEllerNei.NEI])
+          .nullable(),
+        harInntekt: yup.string().when('barnepensjon', {
+          is: validateHarInntekt,
+          then: (yupSchema) =>
+            yupSchema
+              .required(
+                formatMessage(
+                  'søknad.barnetillegg.leggTilBarn.modal.harInntekt.validation.required'
+                )
+              )
+              .oneOf([JaEllerNei.JA, JaEllerNei.NEI])
+              .nullable(),
+        }),
+      })
+    ),
+  });
   const { søknadDispatch } = useSoknadContext();
   const { stepWizardDispatch } = useStepWizard();
   const {
@@ -147,61 +174,80 @@ export const Barnetillegg = ({ getText, onBackClick, søknad }: Props) => {
           completeAndGoToNextStep(stepWizardDispatch);
         })}
         onBack={() => onBackClick()}
-        nextButtonText={'Neste steg'}
-        backButtonText={'Forrige steg'}
-        cancelButtonText={'Avbryt søknad'}
+        nextButtonText={formatMessage('navigation.next')}
+        backButtonText={formatMessage('navigation.back')}
+        cancelButtonText={formatMessage('navigation.cancel')}
         errors={errors}
       >
         <Heading size="large" level="2">
-          {getText('steps.barnetillegg.title')}
+          {formatMessage('søknad.barnetillegg.title')}
         </Heading>
         <LucaGuidePanel>
-          <BodyShort spacing>{getText('steps.barnetillegg.guide')}</BodyShort>
-          <BodyShort>{getText('steps.barnetillegg.guide2')}</BodyShort>
+          <BodyShort spacing>{formatMessage('søknad.barnetillegg.guide.text1')}</BodyShort>
+          <BodyShort>{formatMessage('søknad.barnetillegg.guide.text2')}</BodyShort>
         </LucaGuidePanel>
         {fields.length > 0 && (
           <Heading size="xsmall" level="2">
-            Barn vi har funnet som er registrert på deg:
+            {formatMessage('søknad.barnetillegg.registrerteBarn.title')}
           </Heading>
         )}
         {fields.map((barn, index) => {
           return (
             <article key={barn?.id} className={classes.barneKort}>
               <Label>{`${formatNavn(barn?.navn)}`}</Label>
-              <BodyShort>{`Fødselsnummer / D-nummer: ${barn?.fnr}`}</BodyShort>
+              <BodyShort>{`${formatMessage('søknad.barnetillegg.registrerteBarn.fødselsnummer')}: ${
+                barn?.fnr
+              }`}</BodyShort>
 
               <RadioGroupWrapper
-                legend={'Mottar barnet barnepensjon?'}
+                legend={formatMessage('søknad.barnetillegg.registrerteBarn.barnepensjon.label')}
                 name={`${BARNETILLEGG}.${index}.barnepensjon`}
                 control={control}
                 error={errors?.[BARNETILLEGG]?.[index]?.barnepensjon?.message}
               >
-                <ReadMore header="Hvorfor spør vi om dette?">
-                  Hvis barnet mottar barnepensjon, får du ikke barnetillegg for barnet.
+                <ReadMore
+                  header={formatMessage(
+                    'søknad.barnetillegg.registrerteBarn.barnepensjon.readMore.title'
+                  )}
+                >
+                  {formatMessage('søknad.barnetillegg.registrerteBarn.barnepensjon.readMore.text')}
                 </ReadMore>
                 <Radio value={JaEllerNei.JA}>
-                  <BodyShort>{JaEllerNei.JA}</BodyShort>
+                  <BodyShort>
+                    {formatMessage(`answerOptions.jaEllerNei.${JaEllerNei.JA}`)}
+                  </BodyShort>
                 </Radio>
                 <Radio value={JaEllerNei.NEI}>
-                  <BodyShort>{JaEllerNei.NEI}</BodyShort>
+                  <BodyShort>
+                    {formatMessage(`answerOptions.jaEllerNei.${JaEllerNei.NEI}`)}
+                  </BodyShort>
                 </Radio>
               </RadioGroupWrapper>
               {controlledFields[index]?.barnepensjon === JaEllerNei.NEI && (
                 <RadioGroupWrapper
-                  legend={getText('form.barnetillegg.legend')}
+                  legend={formatMessage('søknad.barnetillegg.registrerteBarn.harInntekt.label')}
                   name={`${BARNETILLEGG}.${index}.harInntekt`}
                   control={control}
                   error={errors?.[BARNETILLEGG]?.[index]?.harInntekt?.message}
                 >
-                  <ReadMore header="Hvorfor spør vi om dette?">
-                    Hvis barnet har en årlig inntekt over 1G (1G = 111 477kr), får du vanligvis ikke
-                    barnetillegg for barnet.
+                  <ReadMore
+                    header={formatMessage(
+                      'søknad.barnetillegg.registrerteBarn.harInntekt.readMore.title'
+                    )}
+                  >
+                    {formatMessage('søknad.barnetillegg.registrerteBarn.harInntekt.readMore.text', {
+                      grunnbeløp: GRUNNBELØP,
+                    })}
                   </ReadMore>
                   <Radio value={JaEllerNei.JA}>
-                    <BodyShort>{JaEllerNei.JA}</BodyShort>
+                    <BodyShort>
+                      {formatMessage(`answerOptions.jaEllerNei.${JaEllerNei.JA}`)}
+                    </BodyShort>
                   </Radio>
                   <Radio value={JaEllerNei.NEI}>
-                    <BodyShort>{JaEllerNei.NEI}</BodyShort>
+                    <BodyShort>
+                      {formatMessage(`answerOptions.jaEllerNei.${JaEllerNei.NEI}`)}
+                    </BodyShort>
                   </Radio>
                 </RadioGroupWrapper>
               )}
@@ -210,43 +256,57 @@ export const Barnetillegg = ({ getText, onBackClick, søknad }: Props) => {
         })}
         {manuelleBarnFields.length > 0 && (
           <Heading size="xsmall" level="2">
-            Barn som du har lagt til:
+            {formatMessage('søknad.barnetillegg.manuelleBarn.title')}
           </Heading>
         )}
         {manuelleBarnFields.map((barn, index) => {
           return (
             <article key={barn?.id} className={classes.barneKort}>
               <Label>{`${formatNavn(barn?.navn)}`}</Label>
-              <BodyShort>{`Fødselsnummer / D-nummer: ${barn?.fnr}`}</BodyShort>
+              <BodyShort>{`${formatMessage('søknad.barnetillegg.manuelleBarn.fødselsnummer')}: ${
+                barn?.fnr
+              }`}</BodyShort>
               {barn?.relasjon === Relasjon.FORELDER && (
-                <BodyShort>Du er forelder til barnet</BodyShort>
+                <BodyShort>
+                  {formatMessage('søknad.barnetillegg.manuelleBarn.erForelder')}
+                </BodyShort>
               )}
               {barn?.relasjon === Relasjon.FOSTERFORELDER && (
-                <BodyShort>Du er fosterforelder til barnet</BodyShort>
+                <BodyShort>
+                  {formatMessage('søknad.barnetillegg.manuelleBarn.erFosterforelder')}
+                </BodyShort>
               )}
               {barn?.barnepensjon === JaEllerNei.JA && (
-                <BodyShort>Barnet mottar barnepensjon</BodyShort>
+                <BodyShort>
+                  {formatMessage('søknad.barnetillegg.manuelleBarn.mottarBarnepensjon')}
+                </BodyShort>
               )}
               {barn?.barnepensjon === JaEllerNei.NEI && (
-                <BodyShort>Barnet mottar ikke barnepensjon</BodyShort>
+                <BodyShort>
+                  {formatMessage('søknad.barnetillegg.manuelleBarn.mottarIkkeBarnepensjon')}
+                </BodyShort>
               )}
               {barn?.harInntekt === JaEllerNei.JA && (
-                <BodyShort>Barnet har årlig inntekt over 1G</BodyShort>
+                <BodyShort>
+                  {formatMessage('søknad.barnetillegg.manuelleBarn.inntektOver1G')}
+                </BodyShort>
               )}
               {barn?.harInntekt === JaEllerNei.NEI && (
-                <BodyShort>Barnet har ikke årlig inntekt over 1G</BodyShort>
+                <BodyShort>
+                  {formatMessage('søknad.barnetillegg.manuelleBarn.inntektIkkeOver1G')}
+                </BodyShort>
               )}
               <Grid>
                 <Cell xs={4}>
                   <Button variant="tertiary" type="button" onClick={() => editNyttBarn(index)}>
-                    Endre informasjon om barnet
+                    {formatMessage('søknad.barnetillegg.manuelleBarn.redigerBarn')}
                   </Button>
                 </Cell>
               </Grid>
             </article>
           );
         })}
-        <BodyShort>{getText('steps.barnetillegg.leggTil.description')}</BodyShort>
+        <BodyShort>{formatMessage('søknad.barnetillegg.leggTilBarn.description')}</BodyShort>
         <Grid>
           <Cell xs={6}>
             <Button
@@ -258,25 +318,28 @@ export const Barnetillegg = ({ getText, onBackClick, søknad }: Props) => {
               }}
             >
               <Add title={'Legg til'} />
-              Legg til barn
+              {formatMessage('søknad.barnetillegg.leggTilBarn.buttonText')}
             </Button>
           </Cell>
         </Grid>
         {(erForelderTilManueltBarn || erFosterforelderTilManueltBarn) && (
           <Alert variant={'info'}>
-            {getText('form.barnetillegg.add.alertTitle')}
+            {formatMessage('søknad.barnetillegg.alert.leggeVedTekst')}
             <ul>
-              {erForelderTilManueltBarn && <li>{getText('form.barnetillegg.add.alertBullet')}</li>}
+              {erForelderTilManueltBarn && (
+                <li>{formatMessage('søknad.barnetillegg.alert.bulletPointVedleggForelder')}</li>
+              )}
               {erFosterforelderTilManueltBarn && (
-                <li>{getText('form.barnetillegg.add.alertBullettFosterforelder')}</li>
+                <li>
+                  {formatMessage('søknad.barnetillegg.alert.bulletPointVedleggFosterforelder')}
+                </li>
               )}
             </ul>
-            {getText('form.barnetillegg.add.alertInfo')}
+            {formatMessage('søknad.barnetillegg.alert.lasteOppVedleggTekst')}
           </Alert>
         )}
       </SoknadFormWrapper>
       <AddBarnModal
-        getText={getText}
         onCloseClick={() => setShowModal(false)}
         onSaveClick={saveNyttBarn}
         onDeleteClick={() => {

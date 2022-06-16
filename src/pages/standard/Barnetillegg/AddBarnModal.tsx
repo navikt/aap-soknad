@@ -10,7 +10,6 @@ import {
 } from '@navikt/ds-react';
 import { JaEllerNei } from '../../../types/Generic';
 import React, { useEffect } from 'react';
-import { GetText } from '../../../hooks/useTexts';
 import Soknad, { Barn } from '../../../types/Soknad';
 import TextFieldWrapper from '../../../components/input/TextFieldWrapper';
 import RadioGroupWrapper from '../../../components/input/RadioGroupWrapper/RadioGroupWrapper';
@@ -19,9 +18,9 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import * as classes from './Barnetillegg.module.css';
 import { ModalButtonWrapper } from '../../../components/ButtonWrapper/ModalButtonWrapper';
+import { useFeatureToggleIntl } from '../../../hooks/useFeatureToggleIntl';
 
 interface Props {
-  getText: GetText;
   søknad?: Soknad;
   onCloseClick: () => void;
   onSaveClick: (data: any) => void;
@@ -37,40 +36,60 @@ export enum Relasjon {
 
 const NAVN = 'navn';
 
-const validateHarInntekt = (barnepensjon: JaEllerNei) => barnepensjon === JaEllerNei.NEI;
+export const validateHarInntekt = (barnepensjon: JaEllerNei) => barnepensjon === JaEllerNei.NEI;
 
 export const AddBarnModal = ({
-  getText,
   showModal,
   onDeleteClick,
   onCloseClick,
   onSaveClick,
   barn,
 }: Props) => {
+  const { formatMessage } = useFeatureToggleIntl();
+
   const schema = yup.object().shape({
     [NAVN]: yup.object().shape({
-      fornavn: yup.string().required('Du må fylle inn barnets fornavn og mellomnavn.'),
-      etternavn: yup.string().required('Du må fylle inn barnets etternavn.'),
+      fornavn: yup
+        .string()
+        .required(
+          formatMessage('søknad.barnetillegg.leggTilBarn.modal.navn.fornavn.validation.required')
+        ),
+      etternavn: yup
+        .string()
+        .required(
+          formatMessage('søknad.barnetillegg.leggTilBarn.modal.navn.etternavn.validation.required')
+        ),
     }),
     fnr: yup
       .string()
-      .required('Du må fylle inn barnets fødselsnummer / D-nummer.')
-      .length(11, 'Fødeslsnummer / D-nummer må være 11 siffer.'),
+      .required(
+        formatMessage('søknad.barnetillegg.leggTilBarn.modal.fødselsnummer.validation.required')
+      )
+      .length(
+        11,
+        formatMessage(
+          'søknad.barnetillegg.leggTilBarn.modal.fødselsnummer.validation.numberCharacters'
+        )
+      ),
     relasjon: yup
       .string()
-      .required('Du må svare på hvilken relasjon du har til barnet.')
+      .required(formatMessage('søknad.barnetillegg.leggTilBarn.modal.relasjon.validation.required'))
       .oneOf([Relasjon.FORELDER, Relasjon.FOSTERFORELDER])
       .nullable(),
     barnepensjon: yup
       .string()
-      .required('Du må svare på om barnet mottar barnepensjon.')
+      .required(
+        formatMessage('søknad.barnetillegg.leggTilBarn.modal.barnepensjon.validation.required')
+      )
       .oneOf([JaEllerNei.JA, JaEllerNei.NEI])
       .nullable(),
     harInntekt: yup.string().when('barnepensjon', {
       is: validateHarInntekt,
       then: (yupSchema) =>
         yupSchema
-          .required('Du må svare på om barnet har en årlig inntekt over 1G.')
+          .required(
+            formatMessage('søknad.barnetillegg.leggTilBarn.modal.harInntekt.validation.required')
+          )
           .oneOf([JaEllerNei.JA, JaEllerNei.NEI])
           .nullable(),
     }),
@@ -109,9 +128,9 @@ export const AddBarnModal = ({
     >
       <Modal.Content className={classes?.leggTilBarnModalContent}>
         <Heading size={'medium'} level={'2'}>
-          {getText('form.barnetillegg.add.title')}
+          {formatMessage('søknad.barnetillegg.leggTilBarn.modal.title')}
         </Heading>
-        <Ingress>{getText('steps.barnetillegg.leggTil.description')}</Ingress>
+        <Ingress>{formatMessage('søknad.barnetillegg.leggTilBarn.modal.description')}</Ingress>
         <form
           onSubmit={handleSubmit((data) => {
             onSaveClick(data);
@@ -119,14 +138,14 @@ export const AddBarnModal = ({
         >
           <TextFieldWrapper
             control={control}
-            label={getText('form.barnetillegg.add.fornavn.label')}
+            label={formatMessage('søknad.barnetillegg.leggTilBarn.modal.navn.fornavn.label')}
             name={'navn.fornavn'}
             error={errors?.[NAVN]?.fornavn?.message}
           />
 
           <TextFieldWrapper
             control={control}
-            label={getText('form.barnetillegg.add.etternavn.label')}
+            label={formatMessage('søknad.barnetillegg.leggTilBarn.modal.navn.etternavn.label')}
             name={'navn.etternavn'}
             error={errors?.[NAVN]?.etternavn?.message}
           />
@@ -134,7 +153,7 @@ export const AddBarnModal = ({
           <div className={classes.leggTilBarnFnrInput}>
             <TextFieldWrapper
               control={control}
-              label={getText('form.barnetillegg.add.fnr.label')}
+              label={formatMessage('søknad.barnetillegg.leggTilBarn.modal.fødselsnummer.label')}
               name={'fnr'}
               error={errors?.fnr?.message}
             />
@@ -142,69 +161,80 @@ export const AddBarnModal = ({
 
           <RadioGroupWrapper
             control={control}
-            legend={'Hvilken relasjon har du til barnet?'}
+            legend={formatMessage('søknad.barnetillegg.leggTilBarn.modal.relasjon.label')}
             name={'relasjon'}
             error={errors?.relasjon?.message}
           >
             <Radio value={Relasjon.FORELDER}>
-              <BodyShort>Forelder</BodyShort>
+              <BodyShort>{formatMessage(`answerOptions.relasjon.${Relasjon.FORELDER}`)}</BodyShort>
             </Radio>
             <Radio value={Relasjon.FOSTERFORELDER}>
-              <BodyShort>Fosterforelder</BodyShort>
+              <BodyShort>
+                {formatMessage(`answerOptions.relasjon.${Relasjon.FOSTERFORELDER}`)}
+              </BodyShort>
             </Radio>
           </RadioGroupWrapper>
           <RadioGroupWrapper
             control={control}
-            legend={'Mottar barnet barnepensjon?'}
+            legend={formatMessage('søknad.barnetillegg.leggTilBarn.modal.barnepensjon.label')}
             name={'barnepensjon'}
             error={errors?.barnepensjon?.message}
           >
-            <ReadMore header="Hvorfor spør vi om dette?">
-              Hvis barnet mottar barnepensjon, får du ikke barnetillegg for barnet.
+            <ReadMore
+              header={formatMessage(
+                'søknad.barnetillegg.leggTilBarn.modal.barnepensjon.readMore.title'
+              )}
+            >
+              {formatMessage('søknad.barnetillegg.leggTilBarn.modal.barnepensjon.readMore.text')}
             </ReadMore>
             <Radio value={JaEllerNei.JA}>
-              <BodyShort>{JaEllerNei.JA}</BodyShort>
+              <BodyShort>{formatMessage(`answerOptions.jaEllerNei.${JaEllerNei.JA}`)}</BodyShort>
             </Radio>
             <Radio value={JaEllerNei.NEI}>
-              <BodyShort>{JaEllerNei.NEI}</BodyShort>
+              <BodyShort>{formatMessage(`answerOptions.jaEllerNei.${JaEllerNei.NEI}`)}</BodyShort>
             </Radio>
           </RadioGroupWrapper>
           {barnepensjon === JaEllerNei.NEI && (
             <RadioGroupWrapper
               control={control}
-              legend={getText('form.barnetillegg.legend')}
+              legend={formatMessage('søknad.barnetillegg.leggTilBarn.modal.harInntekt.label')}
               name={'harInntekt'}
               error={errors?.harInntekt?.message}
             >
-              <ReadMore header="Hvorfor spør vi om dette?">
-                Hvis barnet har en årlig inntekt over 1G (1G = 111 477kr), får du vanligvis ikke
-                barnetillegg for barnet.
+              <ReadMore
+                header={formatMessage(
+                  'søknad.barnetillegg.leggTilBarn.modal.harInntekt.readMore.title'
+                )}
+              >
+                {formatMessage('søknad.barnetillegg.leggTilBarn.modal.harInntekt.readMore.text')}
               </ReadMore>
               <Radio value={JaEllerNei.JA}>
-                <BodyShort>{JaEllerNei.JA}</BodyShort>
+                <BodyShort>{formatMessage(`answerOptions.jaEllerNei.${JaEllerNei.JA}`)}</BodyShort>
               </Radio>
               <Radio value={JaEllerNei.NEI}>
-                <BodyShort>{JaEllerNei.NEI}</BodyShort>
+                <BodyShort>{formatMessage(`answerOptions.jaEllerNei.${JaEllerNei.NEI}`)}</BodyShort>
               </Radio>
             </RadioGroupWrapper>
           )}
 
           {relasjon === Relasjon.FORELDER && (
             <Alert variant={'info'}>
-              {getText('form.barnetillegg.add.alertTitle')}
+              {formatMessage('søknad.barnetillegg.alert.leggeVedTekst')}
               <ul>
-                <li>{getText('form.barnetillegg.add.alertBullet')}</li>
+                <li>{formatMessage('søknad.barnetillegg.alert.bulletPointVedleggForelder')}</li>
               </ul>
-              {getText('form.barnetillegg.add.alertInfo')}
+              {formatMessage('søknad.barnetillegg.alert.lasteOppVedleggTekst')}
             </Alert>
           )}
           {relasjon === Relasjon.FOSTERFORELDER && (
             <Alert variant={'info'}>
-              {getText('form.barnetillegg.add.alertTitle')}
+              {formatMessage('søknad.barnetillegg.alert.leggeVedTekst')}
               <ul>
-                <li>{getText('form.barnetillegg.add.alertBullettFosterforelder')}</li>
+                <li>
+                  {formatMessage('søknad.barnetillegg.alert.bulletPointVedleggFosterforelder')}
+                </li>
               </ul>
-              {getText('form.barnetillegg.add.alertInfo')}
+              {formatMessage('søknad.barnetillegg.alert.lasteOppVedleggTekst')}
             </Alert>
           )}
           <ModalButtonWrapper>
@@ -216,7 +246,7 @@ export const AddBarnModal = ({
                   onDeleteClick();
                 }}
               >
-                Slett
+                {formatMessage('søknad.barnetillegg.leggTilBarn.modal.buttons.slett')}
               </Button>
             ) : (
               <Button
@@ -226,10 +256,12 @@ export const AddBarnModal = ({
                   onCloseClick();
                 }}
               >
-                Avbryt
+                {formatMessage('søknad.barnetillegg.leggTilBarn.modal.buttons.avbryt')}
               </Button>
             )}
-            <Button type={'submit'}>Lagre</Button>
+            <Button type={'submit'}>
+              {formatMessage('søknad.barnetillegg.leggTilBarn.modal.buttons.lagre')}
+            </Button>
             {barn && (
               <Button
                 type="button"
@@ -238,7 +270,7 @@ export const AddBarnModal = ({
                   onCloseClick();
                 }}
               >
-                Avbryt
+                {formatMessage('søknad.barnetillegg.leggTilBarn.modal.buttons.avbryt')}
               </Button>
             )}
           </ModalButtonWrapper>
