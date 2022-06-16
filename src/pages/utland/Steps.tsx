@@ -14,16 +14,16 @@ import SoknadUtland from '../../types/SoknadUtland';
 import * as classes from '../standard/Veiledning/Veiledning.module.css';
 import Soknad from '../../types/Soknad';
 import { useLagrePartialSoknad } from '../../hooks/useLagreSoknad';
-import { useIntl } from 'react-intl';
+import { useFeatureToggleIntl } from '../../hooks/useFeatureToggleIntl';
 
 interface IntroductionProps {
   onSubmit: () => void;
 }
 export const StepIntroduction = ({ onSubmit }: IntroductionProps) => {
-  const intl = useIntl();
+  const { formatMessage } = useFeatureToggleIntl();
   return (
     <>
-      <GuidePanel poster>{intl.formatMessage({ id: 'utland.veiledning.guide.text' })}</GuidePanel>
+      <GuidePanel poster>{formatMessage('utland.veiledning.guide.text')}</GuidePanel>
       <div className={classes?.buttonWrapper}>
         <Button variant="primary" type="button" onClick={() => onSubmit()}>
           {'Fortsett til søknaden'}
@@ -41,12 +41,12 @@ interface SelectCountryProps {
 }
 export const StepSelectCountry = ({ onBackClick }: SelectCountryProps) => {
   const LAND = 'land';
-  const intl = useIntl();
+  const { formatMessage } = useFeatureToggleIntl();
   const schema = yup.object().shape({
     [LAND]: yup
       .string()
-      .required(intl.formatMessage({ id: 'utland.land.select.required' }))
-      .notOneOf(['none'], intl.formatMessage({ id: 'utland.land.select.required' })),
+      .required(formatMessage('utland.land.select.required'))
+      .notOneOf(['none'], formatMessage('utland.land.select.required')),
   });
   const { søknadState, søknadDispatch } = useSoknadContext();
   const { stepList, stepWizardDispatch } = useStepWizard();
@@ -68,7 +68,7 @@ export const StepSelectCountry = ({ onBackClick }: SelectCountryProps) => {
   }, [allFields]);
   return (
     <>
-      <GuidePanel poster>{intl.formatMessage({ id: 'utland.land.guide.text' })}</GuidePanel>
+      <GuidePanel poster>{formatMessage('utland.land.guide.text')}</GuidePanel>
       <SoknadFormWrapper
         onNext={handleSubmit((data) => {
           updateSøknadData(søknadDispatch, data);
@@ -82,7 +82,7 @@ export const StepSelectCountry = ({ onBackClick }: SelectCountryProps) => {
       >
         <CountrySelector
           name={LAND}
-          label={intl.formatMessage({ id: 'utland.land.select.label' })}
+          label={formatMessage('utland.land.select.label')}
           control={control}
           error={errors.country?.message}
         />
@@ -98,17 +98,16 @@ interface SelectTravelPeriodProps {
 export const StepSelectTravelPeriod = ({ søknad, onBackClick }: SelectTravelPeriodProps) => {
   const FRA_DATO = 'fraDato';
   const TIL_DATO = 'tilDato';
-  const intl = useIntl();
+  const { formatMessage } = useFeatureToggleIntl();
   const schema = yup.object().shape({
-    [FRA_DATO]: yup.date().required(intl.formatMessage({ id: 'utland.periode.fraDato.label' })),
+    [FRA_DATO]: yup.date().required(formatMessage('utland.periode.fraDato.label')),
     [TIL_DATO]: yup
       .date()
-      .required(intl.formatMessage({ id: 'utland.periode.tilDato.label' }))
+      .required(formatMessage('utland.periode.tilDato.label'))
       .when(
         FRA_DATO,
         (fromDate, yup) =>
-          fromDate &&
-          yup.min(fromDate, intl.formatMessage({ id: 'utland.periode.tilDato.afterfromdate' }))
+          fromDate && yup.min(fromDate, formatMessage('utland.periode.tilDato.afterfromdate'))
       ),
   });
   const lagrePartialSøknad = useLagrePartialSoknad();
@@ -144,13 +143,13 @@ export const StepSelectTravelPeriod = ({ søknad, onBackClick }: SelectTravelPer
     >
       <DatoVelgerWrapper
         name={FRA_DATO}
-        label={intl.formatMessage({ id: 'utland.periode.fraDato.label' })}
+        label={formatMessage('utland.periode.fraDato.label')}
         control={control}
         error={errors?.[FRA_DATO]?.message}
       />
       <DatoVelgerWrapper
         name={TIL_DATO}
-        label={intl.formatMessage({ id: 'utland.periode.tilDato.label' })}
+        label={formatMessage('utland.periode.tilDato.label')}
         control={control}
         error={errors?.[TIL_DATO]?.message}
       />
@@ -164,13 +163,13 @@ interface SummaryProps {
   onSubmitSoknad: (data: Soknad) => void;
 }
 export const StepSummary = ({ data, onBackClick }: SummaryProps) => {
-  const intl = useIntl();
+  const { formatMessage } = useFeatureToggleIntl();
   const BEKREFT = 'bekreftelse';
   const schema = yup.object().shape({
     [BEKREFT]: yup
       .boolean()
-      .required(intl.formatMessage({ id: 'utland.oppsummering.bekreftelse.required' }))
-      .oneOf([true], intl.formatMessage({ id: 'utland.oppsummering.bekreftelse.required' })),
+      .required(formatMessage('utland.oppsummering.bekreftelse.required'))
+      .oneOf([true], formatMessage('utland.oppsummering.bekreftelse.required')),
   });
   const lagrePartialSøknad = useLagrePartialSoknad();
   const { søknadState, søknadDispatch } = useSoknadContext();
@@ -192,13 +191,13 @@ export const StepSummary = ({ data, onBackClick }: SummaryProps) => {
   return (
     <>
       <Heading size="medium" level="2">
-        {intl.formatMessage({ id: 'utland.oppsummering.title' })}
+        {formatMessage('utland.oppsummering.title')}
       </Heading>
-      <Label>{intl.formatMessage({ id: 'utland.land.select.label' })}</Label>
+      <Label>{formatMessage('utland.land.select.label')}</Label>
       <BodyShort>{data?.land?.split(':')?.[1]}</BodyShort>
-      <Label>{intl.formatMessage({ id: 'utland.periode.fraDato.label' })}</Label>
+      <Label>{formatMessage('utland.periode.fraDato.label')}</Label>
       <BodyShort>{formatDate(data?.fraDato, 'dd.MM.yyyy')}</BodyShort>
-      <Label>{intl.formatMessage({ id: 'utland.periode.tilDato.label' })}</Label>
+      <Label>{formatMessage('utland.periode.tilDato.label')}</Label>
       <BodyShort>{formatDate(data?.tilDato, 'dd.MM.yyyy')}</BodyShort>
       <SoknadFormWrapper
         onNext={handleSubmit((data) => {
@@ -213,7 +212,7 @@ export const StepSummary = ({ data, onBackClick }: SummaryProps) => {
       >
         <ConfirmationPanelWrapper
           name={BEKREFT}
-          label={intl.formatMessage({ id: 'utland.oppsummering.bekreftelse.label' })}
+          label={formatMessage('utland.oppsummering.bekreftelse.label')}
           control={control}
           error={errors.confirmationPanel?.message}
         />
@@ -222,6 +221,6 @@ export const StepSummary = ({ data, onBackClick }: SummaryProps) => {
   );
 };
 export const StepKvittering = () => {
-  const intl = useIntl();
-  return <GuidePanel>{intl.formatMessage({ id: 'utland.kvittering.guide.text' })}</GuidePanel>;
+  const { formatMessage } = useFeatureToggleIntl();
+  return <GuidePanel>{formatMessage('utland.kvittering.guide.text')}</GuidePanel>;
 };

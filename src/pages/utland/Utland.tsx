@@ -1,7 +1,7 @@
 import { PageHeader } from '@navikt/ds-react';
 import { Step, StepWizard } from '../../components/StepWizard';
 import React, { useEffect, useState } from 'react';
-import { useIntl } from 'react-intl';
+import { useFeatureToggleIntl } from '../../hooks/useFeatureToggleIntl';
 import {
   StepIntroduction,
   StepKvittering,
@@ -44,7 +44,7 @@ const Utland = (): JSX.Element => {
   const { søknadState, søknadDispatch } = useSoknadContext();
   const { currentStep, stepList, stepWizardDispatch } = useStepWizard();
   const [isVeiledning, setIsVeiledning] = useState<boolean>(true);
-  const intl = useIntl();
+  const { formatMessage } = useFeatureToggleIntl();
   useEffect(() => {
     setSøknadType(søknadDispatch, SøknadType.UTLAND);
   }, []);
@@ -88,7 +88,7 @@ const Utland = (): JSX.Element => {
   return (
     <>
       <header>
-        <PageHeader align="center">{intl.formatMessage({ id: 'utland.title' })}</PageHeader>
+        <PageHeader align="center">{formatMessage('utland.title')}</PageHeader>
       </header>
       <StepWizard hideLabels={false}>
         <Step order={2} name={StepNames.DESTINATION}>
