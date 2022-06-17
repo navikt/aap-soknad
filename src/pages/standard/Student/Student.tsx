@@ -70,7 +70,6 @@ const Student = ({ getText, onBackClick, søknad }: Props) => {
   });
 
   const erStudent = watch(`${STUDENT}.${ER_STUDENT}`);
-  const tilbakeTilStudie = watch(`${STUDENT}.${KOMME_TILBAKE}`);
 
   useEffect(() => {
     setValue(`${STUDENT}.${KOMME_TILBAKE}`, undefined);
@@ -94,10 +93,6 @@ const Student = ({ getText, onBackClick, søknad }: Props) => {
       </Heading>
       <LucaGuidePanel>
         <BodyShort spacing>{getText('steps.student.guide1')}</BodyShort>
-        <BodyShort>
-          Du regnes som student hvis du tar et studie som gir rett til lån fra Statens lånekasse for
-          utdanning. Du trenger ikke å ha mottatt lån/stipend.
-        </BodyShort>
       </LucaGuidePanel>
       <RadioGroupWrapper
         name={`${STUDENT}.${ER_STUDENT}`}
@@ -136,7 +131,7 @@ const Student = ({ getText, onBackClick, søknad }: Props) => {
           </RadioGroupWrapper>
         </ColorPanel>
       )}
-      {tilbakeTilStudie && (
+      {erStudent === JaNeiAvbrutt.AVBRUTT && (
         <Alert variant="info">
           <BodyShort>Du må legge ved:</BodyShort>
           <ul>

@@ -1,4 +1,4 @@
-import { Accordion, BodyLong, BodyShort, Button, Heading, Label } from '@navikt/ds-react';
+import { Accordion, BodyLong, BodyShort, Button, Heading, Label, Link } from '@navikt/ds-react';
 import React, { useMemo } from 'react';
 import { getParagraphs, GetText } from '../../../hooks/useTexts';
 import { useForm } from 'react-hook-form';
@@ -92,16 +92,38 @@ export const Veiledning = ({ getText, søker, loading, onSubmit }: VeiledningPro
           </Accordion>
           <Accordion>
             <Accordion.Item>
-              <Accordion.Header>Vi vil hente informasjon om deg</Accordion.Header>
+              <Accordion.Header>Vi vil hente og bruke informasjon om deg</Accordion.Header>
               <Accordion.Content>
                 <BodyLong spacing>
                   I tillegg til den informasjonen du oppgir i søknaden, henter vi:
                   <ul>
-                    <li>personinformasjon om deg og barna dine</li>
+                    <li>personinformasjon om deg og barna dine fra Folkeregisteret</li>
                     <li>inntektsinformasjon fra Skatteetaten</li>
                     <li>helseinformasjon fra lege/behandler for å kartlegge arbeidsevnen din</li>
-                    <li>opplysninger om arbeidsforholdet ditt fra Aa-registeret</li>
+                    <li>
+                      opplysninger om arbeidsforholdet ditt fra Arbeidsgiver- og
+                      arbeidstakerregisteret
+                    </li>
+                    <li>opplysninger om deg vi har fra før</li>
                   </ul>
+                </BodyLong>
+                <BodyLong spacing>
+                  Dette gjør vi for å vurdere om du har rett til AAP etter folketrygdloven kapittel
+                  11.
+                  <ul>
+                    <li>
+                      Vi deler hva du får utbetalt i AAP med Skatteetaten og Statistisk sentralbyrå
+                    </li>
+                    <li>Vi kan bruke opplysninger om deg til å bedre våre tjenester</li>
+                  </ul>
+                </BodyLong>
+                <BodyLong spacing>
+                  <Link
+                    href="https://www.nav.no/no/nav-og-samfunn/om-nav/personvern-i-arbeids-og-velferdsetaten/personvernerklaering-for-arbeids-og-velferdsetaten"
+                    target="_blank"
+                  >
+                    Du kan lese mer om hvordan NAV behandler på nav.no (åpnes i ny fane)
+                  </Link>
                 </BodyLong>
               </Accordion.Content>
             </Accordion.Item>

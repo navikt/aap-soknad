@@ -223,10 +223,6 @@ export const Medlemskap = ({ getText, onBackClick, søknad }: Props) => {
         >
           <ReadMore header={getText('steps.medlemskap.boddINorgeReadMore.title')} type={'button'}>
             {getText('steps.medlemskap.boddINorgeReadMore.text')}
-            <ul>
-              <li>{getText('steps.medlemskap.boddINorgeReadMore.bullet1')}</li>
-              <li>{getText('steps.medlemskap.boddINorgeReadMore.bullet2')}</li>
-            </ul>
           </ReadMore>
           <Radio value={JaEllerNei.JA}>
             <BodyShort>Ja</BodyShort>

@@ -7,7 +7,7 @@
     "veiledning": {
       "guide": {
         "paragraphs": [
-          "Jeg er her for å veilede deg gjennom søknaden.",
+          "Jeg er her for å veilede deg gjennom søknaden. Svarene dine lagres underveis, slik at du trygt kan gå tilbake og endre dem.",
           "Arbeidsavklaringspenger forkortes ofte med “AAP”. AAP skal sikre deg inntekt når du på grunn av sykdom eller skade har behov for å få avklart mulighetene dine til å jobbe."
         ]
       },
@@ -16,7 +16,7 @@
       "søknadsdato": {
         "title": "Søknadsdato er viktig for eventuell utbetaling av AAP ",
         "paragraphs": [
-          "Du kan tidligst få AAP fra dagen du søker.",
+          "Vanligvis kan du tidligst få AAP fra den dagen du søker.",
           "Du kan søke om AAP selv om om du ikke har mottatt sykepenger."
         ]
       },
@@ -89,7 +89,7 @@
       },
       "boddINorgeReadMore": {
         "title": "Hva menes med å ha \"bodd sammenhengende\"?",
-        "text": "Dette betyr at du både",
+        "text": "Dette betyr at du har oppholdt deg i Norge mesteparten av hver av disse årene.",
         "bullet1": "har hatt folkeregistrert adresse i Norge, og",
         "bullet2": "har oppholdt deg i Norge mesteparten av hver av disse årene"
       }
@@ -97,8 +97,8 @@
     "yrkesskade": {
       "title": "Yrkesskade",
       "yrkesskadeReadMore": {
-        "title": "Hva menes med en yrkesskade eller en yrkessykdom?",
-        "skade": "Med en yrkesskade mener vi en skade du har fått som følge av en arbeidsulykke, både alvorlige og mindre alvorlige.",
+        "title": "Hva mener vi med yrkesskade eller yrkessykdom?",
+        "skade": "Med en yrkesskade mener vi en skade du har fått som følge av en arbeidsulykke.",
         "sykdom": {
           "text": "Med yrkessykdom mener vi en sykdom du har fått på grunn av skadelig påvirkning fra arbeidsmiljøet. I tillegg må sykdommen være nevnt i $$.",
           "link": {
@@ -109,7 +109,7 @@
       },
       "guide": {
         "info": {
-          "text": "Er arbeidsevnen din nedsatt som følge av en yrkesskade/sykdom blir saken din behandlet etter egne regler. Dette kan gi deg noen fordeler."
+          "text": "Hvis arbeidsevnen din er nedsatt som følge av en yrkesskade eller yrkessykdom, blir saken din behandlet etter andre regler. Dette kan gi deg noen fordeler."
         },
         "application": {
           "text": "Hvis en yrkesskade eller yrkessykdom er årsaken til at du har nedsatt arbeidsevne, bør du $$ og vurdert i saken din.",
@@ -218,10 +218,11 @@
       }
     },
     "startDato": {
-      "title": "Ønsket startdato",
+      "title": "Startdato",
       "guide": {
         "paragraphs": [
-          "Du kan søke om AAP frem i tid, for eksempel hvis du har mer igjen av sykepengene dine."
+          "NAV vil beregne startdato for deg, slik at du får AAP så tidlig som mulig. Hovedregelen er at du tidligst kan få AAP fra den dagen du sender inn søknaden.",
+          "Hvis du mottar sykepenger får du vanligvis AAP første dagen etter at sykepengene dine er ferdig."
         ]
       },
       "guideReadMore": {
@@ -423,7 +424,7 @@
     },
     "student": {
       "legend": "Er du student nå?",
-      "description": "Du regnes som student hvis du tar et studie som gir rett til lån fra Statens lånekasse for utdanning. Du trenger ikke å ha mottatt lån/stipend.",
+      "description": "Du regnes som student hvis du er oppmeldt i et studie som gir rett til lån fra Statens lånekasse for utdanning. Du trenger ikke å ha mottatt lån/stipend.",
       "required": "Du må svare på om du er student.",
       "kommeTilbake": {
         "legend": "Har du planer om å komme tilbake til studiet?",

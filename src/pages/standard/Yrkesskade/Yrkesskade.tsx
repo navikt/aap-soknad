@@ -71,11 +71,13 @@ export const Yrkesskade = ({ getText, onBackClick, søknad }: Props) => {
         error={errors?.[YRKESSKADE]?.message}
       >
         <ReadMore header={getText('steps.yrkesskade.yrkesskadeReadMore.title')} type={'button'}>
-          <div>{getText('steps.yrkesskade.yrkesskadeReadMore.skade')}</div>
-          <TextWithLink
-            text={getText('steps.yrkesskade.yrkesskadeReadMore.sykdom.text')}
-            links={[getText('steps.yrkesskade.yrkesskadeReadMore.sykdom.link')]}
-          />
+          <BodyShort spacing>{getText('steps.yrkesskade.yrkesskadeReadMore.skade')}</BodyShort>
+          <BodyShort spacing>
+            <TextWithLink
+              text={getText('steps.yrkesskade.yrkesskadeReadMore.sykdom.text')}
+              links={[getText('steps.yrkesskade.yrkesskadeReadMore.sykdom.link')]}
+            />
+          </BodyShort>
         </ReadMore>
         <Radio value={JaNeiVetIkke.JA}>
           <BodyShort>{JaNeiVetIkke.JA}</BodyShort>
