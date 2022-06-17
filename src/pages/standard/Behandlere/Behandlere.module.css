@@ -1,3 +1,11 @@
 .fastLege > dl {
   margin: 0 0 1em 0;
 }
+.legeList {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  row-gap: var(--navds-spacing-10);
+}

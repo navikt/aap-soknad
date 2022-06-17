@@ -133,21 +133,23 @@ export const Behandlere = ({ getText, onBackClick, søknad, fastlege }: Props) =
             <Heading size={'xsmall'} level={'4'}>
               {getText('steps.fastlege.andreBehandlere.heading')}
             </Heading>
-            {fields.map((field, index) => (
-              <div>
-                <BodyShort>
-                  {field?.firstname} {field?.lastname}
-                </BodyShort>
-                <BodyShort>{field?.legekontor}</BodyShort>
-                <BodyShort>
-                  {field?.gateadresse}, {field?.postnummer} {field?.poststed}
-                </BodyShort>
-                <BodyShort>{`Telefon: ${field?.telefon}`}</BodyShort>
-                <Button type="button" variant="tertiary" onClick={() => editNyBehandler(index)}>
-                  Endre lege / behandler
-                </Button>
-              </div>
-            ))}
+            <ul className={classes?.legeList}>
+              {fields.map((field, index) => (
+                <li>
+                  <BodyShort>
+                    {field?.firstname} {field?.lastname}
+                  </BodyShort>
+                  <BodyShort>{field?.legekontor}</BodyShort>
+                  <BodyShort>
+                    {field?.gateadresse}, {field?.postnummer} {field?.poststed}
+                  </BodyShort>
+                  <BodyShort>{`Telefon: ${field?.telefon}`}</BodyShort>
+                  <Button type="button" variant="tertiary" onClick={() => editNyBehandler(index)}>
+                    Endre lege / behandler
+                  </Button>
+                </li>
+              ))}
+            </ul>
           </>
         )}
 
