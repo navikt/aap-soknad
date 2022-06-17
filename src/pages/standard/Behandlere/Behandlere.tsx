@@ -1,4 +1,4 @@
-import { BodyLong, BodyShort, Button, Heading, ReadMore } from '@navikt/ds-react';
+import { Label, BodyLong, BodyShort, Button, Heading, ReadMore } from '@navikt/ds-react';
 import React, { useMemo, useState } from 'react';
 import { GetText } from '../../../hooks/useTexts';
 import { FieldValues, useFieldArray, useForm } from 'react-hook-form';
@@ -12,6 +12,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import SoknadFormWrapper from '../../../components/SoknadFormWrapper/SoknadFormWrapper';
 import { AddBehandlerModal } from './AddBehandlerModal';
 import { LucaGuidePanel } from '../../../components/LucaGuidePanel';
+import * as classes from './Behandlere.module.css';
 
 interface Props {
   getText: GetText;
@@ -91,22 +92,38 @@ export const Behandlere = ({ getText, onBackClick, søknad, fastlege }: Props) =
           <BodyLong>{getText('steps.fastlege.guide1')}</BodyLong>
           <BodyLong>{getText('steps.fastlege.guide2')}</BodyLong>
         </LucaGuidePanel>
-        <Heading size={'small'} level={'3'}>
-          {getText('steps.fastlege.fastlege.heading')}
-        </Heading>
-        {!fastlege ? (
-          <BodyLong>{getText('steps.fastlege.ingenFastlege.text')}</BodyLong>
-        ) : (
-          <div>
-            <BodyShort>{fastlege?.fulltNavn}</BodyShort>
-            <BodyShort>{fastlege?.legekontor}</BodyShort>
-            <BodyShort>{fastlege?.adresse}</BodyShort>
-            <BodyShort>{`Telefon: ${fastlege?.telefon}`}</BodyShort>
-            <ReadMore header={getText('steps.fastlege.readMore.header')} type={'button'}>
-              {getText('steps.fastlege.readMore.text')}
-            </ReadMore>
-          </div>
-        )}
+        <div>
+          <Heading size={'small'} level={'3'}>
+            {getText('steps.fastlege.fastlege.heading')}
+          </Heading>
+          {!fastlege ? (
+            <BodyLong>{getText('steps.fastlege.ingenFastlege.text')}</BodyLong>
+          ) : (
+            <>
+              <dl className={classes?.fastLege}>
+                <dt>
+                  <Label>Navn</Label>
+                </dt>
+                <dl>{fastlege?.fulltNavn}</dl>
+                <dt>
+                  <Label>Legekontor</Label>
+                </dt>
+                <dl>{fastlege?.legekontor}</dl>
+                <dt>
+                  <Label>Adresse</Label>
+                </dt>
+                <dl>{fastlege?.adresse}</dl>
+                <dt>
+                  <Label>Telefon</Label>
+                </dt>
+                <dl>{fastlege?.telefon}</dl>
+              </dl>
+              <ReadMore header={getText('steps.fastlege.readMore.header')} type={'button'}>
+                {getText('steps.fastlege.readMore.text')}
+              </ReadMore>
+            </>
+          )}
+        </div>
         <Heading size={'small'} level={'3'}>
           {getText('steps.fastlege.annenBehandler.heading')}
         </Heading>
