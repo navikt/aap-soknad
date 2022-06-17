@@ -132,6 +132,7 @@ export const AddBarnModal = ({
         </Heading>
         <Ingress>{formatMessage('søknad.barnetillegg.leggTilBarn.modal.description')}</Ingress>
         <form
+          className={classes?.modalForm}
           onSubmit={handleSubmit((data) => {
             onSaveClick(data);
           })}

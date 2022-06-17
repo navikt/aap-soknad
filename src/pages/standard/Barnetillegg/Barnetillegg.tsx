@@ -191,121 +191,146 @@ export const Barnetillegg = ({ onBackClick, søknad }: Props) => {
             {formatMessage('søknad.barnetillegg.registrerteBarn.title')}
           </Heading>
         )}
-        {fields.map((barn, index) => {
-          return (
-            <article key={barn?.id} className={classes.barneKort}>
-              <Label>{`${formatNavn(barn?.navn)}`}</Label>
-              <BodyShort>{`${formatMessage('søknad.barnetillegg.registrerteBarn.fødselsnummer')}: ${
-                barn?.fnr
-              }`}</BodyShort>
+        {fields.length > 0 && (
+          <ul className={classes.barnList}>
+            {fields.map((barn, index) => {
+              return (
+                <li key={barn?.id}>
+                  <article className={classes.barneKort}>
+                    <Heading size="xsmall" level="3">{`${formatNavn(barn?.navn)}`}</Heading>
+                    <BodyShort>{`${formatMessage(
+                      'søknad.barnetillegg.registrerteBarn.fødselsnummer'
+                    )}: ${barn?.fnr}`}</BodyShort>
 
-              <RadioGroupWrapper
-                legend={formatMessage('søknad.barnetillegg.registrerteBarn.barnepensjon.label')}
-                name={`${BARNETILLEGG}.${index}.barnepensjon`}
-                control={control}
-                error={errors?.[BARNETILLEGG]?.[index]?.barnepensjon?.message}
-              >
-                <ReadMore
-                  header={formatMessage(
-                    'søknad.barnetillegg.registrerteBarn.barnepensjon.readMore.title'
-                  )}
-                >
-                  {formatMessage('søknad.barnetillegg.registrerteBarn.barnepensjon.readMore.text')}
-                </ReadMore>
-                <Radio value={JaEllerNei.JA}>
-                  <BodyShort>
-                    {formatMessage(`answerOptions.jaEllerNei.${JaEllerNei.JA}`)}
-                  </BodyShort>
-                </Radio>
-                <Radio value={JaEllerNei.NEI}>
-                  <BodyShort>
-                    {formatMessage(`answerOptions.jaEllerNei.${JaEllerNei.NEI}`)}
-                  </BodyShort>
-                </Radio>
-              </RadioGroupWrapper>
-              {controlledFields[index]?.barnepensjon === JaEllerNei.NEI && (
-                <RadioGroupWrapper
-                  legend={formatMessage('søknad.barnetillegg.registrerteBarn.harInntekt.label')}
-                  name={`${BARNETILLEGG}.${index}.harInntekt`}
-                  control={control}
-                  error={errors?.[BARNETILLEGG]?.[index]?.harInntekt?.message}
-                >
-                  <ReadMore
-                    header={formatMessage(
-                      'søknad.barnetillegg.registrerteBarn.harInntekt.readMore.title'
+                    <RadioGroupWrapper
+                      legend={formatMessage(
+                        'søknad.barnetillegg.registrerteBarn.barnepensjon.label'
+                      )}
+                      name={`${BARNETILLEGG}.${index}.barnepensjon`}
+                      control={control}
+                      error={errors?.[BARNETILLEGG]?.[index]?.barnepensjon?.message}
+                    >
+                      <ReadMore
+                        header={formatMessage(
+                          'søknad.barnetillegg.registrerteBarn.barnepensjon.readMore.title'
+                        )}
+                      >
+                        {formatMessage(
+                          'søknad.barnetillegg.registrerteBarn.barnepensjon.readMore.text'
+                        )}
+                      </ReadMore>
+                      <Radio value={JaEllerNei.JA}>
+                        <BodyShort>
+                          {formatMessage(`answerOptions.jaEllerNei.${JaEllerNei.JA}`)}
+                        </BodyShort>
+                      </Radio>
+                      <Radio value={JaEllerNei.NEI}>
+                        <BodyShort>
+                          {formatMessage(`answerOptions.jaEllerNei.${JaEllerNei.NEI}`)}
+                        </BodyShort>
+                      </Radio>
+                    </RadioGroupWrapper>
+                    {controlledFields[index]?.barnepensjon === JaEllerNei.NEI && (
+                      <RadioGroupWrapper
+                        legend={formatMessage(
+                          'søknad.barnetillegg.registrerteBarn.harInntekt.label'
+                        )}
+                        name={`${BARNETILLEGG}.${index}.harInntekt`}
+                        control={control}
+                        error={errors?.[BARNETILLEGG]?.[index]?.harInntekt?.message}
+                      >
+                        <ReadMore
+                          header={formatMessage(
+                            'søknad.barnetillegg.registrerteBarn.harInntekt.readMore.title'
+                          )}
+                        >
+                          {formatMessage(
+                            'søknad.barnetillegg.registrerteBarn.harInntekt.readMore.text',
+                            {
+                              grunnbeløp: GRUNNBELØP,
+                            }
+                          )}
+                        </ReadMore>
+                        <Radio value={JaEllerNei.JA}>
+                          <BodyShort>
+                            {formatMessage(`answerOptions.jaEllerNei.${JaEllerNei.JA}`)}
+                          </BodyShort>
+                        </Radio>
+                        <Radio value={JaEllerNei.NEI}>
+                          <BodyShort>
+                            {formatMessage(`answerOptions.jaEllerNei.${JaEllerNei.NEI}`)}
+                          </BodyShort>
+                        </Radio>
+                      </RadioGroupWrapper>
                     )}
-                  >
-                    {formatMessage('søknad.barnetillegg.registrerteBarn.harInntekt.readMore.text', {
-                      grunnbeløp: GRUNNBELØP,
-                    })}
-                  </ReadMore>
-                  <Radio value={JaEllerNei.JA}>
-                    <BodyShort>
-                      {formatMessage(`answerOptions.jaEllerNei.${JaEllerNei.JA}`)}
-                    </BodyShort>
-                  </Radio>
-                  <Radio value={JaEllerNei.NEI}>
-                    <BodyShort>
-                      {formatMessage(`answerOptions.jaEllerNei.${JaEllerNei.NEI}`)}
-                    </BodyShort>
-                  </Radio>
-                </RadioGroupWrapper>
-              )}
-            </article>
-          );
-        })}
+                  </article>
+                </li>
+              );
+            })}
+          </ul>
+        )}
         {manuelleBarnFields.length > 0 && (
           <Heading size="xsmall" level="2">
             {formatMessage('søknad.barnetillegg.manuelleBarn.title')}
           </Heading>
         )}
-        {manuelleBarnFields.map((barn, index) => {
-          return (
-            <article key={barn?.id} className={classes.barneKort}>
-              <Label>{`${formatNavn(barn?.navn)}`}</Label>
-              <BodyShort>{`${formatMessage('søknad.barnetillegg.manuelleBarn.fødselsnummer')}: ${
-                barn?.fnr
-              }`}</BodyShort>
-              {barn?.relasjon === Relasjon.FORELDER && (
-                <BodyShort>
-                  {formatMessage('søknad.barnetillegg.manuelleBarn.erForelder')}
-                </BodyShort>
-              )}
-              {barn?.relasjon === Relasjon.FOSTERFORELDER && (
-                <BodyShort>
-                  {formatMessage('søknad.barnetillegg.manuelleBarn.erFosterforelder')}
-                </BodyShort>
-              )}
-              {barn?.barnepensjon === JaEllerNei.JA && (
-                <BodyShort>
-                  {formatMessage('søknad.barnetillegg.manuelleBarn.mottarBarnepensjon')}
-                </BodyShort>
-              )}
-              {barn?.barnepensjon === JaEllerNei.NEI && (
-                <BodyShort>
-                  {formatMessage('søknad.barnetillegg.manuelleBarn.mottarIkkeBarnepensjon')}
-                </BodyShort>
-              )}
-              {barn?.harInntekt === JaEllerNei.JA && (
-                <BodyShort>
-                  {formatMessage('søknad.barnetillegg.manuelleBarn.inntektOver1G')}
-                </BodyShort>
-              )}
-              {barn?.harInntekt === JaEllerNei.NEI && (
-                <BodyShort>
-                  {formatMessage('søknad.barnetillegg.manuelleBarn.inntektIkkeOver1G')}
-                </BodyShort>
-              )}
-              <Grid>
-                <Cell xs={4}>
-                  <Button variant="tertiary" type="button" onClick={() => editNyttBarn(index)}>
-                    {formatMessage('søknad.barnetillegg.manuelleBarn.redigerBarn')}
-                  </Button>
-                </Cell>
-              </Grid>
-            </article>
-          );
-        })}
+        {manuelleBarnFields.length > 0 && (
+          <ul className={classes.barnList}>
+            {manuelleBarnFields.map((barn, index) => {
+              return (
+                <li key={barn?.id}>
+                  <article className={classes.barneKort}>
+                    <Heading size="xsmall" level="3">{`${formatNavn(barn?.navn)}`}</Heading>
+                    <BodyShort>{`${formatMessage(
+                      'søknad.barnetillegg.manuelleBarn.fødselsnummer'
+                    )}: ${barn?.fnr}`}</BodyShort>
+                    {barn?.relasjon === Relasjon.FORELDER && (
+                      <BodyShort>
+                        {formatMessage('søknad.barnetillegg.manuelleBarn.erForelder')}
+                      </BodyShort>
+                    )}
+                    {barn?.relasjon === Relasjon.FOSTERFORELDER && (
+                      <BodyShort>
+                        {formatMessage('søknad.barnetillegg.manuelleBarn.erFosterforelder')}
+                      </BodyShort>
+                    )}
+                    {barn?.barnepensjon === JaEllerNei.JA && (
+                      <BodyShort>
+                        {formatMessage('søknad.barnetillegg.manuelleBarn.mottarBarnepensjon')}
+                      </BodyShort>
+                    )}
+                    {barn?.barnepensjon === JaEllerNei.NEI && (
+                      <BodyShort>
+                        {formatMessage('søknad.barnetillegg.manuelleBarn.mottarIkkeBarnepensjon')}
+                      </BodyShort>
+                    )}
+                    {barn?.harInntekt === JaEllerNei.JA && (
+                      <BodyShort>
+                        {formatMessage('søknad.barnetillegg.manuelleBarn.inntektOver1G')}
+                      </BodyShort>
+                    )}
+                    {barn?.harInntekt === JaEllerNei.NEI && (
+                      <BodyShort>
+                        {formatMessage('søknad.barnetillegg.manuelleBarn.inntektIkkeOver1G')}
+                      </BodyShort>
+                    )}
+                    <Grid>
+                      <Cell xs={4}>
+                        <Button
+                          variant="tertiary"
+                          type="button"
+                          onClick={() => editNyttBarn(index)}
+                        >
+                          {formatMessage('søknad.barnetillegg.manuelleBarn.redigerBarn')}
+                        </Button>
+                      </Cell>
+                    </Grid>
+                  </article>
+                </li>
+              );
+            })}
+          </ul>
+        )}
         <BodyShort>{formatMessage('søknad.barnetillegg.leggTilBarn.description')}</BodyShort>
         <Grid>
           <Cell xs={12} md="6">
