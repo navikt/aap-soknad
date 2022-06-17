@@ -308,7 +308,7 @@ export const Barnetillegg = ({ onBackClick, søknad }: Props) => {
         })}
         <BodyShort>{formatMessage('søknad.barnetillegg.leggTilBarn.description')}</BodyShort>
         <Grid>
-          <Cell xs={6}>
+          <Cell xs={12} md="6">
             <Button
               variant="tertiary"
               type="button"
