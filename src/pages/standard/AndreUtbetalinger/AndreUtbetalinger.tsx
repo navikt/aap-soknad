@@ -215,8 +215,8 @@ export const AndreUtbetalinger = ({ getText, onBackClick, søknad }: Props) => {
         <Alert variant={'info'}>
           {getText('steps.andre_utbetalinger.alertAttachments.title')}
           <ul>
-            {Attachments.map((attachment) => (
-              <li>{attachment?.description}</li>
+            {Attachments.map((attachment, index) => (
+              <li key={index}>{attachment?.description}</li>
             ))}
           </ul>
           {getText('steps.andre_utbetalinger.alertAttachments.uploadInfo')}
