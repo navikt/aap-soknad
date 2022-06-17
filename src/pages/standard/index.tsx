@@ -311,7 +311,7 @@ const mapSøknadToBackend = (søknad?: Soknad, fastlege?: FastlegeView): Søknad
         barnepensjon: jaNeiToBoolean(barn.barnepensjon),
       })) ?? [],
     tilleggsopplysninger: søknad?.tilleggsopplysninger,
-    ...(søknad?.vedlegg?.annet ? { vedlegg: søknad?.vedlegg?.annet?.map((e) => e?.id) } : {}),
+    ...(søknad?.vedlegg?.annet ? { andreVedlegg: søknad?.vedlegg?.annet?.map((e) => e?.id) } : {}),
   };
 };
 
