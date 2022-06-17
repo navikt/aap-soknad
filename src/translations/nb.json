@@ -1,6 +1,51 @@
 {
   "test": "Test",
   "søknad": {
+    "andreUtbetalinger": {
+      "title": "Utbetalinger",
+      "guide": {
+        "text": "Hvis du får utbetalinger fra NAV, arbeidsgiver eller andre, kan din AAP bli redusert. Vi spør om dette fordi du ikke alltid har krav på å få flere typer utbetalinger samtidig. Vi prøver å unngå feilutbetalinger."
+      },
+      "lønn": {
+        "label": "Har du fått eller skal du få ekstra utbetalinger fra arbeidsgiver?",
+        "readMore": {
+          "title": "Hva menes med \"ekstra utbetalinger\"?",
+          "text": "Dette kan for eksempel være sluttpakke, etterlønn eller andre goder. Du skal svare “nei” hvis du bare mottar vanlig lønn eller feriepenger."
+        },
+        "validation": {
+          "required": "Du må krysse av for om du har fått eller skal få ekstra utbetalinger fra arbeidsgiver."
+        }
+      },
+      "stønad": {
+        "label": "Kryss av for utbetalinger du får, eller nylig har søkt om:",
+        "values": {
+          "økonomiskSosialhjelp": "Økonomisk sosialhjelp",
+          "omsorgsstønad": "Omsorgsstønad (tidligere omsorgslønn)",
+          "introduksjonsStønad": "Introduksjonssønad (introduksjonsprogrammet)",
+          "kvalifiseringsstønad": "Kvalifiseringsstønad (kvalifiseringsprogrammet)",
+          "verv": "Godtgjørelse eller lønn for verv",
+          "utland": "Ytelser fra utenlandske trygdemyndigheter",
+          "afp": "Avtalefestet pensjon (AFP)",
+          "stipend": "Lån, stipend eller sykestipend fra Lånekassen",
+          "nei": "Ingen av disse"
+        },
+        "validation": {
+          "required": "Du må krysse av for om du får eller nylig har søkt om noen av utbetalingene over."
+        }
+      },
+      "hvemBetalerAfp": {
+        "label": "Hvem utbetaler avtalefestet pensjon (AFP)?"
+      },
+      "vedlegg": {
+        "omsorgsstønad": "Kopi av avtalen om omsorgsstønad fra kommunen din",
+        "utlandsStønad": "Dokumentasjon av ytelser fra utenlandske trygdemyndigheter",
+        "andreGoder": "Dokumentasjon av ekstra utbetalinger fra arbeidsgiver, for eksempel kopi av inngått sluttpakke, avtale om etterlønn eller andre goder. Både beløpet på utbetalingen og perioden den gjelder for bør være dokumentert"
+      },
+      "alert": {
+        "leggeVedTekst": "Du må legge ved:",
+        "lasteOppVedleggTekst": "Dette laster du opp senere i søknaden. Du kan også ettersende vedlegg."
+      }
+    },
     "barnetillegg": {
       "title": "Barnetillegg",
       "guide": {

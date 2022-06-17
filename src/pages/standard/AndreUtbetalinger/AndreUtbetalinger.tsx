@@ -1,6 +1,5 @@
 import { Alert, BodyShort, Cell, Checkbox, Grid, Heading, Radio, ReadMore } from '@navikt/ds-react';
 import React, { useEffect, useMemo } from 'react';
-import { GetText } from '../../../hooks/useTexts';
 import { FieldValues, useForm } from 'react-hook-form';
 import CheckboxGroupWrapper from '../../../components/input/CheckboxGroupWrapper';
 import RadioGroupWrapper from '../../../components/input/RadioGroupWrapper/RadioGroupWrapper';
@@ -19,9 +18,9 @@ import SoknadFormWrapper from '../../../components/SoknadFormWrapper/SoknadFormW
 import TextFieldWrapper from '../../../components/input/TextFieldWrapper';
 import ColorPanel from '../../../components/panel/ColorPanel';
 import { LucaGuidePanel } from '../../../components/LucaGuidePanel';
+import { useFeatureToggleIntl } from '../../../hooks/useFeatureToggleIntl';
 
 interface Props {
-  getText: GetText;
   søknad?: Soknad;
   onBackClick: () => void;
   onCancelClick: () => void;
@@ -48,15 +47,19 @@ const ANDRE_UTBETALINGER = 'andreUtbetalinger';
 const LØNN = 'lønn';
 const STØNAD = 'stønad';
 
-export const AndreUtbetalinger = ({ getText, onBackClick, søknad }: Props) => {
+export const AndreUtbetalinger = ({ onBackClick, søknad }: Props) => {
+  const { formatMessage } = useFeatureToggleIntl();
+
   const schema = yup.object().shape({
     [ANDRE_UTBETALINGER]: yup.object().shape({
       [LØNN]: yup
         .string()
-        .required(getText('form.andreUtbetalinger.lønn.required'))
-        .oneOf([JaEllerNei.JA, JaEllerNei.NEI], getText('form.andreUtbetalinger.lønn.required'))
-        .typeError(getText('form.andreUtbetalinger.lønn.required')),
-      [STØNAD]: yup.array().min(1, getText('form.andreUtbetalinger.stønad.required')),
+        .required(formatMessage('søknad.andreUtbetalinger.lønn.validation.required'))
+        .oneOf([JaEllerNei.JA, JaEllerNei.NEI])
+        .nullable(),
+      [STØNAD]: yup
+        .array()
+        .min(1, formatMessage('søknad.andreUtbetalinger.stønad.validation.required')),
     }),
   });
   const { vedleggDispatch } = useVedleggContext();
@@ -79,17 +82,23 @@ export const AndreUtbetalinger = ({ getText, onBackClick, søknad }: Props) => {
   const stønadEllerVerv = watch(`${ANDRE_UTBETALINGER}.${STØNAD}`);
   const StønadAlternativer = useMemo(
     () => ({
-      ØKONOMISK_SOSIALHJELP: getText(`form.${ANDRE_UTBETALINGER}.${STØNAD}.økonomiskSosialhjelp`),
-      OMSORGSSTØNAD: getText(`form.${ANDRE_UTBETALINGER}.${STØNAD}.omsorgsstønad`),
-      INTRODUKSJONSSTØNAD: getText(`form.${ANDRE_UTBETALINGER}.${STØNAD}.introduksjonsStønad`),
-      KVALIFISERINGSSTØNAD: getText(`form.${ANDRE_UTBETALINGER}.${STØNAD}.kvalifiseringsstønad`),
-      VERV: getText(`form.${ANDRE_UTBETALINGER}.${STØNAD}.verv`),
-      UTLAND: getText(`form.${ANDRE_UTBETALINGER}.${STØNAD}.utland`),
-      AFP: getText(`form.${ANDRE_UTBETALINGER}.${STØNAD}.afp`),
-      STIPEND: getText(`form.${ANDRE_UTBETALINGER}.${STØNAD}.stipend`),
-      NEI: getText(`form.${ANDRE_UTBETALINGER}.${STØNAD}.nei`),
+      ØKONOMISK_SOSIALHJELP: formatMessage(
+        `søknad.${ANDRE_UTBETALINGER}.${STØNAD}.values.økonomiskSosialhjelp`
+      ),
+      OMSORGSSTØNAD: formatMessage(`søknad.${ANDRE_UTBETALINGER}.${STØNAD}.values.omsorgsstønad`),
+      INTRODUKSJONSSTØNAD: formatMessage(
+        `søknad.${ANDRE_UTBETALINGER}.${STØNAD}.values.introduksjonsStønad`
+      ),
+      KVALIFISERINGSSTØNAD: formatMessage(
+        `søknad.${ANDRE_UTBETALINGER}.${STØNAD}.values.kvalifiseringsstønad`
+      ),
+      VERV: formatMessage(`søknad.${ANDRE_UTBETALINGER}.${STØNAD}.values.verv`),
+      UTLAND: formatMessage(`søknad.${ANDRE_UTBETALINGER}.${STØNAD}.values.utland`),
+      AFP: formatMessage(`søknad.${ANDRE_UTBETALINGER}.${STØNAD}.values.afp`),
+      STIPEND: formatMessage(`søknad.${ANDRE_UTBETALINGER}.${STØNAD}.values.stipend`),
+      NEI: formatMessage(`søknad.${ANDRE_UTBETALINGER}.${STØNAD}.values.nei`),
     }),
-    [getText]
+    [formatMessage]
   );
   const Attachments = useMemo(() => {
     let attachments: Array<{ type: string; description: string }> = [];
@@ -99,7 +108,7 @@ export const AndreUtbetalinger = ({ getText, onBackClick, søknad }: Props) => {
         ...attachments,
         {
           type: AttachmentType.OMSORGSSTØNAD,
-          description: getText(`steps.andre_utbetalinger.alertAttachments.omsorgsstønad`),
+          description: formatMessage(`søknad.andreUtbetalinger.vedlegg.omsorgsstønad`),
         },
       ];
     }
@@ -108,7 +117,7 @@ export const AndreUtbetalinger = ({ getText, onBackClick, søknad }: Props) => {
         ...attachments,
         {
           type: AttachmentType.UTLANDSSTØNAD,
-          description: getText(`steps.andre_utbetalinger.alertAttachments.utlandsStønad`),
+          description: formatMessage(`søknad.andreUtbetalinger.vedlegg.utlandsStønad`),
         },
       ];
     }
@@ -117,7 +126,7 @@ export const AndreUtbetalinger = ({ getText, onBackClick, søknad }: Props) => {
         ...attachments,
         {
           type: AttachmentType.LØNN_OG_ANDRE_GODER,
-          description: getText(`steps.andre_utbetalinger.alertAttachments.andreGoder`),
+          description: formatMessage(`søknad.andreUtbetalinger.vedlegg.andreGoder`),
         },
       ];
     }
@@ -147,39 +156,39 @@ export const AndreUtbetalinger = ({ getText, onBackClick, søknad }: Props) => {
         completeAndGoToNextStep(stepWizardDispatch);
       })}
       onBack={() => onBackClick()}
-      nextButtonText={'Neste steg'}
-      backButtonText={'Forrige steg'}
-      cancelButtonText={'Avbryt søknad'}
+      nextButtonText={formatMessage('navigation.next')}
+      backButtonText={formatMessage('navigation.back')}
+      cancelButtonText={formatMessage('navigation.cancel')}
       errors={errors}
     >
       <Heading size="large" level="2">
-        {getText(`steps.andre_utbetalinger.title`)}
+        {formatMessage(`søknad.andreUtbetalinger.title`)}
       </Heading>
-      <LucaGuidePanel>{getText(`steps.andre_utbetalinger.guide`)}</LucaGuidePanel>
+      <LucaGuidePanel>{formatMessage(`søknad.andreUtbetalinger.guide.text`)}</LucaGuidePanel>
       <RadioGroupWrapper
-        legend={getText(`form.${ANDRE_UTBETALINGER}.${LØNN}.legend`)}
+        legend={formatMessage('søknad.andreUtbetalinger.lønn.label')}
         name={`${ANDRE_UTBETALINGER}.${LØNN}`}
         control={control}
         error={errors?.[ANDRE_UTBETALINGER]?.[LØNN]?.message}
       >
         <ReadMore
-          header={getText('steps.andre_utbetalinger.ekstraUtbetalingerReadMore.title')}
+          header={formatMessage('søknad.andreUtbetalinger.lønn.readMore.title')}
           type={'button'}
         >
-          {getText('steps.andre_utbetalinger.ekstraUtbetalingerReadMore.text')}
+          {formatMessage('søknad.andreUtbetalinger.lønn.readMore.text')}
         </ReadMore>
         <Radio value={JaEllerNei.JA}>
-          <BodyShort>{JaEllerNei.JA}</BodyShort>
+          <BodyShort>{formatMessage(`answerOptions.jaEllerNei.${JaEllerNei.JA}`)}</BodyShort>
         </Radio>
         <Radio value={JaEllerNei.NEI}>
-          <BodyShort>{JaEllerNei.NEI}</BodyShort>
+          <BodyShort>{formatMessage(`answerOptions.jaEllerNei.${JaEllerNei.NEI}`)}</BodyShort>
         </Radio>
       </RadioGroupWrapper>
       <CheckboxGroupWrapper
         name={`${ANDRE_UTBETALINGER}.${STØNAD}`}
         control={control}
         size="medium"
-        legend={getText(`form.${ANDRE_UTBETALINGER}.${STØNAD}.legend`)}
+        legend={formatMessage('søknad.andreUtbetalinger.stønad.label')}
         error={errors?.[ANDRE_UTBETALINGER]?.[STØNAD]?.message}
       >
         <Checkbox value={StønadType.VERV}>{StønadAlternativer.VERV}</Checkbox>
@@ -201,7 +210,7 @@ export const AndreUtbetalinger = ({ getText, onBackClick, søknad }: Props) => {
               <Cell xs={7}>
                 <TextFieldWrapper
                   name={`${ANDRE_UTBETALINGER}.afp.hvemBetaler`}
-                  label={getText('form.andreUtbetalinger.afp.legend')}
+                  label={formatMessage('søknad.andreUtbetalinger.hvemBetalerAfp.label')}
                   control={control}
                 />
               </Cell>
@@ -213,13 +222,13 @@ export const AndreUtbetalinger = ({ getText, onBackClick, søknad }: Props) => {
       </CheckboxGroupWrapper>
       {Attachments.length > 0 && (
         <Alert variant={'info'}>
-          {getText('steps.andre_utbetalinger.alertAttachments.title')}
+          {formatMessage('søknad.andreUtbetalinger.alert.leggeVedTekst')}
           <ul>
             {Attachments.map((attachment, index) => (
               <li key={index}>{attachment?.description}</li>
             ))}
           </ul>
-          {getText('steps.andre_utbetalinger.alertAttachments.uploadInfo')}
+          {formatMessage('søknad.andreUtbetalinger.alert.lasteOppVedleggTekst')}
         </Alert>
       )}
     </SoknadFormWrapper>
