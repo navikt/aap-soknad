@@ -19,6 +19,7 @@ import * as yup from 'yup';
 import * as classes from './Barnetillegg.module.css';
 import { ModalButtonWrapper } from '../../../components/ButtonWrapper/ModalButtonWrapper';
 import { useFeatureToggleIntl } from '../../../hooks/useFeatureToggleIntl';
+import { GRUNNBELØP } from './Barnetillegg';
 
 interface Props {
   søknad?: Soknad;
@@ -132,6 +133,7 @@ export const AddBarnModal = ({
         </Heading>
         <Ingress>{formatMessage('søknad.barnetillegg.leggTilBarn.modal.description')}</Ingress>
         <form
+          className={classes?.modalForm}
           onSubmit={handleSubmit((data) => {
             onSaveClick(data);
           })}
@@ -206,7 +208,9 @@ export const AddBarnModal = ({
                   'søknad.barnetillegg.leggTilBarn.modal.harInntekt.readMore.title'
                 )}
               >
-                {formatMessage('søknad.barnetillegg.leggTilBarn.modal.harInntekt.readMore.text')}
+                {formatMessage('søknad.barnetillegg.leggTilBarn.modal.harInntekt.readMore.text', {
+                  grunnbeløp: GRUNNBELØP,
+                })}
               </ReadMore>
               <Radio value={JaEllerNei.JA}>
                 <BodyShort>{formatMessage(`answerOptions.jaEllerNei.${JaEllerNei.JA}`)}</BodyShort>
