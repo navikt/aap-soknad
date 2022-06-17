@@ -263,7 +263,14 @@ const mapSøknadToBackend = (søknad?: Soknad, fastlege?: FastlegeView): Søknad
     behandlere,
     yrkesskadeType: getJaNeiVetIkke(søknad?.yrkesskade),
     utbetalinger: {
-      fraArbeidsgiver: jaNeiToBoolean(søknad?.andreUtbetalinger?.lønn),
+      ...(søknad?.andreUtbetalinger?.lønn
+        ? {
+            ekstraFraArbeidsgiver: {
+              fraArbeidsgiver: jaNeiToBoolean(søknad?.andreUtbetalinger?.lønn),
+              vedlegg: søknad?.vedlegg?.[AttachmentType.LØNN_OG_ANDRE_GODER]?.[0]?.id,
+            },
+          }
+        : {}),
       andreStønader:
         søknad?.andreUtbetalinger?.stønad?.map((stønad) => {
           switch (stønad) {
