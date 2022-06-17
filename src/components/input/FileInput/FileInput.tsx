@@ -80,6 +80,13 @@ const FileInput = ({ fields, append, remove, heading, ingress }: Props) => {
                 color={'var(--navds-global-color-nav-red)'}
                 title={'Slett'}
                 onClick={() => remove(index)}
+                role={'button'}
+                tabIndex={0}
+                onKeyPress={(event) => {
+                  if (event.key === 'Enter') {
+                    remove(index);
+                  }
+                }}
               />
               <BodyShort>{'Slett'}</BodyShort>
             </div>
