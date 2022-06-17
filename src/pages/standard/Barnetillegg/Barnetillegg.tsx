@@ -39,7 +39,7 @@ interface Props {
 const BARNETILLEGG = 'barnetillegg';
 const MANUELLE_BARN = 'manuelleBarn';
 
-const GRUNNBELØP = '111 477';
+export const GRUNNBELØP = '111 477';
 
 export const Barnetillegg = ({ onBackClick, søknad }: Props) => {
   const { formatMessage } = useFeatureToggleIntl();
