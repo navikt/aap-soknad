@@ -31,7 +31,6 @@
     "yup": "^0.32.11"
   },
   "devDependencies": {
-    "@parcel/transformer-less": "2.5.0",
     "@testing-library/cypress": "^8.0.2",
     "@testing-library/jest-dom": "^5.16.1",
     "@testing-library/react": "^12.1.2",
