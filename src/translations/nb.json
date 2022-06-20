@@ -1,6 +1,30 @@
 {
   "test": "Test",
   "søknad": {
+    "student": {
+      "title": "Student",
+      "erStudent": {
+        "legend": "Er du student nå?",
+        "description": "Du regnes som student hvis du tar et studie som gir rett til lån fra Statens lånekasse for utdanning. Du trenger ikke å ha mottatt lån/stipend.",
+        "ja": "Ja, helt eller delvis",
+        "avbrutt": "Ja, men har avbrutt studiet helt på grunn av sykdom",
+        "required": "Du må svare på om du er student."
+      },
+      "kommeTilbake": {
+        "legend": "Har du planer om å komme tilbake til studiet?",
+        "required": "Du må svare på om du har planer om å komme tilbake til studiet."
+      },
+      "guide": {
+        "guide1": "Hvis du er student, gjelder det ulike regler avhengig av om du fortsetter på studiet, eller avbryter helt.",
+        "guide2": "Du regnes som student hvis du tar et studie som gir rett til lån fra Statens lånekasse for utdanning. Du trenger ikke å ha mottatt lån/stipend."
+      },
+      "vedlegg": {
+        "title": "Du må legge ved:",
+        "name": "Bekreftelse på avbrutt studie",
+        "description": "Bekreftelse fra studiested på hvilken dato studiet ble avbrutt fra.",
+        "lastOppSenere": "Dokumentene laster du opp senere i søknaden. Du kan også ettersende vedlegg."
+      }
+    },
     "andreUtbetalinger": {
       "title": "Utbetalinger",
       "guide": {

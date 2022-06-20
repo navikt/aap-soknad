@@ -13,6 +13,8 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import SoknadFormWrapper from '../../../components/SoknadFormWrapper/SoknadFormWrapper';
 import { AttachmentType } from '../AndreUtbetalinger/AndreUtbetalinger';
 import { LucaGuidePanel } from '../../../components/LucaGuidePanel';
+import { AVBRUTT_STUDIE_VEDLEGG } from '../Student/Student';
+import { useFeatureToggleIntl } from '../../../hooks/useFeatureToggleIntl';
 
 interface Props {
   getText: GetText;
@@ -31,6 +33,7 @@ const Vedlegg = ({ getText, onBackClick, søknad }: Props) => {
   const [scanningGuideOpen, setScanningGuideOpen] = useState(false);
   const scanningGuideElement = useRef(null);
   const schema = yup.object().shape({});
+  const { formatMessage } = useFeatureToggleIntl();
   const { vedleggState } = useVedleggContext();
   const { søknadDispatch } = useSoknadContext();
   const { stepWizardDispatch } = useStepWizard();
@@ -52,6 +55,10 @@ const Vedlegg = ({ getText, onBackClick, søknad }: Props) => {
   const scanningGuideOnClick = () => {
     setScanningGuideOpen(!scanningGuideOpen);
   };
+  const fieldArrayAvbruttStudie = useFieldArray({
+    name: AVBRUTT_STUDIE_VEDLEGG,
+    control,
+  });
   const fieldArrayLønn = useFieldArray({
     name: VEDLEGG_LØNN,
     control,
@@ -122,6 +129,16 @@ const Vedlegg = ({ getText, onBackClick, søknad }: Props) => {
       >
         <ScanningGuide getText={getText} />
       </ReadMore>
+      {vedleggState?.requiredVedlegg?.find((e) => e.type === AVBRUTT_STUDIE_VEDLEGG) && (
+        <FileInput
+          name={AVBRUTT_STUDIE_VEDLEGG}
+          fields={fieldArrayAvbruttStudie.fields}
+          append={fieldArrayAvbruttStudie.append}
+          remove={fieldArrayAvbruttStudie.remove}
+          heading={formatMessage('søknad.student.vedlegg.name')}
+          ingress={formatMessage('søknad.student.vedlegg.description')}
+        />
+      )}
       {vedleggState?.requiredVedlegg?.find(
         (e) => e.type === AttachmentType.LØNN_OG_ANDRE_GODER
       ) && (

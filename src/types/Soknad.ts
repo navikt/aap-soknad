@@ -1,6 +1,7 @@
 import { AttachmentType, StønadType } from '../pages/standard/AndreUtbetalinger/AndreUtbetalinger';
 import { Relasjon } from '../pages/standard/Barnetillegg/AddBarnModal';
 import { JaEllerNei, JaNeiVetIkke } from './Generic';
+import { AVBRUTT_STUDIE_VEDLEGG } from '../pages/standard/Student/Student';
 
 export type FieldAndLabel<T> = {
   label?: string;
@@ -108,6 +109,7 @@ interface Soknad {
     [AttachmentType.LØNN_OG_ANDRE_GODER]: Vedlegg[];
     [AttachmentType.OMSORGSSTØNAD]: Vedlegg[];
     [AttachmentType.UTLANDSSTØNAD]: Vedlegg[];
+    [AVBRUTT_STUDIE_VEDLEGG]: Vedlegg[];
     annet: Vedlegg[];
   };
   søknadBekreft?: boolean;

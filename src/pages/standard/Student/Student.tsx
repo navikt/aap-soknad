@@ -1,5 +1,4 @@
 import Soknad from '../../../types/Soknad';
-import { GetText } from '../../../hooks/useTexts';
 import RadioGroupWrapper from '../../../components/input/RadioGroupWrapper/RadioGroupWrapper';
 import { BodyShort, Heading, Radio, Alert } from '@navikt/ds-react';
 import { JaNeiVetIkke } from '../../../types/Generic';
@@ -12,6 +11,13 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import SoknadFormWrapper from '../../../components/SoknadFormWrapper/SoknadFormWrapper';
 import ColorPanel from '../../../components/panel/ColorPanel';
 import { LucaGuidePanel } from '../../../components/LucaGuidePanel';
+import {
+  addRequiredVedlegg,
+  removeRequiredVedlegg,
+  useVedleggContext,
+} from '../../../context/vedleggContext';
+import { useFeatureToggleIntl } from '../../../hooks/useFeatureToggleIntl';
+export const AVBRUTT_STUDIE_VEDLEGG = 'avbruttStudie';
 
 const STUDENT = 'student';
 const ER_STUDENT = 'erStudent';
@@ -23,38 +29,39 @@ enum JaNeiAvbrutt {
   AVBRUTT = 'Avbrutt',
 }
 interface Props {
-  getText: GetText;
   søknad?: Soknad;
   onBackClick: () => void;
   onCancelClick: () => void;
 }
 
-const Student = ({ getText, onBackClick, søknad }: Props) => {
+const Student = ({ onBackClick, søknad }: Props) => {
+  const { formatMessage } = useFeatureToggleIntl();
   const schema = yup.object().shape({
     [STUDENT]: yup.object().shape({
       [ER_STUDENT]: yup
         .string()
-        .required(getText('form.student.required'))
+        .required(formatMessage('søknad.student.erStudent.required'))
         .oneOf(
           [JaNeiAvbrutt.JA, JaNeiAvbrutt.NEI, JaNeiAvbrutt.AVBRUTT],
-          getText('form.student.required')
+          formatMessage('søknad.student.erStudent.required')
         )
-        .typeError(getText('form.student.required')),
+        .typeError(formatMessage('søknad.student.erStudent.required')),
       [KOMME_TILBAKE]: yup.string().when([ER_STUDENT], {
         is: JaNeiAvbrutt.AVBRUTT,
         then: yup
           .string()
-          .required(getText('form.student.kommeTilbake.required'))
+          .required(formatMessage('søknad.student.kommeTilbake.required'))
           .oneOf(
             [JaNeiVetIkke.JA, JaNeiVetIkke.NEI, JaNeiVetIkke.VET_IKKE],
-            getText('form.student.kommeTilbake.required')
+            formatMessage('søknad.student.kommeTilbake.required')
           )
-          .typeError(getText('form.student.kommeTilbake.required')),
+          .typeError(formatMessage('søknad.student.kommeTilbake.required')),
       }),
     }),
   });
   const { søknadDispatch } = useSoknadContext();
   const { stepWizardDispatch } = useStepWizard();
+  const { vedleggDispatch } = useVedleggContext();
   const {
     control,
     handleSubmit,
@@ -70,11 +77,23 @@ const Student = ({ getText, onBackClick, søknad }: Props) => {
   });
 
   const erStudent = watch(`${STUDENT}.${ER_STUDENT}`);
-  const tilbakeTilStudie = watch(`${STUDENT}.${KOMME_TILBAKE}`);
 
   useEffect(() => {
     setValue(`${STUDENT}.${KOMME_TILBAKE}`, undefined);
     clearErrors();
+    if (erStudent === JaNeiAvbrutt.AVBRUTT) {
+      addRequiredVedlegg(
+        [
+          {
+            type: AVBRUTT_STUDIE_VEDLEGG,
+            description: formatMessage('søknad.student.vedlegg.description'),
+          },
+        ],
+        vedleggDispatch
+      );
+    } else {
+      removeRequiredVedlegg(AVBRUTT_STUDIE_VEDLEGG, vedleggDispatch);
+    }
   }, [erStudent]);
 
   return (
@@ -90,27 +109,24 @@ const Student = ({ getText, onBackClick, søknad }: Props) => {
       errors={errors}
     >
       <Heading size="large" level="2">
-        {getText('steps.student.title')}
+        {formatMessage('søknad.student.title')}
       </Heading>
       <LucaGuidePanel>
-        <BodyShort spacing>{getText('steps.student.guide1')}</BodyShort>
-        <BodyShort>
-          Du regnes som student hvis du tar et studie som gir rett til lån fra Statens lånekasse for
-          utdanning. Du trenger ikke å ha mottatt lån/stipend.
-        </BodyShort>
+        <BodyShort spacing>{formatMessage('søknad.student.guide1')}</BodyShort>
+        <BodyShort>{formatMessage('søknad.student.guide2')}</BodyShort>
       </LucaGuidePanel>
       <RadioGroupWrapper
         name={`${STUDENT}.${ER_STUDENT}`}
-        legend={getText(`form.${STUDENT}.legend`)}
-        description={getText(`form.${STUDENT}.description`)}
+        legend={formatMessage(`søknad.${STUDENT}.${ER_STUDENT}.legend`)}
+        description={formatMessage(`søknad.${STUDENT}.${ER_STUDENT}.description`)}
         control={control}
         error={errors?.[STUDENT]?.[ER_STUDENT]?.message}
       >
         <Radio value={JaNeiAvbrutt.JA}>
-          <BodyShort>Ja, helt eller delvis</BodyShort>
+          <BodyShort>{formatMessage('søknad.student.erStudent.ja')}</BodyShort>
         </Radio>
         <Radio value={JaNeiAvbrutt.AVBRUTT}>
-          <BodyShort>Ja, men har avbrutt studiet helt på grunn av sykdom</BodyShort>
+          <BodyShort>{formatMessage('søknad.student.erStudent.avbrutt')}</BodyShort>
         </Radio>
         <Radio value={JaNeiAvbrutt.NEI}>
           <BodyShort>{JaNeiAvbrutt.NEI}</BodyShort>
@@ -120,7 +136,7 @@ const Student = ({ getText, onBackClick, søknad }: Props) => {
         <ColorPanel>
           <RadioGroupWrapper
             name={`${STUDENT}.${KOMME_TILBAKE}`}
-            legend={getText(`form.${STUDENT}.${KOMME_TILBAKE}.legend`)}
+            legend={formatMessage(`søknad.${STUDENT}.${KOMME_TILBAKE}.legend`)}
             control={control}
             error={errors?.[STUDENT]?.[KOMME_TILBAKE]?.message}
           >
@@ -136,15 +152,13 @@ const Student = ({ getText, onBackClick, søknad }: Props) => {
           </RadioGroupWrapper>
         </ColorPanel>
       )}
-      {tilbakeTilStudie && (
+      {erStudent === JaNeiAvbrutt.AVBRUTT && (
         <Alert variant="info">
-          <BodyShort>Du må legge ved:</BodyShort>
+          <BodyShort>{formatMessage('søknad.student.vedlegg.title')}</BodyShort>
           <ul>
-            <li>Bekreftelse fra studiested på hvilken dato studiet ble avbrutt fra.</li>
+            <li>{formatMessage('søknad.student.vedlegg.description')}</li>
           </ul>
-          <BodyShort>
-            Dokumentene laster du opp senere i søknaden. Du kan også ettersende vedlegg.
-          </BodyShort>
+          <BodyShort>{formatMessage('søknad.student.vedlegg.lastOppSenere')}</BodyShort>
         </Alert>
       )}
     </SoknadFormWrapper>

@@ -32,7 +32,7 @@ import Oppsummering from './Oppsummering/Oppsummering';
 import Tilleggsopplysninger from './Tilleggsopplysninger/Tilleggsopplysninger';
 import Vedlegg from './Vedlegg/Vedlegg';
 import StartDato from './StartDato/StartDato';
-import Student from './Student/Student';
+import Student, { AVBRUTT_STUDIE_VEDLEGG } from './Student/Student';
 import Kvittering from './Kvittering/Kvittering';
 import { fetchPOST } from '../../api/fetch';
 import * as classes from './standard.module.css';
@@ -130,6 +130,7 @@ interface SøknadBackendState {
   studier: {
     erStudent?: 'JA' | 'NEI' | 'AVBRUTT';
     kommeTilbake?: 'JA' | 'NEI' | 'VET_IKKE';
+    vedlegg?: string;
   };
   behandlere: Array<Behandler>;
   yrkesskadeType?: 'JA' | 'NEI' | 'VET_IKKE';
@@ -259,6 +260,9 @@ const mapSøknadToBackend = (søknad?: Soknad, fastlege?: FastlegeView): Søknad
     studier: {
       erStudent: getJaNeiAvbrutt(søknad?.student?.erStudent),
       kommeTilbake: getJaNeiVetIkke(søknad?.student?.kommeTilbake),
+      ...(søknad?.vedlegg?.[AVBRUTT_STUDIE_VEDLEGG]?.[0]?.id
+        ? { vedlegg: søknad?.vedlegg?.[AVBRUTT_STUDIE_VEDLEGG]?.[0]?.id }
+        : {}),
     },
     behandlere,
     yrkesskadeType: getJaNeiVetIkke(søknad?.yrkesskade),
@@ -457,7 +461,6 @@ export const StandardPage = (): JSX.Element => {
         </Step>
         <Step order={6} name={StepNames.STUDENT}>
           <Student
-            getText={getText}
             onCancelClick={onDeleteSøknad}
             onBackClick={onPreviousStep}
             søknad={søknadState?.søknad}
