@@ -37,6 +37,7 @@ import Kvittering from './Kvittering/Kvittering';
 import { fetchPOST } from '../../api/fetch';
 import * as classes from './standard.module.css';
 import { format } from 'date-fns';
+import { useFeatureToggleIntl } from '../../hooks/useFeatureToggleIntl';
 export enum StepNames {
   VEILEDNING = 'VEILEDNING',
   STARTDATO = 'STARTDATO',
@@ -316,6 +317,8 @@ const mapSøknadToBackend = (søknad?: Soknad, fastlege?: FastlegeView): Søknad
 };
 
 export const StandardPage = (): JSX.Element => {
+  const { formatMessage } = useFeatureToggleIntl();
+
   const [oppslagLoading, setOppslagLoading] = useState<boolean>(true);
   const [showVeiledning, setShowVeiledning] = useState<boolean>(true);
   const [showKvittering, setShowKvittering] = useState<boolean>(false);
@@ -392,7 +395,7 @@ export const StandardPage = (): JSX.Element => {
     return (
       <>
         <PageHeader align="center" className={classes?.pageHeader}>
-          {getText('pagetitle')}
+          {formatMessage('søknad.pagetitle')}
         </PageHeader>
         <Kvittering getText={getText} søker={søker} />
       </>
@@ -401,7 +404,6 @@ export const StandardPage = (): JSX.Element => {
     return (
       <Veiledning
         onSubmit={() => setShowVeiledning(false)}
-        getText={getText}
         søker={søker}
         loading={oppslagLoading}
       />
@@ -410,7 +412,7 @@ export const StandardPage = (): JSX.Element => {
     <>
       <header>
         <PageHeader tabIndex={-1} ref={pageHeading} align="center">
-          {getText('pagetitle')}
+          {formatMessage('søknad.pagetitle')}
         </PageHeader>
       </header>
       <StepWizard hideLabels={true}>

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Heading, Loader } from '@navikt/ds-react';
 import { HeadingProps } from '@navikt/ds-react/esm/typography/Heading';
+import { useFeatureToggleIntl } from '../../hooks/useFeatureToggleIntl';
 
 type Props = {
   level: HeadingProps['level'];
@@ -10,11 +11,14 @@ type Props = {
 };
 
 const HeadingHelloName = ({ level, size, name, loading }: Props) => {
+  const { formatMessage } = useFeatureToggleIntl();
   return (
     <Heading size={size} level={level} spacing>
-      {`Hei, ${name}`}
-      {loading && <Loader />}
-      {`!`}
+      {loading ? (
+        <Loader />
+      ) : (
+        formatMessage('søknad.veiledning.guide.title', (values = { name: name }))
+      )}
     </Heading>
   );
 };
