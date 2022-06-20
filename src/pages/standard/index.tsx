@@ -432,7 +432,6 @@ export const StandardPage = (): JSX.Element => {
         </Step>
         <Step order={3} name={StepNames.YRKESSKADE}>
           <Yrkesskade
-            getText={getText}
             onCancelClick={onDeleteSøknad}
             onBackClick={onPreviousStep}
             søknad={søknadState?.søknad}

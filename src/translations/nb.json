@@ -147,6 +147,32 @@
         "bulletPointVedleggFosterforelder": "Dokumentasjon på at du er fosterforelder til barnet, og fra når. For eksempel en bekreftelse fra barneverntjenesten.",
         "lasteOppVedleggTekst": "Dette laster du opp senere i søknaden. Du kan også ettersende vedlegg."
       }
+    },
+    "yrkesskade": {
+      "title": "Yrkesskade",
+      "guide": {
+        "text": "Hvis arbeidsevnen din er nedsatt som følge av en yrkesskade eller yrkessykdom, blir saken din behandlet etter andre regler. Dette kan gi deg noen fordeler."
+      },
+      "harDuYrkesskade": {
+        "label": "Har du en yrkesskade eller yrkessykdom?",
+        "readMore": {
+          "title": "Hva mener vi med yrkesskade eller yrkessykdom?",
+          "text1": "Med en yrkesskade mener vi en skade du har fått som følge av en arbeidsulykke.",
+          "text2": "Med yrkessykdom mener vi en sykdom du har fått på grunn av skadelig påvirkning fra arbeidsmiljøet. I tillegg må sykdommen være nevnt i <a>forskrift om yrkessykdommer (åpnes i ny fane)</a>."
+        },
+        "validation": {
+          "required": "Du må svare på om du har en yrkesskade eller yrkessykdom."
+        }
+      },
+      "alert": {
+        "navVilSjekke": "NAV vil nå sjekke om yrkesskaden/yrkessykdommen din er:",
+        "bulletPointGodkjent": "Godkjent av NAV",
+        "bulletPointArbeidsevne": "helt eller delvis årsak til at arbeidsevnen din er nedsatt.",
+        "daGjelder": "Da gjelder dette:",
+        "bulletPointMedlem": "Det holder at du var medlem i folketrygden da du ble skadet/syk, og er det når du søker AAP.",
+        "bulletpointRedusertArbeidsevne": "Arbeidsevnen din trenger ikke være redusert med mer enn 30 prosent.",
+        "bulletPointNavBeregner": "Når NAV beregner hva du får i AAP, kan vi bruke inntekten du hadde da du fikk skaden/sykdommen som grunnlag. Dette gjør vi bare hvis det lønner seg for deg."
+      }
     }
   },
   "utland": {
