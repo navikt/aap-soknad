@@ -50,10 +50,11 @@ describe('StartDato', () => {
     renderWithContext(<Component />, {});
 
     fireEvent.submit(screen.getByRole('button', { name: 'Neste steg' }));
-    const errorSummary = await screen.findByRole('region');
+    const errorSummary = await screen.findByRole('alert');
 
     expect(await findAllByRole(errorSummary, 'link')).toHaveLength(2);
   });
+
   it('Riktig utfylt - enkleste vei', async () => {
     renderWithContext(<Component />, {});
 

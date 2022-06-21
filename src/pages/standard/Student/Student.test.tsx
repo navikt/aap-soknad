@@ -50,7 +50,7 @@ describe('Yrkesskade', () => {
     renderWithContext(<Component />, {});
 
     fireEvent.submit(screen.getByRole('button', { name: 'Neste steg' }));
-    const errorSummary = await screen.findByRole('region');
+    const errorSummary = await screen.findByRole('alert');
 
     expect(await findAllByRole(errorSummary, 'link')).toHaveLength(1);
   });
