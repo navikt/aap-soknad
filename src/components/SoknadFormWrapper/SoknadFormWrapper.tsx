@@ -1,12 +1,12 @@
 import { FieldErrors } from 'react-hook-form';
 import React, { useState } from 'react';
-import { BodyShort, Heading, Modal, Button } from '@navikt/ds-react';
+import { Alert, Loader, BodyShort, Heading, Modal, Button } from '@navikt/ds-react';
 import { FormErrorSummary } from '../schema/FormErrorSummary';
 import * as classes from './SoknadFormWrapper.module.css';
-import * as tekster from './tekster';
-import useTexts from '../../hooks/useTexts';
 import { slettLagretSoknadState, useSoknadContext } from '../../context/soknadContext';
-import { resetStepWizard, useStepWizard } from '../../context/stepWizardContextV2';
+import { SuccessStroke } from '@navikt/ds-icons';
+import { useNavigate } from 'react-router-dom';
+import { useFeatureToggleIntl } from '../../hooks/useFeatureToggleIntl';
 
 interface Props {
   children?: React.ReactNode;
@@ -29,17 +29,22 @@ const SøknadFormWrapper = ({
   errors,
   nextIsLoading = false,
 }: Props) => {
+  const navigate = useNavigate();
+
+  const { formatLink, formatMessage } = useFeatureToggleIntl();
   const { søknadState, søknadDispatch } = useSoknadContext();
-  const { stepWizardDispatch } = useStepWizard();
   const [showLagreModal, setShowLagreModal] = useState<boolean>(false);
   const [showAvbrytModal, setShowAvbrytModal] = useState<boolean>(false);
-  const { getText } = useTexts(tekster);
+  const [isSlettingSøknad, setIsSlettingSøknad] = useState<boolean>(false);
+  const [slettSøknadSuccess, setSlettSøknadSuccess] = useState<boolean>(false);
   const slettSøknadOgAvbryt = async () => {
     try {
+      setIsSlettingSøknad(true);
       await slettLagretSoknadState(søknadDispatch, søknadState);
-      resetStepWizard(stepWizardDispatch);
-      setShowAvbrytModal(false);
+      setIsSlettingSøknad(false);
+      setSlettSøknadSuccess(true);
     } catch (err) {
+      setIsSlettingSøknad(false);
       console.error(err);
     }
   };
@@ -73,7 +78,7 @@ const SøknadFormWrapper = ({
             type="button"
             onClick={() => setShowLagreModal(true)}
           >
-            {'Lagre og fortsett senere'}
+            {formatMessage('navigation.save')}
           </Button>
           <Button
             className={classes?.buttonCancel}
@@ -81,43 +86,86 @@ const SøknadFormWrapper = ({
             type="button"
             onClick={() => setShowAvbrytModal(true)}
           >
-            {'Avbryt og slett søknad'}
+            {formatMessage('navigation.cancel')}
           </Button>
         </div>
       </form>
       <Modal open={showLagreModal} onClose={() => setShowLagreModal(false)}>
-        <Modal.Content className={classes?.formContent}>
+        <Modal.Content className={classes?.modalContent}>
           <Heading size={'small'} level={'1'}>
-            {getText('lagreModal.heading')}
+            {formatMessage('lagreModal.heading')}
           </Heading>
-          <BodyShort>{getText('lagreModal.text')}</BodyShort>
+          <BodyShort>{formatMessage('lagreModal.text')}</BodyShort>
           <div className={classes?.buttonWrapper}>
             <Button
               variant="primary"
               type="button"
-              onClick={() => console.log('lagre og fortsett senere')}
+              onClick={() => {
+                if (window?.location) {
+                  window.location.href = formatLink('dineSaker');
+                }
+              }}
             >
-              {getText('lagreModal.lagreButton')}
+              {formatMessage('lagreModal.lagreButtonText')}
             </Button>
-            <Button variant="secondary" type="button" onClick={() => setShowLagreModal(false)}>
-              {getText('lagreModal.avbrytButton')}
+            <Button variant="tertiary" type="button" onClick={() => setShowLagreModal(false)}>
+              {formatMessage('lagreModal.avbrytButtonText')}
             </Button>
           </div>
         </Modal.Content>
       </Modal>
-      <Modal open={showAvbrytModal} onClose={() => setShowAvbrytModal(false)}>
-        <Modal.Content className={classes?.formContent}>
-          <Heading size={'small'} level={'1'}>
-            {getText('avbrytOgSlettModal.heading')}
-          </Heading>
-          <div className={classes?.buttonWrapper}>
-            <Button variant="primary" type="button" onClick={() => slettSøknadOgAvbryt()}>
-              {getText('avbrytOgSlettModal.avbrytOgSlettButtonText')}
-            </Button>
-            <Button variant="secondary" type="button" onClick={() => setShowAvbrytModal(false)}>
-              {getText('avbrytOgSlettModal.avbrytButtonText')}
-            </Button>
-          </div>
+      <Modal
+        open={showAvbrytModal}
+        onClose={() => setShowAvbrytModal(false)}
+        closeButton={!slettSøknadSuccess}
+        shouldCloseOnOverlayClick={!slettSøknadSuccess}
+      >
+        <Modal.Content className={classes?.modalContent}>
+          {!slettSøknadSuccess && (
+            <>
+              <Heading size={'small'} level={'1'}>
+                {formatMessage('avbrytOgSlettModal.heading')}
+              </Heading>
+              <div className={classes?.buttonWrapper}>
+                <Button variant="primary" type="button" onClick={() => slettSøknadOgAvbryt()}>
+                  {isSlettingSøknad && <Loader />}
+                  {!isSlettingSøknad && formatMessage('avbrytOgSlettModal.avbrytOgSlettButtonText')}
+                </Button>
+                <Button
+                  variant="tertiary"
+                  type="button"
+                  onClick={() => !isSlettingSøknad && setShowAvbrytModal(false)}
+                >
+                  {formatMessage('avbrytOgSlettModal.avbrytButtonText')}
+                </Button>
+              </div>
+            </>
+          )}
+          {slettSøknadSuccess && (
+            <>
+              <SuccessStroke
+                className={classes?.successStroke}
+                color={'var(--navds-semantic-color-feedback-success-border)'}
+              />
+              <Alert variant={'success'}>Søknaden er slettet</Alert>
+              <div className={classes?.buttonWrapper}>
+                <Button
+                  variant="primary"
+                  type="button"
+                  onClick={() => {
+                    if (window?.location) {
+                      window.location.href = formatLink('dittNav');
+                    }
+                  }}
+                >
+                  {formatMessage('avbrytOgSlettModal.lukkButtonText')}
+                </Button>
+                <Button variant="tertiary" type="button" onClick={() => navigate(0)}>
+                  {formatMessage('avbrytOgSlettModal.sendNyButtonText')}
+                </Button>
+              </div>
+            </>
+          )}
         </Modal.Content>
       </Modal>
     </>

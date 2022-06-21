@@ -227,7 +227,20 @@
     "next": "Neste steg",
     "back": "Forrige steg",
     "send": "Send søknad",
-    "save": "Lagre og fortsett senere",
-    "cancel": "Avbryt og slett søknad"
+    "save": "Fortsett senere",
+    "cancel": "Slett søknad"
+  },
+  "lagreModal": {
+    "heading": "Fortsette senere",
+    "text": "Søknaden din vil være lagret i 7 dager og du kan fortsette der du slapp når du kommer tilbake.",
+    "lagreButtonText": "Fortsett senere",
+    "avbrytButtonText": "Avbryt"
+  },
+  "avbrytOgSlettModal": {
+    "heading": "Vil du avbryte og slette søknaden?",
+    "avbrytOgSlettButtonText": "Ja, avbryt og slett søknaden",
+    "avbrytButtonText": "Nei, ikke avbryt og slett",
+    "sendNyButtonText": "Send ny søknad",
+    "lukkButtonText": "Lukk"
   }
 }

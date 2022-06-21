@@ -49,3 +49,14 @@
   }
 }
 
+.buttonWrapper {
+  composes: buttonWrapper from '../../styles/layout.module.css';
+}
+.modalContent {
+  composes: formContent;
+}
+.successStroke {
+  width: 60px;
+  height: 50px;
+  align-self: center;
+}

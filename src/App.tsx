@@ -34,7 +34,7 @@ function flattenMessages(nestedMessages: object, prefix = '') {
     return messages;
   }, {});
 }
-
+import links from './translations/links.json';
 import messagesNb from './translations/nb.json';
 const messages = {
   nb: flattenMessages(messagesNb),
@@ -43,7 +43,10 @@ const messages = {
 const App = (): JSX.Element => {
   const [locale, setLocale] = useState<string>('nb');
   onLanguageSelect(({ locale }) => setLocale(locale));
-  const currentMessages = useMemo(() => messages[locale], [locale]);
+  const currentMessages = useMemo(
+    () => ({ ...messages[locale], ...flattenMessages({ applinks: links }) }),
+    [locale]
+  );
 
   return (
     <ErrorBoundary
