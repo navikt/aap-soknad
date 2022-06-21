@@ -121,6 +121,122 @@
         "text": "Det er viktig at du gir oss beskjed hvis du bestemmer deg for å ta ferie, fordi det kan påvirke startdatoen din. Dette påvirker spesielt deg som får sykepenger."
       }
     },
+    "medlemskap": {
+      "title": "Medlem i folketrygden",
+      "guide": {
+        "text": "Vi trenger å vite om du har jobbet eller bodd i utlandet, for å finne ut om du oppfyller kravene til medlemskap i folketrygden."
+      },
+      "harBoddINorgeSiste5År": {
+        "label": "Har du bodd sammenhengende i Norge de fem siste årene?",
+        "readMore": {
+          "title": "Hva menes med å ha \"bodd sammenhengende\"?",
+          "text": "Dette betyr at du har oppholdt deg i Norge mesteparten av hver av disse årene."
+        },
+        "validation": {
+          "required": "Du må svare på om du har bodd sammenhengende i Norge de fem siste årene."
+        }
+      },
+      "arbeidUtenforNorge": {
+        "label": "Har du jobbet utenfor Norge de fem siste årene?",
+        "description": "Hvis du har jobbet utenfor Norge, kan du i noen tilfeller få mer utbetalt i AAP. NAV bruker bare denne inntekten hvis det er til fordel for deg.",
+        "readMore": {
+          "title": "Regnes ytelser fra utenlandske myndigheter som jobb i utlandet?",
+          "text": "Hvis du har mottatt ytelser (for eksempel dagpenger, sykepenger og foreldrepenger) fra utenlandske myndigheter, regnes dette som jobb utenfor Norge. Pensjon regnes ikke som erstatning for jobb."
+        },
+        "validation": {
+          "required": "Du må svare på om du har jobbet utenfor Norge de fem siste årene."
+        }
+      },
+      "harArbeidetINorgeSiste5År": {
+        "label": "Har du jobbet sammenhengende i Norge de fem siste årene?",
+        "readMore": {
+          "title": "Regnes ytelser fra norske myndigheter som jobb?",
+          "text": "Med “jobb” menes også offentlige ytelser du har fått som erstatning for arbeid, for eksempel dagpenger, sykepenger og foreldrepenger. Pensjon regnes ikke som erstatning for jobb."
+        },
+        "validation": {
+          "required": "Du må svare på om du har jobbet sammenhengende i Norge de fem siste årene."
+        }
+      },
+      "iTilleggArbeidUtenforNorge": {
+        "label": "Har du i tillegg til jobb i Norge, også jobbet i et annet land de fem siste årene?",
+        "description": "Hvis du har jobbet i et annet land, kan du i noen tilfeller få mer utbetalt i AAP. NAV bruker bare denne inntekten hvis det er til fordel for deg.",
+        "readMore": {
+          "title": "Regnes ytelser fra utenlandske myndigheter som jobb i et annet land?",
+          "text": "Hvis du har mottatt ytelser (for eksempel dagpenger, sykepenger og foreldrepenger) fra utenlandske myndigheter, regnes dette som jobb utenfor Norge. Pensjon regnes ikke som erstatning for jobb."
+        },
+        "validation": {
+          "required": "Du må svare på om du i tillegg til jobb i Norge, også har jobbet i et annet land de fem siste årene."
+        }
+      },
+      "utenlandsperiode": {
+        "perioder": {
+          "title": {
+            "ARBEID": "Dine perioder med jobb utenfor Norge",
+            "BODD": "Dine utenlandsopphold"
+          }
+        },
+        "boddINorgeArbeidUtenforNorge": {
+          "validation": {
+            "required": "Du har svart at du har jobbet utenfor Norge de fem siste årene. Du må derfor legge til minst én periode med jobb utenfor Norge."
+          }
+        },
+        "ogsåArbeidUtenforNorge": {
+          "validation": {
+            "required": "Du har svart at du også har jobbet utenfor Norge de fem siste årene. Du må derfor legge til minst én periode med jobb utenfor Norge."
+          }
+        },
+        "arbeidINorge": {
+          "validation": {
+            "required": "Du har svart at du ikke har jobbet sammenhengende i Norge de fem siste årene. Du må derfor legge til minst én periode med utenlandsopphold."
+          }
+        },
+        "modal": {
+          "title": "Legg til utenlandsopphold",
+          "ingress": {
+            "ARBEID": "Nå må du oppgi i hvilke perioder du har jobbet utenfor Norge de fem siste årene. Oppgi også hvilket land du var i.",
+            "BODD": "Nå må du oppgi i hvilke perioder du har bodd eller jobbet utenfor Norge. Oppgi også hvilket land du var i. Ta med alle perioder siden du var 16 år."
+          },
+          "land": {
+            "label": {
+              "ARBEID": "Hvilket land jobbet du i?",
+              "BODD": "Hvilket land var du i?"
+            },
+            "validation": {
+              "required": "Vennligst oppgi land"
+            }
+          },
+          "periode": {
+            "label": {
+              "ARBEID": "I hvilken periode jobbet du der?",
+              "BODD": "I hvilken periode var du der?"
+            },
+            "fraDato": {
+              "label": "Fra og med dato (dd.mm.åååå)",
+              "validation": {
+                "required": "Vennligst oppgi fra dato"
+              }
+            },
+            "tilDato": {
+              "label": "Til og med dato (dd.mm.åååå)",
+              "validation": {
+                "required": "Vennligst oppgi til dato",
+                "fraDatoEtterTilDato": "Fra-dato må være eldre enn til-dato. Fyll inn slik: dd.mm.åååå."
+              }
+            }
+          },
+          "iArbeid": {
+            "label": "Jobbet du i dette landet i denne perioden?"
+          },
+          "utenlandsId": {
+            "label": "ID-nummer/personnummer for det landet du har jobbet i (valgfritt)"
+          },
+          "buttons": {
+            "lagre": "Lagre",
+            "avbryt": "Avbryt"
+          }
+        }
+      }
+    },
     "andreUtbetalinger": {
       "title": "Utbetalinger",
       "guide": {

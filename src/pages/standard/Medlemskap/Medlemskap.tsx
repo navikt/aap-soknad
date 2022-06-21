@@ -10,11 +10,12 @@ import {
   Grid,
 } from '@navikt/ds-react';
 import React, { useState, useEffect, useMemo } from 'react';
-import { GetText } from '../../../hooks/useTexts';
 import { FieldValues, useFieldArray, useForm } from 'react-hook-form';
 import { JaEllerNei, JaNeiVetIkke } from '../../../types/Generic';
 import { Add, Delete } from '@navikt/ds-icons';
-import UtenlandsPeriodeVelger from '..//UtenlandsPeriodeVelger/UtenlandsPeriodeVelger';
+import UtenlandsPeriodeVelger, {
+  ArbeidEllerBodd,
+} from '..//UtenlandsPeriodeVelger/UtenlandsPeriodeVelger';
 import { formatDate } from '../../../utils/date';
 import RadioGroupWrapper from '../../../components/input/RadioGroupWrapper/RadioGroupWrapper';
 import Soknad from '../../../types/Soknad';
@@ -25,9 +26,9 @@ import * as yup from 'yup';
 import { updateSøknadData, useSoknadContext } from '../../../context/soknadContext';
 import ColorPanel from '../../../components/panel/ColorPanel';
 import { LucaGuidePanel } from '../../../components/LucaGuidePanel';
+import { useFeatureToggleIntl } from '../../../hooks/useFeatureToggleIntl';
 
 interface Props {
-  getText: GetText;
   søknad?: Soknad;
   onBackClick: () => void;
   onCancelClick: () => void;
@@ -55,48 +56,45 @@ const validateUtenlandsPeriode = (
   );
 };
 
-export const Medlemskap = ({ getText, onBackClick, søknad }: Props) => {
+export const Medlemskap = ({ onBackClick, søknad }: Props) => {
+  const { formatMessage } = useFeatureToggleIntl();
+
   const schema = yup.object().shape({
     [MEDLEMSKAP]: yup.object().shape({
       [BODD_I_NORGE]: yup
         .string()
-        .required(getText('form.medlemskap.boddINorge.required'))
-        .oneOf([JaNeiVetIkke.JA, JaNeiVetIkke.NEI], getText('form.medlemskap.boddINorge.required'))
-        .typeError(getText('form.medlemskap.boddINorge.required')),
+        .required(formatMessage('søknad.medlemskap.harBoddINorgeSiste5År.validation.required'))
+        .oneOf([JaNeiVetIkke.JA, JaNeiVetIkke.NEI])
+        .nullable(),
       [ARBEID_I_NORGE]: yup.string().when(BODD_I_NORGE, {
         is: validateArbeidINorge,
         then: (yupSchema) =>
           yupSchema
-            .required(getText('form.medlemskap.arbeidINorge.required'))
-            .oneOf(
-              [JaNeiVetIkke.JA, JaNeiVetIkke.NEI],
-              getText('form.medlemskap.arbeidINorge.required')
+            .required(
+              formatMessage('søknad.medlemskap.harArbeidetINorgeSiste5År.validation.required')
             )
-            .typeError(getText('form.medlemskap.arbeidINorge.required')),
+            .oneOf([JaNeiVetIkke.JA, JaNeiVetIkke.NEI])
+            .nullable(),
         otherwise: (yupSchema) => yupSchema.notRequired(),
       }),
       [ARBEID_UTENFOR_NORGE_FØR_SYKDOM]: yup.string().when([BODD_I_NORGE, ARBEID_I_NORGE], {
         is: validateArbeidUtenforNorgeFørSykdom,
         then: (yupSchema) =>
           yupSchema
-            .required(getText('form.medlemskap.arbeidUtenforNorge.required'))
-            .oneOf(
-              [JaNeiVetIkke.JA, JaNeiVetIkke.NEI],
-              getText('form.medlemskap.arbeidUtenforNorge.required')
-            )
-            .typeError(getText('form.medlemskap.arbeidUtenforNorge.required')),
+            .required(formatMessage('søknad.medlemskap.arbeidUtenforNorge.validation.required'))
+            .oneOf([JaNeiVetIkke.JA, JaNeiVetIkke.NEI])
+            .nullable(),
         otherwise: (yupSchema) => yupSchema.notRequired(),
       }),
       [OGSÅ_ARBEID_UTENFOR_NORGE]: yup.string().when([BODD_I_NORGE, ARBEID_I_NORGE], {
         is: valideOgsåArbeidetUtenforNorge,
         then: (yupSchema) =>
           yupSchema
-            .required(getText('form.medlemskap.iTilleggArbeidUtenforNorge.required'))
-            .oneOf(
-              [JaEllerNei.JA, JaEllerNei.NEI],
-              getText('form.medlemskap.iTilleggArbeidUtenforNorge.required')
+            .required(
+              formatMessage('søknad.medlemskap.iTilleggArbeidUtenforNorge.validation.required')
             )
-            .typeError(getText('form.medlemskap.iTilleggArbeidUtenforNorge.required')),
+            .oneOf([JaEllerNei.JA, JaEllerNei.NEI])
+            .nullable(),
         otherwise: (yupSchema) => yupSchema.notRequired(),
       }),
       [UTENLANDSOPPHOLD]: yup
@@ -107,18 +105,28 @@ export const Medlemskap = ({ getText, onBackClick, søknad }: Props) => {
           then: (yupSchema) =>
             yupSchema.min(
               1,
-              getText('form.medlemskap.utenlandsOpphold.boddINorgeArbeidUtenforNorge')
+              formatMessage(
+                'søknad.medlemskap.utenlandsperiode.boddINorgeArbeidUtenforNorge.validation.required'
+              )
             ),
         })
         .when([OGSÅ_ARBEID_UTENFOR_NORGE], {
           is: (ogsåArbeidUtenforNorge: JaEllerNei) => ogsåArbeidUtenforNorge === JaEllerNei.JA,
           then: (yupSchema) =>
-            yupSchema.min(1, getText('form.medlemskap.utenlandsOpphold.ogsåArbeidUtenforNorge')),
+            yupSchema.min(
+              1,
+              formatMessage(
+                'søknad.medlemskap.utenlandsperiode.ogsåArbeidUtenforNorge.validation.required'
+              )
+            ),
         })
         .when([ARBEID_I_NORGE], {
           is: (arbeidINorge: JaEllerNei) => arbeidINorge === JaEllerNei.NEI,
           then: (yupSchema) =>
-            yupSchema.min(1, getText('form.medlemskap.utenlandsOpphold.arbeidINorge')),
+            yupSchema.min(
+              1,
+              formatMessage('søknad.medlemskap.utenlandsperiode.arbeidINorge.validation.required')
+            ),
         }),
     }),
   });
@@ -159,12 +167,14 @@ export const Medlemskap = ({ getText, onBackClick, søknad }: Props) => {
     () => validateUtenlandsPeriode(arbeidINorge, arbeidUtenforNorge, iTilleggArbeidUtenforNorge),
     [arbeidINorge, arbeidUtenforNorge, iTilleggArbeidUtenforNorge]
   );
-  const hideArbeidInUtenlandsPeriode = useMemo(() => {
+
+  const arbeidEllerBodd = useMemo(() => {
     if (boddINorge === JaEllerNei.NEI && arbeidINorge === JaEllerNei.NEI) {
-      return false;
+      return ArbeidEllerBodd.BODD;
     }
-    return true;
+    return ArbeidEllerBodd.ARBEID;
   }, [boddINorge, arbeidINorge]);
+
   useEffect(() => {
     setValue(`${MEDLEMSKAP}.${ARBEID_UTENFOR_NORGE_FØR_SYKDOM}`, undefined);
     setValue(`${MEDLEMSKAP}.${ARBEID_I_NORGE}`, undefined);
@@ -191,13 +201,6 @@ export const Medlemskap = ({ getText, onBackClick, søknad }: Props) => {
     }
   }, [fields]);
 
-  const utenlandsPeriodeInfo = useMemo(
-    () =>
-      arbeidUtenforNorge === JaEllerNei.JA || iTilleggArbeidUtenforNorge === JaEllerNei.JA
-        ? getText('steps.medlemskap.utenlandsPeriode.infoJaJa')
-        : getText('steps.medlemskap.utenlandsPeriode.info'),
-    [arbeidUtenforNorge, iTilleggArbeidUtenforNorge]
-  );
   return (
     <>
       <SoknadFormWrapper
@@ -206,23 +209,26 @@ export const Medlemskap = ({ getText, onBackClick, søknad }: Props) => {
           completeAndGoToNextStep(stepWizardDispatch);
         })}
         onBack={() => onBackClick()}
-        nextButtonText={'Neste steg'}
-        backButtonText={'Forrige steg'}
-        cancelButtonText={'Avbryt søknad'}
+        nextButtonText={formatMessage('navigation.next')}
+        backButtonText={formatMessage('navigation.back')}
+        cancelButtonText={formatMessage('navigation.cancel')}
         errors={errors}
       >
         <Heading size="large" level="2">
-          {getText('steps.medlemskap.title')}
+          {formatMessage('søknad.medlemskap.title')}
         </Heading>
-        <LucaGuidePanel>{getText(`steps.medlemskap.guide`)}</LucaGuidePanel>
+        <LucaGuidePanel>{formatMessage('søknad.medlemskap.guide.text')}</LucaGuidePanel>
         <RadioGroupWrapper
           name={`${MEDLEMSKAP}.${BODD_I_NORGE}`}
-          legend={getText('form.medlemskap.boddINorge.legend')}
+          legend={formatMessage('søknad.medlemskap.harBoddINorgeSiste5År.label')}
           control={control}
           error={errors?.[MEDLEMSKAP]?.[BODD_I_NORGE]?.message}
         >
-          <ReadMore header={getText('steps.medlemskap.boddINorgeReadMore.title')} type={'button'}>
-            {getText('steps.medlemskap.boddINorgeReadMore.text')}
+          <ReadMore
+            header={formatMessage('søknad.medlemskap.harBoddINorgeSiste5År.readMore.title')}
+            type={'button'}
+          >
+            {formatMessage('søknad.medlemskap.harBoddINorgeSiste5År.readMore.text')}
           </ReadMore>
           <Radio value={JaEllerNei.JA}>
             <BodyShort>Ja</BodyShort>
@@ -235,15 +241,15 @@ export const Medlemskap = ({ getText, onBackClick, søknad }: Props) => {
           <>
             <RadioGroupWrapper
               name={`${MEDLEMSKAP}.${ARBEID_I_NORGE}`}
-              legend={getText('form.medlemskap.arbeidINorge.legend')}
+              legend={formatMessage('søknad.medlemskap.harArbeidetINorgeSiste5År.label')}
               control={control}
               error={errors?.[MEDLEMSKAP]?.[ARBEID_I_NORGE]?.message}
             >
               <ReadMore
-                header={getText('steps.medlemskap.andreYtelserReadMore.title')}
+                header={formatMessage('søknad.medlemskap.harArbeidetINorgeSiste5År.readMore.title')}
                 type={'button'}
               >
-                <BodyLong>{getText('steps.medlemskap.andreYtelserReadMore.text')}</BodyLong>
+                {formatMessage('søknad.medlemskap.harArbeidetINorgeSiste5År.readMore.text')}
               </ReadMore>
               <Radio value={JaEllerNei.JA}>
                 <BodyShort>Ja</BodyShort>
@@ -259,16 +265,16 @@ export const Medlemskap = ({ getText, onBackClick, søknad }: Props) => {
           <>
             <RadioGroupWrapper
               name={`${MEDLEMSKAP}.${ARBEID_UTENFOR_NORGE_FØR_SYKDOM}`}
-              legend={getText('form.medlemskap.arbeidUtenforNorge.legend')}
-              description={getText('form.medlemskap.arbeidUtenforNorge.helpText')}
+              legend={formatMessage('søknad.medlemskap.arbeidUtenforNorge.label')}
+              description={formatMessage('søknad.medlemskap.arbeidUtenforNorge.description')}
               control={control}
               error={errors?.[MEDLEMSKAP]?.[ARBEID_UTENFOR_NORGE_FØR_SYKDOM]?.message}
             >
               <ReadMore
-                header={getText('form.medlemskap.arbeidUtenforNorge.readMore.header')}
+                header={formatMessage('søknad.medlemskap.arbeidUtenforNorge.readMore.title')}
                 type={'button'}
               >
-                <BodyLong>{getText('form.medlemskap.arbeidUtenforNorge.readMore.text')}</BodyLong>
+                {formatMessage('søknad.medlemskap.arbeidUtenforNorge.readMore.text')}
               </ReadMore>
               <Radio value={JaEllerNei.JA}>
                 <BodyShort>Ja</BodyShort>
@@ -283,18 +289,20 @@ export const Medlemskap = ({ getText, onBackClick, søknad }: Props) => {
           <>
             <RadioGroupWrapper
               name={`${MEDLEMSKAP}.${OGSÅ_ARBEID_UTENFOR_NORGE}`}
-              legend={getText('form.medlemskap.iTilleggArbeidUtenforNorge.legend')}
-              description={getText('form.medlemskap.iTilleggArbeidUtenforNorge.description')}
+              legend={formatMessage('søknad.medlemskap.iTilleggArbeidUtenforNorge.label')}
+              description={formatMessage(
+                'søknad.medlemskap.iTilleggArbeidUtenforNorge.description'
+              )}
               control={control}
               error={errors?.[MEDLEMSKAP]?.[OGSÅ_ARBEID_UTENFOR_NORGE]?.message}
             >
               <ReadMore
-                header={getText('form.medlemskap.iTilleggArbeidUtenforNorge.readMore.header')}
+                header={formatMessage(
+                  'søknad.medlemskap.iTilleggArbeidUtenforNorge.readMore.title'
+                )}
                 type={'button'}
               >
-                <BodyLong>
-                  {getText('form.medlemskap.iTilleggArbeidUtenforNorge.readMore.text')}
-                </BodyLong>
+                {formatMessage('søknad.medlemskap.iTilleggArbeidUtenforNorge.readMore.text')}
               </ReadMore>
               <Radio value={JaEllerNei.JA}>
                 <BodyShort>Ja</BodyShort>
@@ -307,12 +315,14 @@ export const Medlemskap = ({ getText, onBackClick, søknad }: Props) => {
         )}
         {showLeggTilUtenlandsPeriode && (
           <ColorPanel>
-            <BodyLong>{utenlandsPeriodeInfo}</BodyLong>
+            <BodyLong>
+              {formatMessage(`søknad.medlemskap.utenlandsperiode.modal.ingress.${arbeidEllerBodd}`)}
+            </BodyLong>
             {fields?.length > 0 && (
               <Heading size="xsmall" level="3">
-                {arbeidINorge === JaEllerNei.NEI
-                  ? getText('steps.medlemskap.perioderOppholdHeading')
-                  : getText('steps.medlemskap.perioderJobbHeading')}
+                {formatMessage(
+                  `søknad.medlemskap.utenlandsperiode.perioder.title.${arbeidEllerBodd}`
+                )}
               </Heading>
             )}
             {fields?.map((field, index) => (
@@ -370,12 +380,9 @@ export const Medlemskap = ({ getText, onBackClick, søknad }: Props) => {
           append({ ...data });
           setShowUtenlandsPeriodeModal(false);
         }}
-        hideIArbeid={hideArbeidInUtenlandsPeriode}
+        arbeidEllerBodd={arbeidEllerBodd}
         onCancel={() => setShowUtenlandsPeriodeModal(false)}
         onClose={() => setShowUtenlandsPeriodeModal(false)}
-        getText={getText}
-        heading={getText('steps.medlemskap.utenlandsPeriode.title')}
-        ingress={utenlandsPeriodeInfo}
       />
     </>
   );

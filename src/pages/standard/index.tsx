@@ -425,7 +425,6 @@ export const StandardPage = (): JSX.Element => {
         </Step>
         <Step order={2} name={StepNames.MEDLEMSKAP}>
           <Medlemskap
-            getText={getText}
             onCancelClick={onDeleteSøknad}
             onBackClick={onPreviousStep}
             søknad={søknadState?.søknad}
