@@ -25,6 +25,242 @@
         "lastOppSenere": "Dokumentene laster du opp senere i søknaden. Du kan også ettersende vedlegg."
       }
     },
+    "pagetitle": "Søknad om arbeidsavklaringspenger",
+    "veiledning": {
+      "title": "Søknad om arbeidsavklaringspenger (AAP)",
+      "guide": {
+        "title": "Hei, {name}!",
+        "text1": "Jeg er her for å veilede deg gjennom søknaden. Svarene dine lagres underveis, slik at du trygt kan gå tilbake og endre dem.",
+        "text2": "Arbeidsavklaringspenger forkortes ofte med “AAP”. AAP skal sikre deg inntekt når du på grunn av sykdom eller skade har behov for å få avklart mulighetene dine til å jobbe."
+      },
+      "søknadsdato": {
+        "title": "Søknadsdato er viktig for eventuell utbetaling av AAP",
+        "text1": "Vanligvis kan du tidligst få AAP fra den dagen du søker.",
+        "text2": "Du kan søke om AAP selv om om du ikke har mottatt sykepenger."
+      },
+      "accordionHvis": {
+        "title": "Hvis du får AAP gjelder dette",
+        "bulletPointOppfølging": "Du har rett til oppfølging fra NAV",
+        "bulletPointPlikt": "Du har plikt til å bidra til å avklare om du kan beholde eller komme i jobb",
+        "bulletPointMeldekort": "Du må sende inn meldekort hver 14. dag",
+        "bulletPointBeskjed": "Du har plikt til å gi beskjed hvis situasjonen din endrer seg"
+      },
+      "accordionInformasjon": {
+        "title": "Vi vil hente og bruke informasjon om deg",
+        "informasjonDuOppgir": "I tillegg til den informasjonen du oppgir i søknaden, henter vi:",
+        "bulletPointPersoninformasjon": "personinformasjon om deg og barna dine fra Folkeregisteret",
+        "bulletPontSkatt": "inntektsinformasjon fra Skatteetaten",
+        "bulletpointHelse": "helseinformasjon fra lege/behandler for å kartlegge arbeidsevnen din",
+        "bulletPointArbeid": "opplysninger om arbeidsforholdet ditt fra Arbeidsgiver- og arbeidstakerregisteret",
+        "bulletPointAndreOpplysninger": "opplysninger om deg vi har fra før",
+        "folketrygdloven": "Dette gjør vi for å vurdere om du har rett til AAP etter folketrygdloven kapittel 11.",
+        "bulletPointDeler": "Vi deler hva du får utbetalt i AAP med Skatteetaten og Statistisk sentralbyrå",
+        "bulletPointForbedre": "Vi kan bruke opplysninger om deg til å bedre våre tjenester",
+        "personopplysningerNavNo": "Du kan lese mer om hvordan NAV behandler personopplysninger på nav.no (åpnes i ny fane)"
+      },
+      "veiledningConfirm": {
+        "title": "Vi stoler på deg",
+        "label": "Jeg bekrefter at jeg vil gi så riktige og fullstendige opplysninger som mulig.",
+        "validation": {
+          "required": "Du må bekrefte at du vil gi så riktige opplysninger som mulig."
+        }
+      },
+      "startSøknad": "Start søknad",
+      "avbrytSøknad": "Avbryt søknad"
+    },
+    "startDato": {
+      "title": "Startdato",
+      "guide": {
+        "text1": "NAV vil beregne startdato for deg, slik at du får AAP så tidlig som mulig. Hovedregelen er at du tidligst kan få AAP fra den dagen du sender inn søknaden.",
+        "text2": "Hvis du mottar sykepenger får du vanligvis AAP første dagen etter at sykepengene dine er ferdig.",
+        "readMore": {
+          "title": "Kan jeg søke om AAP tilbake i tid?",
+          "text": "Hvis du av helsemessige årsaker ikke har kunnet søke tidligere, kan du få innvilget AAP tilbake i tid. Du kan også få AAP tilbake i tid hvis du har fått feil informasjon fra NAV og dette er grunnen til at du ikke har søkt tidligere."
+        }
+      },
+      "startDato": {
+        "label": "Fra hvilken dato ønsker du AAP (dd.mm.åååå)?",
+        "validation": {
+          "required": "Du må oppgi hvilken dato du ønsker AAP fra. Fyll inn slik: dd.mm.åååå.",
+          "eldreEnnTreÅr": "Det er kun mulig å søke 3 år tilbake i tid"
+        }
+      },
+      "hvorfor": {
+        "label": "Hvorfor søker du om AAP tilbake i tid?",
+        "values": {
+          "sykdom": "Helsemessige grunner gjorde at jeg ikke søkte før",
+          "feilinformasjon": "Feilinformasjon fra NAV gjorde at jeg ikke søkte før"
+        },
+        "validation": {
+          "required": "Når du søker om AAP tilbake i tid, må du krysse av for hvorfor."
+        }
+      },
+      "begrunnelse": {
+        "label": "Her kan du beskrive nærmere hvorfor du søker tilbake i tid (valgfritt):",
+        "description": "Vi ønsker å være sikre på at vi setter riktig startdato for deg."
+      },
+      "begrunnelseFremITid": {
+        "label": "Her kan du beskrive nærmere hvorfor du søker frem i tid (valgfritt):",
+        "description": "Vi ønsker å være sikre på at vi setter riktig startdato for deg."
+      },
+      "skalHaFerie": {
+        "label": "Planlegger du å ta ferie før startdato på AAP?",
+        "description": "Hvis du tar ut ferie kan startdatoen forskyve seg.",
+        "validation": {
+          "required": "Du må svare på om du planlegger å ta ferie."
+        }
+      },
+      "ferieType": {
+        "label": "Vet du når du skal ta ut ferie?",
+        "values": {
+          "periode": "Ja",
+          "dager": "Nei, men jeg vet antall feriedager"
+        },
+        "validation": {
+          "required": "Du må svare på om du vet når du skal ta ut ferie."
+        }
+      },
+      "periode": {
+        "fraDato": {
+          "label": "Fra dato (dd.mm.åååå)",
+          "validation": {
+            "required": "Du må fylle ut feriens fra-dato. Fyll inn slik: dd.mm.åååå."
+          }
+        },
+        "tilDato": {
+          "label": "Til dato (dd.mm.åååå)",
+          "validation": {
+            "required": "Du må fylle ut feriens til-dato. Fyll inn slik: dd.mm.åååå.",
+            "fraDatoEtterTilDato": "Fra-dato må være eldre enn til-dato. Fyll inn slik: dd.mm.åååå."
+          }
+        }
+      },
+      "antallDager": {
+        "label": "Skriv inn antall dager du skal ha ferie",
+        "validation": {
+          "required": "Du må skrive inn antall dager du skal ha ferie."
+        }
+      },
+      "alert": {
+        "text": "Det er viktig at du gir oss beskjed hvis du bestemmer deg for å ta ferie, fordi det kan påvirke startdatoen din. Dette påvirker spesielt deg som får sykepenger."
+      }
+    },
+    "medlemskap": {
+      "title": "Medlem i folketrygden",
+      "guide": {
+        "text": "Vi trenger å vite om du har jobbet eller bodd i utlandet, for å finne ut om du oppfyller kravene til medlemskap i folketrygden."
+      },
+      "harBoddINorgeSiste5År": {
+        "label": "Har du bodd sammenhengende i Norge de fem siste årene?",
+        "readMore": {
+          "title": "Hva menes med å ha \"bodd sammenhengende\"?",
+          "text": "Dette betyr at du har oppholdt deg i Norge mesteparten av hver av disse årene."
+        },
+        "validation": {
+          "required": "Du må svare på om du har bodd sammenhengende i Norge de fem siste årene."
+        }
+      },
+      "arbeidUtenforNorge": {
+        "label": "Har du jobbet utenfor Norge de fem siste årene?",
+        "description": "Hvis du har jobbet utenfor Norge, kan du i noen tilfeller få mer utbetalt i AAP. NAV bruker bare denne inntekten hvis det er til fordel for deg.",
+        "readMore": {
+          "title": "Regnes ytelser fra utenlandske myndigheter som jobb i utlandet?",
+          "text": "Hvis du har mottatt ytelser (for eksempel dagpenger, sykepenger og foreldrepenger) fra utenlandske myndigheter, regnes dette som jobb utenfor Norge. Pensjon regnes ikke som erstatning for jobb."
+        },
+        "validation": {
+          "required": "Du må svare på om du har jobbet utenfor Norge de fem siste årene."
+        }
+      },
+      "harArbeidetINorgeSiste5År": {
+        "label": "Har du jobbet sammenhengende i Norge de fem siste årene?",
+        "readMore": {
+          "title": "Regnes ytelser fra norske myndigheter som jobb?",
+          "text": "Med “jobb” menes også offentlige ytelser du har fått som erstatning for arbeid, for eksempel dagpenger, sykepenger og foreldrepenger. Pensjon regnes ikke som erstatning for jobb."
+        },
+        "validation": {
+          "required": "Du må svare på om du har jobbet sammenhengende i Norge de fem siste årene."
+        }
+      },
+      "iTilleggArbeidUtenforNorge": {
+        "label": "Har du i tillegg til jobb i Norge, også jobbet i et annet land de fem siste årene?",
+        "description": "Hvis du har jobbet i et annet land, kan du i noen tilfeller få mer utbetalt i AAP. NAV bruker bare denne inntekten hvis det er til fordel for deg.",
+        "readMore": {
+          "title": "Regnes ytelser fra utenlandske myndigheter som jobb i et annet land?",
+          "text": "Hvis du har mottatt ytelser (for eksempel dagpenger, sykepenger og foreldrepenger) fra utenlandske myndigheter, regnes dette som jobb utenfor Norge. Pensjon regnes ikke som erstatning for jobb."
+        },
+        "validation": {
+          "required": "Du må svare på om du i tillegg til jobb i Norge, også har jobbet i et annet land de fem siste årene."
+        }
+      },
+      "utenlandsperiode": {
+        "perioder": {
+          "title": {
+            "ARBEID": "Dine perioder med jobb utenfor Norge",
+            "BODD": "Dine utenlandsopphold"
+          }
+        },
+        "boddINorgeArbeidUtenforNorge": {
+          "validation": {
+            "required": "Du har svart at du har jobbet utenfor Norge de fem siste årene. Du må derfor legge til minst én periode med jobb utenfor Norge."
+          }
+        },
+        "ogsåArbeidUtenforNorge": {
+          "validation": {
+            "required": "Du har svart at du også har jobbet utenfor Norge de fem siste årene. Du må derfor legge til minst én periode med jobb utenfor Norge."
+          }
+        },
+        "arbeidINorge": {
+          "validation": {
+            "required": "Du har svart at du ikke har jobbet sammenhengende i Norge de fem siste årene. Du må derfor legge til minst én periode med utenlandsopphold."
+          }
+        },
+        "modal": {
+          "title": "Legg til utenlandsopphold",
+          "ingress": {
+            "ARBEID": "Nå må du oppgi i hvilke perioder du har jobbet utenfor Norge de fem siste årene. Oppgi også hvilket land du var i.",
+            "BODD": "Nå må du oppgi i hvilke perioder du har bodd eller jobbet utenfor Norge. Oppgi også hvilket land du var i. Ta med alle perioder siden du var 16 år."
+          },
+          "land": {
+            "label": {
+              "ARBEID": "Hvilket land jobbet du i?",
+              "BODD": "Hvilket land var du i?"
+            },
+            "validation": {
+              "required": "Vennligst oppgi land"
+            }
+          },
+          "periode": {
+            "label": {
+              "ARBEID": "I hvilken periode jobbet du der?",
+              "BODD": "I hvilken periode var du der?"
+            },
+            "fraDato": {
+              "label": "Fra og med dato (dd.mm.åååå)",
+              "validation": {
+                "required": "Vennligst oppgi fra dato"
+              }
+            },
+            "tilDato": {
+              "label": "Til og med dato (dd.mm.åååå)",
+              "validation": {
+                "required": "Vennligst oppgi til dato",
+                "fraDatoEtterTilDato": "Fra-dato må være eldre enn til-dato. Fyll inn slik: dd.mm.åååå."
+              }
+            }
+          },
+          "iArbeid": {
+            "label": "Jobbet du i dette landet i denne perioden?"
+          },
+          "utenlandsId": {
+            "label": "ID-nummer/personnummer for det landet du har jobbet i (valgfritt)"
+          },
+          "buttons": {
+            "lagre": "Lagre",
+            "avbryt": "Avbryt"
+          }
+        }
+      }
+    },
     "andreUtbetalinger": {
       "title": "Utbetalinger",
       "guide": {
@@ -170,6 +406,32 @@
         "bulletPointVedleggForelder": "Bekreftelse på at du er forelder til barnet, og fra når (fødselstidspunkt eller adoptivtidspunkt). Dette kan for eksempel være fødselsattest eller adopsjonsdokumenter.",
         "bulletPointVedleggFosterforelder": "Dokumentasjon på at du er fosterforelder til barnet, og fra når. For eksempel en bekreftelse fra barneverntjenesten.",
         "lasteOppVedleggTekst": "Dette laster du opp senere i søknaden. Du kan også ettersende vedlegg."
+      }
+    },
+    "yrkesskade": {
+      "title": "Yrkesskade",
+      "guide": {
+        "text": "Hvis arbeidsevnen din er nedsatt som følge av en yrkesskade eller yrkessykdom, blir saken din behandlet etter andre regler. Dette kan gi deg noen fordeler."
+      },
+      "harDuYrkesskade": {
+        "label": "Har du en yrkesskade eller yrkessykdom?",
+        "readMore": {
+          "title": "Hva mener vi med yrkesskade eller yrkessykdom?",
+          "text1": "Med en yrkesskade mener vi en skade du har fått som følge av en arbeidsulykke.",
+          "text2": "Med yrkessykdom mener vi en sykdom du har fått på grunn av skadelig påvirkning fra arbeidsmiljøet. I tillegg må sykdommen være nevnt i <a>forskrift om yrkessykdommer (åpnes i ny fane)</a>."
+        },
+        "validation": {
+          "required": "Du må svare på om du har en yrkesskade eller yrkessykdom."
+        }
+      },
+      "alert": {
+        "navVilSjekke": "NAV vil nå sjekke om yrkesskaden/yrkessykdommen din er:",
+        "bulletPointGodkjent": "Godkjent av NAV",
+        "bulletPointArbeidsevne": "helt eller delvis årsak til at arbeidsevnen din er nedsatt.",
+        "daGjelder": "Da gjelder dette:",
+        "bulletPointMedlem": "Det holder at du var medlem i folketrygden da du ble skadet/syk, og er det når du søker AAP.",
+        "bulletpointRedusertArbeidsevne": "Arbeidsevnen din trenger ikke være redusert med mer enn 30 prosent.",
+        "bulletPointNavBeregner": "Når NAV beregner hva du får i AAP, kan vi bruke inntekten du hadde da du fikk skaden/sykdommen som grunnlag. Dette gjør vi bare hvis det lønner seg for deg."
       }
     }
   },

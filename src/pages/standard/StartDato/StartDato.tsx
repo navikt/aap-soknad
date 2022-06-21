@@ -1,6 +1,5 @@
 import { FieldValues, useForm } from 'react-hook-form';
 import Soknad from '../../../types/Soknad';
-import { getParagraphs, GetText } from '../../../hooks/useTexts';
 import React, { useEffect, useMemo, useState } from 'react';
 import DatoVelgerWrapper from '../../../components/input/DatoVelgerWrapper';
 import { Alert, BodyShort, Cell, Grid, Heading, Radio, ReadMore } from '@navikt/ds-react';
@@ -17,6 +16,7 @@ import { isFuture, isPast, isToday, subYears } from 'date-fns';
 import TextAreaWrapper from '../../../components/input/TextAreaWrapper';
 import { setErrorSummaryFocus } from '../../../utils/dom';
 import { LucaGuidePanel } from '../../../components/LucaGuidePanel';
+import { useFeatureToggleIntl } from '../../../hooks/useFeatureToggleIntl';
 
 const STARTDATO = 'startDato';
 const FERIE = 'ferie';
@@ -40,30 +40,31 @@ const getStartDatoType = (startDate: Date) => {
 };
 
 interface Props {
-  getText: GetText;
   søknad?: Soknad;
   onBackClick: () => void;
   onCancelClick: () => void;
 }
 
-const StartDato = ({ getText, onBackClick, søknad }: Props) => {
+const StartDato = ({ onBackClick, søknad }: Props) => {
+  const { formatMessage } = useFeatureToggleIntl();
+
   const schema = yup.object().shape({
     [STARTDATO]: yup
       .date()
-      .required(getText('form.startDato.required'))
-      .min(subYears(new Date(), 3), 'form.startDato.eldreEnnTreÅr')
-      .typeError(getText('form.startDato.required')),
+      .required(formatMessage('søknad.startDato.startDato.validation.required'))
+      .min(
+        subYears(new Date(), 3),
+        formatMessage('søknad.startDato.startDato.validation.eldreEnnTreÅr')
+      )
+      .nullable(),
 
     [HVORFOR]: yup.string().when([STARTDATO], {
       is: startDateIsInPast,
       then: yup
         .string()
-        .required(getText('form.startDatoFørDagensDato.hvorfor.required'))
-        .oneOf(
-          ['Sykdom', 'Manglende informasjon'],
-          getText('form.startDatoFørDagensDato.hvorfor.required')
-        )
-        .typeError(getText('form.startDatoFørDagensDato.hvorfor.required')),
+        .required(formatMessage('søknad.startDato.hvorfor.validation.required'))
+        .oneOf(['Sykdom', 'Manglende informasjon'])
+        .nullable(),
     }),
     [BEGRUNNELSE]: yup.string().when([STARTDATO], {
       is: startDateIsInPast || startDateIsInFuture,
@@ -74,32 +75,38 @@ const StartDato = ({ getText, onBackClick, søknad }: Props) => {
       then: yup.object().shape({
         [SKALHAFERIE]: yup
           .string()
-          .required(getText('form.ferie.skalHaFerie.required'))
-          .oneOf(
-            [JaNeiVetIkke.JA, JaNeiVetIkke.NEI, JaNeiVetIkke.VET_IKKE],
-            getText('form.ferie.skalHaFerie.required')
-          )
-          .typeError(getText('form.ferie.skalHaFerie.required')),
+          .required(formatMessage('søknad.startDato.skalHaFerie.validation.required'))
+          .oneOf([JaNeiVetIkke.JA, JaNeiVetIkke.NEI, JaNeiVetIkke.VET_IKKE])
+          .nullable(),
         [FERIETYPE]: yup.string().when([SKALHAFERIE], {
           is: JaNeiVetIkke.JA,
-          then: yup.string().required(getText('form.ferie.ferieType.required')),
+          then: yup
+            .string()
+            .required(formatMessage('søknad.startDato.ferieType.validation.required')),
         }),
 
         ['fraDato']: yup.date().when([FERIETYPE], {
           is: 'Ja',
-          then: yup.date().required(getText('form.ferie.fraDato.required')),
+          then: yup
+            .date()
+            .required(formatMessage('søknad.startDato.periode.fraDato.validation.required')),
         }),
         ['tilDato']: yup.date().when([FERIETYPE], {
           is: 'Ja',
           then: yup
             .date()
-            .required(getText('form.ferie.tilDato.required'))
-            .min(yup.ref('fraDato'), getText('form.ferie.tilDato.fraDatoEtterTilDato')),
+            .required(formatMessage('søknad.startDato.periode.tilDato.validation.required'))
+            .min(
+              yup.ref('fraDato'),
+              formatMessage('søknad.startDato.periode.tilDato.validation.fraDatoEtterTilDato')
+            ),
         }),
 
         ['antallDager']: yup.string().when([FERIETYPE], {
           is: 'Nei, men jeg vet antall feriedager',
-          then: yup.string().required(getText('form.ferie.antallDager.required')),
+          then: yup
+            .string()
+            .required(formatMessage('søknad.startDato.antallDager.validation.required')),
         }),
       }),
     }),
@@ -134,10 +141,10 @@ const StartDato = ({ getText, onBackClick, søknad }: Props) => {
 
   const FerieType = useMemo(
     () => ({
-      PERIODE: getText(`form.${FERIE}.ferieType.periode`),
-      DAGER: getText(`form.${FERIE}.ferieType.dager`),
+      PERIODE: formatMessage('søknad.startDato.ferieType.values.periode'),
+      DAGER: formatMessage('søknad.startDato.ferieType.values.dager'),
     }),
-    [getText]
+    [formatMessage]
   );
 
   useEffect(() => {
@@ -173,29 +180,25 @@ const StartDato = ({ getText, onBackClick, søknad }: Props) => {
         () => setErrorSummaryFocus()
       )}
       onBack={() => onBackClick()}
-      nextButtonText={'Neste steg'}
-      backButtonText={'Forrige steg'}
-      cancelButtonText={'Avbryt søknad'}
+      nextButtonText={formatMessage('navigation.next')}
+      backButtonText={formatMessage('navigation.back')}
+      cancelButtonText={formatMessage('navigation.cancel')}
       errors={errors}
     >
       <Heading size="large" level="2">
-        {getText('steps.startDato.title')}
+        {formatMessage('søknad.startDato.title')}
       </Heading>
       <LucaGuidePanel>
-        {getParagraphs('steps.startDato.guide.paragraphs', getText).map(
-          (e: string, index: number) => (
-            <BodyShort key={`${index}`} spacing>
-              {e}
-            </BodyShort>
-          )
-        )}
-        <ReadMore header={getText('steps.startDato.guideReadMore.heading')} type={'button'}>
-          {getText('steps.startDato.guideReadMore.text')}
+        <BodyShort spacing>{formatMessage('søknad.startDato.guide.text1')}</BodyShort>
+        <BodyShort spacing>{formatMessage('søknad.startDato.guide.text2')}</BodyShort>
+
+        <ReadMore header={formatMessage('søknad.startDato.guide.readMore.title')} type={'button'}>
+          {formatMessage('søknad.startDato.guide.readMore.text')}
         </ReadMore>
       </LucaGuidePanel>
       <DatoVelgerWrapper
         name={`${STARTDATO}`}
-        label={getText(`form.${STARTDATO}.label`)}
+        label={formatMessage('søknad.startDato.startDato.label')}
         control={control}
         error={errors.startDato?.message}
       />
@@ -203,20 +206,20 @@ const StartDato = ({ getText, onBackClick, søknad }: Props) => {
       {tidspunktStartDato === 'FORTID' && (
         <ColorPanel>
           <RadioGroupWrapper
-            legend={getText('form.startDatoFørDagensDato.hvorfor.label')}
+            legend={formatMessage('søknad.startDato.hvorfor.label')}
             name={HVORFOR}
             control={control}
             error={errors?.hvorfor?.message}
           >
-            <Radio value="Sykdom">{getText('form.startDatoFørDagensDato.hvorfor.helse')}</Radio>
+            <Radio value="Sykdom">{formatMessage('søknad.startDato.hvorfor.values.sykdom')}</Radio>
             <Radio value="Manglende informasjon">
-              {getText('form.startDatoFørDagensDato.hvorfor.feilinformasjon')}
+              {formatMessage('søknad.startDato.hvorfor.values.feilinformasjon')}
             </Radio>
           </RadioGroupWrapper>
           <TextAreaWrapper
             name={BEGRUNNELSE}
-            label={getText('form.startDatoFørDagensDato.begrunnelse.label')}
-            description="Vi ønsker å være sikre på at vi setter riktig startdato for deg."
+            label={formatMessage('søknad.startDato.begrunnelse.label')}
+            description={formatMessage('søknad.startDato.begrunnelse.description')}
             control={control}
             error={errors?.begrunnelse?.message}
           />
@@ -227,8 +230,8 @@ const StartDato = ({ getText, onBackClick, søknad }: Props) => {
         <ColorPanel>
           <TextAreaWrapper
             name={BEGRUNNELSE}
-            label={'Her kan du beskrive nærmere hvorfor du søker frem i tid (valgfritt):'}
-            description="Vi ønsker å være sikre på at vi setter riktig startdato for deg."
+            label={formatMessage('søknad.startDato.begrunnelseFremITid.label')}
+            description={formatMessage('søknad.startDato.begrunnelseFremITid.description')}
             control={control}
             error={errors?.begrunnelse?.message}
           />
@@ -238,8 +241,8 @@ const StartDato = ({ getText, onBackClick, søknad }: Props) => {
       {tidspunktStartDato !== 'FORTID' && (
         <>
           <RadioGroupWrapper
-            legend={getText('form.ferie.skalHaFerie.legend')}
-            description={getText('form.ferie.skalHaFerie.description')}
+            legend={formatMessage('søknad.startDato.skalHaFerie.label')}
+            description={formatMessage('søknad.startDato.skalHaFerie.label')}
             name={`${FERIE}.${SKALHAFERIE}`}
             control={control}
             error={errors?.[FERIE]?.[SKALHAFERIE]?.message}
@@ -251,7 +254,7 @@ const StartDato = ({ getText, onBackClick, søknad }: Props) => {
           {skalHaFerie === JaNeiVetIkke.JA && (
             <ColorPanel>
               <RadioGroupWrapper
-                legend={getText('form.ferie.ferieType.legend')}
+                legend={formatMessage('søknad.startDato.ferieType.label')}
                 name={`${FERIE}.${FERIETYPE}`}
                 control={control}
                 error={errors?.[`${FERIE}`]?.ferieType?.message}
@@ -268,7 +271,7 @@ const StartDato = ({ getText, onBackClick, søknad }: Props) => {
                   <Cell xs={5}>
                     <DatoVelgerWrapper
                       name={`${FERIE}.fraDato`}
-                      label={getText('form.ferie.fraDato.label')}
+                      label={formatMessage('søknad.startDato.periode.fraDato.label')}
                       control={control}
                       error={errors?.[`${FERIE}`]?.fraDato?.message}
                     />
@@ -276,7 +279,7 @@ const StartDato = ({ getText, onBackClick, søknad }: Props) => {
                   <Cell xs={5}>
                     <DatoVelgerWrapper
                       name={`${FERIE}.tilDato`}
-                      label={getText('form.ferie.tilDato.label')}
+                      label={formatMessage('søknad.startDato.periode.tilDato.label')}
                       control={control}
                       error={errors?.[`${FERIE}`]?.tilDato?.message}
                     />
@@ -288,7 +291,7 @@ const StartDato = ({ getText, onBackClick, søknad }: Props) => {
               {ferieType === FerieType.DAGER ? (
                 <TextFieldWrapper
                   name={`${FERIE}.antallDager`}
-                  label={getText('form.ferie.antallDager.label')}
+                  label={formatMessage('søknad.startDato.antallDager.label')}
                   control={control}
                   error={errors?.[`${FERIE}`]?.antallDager?.message}
                 />
@@ -298,7 +301,7 @@ const StartDato = ({ getText, onBackClick, søknad }: Props) => {
             </ColorPanel>
           )}
           {skalHaFerie === JaNeiVetIkke.VET_IKKE && (
-            <Alert variant={'info'}>{getText('steps.startDato.alertInfo')}</Alert>
+            <Alert variant={'info'}>{formatMessage('søknad.startDato.alert.text')}</Alert>
           )}
         </>
       )}

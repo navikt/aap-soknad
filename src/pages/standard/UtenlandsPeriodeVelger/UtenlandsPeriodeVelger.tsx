@@ -1,6 +1,5 @@
 import React, { useMemo } from 'react';
 const { eeaMember } = require('is-european');
-import { GetText } from '../../../hooks/useTexts';
 import { FieldValues, useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -21,16 +20,18 @@ import { JaEllerNei } from '../../../types/Generic';
 import RadioGroupWrapper from '../../../components/input/RadioGroupWrapper/RadioGroupWrapper';
 import CountrySelector from '../../../components/input/CountrySelector';
 import TextFieldWrapper from '../../../components/input/TextFieldWrapper';
+import { useFeatureToggleIntl } from '../../../hooks/useFeatureToggleIntl';
 
+export enum ArbeidEllerBodd {
+  ARBEID = 'ARBEID',
+  BODD = 'BODD',
+}
 interface UtenlandsPeriodeProps {
-  getText: GetText;
   onSave: (data: any) => void;
   onCancel: () => void;
   onClose: () => void;
   open: boolean;
-  hideIArbeid?: boolean;
-  heading: string;
-  ingress?: string;
+  arbeidEllerBodd: ArbeidEllerBodd;
 }
 const initFieldVals: FieldValues = {
   land: '',
@@ -39,25 +40,41 @@ const initFieldVals: FieldValues = {
   iArbeid: false,
 };
 const UtenlandsPeriodeVelger = ({
-  getText,
   onSave,
   onCancel,
   onClose,
   open,
-  hideIArbeid,
-  heading,
-  ingress,
+  arbeidEllerBodd,
 }: UtenlandsPeriodeProps) => {
+  const { formatMessage } = useFeatureToggleIntl();
   const schema = yup.object().shape({
     land: yup
       .string()
-      .required(getText('form.utenlandsperiode.land.required'))
-      .notOneOf(['none'], getText('form.utenlandsperiode.land.required')),
-    fraDato: yup.date().required(getText('form.utenlandsperiode.fraDato.required')),
+      .required(formatMessage('søknad.medlemskap.utenlandsperiode.modal.land.validation.required'))
+      .notOneOf(
+        ['none'],
+        formatMessage('søknad.medlemskap.utenlandsperiode.modal.land.validation.required')
+      ),
+    fraDato: yup
+      .date()
+      .required(
+        formatMessage(
+          'søknad.medlemskap.utenlandsperiode.modal.periode.fraDato.validation.required'
+        )
+      ),
     tilDato: yup
       .date()
-      .required(getText('form.utenlandsperiode.tilDato.required'))
-      .min(yup.ref('fraDato'), getText('form.utenlandsperiode.tilDato.fraDatoEtterTilDato')),
+      .required(
+        formatMessage(
+          'søknad.medlemskap.utenlandsperiode.modal.periode.tilDato.validation.required'
+        )
+      )
+      .min(
+        yup.ref('fraDato'),
+        formatMessage(
+          'søknad.medlemskap.utenlandsperiode.modal.periode.tilDato.validation.fraDatoEtterTilDato'
+        )
+      ),
   });
   const {
     control,
@@ -91,9 +108,11 @@ const UtenlandsPeriodeVelger = ({
     <Modal open={open} onClose={onClose}>
       <Modal.Content className={classes.utenlandsPeriodeVelger}>
         <Heading size={'medium'} level={'2'}>
-          {heading}
+          {formatMessage('søknad.medlemskap.utenlandsperiode.modal.title')}
         </Heading>
-        {ingress && <Ingress>{ingress}</Ingress>}
+        <Ingress>
+          {formatMessage(`søknad.medlemskap.utenlandsperiode.modal.ingress.${arbeidEllerBodd}`)}
+        </Ingress>
         <form
           onSubmit={handleSubmit((data) => {
             onSave(data);
@@ -102,25 +121,25 @@ const UtenlandsPeriodeVelger = ({
         >
           <CountrySelector
             name={'land'}
-            label={
-              hideIArbeid
-                ? getText('form.utenlandsperiode.land.labelArbeid')
-                : getText('form.utenlandsperiode.land.label')
-            }
+            label={formatMessage(
+              `søknad.medlemskap.utenlandsperiode.modal.land.label.${arbeidEllerBodd}`
+            )}
             control={control}
             error={errors?.land?.message}
           />
           <div>
             <Label>
-              {hideIArbeid
-                ? getText('form.utenlandsperiode.datoLabelArbeid')
-                : getText('form.utenlandsperiode.datoLabel')}
+              {formatMessage(
+                `søknad.medlemskap.utenlandsperiode.modal.periode.label.${arbeidEllerBodd}`
+              )}
             </Label>
             <Grid>
               <Cell xs={5}>
                 <DatoVelgerWrapper
                   name="fraDato"
-                  label={getText('form.utenlandsperiode.fraDato.label')}
+                  label={formatMessage(
+                    'søknad.medlemskap.utenlandsperiode.modal.periode.fraDato.label'
+                  )}
                   control={control}
                   error={errors.fraDato?.message}
                 />
@@ -128,17 +147,19 @@ const UtenlandsPeriodeVelger = ({
               <Cell xs={5}>
                 <DatoVelgerWrapper
                   name="tilDato"
-                  label={getText('form.utenlandsperiode.tilDato.label')}
+                  label={formatMessage(
+                    'søknad.medlemskap.utenlandsperiode.modal.periode.tilDato.label'
+                  )}
                   control={control}
                   error={errors.tilDato?.message}
                 />
               </Cell>
             </Grid>
           </div>
-          {!hideIArbeid && (
+          {arbeidEllerBodd === ArbeidEllerBodd.BODD && (
             <RadioGroupWrapper
               name={'iArbeid'}
-              legend={getText('form.utenlandsperiode.iArbeid.legend')}
+              legend={formatMessage('søknad.medlemskap.utenlandsperiode.modal.iArbeid.label')}
               control={control}
               error={errors?.iArbeid?.message}
             >
@@ -153,7 +174,7 @@ const UtenlandsPeriodeVelger = ({
           {showUtenlandsId && (
             <TextFieldWrapper
               name={'utenlandsId'}
-              label={getText('form.utenlandsperiode.utenlandsId.label')}
+              label={formatMessage('søknad.medlemskap.utenlandsperiode.modal.utenlandsId.label')}
               control={control}
             />
           )}
@@ -167,11 +188,13 @@ const UtenlandsPeriodeVelger = ({
                   onCancel();
                 }}
               >
-                {getText('form.utenlandsperiode.avbryt')}
+                {formatMessage('søknad.medlemskap.utenlandsperiode.modal.buttons.avbryt')}
               </Button>
             </Cell>
             <Cell xs={5}>
-              <Button>{getText('form.utenlandsperiode.lagre')}</Button>
+              <Button>
+                {formatMessage('søknad.medlemskap.utenlandsperiode.modal.buttons.lagre')}
+              </Button>
             </Cell>
           </Grid>
         </form>

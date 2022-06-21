@@ -1,4 +1,5 @@
 {
   "dittNav": "https://www.{hostname}/person/dittnav",
-  "dineSaker": "https://www.{hostname}/person/dine-saker"
+  "dineSaker": "https://www.{hostname}/person/dine-saker",
+  "personOpplysninger": "https://www.nav.no/no/nav-og-samfunn/om-nav/personvern-i-arbeids-og-velferdsetaten/personvernerklaering-for-arbeids-og-velferdsetaten"
 }

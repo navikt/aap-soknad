@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import './utland/Utland.less';
 import { Heading, Ingress, Button, Loader } from '@navikt/ds-react';
 import { useErrorHandler } from 'react-error-boundary';
 import { captureException } from '@sentry/react';
@@ -38,7 +37,7 @@ const Utland = (): JSX.Element => {
   };
   return (
     <>
-      <Heading size="2xlarge" level="1" spacing={true}>
+      <Heading size="xlarge" level="1" spacing={true}>
         Meg
       </Heading>
       <Ingress spacing={true}>Api test.</Ingress>

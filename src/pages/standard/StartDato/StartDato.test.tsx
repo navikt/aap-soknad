@@ -1,7 +1,5 @@
 import React from 'react';
 import { render, screen, fireEvent, findAllByRole } from '@testing-library/react';
-import useTexts from '../../../hooks/useTexts';
-import * as tekster from '../tekster';
 import { JaNeiVetIkke } from '../../../types/Generic';
 import StartDato from './StartDato';
 import { StepWizardContext, StepWizardContextState } from '../../../context/stepWizardContextV2';
@@ -36,11 +34,10 @@ const renderWithContext = (ui: any, { ...renderOptions }: any) => {
 };
 describe('StartDato', () => {
   const Component = () => {
-    const { getText } = useTexts(tekster);
     return (
       <StepWizard>
         <Step name={STARTDATO}>
-          <StartDato getText={getText} onBackClick={jest.fn()} onCancelClick={jest.fn()} />
+          <StartDato onBackClick={jest.fn()} onCancelClick={jest.fn()} />
         </Step>
       </StepWizard>
     );
@@ -50,10 +47,11 @@ describe('StartDato', () => {
     renderWithContext(<Component />, {});
 
     fireEvent.submit(screen.getByRole('button', { name: 'Neste steg' }));
-    const errorSummary = await screen.findByRole('region');
+    const errorSummary = await screen.findByRole('alert');
 
     expect(await findAllByRole(errorSummary, 'link')).toHaveLength(2);
   });
+
   it('Riktig utfylt - enkleste vei', async () => {
     renderWithContext(<Component />, {});
 
