@@ -44,6 +44,83 @@
       "startSøknad": "Start søknad",
       "avbrytSøknad": "Avbryt søknad"
     },
+    "startDato": {
+      "title": "Startdato",
+      "guide": {
+        "text1": "NAV vil beregne startdato for deg, slik at du får AAP så tidlig som mulig. Hovedregelen er at du tidligst kan få AAP fra den dagen du sender inn søknaden.",
+        "text2": "Hvis du mottar sykepenger får du vanligvis AAP første dagen etter at sykepengene dine er ferdig.",
+        "readMore": {
+          "title": "Kan jeg søke om AAP tilbake i tid?",
+          "text": "Hvis du av helsemessige årsaker ikke har kunnet søke tidligere, kan du få innvilget AAP tilbake i tid. Du kan også få AAP tilbake i tid hvis du har fått feil informasjon fra NAV og dette er grunnen til at du ikke har søkt tidligere."
+        }
+      },
+      "startDato": {
+        "label": "Fra hvilken dato ønsker du AAP (dd.mm.åååå)?",
+        "validation": {
+          "required": "Du må oppgi hvilken dato du ønsker AAP fra. Fyll inn slik: dd.mm.åååå.",
+          "eldreEnnTreÅr": "Det er kun mulig å søke 3 år tilbake i tid"
+        }
+      },
+      "hvorfor": {
+        "label": "Hvorfor søker du om AAP tilbake i tid?",
+        "values": {
+          "sykdom": "Helsemessige grunner gjorde at jeg ikke søkte før",
+          "feilinformasjon": "Feilinformasjon fra NAV gjorde at jeg ikke søkte før"
+        },
+        "validation": {
+          "required": "Når du søker om AAP tilbake i tid, må du krysse av for hvorfor."
+        }
+      },
+      "begrunnelse": {
+        "label": "Her kan du beskrive nærmere hvorfor du søker tilbake i tid (valgfritt):",
+        "description": "Vi ønsker å være sikre på at vi setter riktig startdato for deg."
+      },
+      "begrunnelseFremITid": {
+        "label": "Her kan du beskrive nærmere hvorfor du søker frem i tid (valgfritt):",
+        "description": "Vi ønsker å være sikre på at vi setter riktig startdato for deg."
+      },
+      "skalHaFerie": {
+        "label": "Planlegger du å ta ferie før startdato på AAP?",
+        "description": "Hvis du tar ut ferie kan startdatoen forskyve seg.",
+        "validation": {
+          "required": "Du må svare på om du planlegger å ta ferie."
+        }
+      },
+      "ferieType": {
+        "label": "Vet du når du skal ta ut ferie?",
+        "values": {
+          "periode": "Ja",
+          "dager": "Nei, men jeg vet antall feriedager"
+        },
+        "validation": {
+          "required": "Du må svare på om du vet når du skal ta ut ferie."
+        }
+      },
+      "periode": {
+        "fraDato": {
+          "label": "Fra dato (dd.mm.åååå)",
+          "validation": {
+            "required": "Du må fylle ut feriens fra-dato. Fyll inn slik: dd.mm.åååå."
+          }
+        },
+        "tilDato": {
+          "label": "Til dato (dd.mm.åååå)",
+          "validation": {
+            "required": "Du må fylle ut feriens til-dato. Fyll inn slik: dd.mm.åååå.",
+            "fraDatoEtterTilDato": "Fra-dato må være eldre enn til-dato. Fyll inn slik: dd.mm.åååå."
+          }
+        }
+      },
+      "antallDager": {
+        "label": "Skriv inn antall dager du skal ha ferie",
+        "validation": {
+          "required": "Du må skrive inn antall dager du skal ha ferie."
+        }
+      },
+      "alert": {
+        "text": "Det er viktig at du gir oss beskjed hvis du bestemmer deg for å ta ferie, fordi det kan påvirke startdatoen din. Dette påvirker spesielt deg som får sykepenger."
+      }
+    },
     "andreUtbetalinger": {
       "title": "Utbetalinger",
       "guide": {

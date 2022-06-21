@@ -40,7 +40,7 @@ describe('StartDato', () => {
     return (
       <StepWizard>
         <Step name={STARTDATO}>
-          <StartDato getText={getText} onBackClick={jest.fn()} onCancelClick={jest.fn()} />
+          <StartDato onBackClick={jest.fn()} onCancelClick={jest.fn()} />
         </Step>
       </StepWizard>
     );

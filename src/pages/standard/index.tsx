@@ -418,7 +418,6 @@ export const StandardPage = (): JSX.Element => {
       <StepWizard hideLabels={true}>
         <Step order={1} name={StepNames.STARTDATO}>
           <StartDato
-            getText={getText}
             onCancelClick={onDeleteSøknad}
             onBackClick={onPreviousStep}
             søknad={søknadState?.søknad}
