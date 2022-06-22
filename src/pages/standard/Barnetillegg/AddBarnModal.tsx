@@ -89,7 +89,9 @@ export const AddBarnModal = ({
       then: (yupSchema) =>
         yupSchema
           .required(
-            formatMessage('søknad.barnetillegg.leggTilBarn.modal.harInntekt.validation.required')
+            formatMessage('søknad.barnetillegg.leggTilBarn.modal.harInntekt.validation.required', {
+              grunnbeløp: GRUNNBELØP,
+            })
           )
           .oneOf([JaEllerNei.JA, JaEllerNei.NEI])
           .nullable(),
@@ -199,7 +201,9 @@ export const AddBarnModal = ({
           {barnepensjon === JaEllerNei.NEI && (
             <RadioGroupWrapper
               control={control}
-              legend={formatMessage('søknad.barnetillegg.leggTilBarn.modal.harInntekt.label')}
+              legend={formatMessage('søknad.barnetillegg.leggTilBarn.modal.harInntekt.label', {
+                grunnbeløp: GRUNNBELØP,
+              })}
               name={'harInntekt'}
               error={errors?.harInntekt?.message}
             >

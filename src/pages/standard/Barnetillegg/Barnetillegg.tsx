@@ -60,7 +60,10 @@ export const Barnetillegg = ({ onBackClick, søknad }: Props) => {
             yupSchema
               .required(
                 formatMessage(
-                  'søknad.barnetillegg.leggTilBarn.modal.harInntekt.validation.required'
+                  'søknad.barnetillegg.leggTilBarn.modal.harInntekt.validation.required',
+                  {
+                    grunnbeløp: GRUNNBELØP,
+                  }
                 )
               )
               .oneOf([JaEllerNei.JA, JaEllerNei.NEI])
@@ -233,7 +236,10 @@ export const Barnetillegg = ({ onBackClick, søknad }: Props) => {
                     {controlledFields[index]?.barnepensjon === JaEllerNei.NEI && (
                       <RadioGroupWrapper
                         legend={formatMessage(
-                          'søknad.barnetillegg.registrerteBarn.harInntekt.label'
+                          'søknad.barnetillegg.registrerteBarn.harInntekt.label',
+                          {
+                            grunnbeløp: GRUNNBELØP,
+                          }
                         )}
                         name={`${BARNETILLEGG}.${index}.harInntekt`}
                         control={control}
@@ -306,16 +312,20 @@ export const Barnetillegg = ({ onBackClick, søknad }: Props) => {
                     )}
                     {barn?.harInntekt === JaEllerNei.JA && (
                       <BodyShort>
-                        {formatMessage('søknad.barnetillegg.manuelleBarn.inntektOver1G')}
+                        {formatMessage('søknad.barnetillegg.manuelleBarn.inntektOver1G', {
+                          grunnbeløp: GRUNNBELØP,
+                        })}
                       </BodyShort>
                     )}
                     {barn?.harInntekt === JaEllerNei.NEI && (
                       <BodyShort>
-                        {formatMessage('søknad.barnetillegg.manuelleBarn.inntektIkkeOver1G')}
+                        {formatMessage('søknad.barnetillegg.manuelleBarn.inntektIkkeOver1G', {
+                          grunnbeløp: GRUNNBELØP,
+                        })}
                       </BodyShort>
                     )}
                     <Grid>
-                      <Cell xs={4}>
+                      <Cell xs={4} md="12">
                         <Button
                           variant="tertiary"
                           type="button"

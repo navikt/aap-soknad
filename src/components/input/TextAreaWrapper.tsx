@@ -8,9 +8,17 @@ export interface TextAreaProps {
   label: string;
   error?: string;
   control: Control<FieldValues>;
+  maxLength?: number;
 }
 
-const TextAreaWrapper = ({ name, description, label, control, error }: TextAreaProps) => (
+const TextAreaWrapper = ({
+  name,
+  description,
+  label,
+  control,
+  error,
+  maxLength,
+}: TextAreaProps) => (
   <Controller
     name={name}
     control={control}
@@ -22,6 +30,7 @@ const TextAreaWrapper = ({ name, description, label, control, error }: TextAreaP
         onChange={onChange}
         error={error}
         name={name}
+        maxLength={maxLength}
       />
     )}
   />

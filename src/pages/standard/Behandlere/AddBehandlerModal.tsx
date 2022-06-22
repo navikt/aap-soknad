@@ -1,6 +1,5 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm, FieldValues } from 'react-hook-form';
-import { GetText } from '../../../hooks/useTexts';
 import Soknad from '../../../types/Soknad';
 import * as yup from 'yup';
 import * as classes from './AddBehandlerModal.module.css';
@@ -8,9 +7,9 @@ import { useEffect } from 'react';
 import { Button, Cell, Grid, Heading, Modal } from '@navikt/ds-react';
 import TextFieldWrapper from '../../../components/input/TextFieldWrapper';
 import { ModalButtonWrapper } from '../../../components/ButtonWrapper/ModalButtonWrapper';
+import { useFeatureToggleIntl } from '../../../hooks/useFeatureToggleIntl';
 
 interface Props {
-  getText: GetText;
   søknad?: Soknad;
   onCloseClick: () => void;
   onSaveClick: (data: any) => void;
@@ -20,15 +19,51 @@ interface Props {
 }
 
 export const AddBehandlerModal = ({
-  getText,
   showModal,
   onDeleteClick,
   onCloseClick,
   onSaveClick,
   behandler,
 }: Props) => {
-  const schema = yup.object().shape({});
-  const { control, handleSubmit, setValue, reset } = useForm<FieldValues>({
+  const { formatMessage } = useFeatureToggleIntl();
+
+  const schema = yup.object().shape({
+    firstname: yup
+      .string()
+      .required(formatMessage('søknad.helseopplysninger.modal.fornavn.validation.required'))
+      .nullable(),
+    lastname: yup
+      .string()
+      .required(formatMessage('søknad.helseopplysninger.modal.etternavn.validation.required'))
+      .nullable(),
+    legekontor: yup
+      .string()
+      .required(formatMessage('søknad.helseopplysninger.modal.legekontor.validation.required'))
+      .nullable(),
+    gateadresse: yup
+      .string()
+      .required(formatMessage('søknad.helseopplysninger.modal.gateadresse.validation.required'))
+      .nullable(),
+    postnummer: yup
+      .string()
+      .required(formatMessage('søknad.helseopplysninger.modal.postnummer.validation.required'))
+      .nullable(),
+    poststed: yup
+      .string()
+      .required(formatMessage('søknad.helseopplysninger.modal.poststed.validation.required'))
+      .nullable(),
+    telefon: yup
+      .string()
+      .required(formatMessage('søknad.helseopplysninger.modal.telefonnummer.validation.required'))
+      .nullable(),
+  });
+  const {
+    control,
+    formState: { errors },
+    handleSubmit,
+    setValue,
+    reset,
+  } = useForm<FieldValues>({
     resolver: yupResolver(schema),
     defaultValues: {
       ...(behandler ? behandler : {}),
@@ -54,7 +89,7 @@ export const AddBehandlerModal = ({
     <Modal open={showModal} onClose={() => onCloseClick()}>
       <Modal.Content className={classes?.addBehandlerModalContent}>
         <Heading size={'small'} level={'3'}>
-          {'Legg til annen lege eller behandler'}
+          {formatMessage('søknad.helseopplysninger.modal.title')}
         </Heading>
         <form
           onSubmit={handleSubmit((data) => {
@@ -65,44 +100,51 @@ export const AddBehandlerModal = ({
         >
           <TextFieldWrapper
             control={control}
-            label={getText('form.fastlege.annenbehandler.firstname.label')}
+            label={formatMessage('søknad.helseopplysninger.modal.fornavn.label')}
             name={'firstname'}
+            error={errors?.firstname?.message}
           />
           <TextFieldWrapper
             control={control}
-            label={getText('form.fastlege.annenbehandler.lastname.label')}
+            label={formatMessage('søknad.helseopplysninger.modal.etternavn.label')}
             name={'lastname'}
+            error={errors?.lastname?.message}
           />
           <TextFieldWrapper
             control={control}
-            label={getText('form.fastlege.annenbehandler.legekontor.label')}
+            label={formatMessage('søknad.helseopplysninger.modal.legekontor.label')}
             name={'legekontor'}
+            error={errors?.legekontor?.message}
           />
           <TextFieldWrapper
             control={control}
-            label={getText('form.fastlege.annenbehandler.gateadresse.label')}
+            label={formatMessage('søknad.helseopplysninger.modal.gateadresse.label')}
             name={'gateadresse'}
+            error={errors?.gateadresse?.message}
           />
           <Grid>
             <Cell xs={6}>
               <TextFieldWrapper
                 control={control}
-                label={getText('form.fastlege.annenbehandler.postnummer.label')}
+                label={formatMessage('søknad.helseopplysninger.modal.postnummer.label')}
                 name={'postnummer'}
+                error={errors?.postnummer?.message}
               />
             </Cell>
             <Cell xs={6}>
               <TextFieldWrapper
                 control={control}
-                label={getText('form.fastlege.annenbehandler.poststed.label')}
+                label={formatMessage('søknad.helseopplysninger.modal.poststed.label')}
                 name={'poststed'}
+                error={errors?.poststed?.message}
               />
             </Cell>
           </Grid>
           <TextFieldWrapper
             control={control}
-            label={getText('form.fastlege.annenbehandler.telefon.label')}
+            label={formatMessage('søknad.helseopplysninger.modal.telefonnummer.label')}
             name={'telefon'}
+            error={errors?.telefon?.message}
           />
           <ModalButtonWrapper>
             {behandler ? (
@@ -114,7 +156,7 @@ export const AddBehandlerModal = ({
                   onDeleteClick();
                 }}
               >
-                Slett
+                {formatMessage('søknad.helseopplysninger.modal.buttons.slett')}
               </Button>
             ) : (
               <Button
@@ -124,11 +166,13 @@ export const AddBehandlerModal = ({
                   onCloseClick();
                 }}
               >
-                Avbryt
+                {formatMessage('søknad.helseopplysninger.modal.buttons.avbryt')}
               </Button>
             )}
 
-            <Button type={'submit'}>Lagre</Button>
+            <Button type={'submit'}>
+              {formatMessage('søknad.helseopplysninger.modal.buttons.lagre')}
+            </Button>
 
             {behandler && (
               <Button
@@ -138,7 +182,7 @@ export const AddBehandlerModal = ({
                   onCloseClick();
                 }}
               >
-                Avbryt
+                {formatMessage('søknad.helseopplysninger.modal.buttons.avbryt')}
               </Button>
             )}
           </ModalButtonWrapper>
