@@ -2,7 +2,6 @@ import useSwr from 'swr';
 
 import { Veiledning } from '../../src/pages/standard/Veiledning/Veiledning';
 
-import * as tekster from '../../src/pages/standard/tekster';
 import { useEffect, useState } from 'react';
 import { SokerOppslagState, SøkerView } from '../../src/context/sokerOppslagContext';
 

@@ -2,7 +2,6 @@ import React from 'react';
 import { BodyShort, Label } from '@navikt/ds-react';
 import { UtenlandsPeriode } from '../../../../types/Soknad';
 import { formatDate } from '../../../../utils/date';
-import { GetText } from '../../../../hooks/useTexts';
 import { landNavnFraSelector } from '../../../../utils/StringFormatters';
 import { useFeatureToggleIntl } from '../../../../hooks/useFeatureToggleIntl';
 

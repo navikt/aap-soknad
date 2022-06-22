@@ -1,7 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { useTexts } from '../../hooks/useTexts';
 import { PageHeader } from '@navikt/ds-react';
-import * as tekster from './tekster';
 import { Step, StepWizard } from '../../components/StepWizard';
 import { SubmitHandler } from 'react-hook-form';
 import {
@@ -329,7 +327,6 @@ export const StandardPage = (): JSX.Element => {
   const { søknadState, søknadDispatch } = useSoknadContext();
   const { oppslagDispatch, søker, fastlege } = useSokerOppslag();
   const { currentStep, stepWizardDispatch } = useStepWizard();
-  const { getText } = useTexts(tekster);
   const pageHeading = useRef(null);
   useEffect(() => {
     const getSoknadStateAndOppslag = async () => {
