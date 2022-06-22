@@ -1,6 +1,5 @@
 import { FieldValues, useFieldArray, useForm } from 'react-hook-form';
 import Soknad from '../../../types/Soknad';
-import { GetText } from '../../../hooks/useTexts';
 import React, { useEffect, useRef, useState } from 'react';
 import { Alert, BodyShort, Heading, Label, ReadMore } from '@navikt/ds-react';
 import FileInput from '../../../components/input/FileInput/FileInput';
@@ -17,7 +16,6 @@ import { AVBRUTT_STUDIE_VEDLEGG } from '../Student/Student';
 import { useFeatureToggleIntl } from '../../../hooks/useFeatureToggleIntl';
 
 interface Props {
-  getText: GetText;
   søknad?: Soknad;
   onBackClick: () => void;
   onCancelClick: () => void;
@@ -29,11 +27,13 @@ const VEDLEGG_UTLANDSSTØNAD = `${VEDLEGG}.${AttachmentType.UTLANDSSTØNAD}`;
 const VEDLEGG_BARN = `${VEDLEGG}.barn`;
 const VEDLEGG_ANNET = `${VEDLEGG}.annet`;
 
-const Vedlegg = ({ getText, onBackClick, søknad }: Props) => {
+const Vedlegg = ({ onBackClick, søknad }: Props) => {
+  const { formatMessage } = useFeatureToggleIntl();
+
   const [scanningGuideOpen, setScanningGuideOpen] = useState(false);
   const scanningGuideElement = useRef(null);
   const schema = yup.object().shape({});
-  const { formatMessage } = useFeatureToggleIntl();
+
   const { vedleggState } = useVedleggContext();
   const { søknadDispatch } = useSoknadContext();
   const { stepWizardDispatch } = useStepWizard();
@@ -86,22 +86,22 @@ const Vedlegg = ({ getText, onBackClick, søknad }: Props) => {
         completeAndGoToNextStep(stepWizardDispatch);
       })}
       onBack={() => onBackClick()}
-      nextButtonText={'Neste steg'}
-      backButtonText={'Forrige steg'}
-      cancelButtonText={'Avbryt søknad'}
+      nextButtonText={formatMessage('navigation.next')}
+      backButtonText={formatMessage('navigation.back')}
+      cancelButtonText={formatMessage('navigation.cancel')}
       errors={errors}
     >
       <Heading size="large" level="2">
-        {getText('steps.vedlegg.title')}
+        {formatMessage('søknad.vedlegg.title')}
       </Heading>
       <LucaGuidePanel>
-        <BodyShort spacing>{getText(`steps.vedlegg.guide`)}</BodyShort>
-        <BodyShort>{getText(`steps.vedlegg.guide2`)}</BodyShort>
+        <BodyShort spacing>{formatMessage('søknad.vedlegg.guide.text1')}</BodyShort>
+        <BodyShort>{formatMessage('søknad.vedlegg.guide.text2')}</BodyShort>
       </LucaGuidePanel>
       <BodyShort>
         {vedleggState?.requiredVedlegg?.length > 0 ? (
           <>
-            <Label>{getText('steps.vedlegg.attachmentListDescription')}</Label>
+            <Label>{formatMessage('søknad.vedlegg.harVedlegg.title')}</Label>
             <ul>
               {vedleggState?.requiredVedlegg?.map((vedlegg, index) => (
                 <li key={index}>{vedlegg?.description}</li>
@@ -110,24 +110,25 @@ const Vedlegg = ({ getText, onBackClick, søknad }: Props) => {
           </>
         ) : (
           <>
-            <Label spacing>
-              Ut fra dine svar har vi ikke registrert noen vedlegg som må lastes opp.
-            </Label>
-            <ReadMore header={'Kan jeg laste opp andre vedlegg?'} type={'button'}>
-              {'Hvis du har noe annet du også ønsker å legge ved, kan du også laste opp dette her.'}
+            <Label spacing>{formatMessage('søknad.vedlegg.ingenVedlegg.title')}</Label>
+            <ReadMore
+              header={formatMessage('søknad.vedlegg.ingenVedlegg.readMore.title')}
+              type={'button'}
+            >
+              {formatMessage('søknad.vedlegg.ingenVedlegg.readMore.text')}
             </ReadMore>
           </>
         )}
       </BodyShort>
-      <BodyShort>{getText('steps.vedlegg.taBildeInfo')}</BodyShort>
+      <BodyShort>{formatMessage('søknad.vedlegg.vedleggPåPapir.text')}</BodyShort>
       <ReadMore
-        header={getText('steps.vedlegg.taBildeReadMore')}
+        header={formatMessage('søknad.vedlegg.vedleggPåPapir.readMore.title')}
         type={'button'}
         open={scanningGuideOpen}
         onClick={scanningGuideOnClick}
         ref={scanningGuideElement}
       >
-        <ScanningGuide getText={getText} />
+        <ScanningGuide />
       </ReadMore>
       {vedleggState?.requiredVedlegg?.find((e) => e.type === AVBRUTT_STUDIE_VEDLEGG) && (
         <FileInput
@@ -148,7 +149,7 @@ const Vedlegg = ({ getText, onBackClick, søknad }: Props) => {
           append={fieldArrayLønn.append}
           remove={fieldArrayLønn.remove}
           heading={'Lønn og andre goder'}
-          ingress={getText(`steps.andre_utbetalinger.alertAttachments.andreGoder`)}
+          ingress={formatMessage('søknad.andreUtbetalinger.vedlegg.andreGoder')}
         />
       )}
       {vedleggState?.requiredVedlegg?.find((e) => e.type === AttachmentType.OMSORGSSTØNAD) && (
@@ -157,8 +158,8 @@ const Vedlegg = ({ getText, onBackClick, søknad }: Props) => {
           fields={fieldArrayOmsorgsstønad.fields}
           append={fieldArrayOmsorgsstønad.append}
           remove={fieldArrayOmsorgsstønad.remove}
-          heading={'Omsorgsstønad'}
-          ingress={getText(`steps.andre_utbetalinger.alertAttachments.omsorgsstønad`)}
+          heading={formatMessage('søknad.andreUtbetalinger.stønad.values.omsorgsstønad')}
+          ingress={formatMessage('søknad.andreUtbetalinger.vedlegg.omsorgsstønad')}
         />
       )}
       {vedleggState?.requiredVedlegg?.find((e) => e.type === AttachmentType.UTLANDSSTØNAD) && (
@@ -167,8 +168,8 @@ const Vedlegg = ({ getText, onBackClick, søknad }: Props) => {
           fields={fieldArrayUtlandsstønad.fields}
           append={fieldArrayUtlandsstønad.append}
           remove={fieldArrayUtlandsstønad.remove}
-          heading={'Utlandsstønad'}
-          ingress={getText(`steps.andre_utbetalinger.alertAttachments.utlandsStønad`)}
+          heading={formatMessage('søknad.andreUtbetalinger.stønad.values.utland')}
+          ingress={formatMessage('søknad.andreUtbetalinger.vedlegg.utlandsStønad')}
         />
       )}
       {vedleggState?.requiredVedlegg?.find((e) => e?.type?.split('-')?.[0] === 'barn') && (
@@ -190,7 +191,7 @@ const Vedlegg = ({ getText, onBackClick, søknad }: Props) => {
         ingress={'Hvis du har noe annet du ønsker å legge ved kan du laste det opp her'}
       />
 
-      <Alert variant={'info'}>{getText('steps.vedlegg.alertInfo')}</Alert>
+      <Alert variant={'info'}>{formatMessage('søknad.vedlegg.alert.text')}</Alert>
     </SoknadFormWrapper>
   );
 };

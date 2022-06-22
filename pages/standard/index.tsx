@@ -1,4 +1,3 @@
-import useTexts from '../../src/hooks/useTexts';
 import useSwr from 'swr';
 
 import { Veiledning } from '../../src/pages/standard/Veiledning/Veiledning';
@@ -17,8 +16,6 @@ const fetcher = async (url: string) =>
     });
 
 const Introduksjon = () => {
-  const { getText } = useTexts(tekster);
-
   const { data, error } = useSwr<SokerOppslagState>(sokerUrl, fetcher);
 
   const [soker, setSoker] = useState({});
@@ -34,14 +31,7 @@ const Introduksjon = () => {
     }
   }, [data, setSoker]);
 
-  return (
-    <Veiledning
-      getText={getText}
-      søker={soker}
-      loading={false}
-      onSubmit={() => console.log('onSubmit')}
-    />
-  );
+  return <Veiledning søker={soker} loading={false} onSubmit={() => console.log('onSubmit')} />;
 };
 
 export default Introduksjon;

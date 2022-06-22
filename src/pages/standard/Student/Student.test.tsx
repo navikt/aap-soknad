@@ -36,11 +36,10 @@ const renderWithContext = (ui: any, { ...renderOptions }: any) => {
 };
 describe('Yrkesskade', () => {
   const Component = () => {
-    const { getText } = useTexts(tekster);
     return (
       <StepWizard>
         <Step name={STUDENT}>
-          <Student getText={getText} onBackClick={jest.fn()} onCancelClick={jest.fn()} />
+          <Student onBackClick={jest.fn()} onCancelClick={jest.fn()} />
         </Step>
       </StepWizard>
     );

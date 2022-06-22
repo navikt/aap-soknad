@@ -401,7 +401,7 @@ export const StandardPage = (): JSX.Element => {
         <PageHeader align="center" className={classes?.pageHeader}>
           {formatMessage('søknad.pagetitle')}
         </PageHeader>
-        <Kvittering getText={getText} søker={søker} />
+        <Kvittering søker={søker} />
       </>
     );
   if (showVeiledning)
@@ -473,7 +473,6 @@ export const StandardPage = (): JSX.Element => {
         </Step>
         <Step order={8} name={StepNames.TILLEGGSOPPLYSNINGER}>
           <Tilleggsopplysninger
-            getText={getText}
             onCancelClick={onDeleteSøknad}
             onBackClick={onPreviousStep}
             søknad={søknadState?.søknad}
@@ -481,7 +480,6 @@ export const StandardPage = (): JSX.Element => {
         </Step>
         <Step order={9} name={StepNames.VEDLEGG}>
           <Vedlegg
-            getText={getText}
             onCancelClick={onDeleteSøknad}
             onBackClick={onPreviousStep}
             søknad={søknadState?.søknad}
@@ -489,7 +487,6 @@ export const StandardPage = (): JSX.Element => {
         </Step>
         <Step order={10} name={StepNames.OPPSUMMERING}>
           <Oppsummering
-            getText={getText}
             onCancelClick={onDeleteSøknad}
             onBackClick={onPreviousStep}
             onSubmitSoknad={submitSoknad}
