@@ -25,7 +25,7 @@
         "lastOppSenere": "Dokumentene laster du opp senere i søknaden. Du kan også ettersende vedlegg."
       }
     },
-    "pagetitle": "Søknad om arbeidsavklaringspenger",
+    "pagetitle": "Søknad om arbeidsavklaringspenger (AAP)",
     "veiledning": {
       "title": "Søknad om arbeidsavklaringspenger (AAP)",
       "guide": {
@@ -403,10 +403,10 @@
           }
         },
         "harInntekt": {
-          "label": "Har barnet årlig inntekt over 1G?",
+          "label": "Har barnet årlig inntekt over {grunnbeløp}kr?",
           "readMore": {
             "title": "Hvorfor spør vi om dette?",
-            "text": "Hvis barnet har en årlig inntekt over 1G (1G = {grunnbeløp}kr), får du vanligvis ikke barnetillegg for barnet."
+            "text": "Hvis barnet har en årlig inntekt over {grunnbeløp}kr ({grunnbeløp}kr = 1G), får du vanligvis ikke barnetillegg for barnet."
           }
         }
       },
@@ -417,8 +417,8 @@
         "erFosterforelder": "Du er fosterforelder til barnet",
         "mottarBarnepensjon": "Barnet mottar barnepensjon",
         "mottarIkkeBarnepensjon": "Barnet mottar ikke barnepensjon",
-        "inntektOver1G": "Barnet har årlig inntekt over 1G",
-        "inntektIkkeOver1G": "Barnet har ikke årlig inntekt over 1G",
+        "inntektOver1G": "Barnet har årlig inntekt over {grunnbeløp}kr",
+        "inntektIkkeOver1G": "Barnet har ikke årlig inntekt over {grunnbeløp}kr",
         "redigerBarn": "Endre informasjon om barnet"
       },
       "leggTilBarn": {
@@ -465,13 +465,13 @@
             }
           },
           "harInntekt": {
-            "label": "Har barnet årlig inntekt over 1G?",
+            "label": "Har barnet årlig inntekt over {grunnbeløp}kr?",
             "readMore": {
               "title": "Hvorfor spør vi om dette?",
-              "text": "Hvis barnet har en årlig inntekt over 1G (1G = {grunnbeløp}kr), får du vanligvis ikke barnetillegg for barnet."
+              "text": "Hvis barnet har en årlig inntekt over {grunnbeløp}kr ({grunnbeløp}kr = 1G), får du vanligvis ikke barnetillegg for barnet."
             },
             "validation": {
-              "required": "Du må svare på om barnet har en årlig inntekt over 1G."
+              "required": "Du må svare på om barnet har en årlig inntekt over {grunnbeløp}kr"
             }
           },
           "buttons": {

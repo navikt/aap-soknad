@@ -162,7 +162,7 @@
     },
     "tilleggsopplysninger": {
       "title": "Tilleggsopplysninger",
-      "guide": "Hvis det er noe mer informasjon du ønsker å gi oss, kan du gjøre det her. Dette er helt valgfritt."
+      "guide": "Dette spørsmålet er valgfritt å svare på."
     },
     "oppsummering": {
       "title": "Oppsummering",
@@ -453,7 +453,7 @@
       }
     },
     "tilleggsopplysninger": {
-      "label": "Hvis du har flere opplysninger du mener er viktig for søknaden din, kan du skrive dem her (valgfritt):"
+      "label": "Hvis du har flere opplysninger du mener er viktig for søknaden din, kan du skrive dem her (valgfritt)"
     },
     "startDato": {
       "label": "Fra hvilken dato ønsker du AAP (dd.mm.åååå)?",

@@ -56,6 +56,7 @@ const Tilleggsopplysninger = ({ getText, onBackClick, søknad }: Props) => {
         label={getText(`form.${TILLEGGSOPPLYSNINGER}.label`)}
         control={control}
         error={errors?.[TILLEGGSOPPLYSNINGER]?.message}
+        maxLength={4000}
       />
     </SoknadFormWrapper>
   );
