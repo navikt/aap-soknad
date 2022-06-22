@@ -3,7 +3,7 @@ import React, { useMemo, useState } from 'react';
 import { FieldValues, useFieldArray, useForm } from 'react-hook-form';
 import { FastlegeView } from '../../../context/sokerOppslagContext';
 import { Add } from '@navikt/ds-icons';
-import Soknad from '../../../types/Soknad';
+import Soknad, { Behandler } from '../../../types/Soknad';
 import * as yup from 'yup';
 import { updateSøknadData, useSoknadContext } from '../../../context/soknadContext';
 import { completeAndGoToNextStep, useStepWizard } from '../../../context/stepWizardContextV2';

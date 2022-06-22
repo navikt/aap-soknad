@@ -1,5 +1,5 @@
 import { FormErrorSummary } from './FormErrorSummary';
-import { render, screen, within } from '@testing-library/react';
+import { render, screen, within } from '../../setupTests';
 import { axe, toHaveNoViolations } from 'jest-axe';
 
 expect.extend(toHaveNoViolations);

@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen, fireEvent, findAllByRole } from '@testing-library/react';
+import { render, screen, fireEvent, findAllByRole } from '../../../setupTests';
 import { JaNeiVetIkke } from '../../../types/Generic';
 import StartDato from './StartDato';
 import { StepWizardContext, StepWizardContextState } from '../../../context/stepWizardContextV2';
