@@ -1,6 +1,5 @@
 import { Label, BodyLong, BodyShort, Button, Heading, ReadMore } from '@navikt/ds-react';
 import React, { useMemo, useState } from 'react';
-import { GetText } from '../../../hooks/useTexts';
 import { FieldValues, useFieldArray, useForm } from 'react-hook-form';
 import { FastlegeView } from '../../../context/sokerOppslagContext';
 import { Add } from '@navikt/ds-icons';
@@ -13,9 +12,9 @@ import SoknadFormWrapper from '../../../components/SoknadFormWrapper/SoknadFormW
 import { AddBehandlerModal } from './AddBehandlerModal';
 import { LucaGuidePanel } from '../../../components/LucaGuidePanel';
 import * as classes from './Behandlere.module.css';
+import { useFeatureToggleIntl } from '../../../hooks/useFeatureToggleIntl';
 
 interface Props {
-  getText: GetText;
   søknad?: Soknad;
   onBackClick: () => void;
   onCancelClick: () => void;
@@ -23,7 +22,9 @@ interface Props {
 }
 const BEHANDLERE = 'behandlere';
 
-export const Behandlere = ({ getText, onBackClick, søknad, fastlege }: Props) => {
+export const Behandlere = ({ onBackClick, søknad, fastlege }: Props) => {
+  const { formatMessage } = useFeatureToggleIntl();
+
   const schema = yup.object().shape({});
   const { søknadDispatch } = useSoknadContext();
   const { stepWizardDispatch } = useStepWizard();
@@ -80,58 +81,69 @@ export const Behandlere = ({ getText, onBackClick, søknad, fastlege }: Props) =
           completeAndGoToNextStep(stepWizardDispatch);
         })}
         onBack={() => onBackClick()}
-        nextButtonText={'Neste steg'}
-        backButtonText={'Forrige steg'}
-        cancelButtonText={'Avbryt søknad'}
+        nextButtonText={formatMessage('navigation.next')}
+        backButtonText={formatMessage('navigation.back')}
+        cancelButtonText={formatMessage('navigation.cancel')}
         errors={errors}
       >
         <Heading size="large" level="2">
-          {getText('steps.fastlege.title')}
+          {formatMessage('søknad.helseopplysninger.title')}
         </Heading>
         <LucaGuidePanel>
-          <BodyLong>{getText('steps.fastlege.guide1')}</BodyLong>
-          <BodyLong>{getText('steps.fastlege.guide2')}</BodyLong>
+          <BodyLong>{formatMessage('søknad.helseopplysninger.guide.text1')}</BodyLong>
+          <BodyLong>{formatMessage('søknad.helseopplysninger.guide.text2')}</BodyLong>
         </LucaGuidePanel>
         <div>
           <Heading size={'small'} level={'3'}>
-            {getText('steps.fastlege.fastlege.heading')}
+            {formatMessage('søknad.helseopplysninger.registrertFastlege.title')}
           </Heading>
           {!fastlege ? (
-            <BodyLong>{getText('steps.fastlege.ingenFastlege.text')}</BodyLong>
+            <BodyLong>
+              {formatMessage('søknad.helseopplysninger.registrertFastlege.ingenFastlege')}
+            </BodyLong>
           ) : (
             <>
               <dl className={classes?.fastLege}>
                 <dt>
-                  <Label>Navn</Label>
+                  <Label>{formatMessage('søknad.helseopplysninger.registrertFastlege.navn')}</Label>
                 </dt>
                 <dl>{fastlege?.fulltNavn}</dl>
                 <dt>
-                  <Label>Legekontor</Label>
+                  <Label>
+                    {formatMessage('søknad.helseopplysninger.registrertFastlege.legekontor')}
+                  </Label>
                 </dt>
                 <dl>{fastlege?.legekontor}</dl>
                 <dt>
-                  <Label>Adresse</Label>
+                  <Label>
+                    {formatMessage('søknad.helseopplysninger.registrertFastlege.adresse')}
+                  </Label>
                 </dt>
                 <dl>{fastlege?.adresse}</dl>
                 <dt>
-                  <Label>Telefon</Label>
+                  <Label>
+                    {formatMessage('søknad.helseopplysninger.registrertFastlege.telefon')}
+                  </Label>
                 </dt>
                 <dl>{fastlege?.telefon}</dl>
               </dl>
-              <ReadMore header={getText('steps.fastlege.readMore.header')} type={'button'}>
-                {getText('steps.fastlege.readMore.text')}
+              <ReadMore
+                header={formatMessage('søknad.helseopplysninger.registrertFastlege.readMore.title')}
+                type={'button'}
+              >
+                {formatMessage('søknad.helseopplysninger.registrertFastlege.readMore.text')}
               </ReadMore>
             </>
           )}
         </div>
         <Heading size={'small'} level={'3'}>
-          {getText('steps.fastlege.annenBehandler.heading')}
+          {formatMessage('søknad.helseopplysninger.annenBehandler.title')}
         </Heading>
-        <BodyLong>{getText('steps.fastlege.annenBehandler.info')}</BodyLong>
+        <BodyLong>{formatMessage('søknad.helseopplysninger.annenBehandler.description')}</BodyLong>
         {fields.length > 0 && (
           <>
             <Heading size={'xsmall'} level={'4'}>
-              {getText('steps.fastlege.andreBehandlere.heading')}
+              {formatMessage('søknad.helseopplysninger.dineBehandlere.title')}
             </Heading>
             <ul className={classes?.legeList}>
               {fields.map((field, index) => (
@@ -143,9 +155,11 @@ export const Behandlere = ({ getText, onBackClick, søknad, fastlege }: Props) =
                   <BodyShort>
                     {field?.gateadresse}, {field?.postnummer} {field?.poststed}
                   </BodyShort>
-                  <BodyShort>{`Telefon: ${field?.telefon}`}</BodyShort>
+                  <BodyShort>{`${formatMessage(
+                    'søknad.helseopplysninger.dineBehandlere.editButton'
+                  )}: ${field?.telefon}`}</BodyShort>
                   <Button type="button" variant="tertiary" onClick={() => editNyBehandler(index)}>
-                    Endre lege / behandler
+                    {formatMessage('søknad.helseopplysninger.dineBehandlere.editButton')}
                   </Button>
                 </li>
               ))}
@@ -162,13 +176,14 @@ export const Behandlere = ({ getText, onBackClick, søknad, fastlege }: Props) =
               setShowModal(true);
             }}
           >
-            <Add title={'Legg til'} />
-            {getText('steps.fastlege.buttonAddNyBehandler')}
+            <Add
+              title={formatMessage('søknad.helseopplysninger.annenBehandler.accessibleButtonTitle')}
+            />
+            {formatMessage('søknad.helseopplysninger.annenBehandler.addBehandlerButton')}
           </Button>
         </div>
       </SoknadFormWrapper>
       <AddBehandlerModal
-        getText={getText}
         onCloseClick={() => setShowModal(false)}
         onSaveClick={saveNyBehandler}
         onDeleteClick={() => {

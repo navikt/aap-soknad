@@ -444,7 +444,6 @@ export const StandardPage = (): JSX.Element => {
 
         <Step order={4} name={StepNames.FASTLEGE}>
           <Behandlere
-            getText={getText}
             onCancelClick={onDeleteSøknad}
             onBackClick={onPreviousStep}
             søknad={søknadState?.søknad}
