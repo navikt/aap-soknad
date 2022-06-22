@@ -14,11 +14,7 @@ const HeadingHelloName = ({ level, size, name, loading }: Props) => {
   const { formatMessage } = useFeatureToggleIntl();
   return (
     <Heading size={size} level={level} spacing>
-      {loading ? (
-        <Loader />
-      ) : (
-        formatMessage('søknad.veiledning.guide.title', (values = { name: name }))
-      )}
+      {loading ? <Loader /> : formatMessage('søknad.veiledning.guide.title', { name: name })}
     </Heading>
   );
 };

@@ -20,7 +20,7 @@ interface Props {
 const YRKESSKADE = 'yrkesskade';
 
 export const Yrkesskade = ({ onBackClick, søknad }: Props) => {
-  const { formatMessage } = useFeatureToggleIntl();
+  const { formatMessage, formatElement, formatLink } = useFeatureToggleIntl();
 
   const schema = yup.object().shape({
     [YRKESSKADE]: yup
@@ -76,19 +76,13 @@ export const Yrkesskade = ({ onBackClick, søknad }: Props) => {
               {formatMessage('søknad.yrkesskade.harDuYrkesskade.readMore.text1')}
             </BodyShort>
             <BodyShort spacing>
-              {formatMessage(
-                'søknad.yrkesskade.harDuYrkesskade.readMore.text2',
-                (values = {
-                  a: (chunks) => (
-                    <Link
-                      target="_blank"
-                      href="https://lovdata.no/dokument/SF/forskrift/1960-02-19-6"
-                    >
-                      {chunks}
-                    </Link>
-                  ),
-                })
-              )}
+              {formatElement('søknad.yrkesskade.harDuYrkesskade.readMore.text2', {
+                a: (chunks: string[]) => (
+                  <Link target="_blank" href={formatLink('forskriftOmYrkessykdommer')}>
+                    {chunks}
+                  </Link>
+                ),
+              })}
             </BodyShort>
           </div>
         </ReadMore>

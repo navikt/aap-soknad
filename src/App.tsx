@@ -10,7 +10,6 @@ import { StepWizardProvider } from './context/stepWizardContextV2';
 import { SokerOppslagProvider } from './context/sokerOppslagContext';
 
 // Pages
-import Me from './pages/Me';
 import Utland from './pages/utland/Utland';
 import { Hovedsoknad } from './pages/hovedsoknad/Hovedsoknad';
 import StandardPage from './pages/standard';
@@ -36,13 +35,17 @@ function flattenMessages(nestedMessages: object, prefix = '') {
 }
 import links from './translations/links.json';
 import messagesNb from './translations/nb.json';
-const messages = {
+type Locale = 'nb' | 'en';
+type Messages = {
+  [K in Locale]?: { [name: string]: string };
+};
+export const messages: Messages = {
   nb: flattenMessages(messagesNb),
 };
 
 const App = (): JSX.Element => {
-  const [locale, setLocale] = useState<string>('nb');
-  onLanguageSelect(({ locale }) => setLocale(locale));
+  const [locale, setLocale] = useState<Locale>('nb');
+  onLanguageSelect(({ locale }) => setLocale(locale as Locale));
   const currentMessages = useMemo(
     () => ({ ...messages[locale], ...flattenMessages({ applinks: links }) }),
     [locale]
@@ -64,7 +67,6 @@ const App = (): JSX.Element => {
                   <BrowserRouter>
                     <Routes>
                       <Route path="/aap" element={<Hovedsoknad />} />
-                      <Route path="/aap/me" element={<Me />} />
                       <Route path="/aap/utland" element={<Utland />} />
                       <Route path="/aap/standard" element={<StandardPage />} />
                       <Route
