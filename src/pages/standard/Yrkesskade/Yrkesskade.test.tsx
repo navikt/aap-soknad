@@ -1,7 +1,5 @@
 import { StepWizardContext, StepWizardContextState } from '../../../context/stepWizardContextV2';
-import { findAllByRole, fireEvent, render, screen } from '@testing-library/react';
-import useTexts from '../../../hooks/useTexts';
-import * as tekster from '../tekster';
+import { findAllByRole, fireEvent, render, screen } from '../../../setupTests';
 import { Step, StepWizard } from '../../../components/StepWizard';
 import StartDato from '../StartDato/StartDato';
 import { JaNeiVetIkke } from '../../../types/Generic';
@@ -36,11 +34,10 @@ const renderWithContext = (ui: any, { ...renderOptions }: any) => {
 };
 describe('Yrkesskade', () => {
   const Component = () => {
-    const { getText } = useTexts(tekster);
     return (
       <StepWizard>
         <Step name={YRKESSKADE}>
-          <StartDato getText={getText} onBackClick={jest.fn()} onCancelClick={jest.fn()} />
+          <StartDato onBackClick={jest.fn()} onCancelClick={jest.fn()} />
         </Step>
       </StepWizard>
     );

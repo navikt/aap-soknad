@@ -12,7 +12,6 @@ import { SokerOppslagProvider } from './context/sokerOppslagContext';
 
 // Pages
 import Utland from './pages/utland/Utland';
-import { Hovedsoknad } from './pages/hovedsoknad/Hovedsoknad';
 import StandardPage from './pages/standard';
 import { Feilviser } from './components/Feilviser/Feilviser';
 import { logError } from './utils/clientLogger';
@@ -77,7 +76,6 @@ const App = (): JSX.Element => {
               <StepWizardProvider>
                 <BrowserRouter>
                   <Routes>
-                    <Route path="/aap" element={<Hovedsoknad />} />
                     <Route path="/aap/utland" element={<UtlandWithContext />} />
                     <Route path="/aap/standard" element={<StandardWithContext />} />
                     <Route

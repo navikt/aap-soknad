@@ -1,17 +1,18 @@
-import { GetText } from '../../../hooks/useTexts';
 import { Alert, BodyLong, Button, Heading, Link } from '@navikt/ds-react';
-import React, { useMemo } from 'react';
+import React from 'react';
 import * as classes from './Kvittering.module.css';
 import { SøkerView } from '../../../context/sokerOppslagContext';
 import { Download } from '@navikt/ds-icons';
 import { SuccessStroke } from '@navikt/ds-icons';
+import { useFeatureToggleIntl } from '../../../hooks/useFeatureToggleIntl';
 
 interface StudentProps {
-  getText: GetText;
   søker: SøkerView;
 }
 
-const Kvittering = ({ getText, søker }: StudentProps) => {
+const Kvittering = ({ søker }: StudentProps) => {
+  const { formatMessage, formatElement, formatLink } = useFeatureToggleIntl();
+
   const dittNavUrl = window.location.href.includes('www.nav.no')
     ? 'https://www.nav.no/person/dittnav/'
     : 'https://www.dev.nav.no/person/dittnav/';
@@ -25,21 +26,21 @@ const Kvittering = ({ getText, søker }: StudentProps) => {
         style={{ margin: '0px auto' }}
       />
       <Heading size={'large'} level={'2'}>
-        {`${getText('steps.kvittering.heading')}, ${søker?.fulltNavn}`}
+        {formatMessage('søknad.kvittering.title', { navn: søker?.fulltNavn })}
       </Heading>
       <Alert variant={'success'}>
-        <BodyLong>{getText('steps.kvittering.alertSuccess')}</BodyLong>
+        <BodyLong>{formatMessage('søknad.kvittering.alert.text')}</BodyLong>
       </Alert>
       <BodyLong spacing>
-        <Link href="https://www.nav.no/saksbehandlingstid">
-          Du kan se forventet saksbehandlingstid på nav.no/saksbehandlingstid.
-        </Link>
+        {formatElement('søknad.kvittering.saksbehandlingstid', {
+          a: (chunks: string[]) => <Link href={formatLink('saksbehandlingstid')}>{chunks}</Link>,
+        })}
       </BodyLong>
       <BodyLong>
-        {'Bekreftelse blir også sendt til deg på:'}
+        {formatMessage('søknad.kvittering.bekreftelse.title')}
         <ul>
-          <li>SMS: 99999999</li>
-          <li>E-post: dittnavn@online.no</li>
+          <li>{formatMessage('søknad.kvittering.bekreftelse.sms')}: 99999999</li>
+          <li>{formatMessage('søknad.kvittering.bekreftelse.epost')}: dittnavn@online.no</li>
         </ul>
       </BodyLong>
       <Link
@@ -48,10 +49,10 @@ const Kvittering = ({ getText, søker }: StudentProps) => {
         className={classes?.linkButton}
       >
         <Download />
-        Last ned søknaden som pdf
+        {formatMessage('søknad.kvittering.lastNedSøknad')}
       </Link>
       <form action={dittNavUrl}>
-        <Button variant={'primary'}>Se saken din på Ditt NAV</Button>
+        <Button variant={'primary'}>{formatMessage('søknad.kvittering.dittNavKnapp')}</Button>
       </form>
     </div>
   );

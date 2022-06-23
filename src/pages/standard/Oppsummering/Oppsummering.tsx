@@ -1,6 +1,5 @@
 import { FieldValues, useForm } from 'react-hook-form';
 import Soknad from '../../../types/Soknad';
-import { GetText } from '../../../hooks/useTexts';
 import { Accordion, BodyShort, Heading, Label, Switch } from '@navikt/ds-react';
 import React, { useState } from 'react';
 import ConfirmationPanelWrapper from '../../../components/input/ConfirmationPanelWrapper';
@@ -21,20 +20,17 @@ import { useVedleggContext } from '../../../context/vedleggContext';
 import { goToNamedStep, useStepWizard } from '../../../context/stepWizardContextV2';
 import { StepNames } from '../index';
 import { LucaGuidePanel } from '../../../components/LucaGuidePanel';
+import { useFeatureToggleIntl } from '../../../hooks/useFeatureToggleIntl';
 
 interface OppsummeringProps {
-  getText: GetText;
   onBackClick: () => void;
   onCancelClick: () => void;
   onSubmitSoknad: (data: Soknad) => void;
 }
 
-const Oppsummering = ({
-  getText,
-  onBackClick,
-  onCancelClick,
-  onSubmitSoknad,
-}: OppsummeringProps) => {
+const Oppsummering = ({ onBackClick, onCancelClick, onSubmitSoknad }: OppsummeringProps) => {
+  const { formatMessage } = useFeatureToggleIntl();
+
   const { søknadState } = useSoknadContext();
   const { stepWizardDispatch } = useStepWizard();
   const { vedleggState } = useVedleggContext();
@@ -54,7 +50,7 @@ const Oppsummering = ({
   const SummaryRowIfExists = ({ labelKey, value }: { labelKey: string; value?: any }) => {
     return value ? (
       <BodyShort>
-        <Label>{getText(labelKey)}</Label>
+        <Label>{formatMessage(labelKey)}</Label>
         <span>{value}</span>
       </BodyShort>
     ) : (
@@ -69,92 +65,102 @@ const Oppsummering = ({
       })}
       onBack={() => onBackClick()}
       onCancel={() => onCancelClick()}
-      nextButtonText={'Send søknad'}
-      backButtonText={'Forrige steg'}
-      cancelButtonText={'Avbryt søknad'}
+      nextButtonText={formatMessage('navigation.send')}
+      backButtonText={formatMessage('navigation.back')}
+      cancelButtonText={formatMessage('navigation.cancel')}
       errors={errors}
     >
       <Heading size="large" level="2">
-        {getText('steps.oppsummering.title')}
+        {formatMessage('søknad.oppsummering.title')}
       </Heading>
       <LucaGuidePanel>
-        <BodyShort>
-          Alt du har fylt inn er nå lagret. Her kan du se over at alt er riktig, og ved behov endre
-          opplysninger, før du sender inn søknaden.
-        </BodyShort>
+        <BodyShort>{formatMessage('søknad.oppsummering.guide.text')}</BodyShort>
       </LucaGuidePanel>
       <div style={{ display: 'flex', flexDirection: 'row-reverse' }}>
         <Switch position="right" size="medium" onChange={() => setToggleAll(!toggleAll)}>
-          Åpne alle
+          {!toggleAll
+            ? formatMessage('søknad.oppsummering.toggle.open')
+            : formatMessage('søknad.oppsummering.toggle.close')}
         </Switch>
       </div>
       <Accordion>
         <AccordianItemOppsummering
-          title={'Om deg'}
+          title={formatMessage('søknad.oppsummering.contactInformation.title')}
           defaultOpen={true}
           showEdit={false}
           toggleAll={toggleAll}
         >
-          <OppsummeringKontaktinfo getText={getText} />
+          <OppsummeringKontaktinfo />
         </AccordianItemOppsummering>
+
         <AccordianItemOppsummering
-          title={'Ønsket startdato'}
-          editText="Endre opplysninger om startdato"
+          title={formatMessage('søknad.oppsummering.startDato.title')}
+          editText={formatMessage('søknad.oppsummering.startDato.editText')}
           toggleAll={toggleAll}
           onEdit={() => editStep(StepNames.STARTDATO)}
         >
           <SummaryRowIfExists
-            labelKey={'form.startDato.label'}
+            labelKey={'søknad.startDato.startDato.label'}
             value={formatDate(søknadState?.søknad?.startDato)}
           />
           <SummaryRowIfExists
-            labelKey={'form.ferie.skalHaFerie.legend'}
+            labelKey={'søknad.startDato.skalHaFerie.label'}
             value={søknadState?.søknad?.ferie?.skalHaFerie}
           />
-          <div>
-            <Label>{getText('form.ferie.skalHaFerie.legend')}</Label>
-            <BodyShort>{søknadState?.søknad?.ferie?.skalHaFerie}</BodyShort>
-          </div>
           <SummaryRowIfExists
-            labelKey={'form.ferie.ferieType.legend'}
-            value={søknadState?.søknad?.ferie?.type}
+            labelKey={'søknad.startDato.ferieType.label'}
+            value={søknadState?.søknad?.ferie?.ferieType}
           />
           <SummaryRowIfExists
-            labelKey={'form.ferie.antallDager.label'}
+            labelKey={'søknad.startDato.antallDager.label'}
             value={søknadState?.søknad?.ferie?.antallDager}
           />
-          {isNonEmptyPeriode(søknadState?.søknad?.ferie?.periode) ? (
+          {isNonEmptyPeriode({
+            fraDato: søknadState?.søknad?.ferie?.fraDato,
+            tilDato: søknadState?.søknad?.ferie?.tilDato,
+          }) ? (
             <div>
-              <Label>{'Planlagt ferie'}</Label>
-              <OppsummeringPeriode periode={søknadState?.søknad?.ferie?.periode} />
+              <Label>{formatMessage('søknad.oppsummering.startDato.planlagtFerie')}</Label>
+              <OppsummeringPeriode
+                periode={{
+                  fraDato: søknadState?.søknad?.ferie?.fraDato,
+                  tilDato: søknadState?.søknad?.ferie?.tilDato,
+                }}
+              />
             </div>
           ) : (
             <></>
           )}
         </AccordianItemOppsummering>
+
         <AccordianItemOppsummering
-          title={getText('steps.medlemskap.title')}
-          editText="Endre opplysninger om hvor du har bodd og jobbet"
+          title={formatMessage('søknad.oppsummering.medlemskap.title')}
+          editText={formatMessage('søknad.oppsummering.medlemskap.editText')}
           toggleAll={toggleAll}
           onEdit={() => editStep(StepNames.MEDLEMSKAP)}
         >
           <SummaryRowIfExists
-            labelKey={'form.medlemskap.boddINorge.legend'}
+            labelKey={'søknad.medlemskap.harBoddINorgeSiste5År.label'}
             value={søknadState?.søknad?.medlemskap?.harBoddINorgeSiste5År}
           />
           <SummaryRowIfExists
-            labelKey={'form.medlemskap.arbeidINorge.legend'}
+            labelKey={'søknad.medlemskap.harArbeidetINorgeSiste5År.label'}
             value={søknadState?.søknad?.medlemskap?.harArbeidetINorgeSiste5År}
           />
           <SummaryRowIfExists
-            labelKey={'form.medlemskap.arbeidUtenforNorge.legend'}
+            labelKey={'søknad.medlemskap.arbeidUtenforNorge.legend'}
             value={søknadState?.søknad?.medlemskap?.arbeidetUtenforNorgeFørSykdom}
+          />
+          <SummaryRowIfExists
+            labelKey="søknad.medlemskap.iTilleggArbeidUtenforNorge.label"
+            value={søknadState?.søknad?.medlemskap?.iTilleggArbeidUtenforNorge}
           />
           {søknadState?.søknad?.medlemskap?.utenlandsOpphold ? (
             <>
-              <Label>{'Utenlandsopphold'}</Label>
+              <Label>
+                {formatMessage('søknad.oppsummering.medlemskap.utenlandsopphold.title')}
+              </Label>
               <OppsummeringUtenlandsopphold
-                getText={getText}
                 opphold={søknadState?.søknad?.medlemskap?.utenlandsOpphold}
               />
             </>
@@ -162,27 +168,28 @@ const Oppsummering = ({
             <></>
           )}
         </AccordianItemOppsummering>
+
         <AccordianItemOppsummering
-          title={getText('steps.yrkesskade.title')}
-          editText="Endre opplysninger om yrkesskade"
+          title={formatMessage('søknad.oppsummering.yrkesskade.title')}
+          editText={formatMessage('søknad.oppsummering.yrkesskade.editText')}
           toggleAll={toggleAll}
           onEdit={() => editStep(StepNames.YRKESSKADE)}
         >
           <SummaryRowIfExists
-            labelKey={`form.yrkesskade.legend`}
+            labelKey={`søknad.yrkesskade.harDuYrkesskade.label`}
             value={søknadState?.søknad?.yrkesskade}
           />
         </AccordianItemOppsummering>
         <AccordianItemOppsummering
-          title={getText('steps.fastlege.title')}
-          editText="Endre informasjon om kontaktperson for helseopplysninger"
+          title={formatMessage('søknad.oppsummering.helseopplysninger.title')}
+          editText={formatMessage('søknad.oppsummering.helseopplysninger.editText')}
           toggleAll={toggleAll}
           onEdit={() => editStep(StepNames.FASTLEGE)}
         >
           <>
             <article>
               <Heading size={'small'} level={'3'}>
-                {getText('steps.oppsummering.helseopplysninger.fastlege')}
+                {formatMessage('søknad.oppsummering.helseopplysninger.fastlege')}
               </Heading>
               <BodyShort>{fastlege?.fulltNavn}</BodyShort>
               <BodyShort>{fastlege?.legekontor}</BodyShort>
@@ -190,13 +197,13 @@ const Oppsummering = ({
               <BodyShort>{`Telefon: ${fastlege?.telefon}`}</BodyShort>
             </article>
             {søknadState?.søknad?.behandlere?.map((behandler) => (
-              <OppsummeringBehandler getText={getText} behandler={behandler} />
+              <OppsummeringBehandler behandler={behandler} />
             ))}
           </>
         </AccordianItemOppsummering>
         <AccordianItemOppsummering
-          title={getText('steps.barnetillegg.title')}
-          editText="Endre opplysninger om barn"
+          title={formatMessage('søknad.oppsummering.barnetillegg.title')}
+          editText={formatMessage('søknad.oppsummering.barnetillegg.editText')}
           toggleAll={toggleAll}
           onEdit={() => editStep(StepNames.BARNETILLEGG)}
         >
@@ -210,45 +217,45 @@ const Oppsummering = ({
           </>
         </AccordianItemOppsummering>
         <AccordianItemOppsummering
-          title={getText('steps.student.title')}
-          editText="Endre på om du er student"
+          title={formatMessage('søknad.oppsummering.student.title')}
+          editText={formatMessage('søknad.oppsummering.student.editText')}
           toggleAll={toggleAll}
           onEdit={() => editStep(StepNames.STUDENT)}
         >
           <SummaryRowIfExists
-            labelKey={`form.student.legend`}
+            labelKey={`søknad.student.erStudent.legend`}
             value={søknadState?.søknad?.student?.erStudent}
           />
         </AccordianItemOppsummering>
         <AccordianItemOppsummering
-          title={getText('steps.andre_utbetalinger.title')}
-          editText="Endre opplysninger om utbetalinger"
+          title={formatMessage('søknad.oppsummering.utbetalinger.title')}
+          editText={formatMessage('søknad.oppsummering.utbetalinger.editText')}
           toggleAll={toggleAll}
           onEdit={() => editStep(StepNames.ANDRE_UTBETALINGER)}
         >
           <SummaryRowIfExists
-            labelKey={`form.andreUtbetalinger.lønn.legend`}
+            labelKey={`søknad.andreUtbetalinger.lønn.label`}
             value={søknadState?.søknad?.andreUtbetalinger?.lønn}
           />
           <SummaryRowIfExists
-            labelKey={`form.andreUtbetalinger.stønad.legend`}
+            labelKey={`søknad.andreUtbetalinger.stønad.label`}
             value={søknadState?.søknad?.andreUtbetalinger?.stønad?.join(', ')}
           />
         </AccordianItemOppsummering>
         <AccordianItemOppsummering
-          title={getText('steps.tilleggsopplysninger.title')}
-          editText="Endre tilleggsopplysninger"
+          title={formatMessage('søknad.oppsummering.tilleggsopplysninger.title')}
+          editText={formatMessage('søknad.oppsummering.tilleggsopplysninger.editText')}
           toggleAll={toggleAll}
           onEdit={() => editStep(StepNames.TILLEGGSOPPLYSNINGER)}
         >
           <SummaryRowIfExists
-            labelKey={`form.tilleggsopplysninger.label`}
+            labelKey={`søknad.tilleggsopplysninger.tilleggsopplysninger.label`}
             value={søknadState?.søknad?.tilleggsopplysninger}
           />
         </AccordianItemOppsummering>
         <AccordianItemOppsummering
-          title={getText('steps.vedlegg.title')}
-          editText="Endre vedlegg"
+          title={formatMessage('søknad.oppsummering.vedlegg.title')}
+          editText={formatMessage('søknad.oppsummering.vedlegg.editText')}
           toggleAll={toggleAll}
           onEdit={() => editStep(StepNames.VEDLEGG)}
         >
@@ -287,12 +294,12 @@ const Oppsummering = ({
         </AccordianItemOppsummering>
       </Accordion>
       <ConfirmationPanelWrapper
-        label={getText('steps.oppsummering.confirmation')}
+        label={formatMessage('søknad.oppsummering.confirmation.text')}
         control={control}
         name="søknadBekreft"
         error={errors?.søknadBekreft?.message}
       >
-        <Label>{getText('steps.veiledning.rettogpliktConfirmation.title')}</Label>
+        <Label>{formatMessage('søknad.oppsummering.confirmation.title')}</Label>
       </ConfirmationPanelWrapper>
     </SoknadFormWrapper>
   );

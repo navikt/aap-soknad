@@ -1,23 +1,26 @@
 import { BodyShort, Heading } from '@navikt/ds-react';
 import React from 'react';
 import { Behandler } from '../../../../types/Soknad';
-import { GetText } from '../../../../hooks/useTexts';
+import { useFeatureToggleIntl } from '../../../../hooks/useFeatureToggleIntl';
 
 type Props = {
-  getText: GetText;
   behandler: Behandler;
 };
 
-const OppsummeringBehandler = ({ getText, behandler }: Props) => {
+const OppsummeringBehandler = ({ behandler }: Props) => {
+  const { formatMessage } = useFeatureToggleIntl();
+
   return (
     <article className={''}>
       <Heading size={'small'} level={'3'}>
-        {getText('steps.oppsummering.helseopplysninger.behandler')}
+        {formatMessage('søknad.oppsummering.helseopplysninger.behandler')}
       </Heading>
       <BodyShort>{`${behandler?.firstname} ${behandler?.lastname}`}</BodyShort>
       <BodyShort>{behandler?.legekontor}</BodyShort>
       <BodyShort>{`${behandler?.gateadresse}, ${behandler?.postnummer} ${behandler?.poststed}`}</BodyShort>
-      <BodyShort>{`Telefon: ${behandler?.telefon}`}</BodyShort>
+      <BodyShort>{`${formatMessage('søknad.helseopplysninger.dineBehandlere.telefon')}: ${
+        behandler?.telefon
+      }`}</BodyShort>
     </article>
   );
 };

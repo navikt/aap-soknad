@@ -1,7 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { useTexts } from '../../hooks/useTexts';
 import { PageHeader } from '@navikt/ds-react';
-import * as tekster from './tekster';
 import { Step, StepWizard } from '../../components/StepWizard';
 import { SubmitHandler } from 'react-hook-form';
 import {
@@ -329,7 +327,6 @@ export const StandardPage = (): JSX.Element => {
   const { søknadState, søknadDispatch } = useSoknadContext();
   const { oppslagDispatch, søker, fastlege } = useSokerOppslag();
   const { currentStep, stepWizardDispatch } = useStepWizard();
-  const { getText } = useTexts(tekster);
   const pageHeading = useRef(null);
   useEffect(() => {
     const getSoknadStateAndOppslag = async () => {
@@ -401,7 +398,7 @@ export const StandardPage = (): JSX.Element => {
         <PageHeader align="center" className={classes?.pageHeader}>
           {formatMessage('søknad.pagetitle')}
         </PageHeader>
-        <Kvittering getText={getText} søker={søker} />
+        <Kvittering søker={søker} />
       </>
     );
   if (showVeiledning)
@@ -473,7 +470,6 @@ export const StandardPage = (): JSX.Element => {
         </Step>
         <Step order={8} name={StepNames.TILLEGGSOPPLYSNINGER}>
           <Tilleggsopplysninger
-            getText={getText}
             onCancelClick={onDeleteSøknad}
             onBackClick={onPreviousStep}
             søknad={søknadState?.søknad}
@@ -481,7 +477,6 @@ export const StandardPage = (): JSX.Element => {
         </Step>
         <Step order={9} name={StepNames.VEDLEGG}>
           <Vedlegg
-            getText={getText}
             onCancelClick={onDeleteSøknad}
             onBackClick={onPreviousStep}
             søknad={søknadState?.søknad}
@@ -489,7 +484,6 @@ export const StandardPage = (): JSX.Element => {
         </Step>
         <Step order={10} name={StepNames.OPPSUMMERING}>
           <Oppsummering
-            getText={getText}
             onCancelClick={onDeleteSøknad}
             onBackClick={onPreviousStep}
             onSubmitSoknad={submitSoknad}

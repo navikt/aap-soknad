@@ -156,7 +156,7 @@ export const Behandlere = ({ onBackClick, søknad, fastlege }: Props) => {
                     {field?.gateadresse}, {field?.postnummer} {field?.poststed}
                   </BodyShort>
                   <BodyShort>{`${formatMessage(
-                    'søknad.helseopplysninger.dineBehandlere.editButton'
+                    'søknad.helseopplysninger.dineBehandlere.telefon'
                   )}: ${field?.telefon}`}</BodyShort>
                   <Button type="button" variant="tertiary" onClick={() => editNyBehandler(index)}>
                     {formatMessage('søknad.helseopplysninger.dineBehandlere.editButton')}

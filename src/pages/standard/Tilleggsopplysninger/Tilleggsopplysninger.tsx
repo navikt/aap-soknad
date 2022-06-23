@@ -1,6 +1,5 @@
 import { FieldValues, useForm } from 'react-hook-form';
 import Soknad from '../../../types/Soknad';
-import { GetText } from '../../../hooks/useTexts';
 import React from 'react';
 import TextAreaWrapper from '../../../components/input/TextAreaWrapper';
 import { BodyShort, Heading } from '@navikt/ds-react';
@@ -10,16 +9,18 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import SoknadFormWrapper from '../../../components/SoknadFormWrapper/SoknadFormWrapper';
 import { LucaGuidePanel } from '../../../components/LucaGuidePanel';
+import { useFeatureToggleIntl } from '../../../hooks/useFeatureToggleIntl';
 
 const TILLEGGSOPPLYSNINGER = 'tilleggsopplysninger';
 interface Props {
-  getText: GetText;
   søknad?: Soknad;
   onBackClick: () => void;
   onCancelClick: () => void;
 }
 
-const Tilleggsopplysninger = ({ getText, onBackClick, søknad }: Props) => {
+const Tilleggsopplysninger = ({ onBackClick, søknad }: Props) => {
+  const { formatMessage } = useFeatureToggleIntl();
+
   const schema = yup.object().shape({});
   const { søknadDispatch } = useSoknadContext();
   const { stepWizardDispatch } = useStepWizard();
@@ -40,20 +41,20 @@ const Tilleggsopplysninger = ({ getText, onBackClick, søknad }: Props) => {
         completeAndGoToNextStep(stepWizardDispatch);
       })}
       onBack={() => onBackClick()}
-      nextButtonText={'Neste steg'}
-      backButtonText={'Forrige steg'}
-      cancelButtonText={'Avbryt søknad'}
+      nextButtonText={formatMessage('navigation.next')}
+      backButtonText={formatMessage('navigation.back')}
+      cancelButtonText={formatMessage('navigation.cancel')}
       errors={errors}
     >
       <Heading size="large" level="2">
-        {getText('steps.tilleggsopplysninger.title')}
+        {formatMessage('søknad.tilleggsopplysninger.title')}
       </Heading>
       <LucaGuidePanel>
-        <BodyShort>{getText(`steps.tilleggsopplysninger.guide`)}</BodyShort>
+        <BodyShort>{formatMessage(`søknad.tilleggsopplysninger.guide.text`)}</BodyShort>
       </LucaGuidePanel>
       <TextAreaWrapper
         name={`${TILLEGGSOPPLYSNINGER}`}
-        label={getText(`form.${TILLEGGSOPPLYSNINGER}.label`)}
+        label={formatMessage(`søknad.tilleggsopplysninger.tilleggsopplysninger.label`)}
         control={control}
         error={errors?.[TILLEGGSOPPLYSNINGER]?.message}
         maxLength={4000}

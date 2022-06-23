@@ -1,68 +1,70 @@
 import React from 'react';
-import { BodyShort, Label, ReadMore } from '@navikt/ds-react';
+import { BodyShort, Label, Link, ReadMore } from '@navikt/ds-react';
 import { useSokerOppslag } from '../../../../context/sokerOppslagContext';
-import { GetText } from '../../../../hooks/useTexts';
-import TextWithLink from '../../../../components/TextWithLink';
+import { useFeatureToggleIntl } from '../../../../hooks/useFeatureToggleIntl';
 
-interface Props {
-  getText: GetText;
-}
+const OppsummeringKontaktinfo = () => {
+  const { formatMessage, formatElement, formatLink } = useFeatureToggleIntl();
 
-const OppsummeringKontaktinfo = ({ getText }: Props) => {
   const { søker, kontaktInfo } = useSokerOppslag();
   return (
     <>
       <div>
-        <Label>{getText('steps.oppsummering.kontaktinfo.navn')}</Label>
+        <Label>{formatMessage('søknad.oppsummering.contactInformation.navn')}</Label>
         <BodyShort>{søker?.fulltNavn}</BodyShort>
       </div>
       <div>
-        <Label>{getText('steps.oppsummering.kontaktinfo.fnr')}</Label>
+        <Label>{formatMessage('søknad.oppsummering.contactInformation.personnummer')}</Label>
         <BodyShort>{søker?.fødselsnummer}</BodyShort>
       </div>
       <div>
-        <Label>{getText('steps.oppsummering.kontaktinfo.adresse')}</Label>
+        <Label>{formatMessage('søknad.oppsummering.contactInformation.adresse.label')}</Label>
         <BodyShort>{søker?.fullAdresse}</BodyShort>
         <ReadMore
-          header={getText('steps.oppsummering.kontaktinfo.adresseReadmore.title')}
+          header={formatMessage('søknad.oppsummering.contactInformation.adresse.readMore.title')}
           type={'button'}
         >
-          <span>
-            <TextWithLink
-              text={getText('steps.oppsummering.kontaktinfo.adresseReadmore.text')}
-              links={[getText('steps.oppsummering.kontaktinfo.adresseReadmore.link')]}
-            />
-          </span>
+          {formatElement('søknad.oppsummering.contactInformation.adresse.readMore.text', {
+            a: (chunks: string[]) => (
+              <Link target="_blank" href={formatLink('folkeregisteret')}>
+                {chunks}
+              </Link>
+            ),
+          })}
         </ReadMore>
       </div>
       <div>
-        <Label>{'Telefonnummer'}</Label>
+        <Label>{formatMessage('søknad.oppsummering.contactInformation.telefonnummer.label')}</Label>
         <BodyShort>{kontaktInfo?.mobil}</BodyShort>
         <ReadMore
-          header={getText('steps.oppsummering.kontaktinfo.telefonReadmore.title')}
+          header={formatMessage(
+            'søknad.oppsummering.contactInformation.telefonnummer.readMore.title'
+          )}
           type={'button'}
         >
-          <span>
-            <TextWithLink
-              text={getText('steps.oppsummering.kontaktinfo.telefonReadmore.text')}
-              links={[getText('steps.oppsummering.kontaktinfo.telefonReadmore.link')]}
-            />
-          </span>
+          {formatElement('søknad.oppsummering.contactInformation.telefonnummer.readMore.text', {
+            a: (chunks: string[]) => (
+              <Link target="_blank" href={formatLink('kontaktOgReservasjonsregisteret')}>
+                {chunks}
+              </Link>
+            ),
+          })}
         </ReadMore>
       </div>
       <div>
-        <Label>{'E-post adresse'}</Label>
+        <Label>{formatMessage('søknad.oppsummering.contactInformation.epost.label')}</Label>
         <BodyShort>{kontaktInfo?.epost}</BodyShort>
         <ReadMore
-          header={getText('steps.oppsummering.kontaktinfo.epostReadmore.title')}
+          header={formatMessage('søknad.oppsummering.contactInformation.epost.readMore.title')}
           type={'button'}
         >
-          <span>
-            <TextWithLink
-              text={getText('steps.oppsummering.kontaktinfo.epostReadmore.text')}
-              links={[getText('steps.oppsummering.kontaktinfo.epostReadmore.link')]}
-            />
-          </span>
+          {formatElement('søknad.oppsummering.contactInformation.epost.readMore.text', {
+            a: (chunks: string[]) => (
+              <Link target="_blank" href={formatLink('kontaktOgReservasjonsregisteret')}>
+                {chunks}
+              </Link>
+            ),
+          })}
         </ReadMore>
       </div>
     </>

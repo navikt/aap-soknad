@@ -1,20 +1,20 @@
 import React, { useRef } from 'react';
 import { FieldErrors } from 'react-hook-form';
 import { ErrorSummary } from '@navikt/ds-react';
-import useTexts from '../../hooks/useTexts';
-import * as tekster from './tekster';
 import * as classes from './FormErrorSummary.module.css';
+import { useFeatureToggleIntl } from '../../hooks/useFeatureToggleIntl';
 
 const FormErrorSummary = (props: FieldErrors) => {
+  const { formatMessage } = useFeatureToggleIntl();
+
   const flatErrors = flatObj(props?.errors);
   const keyList = Object.keys(flatErrors).filter((e) => e);
-  const { getText } = useTexts(tekster);
   const errorSummaryElement = useRef(null);
   if (keyList?.length < 1) {
     return (
       <ErrorSummary
         ref={errorSummaryElement}
-        heading={getText('skjemafeil')}
+        heading={formatMessage('errorSummary.title')}
         role={'alert'}
         aria-hidden={keyList?.length === 0}
         className={keyList?.length === 0 ? classes?.visuallyHidden : ''}
@@ -27,7 +27,7 @@ const FormErrorSummary = (props: FieldErrors) => {
   return (
     <ErrorSummary
       ref={errorSummaryElement}
-      heading={getText('skjemafeil')}
+      heading={formatMessage('errorSummary.title')}
       role={'alert'}
       aria-hidden={keyList?.length === 0}
       className={keyList?.length === 0 ? classes?.visuallyHidden : ''}
