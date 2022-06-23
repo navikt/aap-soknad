@@ -4,7 +4,6 @@ import { rest } from 'msw';
 import { setupServer } from 'msw/node';
 import { Step, StepWizard } from './index';
 import { StepWizardContext, StepWizardContextState } from '../../context/stepWizardContextV2';
-import { SoknadContext, SoknadContextData, SøknadType } from '../../context/soknadContext';
 import { BodyShort } from '@navikt/ds-react';
 
 // SET UP DUMMY DATA FOR CONTEXT
@@ -13,13 +12,6 @@ enum stepNames {
   STEP_TWO = 'STEP_TWO',
   STEP_THREE = 'STEP_THREE',
 }
-const soknadContext: SoknadContextData = {
-  søknadState: {
-    version: 1,
-    type: SøknadType.UTLAND,
-  },
-  søknadDispatch: () => console.log('dispatch'),
-};
 const wizardContext: StepWizardContextState = {
   stepList: [
     { name: stepNames.STEP_ONE, active: true },
@@ -33,9 +25,7 @@ const wizardContext: StepWizardContextState = {
 
 const renderWithContext = (ui: any, { ...renderOptions }: any) => {
   return render(
-    <SoknadContext.Provider value={{ ...soknadContext }}>
-      <StepWizardContext.Provider value={{ ...wizardContext }}>{ui}</StepWizardContext.Provider>,
-    </SoknadContext.Provider>,
+    <StepWizardContext.Provider value={{ ...wizardContext }}>{ui}</StepWizardContext.Provider>,
     renderOptions
   );
 };
