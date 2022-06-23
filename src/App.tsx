@@ -5,10 +5,10 @@ import { ErrorBoundary } from 'react-error-boundary';
 import { captureException } from '@sentry/react';
 import { IntlProvider } from 'react-intl';
 import { onLanguageSelect } from '@navikt/nav-dekoratoren-moduler';
-import { SoknadContextProvider } from './context/soknadContext';
 import { SoknadContextProviderUtland } from './context/soknadContextUtland';
 import { StepWizardProvider } from './context/stepWizardContextV2';
 import { SokerOppslagProvider } from './context/sokerOppslagContext';
+import { SoknadContextProviderStandard } from './context/soknadContextStandard';
 
 // Pages
 import Utland from './pages/utland/Utland';
@@ -49,9 +49,9 @@ const UtlandWithContext = () => (
   </SoknadContextProviderUtland>
 );
 const StandardWithContext = () => (
-  <SoknadContextProvider>
+  <SoknadContextProviderStandard>
     <StandardPage />
-  </SoknadContextProvider>
+  </SoknadContextProviderStandard>
 );
 
 const App = (): JSX.Element => {

@@ -3,7 +3,6 @@ import Soknad from '../../../types/Soknad';
 import { Accordion, BodyShort, Heading, Label, Switch } from '@navikt/ds-react';
 import React, { useState } from 'react';
 import ConfirmationPanelWrapper from '../../../components/input/ConfirmationPanelWrapper';
-import { useSoknadContext } from '../../../context/soknadContext';
 import AccordianItemOppsummering from './AccordianItemOppsummering/AccordianItemOppsummering';
 import OppsummeringBarn from './OppsummeringBarn/OppsummeringBarn';
 import { isNonEmptyPeriode } from '../../../utils/periode';
@@ -21,6 +20,8 @@ import { goToNamedStep, useStepWizard } from '../../../context/stepWizardContext
 import { StepNames } from '../index';
 import { LucaGuidePanel } from '../../../components/LucaGuidePanel';
 import { useFeatureToggleIntl } from '../../../hooks/useFeatureToggleIntl';
+import { slettLagretSoknadState } from '../../../context/soknadContextCommon';
+import { useSoknadContextStandard } from '../../../context/soknadContextStandard';
 
 interface OppsummeringProps {
   onBackClick: () => void;
@@ -28,10 +29,10 @@ interface OppsummeringProps {
   onSubmitSoknad: (data: Soknad) => void;
 }
 
-const Oppsummering = ({ onBackClick, onCancelClick, onSubmitSoknad }: OppsummeringProps) => {
+const Oppsummering = ({ onBackClick, onSubmitSoknad }: OppsummeringProps) => {
   const { formatMessage } = useFeatureToggleIntl();
 
-  const { søknadState } = useSoknadContext();
+  const { søknadState, søknadDispatch } = useSoknadContextStandard();
   const { stepWizardDispatch } = useStepWizard();
   const { vedleggState } = useVedleggContext();
   const { fastlege } = useSokerOppslag();
@@ -64,7 +65,7 @@ const Oppsummering = ({ onBackClick, onCancelClick, onSubmitSoknad }: Oppsummeri
         onSubmitSoknad(data);
       })}
       onBack={() => onBackClick()}
-      onCancel={() => onCancelClick()}
+      onDelete={() => slettLagretSoknadState<Soknad>(søknadDispatch, søknadState)}
       nextButtonText={formatMessage('navigation.send')}
       backButtonText={formatMessage('navigation.back')}
       cancelButtonText={formatMessage('navigation.cancel')}

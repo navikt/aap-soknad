@@ -4,7 +4,6 @@ import { BodyShort, Heading, Radio, Alert } from '@navikt/ds-react';
 import { JaNeiVetIkke } from '../../../types/Generic';
 import React, { useEffect } from 'react';
 import * as yup from 'yup';
-import { updateSøknadData, useSoknadContext } from '../../../context/soknadContext';
 import { completeAndGoToNextStep, useStepWizard } from '../../../context/stepWizardContextV2';
 import { FieldValues, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -17,6 +16,8 @@ import {
   useVedleggContext,
 } from '../../../context/vedleggContext';
 import { useFeatureToggleIntl } from '../../../hooks/useFeatureToggleIntl';
+import { slettLagretSoknadState, updateSøknadData } from '../../../context/soknadContextCommon';
+import { useSoknadContextStandard } from '../../../context/soknadContextStandard';
 export const AVBRUTT_STUDIE_VEDLEGG = 'avbruttStudie';
 
 const STUDENT = 'student';
@@ -29,12 +30,11 @@ enum JaNeiAvbrutt {
   AVBRUTT = 'Avbrutt',
 }
 interface Props {
-  søknad?: Soknad;
   onBackClick: () => void;
   onCancelClick: () => void;
 }
 
-const Student = ({ onBackClick, søknad }: Props) => {
+const Student = ({ onBackClick }: Props) => {
   const { formatMessage } = useFeatureToggleIntl();
   const schema = yup.object().shape({
     [STUDENT]: yup.object().shape({
@@ -59,7 +59,7 @@ const Student = ({ onBackClick, søknad }: Props) => {
       }),
     }),
   });
-  const { søknadDispatch } = useSoknadContext();
+  const { søknadState, søknadDispatch } = useSoknadContextStandard();
   const { stepWizardDispatch } = useStepWizard();
   const { vedleggDispatch } = useVedleggContext();
   const {
@@ -72,7 +72,7 @@ const Student = ({ onBackClick, søknad }: Props) => {
   } = useForm<FieldValues>({
     resolver: yupResolver(schema),
     defaultValues: {
-      [STUDENT]: søknad?.student,
+      [STUDENT]: søknadState?.søknad?.student,
     },
   });
 
@@ -99,10 +99,11 @@ const Student = ({ onBackClick, søknad }: Props) => {
   return (
     <SoknadFormWrapper
       onNext={handleSubmit((data) => {
-        updateSøknadData(søknadDispatch, data);
+        updateSøknadData<Soknad>(søknadDispatch, data);
         completeAndGoToNextStep(stepWizardDispatch);
       })}
       onBack={() => onBackClick()}
+      onDelete={() => slettLagretSoknadState<Soknad>(søknadDispatch, søknadState)}
       nextButtonText={'Neste steg'}
       backButtonText={'Forrige steg'}
       cancelButtonText={'Avbryt søknad'}

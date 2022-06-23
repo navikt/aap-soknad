@@ -1,14 +1,4 @@
-import {
-  Alert,
-  BodyShort,
-  Button,
-  Cell,
-  Grid,
-  Heading,
-  Label,
-  Radio,
-  ReadMore,
-} from '@navikt/ds-react';
+import { Alert, BodyShort, Button, Cell, Grid, Heading, Radio, ReadMore } from '@navikt/ds-react';
 import React, { useEffect, useMemo, useState } from 'react';
 import { FieldValues, useFieldArray, useForm } from 'react-hook-form';
 import RadioGroupWrapper from '../../../components/input/RadioGroupWrapper/RadioGroupWrapper';
@@ -22,7 +12,6 @@ import {
   useVedleggContext,
 } from '../../../context/vedleggContext';
 import * as yup from 'yup';
-import { updateSøknadData, useSoknadContext } from '../../../context/soknadContext';
 import { completeAndGoToNextStep, useStepWizard } from '../../../context/stepWizardContextV2';
 import { yupResolver } from '@hookform/resolvers/yup';
 import SoknadFormWrapper from '../../../components/SoknadFormWrapper/SoknadFormWrapper';
@@ -30,9 +19,10 @@ import { AddBarnModal, Relasjon, validateHarInntekt } from './AddBarnModal';
 import { formatNavn } from '../../../utils/StringFormatters';
 import { LucaGuidePanel } from '../../../components/LucaGuidePanel';
 import { useFeatureToggleIntl } from '../../../hooks/useFeatureToggleIntl';
+import { slettLagretSoknadState, updateSøknadData } from '../../../context/soknadContextCommon';
+import { useSoknadContextStandard } from '../../../context/soknadContextStandard';
 
 interface Props {
-  søknad?: Soknad;
   onBackClick: () => void;
   onCancelClick: () => void;
 }
@@ -41,7 +31,7 @@ const MANUELLE_BARN = 'manuelleBarn';
 
 export const GRUNNBELØP = '111 477';
 
-export const Barnetillegg = ({ onBackClick, søknad }: Props) => {
+export const Barnetillegg = ({ onBackClick }: Props) => {
   const { formatMessage } = useFeatureToggleIntl();
 
   const schema = yup.object().shape({
@@ -72,7 +62,7 @@ export const Barnetillegg = ({ onBackClick, søknad }: Props) => {
       })
     ),
   });
-  const { søknadDispatch } = useSoknadContext();
+  const { søknadState, søknadDispatch } = useSoknadContextStandard();
   const { stepWizardDispatch } = useStepWizard();
   const {
     control,
@@ -82,8 +72,8 @@ export const Barnetillegg = ({ onBackClick, søknad }: Props) => {
   } = useForm<FieldValues>({
     resolver: yupResolver(schema),
     defaultValues: {
-      [BARNETILLEGG]: søknad?.barnetillegg,
-      [MANUELLE_BARN]: søknad?.manuelleBarn,
+      [BARNETILLEGG]: søknadState?.søknad?.barnetillegg,
+      [MANUELLE_BARN]: søknadState?.søknad?.manuelleBarn,
     },
   });
   const { vedleggDispatch } = useVedleggContext();
@@ -173,10 +163,11 @@ export const Barnetillegg = ({ onBackClick, søknad }: Props) => {
     <>
       <SoknadFormWrapper
         onNext={handleSubmit((data) => {
-          updateSøknadData(søknadDispatch, data);
+          updateSøknadData<Soknad>(søknadDispatch, data);
           completeAndGoToNextStep(stepWizardDispatch);
         })}
         onBack={() => onBackClick()}
+        onDelete={() => slettLagretSoknadState<Soknad>(søknadDispatch, søknadState)}
         nextButtonText={formatMessage('navigation.next')}
         backButtonText={formatMessage('navigation.back')}
         cancelButtonText={formatMessage('navigation.cancel')}

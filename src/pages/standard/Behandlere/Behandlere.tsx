@@ -5,7 +5,6 @@ import { FastlegeView } from '../../../context/sokerOppslagContext';
 import { Add } from '@navikt/ds-icons';
 import Soknad from '../../../types/Soknad';
 import * as yup from 'yup';
-import { updateSøknadData, useSoknadContext } from '../../../context/soknadContext';
 import { completeAndGoToNextStep, useStepWizard } from '../../../context/stepWizardContextV2';
 import { yupResolver } from '@hookform/resolvers/yup';
 import SoknadFormWrapper from '../../../components/SoknadFormWrapper/SoknadFormWrapper';
@@ -13,20 +12,21 @@ import { AddBehandlerModal } from './AddBehandlerModal';
 import { LucaGuidePanel } from '../../../components/LucaGuidePanel';
 import * as classes from './Behandlere.module.css';
 import { useFeatureToggleIntl } from '../../../hooks/useFeatureToggleIntl';
+import { useSoknadContextStandard } from '../../../context/soknadContextStandard';
+import { slettLagretSoknadState, updateSøknadData } from '../../../context/soknadContextCommon';
 
 interface Props {
-  søknad?: Soknad;
   onBackClick: () => void;
   onCancelClick: () => void;
   fastlege?: FastlegeView;
 }
 const BEHANDLERE = 'behandlere';
 
-export const Behandlere = ({ onBackClick, søknad, fastlege }: Props) => {
+export const Behandlere = ({ onBackClick, fastlege }: Props) => {
   const { formatMessage } = useFeatureToggleIntl();
 
   const schema = yup.object().shape({});
-  const { søknadDispatch } = useSoknadContext();
+  const { søknadState, søknadDispatch } = useSoknadContextStandard();
   const { stepWizardDispatch } = useStepWizard();
   const {
     control,
@@ -35,7 +35,7 @@ export const Behandlere = ({ onBackClick, søknad, fastlege }: Props) => {
   } = useForm<FieldValues>({
     resolver: yupResolver(schema),
     defaultValues: {
-      [BEHANDLERE]: søknad?.behandlere,
+      [BEHANDLERE]: søknadState?.søknad?.behandlere,
     },
   });
 
@@ -77,10 +77,11 @@ export const Behandlere = ({ onBackClick, søknad, fastlege }: Props) => {
     <>
       <SoknadFormWrapper
         onNext={handleSubmit((data) => {
-          updateSøknadData(søknadDispatch, data);
+          updateSøknadData<Soknad>(søknadDispatch, data);
           completeAndGoToNextStep(stepWizardDispatch);
         })}
         onBack={() => onBackClick()}
+        onDelete={() => slettLagretSoknadState<Soknad>(søknadDispatch, søknadState)}
         nextButtonText={formatMessage('navigation.next')}
         backButtonText={formatMessage('navigation.back')}
         cancelButtonText={formatMessage('navigation.cancel')}

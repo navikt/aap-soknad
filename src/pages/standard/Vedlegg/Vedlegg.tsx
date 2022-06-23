@@ -6,7 +6,6 @@ import FileInput from '../../../components/input/FileInput/FileInput';
 import { useVedleggContext } from '../../../context/vedleggContext';
 import ScanningGuide from '../../../components/ScanningGuide/ScanningGuide';
 import * as yup from 'yup';
-import { updateSøknadData, useSoknadContext } from '../../../context/soknadContext';
 import { completeAndGoToNextStep, useStepWizard } from '../../../context/stepWizardContextV2';
 import { yupResolver } from '@hookform/resolvers/yup';
 import SoknadFormWrapper from '../../../components/SoknadFormWrapper/SoknadFormWrapper';
@@ -14,9 +13,10 @@ import { AttachmentType } from '../AndreUtbetalinger/AndreUtbetalinger';
 import { LucaGuidePanel } from '../../../components/LucaGuidePanel';
 import { AVBRUTT_STUDIE_VEDLEGG } from '../Student/Student';
 import { useFeatureToggleIntl } from '../../../hooks/useFeatureToggleIntl';
+import { slettLagretSoknadState, updateSøknadData } from '../../../context/soknadContextCommon';
+import { useSoknadContextStandard } from '../../../context/soknadContextStandard';
 
 interface Props {
-  søknad?: Soknad;
   onBackClick: () => void;
   onCancelClick: () => void;
 }
@@ -27,7 +27,7 @@ const VEDLEGG_UTLANDSSTØNAD = `${VEDLEGG}.${AttachmentType.UTLANDSSTØNAD}`;
 const VEDLEGG_BARN = `${VEDLEGG}.barn`;
 const VEDLEGG_ANNET = `${VEDLEGG}.annet`;
 
-const Vedlegg = ({ onBackClick, søknad }: Props) => {
+const Vedlegg = ({ onBackClick }: Props) => {
   const { formatMessage } = useFeatureToggleIntl();
 
   const [scanningGuideOpen, setScanningGuideOpen] = useState(false);
@@ -35,7 +35,7 @@ const Vedlegg = ({ onBackClick, søknad }: Props) => {
   const schema = yup.object().shape({});
 
   const { vedleggState } = useVedleggContext();
-  const { søknadDispatch } = useSoknadContext();
+  const { søknadState, søknadDispatch } = useSoknadContextStandard();
   const { stepWizardDispatch } = useStepWizard();
   const {
     control,
@@ -44,12 +44,13 @@ const Vedlegg = ({ onBackClick, søknad }: Props) => {
   } = useForm<FieldValues>({
     resolver: yupResolver(schema),
     defaultValues: {
-      [VEDLEGG]: søknad?.vedlegg,
+      [VEDLEGG]: søknadState?.søknad?.vedlegg,
     },
   });
   useEffect(() => {
     if (scanningGuideOpen) {
-      scanningGuideElement?.current?.scrollIntoView({ behavior: 'smooth' });
+      if (scanningGuideElement?.current != null)
+        (scanningGuideElement?.current as HTMLElement)?.scrollIntoView({ behavior: 'smooth' });
     }
   }, [scanningGuideOpen]);
   const scanningGuideOnClick = () => {
@@ -82,10 +83,11 @@ const Vedlegg = ({ onBackClick, søknad }: Props) => {
   return (
     <SoknadFormWrapper
       onNext={handleSubmit((data) => {
-        updateSøknadData(søknadDispatch, data);
+        updateSøknadData<Soknad>(søknadDispatch, data);
         completeAndGoToNextStep(stepWizardDispatch);
       })}
       onBack={() => onBackClick()}
+      onDelete={() => slettLagretSoknadState<Soknad>(søknadDispatch, søknadState)}
       nextButtonText={formatMessage('navigation.next')}
       backButtonText={formatMessage('navigation.back')}
       cancelButtonText={formatMessage('navigation.cancel')}

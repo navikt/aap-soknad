@@ -10,11 +10,8 @@ import {
   setStepList,
 } from '../../context/stepWizardContextV2';
 import Soknad from '../../types/Soknad';
-import {
-  useSoknadContext,
-  slettLagretSoknadState,
-  addBarnIfMissing,
-} from '../../context/soknadContext';
+import { slettLagretSoknadState } from '../../context/soknadContextCommon';
+import { useSoknadContextStandard, addBarnIfMissing } from '../../context/soknadContextStandard';
 import { Veiledning } from './Veiledning/Veiledning';
 import { FastlegeView, hentSokerOppslag, useSokerOppslag } from '../../context/sokerOppslagContext';
 import { Behandlere } from './Behandlere/Behandlere';
@@ -324,7 +321,7 @@ export const StandardPage = (): JSX.Element => {
   const [oppslagLoading, setOppslagLoading] = useState<boolean>(true);
   const [showVeiledning, setShowVeiledning] = useState<boolean>(true);
   const [showKvittering, setShowKvittering] = useState<boolean>(false);
-  const { søknadState, søknadDispatch } = useSoknadContext();
+  const { søknadState, søknadDispatch } = useSoknadContextStandard();
   const { oppslagDispatch, søker, fastlege } = useSokerOppslag();
   const { currentStep, stepWizardDispatch } = useStepWizard();
   const pageHeading = useRef(null);
@@ -347,7 +344,7 @@ export const StandardPage = (): JSX.Element => {
   }, []);
   useEffect(() => {
     window && window.scrollTo(0, 0);
-    pageHeading?.current?.focus();
+    if (pageHeading?.current != null) (pageHeading?.current as HTMLElement)?.focus();
   }, [currentStep]);
   const submitSoknad: SubmitHandler<Soknad> = async (data) => {
     if (currentStep?.name === StepNames.OPPSUMMERING) {
@@ -384,7 +381,7 @@ export const StandardPage = (): JSX.Element => {
   };
   const onDeleteSøknad = async () => {
     if (søknadState.type) {
-      const deleteRes = await slettLagretSoknadState(søknadDispatch, søknadState.type);
+      const deleteRes = await slettLagretSoknadState<Soknad>(søknadDispatch, søknadState);
       if (deleteRes) {
         resetStepWizard(stepWizardDispatch);
       } else {

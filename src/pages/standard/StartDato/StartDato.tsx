@@ -11,12 +11,13 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import SoknadFormWrapper from '../../../components/SoknadFormWrapper/SoknadFormWrapper';
 import { completeAndGoToNextStep, useStepWizard } from '../../../context/stepWizardContextV2';
-import { updateSøknadData, useSoknadContext } from '../../../context/soknadContext';
 import { isFuture, isPast, isToday, subYears } from 'date-fns';
 import TextAreaWrapper from '../../../components/input/TextAreaWrapper';
 import { setErrorSummaryFocus } from '../../../utils/dom';
 import { LucaGuidePanel } from '../../../components/LucaGuidePanel';
 import { useFeatureToggleIntl } from '../../../hooks/useFeatureToggleIntl';
+import { useSoknadContextStandard } from '../../../context/soknadContextStandard';
+import { slettLagretSoknadState, updateSøknadData } from '../../../context/soknadContextCommon';
 
 const STARTDATO = 'startDato';
 const FERIE = 'ferie';
@@ -40,12 +41,11 @@ const getStartDatoType = (startDate: Date) => {
 };
 
 interface Props {
-  søknad?: Soknad;
   onBackClick: () => void;
   onCancelClick: () => void;
 }
 
-const StartDato = ({ onBackClick, søknad }: Props) => {
+const StartDato = ({ onBackClick }: Props) => {
   const { formatMessage } = useFeatureToggleIntl();
 
   const schema = yup.object().shape({
@@ -115,7 +115,7 @@ const StartDato = ({ onBackClick, søknad }: Props) => {
   const [tidspunktStartDato, setTidspunktStartDato] = useState<
     'FORTID' | 'I_DAG' | 'FREMTID' | undefined
   >(undefined);
-
+  const { søknadState, søknadDispatch } = useSoknadContextStandard();
   const {
     control,
     handleSubmit,
@@ -125,16 +125,13 @@ const StartDato = ({ onBackClick, søknad }: Props) => {
   } = useForm<FieldValues>({
     resolver: yupResolver(schema),
     defaultValues: {
-      startDato: søknad?.startDato,
-      hvorfor: søknad?.hvorfor,
-      begrunnelse: søknad?.begrunnelse,
-      ferie: søknad?.ferie,
+      startDato: søknadState?.søknad?.startDato,
+      hvorfor: søknadState?.søknad?.hvorfor,
+      begrunnelse: søknadState?.søknad?.begrunnelse,
+      ferie: søknadState?.søknad?.ferie,
     },
   });
-
-  const { søknadDispatch } = useSoknadContext();
   const { stepWizardDispatch } = useStepWizard();
-
   const startDato = watch(STARTDATO);
   const skalHaFerie = watch(`${FERIE}.${SKALHAFERIE}`);
   const ferieType = watch(`${FERIE}.${FERIETYPE}`);
@@ -174,12 +171,13 @@ const StartDato = ({ onBackClick, søknad }: Props) => {
     <SoknadFormWrapper
       onNext={handleSubmit(
         (data) => {
-          updateSøknadData(søknadDispatch, data);
+          updateSøknadData<Soknad>(søknadDispatch, data);
           completeAndGoToNextStep(stepWizardDispatch);
         },
         () => setErrorSummaryFocus()
       )}
       onBack={() => onBackClick()}
+      onDelete={() => slettLagretSoknadState<Soknad>(søknadDispatch, søknadState)}
       nextButtonText={formatMessage('navigation.next')}
       backButtonText={formatMessage('navigation.back')}
       cancelButtonText={formatMessage('navigation.cancel')}

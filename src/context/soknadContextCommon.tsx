@@ -94,9 +94,3 @@ export function updateSøknadData<SoknadStateType>(
 ) {
   dispatch({ type: SoknadActionKeys.UPDATE_SOKNAD, payload: data });
 }
-export function addBarnIfMissing<SoknadStateType>(
-  dispatch: Dispatch<SoknadAction<SoknadStateType>>,
-  data: OppslagBarn[]
-) {
-  dispatch({ type: SoknadActionKeys.ADD_BARN_IF_MISSING, payload: data });
-}

@@ -11,7 +11,6 @@ import {
 import { JaEllerNei } from '../../../types/Generic';
 import Soknad from '../../../types/Soknad';
 import * as yup from 'yup';
-import { updateSøknadData, useSoknadContext } from '../../../context/soknadContext';
 import { completeAndGoToNextStep, useStepWizard } from '../../../context/stepWizardContextV2';
 import { yupResolver } from '@hookform/resolvers/yup';
 import SoknadFormWrapper from '../../../components/SoknadFormWrapper/SoknadFormWrapper';
@@ -19,9 +18,10 @@ import TextFieldWrapper from '../../../components/input/TextFieldWrapper';
 import ColorPanel from '../../../components/panel/ColorPanel';
 import { LucaGuidePanel } from '../../../components/LucaGuidePanel';
 import { useFeatureToggleIntl } from '../../../hooks/useFeatureToggleIntl';
+import { slettLagretSoknadState, updateSøknadData } from '../../../context/soknadContextCommon';
+import { useSoknadContextStandard } from '../../../context/soknadContextStandard';
 
 interface Props {
-  søknad?: Soknad;
   onBackClick: () => void;
   onCancelClick: () => void;
 }
@@ -47,7 +47,7 @@ const ANDRE_UTBETALINGER = 'andreUtbetalinger';
 const LØNN = 'lønn';
 const STØNAD = 'stønad';
 
-export const AndreUtbetalinger = ({ onBackClick, søknad }: Props) => {
+export const AndreUtbetalinger = ({ onBackClick }: Props) => {
   const { formatMessage } = useFeatureToggleIntl();
 
   const schema = yup.object().shape({
@@ -63,7 +63,7 @@ export const AndreUtbetalinger = ({ onBackClick, søknad }: Props) => {
     }),
   });
   const { vedleggDispatch } = useVedleggContext();
-  const { søknadDispatch } = useSoknadContext();
+  const { søknadState, søknadDispatch } = useSoknadContextStandard();
   const { stepWizardDispatch } = useStepWizard();
   const {
     control,
@@ -74,7 +74,7 @@ export const AndreUtbetalinger = ({ onBackClick, søknad }: Props) => {
   } = useForm<FieldValues>({
     resolver: yupResolver(schema),
     defaultValues: {
-      [ANDRE_UTBETALINGER]: søknad?.andreUtbetalinger,
+      [ANDRE_UTBETALINGER]: søknadState?.søknad?.andreUtbetalinger,
     },
   });
 
@@ -152,10 +152,11 @@ export const AndreUtbetalinger = ({ onBackClick, søknad }: Props) => {
   return (
     <SoknadFormWrapper
       onNext={handleSubmit((data) => {
-        updateSøknadData(søknadDispatch, data);
+        updateSøknadData<Soknad>(søknadDispatch, data);
         completeAndGoToNextStep(stepWizardDispatch);
       })}
       onBack={() => onBackClick()}
+      onDelete={() => slettLagretSoknadState<Soknad>(søknadDispatch, søknadState)}
       nextButtonText={formatMessage('navigation.next')}
       backButtonText={formatMessage('navigation.back')}
       cancelButtonText={formatMessage('navigation.cancel')}
