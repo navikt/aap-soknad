@@ -6,6 +6,7 @@ import { captureException } from '@sentry/react';
 import { IntlProvider } from 'react-intl';
 import { onLanguageSelect } from '@navikt/nav-dekoratoren-moduler';
 import { SoknadContextProvider } from './context/soknadContext';
+import { SoknadContextProviderUtland } from './context/soknadContextUtland';
 import { StepWizardProvider } from './context/stepWizardContextV2';
 import { SokerOppslagProvider } from './context/sokerOppslagContext';
 
@@ -43,6 +44,17 @@ export const messages: Messages = {
   nb: flattenMessages(messagesNb),
 };
 
+const UtlandWithContext = () => (
+  <SoknadContextProviderUtland>
+    <Utland />
+  </SoknadContextProviderUtland>
+);
+const StandardWithContext = () => (
+  <SoknadContextProvider>
+    <StandardPage />
+  </SoknadContextProvider>
+);
+
 const App = (): JSX.Element => {
   const [locale, setLocale] = useState<Locale>('nb');
   onLanguageSelect(({ locale }) => setLocale(locale as Locale));
@@ -60,40 +72,38 @@ const App = (): JSX.Element => {
     >
       <div className="app">
         <IntlProvider locale={locale} messages={currentMessages}>
-          <SoknadContextProvider>
-            <SokerOppslagProvider>
-              <VedleggContextProvider>
-                <StepWizardProvider>
-                  <BrowserRouter>
-                    <Routes>
-                      <Route path="/aap" element={<Hovedsoknad />} />
-                      <Route path="/aap/utland" element={<Utland />} />
-                      <Route path="/aap/standard" element={<StandardPage />} />
-                      <Route
-                        path="*"
-                        element={
-                          <>
-                            <Heading size={'xlarge'} level={'1'} spacing={true}>
-                              AAP App
-                            </Heading>
-                            <Button
-                              onClick={() => {
-                                console.log('USE_MOCK', process.env.USE_MOCK);
-                                console.log('NODE_ENV', process.env.NODE_ENV);
-                              }}
-                            >
-                              USE MOCK
-                            </Button>
-                            <span>Not Found</span>
-                          </>
-                        }
-                      />
-                    </Routes>
-                  </BrowserRouter>
-                </StepWizardProvider>
-              </VedleggContextProvider>
-            </SokerOppslagProvider>
-          </SoknadContextProvider>
+          <SokerOppslagProvider>
+            <VedleggContextProvider>
+              <StepWizardProvider>
+                <BrowserRouter>
+                  <Routes>
+                    <Route path="/aap" element={<Hovedsoknad />} />
+                    <Route path="/aap/utland" element={<UtlandWithContext />} />
+                    <Route path="/aap/standard" element={<StandardWithContext />} />
+                    <Route
+                      path="*"
+                      element={
+                        <>
+                          <Heading size={'xlarge'} level={'1'} spacing={true}>
+                            AAP App
+                          </Heading>
+                          <Button
+                            onClick={() => {
+                              console.log('USE_MOCK', process.env.USE_MOCK);
+                              console.log('NODE_ENV', process.env.NODE_ENV);
+                            }}
+                          >
+                            USE MOCK
+                          </Button>
+                          <span>Not Found</span>
+                        </>
+                      }
+                    />
+                  </Routes>
+                </BrowserRouter>
+              </StepWizardProvider>
+            </VedleggContextProvider>
+          </SokerOppslagProvider>
         </IntlProvider>
       </div>
     </ErrorBoundary>

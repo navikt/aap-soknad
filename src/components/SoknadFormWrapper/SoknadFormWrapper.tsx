@@ -3,7 +3,6 @@ import React, { useState } from 'react';
 import { Alert, Loader, BodyShort, Heading, Modal, Button } from '@navikt/ds-react';
 import { FormErrorSummary } from '../schema/FormErrorSummary';
 import * as classes from './SoknadFormWrapper.module.css';
-import { slettLagretSoknadState, useSoknadContext } from '../../context/soknadContext';
 import { SuccessStroke } from '@navikt/ds-icons';
 import { useNavigate } from 'react-router-dom';
 import { useFeatureToggleIntl } from '../../hooks/useFeatureToggleIntl';
@@ -15,6 +14,7 @@ interface Props {
   cancelButtonText: string;
   onNext: (data: any) => void;
   onBack: () => void;
+  onDelete: () => Promise<boolean>;
   nextIsLoading?: boolean;
   focusOnErrors?: boolean;
   errors: FieldErrors;
@@ -26,13 +26,13 @@ const SøknadFormWrapper = ({
   backButtonText,
   onNext,
   onBack,
+  onDelete,
   errors,
   nextIsLoading = false,
 }: Props) => {
   const navigate = useNavigate();
 
   const { formatLink, formatMessage } = useFeatureToggleIntl();
-  const { søknadState, søknadDispatch } = useSoknadContext();
   const [showLagreModal, setShowLagreModal] = useState<boolean>(false);
   const [showAvbrytModal, setShowAvbrytModal] = useState<boolean>(false);
   const [isSlettingSøknad, setIsSlettingSøknad] = useState<boolean>(false);
@@ -40,7 +40,8 @@ const SøknadFormWrapper = ({
   const slettSøknadOgAvbryt = async () => {
     try {
       setIsSlettingSøknad(true);
-      await slettLagretSoknadState(søknadDispatch, søknadState);
+      await onDelete();
+      // await slettLagretSoknadState(søknadDispatch, søknadState);
       setIsSlettingSøknad(false);
       setSlettSøknadSuccess(true);
     } catch (err) {

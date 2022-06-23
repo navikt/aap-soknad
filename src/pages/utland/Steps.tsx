@@ -6,7 +6,6 @@ import React, { useEffect } from 'react';
 import { formatDate } from '../../utils/date';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
-import { updateSøknadData, useSoknadContext } from '../../context/soknadContext';
 import { completeAndGoToNextStep, useStepWizard } from '../../context/stepWizardContextV2';
 import CountrySelector from '../../components/input/CountrySelector';
 import SoknadFormWrapper from '../../components/SoknadFormWrapper/SoknadFormWrapper';
@@ -15,6 +14,8 @@ import * as classes from '../standard/Veiledning/Veiledning.module.css';
 import Soknad from '../../types/Soknad';
 import { useLagrePartialSoknad } from '../../hooks/useLagreSoknad';
 import { useFeatureToggleIntl } from '../../hooks/useFeatureToggleIntl';
+import { updateSøknadData, slettLagretSoknadState } from '../../context/soknadContextCommon';
+import { useSoknadContextUtland } from '../../context/soknadContextUtland';
 
 interface IntroductionProps {
   onSubmit: () => void;
@@ -48,9 +49,9 @@ export const StepSelectCountry = ({ onBackClick }: SelectCountryProps) => {
       .required(formatMessage('utland.land.select.required'))
       .notOneOf(['none'], formatMessage('utland.land.select.required')),
   });
-  const { søknadState, søknadDispatch } = useSoknadContext();
+  const { søknadState, søknadDispatch } = useSoknadContextUtland();
   const { stepList, stepWizardDispatch } = useStepWizard();
-  const lagrePartialSøknad = useLagrePartialSoknad();
+  const lagrePartialSøknad = useLagrePartialSoknad<SoknadUtland>();
   const {
     control,
     handleSubmit,
@@ -75,6 +76,7 @@ export const StepSelectCountry = ({ onBackClick }: SelectCountryProps) => {
           completeAndGoToNextStep(stepWizardDispatch);
         })}
         onBack={() => onBackClick()}
+        onDelete={() => slettLagretSoknadState(søknadDispatch, søknadState)}
         nextButtonText={'Neste steg'}
         backButtonText={'Forrige steg'}
         cancelButtonText={'Avbryt søknad'}
@@ -110,8 +112,8 @@ export const StepSelectTravelPeriod = ({ søknad, onBackClick }: SelectTravelPer
           fromDate && yup.min(fromDate, formatMessage('utland.periode.tilDato.afterfromdate'))
       ),
   });
-  const lagrePartialSøknad = useLagrePartialSoknad();
-  const { søknadState, søknadDispatch } = useSoknadContext();
+  const lagrePartialSøknad = useLagrePartialSoknad<SoknadUtland>();
+  const { søknadState, søknadDispatch } = useSoknadContextUtland();
   const { stepList, stepWizardDispatch } = useStepWizard();
   const {
     watch,
@@ -136,6 +138,7 @@ export const StepSelectTravelPeriod = ({ søknad, onBackClick }: SelectTravelPer
         completeAndGoToNextStep(stepWizardDispatch);
       })}
       onBack={() => onBackClick()}
+      onDelete={() => slettLagretSoknadState(søknadDispatch, søknadState)}
       nextButtonText={'Neste steg'}
       backButtonText={'Forrige steg'}
       cancelButtonText={'Avbryt søknad'}
@@ -171,8 +174,8 @@ export const StepSummary = ({ data, onBackClick }: SummaryProps) => {
       .required(formatMessage('utland.oppsummering.bekreftelse.required'))
       .oneOf([true], formatMessage('utland.oppsummering.bekreftelse.required')),
   });
-  const lagrePartialSøknad = useLagrePartialSoknad();
-  const { søknadState, søknadDispatch } = useSoknadContext();
+  const lagrePartialSøknad = useLagrePartialSoknad<SoknadUtland>();
+  const { søknadState, søknadDispatch } = useSoknadContextUtland();
   const { stepList, stepWizardDispatch } = useStepWizard();
   const {
     watch,
@@ -205,6 +208,7 @@ export const StepSummary = ({ data, onBackClick }: SummaryProps) => {
           completeAndGoToNextStep(stepWizardDispatch);
         })}
         onBack={() => onBackClick()}
+        onDelete={() => slettLagretSoknadState(søknadDispatch, søknadState)}
         nextButtonText={'Send søknad'}
         backButtonText={'Forrige steg'}
         cancelButtonText={'Avbryt søknad'}

@@ -2,8 +2,9 @@ import { useState } from 'react';
 import { SoknadContextState } from '../context/soknadContext';
 import { StepType } from '../components/StepWizard/Step';
 import { fetchPOST } from '../api/fetch';
+import { GenericSoknadContextState } from '../types/SoknadContext';
 
-export const useLagrePartialSoknad = function () {
+export function useLagrePartialSoknad<SoknadStateType>() {
   const [lastPayload, setLastPayload] = useState<SoknadContextState>();
 
   const lagreSøknad = async (payload: SoknadContextState) => {
@@ -16,7 +17,7 @@ export const useLagrePartialSoknad = function () {
     }
   };
   const lagrePartialSøknad = async (
-    state: SoknadContextState,
+    state: GenericSoknadContextState<SoknadStateType>,
     stepList: StepType[],
     partialSøknad: any
   ) => {
@@ -30,7 +31,7 @@ export const useLagrePartialSoknad = function () {
     }
   };
   return lagrePartialSøknad;
-};
+}
 
 const equalPayLoads = (a: any, b: any) => {
   if (a === b) return true;

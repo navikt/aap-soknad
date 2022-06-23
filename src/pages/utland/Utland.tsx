@@ -11,13 +11,8 @@ import {
 } from './Steps';
 import { fetchPOST } from '../../api/fetch';
 import { formatDate } from '../../utils/date';
-import {
-  hentSoknadState,
-  lagreSoknadState,
-  setSøknadType,
-  SøknadType,
-  useSoknadContext,
-} from '../../context/soknadContext';
+import { hentSoknadState } from '../../context/soknadContextCommon';
+import { useSoknadContextUtland } from '../../context/soknadContextUtland';
 import {
   completeAndGoToNextStep,
   goToPreviousStep,
@@ -26,6 +21,7 @@ import {
 } from '../../context/stepWizardContextV2';
 
 import SoknadUtland from '../../types/SoknadUtland';
+import { SøknadType } from '../../types/SoknadContext';
 
 enum StepNames {
   DESTINATION = 'DESTINATION',
@@ -41,13 +37,10 @@ const defaultStepList = [
 ];
 
 const Utland = (): JSX.Element => {
-  const { søknadState, søknadDispatch } = useSoknadContext();
+  const { søknadState, søknadDispatch } = useSoknadContextUtland();
   const { currentStep, stepList, stepWizardDispatch } = useStepWizard();
   const [isVeiledning, setIsVeiledning] = useState<boolean>(true);
   const { formatMessage } = useFeatureToggleIntl();
-  useEffect(() => {
-    setSøknadType(søknadDispatch, SøknadType.UTLAND);
-  }, []);
   useEffect(() => {
     const getSoknadState = async () => {
       const cachedState = await hentSoknadState(søknadDispatch, SøknadType.UTLAND);
@@ -61,9 +54,9 @@ const Utland = (): JSX.Element => {
     getSoknadState();
   }, []);
   useEffect(() => {
-    if (søknadState?.søknad && Object.keys(søknadState?.søknad)?.length > 0) {
-      lagreSoknadState({ ...søknadState }, [...stepList]);
-    }
+    // if (søknadState?.søknad && Object.keys(søknadState?.søknad)?.length > 0) {
+    //   lagreSoknadState({ ...søknadState }, [...stepList]);
+    // }
   }, [currentStep, stepList]);
   const myHandleSubmit = async () => {
     const postResponse = await postSøknad(søknadState?.søknad);
@@ -74,10 +67,10 @@ const Utland = (): JSX.Element => {
   };
   const postSøknad = async (data?: SoknadUtland) =>
     fetchPOST('/aap/soknad-api/innsending/utland', {
-      land: data?.country,
+      land: data?.land,
       periode: {
-        fom: formatDate(data?.fromDate, 'yyyy-MM-dd'),
-        tom: formatDate(data?.toDate, 'yyyy-MM-dd'),
+        fom: formatDate(data?.fraDato, 'yyyy-MM-dd'),
+        tom: formatDate(data?.tilDato, 'yyyy-MM-dd'),
       },
     });
   const onPreviousStep = () => {
