@@ -46,7 +46,7 @@ const Oppsummering = ({ onBackClick, onSubmitSoknad }: OppsummeringProps) => {
     defaultValues: {},
   });
 
-  const [toggleAll, setToggleAll] = useState(undefined);
+  const [toggleAll, setToggleAll] = useState<boolean | undefined>(undefined);
 
   const SummaryRowIfExists = ({ labelKey, value }: { labelKey: string; value?: any }) => {
     return value ? (
