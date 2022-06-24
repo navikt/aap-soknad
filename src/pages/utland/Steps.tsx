@@ -12,10 +12,10 @@ import SoknadFormWrapper from '../../components/SoknadFormWrapper/SoknadFormWrap
 import SoknadUtland from '../../types/SoknadUtland';
 import * as classes from '../standard/Veiledning/Veiledning.module.css';
 import Soknad from '../../types/Soknad';
-import { useLagrePartialSoknad } from '../../hooks/useLagreSoknad';
 import { useFeatureToggleIntl } from '../../hooks/useFeatureToggleIntl';
 import { updateSøknadData, slettLagretSoknadState } from '../../context/soknadContextCommon';
 import { useSoknadContextUtland } from '../../context/soknadContextUtland';
+import { useDebounceLagreSoknad } from '../../hooks/useDebounceLagreSoknad';
 
 interface IntroductionProps {
   onSubmit: () => void;
@@ -51,7 +51,7 @@ export const StepSelectCountry = ({ onBackClick }: SelectCountryProps) => {
   });
   const { søknadState, søknadDispatch } = useSoknadContextUtland();
   const { stepList, stepWizardDispatch } = useStepWizard();
-  const lagrePartialSøknad = useLagrePartialSoknad<SoknadUtland>();
+  const debouncedLagre = useDebounceLagreSoknad<SoknadUtland>();
   const {
     control,
     handleSubmit,
@@ -65,7 +65,7 @@ export const StepSelectCountry = ({ onBackClick }: SelectCountryProps) => {
   });
   const allFields = watch();
   useEffect(() => {
-    lagrePartialSøknad(søknadState, stepList, allFields);
+    debouncedLagre(søknadState, stepList, allFields);
   }, [allFields]);
   return (
     <>
@@ -112,7 +112,7 @@ export const StepSelectTravelPeriod = ({ søknad, onBackClick }: SelectTravelPer
           fromDate && yup.min(fromDate, formatMessage('utland.periode.tilDato.afterfromdate'))
       ),
   });
-  const lagrePartialSøknad = useLagrePartialSoknad<SoknadUtland>();
+  const debouncedLagre = useDebounceLagreSoknad<SoknadUtland>();
   const { søknadState, søknadDispatch } = useSoknadContextUtland();
   const { stepList, stepWizardDispatch } = useStepWizard();
   const {
@@ -129,7 +129,7 @@ export const StepSelectTravelPeriod = ({ søknad, onBackClick }: SelectTravelPer
   });
   const allFields = watch();
   useEffect(() => {
-    lagrePartialSøknad(søknadState, stepList, allFields);
+    debouncedLagre(søknadState, stepList, allFields);
   }, [allFields]);
   return (
     <SoknadFormWrapper
@@ -174,7 +174,7 @@ export const StepSummary = ({ data, onBackClick }: SummaryProps) => {
       .required(formatMessage('utland.oppsummering.bekreftelse.required'))
       .oneOf([true], formatMessage('utland.oppsummering.bekreftelse.required')),
   });
-  const lagrePartialSøknad = useLagrePartialSoknad<SoknadUtland>();
+  const debouncedLagre = useDebounceLagreSoknad<SoknadUtland>();
   const { søknadState, søknadDispatch } = useSoknadContextUtland();
   const { stepList, stepWizardDispatch } = useStepWizard();
   const {
@@ -188,7 +188,7 @@ export const StepSummary = ({ data, onBackClick }: SummaryProps) => {
   });
   const allFields = watch();
   useEffect(() => {
-    lagrePartialSøknad(søknadState, stepList, allFields);
+    debouncedLagre(søknadState, stepList, allFields);
   }, [allFields]);
 
   return (

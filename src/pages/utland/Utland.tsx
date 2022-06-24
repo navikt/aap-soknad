@@ -22,7 +22,7 @@ import {
 
 import SoknadUtland from '../../types/SoknadUtland';
 import { SøknadType } from '../../types/SoknadContext';
-import { useLagrePartialSoknad } from '../../hooks/useLagreSoknad';
+import { useDebounceLagreSoknad } from '../../hooks/useDebounceLagreSoknad';
 
 enum StepNames {
   DESTINATION = 'DESTINATION',
@@ -41,7 +41,7 @@ const Utland = (): JSX.Element => {
   const { søknadState, søknadDispatch } = useSoknadContextUtland();
   const { currentStep, stepList, stepWizardDispatch } = useStepWizard();
   const [isVeiledning, setIsVeiledning] = useState<boolean>(true);
-  const lagrePartialSøknad = useLagrePartialSoknad();
+  const debouncedLagre = useDebounceLagreSoknad();
   const { formatMessage } = useFeatureToggleIntl();
   useEffect(() => {
     const getSoknadState = async () => {
@@ -57,7 +57,7 @@ const Utland = (): JSX.Element => {
   }, []);
   useEffect(() => {
     if (søknadState?.søknad && Object.keys(søknadState?.søknad)?.length > 0) {
-      lagrePartialSøknad(søknadState, stepList, {});
+      debouncedLagre(søknadState, stepList, {});
     }
   }, [currentStep, stepList]);
   const myHandleSubmit = async () => {

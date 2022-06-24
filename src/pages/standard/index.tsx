@@ -34,7 +34,7 @@ import * as classes from './standard.module.css';
 import { format } from 'date-fns';
 import { useFeatureToggleIntl } from '../../hooks/useFeatureToggleIntl';
 import { SøknadType } from '../../types/SoknadContext';
-import { useLagrePartialSoknad } from '../../hooks/useLagreSoknad';
+import { useDebounceLagreSoknad } from '../../hooks/useDebounceLagreSoknad';
 export enum StepNames {
   VEILEDNING = 'VEILEDNING',
   STARTDATO = 'STARTDATO',
@@ -326,7 +326,7 @@ export const StandardPage = (): JSX.Element => {
   const { søknadState, søknadDispatch } = useSoknadContextStandard();
   const { oppslagDispatch, søker, fastlege } = useSokerOppslag();
   const { currentStep, stepList, stepWizardDispatch } = useStepWizard();
-  const lagrePartialSøknad = useLagrePartialSoknad();
+  const debouncedLagre = useDebounceLagreSoknad<Soknad>();
   const pageHeading = useRef(null);
   useEffect(() => {
     const getSoknadStateAndOppslag = async () => {
@@ -346,7 +346,7 @@ export const StandardPage = (): JSX.Element => {
   }, []);
   useEffect(() => {
     if (søknadState?.søknad && Object.keys(søknadState?.søknad)?.length > 0) {
-      lagrePartialSøknad(søknadState, stepList, {});
+      debouncedLagre(søknadState, stepList, {});
     }
   }, [currentStep, stepList]);
   useEffect(() => {
