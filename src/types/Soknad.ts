@@ -24,7 +24,7 @@ export type UtenlandsPeriode = {
   utenlandsId?: string;
 };
 type Yrkesskade = string;
-type Medlemskap = {
+export type Medlemskap = {
   harBoddINorgeSiste5År?: JaEllerNei;
   harArbeidetINorgeSiste5År?: JaEllerNei;
   arbeidetUtenforNorgeFørSykdom?: JaEllerNei;
