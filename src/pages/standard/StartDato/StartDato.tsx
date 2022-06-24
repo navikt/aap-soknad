@@ -132,7 +132,7 @@ const StartDato = ({ onBackClick }: Props) => {
     },
   });
   const { stepWizardDispatch } = useStepWizard();
-  const startDato = watch(STARTDATO);
+  const startDato: Date = watch(STARTDATO);
   const skalHaFerie = watch(`${FERIE}.${SKALHAFERIE}`);
   const ferieType = watch(`${FERIE}.${FERIETYPE}`);
 
@@ -145,26 +145,31 @@ const StartDato = ({ onBackClick }: Props) => {
   );
 
   useEffect(() => {
-    setValue(`${FERIE}.${FERIETYPE}`, undefined);
-  }, [skalHaFerie]);
+    console.log({ skalHaFerie, fraState: søknadState?.søknad?.ferie?.skalHaFerie });
+    if (skalHaFerie !== søknadState?.søknad?.ferie?.skalHaFerie) {
+      setValue(`${FERIE}.${FERIETYPE}`, undefined);
+    }
+  }, [skalHaFerie, søknadState]);
   useEffect(() => {
     setValue(`${FERIE}.fraDato`, undefined);
     setValue(`${FERIE}.tilDato`, undefined);
     setValue(`${FERIE}.antallDager`, undefined);
   }, [ferieType]);
   useEffect(() => {
-    const startDatoType = getStartDatoType(new Date(startDato));
-    if (startDatoType !== 'I_DAG') {
-      setValue(HVORFOR, undefined);
-      setValue(BEGRUNNELSE, undefined);
-    } else {
-      setValue(`${FERIE}.${FERIETYPE}`, undefined);
-      setValue(`${FERIE}.${SKALHAFERIE}`, undefined);
-      setValue(`${FERIE}.fraDato`, undefined);
-      setValue(`${FERIE}.tilDato`, undefined);
-      setValue(`${FERIE}.antallDager`, undefined);
+    if (startDato.toISOString() !== søknadState?.søknad?.startDato?.toISOString()) {
+      const startDatoType = getStartDatoType(new Date(startDato));
+      if (startDatoType !== 'I_DAG') {
+        setValue(HVORFOR, undefined);
+        setValue(BEGRUNNELSE, undefined);
+      } else {
+        setValue(`${FERIE}.${FERIETYPE}`, undefined);
+        setValue(`${FERIE}.${SKALHAFERIE}`, undefined);
+        setValue(`${FERIE}.fraDato`, undefined);
+        setValue(`${FERIE}.tilDato`, undefined);
+        setValue(`${FERIE}.antallDager`, undefined);
+      }
+      setTidspunktStartDato(startDatoType);
     }
-    setTidspunktStartDato(startDatoType);
   }, [startDato]);
 
   return (
