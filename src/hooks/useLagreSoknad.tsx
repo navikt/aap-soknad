@@ -1,13 +1,14 @@
-import { useState } from 'react';
-import { SoknadContextState } from '../context/soknadContext';
+import { useEffect, useState } from 'react';
 import { StepType } from '../components/StepWizard/Step';
 import { fetchPOST } from '../api/fetch';
 import { GenericSoknadContextState } from '../types/SoknadContext';
 
 export function useLagrePartialSoknad<SoknadStateType>() {
-  const [lastPayload, setLastPayload] = useState<SoknadContextState>();
-
-  const lagreSøknad = async (payload: SoknadContextState) => {
+  const [lastPayload, setLastPayload] = useState<GenericSoknadContextState<SoknadStateType>>();
+  useEffect(() => console.log('lastPayload Updated', lastPayload), [lastPayload]);
+  const lagreSøknad = async (payload: GenericSoknadContextState<SoknadStateType>) => {
+    console.log('payload', payload);
+    console.log('prevpayload', lastPayload);
     if (equalPayLoads(payload, lastPayload)) {
       console.log('duplicate payloads');
       return Promise.resolve();
@@ -22,7 +23,7 @@ export function useLagrePartialSoknad<SoknadStateType>() {
     partialSøknad: any
   ) => {
     if (state?.type && partialSøknad && Object.keys(partialSøknad)?.length > 0) {
-      const payload: SoknadContextState = {
+      const payload: GenericSoknadContextState<SoknadStateType> = {
         ...state,
         søknad: { ...state.søknad, ...partialSøknad },
         lagretStepList: stepList,

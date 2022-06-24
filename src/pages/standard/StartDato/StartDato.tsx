@@ -18,6 +18,7 @@ import { LucaGuidePanel } from '../../../components/LucaGuidePanel';
 import { useFeatureToggleIntl } from '../../../hooks/useFeatureToggleIntl';
 import { useSoknadContextStandard } from '../../../context/soknadContextStandard';
 import { slettLagretSoknadState, updateSøknadData } from '../../../context/soknadContextCommon';
+import { useLagrePartialSoknad } from '../../../hooks/useLagreSoknad';
 
 const STARTDATO = 'startDato';
 const FERIE = 'ferie';
@@ -118,6 +119,8 @@ const StartDato = ({ onBackClick }: Props) => {
     'FORTID' | 'I_DAG' | 'FREMTID' | undefined
   >(undefined);
   const { søknadState, søknadDispatch } = useSoknadContextStandard();
+  const { stepList, stepWizardDispatch } = useStepWizard();
+  const lagrePartialSøknad = useLagrePartialSoknad();
   const {
     control,
     handleSubmit,
@@ -133,7 +136,10 @@ const StartDato = ({ onBackClick }: Props) => {
       ferie: søknadState?.søknad?.ferie,
     },
   });
-  const { stepWizardDispatch } = useStepWizard();
+  const allFields = watch();
+  useEffect(() => {
+    lagrePartialSøknad(søknadState, stepList, allFields);
+  }, [allFields]);
   const startDato: Date = watch(STARTDATO);
   const skalHaFerie = watch(`${FERIE}.${SKALHAFERIE}`);
   const ferieType = watch(`${FERIE}.${FERIETYPE}`);

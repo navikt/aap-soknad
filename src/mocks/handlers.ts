@@ -20,6 +20,9 @@ export const handlers = [
   rest.post('/aap/soknad-api/buckets/lagre/UTLAND', (req, res, ctx) => {
     return res(ctx.status(200), ctx.delay(100), ctx.json({}));
   }),
+  rest.post('/aap/soknad-api/buckets/lagre/HOVED', (req, res, ctx) => {
+    return res(ctx.status(200), ctx.delay(100), ctx.json({}));
+  }),
 
   rest.get('/aap/soknad-api/buckets/les/UTLAND', (req, res, ctx) => {
     return res(

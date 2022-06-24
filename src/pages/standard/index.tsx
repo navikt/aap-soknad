@@ -10,7 +10,7 @@ import {
   setStepList,
 } from '../../context/stepWizardContextV2';
 import Soknad from '../../types/Soknad';
-import { slettLagretSoknadState } from '../../context/soknadContextCommon';
+import { hentSoknadState, slettLagretSoknadState } from '../../context/soknadContextCommon';
 import { useSoknadContextStandard, addBarnIfMissing } from '../../context/soknadContextStandard';
 import { Veiledning } from './Veiledning/Veiledning';
 import { FastlegeView, hentSokerOppslag, useSokerOppslag } from '../../context/sokerOppslagContext';
@@ -33,6 +33,8 @@ import { fetchPOST } from '../../api/fetch';
 import * as classes from './standard.module.css';
 import { format } from 'date-fns';
 import { useFeatureToggleIntl } from '../../hooks/useFeatureToggleIntl';
+import { SøknadType } from '../../types/SoknadContext';
+import { useLagrePartialSoknad } from '../../hooks/useLagreSoknad';
 export enum StepNames {
   VEILEDNING = 'VEILEDNING',
   STARTDATO = 'STARTDATO',
@@ -323,25 +325,30 @@ export const StandardPage = (): JSX.Element => {
   const [showKvittering, setShowKvittering] = useState<boolean>(false);
   const { søknadState, søknadDispatch } = useSoknadContextStandard();
   const { oppslagDispatch, søker, fastlege } = useSokerOppslag();
-  const { currentStep, stepWizardDispatch } = useStepWizard();
+  const { currentStep, stepList, stepWizardDispatch } = useStepWizard();
+  const lagrePartialSøknad = useLagrePartialSoknad();
   const pageHeading = useRef(null);
   useEffect(() => {
     const getSoknadStateAndOppslag = async () => {
       // Wait to test cache
-      // const cachedState = await hentSoknadState(søknadDispatch, SøknadType.HOVED);
-      // if (cachedState?.lagretStepList) {
-      //   setShowVeiledning(false);
-      //   setStepList([...cachedState.lagretStepList], stepWizardDispatch);
-      // } else {
-      //   setStepList([...defaultStepList], stepWizardDispatch);
-      // }
-      setStepList([...defaultStepList], stepWizardDispatch);
+      const cachedState = await hentSoknadState<Soknad>(søknadDispatch, SøknadType.HOVED);
+      if (cachedState?.lagretStepList && cachedState?.lagretStepList?.length > 0) {
+        setShowVeiledning(false);
+        setStepList([...cachedState.lagretStepList], stepWizardDispatch);
+      } else {
+        setStepList([...defaultStepList], stepWizardDispatch);
+      }
       const oppslag = await hentSokerOppslag(oppslagDispatch);
       setOppslagLoading(false);
       if (oppslag?.søker?.barn) addBarnIfMissing(søknadDispatch, oppslag.søker.barn);
     };
     getSoknadStateAndOppslag();
   }, []);
+  useEffect(() => {
+    if (søknadState?.søknad && Object.keys(søknadState?.søknad)?.length > 0) {
+      lagrePartialSøknad(søknadState, stepList, {});
+    }
+  }, [currentStep, stepList]);
   useEffect(() => {
     window && window.scrollTo(0, 0);
     if (pageHeading?.current != null) (pageHeading?.current as HTMLElement)?.focus();
@@ -415,69 +422,36 @@ export const StandardPage = (): JSX.Element => {
       </header>
       <StepWizard hideLabels={true}>
         <Step order={1} name={StepNames.STARTDATO}>
-          <StartDato
-            onCancelClick={onDeleteSøknad}
-            onBackClick={onPreviousStep}
-            søknad={søknadState?.søknad}
-          />
+          <StartDato onCancelClick={onDeleteSøknad} onBackClick={onPreviousStep} />
         </Step>
         <Step order={2} name={StepNames.MEDLEMSKAP}>
-          <Medlemskap
-            onCancelClick={onDeleteSøknad}
-            onBackClick={onPreviousStep}
-            søknad={søknadState?.søknad}
-          />
+          <Medlemskap onCancelClick={onDeleteSøknad} onBackClick={onPreviousStep} />
         </Step>
         <Step order={3} name={StepNames.YRKESSKADE}>
-          <Yrkesskade
-            onCancelClick={onDeleteSøknad}
-            onBackClick={onPreviousStep}
-            søknad={søknadState?.søknad}
-          />
+          <Yrkesskade onCancelClick={onDeleteSøknad} onBackClick={onPreviousStep} />
         </Step>
 
         <Step order={4} name={StepNames.FASTLEGE}>
           <Behandlere
             onCancelClick={onDeleteSøknad}
             onBackClick={onPreviousStep}
-            søknad={søknadState?.søknad}
             fastlege={fastlege}
           />
         </Step>
         <Step order={5} name={StepNames.BARNETILLEGG}>
-          <Barnetillegg
-            onCancelClick={onDeleteSøknad}
-            onBackClick={onPreviousStep}
-            søknad={søknadState?.søknad}
-          />
+          <Barnetillegg onCancelClick={onDeleteSøknad} onBackClick={onPreviousStep} />
         </Step>
         <Step order={6} name={StepNames.STUDENT}>
-          <Student
-            onCancelClick={onDeleteSøknad}
-            onBackClick={onPreviousStep}
-            søknad={søknadState?.søknad}
-          />
+          <Student onCancelClick={onDeleteSøknad} onBackClick={onPreviousStep} />
         </Step>
         <Step order={7} name={StepNames.ANDRE_UTBETALINGER}>
-          <AndreUtbetalinger
-            onCancelClick={onDeleteSøknad}
-            onBackClick={onPreviousStep}
-            søknad={søknadState?.søknad}
-          />
+          <AndreUtbetalinger onCancelClick={onDeleteSøknad} onBackClick={onPreviousStep} />
         </Step>
         <Step order={8} name={StepNames.TILLEGGSOPPLYSNINGER}>
-          <Tilleggsopplysninger
-            onCancelClick={onDeleteSøknad}
-            onBackClick={onPreviousStep}
-            søknad={søknadState?.søknad}
-          />
+          <Tilleggsopplysninger onCancelClick={onDeleteSøknad} onBackClick={onPreviousStep} />
         </Step>
         <Step order={9} name={StepNames.VEDLEGG}>
-          <Vedlegg
-            onCancelClick={onDeleteSøknad}
-            onBackClick={onPreviousStep}
-            søknad={søknadState?.søknad}
-          />
+          <Vedlegg onCancelClick={onDeleteSøknad} onBackClick={onPreviousStep} />
         </Step>
         <Step order={10} name={StepNames.OPPSUMMERING}>
           <Oppsummering

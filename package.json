@@ -72,7 +72,7 @@
     "lint": "yarn lint:jsts",
     "lint:jsts": "npx eslint .",
     "test": "jest",
-    "testtest": "jest Student.test.tsx",
+    "testtest": "jest StepWizard.test.tsx",
     "cypress:run": "cypress run",
     "cypress:open": "cypress open",
     "next:dev": "next dev",
