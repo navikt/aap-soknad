@@ -45,10 +45,8 @@ interface Props {
   onCancelClick: () => void;
 }
 
-const StartDato = ({ onBackClick }: Props) => {
-  const { formatMessage } = useFeatureToggleIntl();
-
-  const schema = yup.object().shape({
+export const getSchema = (formatMessage: (id: string) => string) => {
+  return yup.object().shape({
     [STARTDATO]: yup
       .date()
       .required(formatMessage('søknad.startDato.startDato.validation.required'))
@@ -111,6 +109,10 @@ const StartDato = ({ onBackClick }: Props) => {
       }),
     }),
   });
+};
+
+const StartDato = ({ onBackClick }: Props) => {
+  const { formatMessage } = useFeatureToggleIntl();
 
   const [tidspunktStartDato, setTidspunktStartDato] = useState<
     'FORTID' | 'I_DAG' | 'FREMTID' | undefined
@@ -123,7 +125,7 @@ const StartDato = ({ onBackClick }: Props) => {
     setValue,
     formState: { errors },
   } = useForm<FieldValues>({
-    resolver: yupResolver(schema),
+    resolver: yupResolver(getSchema(formatMessage)),
     defaultValues: {
       startDato: søknadState?.søknad?.startDato,
       hvorfor: søknadState?.søknad?.hvorfor,

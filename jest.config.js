@@ -8,7 +8,7 @@ module.exports = {
     // TODO: Fiks tester
     'src/pages/standard/Student',
     'src/pages/standard/Veiledning/',
-    'src/pages/standard/StartDato/',
+    'src/pages/standard/StartDato/StartDato.test.tsx',
     'src/pages/standard/Yrkesskade/',
     'src/components/schema/',
   ],
