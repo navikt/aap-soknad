@@ -138,7 +138,7 @@ const StartDato = ({ onBackClick }: Props) => {
   useEffect(() => {
     lagrePartialSøknad(søknadState, stepList, allFields);
   }, [allFields]);
-  const startDato = watch(STARTDATO);
+  const startDato: Date = watch(STARTDATO);
   const skalHaFerie = watch(`${FERIE}.${SKALHAFERIE}`);
   const ferieType = watch(`${FERIE}.${FERIETYPE}`);
 
@@ -151,27 +151,34 @@ const StartDato = ({ onBackClick }: Props) => {
   );
 
   useEffect(() => {
-    setValue(`${FERIE}.${FERIETYPE}`, undefined);
-  }, [skalHaFerie]);
-  useEffect(() => {
-    setValue(`${FERIE}.fraDato`, undefined);
-    setValue(`${FERIE}.tilDato`, undefined);
-    setValue(`${FERIE}.antallDager`, undefined);
-  }, [ferieType]);
-  useEffect(() => {
-    const startDatoType = getStartDatoType(new Date(startDato));
-    if (startDatoType !== 'I_DAG') {
-      setValue(HVORFOR, undefined);
-      setValue(BEGRUNNELSE, undefined);
-    } else {
+    if (skalHaFerie !== søknadState?.søknad?.ferie?.skalHaFerie) {
       setValue(`${FERIE}.${FERIETYPE}`, undefined);
-      setValue(`${FERIE}.${SKALHAFERIE}`, undefined);
+    }
+  }, [skalHaFerie, søknadState]);
+  useEffect(() => {
+    if (ferieType !== søknadState?.søknad?.ferie?.ferieType) {
       setValue(`${FERIE}.fraDato`, undefined);
       setValue(`${FERIE}.tilDato`, undefined);
       setValue(`${FERIE}.antallDager`, undefined);
     }
-    setTidspunktStartDato(startDatoType);
-  }, [startDato]);
+  }, [ferieType, søknadState]);
+  useEffect(() => {
+    if (startDato?.toISOString() !== søknadState?.søknad?.startDato?.toISOString()) {
+      console.log('not equal, will reset');
+      const startDatoType = getStartDatoType(new Date(startDato));
+      if (startDatoType !== 'I_DAG') {
+        setValue(HVORFOR, undefined);
+        setValue(BEGRUNNELSE, undefined);
+      } else {
+        setValue(`${FERIE}.${FERIETYPE}`, undefined);
+        setValue(`${FERIE}.${SKALHAFERIE}`, undefined);
+        setValue(`${FERIE}.fraDato`, undefined);
+        setValue(`${FERIE}.tilDato`, undefined);
+        setValue(`${FERIE}.antallDager`, undefined);
+      }
+      setTidspunktStartDato(startDatoType);
+    }
+  }, [startDato, søknadState]);
 
   return (
     <SoknadFormWrapper

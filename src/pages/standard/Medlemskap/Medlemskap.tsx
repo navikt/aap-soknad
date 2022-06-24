@@ -10,7 +10,7 @@ import {
   Grid,
 } from '@navikt/ds-react';
 import React, { useState, useEffect, useMemo } from 'react';
-import { FieldValues, useFieldArray, useForm } from 'react-hook-form';
+import { useFieldArray, useForm } from 'react-hook-form';
 import { JaEllerNei, JaNeiVetIkke } from '../../../types/Generic';
 import { Add, Delete } from '@navikt/ds-icons';
 import UtenlandsPeriodeVelger, {
@@ -18,7 +18,7 @@ import UtenlandsPeriodeVelger, {
 } from '..//UtenlandsPeriodeVelger/UtenlandsPeriodeVelger';
 import { formatDate } from '../../../utils/date';
 import RadioGroupWrapper from '../../../components/input/RadioGroupWrapper/RadioGroupWrapper';
-import Soknad from '../../../types/Soknad';
+import Soknad, { Medlemskap as MedlemskapType } from '../../../types/Soknad';
 import { completeAndGoToNextStep, useStepWizard } from '../../../context/stepWizardContextV2';
 import SoknadFormWrapper from '../../../components/SoknadFormWrapper/SoknadFormWrapper';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -35,19 +35,19 @@ interface Props {
 }
 const UTENLANDSOPPHOLD = 'utenlandsOpphold';
 const BODD_I_NORGE = 'harBoddINorgeSiste5År';
-const ARBEID_UTENFOR_NORGE_FØR_SYKDOM = 'arbeidUtenforNorge';
+const ARBEID_UTENFOR_NORGE_FØR_SYKDOM = 'arbeidetUtenforNorgeFørSykdom';
 const OGSÅ_ARBEID_UTENFOR_NORGE = 'iTilleggArbeidUtenforNorge';
 const ARBEID_I_NORGE = 'harArbeidetINorgeSiste5År';
 const MEDLEMSKAP = 'medlemskap';
-const validateArbeidINorge = (boddINorge: JaEllerNei) => boddINorge === JaEllerNei.NEI;
-const validateArbeidUtenforNorgeFørSykdom = (boddINorge: JaEllerNei) =>
+const validateArbeidINorge = (boddINorge?: JaEllerNei) => boddINorge === JaEllerNei.NEI;
+const validateArbeidUtenforNorgeFørSykdom = (boddINorge?: JaEllerNei) =>
   boddINorge === JaEllerNei.JA;
-const valideOgsåArbeidetUtenforNorge = (boddINorge: JaEllerNei, JobbINorge: JaEllerNei) =>
+const valideOgsåArbeidetUtenforNorge = (boddINorge?: JaEllerNei, JobbINorge?: JaEllerNei) =>
   boddINorge === JaEllerNei.NEI && JobbINorge === JaEllerNei.JA;
 const validateUtenlandsPeriode = (
-  arbeidINorge: JaEllerNei,
-  arbeidUtenforNorge: JaEllerNei,
-  iTilleggArbeidUtenforNorge: JaEllerNei
+  arbeidINorge?: JaEllerNei,
+  arbeidUtenforNorge?: JaEllerNei,
+  iTilleggArbeidUtenforNorge?: JaEllerNei
 ) => {
   return (
     arbeidUtenforNorge === JaEllerNei.JA ||
@@ -138,11 +138,12 @@ export const Medlemskap = ({ onBackClick }: Props) => {
     setValue,
     clearErrors,
     formState: { errors },
-  } = useForm<FieldValues>({
+  } = useForm<{
+    [MEDLEMSKAP]: MedlemskapType;
+  }>({
     resolver: yupResolver(schema),
     defaultValues: {
-      [`${MEDLEMSKAP}.${UTENLANDSOPPHOLD}`]:
-        søknadState?.søknad?.medlemskap?.utenlandsOpphold || [],
+      [MEDLEMSKAP]: søknadState?.søknad?.medlemskap,
     },
   });
   const [showUtenlandsPeriodeModal, setShowUtenlandsPeriodeModal] = useState<boolean>(false);
@@ -177,12 +178,14 @@ export const Medlemskap = ({ onBackClick }: Props) => {
   }, [boddINorge, arbeidINorge]);
 
   useEffect(() => {
-    setValue(`${MEDLEMSKAP}.${ARBEID_UTENFOR_NORGE_FØR_SYKDOM}`, undefined);
-    setValue(`${MEDLEMSKAP}.${ARBEID_I_NORGE}`, undefined);
-    setValue(`${MEDLEMSKAP}.${OGSÅ_ARBEID_UTENFOR_NORGE}`, undefined);
-    clearErrors();
-    remove();
-  }, [boddINorge]);
+    if (boddINorge !== søknadState.søknad?.medlemskap?.harBoddINorgeSiste5År) {
+      setValue(`${MEDLEMSKAP}.${ARBEID_UTENFOR_NORGE_FØR_SYKDOM}`, undefined);
+      setValue(`${MEDLEMSKAP}.${ARBEID_I_NORGE}`, undefined);
+      setValue(`${MEDLEMSKAP}.${OGSÅ_ARBEID_UTENFOR_NORGE}`, undefined);
+      clearErrors();
+      remove();
+    }
+  }, [boddINorge, søknadState]);
   useEffect(() => {
     setValue(`${MEDLEMSKAP}.${OGSÅ_ARBEID_UTENFOR_NORGE}`, undefined);
     if (arbeidINorge === JaEllerNei.JA) remove();
@@ -368,8 +371,11 @@ export const Medlemskap = ({ onBackClick }: Props) => {
               </Cell>
             </Grid>
 
+            {/* TODO: react-hook-form antar at vi kun har validering på hvert enkelt field i FieldArrays */}
+            {/* @ts-ignore-line */}
             {errors?.[MEDLEMSKAP]?.[UTENLANDSOPPHOLD]?.message && (
               <div className={'navds-error-message navds-error-message--medium navds-label'}>
+                {/* @ts-ignore-line*/}
                 {errors?.[MEDLEMSKAP]?.[UTENLANDSOPPHOLD]?.message}
               </div>
             )}
