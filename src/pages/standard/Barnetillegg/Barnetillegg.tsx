@@ -3,7 +3,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { FieldValues, useFieldArray, useForm } from 'react-hook-form';
 import RadioGroupWrapper from '../../../components/input/RadioGroupWrapper/RadioGroupWrapper';
 import { JaEllerNei } from '../../../types/Generic';
-import Soknad from '../../../types/Soknad';
+import Soknad, { Barn, ManuelleBarn } from '../../../types/Soknad';
 import * as classes from './Barnetillegg.module.css';
 import { Add } from '@navikt/ds-icons';
 import {
@@ -69,7 +69,10 @@ export const Barnetillegg = ({ onBackClick }: Props) => {
     handleSubmit,
     formState: { errors },
     watch,
-  } = useForm<FieldValues>({
+  } = useForm<{
+    [BARNETILLEGG]: Array<Barn>;
+    [MANUELLE_BARN]: Array<ManuelleBarn>;
+  }>({
     resolver: yupResolver(schema),
     defaultValues: {
       [BARNETILLEGG]: søknadState?.søknad?.barnetillegg,
@@ -135,11 +138,10 @@ export const Barnetillegg = ({ onBackClick }: Props) => {
     setSelectedBarnIndex(index);
     setShowModal(true);
   };
-  const saveNyttBarn = (barn) => {
+  const saveNyttBarn = (barn: ManuelleBarn) => {
     if (selectedBarn === undefined) {
       manuelleBarnAppend({
         ...barn,
-        manueltOpprettet: true,
       });
       addRequiredVedlegg(
         [
@@ -150,11 +152,9 @@ export const Barnetillegg = ({ onBackClick }: Props) => {
         ],
         vedleggDispatch
       );
-    } else {
-      const gammeltBarn = manuelleBarnFields[selectedBarnIndex];
+    } else if (selectedBarnIndex !== undefined) {
       manuelleBarnUpdate(selectedBarnIndex, {
         ...barn,
-        manueltOpprettet: gammeltBarn?.manueltOpprettet,
       });
     }
     setShowModal(false);
@@ -316,7 +316,7 @@ export const Barnetillegg = ({ onBackClick }: Props) => {
                       </BodyShort>
                     )}
                     <Grid>
-                      <Cell xs={4} md="12">
+                      <Cell xs={4} md={12}>
                         <Button
                           variant="tertiary"
                           type="button"
@@ -334,7 +334,7 @@ export const Barnetillegg = ({ onBackClick }: Props) => {
         )}
         <BodyShort>{formatMessage('søknad.barnetillegg.leggTilBarn.description')}</BodyShort>
         <Grid>
-          <Cell xs={12} md="6">
+          <Cell xs={12} md={6}>
             <Button
               variant="tertiary"
               type="button"
@@ -369,11 +369,13 @@ export const Barnetillegg = ({ onBackClick }: Props) => {
         onCloseClick={() => setShowModal(false)}
         onSaveClick={saveNyttBarn}
         onDeleteClick={() => {
-          const barn = manuelleBarnFields[selectedBarnIndex];
-          removeRequiredVedlegg(`barn-${barn?.fnr}`, vedleggDispatch);
-          manuelleBarnRemove(selectedBarnIndex);
+          if (selectedBarnIndex != undefined) {
+            const barn = manuelleBarnFields[selectedBarnIndex];
+            removeRequiredVedlegg(`barn-${barn?.fnr}`, vedleggDispatch);
+            manuelleBarnRemove(selectedBarnIndex);
 
-          setShowModal(false);
+            setShowModal(false);
+          }
         }}
         showModal={showModal}
         barn={selectedBarn}
