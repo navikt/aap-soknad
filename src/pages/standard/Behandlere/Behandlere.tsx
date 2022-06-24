@@ -1,9 +1,9 @@
 import { Label, BodyLong, BodyShort, Button, Heading, ReadMore } from '@navikt/ds-react';
 import React, { useMemo, useState } from 'react';
-import { FieldValues, useFieldArray, useForm } from 'react-hook-form';
+import { useFieldArray, useForm } from 'react-hook-form';
 import { FastlegeView } from '../../../context/sokerOppslagContext';
 import { Add } from '@navikt/ds-icons';
-import Soknad from '../../../types/Soknad';
+import Soknad, { Behandler } from '../../../types/Soknad';
 import * as yup from 'yup';
 import { completeAndGoToNextStep, useStepWizard } from '../../../context/stepWizardContextV2';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -32,7 +32,7 @@ export const Behandlere = ({ onBackClick, fastlege }: Props) => {
     control,
     handleSubmit,
     formState: { errors },
-  } = useForm<FieldValues>({
+  } = useForm<{ [BEHANDLERE]: Array<Behandler> }>({
     resolver: yupResolver(schema),
     defaultValues: {
       [BEHANDLERE]: søknadState?.søknad?.behandlere,
@@ -57,15 +57,16 @@ export const Behandlere = ({ onBackClick, fastlege }: Props) => {
     setSelectedBehandlerIndex(index);
     setShowModal(true);
   };
-  const saveNyBehandler = (behandler) => {
+  const saveNyBehandler = (behandler: Behandler) => {
     if (selectedBehandler === undefined) {
       append({
         ...behandler,
       });
     } else {
-      update(selectedBehandlerIndex, {
-        ...behandler,
-      });
+      if (selectedBehandlerIndex)
+        update(selectedBehandlerIndex, {
+          ...behandler,
+        });
     }
     setShowModal(false);
   };
