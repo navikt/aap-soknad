@@ -128,13 +128,13 @@ interface SøknadBackendState {
   studier: {
     erStudent?: 'JA' | 'NEI' | 'AVBRUTT';
     kommeTilbake?: 'JA' | 'NEI' | 'VET_IKKE';
-    vedlegg?: string;
+    vedlegg?: Array<string>;
   };
   behandlere: Array<Behandler>;
   yrkesskadeType?: 'JA' | 'NEI' | 'VET_IKKE';
   utbetalinger: {
     fraArbeidsgiver?: boolean;
-    andreStønader: Array<{ type: StønadType; hvemUtbetalerAFP?: string; vedlegg?: string }>;
+    andreStønader: Array<{ type: StønadType; hvemUtbetalerAFP?: string; vedlegg?: Array<string> }>;
   };
   registrerteBarn: Array<{
     fnr: string;
@@ -259,7 +259,7 @@ const mapSøknadToBackend = (søknad?: Soknad, fastlege?: FastlegeView): Søknad
       erStudent: getJaNeiAvbrutt(søknad?.student?.erStudent),
       kommeTilbake: getJaNeiVetIkke(søknad?.student?.kommeTilbake),
       ...(søknad?.vedlegg?.[AVBRUTT_STUDIE_VEDLEGG]?.[0]?.id
-        ? { vedlegg: søknad?.vedlegg?.[AVBRUTT_STUDIE_VEDLEGG]?.[0]?.id }
+        ? { vedlegg: søknad?.vedlegg?.[AVBRUTT_STUDIE_VEDLEGG]?.map((vedlegg) => vedlegg.id) ?? [] }
         : {}),
     },
     behandlere,
@@ -269,7 +269,10 @@ const mapSøknadToBackend = (søknad?: Soknad, fastlege?: FastlegeView): Søknad
         ? {
             ekstraFraArbeidsgiver: {
               fraArbeidsgiver: jaNeiToBoolean(søknad?.andreUtbetalinger?.lønn),
-              vedlegg: søknad?.vedlegg?.[AttachmentType.LØNN_OG_ANDRE_GODER]?.[0]?.id,
+              vedlegg:
+                søknad?.vedlegg?.[AttachmentType.LØNN_OG_ANDRE_GODER]?.map(
+                  (vedlegg) => vedlegg.id
+                ) ?? [],
             },
           }
         : {}),
@@ -284,12 +287,16 @@ const mapSøknadToBackend = (søknad?: Soknad, fastlege?: FastlegeView): Søknad
             case StønadType.OMSORGSSTØNAD:
               return {
                 type: stønad,
-                vedlegg: søknad?.vedlegg?.[AttachmentType.OMSORGSSTØNAD]?.[0]?.id,
+                vedlegg:
+                  søknad?.vedlegg?.[AttachmentType.OMSORGSSTØNAD]?.map((vedlegg) => vedlegg.id) ??
+                  [],
               };
             case StønadType.UTLAND:
               return {
                 type: stønad,
-                vedlegg: søknad?.vedlegg?.[AttachmentType.UTLANDSSTØNAD]?.[0]?.id,
+                vedlegg:
+                  søknad?.vedlegg?.[AttachmentType.UTLANDSSTØNAD]?.map((vedlegg) => vedlegg.id) ??
+                  [],
               };
             default:
               return { type: stønad };
