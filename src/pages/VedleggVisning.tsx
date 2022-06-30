@@ -6,7 +6,7 @@ const VedleggVisning = () => {
   const { id } = useParams();
   useEffect(() => {
     const getFile = async () => {
-      const file = await fetch(`/aap/soknad-api/vedlegg/les/${id}`);
+      const file = await fetch(`/aap/soknad-api/vedlegg/les/${id}`).then((res) => res.formData());
       console.log('file', file);
       file && setFile(file);
     };

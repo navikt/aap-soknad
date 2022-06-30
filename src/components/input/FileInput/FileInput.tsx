@@ -72,7 +72,9 @@ const FileInput = ({ fields, append, remove, heading, ingress }: Props) => {
                 <FileSuccess color={'var(--navds-semantic-color-feedback-success-icon)'} />
               </div>
               <div>
-                <Link href={`/aap/vedleggvisning/${attachment?.id}`}>{attachment?.name}</Link>
+                <Link target={'_blank'} href={`/aap/vedleggvisning/${attachment?.id}`}>
+                  {attachment?.name}
+                </Link>
                 <Detail>{attachment?.size}</Detail>
               </div>
             </div>
