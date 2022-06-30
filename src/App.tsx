@@ -35,6 +35,7 @@ function flattenMessages(nestedMessages: object, prefix = '') {
 }
 import links from './translations/links.json';
 import messagesNb from './translations/nb.json';
+import VedleggVisning from './pages/VedleggVisning';
 type Locale = 'nb' | 'en';
 type Messages = {
   [K in Locale]?: { [name: string]: string };
@@ -78,6 +79,7 @@ const App = (): JSX.Element => {
                   <Routes>
                     <Route path="/aap/utland" element={<UtlandWithContext />} />
                     <Route path="/aap/standard" element={<StandardWithContext />} />
+                    <Route path="/aap/vedleggvisning/:id" element={<VedleggVisning />} />
                     <Route
                       path="*"
                       element={

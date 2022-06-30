@@ -27,11 +27,21 @@
   column-gap: 10px;
 }
 .deleteAttachment {
-  color: var(--navds-global-color-nav-red);
+  border:none;
+  background-color:transparent;
+  outline:none;
+  cursor: pointer;
+  color: var(--navds-link-color-icon);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+}
+.deleteAttachment:hover {
+  border: 2px solid var(--navds-link-color-icon);
+}
+.deleteAttachment:focus {
+  border: 2px solid var(--navds-link-color-icon);
 }
 .fileSuccess {
   display: flex;

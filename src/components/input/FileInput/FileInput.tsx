@@ -1,4 +1,4 @@
-import { BodyShort, Detail, Heading, Label, Loader, Panel } from '@navikt/ds-react';
+import { Link, BodyShort, Detail, Heading, Loader, Panel } from '@navikt/ds-react';
 import React, { DragEventHandler, useRef, useState } from 'react';
 import SvgUpload from '@navikt/ds-icons/esm/Upload';
 import * as classes from './FileInput.module.css';
@@ -44,6 +44,7 @@ const FileInput = ({ fields, append, remove, heading, ingress }: Props) => {
     const data = new FormData();
     data.append('vedlegg', file);
     setLoading(true);
+    console.log('data', JSON.stringify(Object.fromEntries(data)));
     const vedlegg = await fetch('/aap/soknad-api/vedlegg/lagre', {
       method: 'POST',
       body: data,
@@ -71,25 +72,28 @@ const FileInput = ({ fields, append, remove, heading, ingress }: Props) => {
                 <FileSuccess color={'var(--navds-semantic-color-feedback-success-icon)'} />
               </div>
               <div>
-                <Label>{attachment?.name}</Label>
+                <Link href={`/aap/vedleggvisning/${attachment?.id}`}>{attachment?.name}</Link>
                 <Detail>{attachment?.size}</Detail>
               </div>
             </div>
-            <div className={classes?.deleteAttachment}>
-              <Delete
-                color={'var(--navds-global-color-nav-red)'}
-                title={'Slett'}
-                onClick={() => remove(index)}
-                role={'button'}
-                tabIndex={0}
-                onKeyPress={(event) => {
-                  if (event.key === 'Enter') {
-                    remove(index);
-                  }
-                }}
-              />
+            <button
+              type={'button'}
+              onClick={() =>
+                fetch(`/aap/soknad-api/vedlegg/slett/${attachment?.id}`, {
+                  method: 'DELETE',
+                }).then(() => remove(index))
+              }
+              tabIndex={0}
+              onKeyPress={(event) => {
+                if (event.key === 'Enter') {
+                  remove(index);
+                }
+              }}
+              className={classes?.deleteAttachment}
+            >
+              <Delete title={'Slett'} />
               <BodyShort>{'Slett'}</BodyShort>
-            </div>
+            </button>
           </Panel>
         );
       })}

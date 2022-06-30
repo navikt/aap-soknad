@@ -20,7 +20,7 @@ export const handlers = [
   rest.post('/aap/soknad-api/buckets/lagre/UTLAND', (req, res, ctx) => {
     return res(ctx.status(200), ctx.delay(100), ctx.json({}));
   }),
-  rest.post('/aap/soknad-api/buckets/lagre/HOVED', (req, res, ctx) => {
+  rest.post('/aap/soknad-api/buckets/lagre/STANDARD', (req, res, ctx) => {
     return res(ctx.status(200), ctx.delay(100), ctx.json({}));
   }),
 
@@ -62,7 +62,7 @@ export const handlers = [
     // return res(ctx.status(500), ctx.json({ ok: false }), ctx.delay(3000));
   }),
 
-  rest.get('/aap/soknad-api/buckets/les/HOVED', (req, res, ctx) => {
+  rest.get('/aap/soknad-api/buckets/les/STANDARD', (req, res, ctx) => {
     return res(
       ctx.status(200),
       ctx.delay(100),
@@ -113,7 +113,7 @@ export const handlers = [
       // })
     );
   }),
-  rest.delete('/aap/soknad-api/buckets/slett/HOVED', (req, res, ctx) => {
+  rest.delete('/aap/soknad-api/buckets/slett/STANDARD', (req, res, ctx) => {
     return res(ctx.status(200), ctx.json({ ok: true }), ctx.delay(3000));
     // return res(ctx.status(500), ctx.json({ ok: false }), ctx.delay(3000));
   }),
