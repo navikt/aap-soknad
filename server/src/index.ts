@@ -6,7 +6,6 @@ import config from './config';
 import { getHtmlWithDecorator } from './dekorator';
 import { tokenXProxy } from './apiProxy';
 import { LogError, LogInfo } from './logger';
-import { loginserviceCallback } from './auth/loginservice';
 import { enforceIDPortenAuthenticationMiddleware } from './auth/middleware';
 import { logClientError } from './clientLogger';
 
@@ -37,9 +36,6 @@ const startServer = () => {
     [`${config.BASE_PATH}/internal/isAlive`, `${config.BASE_PATH}/internal/isReady`],
     (req: any, res: any) => res.sendStatus(200)
   );
-
-  // Callback from loginservice, get originalUrl from cookie
-  server.use(`${config.BASE_PATH}/loginservice`, loginserviceCallback);
 
   // Enforce idporten authentication
   server.use(`${config.BASE_PATH}/*`, enforceIDPortenAuthenticationMiddleware);

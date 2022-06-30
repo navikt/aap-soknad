@@ -1,5 +1,4 @@
 import { NextFunction, Request, Response } from 'express';
-import { redirectToLoginservice } from './loginservice';
 import { validerToken } from './idporten';
 import { LogError } from '../logger';
 
@@ -10,14 +9,10 @@ export const enforceIDPortenAuthenticationMiddleware = async function (
 ) {
   const loginPath = `/oauth2/login?redirect=${req.originalUrl}/`;
   const { authorization } = req.headers;
-  const selvbetjeningIdtoken = req.cookies['selvbetjening-idtoken'];
 
   // Not logged in - log in with wonderwall
   if (!authorization) {
     res.redirect(loginPath);
-    // Log in with loginservice (for decorator)
-  } else if (!selvbetjeningIdtoken) {
-    redirectToLoginservice(req, res);
   } else {
     // Validate token and continue to app
     if (await validateAuthorization(authorization)) {
