@@ -12,6 +12,6 @@ const VedleggVisning = () => {
     };
     getFile();
   }, [id]);
-  return <img alt={'vedlegg'} src={URL?.createObjectURL(file)} />;
+  return file ? <img alt={'vedlegg'} src={URL?.createObjectURL(file)} /> : <></>;
 };
 export default VedleggVisning;
