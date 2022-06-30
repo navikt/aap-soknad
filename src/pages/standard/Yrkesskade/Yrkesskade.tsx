@@ -1,5 +1,5 @@
 import { FieldValues, useForm } from 'react-hook-form';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { ReadMore, BodyLong, BodyShort, Heading, Radio, Alert, Link } from '@navikt/ds-react';
 import RadioGroupWrapper from '../../../components/input/RadioGroupWrapper/RadioGroupWrapper';
 import Soknad from '../../../types/Soknad';
@@ -12,6 +12,7 @@ import { LucaGuidePanel } from '../../../components/LucaGuidePanel';
 import { useFeatureToggleIntl } from '../../../hooks/useFeatureToggleIntl';
 import { slettLagretSoknadState, updateSøknadData } from '../../../context/soknadContextCommon';
 import { useSoknadContextStandard } from '../../../context/soknadContextStandard';
+import { useDebounceLagreSoknad } from '../../../hooks/useDebounceLagreSoknad';
 
 interface Props {
   onBackClick: () => void;
@@ -30,7 +31,7 @@ export const Yrkesskade = ({ onBackClick }: Props) => {
       .nullable(),
   });
   const { søknadState, søknadDispatch } = useSoknadContextStandard();
-  const { stepWizardDispatch } = useStepWizard();
+  const { stepList, stepWizardDispatch } = useStepWizard();
   const {
     control,
     handleSubmit,
@@ -42,6 +43,11 @@ export const Yrkesskade = ({ onBackClick }: Props) => {
       [YRKESSKADE]: søknadState?.søknad?.yrkesskade,
     },
   });
+  const debouncedLagre = useDebounceLagreSoknad<Soknad>();
+  const allFields = watch();
+  useEffect(() => {
+    debouncedLagre(søknadState, stepList, allFields);
+  }, [allFields]);
   const harSkadeEllerSykdom = watch(`${YRKESSKADE}`);
   return (
     <SoknadFormWrapper

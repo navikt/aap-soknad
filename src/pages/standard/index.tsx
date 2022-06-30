@@ -338,7 +338,7 @@ export const StandardPage = (): JSX.Element => {
   useEffect(() => {
     const getSoknadStateAndOppslag = async () => {
       // Wait to test cache
-      const cachedState = await hentSoknadState<Soknad>(søknadDispatch, SøknadType.HOVED);
+      const cachedState = await hentSoknadState<Soknad>(søknadDispatch, SøknadType.STANDARD);
       if (cachedState?.lagretStepList && cachedState?.lagretStepList?.length > 0) {
         setShowVeiledning(false);
         setStepList([...cachedState.lagretStepList], stepWizardDispatch);

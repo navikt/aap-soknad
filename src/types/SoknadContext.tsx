@@ -2,7 +2,7 @@ import { StepType } from '../components/StepWizard/Step';
 
 export enum SøknadType {
   UTLAND = 'UTLAND',
-  HOVED = 'HOVED',
+  STANDARD = 'STANDARD',
 }
 export interface GenericSoknadContextState<SoknadStateType> {
   version: number;

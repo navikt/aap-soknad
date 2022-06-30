@@ -18,6 +18,7 @@ import {
 import { useFeatureToggleIntl } from '../../../hooks/useFeatureToggleIntl';
 import { slettLagretSoknadState, updateSøknadData } from '../../../context/soknadContextCommon';
 import { useSoknadContextStandard } from '../../../context/soknadContextStandard';
+import { useDebounceLagreSoknad } from '../../../hooks/useDebounceLagreSoknad';
 export const AVBRUTT_STUDIE_VEDLEGG = 'avbruttStudie';
 
 const STUDENT = 'student';
@@ -60,7 +61,7 @@ const Student = ({ onBackClick }: Props) => {
     }),
   });
   const { søknadState, søknadDispatch } = useSoknadContextStandard();
-  const { stepWizardDispatch } = useStepWizard();
+  const { stepList, stepWizardDispatch } = useStepWizard();
   const { vedleggDispatch } = useVedleggContext();
   const {
     control,
@@ -77,6 +78,11 @@ const Student = ({ onBackClick }: Props) => {
   });
 
   const erStudent = watch(`${STUDENT}.${ER_STUDENT}`);
+  const debouncedLagre = useDebounceLagreSoknad<Soknad>();
+  const allFields = watch();
+  useEffect(() => {
+    debouncedLagre(søknadState, stepList, allFields);
+  }, [allFields]);
 
   useEffect(() => {
     setValue(`${STUDENT}.${KOMME_TILBAKE}`, undefined);

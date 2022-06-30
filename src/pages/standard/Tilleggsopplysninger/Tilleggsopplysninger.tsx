@@ -1,6 +1,6 @@
 import { FieldValues, useForm } from 'react-hook-form';
 import Soknad from '../../../types/Soknad';
-import React from 'react';
+import React, { useEffect } from 'react';
 import TextAreaWrapper from '../../../components/input/TextAreaWrapper';
 import { BodyShort, Heading } from '@navikt/ds-react';
 import { completeAndGoToNextStep, useStepWizard } from '../../../context/stepWizardContextV2';
@@ -11,6 +11,7 @@ import { LucaGuidePanel } from '../../../components/LucaGuidePanel';
 import { useFeatureToggleIntl } from '../../../hooks/useFeatureToggleIntl';
 import { slettLagretSoknadState, updateSøknadData } from '../../../context/soknadContextCommon';
 import { useSoknadContextStandard } from '../../../context/soknadContextStandard';
+import { useDebounceLagreSoknad } from '../../../hooks/useDebounceLagreSoknad';
 
 const TILLEGGSOPPLYSNINGER = 'tilleggsopplysninger';
 interface Props {
@@ -23,8 +24,9 @@ const Tilleggsopplysninger = ({ onBackClick }: Props) => {
 
   const schema = yup.object().shape({});
   const { søknadState, søknadDispatch } = useSoknadContextStandard();
-  const { stepWizardDispatch } = useStepWizard();
+  const { stepList, stepWizardDispatch } = useStepWizard();
   const {
+    watch,
     control,
     handleSubmit,
     formState: { errors },
@@ -34,6 +36,11 @@ const Tilleggsopplysninger = ({ onBackClick }: Props) => {
       [TILLEGGSOPPLYSNINGER]: søknadState?.søknad?.tilleggsopplysninger,
     },
   });
+  const debouncedLagre = useDebounceLagreSoknad<Soknad>();
+  const allFields = watch();
+  useEffect(() => {
+    debouncedLagre(søknadState, stepList, allFields);
+  }, [allFields]);
   return (
     <SoknadFormWrapper
       onNext={handleSubmit((data) => {

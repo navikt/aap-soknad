@@ -1,5 +1,5 @@
 import { Label, BodyLong, BodyShort, Button, Heading, ReadMore } from '@navikt/ds-react';
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
 import { FastlegeView } from '../../../context/sokerOppslagContext';
 import { Add } from '@navikt/ds-icons';
@@ -14,6 +14,7 @@ import * as classes from './Behandlere.module.css';
 import { useFeatureToggleIntl } from '../../../hooks/useFeatureToggleIntl';
 import { useSoknadContextStandard } from '../../../context/soknadContextStandard';
 import { slettLagretSoknadState, updateSøknadData } from '../../../context/soknadContextCommon';
+import { useDebounceLagreSoknad } from '../../../hooks/useDebounceLagreSoknad';
 
 interface Props {
   onBackClick: () => void;
@@ -27,8 +28,9 @@ export const Behandlere = ({ onBackClick, fastlege }: Props) => {
 
   const schema = yup.object().shape({});
   const { søknadState, søknadDispatch } = useSoknadContextStandard();
-  const { stepWizardDispatch } = useStepWizard();
+  const { stepList, stepWizardDispatch } = useStepWizard();
   const {
+    watch,
     control,
     handleSubmit,
     formState: { errors },
@@ -39,6 +41,11 @@ export const Behandlere = ({ onBackClick, fastlege }: Props) => {
     },
   });
 
+  const debouncedLagre = useDebounceLagreSoknad<Soknad>();
+  const allFields = watch();
+  useEffect(() => {
+    debouncedLagre(søknadState, stepList, allFields);
+  }, [allFields]);
   const [showModal, setShowModal] = useState(false);
   const [selectedBehandlerIndex, setSelectedBehandlerIndex] = useState<number | undefined>(
     undefined

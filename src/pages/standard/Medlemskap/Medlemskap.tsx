@@ -28,6 +28,7 @@ import { LucaGuidePanel } from '../../../components/LucaGuidePanel';
 import { useFeatureToggleIntl } from '../../../hooks/useFeatureToggleIntl';
 import { useSoknadContextStandard } from '../../../context/soknadContextStandard';
 import { slettLagretSoknadState, updateSøknadData } from '../../../context/soknadContextCommon';
+import { useDebounceLagreSoknad } from '../../../hooks/useDebounceLagreSoknad';
 
 interface Props {
   onBackClick: () => void;
@@ -151,7 +152,12 @@ export const Medlemskap = ({ onBackClick }: Props) => {
     name: `${MEDLEMSKAP}.${UTENLANDSOPPHOLD}`,
     control,
   });
-  const { stepWizardDispatch } = useStepWizard();
+  const { stepList, stepWizardDispatch } = useStepWizard();
+  const debouncedLagre = useDebounceLagreSoknad<Soknad>();
+  const allFields = watch();
+  useEffect(() => {
+    debouncedLagre(søknadState, stepList, allFields);
+  }, [allFields]);
   const boddINorge = watch(`${MEDLEMSKAP}.${BODD_I_NORGE}`);
   const arbeidINorge = watch(`${MEDLEMSKAP}.${ARBEID_I_NORGE}`);
   const arbeidUtenforNorge = watch(`${MEDLEMSKAP}.${ARBEID_UTENFOR_NORGE_FØR_SYKDOM}`);
@@ -176,7 +182,6 @@ export const Medlemskap = ({ onBackClick }: Props) => {
     }
     return ArbeidEllerBodd.ARBEID;
   }, [boddINorge, arbeidINorge]);
-
   useEffect(() => {
     if (boddINorge !== søknadState.søknad?.medlemskap?.harBoddINorgeSiste5År) {
       setValue(`${MEDLEMSKAP}.${ARBEID_UTENFOR_NORGE_FØR_SYKDOM}`, undefined);

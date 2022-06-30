@@ -12,7 +12,7 @@ import { OppslagBarn } from './sokerOppslagContext';
 
 const soknadContextInititalStateStandard = {
   ...soknadContextInititalState,
-  type: SøknadType.HOVED,
+  type: SøknadType.STANDARD,
 };
 
 function soknadReducerStandard(

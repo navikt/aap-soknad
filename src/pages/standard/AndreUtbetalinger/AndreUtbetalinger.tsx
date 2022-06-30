@@ -20,6 +20,7 @@ import { LucaGuidePanel } from '../../../components/LucaGuidePanel';
 import { useFeatureToggleIntl } from '../../../hooks/useFeatureToggleIntl';
 import { slettLagretSoknadState, updateSøknadData } from '../../../context/soknadContextCommon';
 import { useSoknadContextStandard } from '../../../context/soknadContextStandard';
+import { useDebounceLagreSoknad } from '../../../hooks/useDebounceLagreSoknad';
 
 interface Props {
   onBackClick: () => void;
@@ -64,7 +65,7 @@ export const AndreUtbetalinger = ({ onBackClick }: Props) => {
   });
   const { vedleggDispatch } = useVedleggContext();
   const { søknadState, søknadDispatch } = useSoknadContextStandard();
-  const { stepWizardDispatch } = useStepWizard();
+  const { stepList, stepWizardDispatch } = useStepWizard();
   const {
     control,
     handleSubmit,
@@ -78,6 +79,11 @@ export const AndreUtbetalinger = ({ onBackClick }: Props) => {
     },
   });
 
+  const debouncedLagre = useDebounceLagreSoknad<Soknad>();
+  const allFields = watch();
+  useEffect(() => {
+    debouncedLagre(søknadState, stepList, allFields);
+  }, [allFields]);
   const lønnEtterlønnEllerSluttpakke = watch(`${ANDRE_UTBETALINGER}.${LØNN}`);
   const stønadEllerVerv = watch(`${ANDRE_UTBETALINGER}.${STØNAD}`);
   const StønadAlternativer = useMemo(

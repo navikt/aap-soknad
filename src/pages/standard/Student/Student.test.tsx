@@ -3,17 +3,20 @@ import { findAllByRole, fireEvent, render, screen } from '../../../setupTests';
 import { Step, StepWizard } from '../../../components/StepWizard';
 import { JaNeiVetIkke } from '../../../types/Generic';
 import React from 'react';
-import { SoknadContext, SoknadContextData, SøknadType } from '../../../context/soknadContext';
 import Student from './Student';
 import { axe, toHaveNoViolations } from 'jest-axe';
+import Soknad from '../../../types/Soknad';
+import { SoknadContextData } from '../../../context/soknadContextCommon';
+import { SøknadType } from '../../../types/SoknadContext';
+import { SoknadContextStandard } from '../../../context/soknadContextStandard';
 expect.extend(toHaveNoViolations);
 
 const STUDENT = 'student';
 
-const soknadContext: SoknadContextData = {
+const soknadContext: SoknadContextData<Soknad> = {
   søknadState: {
     version: 1,
-    type: SøknadType.HOVED,
+    type: SøknadType.STANDARD,
   },
   søknadDispatch: () => console.log('dispatch'),
 };
@@ -26,9 +29,9 @@ const wizardContext: StepWizardContextState = {
 
 const renderWithContext = (ui: any, { ...renderOptions }: any) => {
   return render(
-    <SoknadContext.Provider value={{ ...soknadContext }}>
+    <SoknadContextStandard.Provider value={{ ...soknadContext }}>
       <StepWizardContext.Provider value={{ ...wizardContext }}>{ui}</StepWizardContext.Provider>,
-    </SoknadContext.Provider>,
+    </SoknadContextStandard.Provider>,
     renderOptions
   );
 };
