@@ -6,6 +6,7 @@ import config from './config';
 import { IncomingMessage } from 'http';
 
 const options = (targetAudience: string) => ({
+  limit: '50mb',
   parseReqBody: true,
   proxyReqOptDecorator: (options: any, req: Request) => {
     const { authorization } = req.headers;

@@ -41,11 +41,7 @@ const startServer = () => {
   server.use(`${config.BASE_PATH}/*`, enforceIDPortenAuthenticationMiddleware);
 
   // Client error logger
-  server.use(
-    `${config.BASE_PATH}/client-logger/error`,
-    express.json({ limit: '50mb' }),
-    logClientError
-  );
+  server.use(`${config.BASE_PATH}/client-logger/error`, express.json(), logClientError);
 
   // Reverse proxy to add tokenx header for api calls
   tokenXProxy(`${config.BASE_PATH}/soknad-api`, server);
