@@ -53,7 +53,7 @@ const FileInput = ({ fields, append, remove, heading, ingress }: Props) => {
     if (vedlegg.ok) {
       const id = await vedlegg.json();
       console.log(file?.name, id);
-      append({ name: file?.name, size: file?.size, id });
+      append({ name: file?.name, size: file?.size, vedleggId: id });
     }
     setDragOver(false);
   };
@@ -73,7 +73,7 @@ const FileInput = ({ fields, append, remove, heading, ingress }: Props) => {
                 <FileSuccess color={'var(--navds-semantic-color-feedback-success-icon)'} />
               </div>
               <div>
-                <Link target={'_blank'} href={`/aap/vedleggvisning/${attachment?.id}`}>
+                <Link target={'_blank'} href={`/aap/vedleggvisning/${attachment?.vedleggId}`}>
                   {attachment?.name}
                 </Link>
                 <Detail>{attachment?.size}</Detail>
