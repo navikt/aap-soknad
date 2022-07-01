@@ -44,14 +44,15 @@ const FileInput = ({ fields, append, remove, heading, ingress }: Props) => {
     const data = new FormData();
     data.append('vedlegg', file);
     setLoading(true);
-    console.log('data', JSON.stringify(Object.fromEntries(data)));
     const vedlegg = await fetch('/aap/soknad-api/vedlegg/lagre', {
       method: 'POST',
       body: data,
     });
+    console.log('body', vedlegg?.body);
     setLoading(false);
     if (vedlegg.ok) {
       const id = await vedlegg.json();
+      console.log(file?.name, id);
       append({ name: file?.name, size: file?.size, id });
     }
     setDragOver(false);
