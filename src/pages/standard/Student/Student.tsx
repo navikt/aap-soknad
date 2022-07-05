@@ -108,7 +108,10 @@ const Student = ({ onBackClick }: Props) => {
         updateSøknadData<Soknad>(søknadDispatch, data);
         completeAndGoToNextStep(stepWizardDispatch);
       })}
-      onBack={() => onBackClick()}
+      onBack={() => {
+        updateSøknadData<Soknad>(søknadDispatch, { ...søknadState.søknad });
+        onBackClick();
+      }}
       onDelete={() => slettLagretSoknadState<Soknad>(søknadDispatch, søknadState)}
       nextButtonText={'Neste steg'}
       backButtonText={'Forrige steg'}

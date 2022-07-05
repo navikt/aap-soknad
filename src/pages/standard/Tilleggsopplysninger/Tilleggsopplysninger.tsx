@@ -47,7 +47,10 @@ const Tilleggsopplysninger = ({ onBackClick }: Props) => {
         updateSøknadData<Soknad>(søknadDispatch, data);
         completeAndGoToNextStep(stepWizardDispatch);
       })}
-      onBack={() => onBackClick()}
+      onBack={() => {
+        updateSøknadData<Soknad>(søknadDispatch, { ...søknadState.søknad });
+        onBackClick();
+      }}
       onDelete={() => slettLagretSoknadState<Soknad>(søknadDispatch, søknadState)}
       nextButtonText={formatMessage('navigation.next')}
       backButtonText={formatMessage('navigation.back')}
