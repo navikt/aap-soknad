@@ -19,6 +19,13 @@
   justify-content: space-between;
   align-items: center;
 }
+.fileCard.error {
+  border: 2px solid var(--navds-semantic-color-interaction-danger-hover);
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
 .fileCardLeftContent {
   display: flex;
   flex-direction: row;
@@ -52,6 +59,16 @@
   height: 3rem;
   font-size: 1.5rem;
   background-color: var(--navds-semantic-color-feedback-success-background);
+}
+.fileError {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  width: 3rem;
+  height: 3rem;
+  font-size: 1.5rem;
+  background-color: var(--navds-semantic-color-feedback-danger-background);
 }
 .fileInput {
   padding: 2rem;

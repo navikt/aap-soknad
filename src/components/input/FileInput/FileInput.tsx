@@ -1,9 +1,16 @@
-import { Link, BodyShort, Detail, Heading, Loader, Panel } from '@navikt/ds-react';
+import { Label, Link, BodyShort, Detail, Heading, Loader, Panel } from '@navikt/ds-react';
 import React, { DragEventHandler, useRef, useState } from 'react';
 import SvgUpload from '@navikt/ds-icons/esm/Upload';
 import * as classes from './FileInput.module.css';
-import { FieldArray, FieldArrayMethodProps, FieldArrayWithId, FieldValues } from 'react-hook-form';
-import { Delete, FileSuccess } from '@navikt/ds-icons';
+import {
+  FieldArray,
+  FieldArrayMethodProps,
+  FieldArrayWithId,
+  FieldError,
+  FieldValues,
+} from 'react-hook-form';
+import { Cancel, Delete, FileError, FileSuccess } from '@navikt/ds-icons';
+import { useFeatureToggleIntl } from '../../../hooks/useFeatureToggleIntl';
 
 export interface Props {
   fields: FieldArrayWithId[];
@@ -11,16 +18,32 @@ export interface Props {
     value: Partial<FieldArray<FieldValues, any>> | Partial<FieldArray<FieldValues, any>>[],
     options?: FieldArrayMethodProps
   ) => void;
+  setError: (name: string, error: FieldError) => void;
+  clearErrors: (name?: string | string[]) => void;
   remove: (index?: number | number[] | undefined) => void;
   name: string;
   heading: string;
   ingress: string;
+  error?: string;
 }
-const FileInput = ({ fields, append, remove, heading, ingress }: Props) => {
+const FileInput = ({
+  fields,
+  append,
+  remove,
+  heading,
+  ingress,
+  name,
+  setError,
+  clearErrors,
+  error,
+}: Props) => {
+  const { formatMessage } = useFeatureToggleIntl();
   const [dragOver, setDragOver] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
+  const [filename, setFilename] = useState<string | undefined>();
   const [inputId] = useState<string>(`file-upload-input-${Math.floor(Math.random() * 100000)}`);
   const fileUploadInputElement = useRef(null);
+  const [totalUploadedBytes, setTotalUploadedBytes] = useState(0);
   const handleDragLeave: DragEventHandler<HTMLDivElement> = (e) => {
     setDragOver(false);
     return e;
@@ -40,7 +63,35 @@ const FileInput = ({ fields, append, remove, heading, ingress }: Props) => {
   const handleFiles = (fileList: FileList) => {
     Array.from(fileList).forEach(uploadFile);
   };
+  const errorText = (statusCode: number) => {
+    switch (statusCode) {
+      case 422:
+        return formatMessage('fileInputErrors.virus');
+      case 413:
+        return formatMessage('fileInputErrors.fileTooLarge');
+      case 415:
+        return formatMessage('fileInputErrors.unsupportedMediaType');
+      case 500:
+        return formatMessage('fileInputErrors.other');
+      default:
+        return '';
+    }
+  };
   const uploadFile = async (file: any) => {
+    clearErrors(name);
+    console.log('length', file);
+    if (!['image/png', 'image/jpg', 'image/jpeg', 'application/pdf'].includes(file?.type)) {
+      setFilename(file?.name);
+      setError(name, { type: 'custom', message: errorText(415) });
+      setDragOver(false);
+      return;
+    }
+    if (totalUploadedBytes + file?.size > 52428800) {
+      setFilename(file?.name);
+      setError(name, { type: 'custom', message: errorText(413) });
+      setDragOver(false);
+      return;
+    }
     const data = new FormData();
     data.append('vedlegg', file);
     setLoading(true);
@@ -48,12 +99,15 @@ const FileInput = ({ fields, append, remove, heading, ingress }: Props) => {
       method: 'POST',
       body: data,
     });
-    console.log('body', vedlegg?.body);
     setLoading(false);
     if (vedlegg.ok) {
       const id = await vedlegg.json();
       console.log(file?.name, id);
       append({ name: file?.name, size: file?.size, vedleggId: id });
+      setTotalUploadedBytes(totalUploadedBytes + file.size);
+    } else {
+      setFilename(file?.name);
+      setError(name, { type: 'custom', message: errorText(vedlegg.status) });
     }
     setDragOver(false);
   };
@@ -100,6 +154,43 @@ const FileInput = ({ fields, append, remove, heading, ingress }: Props) => {
           </Panel>
         );
       })}
+      {error && (
+        <>
+          <Panel className={`${classes?.fileCard} ${classes?.error}`} id={name} tabIndex={0}>
+            <div className={classes?.fileCardLeftContent}>
+              <div className={classes?.fileError}>
+                <FileError color={'var(--navds-semantic-color-interaction-danger-hover)'} />
+              </div>
+              <div>
+                <Label>{filename}</Label>
+              </div>
+            </div>
+            <button
+              type={'button'}
+              onClick={() => {
+                setFilename(undefined);
+                clearErrors(name);
+                // clearErrors(filename);
+              }}
+              tabIndex={0}
+              onKeyPress={(event) => {
+                if (event.key === 'Enter') {
+                  setFilename(undefined);
+                  clearErrors(name);
+                  // clearErrors(filename);
+                }
+              }}
+              className={classes?.deleteAttachment}
+            >
+              <Cancel title={'Avbryt'} />
+              <BodyShort>{'Avbryt'}</BodyShort>
+            </button>
+          </Panel>
+          <div className={'navds-error-message navds-error-message--medium navds-label'}>
+            {error}
+          </div>
+        </>
+      )}
       <div
         className={`${classes?.dropZone} ${dragOver ? classes?.dragOver : ''}`}
         onDragEnter={handleDragEnter}
@@ -122,6 +213,7 @@ const FileInput = ({ fields, append, remove, heading, ingress }: Props) => {
               className={classes?.visuallyHidden}
               tabIndex={-1}
               ref={fileUploadInputElement}
+              accept="image/*,.pdf"
             />
             <BodyShort>{'Dra og slipp'}</BodyShort>
             <BodyShort>{'eller'}</BodyShort>

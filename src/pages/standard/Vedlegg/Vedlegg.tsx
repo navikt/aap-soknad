@@ -15,6 +15,7 @@ import { AVBRUTT_STUDIE_VEDLEGG } from '../Student/Student';
 import { useFeatureToggleIntl } from '../../../hooks/useFeatureToggleIntl';
 import { slettLagretSoknadState, updateSøknadData } from '../../../context/soknadContextCommon';
 import { useSoknadContextStandard } from '../../../context/soknadContextStandard';
+import { useDebounceLagreSoknad } from '../../../hooks/useDebounceLagreSoknad';
 
 interface Props {
   onBackClick: () => void;
@@ -26,18 +27,25 @@ const VEDLEGG_OMSORGSSTØNAD = `${VEDLEGG}.${AttachmentType.OMSORGSSTØNAD}`;
 const VEDLEGG_UTLANDSSTØNAD = `${VEDLEGG}.${AttachmentType.UTLANDSSTØNAD}`;
 const VEDLEGG_BARN = `${VEDLEGG}.barn`;
 const VEDLEGG_ANNET = `${VEDLEGG}.annet`;
+const VEDLEGG_ANNET_ERROR = `${VEDLEGG}.annetError`;
+const LØNN_ERROR = 'lønnError';
+const OMSORGSSTØNAD_ERROR = 'omsorgError';
+const UTLANDSSTØNAD_ERROR = 'utlandError';
+const BARN_ERROR = 'barnError';
+const AVBRUTT_STUDIE_ERROR = 'avbruttStudieError';
 
 const Vedlegg = ({ onBackClick }: Props) => {
   const { formatMessage } = useFeatureToggleIntl();
-
   const [scanningGuideOpen, setScanningGuideOpen] = useState(false);
   const scanningGuideElement = useRef(null);
   const schema = yup.object().shape({});
-
   const { vedleggState } = useVedleggContext();
   const { søknadState, søknadDispatch } = useSoknadContextStandard();
-  const { stepWizardDispatch } = useStepWizard();
+  const { stepList, stepWizardDispatch } = useStepWizard();
   const {
+    watch,
+    clearErrors,
+    setError,
     control,
     handleSubmit,
     formState: { errors },
@@ -80,6 +88,11 @@ const Vedlegg = ({ onBackClick }: Props) => {
     name: VEDLEGG_ANNET,
     control,
   });
+  const debouncedLagre = useDebounceLagreSoknad<Soknad>();
+  const allFields = watch();
+  useEffect(() => {
+    debouncedLagre(søknadState, stepList, allFields);
+  }, [allFields]);
   return (
     <SoknadFormWrapper
       onNext={handleSubmit((data) => {
@@ -134,10 +147,13 @@ const Vedlegg = ({ onBackClick }: Props) => {
       </ReadMore>
       {vedleggState?.requiredVedlegg?.find((e) => e.type === AVBRUTT_STUDIE_VEDLEGG) && (
         <FileInput
-          name={AVBRUTT_STUDIE_VEDLEGG}
+          name={`${VEDLEGG}.${AVBRUTT_STUDIE_ERROR}`}
           fields={fieldArrayAvbruttStudie.fields}
           append={fieldArrayAvbruttStudie.append}
           remove={fieldArrayAvbruttStudie.remove}
+          error={errors?.[VEDLEGG]?.[AVBRUTT_STUDIE_ERROR]?.message}
+          setError={setError}
+          clearErrors={clearErrors}
           heading={formatMessage('søknad.student.vedlegg.name')}
           ingress={formatMessage('søknad.student.vedlegg.description')}
         />
@@ -146,52 +162,71 @@ const Vedlegg = ({ onBackClick }: Props) => {
         (e) => e.type === AttachmentType.LØNN_OG_ANDRE_GODER
       ) && (
         <FileInput
-          name={VEDLEGG_LØNN}
+          name={`${VEDLEGG}.${LØNN_ERROR}`}
           fields={fieldArrayLønn.fields}
           append={fieldArrayLønn.append}
           remove={fieldArrayLønn.remove}
+          error={errors?.[VEDLEGG]?.[LØNN_ERROR]?.message}
+          setError={setError}
+          clearErrors={clearErrors}
           heading={'Lønn og andre goder'}
           ingress={formatMessage('søknad.andreUtbetalinger.vedlegg.andreGoder')}
         />
       )}
       {vedleggState?.requiredVedlegg?.find((e) => e.type === AttachmentType.OMSORGSSTØNAD) && (
         <FileInput
-          name={VEDLEGG_OMSORGSSTØNAD}
+          name={`${VEDLEGG}.${OMSORGSSTØNAD_ERROR}`}
           fields={fieldArrayOmsorgsstønad.fields}
           append={fieldArrayOmsorgsstønad.append}
           remove={fieldArrayOmsorgsstønad.remove}
+          error={errors?.[VEDLEGG]?.[OMSORGSSTØNAD_ERROR]?.message}
+          setError={setError}
+          clearErrors={clearErrors}
           heading={formatMessage('søknad.andreUtbetalinger.stønad.values.omsorgsstønad')}
           ingress={formatMessage('søknad.andreUtbetalinger.vedlegg.omsorgsstønad')}
         />
       )}
       {vedleggState?.requiredVedlegg?.find((e) => e.type === AttachmentType.UTLANDSSTØNAD) && (
         <FileInput
-          name={VEDLEGG_UTLANDSSTØNAD}
+          name={`${VEDLEGG}.${UTLANDSSTØNAD_ERROR}`}
           fields={fieldArrayUtlandsstønad.fields}
           append={fieldArrayUtlandsstønad.append}
           remove={fieldArrayUtlandsstønad.remove}
+          error={errors?.[VEDLEGG]?.[UTLANDSSTØNAD_ERROR]?.message}
+          setError={setError}
+          clearErrors={clearErrors}
           heading={formatMessage('søknad.andreUtbetalinger.stønad.values.utland')}
           ingress={formatMessage('søknad.andreUtbetalinger.vedlegg.utlandsStønad')}
         />
       )}
       {vedleggState?.requiredVedlegg?.find((e) => e?.type?.split('-')?.[0] === 'barn') && (
         <FileInput
-          name={VEDLEGG_BARN}
+          name={`${VEDLEGG}.${BARN_ERROR}`}
           fields={fieldArrayBarn.fields}
           append={fieldArrayBarn.append}
           remove={fieldArrayBarn.remove}
+          error={errors?.[VEDLEGG]?.[BARN_ERROR]?.message}
+          setError={setError}
+          clearErrors={clearErrors}
           heading={'Barn'}
           ingress={'Fødselsattest eller bostedbevis for barn du har lagt til manuelt.'}
         />
       )}
       <FileInput
-        name={VEDLEGG}
+        name={VEDLEGG_ANNET_ERROR}
         fields={fieldArrayAnnet.fields}
-        append={fieldArrayAnnet.append}
+        append={(obj: any) => {
+          // setError(VEDLEGG_ANNET, { type: 'custom', message: 'en test' });
+          fieldArrayAnnet.append(obj);
+        }}
         remove={fieldArrayAnnet.remove}
+        error={errors?.[VEDLEGG]?.['annetError']?.message}
+        setError={setError}
+        clearErrors={clearErrors}
         heading={'Annen dokumentasjon'}
         ingress={'Hvis du har noe annet du ønsker å legge ved kan du laste det opp her'}
       />
+      <BodyShort>{errors?.[VEDLEGG_ANNET]?.message}</BodyShort>
 
       <Alert variant={'info'}>{formatMessage('søknad.vedlegg.alert.text')}</Alert>
     </SoknadFormWrapper>
