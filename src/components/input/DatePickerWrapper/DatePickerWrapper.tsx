@@ -11,15 +11,17 @@ const DatePickerWrapper = ({ name, label, control, error }: DatoVelgerProps) => 
       control={control}
       render={({ field: { name, value, onChange } }) => (
         <Datepicker
-          inputId={name}
-          inputLabel={label}
+          locale={'nb'}
+          id={name}
+          label={label}
           value={value}
+          //error={error}
           onChange={onChange}
           inputProps={{
             name: name,
             'aria-invalid': !!error,
           }}
-          calendarSettings={{ showWeekNumbers: true }}
+          calendarSettings={{ showWeekNumbers: false }}
           showYearSelector={true}
           limitations={{
             weekendsNotSelectable: false,

@@ -1,7 +1,6 @@
 import { FieldValues, useForm } from 'react-hook-form';
 import Soknad from '../../../types/Soknad';
 import React, { useEffect, useMemo, useState } from 'react';
-import DatoVelgerWrapper from '../../../components/input/DatoVelgerWrapper';
 import { Alert, BodyShort, Cell, Grid, Heading, Radio, ReadMore } from '@navikt/ds-react';
 import RadioGroupWrapper from '../../../components/input/RadioGroupWrapper/RadioGroupWrapper';
 import { JaNeiVetIkke } from '../../../types/Generic';
@@ -11,7 +10,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import SoknadFormWrapper from '../../../components/SoknadFormWrapper/SoknadFormWrapper';
 import { completeAndGoToNextStep, useStepWizard } from '../../../context/stepWizardContextV2';
-import { isFuture, isPast, isToday, subYears } from 'date-fns';
+import { format, isDate, isFuture, isPast, isToday, parse, subYears } from 'date-fns';
 import TextAreaWrapper from '../../../components/input/TextAreaWrapper';
 import { setErrorSummaryFocus } from '../../../utils/dom';
 import { LucaGuidePanel } from '../../../components/LucaGuidePanel';
@@ -19,6 +18,7 @@ import { useFeatureToggleIntl } from '../../../hooks/useFeatureToggleIntl';
 import { useSoknadContextStandard } from '../../../context/soknadContextStandard';
 import { slettLagretSoknadState, updateSøknadData } from '../../../context/soknadContextCommon';
 import { useDebounceLagreSoknad } from '../../../hooks/useDebounceLagreSoknad';
+import DatePickerWrapper from '../../../components/input/DatePickerWrapper/DatePickerWrapper';
 
 const STARTDATO = 'startDato';
 const FERIE = 'ferie';
@@ -41,6 +41,13 @@ const getStartDatoType = (startDate: Date) => {
   return 'I_DAG';
 };
 
+const formatDate = (date?: Date) => {
+  if (date) {
+    return format(date, 'yyyy-MM-dd');
+  }
+  return undefined;
+};
+
 interface Props {
   onBackClick: () => void;
   onCancelClick: () => void;
@@ -55,6 +62,7 @@ export const getSchema = (formatMessage: (id: string) => string) => {
         subYears(new Date(), 3),
         formatMessage('søknad.startDato.startDato.validation.eldreEnnTreÅr')
       )
+      .typeError('Må være en gyldig dato')
       .nullable(),
 
     [HVORFOR]: yup.string().when([STARTDATO], {
@@ -129,10 +137,14 @@ const StartDato = ({ onBackClick }: Props) => {
   } = useForm<FieldValues>({
     resolver: yupResolver(getSchema(formatMessage)),
     defaultValues: {
-      startDato: søknadState?.søknad?.startDato,
+      startDato: formatDate(søknadState?.søknad?.startDato),
       hvorfor: søknadState?.søknad?.hvorfor,
       begrunnelse: søknadState?.søknad?.begrunnelse,
-      ferie: søknadState?.søknad?.ferie,
+      ferie: {
+        ...søknadState?.søknad?.ferie,
+        fraDato: formatDate(søknadState?.søknad?.ferie?.fraDato),
+        tilDato: formatDate(søknadState?.søknad?.ferie?.tilDato),
+      },
     },
   });
   const debouncedLagre = useDebounceLagreSoknad<Soknad>();
@@ -140,7 +152,7 @@ const StartDato = ({ onBackClick }: Props) => {
   useEffect(() => {
     debouncedLagre(søknadState, stepList, allFields);
   }, [allFields]);
-  const startDato: Date = watch(STARTDATO);
+  const startDato: string = watch(STARTDATO);
   const skalHaFerie = watch(`${FERIE}.${SKALHAFERIE}`);
   const ferieType = watch(`${FERIE}.${FERIETYPE}`);
 
@@ -153,10 +165,10 @@ const StartDato = ({ onBackClick }: Props) => {
   );
 
   useEffect(() => {
-    if (skalHaFerie !== søknadState?.søknad?.ferie?.skalHaFerie) {
+    if (startDato !== formatDate(søknadState?.søknad?.startDato)) {
       setValue(`${FERIE}.${FERIETYPE}`, undefined);
     }
-  }, [skalHaFerie, søknadState]);
+  }, [startDato, søknadState]);
   useEffect(() => {
     if (ferieType !== søknadState?.søknad?.ferie?.ferieType) {
       setValue(`${FERIE}.fraDato`, undefined);
@@ -165,8 +177,7 @@ const StartDato = ({ onBackClick }: Props) => {
     }
   }, [ferieType, søknadState]);
   useEffect(() => {
-    if (startDato?.toISOString() !== søknadState?.søknad?.startDato?.toISOString()) {
-      console.log('not equal, will reset');
+    if (startDato !== formatDate(søknadState?.søknad?.startDato)) {
       const startDatoType = getStartDatoType(new Date(startDato));
       if (startDatoType !== 'I_DAG') {
         setValue(HVORFOR, undefined);
@@ -209,7 +220,7 @@ const StartDato = ({ onBackClick }: Props) => {
           {formatMessage('søknad.startDato.guide.readMore.text')}
         </ReadMore>
       </LucaGuidePanel>
-      <DatoVelgerWrapper
+      <DatePickerWrapper
         name={`${STARTDATO}`}
         label={formatMessage('søknad.startDato.startDato.label')}
         control={control}
@@ -281,16 +292,16 @@ const StartDato = ({ onBackClick }: Props) => {
               </RadioGroupWrapper>
               {ferieType === FerieType.PERIODE ? (
                 <Grid>
-                  <Cell xs={5}>
-                    <DatoVelgerWrapper
+                  <Cell xs={12} lg={5}>
+                    <DatePickerWrapper
                       name={`${FERIE}.fraDato`}
                       label={formatMessage('søknad.startDato.periode.fraDato.label')}
                       control={control}
                       error={errors?.[`${FERIE}`]?.fraDato?.message}
                     />
                   </Cell>
-                  <Cell xs={5}>
-                    <DatoVelgerWrapper
+                  <Cell xs={12} lg={5}>
+                    <DatePickerWrapper
                       name={`${FERIE}.tilDato`}
                       label={formatMessage('søknad.startDato.periode.tilDato.label')}
                       control={control}
