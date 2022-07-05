@@ -22,7 +22,7 @@ interface VeiledningProps {
   onSubmit: () => void;
 }
 export const Veiledning = ({ søker, loading, onSubmit }: VeiledningProps) => {
-  const { formatMessage, formatLink } = useFeatureToggleIntl();
+  const { formatMessage } = useFeatureToggleIntl();
 
   const schema = yup.object().shape({
     veiledningConfirm: yup
@@ -122,7 +122,7 @@ export const Veiledning = ({ søker, loading, onSubmit }: VeiledningProps) => {
                   </ul>
                 </BodyLong>
                 <BodyLong spacing>
-                  <Link href={formatLink('personOpplysninger')} target={'_blank'}>
+                  <Link href={formatMessage('applinks.personOpplysninger')} target={'_blank'}>
                     {formatMessage(
                       'søknad.veiledning.accordionInformasjon.personopplysningerNavNo'
                     )}

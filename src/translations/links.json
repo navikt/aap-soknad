@@ -1,6 +1,6 @@
 {
-  "dittNav": "https://www.{hostname}/person/dittnav",
-  "dineSaker": "https://www.{hostname}/person/dine-saker",
+  "dittNav": "https://www.{navHostname}/person/dittnav",
+  "dineSaker": "https://www.{navHostname}/person/dine-saker",
   "saksbehandlingstid": "https://www.nav.no/saksbehandlingstid",
   "personOpplysninger": "https://www.nav.no/no/nav-og-samfunn/om-nav/personvern-i-arbeids-og-velferdsetaten/personvernerklaering-for-arbeids-og-velferdsetaten",
   "forskriftOmYrkessykdommer": "https://lovdata.no/dokument/SF/forskrift/1960-02-19-6",

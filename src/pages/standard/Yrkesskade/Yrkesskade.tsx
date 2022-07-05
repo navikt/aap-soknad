@@ -21,7 +21,7 @@ interface Props {
 const YRKESSKADE = 'yrkesskade';
 
 export const Yrkesskade = ({ onBackClick }: Props) => {
-  const { formatMessage, formatElement, formatLink } = useFeatureToggleIntl();
+  const { formatMessage, formatElement } = useFeatureToggleIntl();
 
   const schema = yup.object().shape({
     [YRKESSKADE]: yup
@@ -88,7 +88,7 @@ export const Yrkesskade = ({ onBackClick }: Props) => {
             <BodyShort spacing>
               {formatElement('søknad.yrkesskade.harDuYrkesskade.readMore.text2', {
                 a: (chunks: string[]) => (
-                  <Link target="_blank" href={formatLink('forskriftOmYrkessykdommer')}>
+                  <Link target="_blank" href={formatMessage('applinks.forskriftOmYrkessykdommer')}>
                     {chunks}
                   </Link>
                 ),

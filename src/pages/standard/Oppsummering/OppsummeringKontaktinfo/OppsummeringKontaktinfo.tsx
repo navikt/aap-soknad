@@ -4,7 +4,7 @@ import { useSokerOppslag } from '../../../../context/sokerOppslagContext';
 import { useFeatureToggleIntl } from '../../../../hooks/useFeatureToggleIntl';
 
 const OppsummeringKontaktinfo = () => {
-  const { formatMessage, formatElement, formatLink } = useFeatureToggleIntl();
+  const { formatMessage, formatElement } = useFeatureToggleIntl();
 
   const { søker, kontaktInfo } = useSokerOppslag();
   return (
@@ -26,7 +26,7 @@ const OppsummeringKontaktinfo = () => {
         >
           {formatElement('søknad.oppsummering.contactInformation.adresse.readMore.text', {
             a: (chunks: string[]) => (
-              <Link target="_blank" href={formatLink('folkeregisteret')}>
+              <Link target="_blank" href={formatMessage('applinks.folkeregisteret')}>
                 {chunks}
               </Link>
             ),
@@ -44,7 +44,10 @@ const OppsummeringKontaktinfo = () => {
         >
           {formatElement('søknad.oppsummering.contactInformation.telefonnummer.readMore.text', {
             a: (chunks: string[]) => (
-              <Link target="_blank" href={formatLink('kontaktOgReservasjonsregisteret')}>
+              <Link
+                target="_blank"
+                href={formatMessage('applinks.kontaktOgReservasjonsregisteret')}
+              >
                 {chunks}
               </Link>
             ),
@@ -60,7 +63,10 @@ const OppsummeringKontaktinfo = () => {
         >
           {formatElement('søknad.oppsummering.contactInformation.epost.readMore.text', {
             a: (chunks: string[]) => (
-              <Link target="_blank" href={formatLink('kontaktOgReservasjonsregisteret')}>
+              <Link
+                target="_blank"
+                href={formatMessage('applinks.kontaktOgReservasjonsregisteret')}
+              >
                 {chunks}
               </Link>
             ),

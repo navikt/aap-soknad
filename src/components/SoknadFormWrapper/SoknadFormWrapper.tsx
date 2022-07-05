@@ -32,7 +32,7 @@ const SøknadFormWrapper = ({
 }: Props) => {
   const navigate = useNavigate();
 
-  const { formatLink, formatMessage } = useFeatureToggleIntl();
+  const { formatMessage } = useFeatureToggleIntl();
   const [showLagreModal, setShowLagreModal] = useState<boolean>(false);
   const [showAvbrytModal, setShowAvbrytModal] = useState<boolean>(false);
   const [isSlettingSøknad, setIsSlettingSøknad] = useState<boolean>(false);
@@ -103,7 +103,7 @@ const SøknadFormWrapper = ({
               type="button"
               onClick={() => {
                 if (window?.location) {
-                  window.location.href = formatLink('dineSaker');
+                  window.location.href = formatMessage('applinks.dineSaker');
                 }
               }}
             >
@@ -155,7 +155,9 @@ const SøknadFormWrapper = ({
                   type="button"
                   onClick={() => {
                     if (window?.location) {
-                      window.location.href = formatLink('dittNav');
+                      window.location.href = formatMessage('applinks.dittNav', {
+                        hostname: process.env.NAV_HOSTNAME_URL,
+                      });
                     }
                   }}
                 >

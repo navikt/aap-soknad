@@ -11,7 +11,7 @@ interface StudentProps {
 }
 
 const Kvittering = ({ søker }: StudentProps) => {
-  const { formatMessage, formatElement, formatLink } = useFeatureToggleIntl();
+  const { formatMessage, formatElement } = useFeatureToggleIntl();
 
   const dittNavUrl = window.location.href.includes('www.nav.no')
     ? 'https://www.nav.no/person/dittnav/'
@@ -33,7 +33,9 @@ const Kvittering = ({ søker }: StudentProps) => {
       </Alert>
       <BodyLong spacing>
         {formatElement('søknad.kvittering.saksbehandlingstid', {
-          a: (chunks: string[]) => <Link href={formatLink('saksbehandlingstid')}>{chunks}</Link>,
+          a: (chunks: string[]) => (
+            <Link href={formatMessage('appLinks.saksbehandlingstid')}>{chunks}</Link>
+          ),
         })}
       </BodyLong>
       <BodyLong>
