@@ -34,7 +34,7 @@ const Kvittering = ({ søker }: StudentProps) => {
       <BodyLong spacing>
         {formatElement('søknad.kvittering.saksbehandlingstid', {
           a: (chunks: string[]) => (
-            <Link href={formatMessage('appLinks.saksbehandlingstid')}>{chunks}</Link>
+            <Link href={formatMessage('applinks.saksbehandlingstid')}>{chunks}</Link>
           ),
         })}
       </BodyLong>
