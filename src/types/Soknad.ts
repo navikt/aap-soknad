@@ -87,7 +87,7 @@ export type Ferie = {
 type Vedlegg = {
   name: string;
   size: string;
-  id: string;
+  vedleggId: string;
 };
 
 export type StartDato = Date;

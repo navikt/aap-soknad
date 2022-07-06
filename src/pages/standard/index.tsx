@@ -258,8 +258,11 @@ const mapSøknadToBackend = (søknad?: Soknad, fastlege?: FastlegeView): Søknad
     studier: {
       erStudent: getJaNeiAvbrutt(søknad?.student?.erStudent),
       kommeTilbake: getJaNeiVetIkke(søknad?.student?.kommeTilbake),
-      ...(søknad?.vedlegg?.[AVBRUTT_STUDIE_VEDLEGG]?.[0]?.id
-        ? { vedlegg: søknad?.vedlegg?.[AVBRUTT_STUDIE_VEDLEGG]?.map((vedlegg) => vedlegg.id) ?? [] }
+      ...(søknad?.vedlegg?.[AVBRUTT_STUDIE_VEDLEGG]?.[0]?.vedleggId
+        ? {
+            vedlegg:
+              søknad?.vedlegg?.[AVBRUTT_STUDIE_VEDLEGG]?.map((vedlegg) => vedlegg.vedleggId) ?? [],
+          }
         : {}),
     },
     behandlere,
@@ -271,7 +274,7 @@ const mapSøknadToBackend = (søknad?: Soknad, fastlege?: FastlegeView): Søknad
               fraArbeidsgiver: jaNeiToBoolean(søknad?.andreUtbetalinger?.lønn),
               vedlegg:
                 søknad?.vedlegg?.[AttachmentType.LØNN_OG_ANDRE_GODER]?.map(
-                  (vedlegg) => vedlegg.id
+                  (vedlegg) => vedlegg.vedleggId
                 ) ?? [],
             },
           }
@@ -288,15 +291,17 @@ const mapSøknadToBackend = (søknad?: Soknad, fastlege?: FastlegeView): Søknad
               return {
                 type: stønad,
                 vedlegg:
-                  søknad?.vedlegg?.[AttachmentType.OMSORGSSTØNAD]?.map((vedlegg) => vedlegg.id) ??
-                  [],
+                  søknad?.vedlegg?.[AttachmentType.OMSORGSSTØNAD]?.map(
+                    (vedlegg) => vedlegg.vedleggId
+                  ) ?? [],
               };
             case StønadType.UTLAND:
               return {
                 type: stønad,
                 vedlegg:
-                  søknad?.vedlegg?.[AttachmentType.UTLANDSSTØNAD]?.map((vedlegg) => vedlegg.id) ??
-                  [],
+                  søknad?.vedlegg?.[AttachmentType.UTLANDSSTØNAD]?.map(
+                    (vedlegg) => vedlegg.vedleggId
+                  ) ?? [],
               };
             default:
               return { type: stønad };
@@ -320,7 +325,9 @@ const mapSøknadToBackend = (søknad?: Soknad, fastlege?: FastlegeView): Søknad
         barnepensjon: jaNeiToBoolean(barn.barnepensjon),
       })) ?? [],
     tilleggsopplysninger: søknad?.tilleggsopplysninger,
-    ...(søknad?.vedlegg?.annet ? { andreVedlegg: søknad?.vedlegg?.annet?.map((e) => e?.id) } : {}),
+    ...(søknad?.vedlegg?.annet
+      ? { andreVedlegg: søknad?.vedlegg?.annet?.map((e) => e?.vedleggId) }
+      : {}),
   };
 };
 

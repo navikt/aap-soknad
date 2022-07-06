@@ -79,7 +79,6 @@ const FileInput = ({
   };
   const uploadFile = async (file: any) => {
     clearErrors(name);
-    console.log('length', file);
     if (!['image/png', 'image/jpg', 'image/jpeg', 'application/pdf'].includes(file?.type)) {
       setFilename(file?.name);
       setError(name, { type: 'custom', message: errorText(415) });
