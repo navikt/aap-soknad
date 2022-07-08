@@ -277,22 +277,19 @@ const Oppsummering = ({ onBackClick, onSubmitSoknad }: OppsummeringProps) => {
                 </>
               );
             })}
-            {vedleggState?.requiredVedlegg
-              ?.filter(
-                (vedlegg) =>
-                  vedlegg?.filterType === Relasjon.FORELDER ||
-                  vedlegg?.filterType === Relasjon.FOSTERFORELDER
-              )
-              .map((e) => (
-                <>
-                  <Label>{e?.description}</Label>
-                  {søknadState?.søknad?.vedlegg?.barn
-                    ?.filter((e) => e?.fnr === e.type)
-                    .map((vedleggFile) => (
-                      <BodyShort>{vedleggFile?.name}</BodyShort>
-                    ))}
-                </>
-              ))}
+            {søknadState?.søknad?.manuelleBarn?.map((barn, i) => {
+              const label = vedleggState?.requiredVedlegg?.find(
+                (e) => e.type === barn.fnr
+              )?.description;
+              return (
+                <div key={i}>
+                  <Label>{label}</Label>
+                  {barn?.vedlegg?.map((vedlegg, j) => (
+                    <BodyShort key={j}>{vedlegg?.name}</BodyShort>
+                  ))}
+                </div>
+              );
+            })}
             {søknadState?.søknad?.vedlegg?.annet &&
               søknadState?.søknad?.vedlegg?.annet?.length > 0 && (
                 <>
