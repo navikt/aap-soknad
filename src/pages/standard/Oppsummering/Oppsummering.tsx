@@ -11,7 +11,6 @@ import OppsummeringKontaktinfo from './OppsummeringKontaktinfo/OppsummeringKonta
 import { useSokerOppslag } from '../../../context/sokerOppslagContext';
 import OppsummeringUtenlandsopphold from './OppsummeringUtenlandsopphold/OppsummeringUtenlandsopphold';
 import OppsummeringBehandler from './OppsummeringBehandler/OppsummeringBehandler';
-import { formatDate } from '../../../utils/date';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import SoknadFormWrapper from '../../../components/SoknadFormWrapper/SoknadFormWrapper';
@@ -101,10 +100,6 @@ const Oppsummering = ({ onBackClick, onSubmitSoknad }: OppsummeringProps) => {
           toggleAll={toggleAll}
           onEdit={() => editStep(StepNames.STARTDATO)}
         >
-          <SummaryRowIfExists
-            labelKey={'søknad.startDato.startDato.label'}
-            value={formatDate(søknadState?.søknad?.startDato)}
-          />
           <SummaryRowIfExists
             labelKey={'søknad.startDato.skalHaFerie.label'}
             value={søknadState?.søknad?.ferie?.skalHaFerie}

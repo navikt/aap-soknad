@@ -9,7 +9,6 @@ describe('Start dato validation', () => {
 
   it('should validate startDato correctly', async () => {
     const form = {
-      startDato: new Date(),
       ferie: {
         skalHaFerie: 'Ja',
         ferieType: 'Nei, men jeg vet antall feriedager',
@@ -19,14 +18,5 @@ describe('Start dato validation', () => {
     const schema = getSchema(jest.fn());
     const result = await schema.validate(form, { abortEarly: false }).catch((err) => err);
     expect(result).toStrictEqual(form);
-  });
-
-  it('should return invalid if ferie is missing when startDato is current day', async () => {
-    const form = {
-      startDato: new Date(),
-    };
-    const schema = getSchema(jest.fn());
-    const result = await schema.validate(form, { abortEarly: false }).catch((err) => err);
-    expect(result.errors.length).not.toBe(0);
   });
 });
