@@ -48,6 +48,7 @@ const Vedlegg = ({ onBackClick }: Props) => {
     resolver: yupResolver(schema),
     defaultValues: {
       [VEDLEGG]: søknadState?.søknad?.vedlegg,
+      [MANUELLE_BARN]: søknadState?.søknad?.manuelleBarn,
     },
   });
   useEffect(() => {

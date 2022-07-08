@@ -91,7 +91,6 @@ const FieldArrayFileInput = ({
     setLoading(false);
     if (vedlegg.ok) {
       const id = await vedlegg.json();
-      console.log(file?.name, id);
       append({ name: file?.name, size: file?.size, vedleggId: id });
       setTotalUploadedBytes(totalUploadedBytes + file.size);
     } else {
@@ -99,6 +98,10 @@ const FieldArrayFileInput = ({
       setError(inputId, { type: 'custom', message: errorText(vedlegg.status) });
     }
     setDragOver(false);
+  };
+  const fileSizeString = (size: number) => {
+    const kb = size / 1024;
+    return kb > 1000 ? `${(kb / 1024).toFixed(1)} mB` : `${Math.floor(kb)} kB`;
   };
   return (
     <div className={classes?.fileInput}>
@@ -119,7 +122,7 @@ const FieldArrayFileInput = ({
                 <Link target={'_blank'} href={`/aap/vedleggvisning/${attachment?.vedleggId}`}>
                   {attachment?.name}
                 </Link>
-                <Detail>{attachment?.size}</Detail>
+                <Detail>{fileSizeString(attachment?.size)}</Detail>
               </div>
             </div>
             <button
