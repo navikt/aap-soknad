@@ -39,7 +39,7 @@ interface Props {
 
 export const getSchema = (formatMessage: (id: string) => string) => {
   return yup.object().shape({
-    [BEGRUNNELSE]: yup.string().required(),
+    [BEGRUNNELSE]: yup.string().nullable(),
     [FERIE]: yup.object().shape({
       [SKALHAFERIE]: yup
         .string()
