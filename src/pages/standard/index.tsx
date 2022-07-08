@@ -323,6 +323,7 @@ const mapSøknadToBackend = (søknad?: Soknad, fastlege?: FastlegeView): Søknad
         relasjon: barn.relasjon,
         merEnnIG: jaNeiToBoolean(barn.harInntekt),
         barnepensjon: jaNeiToBoolean(barn.barnepensjon),
+        vedlegg: barn?.vedlegg?.map((e) => e?.vedleggId),
       })) ?? [],
     tilleggsopplysninger: søknad?.tilleggsopplysninger,
     ...(søknad?.vedlegg?.annet

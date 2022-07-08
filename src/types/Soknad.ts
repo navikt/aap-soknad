@@ -75,6 +75,7 @@ export type ManuelleBarn = {
   harInntekt?: string;
   barnepensjon?: string;
   relasjon: Relasjon;
+  vedlegg?: Vedlegg[];
 };
 
 export type Ferie = {

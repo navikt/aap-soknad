@@ -17,6 +17,7 @@ export type VedleggAction = AddVedlegg | RemoveVedlegg;
 type RequiredVedlegg = {
   type: string;
   description: string;
+  filterType?: string;
 };
 type VedleggState = {
   requiredVedlegg: RequiredVedlegg[];
@@ -28,6 +29,7 @@ type VedleggContextState = {
 const VedleggContext = createContext<VedleggContextState | undefined>(undefined);
 
 function stateReducer(state: VedleggState, action: VedleggAction) {
+  console.log(action.type, action.payload);
   switch (action.type) {
     case 'ADD_VEDLEGG': {
       const vedleggList =

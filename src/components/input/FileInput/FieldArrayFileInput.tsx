@@ -1,40 +1,32 @@
-import { Label, Link, BodyShort, Detail, Heading, Loader, Panel } from '@navikt/ds-react';
-import React, { DragEventHandler, useRef, useState } from 'react';
-import SvgUpload from '@navikt/ds-icons/esm/Upload';
-import * as classes from './FileInput.module.css';
-import {
-  FieldArray,
-  FieldArrayMethodProps,
-  FieldArrayWithId,
-  FieldError,
-  FieldValues,
-} from 'react-hook-form';
-import { Cancel, Delete, FileError, FileSuccess } from '@navikt/ds-icons';
+import { Control, FieldError, FieldErrors, useFieldArray } from 'react-hook-form';
 import { useFeatureToggleIntl } from '../../../hooks/useFeatureToggleIntl';
-
-export interface Props {
-  fields: FieldArrayWithId[];
-  append: (
-    value: Partial<FieldArray<FieldValues, any>> | Partial<FieldArray<FieldValues, any>>[],
-    options?: FieldArrayMethodProps
-  ) => void;
+import React, { DragEventHandler, useRef, useState } from 'react';
+import * as classes from './FileInput.module.css';
+import { BodyShort, Detail, Heading, Label, Link, Loader, Panel } from '@navikt/ds-react';
+import { Cancel, Delete, FileError, FileSuccess } from '@navikt/ds-icons';
+import SvgUpload from '@navikt/ds-icons/esm/Upload';
+type Props = {
   setError: (name: string, error: FieldError) => void;
   clearErrors: (name?: string | string[]) => void;
-  remove: (index?: number | number[] | undefined) => void;
+  name: string;
   heading: string;
   ingress?: string;
-  error?: string;
-}
-const FileInput = ({
-  fields,
-  append,
-  remove,
+  errors?: FieldErrors;
+  control: Control;
+};
+const FieldArrayFileInput = ({
   heading,
   ingress,
+  name,
   setError,
   clearErrors,
-  error,
+  control,
+  errors,
 }: Props) => {
+  const { append, remove, fields } = useFieldArray({
+    name: name,
+    control,
+  });
   const { formatMessage } = useFeatureToggleIntl();
   const [dragOver, setDragOver] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
@@ -151,7 +143,7 @@ const FileInput = ({
           </Panel>
         );
       })}
-      {error && (
+      {errors?.[inputId]?.message && (
         <>
           <Panel className={`${classes?.fileCard} ${classes?.error}`} id={name} tabIndex={0}>
             <div className={classes?.fileCardLeftContent}>
@@ -182,7 +174,7 @@ const FileInput = ({
             </button>
           </Panel>
           <div className={'navds-error-message navds-error-message--medium navds-label'}>
-            {error}
+            {errors?.[inputId]?.message}
           </div>
         </>
       )}
@@ -235,4 +227,4 @@ const FileInput = ({
     </div>
   );
 };
-export default FileInput;
+export default FieldArrayFileInput;

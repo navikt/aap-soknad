@@ -28,7 +28,7 @@ interface Props {
   onCancelClick: () => void;
 }
 const BARNETILLEGG = 'barnetillegg';
-const MANUELLE_BARN = 'manuelleBarn';
+export const MANUELLE_BARN = 'manuelleBarn';
 
 export const GRUNNBELØP = '111 477';
 
@@ -152,8 +152,12 @@ export const Barnetillegg = ({ onBackClick }: Props) => {
       addRequiredVedlegg(
         [
           {
-            type: `barn-${barn?.fnr}`,
-            description: `Fødselsattest eller bostedsbevis for: ${barn?.navn?.fornavn} ${barn?.navn?.etternavn}`,
+            filterType: barn.relasjon,
+            type: barn?.fnr,
+            description:
+              barn.relasjon === Relasjon.FORELDER
+                ? `Fødselsattest eller adopsjonsbevis for: ${barn?.navn?.fornavn} ${barn?.navn?.etternavn}`
+                : `Bostedbevis for: ${barn?.navn?.fornavn} ${barn?.navn?.etternavn}`,
           },
         ],
         vedleggDispatch
@@ -380,7 +384,7 @@ export const Barnetillegg = ({ onBackClick }: Props) => {
         onDeleteClick={() => {
           if (selectedBarnIndex != undefined) {
             const barn = manuelleBarnFields[selectedBarnIndex];
-            removeRequiredVedlegg(`barn-${barn?.fnr}`, vedleggDispatch);
+            removeRequiredVedlegg(barn?.fnr, vedleggDispatch);
             manuelleBarnRemove(selectedBarnIndex);
 
             setShowModal(false);

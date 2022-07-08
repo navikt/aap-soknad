@@ -22,6 +22,7 @@ import { LucaGuidePanel } from '../../../components/LucaGuidePanel';
 import { useFeatureToggleIntl } from '../../../hooks/useFeatureToggleIntl';
 import { slettLagretSoknadState } from '../../../context/soknadContextCommon';
 import { useSoknadContextStandard } from '../../../context/soknadContextStandard';
+import { Relasjon } from '../Barnetillegg/AddBarnModal';
 
 interface OppsummeringProps {
   onBackClick: () => void;
@@ -262,7 +263,11 @@ const Oppsummering = ({ onBackClick, onSubmitSoknad }: OppsummeringProps) => {
         >
           <>
             {vedleggState?.requiredVedlegg?.map((vedlegg) => {
-              if (vedlegg?.type?.split('-')?.[0] === 'barn') return <></>;
+              if (
+                vedlegg?.filterType === Relasjon.FORELDER ||
+                vedlegg?.filterType === Relasjon.FOSTERFORELDER
+              )
+                return <></>;
               return (
                 <>
                   <Label>{vedlegg?.description}</Label>
@@ -272,16 +277,22 @@ const Oppsummering = ({ onBackClick, onSubmitSoknad }: OppsummeringProps) => {
                 </>
               );
             })}
-            {vedleggState?.requiredVedlegg?.find(
-              (vedlegg) => vedlegg?.type?.split('-')?.[0] === 'barn'
-            ) && (
-              <>
-                <Label>{'Fødselsattest eller bostedbevis for barn:'}</Label>
-                {søknadState?.søknad?.vedlegg?.barn?.map((vedleggFile) => (
-                  <BodyShort>{vedleggFile?.name}</BodyShort>
-                ))}
-              </>
-            )}
+            {vedleggState?.requiredVedlegg
+              ?.filter(
+                (vedlegg) =>
+                  vedlegg?.filterType === Relasjon.FORELDER ||
+                  vedlegg?.filterType === Relasjon.FOSTERFORELDER
+              )
+              .map((e) => (
+                <>
+                  <Label>{e?.description}</Label>
+                  {søknadState?.søknad?.vedlegg?.barn
+                    ?.filter((e) => e?.fnr === e.type)
+                    .map((vedleggFile) => (
+                      <BodyShort>{vedleggFile?.name}</BodyShort>
+                    ))}
+                </>
+              ))}
             {søknadState?.søknad?.vedlegg?.annet &&
               søknadState?.søknad?.vedlegg?.annet?.length > 0 && (
                 <>

@@ -36,14 +36,24 @@ function soknadReducerStandard(
         ...state,
         søknad: action.payload,
       };
-    case SoknadActionKeys.UPDATE_SOKNAD:
+    case SoknadActionKeys.UPDATE_SOKNAD: {
+      const manuelleBarn = state?.søknad?.manuelleBarn || [];
       return {
         ...state,
         søknad: {
           ...state?.søknad,
           ...action.payload,
+          ...(action?.payload?.manuelleBarn && manuelleBarn.length > 0
+            ? {
+                manuelleBarn: manuelleBarn.map((e, i) => ({
+                  ...e,
+                  ...action?.payload?.manuelleBarn?.[i],
+                })),
+              }
+            : {}),
         },
       };
+    }
     case SoknadActionKeys.ADD_BARN_IF_MISSING: {
       const barn = state?.søknad?.barnetillegg || [];
       const newBarn = action.payload?.filter((e: any) => !barn.find((a: any) => a?.fnr === e?.fnr));
