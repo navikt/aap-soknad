@@ -64,12 +64,6 @@ const defaultStepList = [
 const formatDate = (date?: Date): string | undefined =>
   date ? format(date, 'yyyy-MM-dd') : undefined;
 
-const getHvorfor = (hvorfor?: string) => {
-  if (hvorfor === 'Sykdom') return 'HELSE';
-  if (hvorfor === 'Manglende informasjon') return 'FEILINFO';
-  return undefined;
-};
-
 const getFerieType = (skalHaFerie?: string, ferieType?: string) => {
   if (skalHaFerie === 'Ja' && ferieType === 'Ja') return 'PERIODE';
   if (skalHaFerie === 'Ja' && ferieType === 'Nei, men jeg vet antall dager') return 'DAGER';
@@ -222,8 +216,7 @@ const mapSøknadToBackend = (søknad?: Soknad, fastlege?: FastlegeView): Søknad
 
   return {
     startDato: {
-      fom: formatDate(søknad?.startDato),
-      hvorfor: getHvorfor(søknad?.hvorfor),
+      fom: formatDate(new Date()),
       beskrivelse: søknad?.begrunnelse,
     },
     ferie: {
