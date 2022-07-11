@@ -216,6 +216,7 @@ const mapSøknadToBackend = (søknad?: Soknad, fastlege?: FastlegeView): Søknad
 
   return {
     startDato: {
+      fom: formatDate(new Date()),
       beskrivelse: søknad?.begrunnelse,
     },
     ferie: {
