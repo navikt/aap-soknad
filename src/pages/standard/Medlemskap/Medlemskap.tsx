@@ -349,46 +349,52 @@ export const Medlemskap = ({ onBackClick }: Props) => {
                 )}
               </Heading>
             )}
-            {fields?.map((field, index) => (
-              <Table.Row key={field.id}>
-                <Table.DataCell>
-                  <Button
-                    variant="tertiary"
-                    type="button"
-                    onClick={() => {
-                      setSelectedUtenlandsPeriodeIndex(index);
-                      setShowUtenlandsPeriodeModal(true);
-                    }}
-                  >{`${field?.land?.split(':')?.[1]} ${formatDate(
-                    field?.fraDato,
-                    'dd.MM.yyyy'
-                  )} - ${formatDate(field?.tilDato, 'dd.MM.yyyy')}${
-                    field?.iArbeid ? ' (Jobb)' : ''
-                  }`}</Button>
-                </Table.DataCell>
-                <Table.DataCell>
-                  {
-                    <Delete
-                      className={styles.deleteIcon}
-                      onClick={() => remove(index)}
-                      title={'Slett utenlandsopphold'}
-                      role={'button'}
-                      tabIndex={0}
-                      onKeyPress={(event) => {
-                        if (event.key === 'Enter') {
-                          remove(index);
+            {fields?.length > 0 && (
+              <Table size="medium">
+                <Table.Body>
+                  {fields?.map((field, index) => (
+                    <Table.Row key={field.id}>
+                      <Table.DataCell>
+                        <Button
+                          variant="tertiary"
+                          type="button"
+                          onClick={() => {
+                            setSelectedUtenlandsPeriodeIndex(index);
+                            setShowUtenlandsPeriodeModal(true);
+                          }}
+                        >{`${field?.land?.split(':')?.[1]} ${formatDate(
+                          field?.fraDato,
+                          'dd.MM.yyyy'
+                        )} - ${formatDate(field?.tilDato, 'dd.MM.yyyy')}${
+                          field?.iArbeid ? ' (Jobb)' : ''
+                        }`}</Button>
+                      </Table.DataCell>
+                      <Table.DataCell>
+                        {
+                          <Delete
+                            className={styles.deleteIcon}
+                            onClick={() => remove(index)}
+                            title={'Slett utenlandsopphold'}
+                            role={'button'}
+                            tabIndex={0}
+                            onKeyPress={(event) => {
+                              if (event.key === 'Enter') {
+                                remove(index);
+                              }
+                            }}
+                          />
                         }
-                      }}
-                    />
-                  }
-                </Table.DataCell>
-              </Table.Row>
-            ))}
+                      </Table.DataCell>
+                    </Table.Row>
+                  ))}
+                </Table.Body>
+              </Table>
+            )}
 
             <Grid>
               <Cell xs={12}>
                 <Button
-                  variant="tertiary"
+                  variant="secondary"
                   type="button"
                   onClick={() => {
                     setSelectedUtenlandsPeriodeIndex(undefined);
