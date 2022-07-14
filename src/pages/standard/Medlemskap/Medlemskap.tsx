@@ -29,6 +29,7 @@ import { useFeatureToggleIntl } from '../../../hooks/useFeatureToggleIntl';
 import { useSoknadContextStandard } from '../../../context/soknadContextStandard';
 import { slettLagretSoknadState, updateSøknadData } from '../../../context/soknadContextCommon';
 import { useDebounceLagreSoknad } from '../../../hooks/useDebounceLagreSoknad';
+import * as styles from './Medlemskap.module.css';
 
 interface Props {
   onBackClick: () => void;
@@ -368,6 +369,7 @@ export const Medlemskap = ({ onBackClick }: Props) => {
                 <Table.DataCell>
                   {
                     <Delete
+                      className={styles.deleteIcon}
                       onClick={() => remove(index)}
                       title={'Slett utenlandsopphold'}
                       role={'button'}
@@ -395,8 +397,8 @@ export const Medlemskap = ({ onBackClick }: Props) => {
                 >
                   <Add title={'Legg til'} />
                   {arbeidINorge === JaEllerNei.NEI
-                    ? 'Legg til utenlandsopphold'
-                    : 'Legg til periode med jobb utenfor Norge'}
+                    ? 'Registrer utenlandsopphold'
+                    : 'Registrer periode med jobb utenfor Norge'}
                 </Button>
               </Cell>
             </Grid>

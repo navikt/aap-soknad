@@ -193,7 +193,10 @@
           }
         },
         "modal": {
-          "title": "Legg til utenlandsopphold",
+          "title": {
+            "ARBEID": "Legg til periode med jobb utenfor Norge",
+            "BODD": "Legg til utenlandsopphold"
+          },
           "ingress": {
             "ARBEID": "Nå må du oppgi i hvilke perioder du har jobbet utenfor Norge de fem siste årene. Oppgi også hvilket land du var i.",
             "BODD": "Nå må du oppgi i hvilke perioder du har bodd eller jobbet utenfor Norge. Oppgi også hvilket land du var i. Ta med alle perioder siden du var 16 år."

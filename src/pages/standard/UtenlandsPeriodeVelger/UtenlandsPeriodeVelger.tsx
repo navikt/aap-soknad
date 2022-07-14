@@ -133,7 +133,7 @@ const UtenlandsPeriodeVelger = ({
     <Modal open={open} onClose={onClose}>
       <Modal.Content className={classes.utenlandsPeriodeVelger}>
         <Heading size={'medium'} level={'2'}>
-          {formatMessage('søknad.medlemskap.utenlandsperiode.modal.title')}
+          {formatMessage(`søknad.medlemskap.utenlandsperiode.modal.title.${arbeidEllerBodd}`)}
         </Heading>
         <Ingress>
           {formatMessage(`søknad.medlemskap.utenlandsperiode.modal.ingress.${arbeidEllerBodd}`)}
@@ -146,6 +146,7 @@ const UtenlandsPeriodeVelger = ({
           })}
         >
           <CountrySelector
+            className={classes.countrySelector}
             name={'land'}
             label={formatMessage(
               `søknad.medlemskap.utenlandsperiode.modal.land.label.${arbeidEllerBodd}`
@@ -199,6 +200,7 @@ const UtenlandsPeriodeVelger = ({
           )}
           {showUtenlandsId && (
             <TextFieldWrapper
+              className={classes.pidInput}
               name={'utenlandsId'}
               label={formatMessage('søknad.medlemskap.utenlandsperiode.modal.utenlandsId.label')}
               control={control}

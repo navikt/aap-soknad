@@ -12,3 +12,11 @@
   justify-content: space-between;
   gap: var(--navds-spacing-5);
 }
+
+.countrySelector {
+  max-width: 22rem;
+}
+
+.pidInput input {
+  max-width: 8rem;
+}

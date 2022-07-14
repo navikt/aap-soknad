@@ -12,9 +12,10 @@ interface Props {
   name: string;
   label: string;
   error?: string;
+  className?: string;
   control: Control<Soknad>;
 }
-const CountrySelector = ({ name, label, error, control }: Props) => {
+const CountrySelector = ({ name, label, error, className, control }: Props) => {
   const [countryList, setCountryList] = useState<string[][]>([]);
   useEffect(() => {
     const getCountries = () => {
@@ -28,18 +29,20 @@ const CountrySelector = ({ name, label, error, control }: Props) => {
     getCountries();
   }, [setCountryList]);
   return (
-    <SelectWrapper name={name} label={label} control={control} error={error}>
-      {[
-        <option key="none" value="none">
-          Velg land
-        </option>,
-        ...countryList.map(([key, val]) => (
-          <option key={key} value={`${key}:${val}`}>
-            {val}
-          </option>
-        )),
-      ]}
-    </SelectWrapper>
+    <div className={className}>
+      <SelectWrapper name={name} label={label} control={control} error={error}>
+        {[
+          <option key="none" value="none">
+            Velg land
+          </option>,
+          ...countryList.map(([key, val]) => (
+            <option key={key} value={`${key}:${val}`}>
+              {val}
+            </option>
+          )),
+        ]}
+      </SelectWrapper>
+    </div>
   );
 };
 export default CountrySelector;
