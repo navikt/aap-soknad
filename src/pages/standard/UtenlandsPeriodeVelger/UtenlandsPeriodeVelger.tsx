@@ -1,10 +1,9 @@
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo, useRef } from 'react';
 const { eeaMember } = require('is-european');
 import { FieldValues, useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as classes from './UtenlandsPeriode.module.css';
-import DatoVelgerWrapper from '../../../components/input/DatoVelgerWrapper';
 import {
   Label,
   BodyShort,
@@ -21,12 +20,17 @@ import RadioGroupWrapper from '../../../components/input/RadioGroupWrapper/Radio
 import CountrySelector from '../../../components/input/CountrySelector';
 import TextFieldWrapper from '../../../components/input/TextFieldWrapper';
 import { useFeatureToggleIntl } from '../../../hooks/useFeatureToggleIntl';
+import DatePickerWrapper from '../../../components/input/DatePickerWrapper/DatePickerWrapper';
+import { ModalButtonWrapper } from '../../../components/ButtonWrapper/ModalButtonWrapper';
+import { UtenlandsPeriode } from '../../../types/Soknad';
+import { formatDate } from '../StartDato/StartDato';
 
 export enum ArbeidEllerBodd {
   ARBEID = 'ARBEID',
   BODD = 'BODD',
 }
 interface UtenlandsPeriodeProps {
+  utenlandsPeriode?: UtenlandsPeriode;
   onSave: (data: any) => void;
   onCancel: () => void;
   onClose: () => void;
@@ -40,6 +44,7 @@ const initFieldVals: FieldValues = {
   iArbeid: false,
 };
 const UtenlandsPeriodeVelger = ({
+  utenlandsPeriode,
   onSave,
   onCancel,
   onClose,
@@ -47,6 +52,7 @@ const UtenlandsPeriodeVelger = ({
   arbeidEllerBodd,
 }: UtenlandsPeriodeProps) => {
   const { formatMessage } = useFeatureToggleIntl();
+
   const schema = yup.object().shape({
     land: yup
       .string()
@@ -76,16 +82,35 @@ const UtenlandsPeriodeVelger = ({
         )
       ),
   });
+
   const {
     control,
     watch,
     formState: { errors },
+    reset,
     handleSubmit,
     setValue,
   } = useForm({
     resolver: yupResolver(schema),
-    defaultValues: { ...initFieldVals },
+    defaultValues: {
+      ...(utenlandsPeriode
+        ? {
+            ...utenlandsPeriode,
+            fraDato: formatDate(utenlandsPeriode.fraDato),
+            tilDato: formatDate(utenlandsPeriode.tilDato),
+          }
+        : initFieldVals),
+    },
   });
+
+  useEffect(() => {
+    reset({
+      ...utenlandsPeriode,
+      fraDato: formatDate(utenlandsPeriode?.fraDato),
+      tilDato: formatDate(utenlandsPeriode?.tilDato),
+    });
+  }, [utenlandsPeriode, open, reset]);
+
   const valgtLand = watch('land');
   const showUtenlandsId = useMemo(() => {
     const landKode = valgtLand?.split(':')?.[0];
@@ -114,6 +139,7 @@ const UtenlandsPeriodeVelger = ({
           {formatMessage(`søknad.medlemskap.utenlandsperiode.modal.ingress.${arbeidEllerBodd}`)}
         </Ingress>
         <form
+          className={classes.modalForm}
           onSubmit={handleSubmit((data) => {
             onSave(data);
             clearModal();
@@ -134,8 +160,8 @@ const UtenlandsPeriodeVelger = ({
               )}
             </Label>
             <Grid>
-              <Cell xs={5}>
-                <DatoVelgerWrapper
+              <Cell xs={12} lg={5}>
+                <DatePickerWrapper
                   name="fraDato"
                   label={formatMessage(
                     'søknad.medlemskap.utenlandsperiode.modal.periode.fraDato.label'
@@ -144,8 +170,8 @@ const UtenlandsPeriodeVelger = ({
                   error={errors.fraDato?.message}
                 />
               </Cell>
-              <Cell xs={5}>
-                <DatoVelgerWrapper
+              <Cell xs={12} lg={5}>
+                <DatePickerWrapper
                   name="tilDato"
                   label={formatMessage(
                     'søknad.medlemskap.utenlandsperiode.modal.periode.tilDato.label'
@@ -178,25 +204,22 @@ const UtenlandsPeriodeVelger = ({
               control={control}
             />
           )}
-          <Grid>
-            <Cell xs={2}>
-              <Button
-                type="button"
-                variant={'secondary'}
-                onClick={() => {
-                  clearModal();
-                  onCancel();
-                }}
-              >
-                {formatMessage('søknad.medlemskap.utenlandsperiode.modal.buttons.avbryt')}
-              </Button>
-            </Cell>
-            <Cell xs={5}>
-              <Button>
-                {formatMessage('søknad.medlemskap.utenlandsperiode.modal.buttons.lagre')}
-              </Button>
-            </Cell>
-          </Grid>
+          <ModalButtonWrapper>
+            <Button
+              type="button"
+              variant={'secondary'}
+              onClick={() => {
+                clearModal();
+                onCancel();
+              }}
+            >
+              {formatMessage('søknad.medlemskap.utenlandsperiode.modal.buttons.avbryt')}
+            </Button>
+
+            <Button>
+              {formatMessage('søknad.medlemskap.utenlandsperiode.modal.buttons.lagre')}
+            </Button>
+          </ModalButtonWrapper>
         </form>
       </Modal.Content>
     </Modal>

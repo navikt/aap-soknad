@@ -18,7 +18,7 @@ import UtenlandsPeriodeVelger, {
 } from '..//UtenlandsPeriodeVelger/UtenlandsPeriodeVelger';
 import { formatDate } from '../../../utils/date';
 import RadioGroupWrapper from '../../../components/input/RadioGroupWrapper/RadioGroupWrapper';
-import Soknad, { Medlemskap as MedlemskapType } from '../../../types/Soknad';
+import Soknad, { Medlemskap as MedlemskapType, UtenlandsPeriode } from '../../../types/Soknad';
 import { completeAndGoToNextStep, useStepWizard } from '../../../context/stepWizardContextV2';
 import SoknadFormWrapper from '../../../components/SoknadFormWrapper/SoknadFormWrapper';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -148,10 +148,20 @@ export const Medlemskap = ({ onBackClick }: Props) => {
     },
   });
   const [showUtenlandsPeriodeModal, setShowUtenlandsPeriodeModal] = useState<boolean>(false);
-  const { fields, append, remove } = useFieldArray({
+  const [selectedUtenlandsPeriodeIndex, setSelectedUtenlandsPeriodeIndex] = useState<
+    number | undefined
+  >(undefined);
+
+  const { fields, append, update, remove } = useFieldArray({
     name: `${MEDLEMSKAP}.${UTENLANDSOPPHOLD}`,
     control,
   });
+
+  const selectedUtenlandsPeriode = useMemo(() => {
+    if (selectedUtenlandsPeriodeIndex === undefined) return undefined;
+    return fields[selectedUtenlandsPeriodeIndex];
+  }, [selectedUtenlandsPeriodeIndex, fields]);
+
   const { stepList, stepWizardDispatch } = useStepWizard();
   const debouncedLagre = useDebounceLagreSoknad<Soknad>();
   const allFields = watch();
@@ -340,12 +350,21 @@ export const Medlemskap = ({ onBackClick }: Props) => {
             )}
             {fields?.map((field, index) => (
               <Table.Row key={field.id}>
-                <Table.DataCell>{`${field?.land?.split(':')?.[1]} ${formatDate(
-                  field?.fraDato,
-                  'dd.MM.yyyy'
-                )} - ${formatDate(field?.tilDato, 'dd.MM.yyyy')}${
-                  field?.iArbeid ? ' (Jobb)' : ''
-                }`}</Table.DataCell>
+                <Table.DataCell>
+                  <Button
+                    variant="tertiary"
+                    type="button"
+                    onClick={() => {
+                      setSelectedUtenlandsPeriodeIndex(index);
+                      setShowUtenlandsPeriodeModal(true);
+                    }}
+                  >{`${field?.land?.split(':')?.[1]} ${formatDate(
+                    field?.fraDato,
+                    'dd.MM.yyyy'
+                  )} - ${formatDate(field?.tilDato, 'dd.MM.yyyy')}${
+                    field?.iArbeid ? ' (Jobb)' : ''
+                  }`}</Button>
+                </Table.DataCell>
                 <Table.DataCell>
                   {
                     <Delete
@@ -369,7 +388,10 @@ export const Medlemskap = ({ onBackClick }: Props) => {
                 <Button
                   variant="tertiary"
                   type="button"
-                  onClick={() => setShowUtenlandsPeriodeModal(true)}
+                  onClick={() => {
+                    setSelectedUtenlandsPeriodeIndex(undefined);
+                    setShowUtenlandsPeriodeModal(true);
+                  }}
                 >
                   <Add title={'Legg til'} />
                   {arbeidINorge === JaEllerNei.NEI
@@ -391,9 +413,15 @@ export const Medlemskap = ({ onBackClick }: Props) => {
         )}
       </SoknadFormWrapper>
       <UtenlandsPeriodeVelger
+        utenlandsPeriode={selectedUtenlandsPeriode}
         open={showUtenlandsPeriodeModal}
         onSave={(data) => {
-          append({ ...data });
+          if (selectedUtenlandsPeriode === undefined) {
+            append({ ...data });
+          } else if (selectedUtenlandsPeriodeIndex !== undefined) {
+            update(selectedUtenlandsPeriodeIndex, { ...data });
+          }
+
           setShowUtenlandsPeriodeModal(false);
         }}
         arbeidEllerBodd={arbeidEllerBodd}

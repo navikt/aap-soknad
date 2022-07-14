@@ -25,7 +25,7 @@ const FERIETYPE = 'ferieType';
 const SKALHAFERIE = 'skalHaFerie';
 const BEGRUNNELSE = 'begrunnelse';
 
-const formatDate = (date?: Date) => {
+export const formatDate = (date?: Date) => {
   if (date) {
     return format(date, 'yyyy-MM-dd');
   }
