@@ -1,9 +1,18 @@
 import '@navikt/ds-datepicker/lib/index.css';
 import { Datepicker } from '@navikt/ds-datepicker';
 import { Controller } from 'react-hook-form';
-import { DatoVelgerProps } from '../DatoVelgerWrapper';
 
-const DatePickerWrapper = ({ name, label, control, error }: DatoVelgerProps) => {
+export interface DatePickerProps {
+  name: string;
+  label: string;
+  control: any;
+  description?: React.ReactChild | React.ReactChild[];
+  error?: string;
+  required?: string;
+  validate?: () => any;
+}
+
+const DatePickerWrapper = ({ name, label, control, error }: DatePickerProps) => {
   return (
     <Controller
       name={name}

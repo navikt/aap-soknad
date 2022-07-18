@@ -1,6 +1,5 @@
 import { BodyShort, Button, GuidePanel, Heading, Label } from '@navikt/ds-react';
 import { FieldValues, useForm } from 'react-hook-form';
-import DatoVelgerWrapper from '../../components/input/DatoVelgerWrapper';
 import ConfirmationPanelWrapper from '../../components/input/ConfirmationPanelWrapper';
 import React, { useEffect } from 'react';
 import { formatDate } from '../../utils/date';
@@ -16,6 +15,7 @@ import { useFeatureToggleIntl } from '../../hooks/useFeatureToggleIntl';
 import { updateSøknadData, slettLagretSoknadState } from '../../context/soknadContextCommon';
 import { useSoknadContextUtland } from '../../context/soknadContextUtland';
 import { useDebounceLagreSoknad } from '../../hooks/useDebounceLagreSoknad';
+import DatePickerWrapper from '../../components/input/DatePickerWrapper/DatePickerWrapper';
 
 interface IntroductionProps {
   onSubmit: () => void;
@@ -144,13 +144,13 @@ export const StepSelectTravelPeriod = ({ søknad, onBackClick }: SelectTravelPer
       cancelButtonText={'Avbryt søknad'}
       errors={errors}
     >
-      <DatoVelgerWrapper
+      <DatePickerWrapper
         name={FRA_DATO}
         label={formatMessage('utland.periode.fraDato.label')}
         control={control}
         error={errors?.[FRA_DATO]?.message}
       />
-      <DatoVelgerWrapper
+      <DatePickerWrapper
         name={TIL_DATO}
         label={formatMessage('utland.periode.tilDato.label')}
         control={control}
