@@ -1,6 +1,6 @@
 import { Alert, BodyShort, Button, Cell, Grid, Heading, Radio, ReadMore } from '@navikt/ds-react';
 import React, { useEffect, useMemo, useState } from 'react';
-import { useFieldArray, useForm } from 'react-hook-form';
+import { FieldArray, useFieldArray, useForm } from 'react-hook-form';
 import RadioGroupWrapper from '../../../components/input/RadioGroupWrapper/RadioGroupWrapper';
 import { JaEllerNei } from '../../../types/Generic';
 import Soknad, { Barn, ManuelleBarn } from '../../../types/Soknad';
@@ -22,6 +22,7 @@ import { useFeatureToggleIntl } from '../../../hooks/useFeatureToggleIntl';
 import { slettLagretSoknadState, updateSøknadData } from '../../../context/soknadContextCommon';
 import { useSoknadContextStandard } from '../../../context/soknadContextStandard';
 import { useDebounceLagreSoknad } from '../../../hooks/useDebounceLagreSoknad';
+import { formatDate } from '../StartDato/StartDato';
 
 interface Props {
   onBackClick: () => void;
@@ -294,6 +295,10 @@ export const Barnetillegg = ({ onBackClick }: Props) => {
                     <BodyShort>{`${formatMessage(
                       'søknad.barnetillegg.manuelleBarn.fødselsnummer'
                     )}: ${barn?.fnr}`}</BodyShort>
+                    <BodyShort>
+                      {formatMessage('søknad.barnetillegg.manuelleBarn.fødselsdato')}:{' '}
+                      {formatDate(barn?.fødselsdato)}
+                    </BodyShort>
                     {barn?.relasjon === Relasjon.FORELDER && (
                       <BodyShort>
                         {formatMessage('søknad.barnetillegg.manuelleBarn.erForelder')}

@@ -72,6 +72,7 @@ export type Barn = {
 export type ManuelleBarn = {
   navn: Navn;
   fnr: string;
+  fødselsdato?: Date;
   harInntekt?: string;
   barnepensjon?: string;
   relasjon: Relasjon;

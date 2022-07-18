@@ -10,7 +10,7 @@ import {
 } from '@navikt/ds-react';
 import { JaEllerNei } from '../../../types/Generic';
 import React, { useEffect } from 'react';
-import Soknad, { Barn } from '../../../types/Soknad';
+import Soknad, { Barn, ManuelleBarn } from '../../../types/Soknad';
 import TextFieldWrapper from '../../../components/input/TextFieldWrapper';
 import RadioGroupWrapper from '../../../components/input/RadioGroupWrapper/RadioGroupWrapper';
 import { FieldValues, useForm } from 'react-hook-form';
@@ -20,6 +20,9 @@ import * as classes from './Barnetillegg.module.css';
 import { ModalButtonWrapper } from '../../../components/ButtonWrapper/ModalButtonWrapper';
 import { useFeatureToggleIntl } from '../../../hooks/useFeatureToggleIntl';
 import { GRUNNBELØP } from './Barnetillegg';
+import DatePickerWrapper from '../../../components/input/DatePickerWrapper/DatePickerWrapper';
+import { add, sub } from 'date-fns';
+import { formatDate } from '../StartDato/StartDato';
 
 interface Props {
   søknad?: Soknad;
@@ -27,7 +30,7 @@ interface Props {
   onSaveClick: (data: any) => void;
   onDeleteClick: () => void;
   showModal: boolean;
-  barn?: Barn;
+  barn?: ManuelleBarn;
 }
 
 export enum Relasjon {
@@ -72,6 +75,11 @@ export const AddBarnModal = ({
           'søknad.barnetillegg.leggTilBarn.modal.fødselsnummer.validation.numberCharacters'
         )
       ),
+    fødselsdato: yup
+      .date()
+      .required('Du må fylle inn barnets fødselsdato.')
+      .min(sub(new Date(), { years: 18 }), 'Barnet kan ikke være over 18 år.')
+      .max(add(new Date(), { days: 1 }), 'Du kan ikke registrere barn som er født i fremtiden.'),
     relasjon: yup
       .string()
       .required(formatMessage('søknad.barnetillegg.leggTilBarn.modal.relasjon.validation.required'))
@@ -107,7 +115,12 @@ export const AddBarnModal = ({
   } = useForm<FieldValues>({
     resolver: yupResolver(schema),
     defaultValues: {
-      ...(barn ? barn : {}),
+      ...(barn
+        ? {
+            ...barn,
+            fødselsdato: formatDate(barn.fødselsdato),
+          }
+        : {}),
     },
   });
 
@@ -119,7 +132,7 @@ export const AddBarnModal = ({
   }, [barnepensjon]);
 
   useEffect(() => {
-    reset({ ...barn });
+    reset({ ...barn, fødselsdato: formatDate(barn?.fødselsdato) });
   }, [barn, showModal, reset]);
 
   return (
@@ -154,6 +167,7 @@ export const AddBarnModal = ({
             error={errors?.[NAVN]?.etternavn?.message}
           />
 
+          {/* TODO: Denne skal fjernes når kontrakt i backend er oppdatert */}
           <div className={classes.leggTilBarnFnrInput}>
             <TextFieldWrapper
               control={control}
@@ -162,6 +176,14 @@ export const AddBarnModal = ({
               error={errors?.fnr?.message}
             />
           </div>
+
+          <DatePickerWrapper
+            control={control}
+            label="Fødselsdato"
+            name="fødselsdato"
+            error={errors?.fødselsdato?.message}
+          />
+          {errors?.fødselsdato?.message}
 
           <RadioGroupWrapper
             control={control}
