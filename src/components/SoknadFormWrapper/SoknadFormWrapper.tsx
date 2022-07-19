@@ -20,6 +20,118 @@ interface Props {
   errors: FieldErrors;
 }
 
+interface LagreModalProps {
+  isOpen: boolean;
+  onClose: (value: boolean) => void;
+}
+
+export const LagreModal = ({ isOpen, onClose }: LagreModalProps) => {
+  const { formatMessage } = useFeatureToggleIntl();
+  return (
+    <Modal open={isOpen} onClose={() => onClose(false)}>
+      <Modal.Content className={classes?.modalContent}>
+        <Heading size={'small'} level={'1'}>
+          {formatMessage('lagreModal.heading')}
+        </Heading>
+        <BodyShort>{formatMessage('lagreModal.text')}</BodyShort>
+        <div className={classes?.buttonWrapper}>
+          <Button
+            variant="primary"
+            type="button"
+            onClick={() => {
+              if (window?.location) {
+                window.location.href = formatMessage('applinks.dineSaker');
+              }
+            }}
+          >
+            {formatMessage('lagreModal.lagreButtonText')}
+          </Button>
+          <Button variant="tertiary" type="button" onClick={() => onClose(false)}>
+            {formatMessage('lagreModal.avbrytButtonText')}
+          </Button>
+        </div>
+      </Modal.Content>
+    </Modal>
+  );
+};
+
+interface SlettModalProps {
+  isOpen: boolean;
+  onClose: (value: boolean) => void;
+  slettSøknadSuccess: boolean;
+  isDeletingSøknad: boolean;
+  slettSøknadOgAvbryt: () => void;
+  startNySøknad: () => void;
+}
+export const SlettModal = ({
+  isOpen,
+  onClose,
+  slettSøknadSuccess,
+  isDeletingSøknad,
+  slettSøknadOgAvbryt,
+  startNySøknad,
+}: SlettModalProps) => {
+  const { formatMessage } = useFeatureToggleIntl();
+  return (
+    <Modal
+      open={isOpen}
+      onClose={() => onClose(false)}
+      closeButton={!slettSøknadSuccess}
+      shouldCloseOnOverlayClick={!slettSøknadSuccess}
+    >
+      <Modal.Content className={classes?.modalContent}>
+        {!slettSøknadSuccess && (
+          <>
+            <Heading size={'small'} level={'1'}>
+              {formatMessage('avbrytOgSlettModal.heading')}
+            </Heading>
+            <div className={classes?.buttonWrapper}>
+              <Button variant="primary" type="button" onClick={() => slettSøknadOgAvbryt()}>
+                {isDeletingSøknad && <Loader />}
+                {!isDeletingSøknad && formatMessage('avbrytOgSlettModal.avbrytOgSlettButtonText')}
+              </Button>
+              <Button
+                variant="tertiary"
+                type="button"
+                onClick={() => !isDeletingSøknad && onClose(false)}
+              >
+                {formatMessage('avbrytOgSlettModal.avbrytButtonText')}
+              </Button>
+            </div>
+          </>
+        )}
+        {slettSøknadSuccess && (
+          <>
+            <SuccessStroke
+              className={classes?.successStroke}
+              color={'var(--navds-semantic-color-feedback-success-border)'}
+            />
+            <Alert variant={'success'}>Søknaden er slettet</Alert>
+            <div className={classes?.buttonWrapper}>
+              <Button
+                variant="primary"
+                type="button"
+                onClick={() => {
+                  if (window?.location) {
+                    window.location.href = formatMessage('applinks.dittNav', {
+                      hostname: process.env.NAV_HOSTNAME_URL,
+                    });
+                  }
+                }}
+              >
+                {formatMessage('avbrytOgSlettModal.lukkButtonText')}
+              </Button>
+              <Button variant="tertiary" type="button" onClick={() => startNySøknad()}>
+                {formatMessage('avbrytOgSlettModal.sendNyButtonText')}
+              </Button>
+            </div>
+          </>
+        )}
+      </Modal.Content>
+    </Modal>
+  );
+};
+
 const SøknadFormWrapper = ({
   children,
   nextButtonText,
@@ -91,86 +203,15 @@ const SøknadFormWrapper = ({
           </Button>
         </div>
       </form>
-      <Modal open={showLagreModal} onClose={() => setShowLagreModal(false)}>
-        <Modal.Content className={classes?.modalContent}>
-          <Heading size={'small'} level={'1'}>
-            {formatMessage('lagreModal.heading')}
-          </Heading>
-          <BodyShort>{formatMessage('lagreModal.text')}</BodyShort>
-          <div className={classes?.buttonWrapper}>
-            <Button
-              variant="primary"
-              type="button"
-              onClick={() => {
-                if (window?.location) {
-                  window.location.href = formatMessage('applinks.dineSaker');
-                }
-              }}
-            >
-              {formatMessage('lagreModal.lagreButtonText')}
-            </Button>
-            <Button variant="tertiary" type="button" onClick={() => setShowLagreModal(false)}>
-              {formatMessage('lagreModal.avbrytButtonText')}
-            </Button>
-          </div>
-        </Modal.Content>
-      </Modal>
-      <Modal
-        open={showAvbrytModal}
-        onClose={() => setShowAvbrytModal(false)}
-        closeButton={!slettSøknadSuccess}
-        shouldCloseOnOverlayClick={!slettSøknadSuccess}
-      >
-        <Modal.Content className={classes?.modalContent}>
-          {!slettSøknadSuccess && (
-            <>
-              <Heading size={'small'} level={'1'}>
-                {formatMessage('avbrytOgSlettModal.heading')}
-              </Heading>
-              <div className={classes?.buttonWrapper}>
-                <Button variant="primary" type="button" onClick={() => slettSøknadOgAvbryt()}>
-                  {isSlettingSøknad && <Loader />}
-                  {!isSlettingSøknad && formatMessage('avbrytOgSlettModal.avbrytOgSlettButtonText')}
-                </Button>
-                <Button
-                  variant="tertiary"
-                  type="button"
-                  onClick={() => !isSlettingSøknad && setShowAvbrytModal(false)}
-                >
-                  {formatMessage('avbrytOgSlettModal.avbrytButtonText')}
-                </Button>
-              </div>
-            </>
-          )}
-          {slettSøknadSuccess && (
-            <>
-              <SuccessStroke
-                className={classes?.successStroke}
-                color={'var(--navds-semantic-color-feedback-success-border)'}
-              />
-              <Alert variant={'success'}>Søknaden er slettet</Alert>
-              <div className={classes?.buttonWrapper}>
-                <Button
-                  variant="primary"
-                  type="button"
-                  onClick={() => {
-                    if (window?.location) {
-                      window.location.href = formatMessage('applinks.dittNav', {
-                        hostname: process.env.NAV_HOSTNAME_URL,
-                      });
-                    }
-                  }}
-                >
-                  {formatMessage('avbrytOgSlettModal.lukkButtonText')}
-                </Button>
-                <Button variant="tertiary" type="button" onClick={() => navigate(0)}>
-                  {formatMessage('avbrytOgSlettModal.sendNyButtonText')}
-                </Button>
-              </div>
-            </>
-          )}
-        </Modal.Content>
-      </Modal>
+      <LagreModal isOpen={showLagreModal} onClose={(value) => setShowLagreModal(value)} />
+      <SlettModal
+        isOpen={showAvbrytModal}
+        onClose={(value: boolean) => setShowAvbrytModal(value)}
+        slettSøknadSuccess={slettSøknadSuccess}
+        isDeletingSøknad={isSlettingSøknad}
+        slettSøknadOgAvbryt={() => slettSøknadOgAvbryt()}
+        startNySøknad={() => navigate(0)}
+      />
     </>
   );
 };
