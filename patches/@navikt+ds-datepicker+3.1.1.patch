@@ -1,0 +1,13 @@
+diff --git a/node_modules/@navikt/ds-datepicker/lib/Datepicker.js b/node_modules/@navikt/ds-datepicker/lib/Datepicker.js
+index 17cebc6..f2b5ee6 100644
+--- a/node_modules/@navikt/ds-datepicker/lib/Datepicker.js
++++ b/node_modules/@navikt/ds-datepicker/lib/Datepicker.js
+@@ -37,7 +37,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
+     return (mod && mod.__esModule) ? mod : { "default": mod };
+ };
+ Object.defineProperty(exports, "__esModule", { value: true });
+-var useFormField_1 = require("@navikt/ds-react/esm/form/useFormField");
++var useFormField_1 = require("@navikt/ds-react/cjs/form/useFormField");
+ var react_1 = __importStar(require("react"));
+ var uuid_1 = require("uuid");
+ var DomEventContainer_1 = __importDefault(require("./common/DomEventContainer"));
