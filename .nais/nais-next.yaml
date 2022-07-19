@@ -23,6 +23,7 @@ spec:
     enabled: true
     sidecar:
       enabled: true
+      autoLogin: true
       level: Level4
   ingresses:
     - https://aap-soknad-next.dev.nav.no

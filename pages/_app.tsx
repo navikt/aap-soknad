@@ -10,6 +10,10 @@ import { SokerOppslagProvider } from '../src/context/sokerOppslagContext';
 import { VedleggContextProvider } from '../src/context/vedleggContext';
 import { StepWizardProvider } from '../src/context/stepWizardContextV2';
 
+if (process.env.NEXT_PUBLIC_USE_MOCK === 'true') {
+  require('../src/mocks/nextjs');
+}
+
 const CustomApp = ({ Component, pageProps }: AppProps) => {
   const locale = 'nb';
 
