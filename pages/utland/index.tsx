@@ -12,7 +12,7 @@ const Utland = () => {
     <>
       <GuidePanel poster>{formatMessage('utland.veiledning.guide.text')}</GuidePanel>
       <div className={classes?.buttonWrapper}>
-        <Button variant="primary" type="button" onClick={() => router.push('destinasjon')}>
+        <Button variant="primary" type="button" onClick={() => router.push('/utland/1')}>
           {'Fortsett til søknaden'}
         </Button>
         <Button variant="tertiary" type="button" onClick={() => console.log('TODO')}>

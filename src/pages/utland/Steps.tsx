@@ -39,8 +39,9 @@ export const StepIntroduction = ({ onSubmit }: IntroductionProps) => {
 
 interface SelectCountryProps {
   onBackClick: () => void;
+  onNext: (data: any) => void;
 }
-export const StepSelectCountry = ({ onBackClick }: SelectCountryProps) => {
+export const StepSelectCountry = ({ onBackClick, onNext }: SelectCountryProps) => {
   const LAND = 'land';
   const { formatMessage } = useFeatureToggleIntl();
   const schema = yup.object().shape({
@@ -72,8 +73,7 @@ export const StepSelectCountry = ({ onBackClick }: SelectCountryProps) => {
       <GuidePanel poster>{formatMessage('utland.land.guide.text')}</GuidePanel>
       <SoknadFormWrapper
         onNext={handleSubmit((data) => {
-          updateSøknadData(søknadDispatch, data);
-          completeAndGoToNextStep(stepWizardDispatch);
+          onNext(data);
         })}
         onBack={() => onBackClick()}
         onDelete={() => slettLagretSoknadState(søknadDispatch, søknadState)}
@@ -96,8 +96,13 @@ export const StepSelectCountry = ({ onBackClick }: SelectCountryProps) => {
 interface SelectTravelPeriodProps {
   søknad?: SoknadUtland;
   onBackClick: () => void;
+  onNext: (data: any) => void;
 }
-export const StepSelectTravelPeriod = ({ søknad, onBackClick }: SelectTravelPeriodProps) => {
+export const StepSelectTravelPeriod = ({
+  søknad,
+  onBackClick,
+  onNext,
+}: SelectTravelPeriodProps) => {
   const FRA_DATO = 'fraDato';
   const TIL_DATO = 'tilDato';
   const { formatMessage } = useFeatureToggleIntl();
@@ -134,8 +139,7 @@ export const StepSelectTravelPeriod = ({ søknad, onBackClick }: SelectTravelPer
   return (
     <SoknadFormWrapper
       onNext={handleSubmit((data) => {
-        updateSøknadData(søknadDispatch, data);
-        completeAndGoToNextStep(stepWizardDispatch);
+        onNext(data);
       })}
       onBack={() => onBackClick()}
       onDelete={() => slettLagretSoknadState(søknadDispatch, søknadState)}
@@ -164,8 +168,9 @@ interface SummaryProps {
   data: any;
   onBackClick: () => void;
   onSubmitSoknad: (data: Soknad) => void;
+  onNext: (data: any) => void;
 }
-export const StepSummary = ({ data, onBackClick }: SummaryProps) => {
+export const StepSummary = ({ data, onBackClick, onNext }: SummaryProps) => {
   const { formatMessage } = useFeatureToggleIntl();
   const BEKREFT = 'bekreftelse';
   const schema = yup.object().shape({
@@ -204,8 +209,7 @@ export const StepSummary = ({ data, onBackClick }: SummaryProps) => {
       <BodyShort>{formatDate(data?.tilDato, 'dd.MM.yyyy')}</BodyShort>
       <SoknadFormWrapper
         onNext={handleSubmit((data) => {
-          updateSøknadData(søknadDispatch, data);
-          completeAndGoToNextStep(stepWizardDispatch);
+          onNext(data);
         })}
         onBack={() => onBackClick()}
         onDelete={() => slettLagretSoknadState(søknadDispatch, søknadState)}

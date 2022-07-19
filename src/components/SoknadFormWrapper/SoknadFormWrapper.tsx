@@ -17,6 +17,7 @@ interface Props {
   onDelete: () => Promise<boolean>;
   nextIsLoading?: boolean;
   focusOnErrors?: boolean;
+  onStartNySøknad?: () => void;
   errors: FieldErrors;
 }
 
@@ -141,8 +142,9 @@ const SøknadFormWrapper = ({
   onDelete,
   errors,
   nextIsLoading = false,
+  onStartNySøknad,
 }: Props) => {
-  const navigate = useNavigate();
+  //const navigate = useNavigate();
 
   const { formatMessage } = useFeatureToggleIntl();
   const [showLagreModal, setShowLagreModal] = useState<boolean>(false);
@@ -210,7 +212,9 @@ const SøknadFormWrapper = ({
         slettSøknadSuccess={slettSøknadSuccess}
         isDeletingSøknad={isSlettingSøknad}
         slettSøknadOgAvbryt={() => slettSøknadOgAvbryt()}
-        startNySøknad={() => navigate(0)}
+        startNySøknad={() =>
+          onStartNySøknad ? onStartNySøknad() : console.log('navigate is not implemented')
+        }
       />
     </>
   );
