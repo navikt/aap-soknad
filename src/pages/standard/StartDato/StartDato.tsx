@@ -108,7 +108,6 @@ const StartDato = ({ onBackClick }: Props) => {
   }, [allFields]);
   const skalHaFerie = watch(`${FERIE}.${SKALHAFERIE}`);
   const ferieType = watch(`${FERIE}.${FERIETYPE}`);
-
   const FerieType = useMemo(
     () => ({
       PERIODE: formatMessage('søknad.startDato.ferieType.values.periode'),
@@ -226,4 +225,5 @@ const StartDato = ({ onBackClick }: Props) => {
     </SoknadFormWrapper>
   );
 };
+
 export default StartDato;

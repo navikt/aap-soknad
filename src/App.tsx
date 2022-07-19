@@ -16,33 +16,9 @@ import StandardPage from './pages/standard';
 import { Feilviser } from './components/Feilviser/Feilviser';
 import { logError } from './utils/clientLogger';
 import { VedleggContextProvider } from './context/vedleggContext';
-
-function flattenMessages(nestedMessages: object, prefix = '') {
-  return Object.keys(nestedMessages).reduce((messages, key) => {
-    // @ts-ignore
-    let value = nestedMessages[key];
-    let prefixedKey = prefix ? `${prefix}.${key}` : key;
-
-    if (typeof value === 'string') {
-      // @ts-ignore
-      messages[prefixedKey] = value;
-    } else {
-      Object.assign(messages, flattenMessages(value, prefixedKey));
-    }
-
-    return messages;
-  }, {});
-}
 import links from './translations/links.json';
-import messagesNb from './translations/nb.json';
 import VedleggVisning from './pages/VedleggVisning';
-type Locale = 'nb' | 'en';
-type Messages = {
-  [K in Locale]?: { [name: string]: string };
-};
-export const messages: Messages = {
-  nb: flattenMessages(messagesNb),
-};
+import { messages, flattenMessages, Locale } from './utils/message';
 
 const UtlandWithContext = () => (
   <SoknadContextProviderUtland>

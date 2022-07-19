@@ -4,6 +4,8 @@ import { Veiledning } from '../../src/pages/standard/Veiledning/Veiledning';
 
 import { useEffect, useState } from 'react';
 import { SokerOppslagState, SøkerView } from '../../src/context/sokerOppslagContext';
+import React from 'react';
+import { useRouter } from 'next/router';
 
 const sokerUrl = '/aap/soknad/api/oppslag/soeker/';
 
@@ -16,6 +18,7 @@ const fetcher = async (url: string) =>
 
 const Introduksjon = () => {
   const { data, error } = useSwr<SokerOppslagState>(sokerUrl, fetcher);
+  const router = useRouter();
 
   const [soker, setSoker] = useState({});
 
@@ -30,7 +33,7 @@ const Introduksjon = () => {
     }
   }, [data, setSoker]);
 
-  return <Veiledning søker={soker} loading={false} onSubmit={() => console.log('onSubmit')} />;
+  return <Veiledning søker={soker} loading={false} onSubmit={() => router.push('startdato')} />;
 };
 
 export default Introduksjon;
