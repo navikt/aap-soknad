@@ -10,9 +10,6 @@ module.exports = {
     'src/pages/standard/Veiledning/',
     'src/pages/standard/StartDato/StartDato.test.tsx',
     'src/pages/standard/Yrkesskade/',
-    'src/components/schema/',
-    // Ny datepicker krangler på imports :(
-    'src/pages/standard/StartDato/StartDatoValidation.test.ts',
   ],
   moduleNameMapper: { '\\.(css)$': '<rootDir>/src/mocks/styleMock.ts' },
   transform: {

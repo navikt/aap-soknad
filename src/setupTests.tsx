@@ -7,7 +7,7 @@ import { render as rtlRender } from '@testing-library/react';
 import { ReactElement } from 'react';
 import { IntlProvider } from 'react-intl';
 import { BrowserRouter } from 'react-router-dom';
-import { messages } from './App';
+import { messages } from './utils/message';
 import { server } from './mocks/server';
 
 beforeAll(() => server.listen());
