@@ -16,6 +16,7 @@ interface Opts {
   //req: NextApiRequest;
   audience: string;
   method: 'GET' | 'POST' | 'DELETE';
+  data?: string;
   noResponse?: boolean;
   bearerToken?: string;
 }
@@ -29,6 +30,7 @@ export const tokenXProxy = async (opts: Opts) => {
   const tokenxToken = await getTokenxToken(idportenToken, opts.audience);
   const response = await fetch(opts.url, {
     method: opts.method,
+    body: opts.data,
     headers: { Authorization: `Bearer ${tokenxToken}` },
   });
 

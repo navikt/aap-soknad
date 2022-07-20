@@ -22,6 +22,7 @@ export const lagreBucket = async (type: SøknadsType, data: string, accessToken?
   await tokenXProxy({
     url: `${process.env.SOKNAD_API_URL}/buckets/lagre/${type}`,
     method: 'POST',
+    data: JSON.stringify(data),
     audience: process.env.SOKNAD_API_AUDIENCE!,
     bearerToken: accessToken,
   });
