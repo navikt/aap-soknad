@@ -16,11 +16,11 @@ import { useDebounceLagreSoknad } from '../../../hooks/useDebounceLagreSoknad';
 
 interface Props {
   onBackClick: () => void;
-  onCancelClick: () => void;
+  onNext: (data: any) => void;
 }
 const YRKESSKADE = 'yrkesskade';
 
-export const Yrkesskade = ({ onBackClick }: Props) => {
+export const Yrkesskade = ({ onBackClick, onNext }: Props) => {
   const { formatMessage, formatElement } = useFeatureToggleIntl();
 
   const schema = yup.object().shape({
@@ -52,8 +52,7 @@ export const Yrkesskade = ({ onBackClick }: Props) => {
   return (
     <SoknadFormWrapper
       onNext={handleSubmit((data) => {
-        updateSøknadData<Soknad>(søknadDispatch, data);
-        completeAndGoToNextStep(stepWizardDispatch);
+        onNext(data);
       })}
       onBack={() => {
         updateSøknadData<Soknad>(søknadDispatch, { ...søknadState.søknad });

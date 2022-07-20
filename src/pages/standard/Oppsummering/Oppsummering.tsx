@@ -25,7 +25,6 @@ import { Relasjon } from '../Barnetillegg/AddBarnModal';
 
 interface OppsummeringProps {
   onBackClick: () => void;
-  onCancelClick: () => void;
   onSubmitSoknad: (data: Soknad) => void;
 }
 

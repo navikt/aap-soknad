@@ -13,9 +13,10 @@ interface StudentProps {
 const Kvittering = ({ søker }: StudentProps) => {
   const { formatMessage, formatElement } = useFeatureToggleIntl();
 
-  const dittNavUrl = window.location.href.includes('www.nav.no')
-    ? 'https://www.nav.no/person/dittnav/'
-    : 'https://www.dev.nav.no/person/dittnav/';
+  const dittNavUrl =
+    typeof window !== 'undefined' && window.location.href.includes('www.nav.no')
+      ? 'https://www.nav.no/person/dittnav/'
+      : 'https://www.dev.nav.no/person/dittnav/';
 
   return (
     <div className={classes?.kvitteringContent}>

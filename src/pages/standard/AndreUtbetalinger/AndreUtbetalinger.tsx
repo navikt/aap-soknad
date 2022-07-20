@@ -24,7 +24,7 @@ import { useDebounceLagreSoknad } from '../../../hooks/useDebounceLagreSoknad';
 
 interface Props {
   onBackClick: () => void;
-  onCancelClick: () => void;
+  onNext: (data: any) => void;
 }
 export enum AttachmentType {
   LØNN_OG_ANDRE_GODER = 'LØNN_OG_ANDRE_GODER',
@@ -48,7 +48,7 @@ const ANDRE_UTBETALINGER = 'andreUtbetalinger';
 const LØNN = 'lønn';
 const STØNAD = 'stønad';
 
-export const AndreUtbetalinger = ({ onBackClick }: Props) => {
+export const AndreUtbetalinger = ({ onBackClick, onNext }: Props) => {
   const { formatMessage } = useFeatureToggleIntl();
 
   const schema = yup.object().shape({
@@ -158,8 +158,7 @@ export const AndreUtbetalinger = ({ onBackClick }: Props) => {
   return (
     <SoknadFormWrapper
       onNext={handleSubmit((data) => {
-        updateSøknadData<Soknad>(søknadDispatch, data);
-        completeAndGoToNextStep(stepWizardDispatch);
+        onNext(data);
       })}
       onBack={() => {
         updateSøknadData<Soknad>(søknadDispatch, { ...søknadState.søknad });

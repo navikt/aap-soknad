@@ -33,7 +33,7 @@ import * as styles from './Medlemskap.module.css';
 
 interface Props {
   onBackClick: () => void;
-  onCancelClick: () => void;
+  onNext: (data: any) => void;
 }
 const UTENLANDSOPPHOLD = 'utenlandsOpphold';
 const BODD_I_NORGE = 'harBoddINorgeSiste5År';
@@ -58,7 +58,7 @@ const validateUtenlandsPeriode = (
   );
 };
 
-export const Medlemskap = ({ onBackClick }: Props) => {
+export const Medlemskap = ({ onBackClick, onNext }: Props) => {
   const { formatMessage } = useFeatureToggleIntl();
 
   const schema = yup.object().shape({
@@ -225,8 +225,7 @@ export const Medlemskap = ({ onBackClick }: Props) => {
     <>
       <SoknadFormWrapper
         onNext={handleSubmit((data) => {
-          updateSøknadData<Soknad>(søknadDispatch, data);
-          completeAndGoToNextStep(stepWizardDispatch);
+          onNext(data);
         })}
         onBack={() => {
           updateSøknadData<Soknad>(søknadDispatch, { ...søknadState.søknad });

@@ -1,6 +1,6 @@
 import { Label, Link, BodyShort, Detail, Heading, Loader, Panel } from '@navikt/ds-react';
 import React, { DragEventHandler, useRef, useState } from 'react';
-import SvgUpload from '@navikt/ds-icons/esm/Upload';
+import { Upload as SvgUpload } from '@navikt/ds-icons';
 import * as classes from './FileInput.module.css';
 import {
   FieldArray,

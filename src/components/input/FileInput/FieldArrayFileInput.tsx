@@ -4,7 +4,7 @@ import React, { DragEventHandler, useRef, useState } from 'react';
 import * as classes from './FileInput.module.css';
 import { BodyShort, Detail, Heading, Label, Link, Loader, Panel } from '@navikt/ds-react';
 import { Cancel, Delete, FileError, FileSuccess } from '@navikt/ds-icons';
-import SvgUpload from '@navikt/ds-icons/esm/Upload';
+import { Upload as SvgUpload } from '@navikt/ds-icons';
 type Props = {
   setError: (name: string, error: FieldError) => void;
   clearErrors: (name?: string | string[]) => void;

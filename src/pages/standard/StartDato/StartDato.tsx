@@ -34,7 +34,7 @@ export const formatDate = (date?: Date) => {
 
 interface Props {
   onBackClick: () => void;
-  onCancelClick: () => void;
+  onNext: (data: any) => void;
 }
 
 export const getSchema = (formatMessage: (id: string) => string) => {
@@ -80,7 +80,7 @@ export const getSchema = (formatMessage: (id: string) => string) => {
   });
 };
 
-const StartDato = ({ onBackClick }: Props) => {
+const StartDato = ({ onBackClick, onNext }: Props) => {
   const { formatMessage } = useFeatureToggleIntl();
   const { søknadState, søknadDispatch } = useSoknadContextStandard();
   const { stepList, stepWizardDispatch } = useStepWizard();
@@ -126,8 +126,7 @@ const StartDato = ({ onBackClick }: Props) => {
     <SoknadFormWrapper
       onNext={handleSubmit(
         (data) => {
-          updateSøknadData<Soknad>(søknadDispatch, data);
-          completeAndGoToNextStep(stepWizardDispatch);
+          onNext(data);
         },
         () => setErrorSummaryFocus()
       )}

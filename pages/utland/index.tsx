@@ -1,26 +1,10 @@
-import { Button, GuidePanel } from '@navikt/ds-react';
 import { useRouter } from 'next/router';
 import React from 'react';
-import { useFeatureToggleIntl } from '../../src/hooks/useFeatureToggleIntl';
-import * as classes from '../../src/pages/standard/Veiledning/Veiledning.module.css';
+import { StepIntroduction } from '../../src/pages/utland/Steps';
 
 const Utland = () => {
   const router = useRouter();
-  const { formatMessage } = useFeatureToggleIntl();
-
-  return (
-    <>
-      <GuidePanel poster>{formatMessage('utland.veiledning.guide.text')}</GuidePanel>
-      <div className={classes?.buttonWrapper}>
-        <Button variant="primary" type="button" onClick={() => router.push('/utland/1')}>
-          {'Fortsett til søknaden'}
-        </Button>
-        <Button variant="tertiary" type="button" onClick={() => console.log('TODO')}>
-          {'Slett påbegynt søknad'}
-        </Button>
-      </div>
-    </>
-  );
+  return <StepIntroduction onSubmit={() => router.push('utland/1')} />;
 };
 
 export default Utland;

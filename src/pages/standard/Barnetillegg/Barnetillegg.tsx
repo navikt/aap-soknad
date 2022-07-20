@@ -26,14 +26,14 @@ import { formatDate } from '../StartDato/StartDato';
 
 interface Props {
   onBackClick: () => void;
-  onCancelClick: () => void;
+  onNext: (data: any) => void;
 }
 const BARNETILLEGG = 'barnetillegg';
 export const MANUELLE_BARN = 'manuelleBarn';
 
 export const GRUNNBELØP = '111 477';
 
-export const Barnetillegg = ({ onBackClick }: Props) => {
+export const Barnetillegg = ({ onBackClick, onNext }: Props) => {
   const { formatMessage } = useFeatureToggleIntl();
 
   const schema = yup.object().shape({
@@ -174,8 +174,7 @@ export const Barnetillegg = ({ onBackClick }: Props) => {
     <>
       <SoknadFormWrapper
         onNext={handleSubmit((data) => {
-          updateSøknadData<Soknad>(søknadDispatch, data);
-          completeAndGoToNextStep(stepWizardDispatch);
+          onNext(data);
         })}
         onBack={() => {
           updateSøknadData<Soknad>(søknadDispatch, { ...søknadState.søknad });

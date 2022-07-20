@@ -14,6 +14,7 @@ import { hentSoknadState, slettLagretSoknadState } from '../../context/soknadCon
 import { useSoknadContextStandard, addBarnIfMissing } from '../../context/soknadContextStandard';
 import { Veiledning } from './Veiledning/Veiledning';
 import { FastlegeView, hentSokerOppslag, useSokerOppslag } from '../../context/sokerOppslagContext';
+import { updateSøknadData } from '../../context/soknadContextCommon';
 import { Behandlere } from './Behandlere/Behandlere';
 import { Medlemskap } from './Medlemskap/Medlemskap';
 import { Yrkesskade } from './Yrkesskade/Yrkesskade';
@@ -48,7 +49,7 @@ export enum StepNames {
   TILLEGGSOPPLYSNINGER = 'TILLEGGSOPPLYSNINGER',
   OPPSUMMERING = 'OPPSUMMERING',
 }
-const defaultStepList = [
+export const defaultStepList = [
   { name: StepNames.STARTDATO, active: true },
   { name: StepNames.MEDLEMSKAP },
   { name: StepNames.YRKESSKADE },
@@ -187,7 +188,10 @@ const mapFastlege = (fastlege?: FastlegeView): Behandler[] => {
   return [];
 };
 
-const mapSøknadToBackend = (søknad?: Soknad, fastlege?: FastlegeView): SøknadBackendState => {
+export const mapSøknadToBackend = (
+  søknad?: Soknad,
+  fastlege?: FastlegeView
+): SøknadBackendState => {
   const ferieType = getFerieType(søknad?.ferie?.skalHaFerie, søknad?.ferie?.ferieType);
   const mappedFastlege = mapFastlege(fastlege);
 
@@ -430,43 +434,90 @@ export const StandardPage = (): JSX.Element => {
       </header>
       <StepWizard hideLabels={true}>
         <Step order={1} name={StepNames.STARTDATO}>
-          <StartDato onCancelClick={onDeleteSøknad} onBackClick={onPreviousStep} />
+          <StartDato
+            onBackClick={onPreviousStep}
+            onNext={(data) => {
+              updateSøknadData<Soknad>(søknadDispatch, data);
+              completeAndGoToNextStep(stepWizardDispatch);
+            }}
+          />
         </Step>
         <Step order={2} name={StepNames.MEDLEMSKAP}>
-          <Medlemskap onCancelClick={onDeleteSøknad} onBackClick={onPreviousStep} />
+          <Medlemskap
+            onBackClick={onPreviousStep}
+            onNext={(data) => {
+              updateSøknadData<Soknad>(søknadDispatch, data);
+              completeAndGoToNextStep(stepWizardDispatch);
+            }}
+          />
         </Step>
         <Step order={3} name={StepNames.YRKESSKADE}>
-          <Yrkesskade onCancelClick={onDeleteSøknad} onBackClick={onPreviousStep} />
+          <Yrkesskade
+            onBackClick={onPreviousStep}
+            onNext={(data) => {
+              updateSøknadData<Soknad>(søknadDispatch, data);
+              completeAndGoToNextStep(stepWizardDispatch);
+            }}
+          />
         </Step>
 
         <Step order={4} name={StepNames.FASTLEGE}>
           <Behandlere
-            onCancelClick={onDeleteSøknad}
             onBackClick={onPreviousStep}
+            onNext={(data) => {
+              updateSøknadData<Soknad>(søknadDispatch, data);
+              completeAndGoToNextStep(stepWizardDispatch);
+            }}
             fastlege={fastlege}
           />
         </Step>
         <Step order={5} name={StepNames.BARNETILLEGG}>
-          <Barnetillegg onCancelClick={onDeleteSøknad} onBackClick={onPreviousStep} />
+          <Barnetillegg
+            onBackClick={onPreviousStep}
+            onNext={(data) => {
+              updateSøknadData<Soknad>(søknadDispatch, data);
+              completeAndGoToNextStep(stepWizardDispatch);
+            }}
+          />
         </Step>
         <Step order={6} name={StepNames.STUDENT}>
-          <Student onCancelClick={onDeleteSøknad} onBackClick={onPreviousStep} />
+          <Student
+            onBackClick={onPreviousStep}
+            onNext={(data) => {
+              updateSøknadData<Soknad>(søknadDispatch, data);
+              completeAndGoToNextStep(stepWizardDispatch);
+            }}
+          />
         </Step>
         <Step order={7} name={StepNames.ANDRE_UTBETALINGER}>
-          <AndreUtbetalinger onCancelClick={onDeleteSøknad} onBackClick={onPreviousStep} />
+          <AndreUtbetalinger
+            onBackClick={onPreviousStep}
+            onNext={(data) => {
+              updateSøknadData<Soknad>(søknadDispatch, data);
+              completeAndGoToNextStep(stepWizardDispatch);
+            }}
+          />
         </Step>
         <Step order={8} name={StepNames.TILLEGGSOPPLYSNINGER}>
-          <Tilleggsopplysninger onCancelClick={onDeleteSøknad} onBackClick={onPreviousStep} />
+          <Tilleggsopplysninger
+            onBackClick={onPreviousStep}
+            onNext={(data) => {
+              updateSøknadData<Soknad>(søknadDispatch, data);
+              completeAndGoToNextStep(stepWizardDispatch);
+            }}
+          />
         </Step>
         <Step order={9} name={StepNames.VEDLEGG}>
-          <Vedlegg onCancelClick={onDeleteSøknad} onBackClick={onPreviousStep} />
+          <Vedlegg
+            onBackClick={onPreviousStep}
+            onNext={(data) => {
+              updateSøknadData<Soknad>(søknadDispatch, data);
+              completeAndGoToNextStep(stepWizardDispatch);
+            }}
+          />
         </Step>
         <Step order={10} name={StepNames.OPPSUMMERING}>
-          <Oppsummering
-            onCancelClick={onDeleteSøknad}
-            onBackClick={onPreviousStep}
-            onSubmitSoknad={submitSoknad}
-          />
+          <Oppsummering onBackClick={onPreviousStep} onSubmitSoknad={submitSoknad} />
         </Step>
       </StepWizard>
     </>

@@ -21,7 +21,7 @@ import FieldArrayFileInput from '../../../components/input/FileInput/FieldArrayF
 
 interface Props {
   onBackClick: () => void;
-  onCancelClick: () => void;
+  onNext: (data: any) => void;
 }
 const VEDLEGG = 'vedlegg';
 const VEDLEGG_LØNN = `${VEDLEGG}.${AttachmentType.LØNN_OG_ANDRE_GODER}`;
@@ -29,7 +29,7 @@ const VEDLEGG_OMSORGSSTØNAD = `${VEDLEGG}.${AttachmentType.OMSORGSSTØNAD}`;
 const VEDLEGG_UTLANDSSTØNAD = `${VEDLEGG}.${AttachmentType.UTLANDSSTØNAD}`;
 const VEDLEGG_ANNET = `${VEDLEGG}.annet`;
 
-const Vedlegg = ({ onBackClick }: Props) => {
+const Vedlegg = ({ onBackClick, onNext }: Props) => {
   const { formatMessage } = useFeatureToggleIntl();
   const [scanningGuideOpen, setScanningGuideOpen] = useState(false);
   const scanningGuideElement = useRef(null);
@@ -68,8 +68,7 @@ const Vedlegg = ({ onBackClick }: Props) => {
   return (
     <SoknadFormWrapper
       onNext={handleSubmit((data) => {
-        updateSøknadData<Soknad>(søknadDispatch, data);
-        completeAndGoToNextStep(stepWizardDispatch);
+        onNext(data);
       })}
       onBack={() => {
         updateSøknadData<Soknad>(søknadDispatch, { ...søknadState.søknad });

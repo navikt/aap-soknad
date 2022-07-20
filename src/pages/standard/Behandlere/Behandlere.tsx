@@ -18,12 +18,12 @@ import { useDebounceLagreSoknad } from '../../../hooks/useDebounceLagreSoknad';
 
 interface Props {
   onBackClick: () => void;
-  onCancelClick: () => void;
+  onNext: (data: any) => void;
   fastlege?: FastlegeView;
 }
 const BEHANDLERE = 'behandlere';
 
-export const Behandlere = ({ onBackClick, fastlege }: Props) => {
+export const Behandlere = ({ onBackClick, onNext, fastlege }: Props) => {
   const { formatMessage } = useFeatureToggleIntl();
 
   const schema = yup.object().shape({});
@@ -85,8 +85,7 @@ export const Behandlere = ({ onBackClick, fastlege }: Props) => {
     <>
       <SoknadFormWrapper
         onNext={handleSubmit((data) => {
-          updateSøknadData<Soknad>(søknadDispatch, data);
-          completeAndGoToNextStep(stepWizardDispatch);
+          onNext(data);
         })}
         onBack={() => {
           updateSøknadData<Soknad>(søknadDispatch, { ...søknadState.søknad });

@@ -16,10 +16,10 @@ import { useDebounceLagreSoknad } from '../../../hooks/useDebounceLagreSoknad';
 const TILLEGGSOPPLYSNINGER = 'tilleggsopplysninger';
 interface Props {
   onBackClick: () => void;
-  onCancelClick: () => void;
+  onNext: (data: any) => void;
 }
 
-const Tilleggsopplysninger = ({ onBackClick }: Props) => {
+const Tilleggsopplysninger = ({ onBackClick, onNext }: Props) => {
   const { formatMessage } = useFeatureToggleIntl();
 
   const schema = yup.object().shape({});
@@ -44,8 +44,7 @@ const Tilleggsopplysninger = ({ onBackClick }: Props) => {
   return (
     <SoknadFormWrapper
       onNext={handleSubmit((data) => {
-        updateSøknadData<Soknad>(søknadDispatch, data);
-        completeAndGoToNextStep(stepWizardDispatch);
+        onNext(data);
       })}
       onBack={() => {
         updateSøknadData<Soknad>(søknadDispatch, { ...søknadState.søknad });

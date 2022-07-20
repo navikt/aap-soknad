@@ -33,7 +33,7 @@ const Introduksjon = () => {
     }
   }, [data, setSoker]);
 
-  return <Veiledning søker={soker} loading={false} onSubmit={() => router.push('startdato')} />;
+  return <Veiledning søker={soker} loading={false} onSubmit={() => router.push('standard/1')} />;
 };
 
 export default Introduksjon;

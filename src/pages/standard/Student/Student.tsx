@@ -32,10 +32,10 @@ enum JaNeiAvbrutt {
 }
 interface Props {
   onBackClick: () => void;
-  onCancelClick: () => void;
+  onNext: (data: any) => void;
 }
 
-const Student = ({ onBackClick }: Props) => {
+const Student = ({ onBackClick, onNext }: Props) => {
   const { formatMessage } = useFeatureToggleIntl();
   const schema = yup.object().shape({
     [STUDENT]: yup.object().shape({
@@ -105,8 +105,7 @@ const Student = ({ onBackClick }: Props) => {
   return (
     <SoknadFormWrapper
       onNext={handleSubmit((data) => {
-        updateSøknadData<Soknad>(søknadDispatch, data);
-        completeAndGoToNextStep(stepWizardDispatch);
+        onNext(data);
       })}
       onBack={() => {
         updateSøknadData<Soknad>(søknadDispatch, { ...søknadState.søknad });
