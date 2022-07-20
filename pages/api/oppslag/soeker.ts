@@ -7,7 +7,7 @@ import { isMock } from '../../../utils/environments';
 
 const handler = beskyttetApi(async (req: NextApiRequest, res: NextApiResponse) => {
   const accessToken = getAccessTokenFromRequest(req);
-  res.status(200).json(getSøker(accessToken));
+  res.status(200).json(await getSøker(accessToken));
 });
 
 export const getSøker = async (accessToken?: string) => {
@@ -18,4 +18,7 @@ export const getSøker = async (accessToken?: string) => {
     audience: process.env.SOKNAD_API_AUDIENCE!,
     bearerToken: accessToken,
   });
+  return søker;
 };
+
+export default handler;

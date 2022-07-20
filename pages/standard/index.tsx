@@ -34,7 +34,7 @@ const Introduksjon = ({ søker }: PageProps) => {
 export const getServerSideProps = beskyttetSide(
   async (ctx: NextPageContext): Promise<GetServerSidePropsResult<{}>> => {
     const bearerToken = getAccessToken(ctx);
-    const søker = getSøker(bearerToken);
+    const søker = await getSøker(bearerToken);
 
     return {
       props: { søker },
