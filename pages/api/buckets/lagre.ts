@@ -1,0 +1,31 @@
+import { NextApiRequest, NextApiResponse } from 'next';
+import { getAccessTokenFromRequest } from '../../../auth/accessToken';
+import { beskyttetApi } from '../../../auth/beskyttetApi';
+import { tokenXProxy } from '../../../auth/tokenXProxy';
+import { lagreCache } from '../../../mock/mellomlagringsCache';
+import { erGyldigSøknadsType, GYLDIGE_SØKNADS_TYPER, SøknadsType } from '../../../utils/api';
+import { isMock } from '../../../utils/environments';
+import { getStringFromPossiblyArrayQuery } from '../../../utils/string';
+
+const handler = beskyttetApi(async (req: NextApiRequest, res: NextApiResponse) => {
+  const type = getStringFromPossiblyArrayQuery(req.query.type);
+  if (erGyldigSøknadsType(type)) {
+    res.status(400).json({ error: 'type må være en av ' + GYLDIGE_SØKNADS_TYPER.join(', ') });
+  }
+  const accessToken = getAccessTokenFromRequest(req);
+  await lagreBucket(type as SøknadsType, req.body, accessToken);
+  res.status(201).json({});
+});
+
+export const lagreBucket = async (type: SøknadsType, data: string, accessToken?: string) => {
+  if (isMock()) return await lagreCache(type, data);
+  await tokenXProxy({
+    url: `${process.env.SOKNAD_API_URL}/buckets/lagre/${type}`,
+    method: 'POST',
+    audience: process.env.SOKNAD_API_AUDIENCE!,
+    bearerToken: accessToken,
+  });
+  return;
+};
+
+export default handler;

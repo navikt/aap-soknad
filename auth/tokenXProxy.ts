@@ -15,7 +15,7 @@ interface Opts {
   url: string;
   //req: NextApiRequest;
   audience: string;
-  method: 'GET' | 'POST';
+  method: 'GET' | 'POST' | 'DELETE';
   noResponse?: boolean;
   bearerToken?: string;
 }

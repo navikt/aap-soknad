@@ -15,7 +15,12 @@ export function useDebounceLagreSoknad<SoknadStateType>() {
         søknad: { ...state.søknad, ...partialSøknad },
         lagretStepList: stepList,
       };
-      fetchPOST(`/aap/soknad-api/buckets/lagre/${payload.type}`, payload);
+      fetchPOST(
+        `${process.env.NEXT_PUBLIC_TEMP_LAGRE_URL ?? '/aap/soknad-api/buckets/lagre/'}${
+          payload.type
+        }`,
+        payload
+      );
     }
   }
   const debouncedLagre = () => {

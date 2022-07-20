@@ -61,9 +61,16 @@ export async function hentSoknadState<SoknadStateType>(
   dispatch: Dispatch<SoknadAction<SoknadStateType>>,
   søknadType: SøknadType
 ) {
-  const cachedState: GenericSoknadContextState<SoknadStateType> = await fetch(
-    `/aap/soknad-api/buckets/les/${søknadType}`
-  ).then((res) => (res.ok ? res.json() : undefined));
+  return hentSoknadStateMedUrl(dispatch, `/aap/soknad-api/buckets/les/${søknadType}`);
+}
+
+export async function hentSoknadStateMedUrl<SoknadStateType>(
+  dispatch: Dispatch<SoknadAction<SoknadStateType>>,
+  url: string
+) {
+  const cachedState: GenericSoknadContextState<SoknadStateType> = await fetch(url).then((res) =>
+    res.ok ? res.json() : undefined
+  );
   console.log('bucket/les ', cachedState);
   cachedState &&
     dispatch({

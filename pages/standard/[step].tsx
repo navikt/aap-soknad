@@ -1,7 +1,7 @@
 import { PageHeader } from '@navikt/ds-react';
 import { useRouter } from 'next/router';
 import React, { useEffect, useRef } from 'react';
-import { hentSoknadState } from '../../src/context/soknadContextCommon';
+import { hentSoknadStateMedUrl } from '../../src/context/soknadContextCommon';
 import {
   useStepWizard,
   setStepList,
@@ -61,7 +61,10 @@ const Steps = ({ søker }: PageProps) => {
   useEffect(() => {
     const getSoknadStateAndOppslag = async () => {
       // Wait to test cache
-      const cachedState = await hentSoknadState<Soknad>(søknadDispatch, SøknadType.STANDARD);
+      const cachedState = await hentSoknadStateMedUrl<Soknad>(
+        søknadDispatch,
+        `/aap/soknad/api/buckets/les?type=${SøknadType.STANDARD}`
+      );
       if (cachedState?.lagretStepList && cachedState?.lagretStepList?.length > 0) {
         setStepList([...cachedState.lagretStepList], stepWizardDispatch);
       } else {
