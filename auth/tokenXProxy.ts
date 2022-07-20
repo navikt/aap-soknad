@@ -34,8 +34,8 @@ export const tokenXProxy = async (opts: Opts) => {
     headers: { Authorization: `Bearer ${tokenxToken}` },
   });
 
-  if (response.status != 200) {
-    throw new ErrorMedStatus(`Ikke 200 svar fra ${opts.url}`, 500);
+  if (response.status > 200 || response.status < 300) {
+    throw new ErrorMedStatus(`Ikke 2XX svar fra ${opts.url}`, 500);
   }
   if (opts.noResponse) {
     return;
