@@ -1,7 +1,7 @@
 import { PageHeader } from '@navikt/ds-react';
 import { useRouter } from 'next/router';
-import React, { useEffect, useRef, useState } from 'react';
-import { hentSoknadState, slettLagretSoknadState } from '../../src/context/soknadContextCommon';
+import React, { useEffect, useRef } from 'react';
+import { hentSoknadState } from '../../src/context/soknadContextCommon';
 import {
   useStepWizard,
   setStepList,
@@ -18,7 +18,11 @@ import {
   useSoknadContextStandard,
   addBarnIfMissing,
 } from '../../src/context/soknadContextStandard';
-import { hentSokerOppslag, useSokerOppslag } from '../../src/context/sokerOppslagContext';
+import {
+  setSokerOppslagFraProps,
+  SokerOppslagState,
+  useSokerOppslag,
+} from '../../src/context/sokerOppslagContext';
 import { updateSøknadData } from '../../src/context/soknadContextCommon';
 import Soknad from '../../src/types/Soknad';
 import { SubmitHandler } from 'react-hook-form';
@@ -34,19 +38,23 @@ import { AndreUtbetalinger } from '../../src/pages/standard/AndreUtbetalinger/An
 import Tilleggsopplysninger from '../../src/pages/standard/Tilleggsopplysninger/Tilleggsopplysninger';
 import Vedlegg from '../../src/pages/standard/Vedlegg/Vedlegg';
 import Oppsummering from '../../src/pages/standard/Oppsummering/Oppsummering';
+import { beskyttetSide } from '../../auth/beskyttetSide';
+import { GetServerSidePropsResult, NextPageContext } from 'next';
+import { getAccessToken } from '../../auth/accessToken';
+import { getSøker } from '../api/oppslag/soeker';
 
-const Steps = () => {
+interface PageProps {
+  søker: SokerOppslagState;
+}
+
+const Steps = ({ søker }: PageProps) => {
   const router = useRouter();
-
   const { step } = router.query;
-
-  console.log('router.query', step);
 
   const { formatMessage } = useFeatureToggleIntl();
 
-  const [oppslagLoading, setOppslagLoading] = useState<boolean>(true);
   const { søknadState, søknadDispatch } = useSoknadContextStandard();
-  const { oppslagDispatch, søker, fastlege } = useSokerOppslag();
+  const { oppslagDispatch, fastlege } = useSokerOppslag();
   const { currentStep, stepList, stepWizardDispatch } = useStepWizard();
   const debouncedLagre = useDebounceLagreSoknad<Soknad>();
   const pageHeading = useRef(null);
@@ -59,8 +67,7 @@ const Steps = () => {
       } else {
         setStepList([...defaultStepList], stepWizardDispatch);
       }
-      const oppslag = await hentSokerOppslag(oppslagDispatch);
-      setOppslagLoading(false);
+      const oppslag = setSokerOppslagFraProps(søker, oppslagDispatch);
       if (oppslag?.søker?.barn) addBarnIfMissing(søknadDispatch, oppslag.søker.barn);
     };
     getSoknadStateAndOppslag();
@@ -217,10 +224,21 @@ const Steps = () => {
   );
 };
 
-const StepsWithContextProvider = () => (
+const StepsWithContextProvider = ({ søker }: PageProps) => (
   <SoknadContextProviderStandard>
-    <Steps />
+    <Steps søker={søker} />
   </SoknadContextProviderStandard>
+);
+
+export const getServerSideProps = beskyttetSide(
+  async (ctx: NextPageContext): Promise<GetServerSidePropsResult<{}>> => {
+    const bearerToken = getAccessToken(ctx);
+    const søker = getSøker(bearerToken);
+
+    return {
+      props: { søker },
+    };
+  }
 );
 
 export default StepsWithContextProvider;

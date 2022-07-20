@@ -1,39 +1,45 @@
-import useSwr from 'swr';
-
 import { Veiledning } from '../../src/pages/standard/Veiledning/Veiledning';
 
 import { useEffect, useState } from 'react';
 import { SokerOppslagState, SøkerView } from '../../src/context/sokerOppslagContext';
 import React from 'react';
 import { useRouter } from 'next/router';
+import { GetServerSidePropsResult, NextPageContext } from 'next/types';
+import { beskyttetSide } from '../../auth/beskyttetSide';
+import { getAccessToken } from '../../auth/accessToken';
+import { getSøker } from '../api/oppslag/soeker';
+interface PageProps {
+  søker: SokerOppslagState;
+}
 
-const sokerUrl = '/aap/soknad/api/oppslag/soeker/';
-
-const fetcher = async (url: string) =>
-  await fetch(url)
-    .then((res) => res.json())
-    .catch((err) => {
-      throw err;
-    });
-
-const Introduksjon = () => {
-  const { data, error } = useSwr<SokerOppslagState>(sokerUrl, fetcher);
+const Introduksjon = ({ søker }: PageProps) => {
   const router = useRouter();
 
   const [soker, setSoker] = useState({});
 
   useEffect(() => {
-    if (data?.søker) {
+    if (søker?.søker) {
       const _søker: SøkerView = {
-        fulltNavn: `${data.søker.navn.fornavn ?? ''} ${data.søker.navn.mellomnavn ?? ''} ${
-          data.søker.navn.etternavn ?? ''
+        fulltNavn: `${søker.søker.navn.fornavn ?? ''} ${søker.søker.navn.mellomnavn ?? ''} ${
+          søker.søker.navn.etternavn ?? ''
         }`,
       };
       setSoker(_søker);
     }
-  }, [data, setSoker]);
+  }, [søker, setSoker]);
 
   return <Veiledning søker={soker} loading={false} onSubmit={() => router.push('standard/1')} />;
 };
+
+export const getServerSideProps = beskyttetSide(
+  async (ctx: NextPageContext): Promise<GetServerSidePropsResult<{}>> => {
+    const bearerToken = getAccessToken(ctx);
+    const søker = getSøker(bearerToken);
+
+    return {
+      props: { søker },
+    };
+  }
+);
 
 export default Introduksjon;

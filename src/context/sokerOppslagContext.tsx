@@ -142,6 +142,14 @@ export const hentSokerOppslag = async (dispatch: Dispatch<DispatchSokerOppslagAc
   return oppslag;
 };
 
+export const setSokerOppslagFraProps = (
+  oppslag: SokerOppslagState,
+  dispatch: Dispatch<DispatchSokerOppslagAction>
+) => {
+  dispatch({ type: 'SET_SOKER_OPPSLAG', payload: oppslag });
+  return oppslag;
+};
+
 function useSokerOppslag() {
   const context = useContext(SokerOppslagContext);
   if (context === undefined) {
