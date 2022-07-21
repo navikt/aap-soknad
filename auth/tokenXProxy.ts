@@ -35,6 +35,9 @@ export const tokenXProxy = async (opts: Opts) => {
   });
 
   if (response.status > 200 || response.status < 300) {
+    console.log(
+      `Status for ${opts.url} er ${response.status}. Response json er: ${response.json()}`
+    );
     throw new ErrorMedStatus(`Ikke 2XX svar fra ${opts.url}`, 500);
   }
   if (opts.noResponse) {
