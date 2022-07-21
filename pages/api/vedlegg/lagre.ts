@@ -25,9 +25,7 @@ export const sendVedlegg = async (data: string, accessToken?: string) => {
 
 export const config = {
   api: {
-    bodyParser: {
-      sizeLimit: '50mb',
-    },
+    bodyParser: false,
   },
 };
 

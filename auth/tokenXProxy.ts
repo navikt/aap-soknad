@@ -47,5 +47,5 @@ export const tokenXProxy = async (opts: Opts) => {
   if (opts.noResponse) {
     return;
   }
-  return response.json();
+  return await response.json();
 };
