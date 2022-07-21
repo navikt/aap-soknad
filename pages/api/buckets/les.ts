@@ -24,7 +24,6 @@ export const lesBucket = async (type: SøknadsType, accessToken?: string) => {
     audience: process.env.SOKNAD_API_AUDIENCE!,
     bearerToken: accessToken,
   });
-  console.log('mellomlagretSøknad', mellomlagretSøknad);
   return mellomlagretSøknad;
 };
 

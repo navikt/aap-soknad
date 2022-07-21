@@ -18,7 +18,6 @@ const handler = beskyttetApi(async (req: NextApiRequest, res: NextApiResponse) =
 });
 
 export const lagreBucket = async (type: SøknadsType, data: string, accessToken?: string) => {
-  console.log('bucket data', data);
   if (isMock()) return await lagreCache(type, JSON.stringify(data));
   await tokenXProxy({
     url: `${process.env.SOKNAD_API_URL}/buckets/lagre/${type}`,
