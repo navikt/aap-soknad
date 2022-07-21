@@ -109,7 +109,7 @@ const Steps = ({ søker }: PageProps) => {
     }
   };
   const postSøknad = async (data?: any) =>
-    fetchPOST('/aap/soknad-api/innsending/soknad', {
+    fetchPOST('/aap/soknad/api/innsending/soknad', {
       ...data,
     });
   const onPreviousStep = () => {

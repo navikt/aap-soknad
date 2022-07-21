@@ -17,7 +17,7 @@ const handler = beskyttetApi(async (req: NextApiRequest, res: NextApiResponse) =
 });
 
 export const lesBucket = async (type: SøknadsType, accessToken?: string) => {
-  if (isMock()) return lesCache(type) ?? '';
+  if (isMock()) return lesCache(type) ?? {};
   const mellomlagretSøknad = await tokenXProxy({
     url: `${process.env.SOKNAD_API_URL}/buckets/les/${type}`,
     method: 'GET',
