@@ -7,20 +7,16 @@ import { isMock } from '../../../utils/environments';
 
 const handler = beskyttetApi(async (req: NextApiRequest, res: NextApiResponse) => {
   const accessToken = getAccessTokenFromRequest(req);
-  res.status(201).json(await sendVedlegg(req, accessToken));
-});
+  if (isMock()) res.status(201).json(randomUUID());
 
-export const sendVedlegg = async (req: NextApiRequest, accessToken?: string) => {
-  if (isMock()) return randomUUID();
-  const vedlegg = await tokenXAxiosProxy({
+  await tokenXAxiosProxy({
     url: `${process.env.SOKNAD_API_URL}/vedlegg/lagre`,
-    method: 'POST',
     req,
+    res,
     audience: process.env.SOKNAD_API_AUDIENCE!,
     bearerToken: accessToken,
   });
-  return vedlegg;
-};
+});
 
 export const config = {
   api: {

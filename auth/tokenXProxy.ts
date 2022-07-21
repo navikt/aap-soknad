@@ -1,4 +1,4 @@
-import { NextApiRequest } from 'next/dist/shared/lib/utils';
+import { NextApiRequest, NextApiResponse } from 'next/dist/shared/lib/utils';
 import axios from 'axios';
 
 import { getTokenxToken } from './getTokenxToken';
@@ -14,7 +14,6 @@ class ErrorMedStatus extends Error {
 
 interface Opts {
   url: string;
-  //req: NextApiRequest;
   audience: string;
   method: 'GET' | 'POST' | 'DELETE';
   data?: string;
@@ -52,7 +51,15 @@ export const tokenXProxy = async (opts: Opts) => {
   return await response.json();
 };
 
-export const tokenXAxiosProxy = async (opts: Opts) => {
+interface AxiosOpts {
+  url: string;
+  audience: string;
+  req: NextApiRequest;
+  res: NextApiResponse;
+  bearerToken?: string;
+}
+
+export const tokenXAxiosProxy = async (opts: AxiosOpts) => {
   const idportenToken = opts.bearerToken!.split(' ')[1];
   const tokenxToken = await getTokenxToken(idportenToken, opts.audience);
 
@@ -63,5 +70,5 @@ export const tokenXAxiosProxy = async (opts: Opts) => {
       Authorization: `Bearer ${tokenxToken}`,
     },
   });
-  return data.body;
+  return data.pipe(opts.res);
 };
