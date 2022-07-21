@@ -23,7 +23,6 @@ export const lagreBucket = async (type: SøknadsType, data: string, accessToken?
     url: `${process.env.SOKNAD_API_URL}/buckets/lagre/${type}`,
     method: 'POST',
     data: data,
-    contentType: 'multipart/form-data',
     audience: process.env.SOKNAD_API_AUDIENCE!,
     bearerToken: accessToken,
   });
