@@ -34,7 +34,7 @@ export const tokenXProxy = async (opts: Opts) => {
     headers: { Authorization: `Bearer ${tokenxToken}` },
   });
 
-  if (response.status > 200 || response.status < 300) {
+  if (response.status < 200 || response.status > 300) {
     console.log(
       `Status for ${opts.url} er ${response.status}. Response json er: ${response.json()}`
     );
