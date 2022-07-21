@@ -17,6 +17,7 @@ interface Opts {
   audience: string;
   method: 'GET' | 'POST' | 'DELETE';
   data?: string;
+  contentType?: string;
   noResponse?: boolean;
   bearerToken?: string;
 }
@@ -31,7 +32,10 @@ export const tokenXProxy = async (opts: Opts) => {
   const response = await fetch(opts.url, {
     method: opts.method,
     body: opts.data,
-    headers: { Authorization: `Bearer ${tokenxToken}` },
+    headers: {
+      Authorization: `Bearer ${tokenxToken}`,
+      'Content-Type': opts.contentType ?? 'application/json',
+    },
   });
 
   if (response.status < 200 || response.status > 300) {
