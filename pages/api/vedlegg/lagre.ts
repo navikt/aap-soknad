@@ -15,7 +15,7 @@ export const sendVedlegg = async (data: string, accessToken?: string) => {
   const søker = await tokenXProxy({
     url: `${process.env.SOKNAD_API_URL}/vedlegg/lagre`,
     method: 'POST',
-    data: JSON.stringify(data),
+    data: data,
     contentType: 'multipart/form-data',
     audience: process.env.SOKNAD_API_AUDIENCE!,
     bearerToken: accessToken,
