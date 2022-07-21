@@ -1,4 +1,5 @@
 import { NextApiRequest } from 'next/dist/shared/lib/utils';
+import axios from 'axios';
 
 import { getTokenxToken } from './getTokenxToken';
 
@@ -17,6 +18,7 @@ interface Opts {
   audience: string;
   method: 'GET' | 'POST' | 'DELETE';
   data?: string;
+  req?: NextApiRequest;
   contentType?: string;
   noResponse?: boolean;
   bearerToken?: string;
@@ -48,4 +50,18 @@ export const tokenXProxy = async (opts: Opts) => {
     return;
   }
   return await response.json();
+};
+
+export const tokenXAxiosProxy = async (opts: Opts) => {
+  const idportenToken = opts.bearerToken!.split(' ')[1];
+  const tokenxToken = await getTokenxToken(idportenToken, opts.audience);
+
+  const { data } = await axios.post(opts.url, opts.req, {
+    responseType: 'stream',
+    headers: {
+      'Content-Type': opts.req?.headers['content-type'] ?? '', // which is multipart/form-data with boundary included
+      Authorization: `Bearer ${tokenxToken}`,
+    },
+  });
+  return data.body;
 };
