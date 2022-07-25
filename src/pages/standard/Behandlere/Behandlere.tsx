@@ -15,15 +15,17 @@ import { useFeatureToggleIntl } from '../../../hooks/useFeatureToggleIntl';
 import { useSoknadContextStandard } from '../../../context/soknadContextStandard';
 import { slettLagretSoknadState, updateSøknadData } from '../../../context/soknadContextCommon';
 import { useDebounceLagreSoknad } from '../../../hooks/useDebounceLagreSoknad';
+import { GenericSoknadContextState } from '../../../types/SoknadContext';
 
 interface Props {
   onBackClick: () => void;
   onNext: (data: any) => void;
+  defaultValues?: GenericSoknadContextState<Soknad>;
   fastlege?: FastlegeView;
 }
 const BEHANDLERE = 'behandlere';
 
-export const Behandlere = ({ onBackClick, onNext, fastlege }: Props) => {
+export const Behandlere = ({ onBackClick, onNext, defaultValues, fastlege }: Props) => {
   const { formatMessage } = useFeatureToggleIntl();
 
   const schema = yup.object().shape({});
@@ -37,7 +39,7 @@ export const Behandlere = ({ onBackClick, onNext, fastlege }: Props) => {
   } = useForm<{ [BEHANDLERE]: Array<Behandler> }>({
     resolver: yupResolver(schema),
     defaultValues: {
-      [BEHANDLERE]: søknadState?.søknad?.behandlere,
+      [BEHANDLERE]: defaultValues?.søknad?.behandlere,
     },
   });
 

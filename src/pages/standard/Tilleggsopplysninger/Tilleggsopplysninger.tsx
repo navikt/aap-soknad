@@ -12,14 +12,16 @@ import { useFeatureToggleIntl } from '../../../hooks/useFeatureToggleIntl';
 import { slettLagretSoknadState, updateSøknadData } from '../../../context/soknadContextCommon';
 import { useSoknadContextStandard } from '../../../context/soknadContextStandard';
 import { useDebounceLagreSoknad } from '../../../hooks/useDebounceLagreSoknad';
+import { GenericSoknadContextState } from '../../../types/SoknadContext';
 
 const TILLEGGSOPPLYSNINGER = 'tilleggsopplysninger';
 interface Props {
   onBackClick: () => void;
   onNext: (data: any) => void;
+  defaultValues?: GenericSoknadContextState<Soknad>;
 }
 
-const Tilleggsopplysninger = ({ onBackClick, onNext }: Props) => {
+const Tilleggsopplysninger = ({ onBackClick, onNext, defaultValues }: Props) => {
   const { formatMessage } = useFeatureToggleIntl();
 
   const schema = yup.object().shape({});
@@ -33,7 +35,7 @@ const Tilleggsopplysninger = ({ onBackClick, onNext }: Props) => {
   } = useForm<FieldValues>({
     resolver: yupResolver(schema),
     defaultValues: {
-      [TILLEGGSOPPLYSNINGER]: søknadState?.søknad?.tilleggsopplysninger,
+      [TILLEGGSOPPLYSNINGER]: defaultValues?.søknad?.tilleggsopplysninger,
     },
   });
   const debouncedLagre = useDebounceLagreSoknad<Soknad>();

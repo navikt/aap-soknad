@@ -18,10 +18,12 @@ import { useDebounceLagreSoknad } from '../../../hooks/useDebounceLagreSoknad';
 import { Relasjon } from '../Barnetillegg/AddBarnModal';
 import { MANUELLE_BARN } from '../Barnetillegg/Barnetillegg';
 import FieldArrayFileInput from '../../../components/input/FileInput/FieldArrayFileInput';
+import { GenericSoknadContextState } from '../../../types/SoknadContext';
 
 interface Props {
   onBackClick: () => void;
   onNext: (data: any) => void;
+  defaultValues?: GenericSoknadContextState<Soknad>;
 }
 const VEDLEGG = 'vedlegg';
 const VEDLEGG_LØNN = `${VEDLEGG}.${AttachmentType.LØNN_OG_ANDRE_GODER}`;
@@ -29,7 +31,7 @@ const VEDLEGG_OMSORGSSTØNAD = `${VEDLEGG}.${AttachmentType.OMSORGSSTØNAD}`;
 const VEDLEGG_UTLANDSSTØNAD = `${VEDLEGG}.${AttachmentType.UTLANDSSTØNAD}`;
 const VEDLEGG_ANNET = `${VEDLEGG}.annet`;
 
-const Vedlegg = ({ onBackClick, onNext }: Props) => {
+const Vedlegg = ({ onBackClick, onNext, defaultValues }: Props) => {
   const { formatMessage } = useFeatureToggleIntl();
   const [scanningGuideOpen, setScanningGuideOpen] = useState(false);
   const scanningGuideElement = useRef(null);
@@ -47,8 +49,8 @@ const Vedlegg = ({ onBackClick, onNext }: Props) => {
   } = useForm<FieldValues>({
     resolver: yupResolver(schema),
     defaultValues: {
-      [VEDLEGG]: søknadState?.søknad?.vedlegg,
-      [MANUELLE_BARN]: søknadState?.søknad?.manuelleBarn,
+      [VEDLEGG]: defaultValues?.søknad?.vedlegg,
+      [MANUELLE_BARN]: defaultValues?.søknad?.manuelleBarn,
     },
   });
   useEffect(() => {

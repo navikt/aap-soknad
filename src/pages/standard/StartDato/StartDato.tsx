@@ -19,6 +19,7 @@ import { useSoknadContextStandard } from '../../../context/soknadContextStandard
 import { slettLagretSoknadState, updateSøknadData } from '../../../context/soknadContextCommon';
 import { useDebounceLagreSoknad } from '../../../hooks/useDebounceLagreSoknad';
 import DatePickerWrapper from '../../../components/input/DatePickerWrapper/DatePickerWrapper';
+import { GenericSoknadContextState } from '../../../types/SoknadContext';
 
 const FERIE = 'ferie';
 const FERIETYPE = 'ferieType';
@@ -35,6 +36,7 @@ export const formatDate = (date?: Date) => {
 interface Props {
   onBackClick: () => void;
   onNext: (data: any) => void;
+  defaultValues?: GenericSoknadContextState<Soknad>;
 }
 
 export const getSchema = (formatMessage: (id: string) => string) => {
@@ -80,10 +82,11 @@ export const getSchema = (formatMessage: (id: string) => string) => {
   });
 };
 
-const StartDato = ({ onBackClick, onNext }: Props) => {
+const StartDato = ({ onBackClick, onNext, defaultValues }: Props) => {
   const { formatMessage } = useFeatureToggleIntl();
   const { søknadState, søknadDispatch } = useSoknadContextStandard();
-  const { stepList, stepWizardDispatch } = useStepWizard();
+  console.log('SØKNADSSTATE', defaultValues);
+  const { stepList } = useStepWizard();
   const {
     control,
     handleSubmit,
@@ -93,11 +96,11 @@ const StartDato = ({ onBackClick, onNext }: Props) => {
   } = useForm<FieldValues>({
     resolver: yupResolver(getSchema(formatMessage)),
     defaultValues: {
-      begrunnelse: søknadState?.søknad?.begrunnelse,
+      begrunnelse: defaultValues?.søknad?.begrunnelse,
       ferie: {
-        ...søknadState?.søknad?.ferie,
-        fraDato: formatDate(søknadState?.søknad?.ferie?.fraDato),
-        tilDato: formatDate(søknadState?.søknad?.ferie?.tilDato),
+        ...defaultValues?.søknad?.ferie,
+        fraDato: formatDate(defaultValues?.søknad?.ferie?.fraDato),
+        tilDato: formatDate(defaultValues?.søknad?.ferie?.tilDato),
       },
     },
   });

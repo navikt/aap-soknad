@@ -30,11 +30,14 @@ import { useSoknadContextStandard } from '../../../context/soknadContextStandard
 import { slettLagretSoknadState, updateSøknadData } from '../../../context/soknadContextCommon';
 import { useDebounceLagreSoknad } from '../../../hooks/useDebounceLagreSoknad';
 import * as styles from './Medlemskap.module.css';
+import { GenericSoknadContextState } from '../../../types/SoknadContext';
 
 interface Props {
   onBackClick: () => void;
   onNext: (data: any) => void;
+  defaultValues?: GenericSoknadContextState<Soknad>;
 }
+
 const UTENLANDSOPPHOLD = 'utenlandsOpphold';
 const BODD_I_NORGE = 'harBoddINorgeSiste5År';
 const ARBEID_UTENFOR_NORGE_FØR_SYKDOM = 'arbeidetUtenforNorgeFørSykdom';
@@ -58,7 +61,7 @@ const validateUtenlandsPeriode = (
   );
 };
 
-export const Medlemskap = ({ onBackClick, onNext }: Props) => {
+export const Medlemskap = ({ onBackClick, onNext, defaultValues }: Props) => {
   const { formatMessage } = useFeatureToggleIntl();
 
   const schema = yup.object().shape({
@@ -145,7 +148,7 @@ export const Medlemskap = ({ onBackClick, onNext }: Props) => {
   }>({
     resolver: yupResolver(schema),
     defaultValues: {
-      [MEDLEMSKAP]: søknadState?.søknad?.medlemskap,
+      [MEDLEMSKAP]: defaultValues?.søknad?.medlemskap,
     },
   });
   const [showUtenlandsPeriodeModal, setShowUtenlandsPeriodeModal] = useState<boolean>(false);

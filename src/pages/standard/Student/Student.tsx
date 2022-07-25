@@ -19,6 +19,7 @@ import { useFeatureToggleIntl } from '../../../hooks/useFeatureToggleIntl';
 import { slettLagretSoknadState, updateSøknadData } from '../../../context/soknadContextCommon';
 import { useSoknadContextStandard } from '../../../context/soknadContextStandard';
 import { useDebounceLagreSoknad } from '../../../hooks/useDebounceLagreSoknad';
+import { GenericSoknadContextState } from '../../../types/SoknadContext';
 export const AVBRUTT_STUDIE_VEDLEGG = 'avbruttStudie';
 
 const STUDENT = 'student';
@@ -33,9 +34,10 @@ enum JaNeiAvbrutt {
 interface Props {
   onBackClick: () => void;
   onNext: (data: any) => void;
+  defaultValues?: GenericSoknadContextState<Soknad>;
 }
 
-const Student = ({ onBackClick, onNext }: Props) => {
+const Student = ({ onBackClick, onNext, defaultValues }: Props) => {
   const { formatMessage } = useFeatureToggleIntl();
   const schema = yup.object().shape({
     [STUDENT]: yup.object().shape({
@@ -73,7 +75,7 @@ const Student = ({ onBackClick, onNext }: Props) => {
   } = useForm<FieldValues>({
     resolver: yupResolver(schema),
     defaultValues: {
-      [STUDENT]: søknadState?.søknad?.student,
+      [STUDENT]: defaultValues?.søknad?.student,
     },
   });
 

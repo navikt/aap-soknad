@@ -21,10 +21,12 @@ import { useFeatureToggleIntl } from '../../../hooks/useFeatureToggleIntl';
 import { slettLagretSoknadState, updateSøknadData } from '../../../context/soknadContextCommon';
 import { useSoknadContextStandard } from '../../../context/soknadContextStandard';
 import { useDebounceLagreSoknad } from '../../../hooks/useDebounceLagreSoknad';
+import { GenericSoknadContextState } from '../../../types/SoknadContext';
 
 interface Props {
   onBackClick: () => void;
   onNext: (data: any) => void;
+  defaultValues?: GenericSoknadContextState<Soknad>;
 }
 export enum AttachmentType {
   LØNN_OG_ANDRE_GODER = 'LØNN_OG_ANDRE_GODER',
@@ -48,7 +50,7 @@ const ANDRE_UTBETALINGER = 'andreUtbetalinger';
 const LØNN = 'lønn';
 const STØNAD = 'stønad';
 
-export const AndreUtbetalinger = ({ onBackClick, onNext }: Props) => {
+export const AndreUtbetalinger = ({ onBackClick, onNext, defaultValues }: Props) => {
   const { formatMessage } = useFeatureToggleIntl();
 
   const schema = yup.object().shape({
@@ -75,7 +77,7 @@ export const AndreUtbetalinger = ({ onBackClick, onNext }: Props) => {
   } = useForm<FieldValues>({
     resolver: yupResolver(schema),
     defaultValues: {
-      [ANDRE_UTBETALINGER]: søknadState?.søknad?.andreUtbetalinger,
+      [ANDRE_UTBETALINGER]: defaultValues?.søknad?.andreUtbetalinger,
     },
   });
 

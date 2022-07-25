@@ -1,16 +1,16 @@
 import { PageHeader } from '@navikt/ds-react';
 import { useRouter } from 'next/router';
-import React, { useEffect, useRef } from 'react';
-import { hentSoknadStateMedUrl } from '../../src/context/soknadContextCommon';
+import React, { useEffect } from 'react';
+import { setSoknadStateFraProps } from '../../src/context/soknadContextCommon';
 import {
   useStepWizard,
   setStepList,
   completeAndGoToNextStep,
+  setCurrentStepIndex,
   goToPreviousStep,
-  resetStepWizard,
 } from '../../src/context/stepWizardContextV2';
 import { useFeatureToggleIntl } from '../../src/hooks/useFeatureToggleIntl';
-import { SøknadType } from '../../src/types/SoknadContext';
+import { GenericSoknadContextState, SøknadType } from '../../src/types/SoknadContext';
 import { useDebounceLagreSoknad } from '../../src/hooks/useDebounceLagreSoknad';
 import { StepWizard } from '../../src/components/StepWizard';
 import {
@@ -43,12 +43,14 @@ import { GetServerSidePropsResult, NextPageContext } from 'next';
 import { getAccessToken } from '../../auth/accessToken';
 import { getSøker } from '../api/oppslag/soeker';
 import { useVedleggContext, VedleggActionKeys } from '../../src/context/vedleggContext';
+import { lesBucket } from '../api/buckets/les';
 
 interface PageProps {
   søker: SokerOppslagState;
+  mellomlagretSøknad?: GenericSoknadContextState<Soknad>;
 }
 
-const Steps = ({ søker }: PageProps) => {
+const Steps = ({ søker, mellomlagretSøknad }: PageProps) => {
   const router = useRouter();
   const { step } = router.query;
 
@@ -59,23 +61,18 @@ const Steps = ({ søker }: PageProps) => {
   const { vedleggDispatch } = useVedleggContext();
   const { currentStep, stepList, stepWizardDispatch } = useStepWizard();
   const debouncedLagre = useDebounceLagreSoknad<Soknad>();
-  const pageHeading = useRef(null);
+
   useEffect(() => {
-    const getSoknadStateAndOppslag = async () => {
-      // Wait to test cache
-      const cachedState = await hentSoknadStateMedUrl<Soknad>(
-        søknadDispatch,
-        `/aap/soknad/api/buckets/les?type=${SøknadType.STANDARD}`
-      );
-      if (cachedState?.lagretStepList && cachedState?.lagretStepList?.length > 0) {
-        setStepList([...cachedState.lagretStepList], stepWizardDispatch);
+    if (mellomlagretSøknad) {
+      setSoknadStateFraProps(mellomlagretSøknad, søknadDispatch);
+      if (mellomlagretSøknad?.lagretStepList && mellomlagretSøknad?.lagretStepList?.length > 0) {
+        setStepList([...mellomlagretSøknad.lagretStepList], stepWizardDispatch);
       } else {
         setStepList([...defaultStepList], stepWizardDispatch);
       }
       const oppslag = setSokerOppslagFraProps(søker, oppslagDispatch);
       if (oppslag?.søker?.barn) addBarnIfMissing(søknadDispatch, oppslag.søker.barn);
-    };
-    getSoknadStateAndOppslag();
+    }
   }, []);
 
   useEffect(() => {
@@ -83,13 +80,9 @@ const Steps = ({ søker }: PageProps) => {
       debouncedLagre(søknadState, stepList, {});
     }
   }, [currentStep, stepList]);
-  useEffect(() => {
-    window && window.scrollTo(0, 0);
-    if (pageHeading?.current != null) (pageHeading?.current as HTMLElement)?.focus();
-  }, [currentStep]);
 
   const submitSoknad: SubmitHandler<Soknad> = async (data) => {
-    if (currentStep?.name === StepNames.OPPSUMMERING || true) {
+    if (currentStep?.name === StepNames.OPPSUMMERING) {
       console.log('post søknad', søknadState?.søknad);
 
       // Må massere dataene litt før vi sender de inn
@@ -116,14 +109,22 @@ const Steps = ({ søker }: PageProps) => {
     fetchPOST('/aap/soknad/api/innsending/soknad', {
       ...data,
     });
+
   const onPreviousStep = () => {
     if (currentStep?.name === StepNames.STARTDATO) {
       router.push('/standard');
     } else {
-      goToPreviousStep(stepWizardDispatch);
+      // @ts-ignore-line
+      setCurrentStepIndex(Number.parseInt(step) - 2, stepWizardDispatch);
       // @ts-ignore-line
       router.push(`/standard/${Number.parseInt(step) - 1}`);
     }
+  };
+
+  const onNextStep = (data: any, nextStep: string) => {
+    updateSøknadData<Soknad>(søknadDispatch, data);
+    setCurrentStepIndex(Number.parseInt(nextStep) - 1, stepWizardDispatch);
+    router.push(nextStep);
   };
 
   return (
@@ -135,40 +136,36 @@ const Steps = ({ søker }: PageProps) => {
         {step === '1' && (
           <StartDato
             onBackClick={onPreviousStep}
+            defaultValues={mellomlagretSøknad}
             onNext={(data) => {
-              updateSøknadData<Soknad>(søknadDispatch, data);
-              completeAndGoToNextStep(stepWizardDispatch);
-              router.push('2');
+              onNextStep(data, '2');
             }}
           />
         )}
         {step === '2' && (
           <Medlemskap
             onBackClick={onPreviousStep}
+            defaultValues={mellomlagretSøknad}
             onNext={(data) => {
-              updateSøknadData<Soknad>(søknadDispatch, data);
-              completeAndGoToNextStep(stepWizardDispatch);
-              router.push('3');
+              onNextStep(data, '3');
             }}
           />
         )}
         {step === '3' && (
           <Yrkesskade
             onBackClick={onPreviousStep}
+            defaultValues={mellomlagretSøknad}
             onNext={(data) => {
-              updateSøknadData<Soknad>(søknadDispatch, data);
-              completeAndGoToNextStep(stepWizardDispatch);
-              router.push('4');
+              onNextStep(data, '4');
             }}
           />
         )}
         {step === '4' && (
           <Behandlere
             onBackClick={onPreviousStep}
+            defaultValues={mellomlagretSøknad}
             onNext={(data) => {
-              updateSøknadData<Soknad>(søknadDispatch, data);
-              completeAndGoToNextStep(stepWizardDispatch);
-              router.push('5');
+              onNextStep(data, '5');
             }}
             fastlege={fastlege}
           />
@@ -176,50 +173,45 @@ const Steps = ({ søker }: PageProps) => {
         {step === '5' && (
           <Barnetillegg
             onBackClick={onPreviousStep}
+            defaultValues={mellomlagretSøknad}
             onNext={(data) => {
-              updateSøknadData<Soknad>(søknadDispatch, data);
-              completeAndGoToNextStep(stepWizardDispatch);
-              router.push('6');
+              onNextStep(data, '6');
             }}
           />
         )}
         {step === '6' && (
           <Student
             onBackClick={onPreviousStep}
+            defaultValues={mellomlagretSøknad}
             onNext={(data) => {
-              updateSøknadData<Soknad>(søknadDispatch, data);
-              completeAndGoToNextStep(stepWizardDispatch);
-              router.push('7');
+              onNextStep(data, '7');
             }}
           />
         )}
         {step === '7' && (
           <AndreUtbetalinger
             onBackClick={onPreviousStep}
+            defaultValues={mellomlagretSøknad}
             onNext={(data) => {
-              updateSøknadData<Soknad>(søknadDispatch, data);
-              completeAndGoToNextStep(stepWizardDispatch);
-              router.push('8');
+              onNextStep(data, '8');
             }}
           />
         )}
         {step === '8' && (
           <Tilleggsopplysninger
             onBackClick={onPreviousStep}
+            defaultValues={mellomlagretSøknad}
             onNext={(data) => {
-              updateSøknadData<Soknad>(søknadDispatch, data);
-              completeAndGoToNextStep(stepWizardDispatch);
-              router.push('9');
+              onNextStep(data, '9');
             }}
           />
         )}
         {step === '9' && (
           <Vedlegg
             onBackClick={onPreviousStep}
+            defaultValues={mellomlagretSøknad}
             onNext={(data) => {
-              updateSøknadData<Soknad>(søknadDispatch, data);
-              completeAndGoToNextStep(stepWizardDispatch);
-              router.push('10');
+              onNextStep(data, '10');
             }}
           />
         )}
@@ -231,9 +223,9 @@ const Steps = ({ søker }: PageProps) => {
   );
 };
 
-const StepsWithContextProvider = ({ søker }: PageProps) => (
+const StepsWithContextProvider = ({ søker, mellomlagretSøknad }: PageProps) => (
   <SoknadContextProviderStandard>
-    <Steps søker={søker} />
+    <Steps søker={søker} mellomlagretSøknad={mellomlagretSøknad} />
   </SoknadContextProviderStandard>
 );
 
@@ -241,9 +233,10 @@ export const getServerSideProps = beskyttetSide(
   async (ctx: NextPageContext): Promise<GetServerSidePropsResult<{}>> => {
     const bearerToken = getAccessToken(ctx);
     const søker = await getSøker(bearerToken);
+    const mellomlagretSøknad = await lesBucket('STANDARD', bearerToken);
 
     return {
-      props: { søker },
+      props: { søker, mellomlagretSøknad },
     };
   }
 );

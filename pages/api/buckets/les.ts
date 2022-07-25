@@ -13,11 +13,16 @@ const handler = beskyttetApi(async (req: NextApiRequest, res: NextApiResponse) =
     res.status(400).json({ error: 'type må være en av ' + GYLDIGE_SØKNADS_TYPER.join(', ') });
   }
   const accessToken = getAccessTokenFromRequest(req);
-  res.status(200).json(await lesBucket(type as SøknadsType, accessToken));
+  const result = await lesBucket(type as SøknadsType, accessToken);
+  res.status(200).json(result);
 });
 
 export const lesBucket = async (type: SøknadsType, accessToken?: string) => {
-  if (isMock()) return lesCache(type) ?? {};
+  if (isMock()) {
+    const result = await lesCache();
+    // @ts-ignore-line
+    return result ? JSON.parse(result) : {};
+  }
   const mellomlagretSøknad = await tokenXProxy({
     url: `${process.env.SOKNAD_API_URL}/buckets/les/${type}`,
     method: 'GET',

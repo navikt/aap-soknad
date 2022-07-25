@@ -7,15 +7,17 @@ import { isMock } from '../../../utils/environments';
 
 const handler = beskyttetApi(async (req: NextApiRequest, res: NextApiResponse) => {
   const accessToken = getAccessTokenFromRequest(req);
-  if (isMock()) res.status(201).json(randomUUID());
-
-  await tokenXAxiosProxy({
-    url: `${process.env.SOKNAD_API_URL}/vedlegg/lagre`,
-    req,
-    res,
-    audience: process.env.SOKNAD_API_AUDIENCE!,
-    bearerToken: accessToken,
-  });
+  if (isMock()) {
+    res.status(201).json(randomUUID());
+  } else {
+    await tokenXAxiosProxy({
+      url: `${process.env.SOKNAD_API_URL}/vedlegg/lagre`,
+      req,
+      res,
+      audience: process.env.SOKNAD_API_AUDIENCE!,
+      bearerToken: accessToken,
+    });
+  }
 });
 
 export const config = {

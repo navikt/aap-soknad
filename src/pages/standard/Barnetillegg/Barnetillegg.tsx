@@ -23,17 +23,19 @@ import { slettLagretSoknadState, updateSøknadData } from '../../../context/sokn
 import { useSoknadContextStandard } from '../../../context/soknadContextStandard';
 import { useDebounceLagreSoknad } from '../../../hooks/useDebounceLagreSoknad';
 import { formatDate } from '../StartDato/StartDato';
+import { GenericSoknadContextState } from '../../../types/SoknadContext';
 
 interface Props {
   onBackClick: () => void;
   onNext: (data: any) => void;
+  defaultValues?: GenericSoknadContextState<Soknad>;
 }
 const BARNETILLEGG = 'barnetillegg';
 export const MANUELLE_BARN = 'manuelleBarn';
 
 export const GRUNNBELØP = '111 477';
 
-export const Barnetillegg = ({ onBackClick, onNext }: Props) => {
+export const Barnetillegg = ({ onBackClick, onNext, defaultValues }: Props) => {
   const { formatMessage } = useFeatureToggleIntl();
 
   const schema = yup.object().shape({
@@ -77,8 +79,8 @@ export const Barnetillegg = ({ onBackClick, onNext }: Props) => {
   }>({
     resolver: yupResolver(schema),
     defaultValues: {
-      [BARNETILLEGG]: søknadState?.søknad?.barnetillegg,
-      [MANUELLE_BARN]: søknadState?.søknad?.manuelleBarn,
+      [BARNETILLEGG]: defaultValues?.søknad?.barnetillegg,
+      [MANUELLE_BARN]: defaultValues?.søknad?.manuelleBarn,
     },
   });
   const { vedleggDispatch } = useVedleggContext();

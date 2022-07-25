@@ -68,9 +68,9 @@ export async function hentSoknadStateMedUrl<SoknadStateType>(
   dispatch: Dispatch<SoknadAction<SoknadStateType>>,
   url: string
 ) {
-  const cachedState: GenericSoknadContextState<SoknadStateType> = await fetch(url).then((res) =>
-    res.ok ? res.json() : undefined
-  );
+  const cachedState: GenericSoknadContextState<SoknadStateType> = await fetch(url)
+    .then((res) => (res.ok ? res.json() : undefined))
+    .catch((err) => console.log('err', err));
   console.log('bucket/les ', cachedState);
   cachedState &&
     dispatch({
@@ -78,6 +78,17 @@ export async function hentSoknadStateMedUrl<SoknadStateType>(
       payload: cachedState as GenericSoknadContextState<SoknadStateType>,
     });
   return cachedState;
+}
+
+export function setSoknadStateFraProps<SoknadStateType>(
+  props: GenericSoknadContextState<SoknadStateType>,
+  dispatch: Dispatch<SoknadAction<SoknadStateType>>
+) {
+  dispatch({
+    type: SoknadActionKeys.SET_STATE_FROM_CACHE,
+    payload: props,
+  });
+  return props;
 }
 
 export async function slettLagretSoknadState<SoknadStateType>(

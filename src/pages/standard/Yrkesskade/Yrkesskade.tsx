@@ -13,14 +13,16 @@ import { useFeatureToggleIntl } from '../../../hooks/useFeatureToggleIntl';
 import { slettLagretSoknadState, updateSøknadData } from '../../../context/soknadContextCommon';
 import { useSoknadContextStandard } from '../../../context/soknadContextStandard';
 import { useDebounceLagreSoknad } from '../../../hooks/useDebounceLagreSoknad';
+import { GenericSoknadContextState } from '../../../types/SoknadContext';
 
 interface Props {
   onBackClick: () => void;
   onNext: (data: any) => void;
+  defaultValues?: GenericSoknadContextState<Soknad>;
 }
 const YRKESSKADE = 'yrkesskade';
 
-export const Yrkesskade = ({ onBackClick, onNext }: Props) => {
+export const Yrkesskade = ({ onBackClick, onNext, defaultValues }: Props) => {
   const { formatMessage, formatElement } = useFeatureToggleIntl();
 
   const schema = yup.object().shape({
@@ -40,7 +42,7 @@ export const Yrkesskade = ({ onBackClick, onNext }: Props) => {
   } = useForm<FieldValues>({
     resolver: yupResolver(schema),
     defaultValues: {
-      [YRKESSKADE]: søknadState?.søknad?.yrkesskade,
+      [YRKESSKADE]: defaultValues?.søknad?.yrkesskade,
     },
   });
   const debouncedLagre = useDebounceLagreSoknad<Soknad>();
