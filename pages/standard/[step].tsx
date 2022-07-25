@@ -42,6 +42,7 @@ import { beskyttetSide } from '../../auth/beskyttetSide';
 import { GetServerSidePropsResult, NextPageContext } from 'next';
 import { getAccessToken } from '../../auth/accessToken';
 import { getSøker } from '../api/oppslag/soeker';
+import { useVedleggContext, VedleggActionKeys } from '../../src/context/vedleggContext';
 
 interface PageProps {
   søker: SokerOppslagState;
@@ -55,6 +56,7 @@ const Steps = ({ søker }: PageProps) => {
 
   const { søknadState, søknadDispatch } = useSoknadContextStandard();
   const { oppslagDispatch, fastlege } = useSokerOppslag();
+  const { vedleggDispatch } = useVedleggContext();
   const { currentStep, stepList, stepWizardDispatch } = useStepWizard();
   const debouncedLagre = useDebounceLagreSoknad<Soknad>();
   const pageHeading = useRef(null);
@@ -87,7 +89,7 @@ const Steps = ({ søker }: PageProps) => {
   }, [currentStep]);
 
   const submitSoknad: SubmitHandler<Soknad> = async (data) => {
-    if (currentStep?.name === StepNames.OPPSUMMERING) {
+    if (currentStep?.name === StepNames.OPPSUMMERING || true) {
       console.log('post søknad', søknadState?.søknad);
 
       // Må massere dataene litt før vi sender de inn
@@ -97,6 +99,8 @@ const Steps = ({ søker }: PageProps) => {
 
       const postResponse = await postSøknad(søknad);
       if (postResponse?.ok) {
+        const url = postResponse?.data?.uri;
+        vedleggDispatch({ type: VedleggActionKeys.ADD_SØKNAD_URL, payload: url });
         router.push('kvittering');
       } else {
         // show post error

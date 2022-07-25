@@ -7,7 +7,6 @@ import { getStringFromPossiblyArrayQuery } from '../../../utils/string';
 
 const handler = beskyttetApi(async (req: NextApiRequest, res: NextApiResponse) => {
   const uuid = getStringFromPossiblyArrayQuery(req.query.uuid);
-  console.log('uuid', uuid);
   if (!uuid) {
     res.status(400).json({ error: 'uuid må være en string' });
   }

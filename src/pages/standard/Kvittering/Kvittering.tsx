@@ -5,13 +5,28 @@ import { SøkerView } from '../../../context/sokerOppslagContext';
 import { Download } from '@navikt/ds-icons';
 import { SuccessStroke } from '@navikt/ds-icons';
 import { useFeatureToggleIntl } from '../../../hooks/useFeatureToggleIntl';
+import { useVedleggContext } from '../../../context/vedleggContext';
 
 interface StudentProps {
   søker: SøkerView;
 }
 
+const getUUUIDfromString = (str: string) => {
+  const uuid = str.split('/').pop();
+  return uuid;
+};
+
+const getDownloadUrl = (url?: string) => {
+  const filopplastingUrl = process.env.NEXT_PUBLIC_TEMP_FILOPPLASTING_LES_URL;
+  if (filopplastingUrl && url) {
+    return `${filopplastingUrl}${getUUUIDfromString(url)}`;
+  }
+  return url;
+};
+
 const Kvittering = ({ søker }: StudentProps) => {
   const { formatMessage, formatElement } = useFeatureToggleIntl();
+  const { vedleggState } = useVedleggContext();
 
   const dittNavUrl =
     typeof window !== 'undefined' && window.location.href.includes('www.nav.no')
@@ -48,7 +63,7 @@ const Kvittering = ({ søker }: StudentProps) => {
       </BodyLong>
       <Link
         target={'_blank'}
-        onClick={() => window && window.alert('vær så god')}
+        href={getDownloadUrl(vedleggState.søknadUrl)}
         className={classes?.linkButton}
       >
         <Download />

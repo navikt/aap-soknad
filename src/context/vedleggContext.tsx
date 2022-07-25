@@ -3,6 +3,7 @@ import React, { createContext, Dispatch, ReactNode, useReducer, useContext, useM
 export enum VedleggActionKeys {
   ADD_VEDLEGG = 'ADD_VEDLEGG',
   REMOVE_VEDLEGG = 'REMOVE_VEDLEGG',
+  ADD_SØKNAD_URL = 'ADD_SØKNAD_URL',
 }
 type AddVedlegg = {
   type: VedleggActionKeys.ADD_VEDLEGG;
@@ -12,7 +13,11 @@ type RemoveVedlegg = {
   type: VedleggActionKeys.REMOVE_VEDLEGG;
   payload?: string;
 };
-export type VedleggAction = AddVedlegg | RemoveVedlegg;
+type AddSøknadUrl = {
+  type: VedleggActionKeys.ADD_SØKNAD_URL;
+  payload?: string;
+};
+export type VedleggAction = AddVedlegg | RemoveVedlegg | AddSøknadUrl;
 
 type RequiredVedlegg = {
   type: string;
@@ -21,6 +26,7 @@ type RequiredVedlegg = {
 };
 type VedleggState = {
   requiredVedlegg: RequiredVedlegg[];
+  søknadUrl?: string;
 };
 type VedleggContextState = {
   vedleggState: VedleggState;
@@ -51,6 +57,12 @@ function stateReducer(state: VedleggState, action: VedleggAction) {
       return {
         ...state,
         requiredVedlegg: [...newVedleggList],
+      };
+    }
+    case 'ADD_SØKNAD_URL': {
+      return {
+        ...state,
+        søknadUrl: action?.payload,
       };
     }
     default: {
