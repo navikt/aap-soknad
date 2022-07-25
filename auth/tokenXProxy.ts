@@ -19,6 +19,7 @@ interface Opts {
   data?: string;
   req?: NextApiRequest;
   contentType?: string;
+  rawResonse?: boolean;
   noResponse?: boolean;
   bearerToken?: string;
 }
@@ -47,6 +48,9 @@ export const tokenXProxy = async (opts: Opts) => {
   }
   if (opts.noResponse) {
     return;
+  }
+  if (opts.rawResonse) {
+    return response;
   }
   return await response.json();
 };

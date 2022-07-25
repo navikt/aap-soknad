@@ -13,16 +13,17 @@ const handler = beskyttetApi(async (req: NextApiRequest, res: NextApiResponse) =
   }
   const accessToken = getAccessTokenFromRequest(req);
   const result = await lesVedlegg(uuid as string, accessToken);
-  res.status(204).send({ result });
+  res.status(200).send(result.body);
 });
 
 export const lesVedlegg = async (uuid: string, accessToken?: string) => {
-  if (isMock()) return ['somerandombytes'];
+  if (isMock()) return await fetch('http://localhost:3000/aap/soknad/Rød.png');
   return await tokenXProxy({
     url: `${process.env.SOKNAD_API_URL}/vedlegg/les/${uuid}`,
     method: 'GET',
     audience: process.env.SOKNAD_API_AUDIENCE!,
     bearerToken: accessToken,
+    rawResonse: true,
   });
 };
 
