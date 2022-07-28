@@ -4,6 +4,7 @@ import '../src/index.css';
 import React, { useMemo } from 'react';
 import { IntlProvider } from 'react-intl';
 import { AppProps } from 'next/app';
+import { Modal } from '@navikt/ds-react';
 
 import links from '../src/translations/links.json';
 import { messages, flattenMessages } from '../src/utils/message';
@@ -22,6 +23,10 @@ const CustomApp = ({ Component, pageProps }: AppProps) => {
     () => ({ ...messages[locale], ...flattenMessages({ applinks: links }) }),
     [locale]
   );
+
+  if (Modal.setAppElement) {
+    Modal.setAppElement('#__next');
+  }
 
   return (
     <IntlProvider locale={locale} messages={currentMessages}>
