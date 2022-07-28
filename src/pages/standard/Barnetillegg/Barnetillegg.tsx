@@ -22,8 +22,8 @@ import { useFeatureToggleIntl } from '../../../hooks/useFeatureToggleIntl';
 import { slettLagretSoknadState, updateSøknadData } from '../../../context/soknadContextCommon';
 import { useSoknadContextStandard } from '../../../context/soknadContextStandard';
 import { useDebounceLagreSoknad } from '../../../hooks/useDebounceLagreSoknad';
-import { formatDate } from '../StartDato/StartDato';
 import { GenericSoknadContextState } from '../../../types/SoknadContext';
+import { formatDate } from '../../../utils/date';
 
 interface Props {
   onBackClick: () => void;
@@ -203,13 +203,14 @@ export const Barnetillegg = ({ onBackClick, onNext, defaultValues }: Props) => {
         {fields.length > 0 && (
           <ul className={classes.barnList}>
             {fields.map((barn, index) => {
+              console.log('barn', barn);
               return (
                 <li key={barn?.id}>
                   <article className={classes.barneKort}>
                     <Heading size="xsmall" level="3">{`${formatNavn(barn?.navn)}`}</Heading>
                     <BodyShort>{`${formatMessage(
-                      'søknad.barnetillegg.registrerteBarn.fødselsnummer'
-                    )}: ${barn?.fnr}`}</BodyShort>
+                      'søknad.barnetillegg.registrerteBarn.fødselsdato'
+                    )}: ${formatDate(barn?.fødseldato)}`}</BodyShort>
 
                     <RadioGroupWrapper
                       legend={formatMessage(
@@ -293,12 +294,9 @@ export const Barnetillegg = ({ onBackClick, onNext, defaultValues }: Props) => {
                 <li key={barn?.id}>
                   <article className={classes.barneKort}>
                     <Heading size="xsmall" level="3">{`${formatNavn(barn?.navn)}`}</Heading>
-                    <BodyShort>{`${formatMessage(
-                      'søknad.barnetillegg.manuelleBarn.fødselsnummer'
-                    )}: ${barn?.fnr}`}</BodyShort>
                     <BodyShort>
                       {formatMessage('søknad.barnetillegg.manuelleBarn.fødselsdato')}:{' '}
-                      {formatDate(barn?.fødselsdato)}
+                      {formatDate(barn?.fødseldato)}
                     </BodyShort>
                     {barn?.relasjon === Relasjon.FORELDER && (
                       <BodyShort>

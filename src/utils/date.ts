@@ -1,5 +1,11 @@
 import { format } from 'date-fns';
-import { nb } from 'date-fns/locale';
 
-export const formatDate = (date: any, formatStr = 'dd.MM.yyyy') =>
-  format(date, formatStr, { locale: nb });
+export const formatDate = (date: any, formatStr = 'dd.MM.yyyy') => {
+  if (date) {
+    if (typeof date === 'string') {
+      return format(new Date(date), formatStr);
+    }
+    return format(date, formatStr);
+  }
+  return undefined;
+};

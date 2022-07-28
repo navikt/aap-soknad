@@ -36,6 +36,7 @@ import { format } from 'date-fns';
 import { useFeatureToggleIntl } from '../../hooks/useFeatureToggleIntl';
 import { SøknadType } from '../../types/SoknadContext';
 import { useDebounceLagreSoknad } from '../../hooks/useDebounceLagreSoknad';
+import { formatDate } from '../../utils/date';
 export enum StepNames {
   VEILEDNING = 'VEILEDNING',
   STARTDATO = 'STARTDATO',
@@ -61,9 +62,6 @@ export const defaultStepList = [
   { name: StepNames.VEDLEGG },
   { name: StepNames.OPPSUMMERING },
 ];
-
-const formatDate = (date?: Date): string | undefined =>
-  date ? format(date, 'yyyy-MM-dd') : undefined;
 
 const getFerieType = (skalHaFerie?: string, ferieType?: string) => {
   if (skalHaFerie === 'Ja' && ferieType === 'Ja') return 'PERIODE';
@@ -220,15 +218,15 @@ export const mapSøknadToBackend = (
 
   return {
     startDato: {
-      fom: formatDate(new Date()),
+      fom: formatDate(new Date(), 'yyyy-MM-dd'),
       beskrivelse: søknad?.begrunnelse,
     },
     ferie: {
       ferieType,
       ...(ferieType === 'PERIODE' && {
         periode: {
-          fom: formatDate(søknad?.ferie?.fraDato),
-          tom: formatDate(søknad?.ferie?.tilDato),
+          fom: formatDate(søknad?.ferie?.fraDato, 'yyyy-MM-dd'),
+          tom: formatDate(søknad?.ferie?.tilDato, 'yyyy-MM-dd'),
         },
       }),
       dager: søknad?.ferie?.antallDager,
@@ -244,8 +242,8 @@ export const mapSøknadToBackend = (
         søknad?.medlemskap?.utenlandsOpphold?.map((utenlandsopphold) => ({
           land: utenlandsopphold.land,
           periode: {
-            fom: formatDate(utenlandsopphold.fraDato),
-            tom: formatDate(utenlandsopphold.tilDato),
+            fom: formatDate(utenlandsopphold.fraDato, 'yyyy-MM-dd'),
+            tom: formatDate(utenlandsopphold.tilDato, 'yyyy-MM-dd'),
           },
           arbeidet: utenlandsopphold.iArbeid,
           id: utenlandsopphold.utenlandsId,

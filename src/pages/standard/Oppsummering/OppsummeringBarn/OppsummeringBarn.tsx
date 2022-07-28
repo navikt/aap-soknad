@@ -1,8 +1,8 @@
 import { BodyShort, Label } from '@navikt/ds-react';
 import React from 'react';
 import { Barn, ManuelleBarn } from '../../../../types/Soknad';
+import { formatDate } from '../../../../utils/date';
 import { formatNavn } from '../../../../utils/StringFormatters';
-import { formatDate } from '../../StartDato/StartDato';
 import * as classes from './OppsummeringBarn.module.css';
 
 type OppsummeringBarnProps = {
@@ -15,7 +15,6 @@ const OppsummeringBarn = ({ barn }: OppsummeringBarnProps) => {
       <Label>{'Navn'}</Label>
       <BodyShort>{formatNavn(barn?.navn)}</BodyShort>
       <Label>Fødselsdato</Label>
-      {/* @ts-ignore-line */}
       <BodyShort>{formatDate(barn?.fødselsdato)}</BodyShort>
       {barn?.relasjon && (
         <>

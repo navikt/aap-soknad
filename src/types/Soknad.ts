@@ -61,7 +61,7 @@ type AndreUtbetalinger = {
 };
 export type Barn = {
   navn: Navn;
-  fødselsdato?: string;
+  fødseldato?: string;
   fnr: string;
   harInntekt?: string;
   barnepensjon?: string;
@@ -72,7 +72,7 @@ export type Barn = {
 export type ManuelleBarn = {
   navn: Navn;
   fnr: string;
-  fødselsdato?: Date;
+  fødseldato?: Date;
   harInntekt?: string;
   barnepensjon?: string;
   relasjon: Relasjon;

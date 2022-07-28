@@ -23,7 +23,7 @@ import { useFeatureToggleIntl } from '../../../hooks/useFeatureToggleIntl';
 import DatePickerWrapper from '../../../components/input/DatePickerWrapper/DatePickerWrapper';
 import { ModalButtonWrapper } from '../../../components/ButtonWrapper/ModalButtonWrapper';
 import { UtenlandsPeriode } from '../../../types/Soknad';
-import { formatDate } from '../StartDato/StartDato';
+import { formatDate } from '../../../utils/date';
 
 export enum ArbeidEllerBodd {
   ARBEID = 'ARBEID',
@@ -96,8 +96,8 @@ const UtenlandsPeriodeVelger = ({
       ...(utenlandsPeriode
         ? {
             ...utenlandsPeriode,
-            fraDato: formatDate(utenlandsPeriode.fraDato),
-            tilDato: formatDate(utenlandsPeriode.tilDato),
+            fraDato: formatDate(utenlandsPeriode.fraDato, 'yyyy-MM-dd'),
+            tilDato: formatDate(utenlandsPeriode.tilDato, 'yyyy-MM-dd'),
           }
         : initFieldVals),
     },
@@ -106,8 +106,8 @@ const UtenlandsPeriodeVelger = ({
   useEffect(() => {
     reset({
       ...utenlandsPeriode,
-      fraDato: formatDate(utenlandsPeriode?.fraDato),
-      tilDato: formatDate(utenlandsPeriode?.tilDato),
+      fraDato: formatDate(utenlandsPeriode?.fraDato, 'yyyy-MM-dd'),
+      tilDato: formatDate(utenlandsPeriode?.tilDato, 'yyyy-MM-dd'),
     });
   }, [utenlandsPeriode, open, reset]);
 

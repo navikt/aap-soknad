@@ -20,18 +20,23 @@ import { slettLagretSoknadState, updateSøknadData } from '../../../context/sokn
 import { useDebounceLagreSoknad } from '../../../hooks/useDebounceLagreSoknad';
 import DatePickerWrapper from '../../../components/input/DatePickerWrapper/DatePickerWrapper';
 import { GenericSoknadContextState } from '../../../types/SoknadContext';
+import { formatDate } from '../../../utils/date';
 
 const FERIE = 'ferie';
 const FERIETYPE = 'ferieType';
 const SKALHAFERIE = 'skalHaFerie';
 const BEGRUNNELSE = 'begrunnelse';
 
-export const formatDate = (date?: Date) => {
+/*export const formatDate = (date?: Date) => {
+  console.log({ date: date, type: typeof date });
   if (date) {
+    if (typeof date === 'string') {
+      return format(new Date(date), 'yyyy-MM-dd');
+    }
     return format(date, 'yyyy-MM-dd');
   }
   return undefined;
-};
+};*/
 
 interface Props {
   onBackClick: () => void;
@@ -99,8 +104,8 @@ const StartDato = ({ onBackClick, onNext, defaultValues }: Props) => {
       begrunnelse: defaultValues?.søknad?.begrunnelse,
       ferie: {
         ...defaultValues?.søknad?.ferie,
-        fraDato: formatDate(defaultValues?.søknad?.ferie?.fraDato),
-        tilDato: formatDate(defaultValues?.søknad?.ferie?.tilDato),
+        fraDato: formatDate(defaultValues?.søknad?.ferie?.fraDato, 'yyyy-MM-dd'),
+        tilDato: formatDate(defaultValues?.søknad?.ferie?.tilDato, 'yyyy-MM-dd'),
       },
     },
   });

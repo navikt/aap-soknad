@@ -22,7 +22,7 @@ import { useFeatureToggleIntl } from '../../../hooks/useFeatureToggleIntl';
 import { GRUNNBELØP } from './Barnetillegg';
 import DatePickerWrapper from '../../../components/input/DatePickerWrapper/DatePickerWrapper';
 import { add, sub } from 'date-fns';
-import { formatDate } from '../StartDato/StartDato';
+import { formatDate } from '../../../utils/date';
 
 interface Props {
   søknad?: Soknad;
@@ -75,7 +75,7 @@ export const AddBarnModal = ({
           'søknad.barnetillegg.leggTilBarn.modal.fødselsnummer.validation.numberCharacters'
         )
       ),
-    fødselsdato: yup
+    fødseldato: yup
       .date()
       .required('Du må fylle inn barnets fødselsdato.')
       .min(sub(new Date(), { years: 18 }), 'Barnet kan ikke være over 18 år.')
@@ -118,7 +118,7 @@ export const AddBarnModal = ({
       ...(barn
         ? {
             ...barn,
-            fødselsdato: formatDate(barn.fødselsdato),
+            fødseldato: formatDate(barn.fødseldato, 'yyyy-MM-dd'),
           }
         : {}),
     },
@@ -132,7 +132,7 @@ export const AddBarnModal = ({
   }, [barnepensjon]);
 
   useEffect(() => {
-    reset({ ...barn, fødselsdato: formatDate(barn?.fødselsdato) });
+    reset({ ...barn, fødseldato: formatDate(barn?.fødseldato, 'yyyy-MM-dd') });
   }, [barn, showModal, reset]);
 
   return (
@@ -180,10 +180,10 @@ export const AddBarnModal = ({
           <DatePickerWrapper
             control={control}
             label="Fødselsdato"
-            name="fødselsdato"
-            error={errors?.fødselsdato?.message}
+            name="fødseldato"
+            error={errors?.fødseldato?.message}
           />
-          {errors?.fødselsdato?.message}
+          {errors?.fødseldato?.message}
 
           <RadioGroupWrapper
             control={control}

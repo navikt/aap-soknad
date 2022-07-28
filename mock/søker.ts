@@ -1,3 +1,6 @@
+import { sub } from 'date-fns';
+import { formatDate } from '../src/utils/date';
+
 export const mockSøker = {
   søker: {
     navn: {
@@ -15,7 +18,7 @@ export const mockSøker = {
         poststed: 'Oslo',
       },
     },
-    fødseldato: '2022-02-14',
+    fødseldato: formatDate(sub(new Date(), { years: 30 }), 'yyyy-MM-dd'),
     barn: [
       {
         fnr: '123',
@@ -24,7 +27,7 @@ export const mockSøker = {
           mellomnavn: 'Nummer',
           etternavn: 'En',
         },
-        fødseldato: '2022-02-14',
+        fødseldato: formatDate(sub(new Date(), { years: 1 }), 'yyyy-MM-dd'),
       },
       {
         fnr: '456',
@@ -33,7 +36,7 @@ export const mockSøker = {
           mellomnavn: 'Nummer',
           etternavn: 'To',
         },
-        fødseldato: '2022-02-14',
+        fødseldato: formatDate(sub(new Date(), { years: 2 }), 'yyyy-MM-dd'),
       },
       {
         fnr: '789',
@@ -42,7 +45,7 @@ export const mockSøker = {
           mellomnavn: 'Nummer',
           etternavn: 'Tre',
         },
-        fødseldato: '2022-02-14',
+        fødseldato: formatDate(sub(new Date(), { years: 3 }), 'yyyy-MM-dd'),
       },
       {
         fnr: '012',
@@ -51,7 +54,7 @@ export const mockSøker = {
           mellomnavn: 'Nummer',
           etternavn: 'Fire',
         },
-        fødseldato: '2022-02-14',
+        fødseldato: formatDate(sub(new Date(), { years: 4 }), 'yyyy-MM-dd'),
       },
     ],
   },

@@ -513,6 +513,7 @@
       "registrerteBarn": {
         "title": "Barn vi har funnet som er registrert på deg:",
         "fødselsnummer": "Fødselsnummer / D-nummer",
+        "fødselsdato": "Fødselsdato",
         "barnepensjon": {
           "label": "Mottar barnet barnepensjon?",
           "readMore": {
@@ -531,6 +532,7 @@
       "manuelleBarn": {
         "title": "Barn som du har lagt til:",
         "fødselsnummer": "Fødselsnummer / D-nummer",
+        "fødselsdato": "Fødselsdato",
         "erForelder": "Du er forelder til barnet",
         "erFosterforelder": "Du er fosterforelder til barnet",
         "mottarBarnepensjon": "Barnet mottar barnepensjon",

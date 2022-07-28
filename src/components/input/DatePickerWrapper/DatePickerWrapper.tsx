@@ -24,12 +24,12 @@ const DatePickerWrapper = ({ name, label, control, error }: DatePickerProps) => 
           id={name}
           label={label}
           value={value}
-          //error={error}
+          error={error}
           onChange={onChange}
           inputProps={{
             'aria-invalid': !!error,
           }}
-          calendarSettings={{ showWeekNumbers: false }}
+          calendarSettings={{ showWeekNumbers: false, position: 'fullscreen' }}
           showYearSelector={true}
           limitations={{
             weekendsNotSelectable: false,
