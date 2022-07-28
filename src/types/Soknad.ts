@@ -20,7 +20,7 @@ export type UtenlandsPeriode = {
   land: string;
   tilDato: Date;
   fraDato: Date;
-  iArbeid: boolean;
+  iArbeid: JaEllerNei;
   utenlandsId?: string;
 };
 type Yrkesskade = string;

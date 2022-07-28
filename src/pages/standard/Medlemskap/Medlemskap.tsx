@@ -368,7 +368,7 @@ export const Medlemskap = ({ onBackClick, onNext, defaultValues }: Props) => {
                           field?.fraDato,
                           'dd.MM.yyyy'
                         )} - ${formatDate(field?.tilDato, 'dd.MM.yyyy')}${
-                          field?.iArbeid ? ' (Jobb)' : ''
+                          field?.iArbeid === 'Ja' ? ' (Jobb)' : ''
                         }`}</Button>
                       </Table.DataCell>
                       <Table.DataCell>
