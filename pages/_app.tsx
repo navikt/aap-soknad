@@ -1,4 +1,5 @@
 import '@navikt/ds-css';
+import '../src/index.css';
 
 import React, { useMemo } from 'react';
 import { IntlProvider } from 'react-intl';
