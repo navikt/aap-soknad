@@ -34,3 +34,6 @@ yarn-error.log*
 package-lock.json
 
 .next
+
+# Sentry
+.sentryclirc
