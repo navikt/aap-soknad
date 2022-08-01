@@ -8,6 +8,8 @@ import { GetServerSidePropsResult, NextPageContext } from 'next/types';
 import { beskyttetSide } from '../../auth/beskyttetSide';
 import { getAccessToken } from '../../auth/accessToken';
 import { getSøker } from '../api/oppslag/soeker';
+import { fetchPOST } from '../../src/api/fetch';
+import { defaultStepList } from '../../src/pages/standard';
 interface PageProps {
   søker: SokerOppslagState;
 }
@@ -28,7 +30,28 @@ const Introduksjon = ({ søker }: PageProps) => {
     }
   }, [søker, setSoker]);
 
-  return <Veiledning søker={soker} loading={false} onSubmit={() => router.push('standard/1')} />;
+  const startSoknad = async () => {
+    await fetchPOST(
+      `${process.env.NEXT_PUBLIC_TEMP_LAGRE_URL ?? '/aap/soknad-api/buckets/lagre/'}STANDARD`,
+      {
+        type: 'STANDARD',
+        version: 1,
+        søknad: {},
+        lagretStepList: defaultStepList,
+      }
+    );
+  };
+
+  return (
+    <Veiledning
+      søker={soker}
+      loading={false}
+      onSubmit={async () => {
+        await startSoknad();
+        router.push('standard/1');
+      }}
+    />
+  );
 };
 
 export const getServerSideProps = beskyttetSide(

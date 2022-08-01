@@ -1,8 +1,5 @@
 import fs from 'fs/promises';
-import NodeCache from 'node-cache';
 import { SøknadsType } from '../utils/api';
-
-const mellomlagringsCache = new NodeCache({ stdTTL: 60 * 60 * 24 * 30 });
 
 export const lesCache = async () => {
   try {
@@ -20,5 +17,6 @@ export const lagreCache = async (data: string) => {
 };
 
 export const deleteCache = async (type: SøknadsType) => {
-  return mellomlagringsCache.del(type);
+  await fs.unlink('.bucket.cache');
+  return;
 };

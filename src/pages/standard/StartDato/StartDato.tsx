@@ -90,7 +90,6 @@ export const getSchema = (formatMessage: (id: string) => string) => {
 const StartDato = ({ onBackClick, onNext, defaultValues }: Props) => {
   const { formatMessage } = useFeatureToggleIntl();
   const { søknadState, søknadDispatch } = useSoknadContextStandard();
-  console.log('SØKNADSSTATE', defaultValues);
   const { stepList } = useStepWizard();
   const {
     control,

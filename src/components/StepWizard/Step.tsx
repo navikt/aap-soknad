@@ -2,6 +2,7 @@ import React from 'react';
 import { useStepWizard } from '../../context/stepWizardContextV2';
 
 export type StepType = {
+  stepIndex?: number;
   name: string;
   completed?: boolean;
   active?: boolean;

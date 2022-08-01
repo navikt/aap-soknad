@@ -10,7 +10,7 @@ import {
   goToPreviousStep,
 } from '../../src/context/stepWizardContextV2';
 import { useFeatureToggleIntl } from '../../src/hooks/useFeatureToggleIntl';
-import { GenericSoknadContextState, SøknadType } from '../../src/types/SoknadContext';
+import { GenericSoknadContextState } from '../../src/types/SoknadContext';
 import { useDebounceLagreSoknad } from '../../src/hooks/useDebounceLagreSoknad';
 import { StepWizard } from '../../src/components/StepWizard';
 import {
@@ -27,7 +27,7 @@ import { updateSøknadData } from '../../src/context/soknadContextCommon';
 import Soknad from '../../src/types/Soknad';
 import { SubmitHandler } from 'react-hook-form';
 import { fetchPOST } from '../../src/api/fetch';
-import { defaultStepList, mapSøknadToBackend, StepNames } from '../../src/pages/standard';
+import { mapSøknadToBackend, StepNames } from '../../src/pages/standard';
 import StartDato from '../../src/pages/standard/StartDato/StartDato';
 import { Medlemskap } from '../../src/pages/standard/Medlemskap/Medlemskap';
 import { Yrkesskade } from '../../src/pages/standard/Yrkesskade/Yrkesskade';
@@ -47,7 +47,7 @@ import { lesBucket } from '../api/buckets/les';
 
 interface PageProps {
   søker: SokerOppslagState;
-  mellomlagretSøknad?: GenericSoknadContextState<Soknad>;
+  mellomlagretSøknad: GenericSoknadContextState<Soknad>;
 }
 
 const Steps = ({ søker, mellomlagretSøknad }: PageProps) => {
@@ -63,16 +63,12 @@ const Steps = ({ søker, mellomlagretSøknad }: PageProps) => {
   const debouncedLagre = useDebounceLagreSoknad<Soknad>();
 
   useEffect(() => {
-    if (mellomlagretSøknad) {
-      setSoknadStateFraProps(mellomlagretSøknad, søknadDispatch);
-      if (mellomlagretSøknad?.lagretStepList && mellomlagretSøknad?.lagretStepList?.length > 0) {
-        setStepList([...mellomlagretSøknad.lagretStepList], stepWizardDispatch);
-      } else {
-        setStepList([...defaultStepList], stepWizardDispatch);
-      }
-      const oppslag = setSokerOppslagFraProps(søker, oppslagDispatch);
-      if (oppslag?.søker?.barn) addBarnIfMissing(søknadDispatch, oppslag.søker.barn);
+    setSoknadStateFraProps(mellomlagretSøknad, søknadDispatch);
+    if (mellomlagretSøknad.lagretStepList && mellomlagretSøknad?.lagretStepList?.length > 0) {
+      setStepList([...mellomlagretSøknad.lagretStepList], stepWizardDispatch);
     }
+    const oppslag = setSokerOppslagFraProps(søker, oppslagDispatch);
+    if (oppslag?.søker?.barn) addBarnIfMissing(søknadDispatch, oppslag.søker.barn);
   }, []);
 
   useEffect(() => {
@@ -80,6 +76,13 @@ const Steps = ({ søker, mellomlagretSøknad }: PageProps) => {
       debouncedLagre(søknadState, stepList, {});
     }
   }, [currentStep, stepList]);
+
+  useEffect(() => {
+    console.log('currentStep', currentStep);
+    if (currentStep && currentStep.stepIndex !== undefined) {
+      router.push(currentStep.stepIndex.toString());
+    }
+  }, [currentStep]);
 
   const submitSoknad: SubmitHandler<Soknad> = async (data) => {
     if (currentStep?.name === StepNames.OPPSUMMERING) {
@@ -110,21 +113,17 @@ const Steps = ({ søker, mellomlagretSøknad }: PageProps) => {
       ...data,
     });
 
-  const onPreviousStep = () => {
+  const onPreviousStep = async () => {
     if (currentStep?.name === StepNames.STARTDATO) {
       router.push('/standard');
     } else {
-      // @ts-ignore-line
-      setCurrentStepIndex(Number.parseInt(step) - 2, stepWizardDispatch);
-      // @ts-ignore-line
-      router.push(`/standard/${Number.parseInt(step) - 1}`);
+      goToPreviousStep(stepWizardDispatch);
     }
   };
 
-  const onNextStep = (data: any, nextStep: string) => {
+  const onNextStep = async (data: any) => {
     updateSøknadData<Soknad>(søknadDispatch, data);
-    setCurrentStepIndex(Number.parseInt(nextStep) - 1, stepWizardDispatch);
-    router.push(nextStep);
+    completeAndGoToNextStep(stepWizardDispatch);
   };
 
   return (
@@ -138,7 +137,7 @@ const Steps = ({ søker, mellomlagretSøknad }: PageProps) => {
             onBackClick={onPreviousStep}
             defaultValues={mellomlagretSøknad}
             onNext={(data) => {
-              onNextStep(data, '2');
+              onNextStep(data);
             }}
           />
         )}
@@ -147,7 +146,7 @@ const Steps = ({ søker, mellomlagretSøknad }: PageProps) => {
             onBackClick={onPreviousStep}
             defaultValues={mellomlagretSøknad}
             onNext={(data) => {
-              onNextStep(data, '3');
+              onNextStep(data);
             }}
           />
         )}
@@ -156,7 +155,7 @@ const Steps = ({ søker, mellomlagretSøknad }: PageProps) => {
             onBackClick={onPreviousStep}
             defaultValues={mellomlagretSøknad}
             onNext={(data) => {
-              onNextStep(data, '4');
+              onNextStep(data);
             }}
           />
         )}
@@ -165,7 +164,7 @@ const Steps = ({ søker, mellomlagretSøknad }: PageProps) => {
             onBackClick={onPreviousStep}
             defaultValues={mellomlagretSøknad}
             onNext={(data) => {
-              onNextStep(data, '5');
+              onNextStep(data);
             }}
             fastlege={fastlege}
           />
@@ -175,7 +174,7 @@ const Steps = ({ søker, mellomlagretSøknad }: PageProps) => {
             onBackClick={onPreviousStep}
             defaultValues={mellomlagretSøknad}
             onNext={(data) => {
-              onNextStep(data, '6');
+              onNextStep(data);
             }}
           />
         )}
@@ -184,7 +183,7 @@ const Steps = ({ søker, mellomlagretSøknad }: PageProps) => {
             onBackClick={onPreviousStep}
             defaultValues={mellomlagretSøknad}
             onNext={(data) => {
-              onNextStep(data, '7');
+              onNextStep(data);
             }}
           />
         )}
@@ -193,7 +192,7 @@ const Steps = ({ søker, mellomlagretSøknad }: PageProps) => {
             onBackClick={onPreviousStep}
             defaultValues={mellomlagretSøknad}
             onNext={(data) => {
-              onNextStep(data, '8');
+              onNextStep(data);
             }}
           />
         )}
@@ -202,7 +201,7 @@ const Steps = ({ søker, mellomlagretSøknad }: PageProps) => {
             onBackClick={onPreviousStep}
             defaultValues={mellomlagretSøknad}
             onNext={(data) => {
-              onNextStep(data, '9');
+              onNextStep(data);
             }}
           />
         )}
@@ -211,7 +210,7 @@ const Steps = ({ søker, mellomlagretSøknad }: PageProps) => {
             onBackClick={onPreviousStep}
             defaultValues={mellomlagretSøknad}
             onNext={(data) => {
-              onNextStep(data, '10');
+              onNextStep(data);
             }}
           />
         )}
@@ -231,9 +230,19 @@ const StepsWithContextProvider = ({ søker, mellomlagretSøknad }: PageProps) =>
 
 export const getServerSideProps = beskyttetSide(
   async (ctx: NextPageContext): Promise<GetServerSidePropsResult<{}>> => {
+    const { step } = ctx.query;
     const bearerToken = getAccessToken(ctx);
     const søker = await getSøker(bearerToken);
     const mellomlagretSøknad = await lesBucket('STANDARD', bearerToken);
+
+    if (!mellomlagretSøknad.lagretStepList) {
+      return {
+        redirect: {
+          destination: '/standard',
+          permanent: false,
+        },
+      };
+    }
 
     return {
       props: { søker, mellomlagretSøknad },

@@ -51,16 +51,16 @@ export enum StepNames {
   OPPSUMMERING = 'OPPSUMMERING',
 }
 export const defaultStepList = [
-  { name: StepNames.STARTDATO, active: true },
-  { name: StepNames.MEDLEMSKAP },
-  { name: StepNames.YRKESSKADE },
-  { name: StepNames.FASTLEGE },
-  { name: StepNames.BARNETILLEGG },
-  { name: StepNames.STUDENT },
-  { name: StepNames.ANDRE_UTBETALINGER },
-  { name: StepNames.TILLEGGSOPPLYSNINGER },
-  { name: StepNames.VEDLEGG },
-  { name: StepNames.OPPSUMMERING },
+  { stepIndex: 1, name: StepNames.STARTDATO, active: true },
+  { stepIndex: 2, name: StepNames.MEDLEMSKAP },
+  { stepIndex: 3, name: StepNames.YRKESSKADE },
+  { stepIndex: 4, name: StepNames.FASTLEGE },
+  { stepIndex: 5, name: StepNames.BARNETILLEGG },
+  { stepIndex: 6, name: StepNames.STUDENT },
+  { stepIndex: 7, name: StepNames.ANDRE_UTBETALINGER },
+  { stepIndex: 8, name: StepNames.TILLEGGSOPPLYSNINGER },
+  { stepIndex: 9, name: StepNames.VEDLEGG },
+  { stepIndex: 10, name: StepNames.OPPSUMMERING },
 ];
 
 const getFerieType = (skalHaFerie?: string, ferieType?: string) => {
