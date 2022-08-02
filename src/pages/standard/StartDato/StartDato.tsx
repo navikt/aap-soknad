@@ -57,9 +57,9 @@ export const getSchema = (formatMessage: (id: string) => string) => {
         is: JaNeiVetIkke.JA,
         then: yup
           .string()
-          .required(formatMessage('søknad.startDato.ferieType.validation.required')),
+          .required(formatMessage('søknad.startDato.ferieType.validation.required'))
+          .nullable(),
       }),
-
       ['fraDato']: yup.date().when([FERIETYPE], {
         is: 'Ja',
         then: yup
