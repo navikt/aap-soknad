@@ -3,5 +3,11 @@
   display: flex;
   flex-direction: column;
   gap: var(--navds-spacing-10);
-  background-color: #E9E7E7;
+  background-color: #e9e7e7;
+}
+
+@media (max-width: 480px) {
+  .panelGrey {
+    padding: var(--navds-spacing-4);
+  }
 }

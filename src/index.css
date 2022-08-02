@@ -1,11 +1,17 @@
 #app {
-  display:flex;
-  flex-direction:column;
-  min-height:100vh;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 }
 .app-container {
   flex: 1;
 }
 .app {
-  padding: var(--navds-spacing-10)
+  padding: var(--navds-spacing-10);
+}
+
+@media (max-width: 480px) {
+  .navds-page-header__title {
+    font-size: var(--navds-font-size-heading-medium);
+  }
 }

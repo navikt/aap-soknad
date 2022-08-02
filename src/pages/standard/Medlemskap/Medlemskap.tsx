@@ -356,7 +356,7 @@ export const Medlemskap = ({ onBackClick, onNext, defaultValues }: Props) => {
                 <Table.Body>
                   {fields?.map((field, index) => (
                     <Table.Row key={field.id}>
-                      <Table.DataCell>
+                      <Table.DataCell className={styles.dataCell}>
                         <Button
                           variant="tertiary"
                           type="button"
@@ -364,12 +364,17 @@ export const Medlemskap = ({ onBackClick, onNext, defaultValues }: Props) => {
                             setSelectedUtenlandsPeriodeIndex(index);
                             setShowUtenlandsPeriodeModal(true);
                           }}
-                        >{`${field?.land?.split(':')?.[1]} ${formatDate(
-                          field?.fraDato,
-                          'dd.MM.yyyy'
-                        )} - ${formatDate(field?.tilDato, 'dd.MM.yyyy')}${
-                          field?.iArbeid === 'Ja' ? ' (Jobb)' : ''
-                        }`}</Button>
+                        >
+                          <div className={styles.tableRowButtonContainer}>
+                            <span>{`${field?.land?.split(':')?.[1]} `}</span>
+                            <span>
+                              {`${formatDate(field?.fraDato, 'dd.MM.yyyy')} - ${formatDate(
+                                field?.tilDato,
+                                'dd.MM.yyyy'
+                              )}${field?.iArbeid === 'Ja' ? ' (Jobb)' : ''}`}
+                            </span>
+                          </div>
+                        </Button>
                       </Table.DataCell>
                       <Table.DataCell>
                         {
