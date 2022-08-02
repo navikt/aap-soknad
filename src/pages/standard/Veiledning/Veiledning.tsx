@@ -67,16 +67,12 @@ export const Veiledning = ({ søker, loading, onSubmit }: VeiledningProps) => {
                 {formatMessage('søknad.veiledning.accordionHvis.title')}
               </Accordion.Header>
               <Accordion.Content>
-                <BodyShort spacing>
-                  <ul>
-                    <li>
-                      {formatMessage('søknad.veiledning.accordionHvis.bulletPointOppfølging')}
-                    </li>
-                    <li>{formatMessage('søknad.veiledning.accordionHvis.bulletPointPlikt')}</li>
-                    <li>{formatMessage('søknad.veiledning.accordionHvis.bulletPointMeldekort')}</li>
-                    <li>{formatMessage('søknad.veiledning.accordionHvis.bulletPointBeskjed')}</li>
-                  </ul>
-                </BodyShort>
+                <ul>
+                  <li>{formatMessage('søknad.veiledning.accordionHvis.bulletPointOppfølging')}</li>
+                  <li>{formatMessage('søknad.veiledning.accordionHvis.bulletPointPlikt')}</li>
+                  <li>{formatMessage('søknad.veiledning.accordionHvis.bulletPointMeldekort')}</li>
+                  <li>{formatMessage('søknad.veiledning.accordionHvis.bulletPointBeskjed')}</li>
+                </ul>
               </Accordion.Content>
             </Accordion.Item>
           </Accordion>
@@ -86,48 +82,44 @@ export const Veiledning = ({ søker, loading, onSubmit }: VeiledningProps) => {
                 {formatMessage('søknad.veiledning.accordionInformasjon.title')}
               </Accordion.Header>
               <Accordion.Content>
-                <BodyLong spacing>
+                <BodyShort spacing>
                   {formatMessage('søknad.veiledning.accordionInformasjon.informasjonDuOppgir')}
-                  <ul>
-                    <li>
-                      {formatMessage(
-                        'søknad.veiledning.accordionInformasjon.bulletPointPersoninformasjon'
-                      )}
-                    </li>
-                    <li>
-                      {formatMessage('søknad.veiledning.accordionInformasjon.bulletPontSkatt')}
-                    </li>
-                    <li>
-                      {formatMessage('søknad.veiledning.accordionInformasjon.bulletpointHelse')}
-                    </li>
-                    <li>
-                      {formatMessage('søknad.veiledning.accordionInformasjon.bulletPointArbeid')}
-                    </li>
-                    <li>
-                      {formatMessage(
-                        'søknad.veiledning.accordionInformasjon.bulletPointAndreOpplysninger'
-                      )}
-                    </li>
-                  </ul>
-                </BodyLong>
-                <BodyLong spacing>
-                  {formatMessage('søknad.veiledning.accordionInformasjon.folketrygdloven')}
-                  <ul>
-                    <li>
-                      {formatMessage('søknad.veiledning.accordionInformasjon.bulletPointDeler')}
-                    </li>
-                    <li>
-                      {formatMessage('søknad.veiledning.accordionInformasjon.bulletPointForbedre')}
-                    </li>
-                  </ul>
-                </BodyLong>
-                <BodyLong spacing>
-                  <Link href={formatMessage('applinks.personOpplysninger')} target={'_blank'}>
+                </BodyShort>
+                <ul>
+                  <li>
                     {formatMessage(
-                      'søknad.veiledning.accordionInformasjon.personopplysningerNavNo'
+                      'søknad.veiledning.accordionInformasjon.bulletPointPersoninformasjon'
                     )}
-                  </Link>
-                </BodyLong>
+                  </li>
+                  <li>{formatMessage('søknad.veiledning.accordionInformasjon.bulletPontSkatt')}</li>
+                  <li>
+                    {formatMessage('søknad.veiledning.accordionInformasjon.bulletpointHelse')}
+                  </li>
+                  <li>
+                    {formatMessage('søknad.veiledning.accordionInformasjon.bulletPointArbeid')}
+                  </li>
+                  <li>
+                    {formatMessage(
+                      'søknad.veiledning.accordionInformasjon.bulletPointAndreOpplysninger'
+                    )}
+                  </li>
+                </ul>
+
+                <BodyShort spacing>
+                  {formatMessage('søknad.veiledning.accordionInformasjon.folketrygdloven')}
+                </BodyShort>
+                <ul>
+                  <li>
+                    {formatMessage('søknad.veiledning.accordionInformasjon.bulletPointDeler')}
+                  </li>
+                  <li>
+                    {formatMessage('søknad.veiledning.accordionInformasjon.bulletPointForbedre')}
+                  </li>
+                </ul>
+
+                <Link href={formatMessage('applinks.personOpplysninger')} target={'_blank'}>
+                  {formatMessage('søknad.veiledning.accordionInformasjon.personopplysningerNavNo')}
+                </Link>
               </Accordion.Content>
             </Accordion.Item>
           </Accordion>
@@ -144,7 +136,7 @@ export const Veiledning = ({ søker, loading, onSubmit }: VeiledningProps) => {
             name={VEILEDNING_CONFIRM}
             error={errors?.[VEILEDNING_CONFIRM]?.message}
           >
-            <Label>{formatMessage('søknad.veiledning.veiledningConfirm.title')}</Label>
+            <Label as={'span'}>{formatMessage('søknad.veiledning.veiledningConfirm.title')}</Label>
           </ConfirmationPanelWrapper>
           <div className={classes?.buttonWrapper}>
             <Button variant="primary" type="submit">
