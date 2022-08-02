@@ -122,6 +122,13 @@ const StartDato = ({ onBackClick, onNext, defaultValues }: Props) => {
     }),
     [formatMessage]
   );
+
+  useEffect(() => {
+    if (skalHaFerie !== JaNeiVetIkke.JA) {
+      setValue(`${FERIE}.${FERIETYPE}`, undefined);
+    }
+  }, [skalHaFerie]);
+
   useEffect(() => {
     if (ferieType !== søknadState?.søknad?.ferie?.ferieType) {
       setValue(`${FERIE}.fraDato`, undefined);
