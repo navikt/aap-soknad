@@ -93,8 +93,6 @@ const jaNeiToBoolean = (value?: string) => {
 
 interface SøknadBackendState {
   startDato: {
-    fom?: string;
-    hvorfor?: string;
     beskrivelse?: string;
   };
   ferie: {
@@ -130,13 +128,12 @@ interface SøknadBackendState {
     andreStønader: Array<{ type: StønadType; hvemUtbetalerAFP?: string; vedlegg?: Array<string> }>;
   };
   registrerteBarn: Array<{
-    fnr: string;
     merEnnIG?: boolean;
     barnepensjon?: boolean;
   }>;
   andreBarn: Array<{
     barn: {
-      fnr: string;
+      fødseldato?: string;
       navn: {
         fornavn?: string;
         mellomnavn?: string;
@@ -218,7 +215,6 @@ export const mapSøknadToBackend = (
 
   return {
     startDato: {
-      fom: formatDate(new Date(), 'yyyy-MM-dd'),
       beskrivelse: søknad?.begrunnelse,
     },
     ferie: {
@@ -305,14 +301,13 @@ export const mapSøknadToBackend = (
     },
     registrerteBarn:
       søknad?.barnetillegg?.map((barn) => ({
-        fnr: barn.fnr,
         merEnnIG: jaNeiToBoolean(barn.harInntekt),
         barnepensjon: jaNeiToBoolean(barn.barnepensjon),
       })) ?? [],
     andreBarn:
       søknad?.manuelleBarn?.map((barn) => ({
         barn: {
-          fnr: barn.fnr,
+          fødseldato: formatDate(barn.fødseldato, 'yyyy-MM-dd'),
           navn: barn.navn,
         },
         relasjon: barn.relasjon,

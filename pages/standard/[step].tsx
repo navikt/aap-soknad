@@ -63,7 +63,6 @@ const Steps = ({ søker, mellomlagretSøknad }: PageProps) => {
 
   useEffect(() => {
     if (søknadState?.søknad === undefined) {
-      console.log('setter søknadstate fra props');
       setSoknadStateFraProps(mellomlagretSøknad, søknadDispatch);
       if (mellomlagretSøknad.lagretStepList && mellomlagretSøknad?.lagretStepList?.length > 0) {
         setStepList([...mellomlagretSøknad.lagretStepList], stepWizardDispatch);
