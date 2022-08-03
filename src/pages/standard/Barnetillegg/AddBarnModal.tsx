@@ -64,17 +64,6 @@ export const AddBarnModal = ({
           formatMessage('søknad.barnetillegg.leggTilBarn.modal.navn.etternavn.validation.required')
         ),
     }),
-    fnr: yup
-      .string()
-      .required(
-        formatMessage('søknad.barnetillegg.leggTilBarn.modal.fødselsnummer.validation.required')
-      )
-      .length(
-        11,
-        formatMessage(
-          'søknad.barnetillegg.leggTilBarn.modal.fødselsnummer.validation.numberCharacters'
-        )
-      ),
     fødseldato: yup
       .date()
       .required('Du må fylle inn barnets fødselsdato.')
@@ -166,16 +155,6 @@ export const AddBarnModal = ({
             name={'navn.etternavn'}
             error={errors?.[NAVN]?.etternavn?.message}
           />
-
-          {/* TODO: Denne skal fjernes når kontrakt i backend er oppdatert */}
-          <div className={classes.leggTilBarnFnrInput}>
-            <TextFieldWrapper
-              control={control}
-              label={formatMessage('søknad.barnetillegg.leggTilBarn.modal.fødselsnummer.label')}
-              name={'fnr'}
-              error={errors?.fnr?.message}
-            />
-          </div>
 
           <DatePickerWrapper
             control={control}
