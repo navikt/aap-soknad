@@ -87,6 +87,12 @@ function soknadReducerStandard(
         requiredVedlegg: [...newVedleggList],
       };
     }
+    case SoknadActionKeys.ADD_SØKNAD_URL: {
+      return {
+        ...state,
+        søknadUrl: action?.payload,
+      };
+    }
     default: {
       throw new Error(`Unhandled action type: ${action.type}`);
     }
