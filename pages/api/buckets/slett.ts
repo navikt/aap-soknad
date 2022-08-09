@@ -19,7 +19,10 @@ const handler = beskyttetApi(async (req: NextApiRequest, res: NextApiResponse) =
 });
 
 export const slettBucket = async (type: SøknadsType, accessToken?: string) => {
-  if (isMock()) deleteCache(type);
+  if (isMock()) {
+    await deleteCache(type);
+    return;
+  }
   await tokenXProxy({
     url: `${process.env.SOKNAD_API_URL}/buckets/slett/${type}`,
     method: 'DELETE',
