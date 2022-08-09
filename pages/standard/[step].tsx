@@ -1,7 +1,7 @@
 import { PageHeader } from '@navikt/ds-react';
 import { useRouter } from 'next/router';
 import React, { useEffect } from 'react';
-import { setSoknadStateFraProps } from '../../src/context/soknadContextCommon';
+import { setSoknadStateFraProps, SoknadActionKeys } from '../../src/context/soknadContextCommon';
 import {
   useStepWizard,
   setStepList,
@@ -41,7 +41,6 @@ import { beskyttetSide } from '../../auth/beskyttetSide';
 import { GetServerSidePropsResult, NextPageContext } from 'next';
 import { getAccessToken } from '../../auth/accessToken';
 import { getSøker } from '../api/oppslag/soeker';
-import { useVedleggContext, VedleggActionKeys } from '../../src/context/vedleggContext';
 import { lesBucket } from '../api/buckets/les';
 
 interface PageProps {
@@ -57,7 +56,6 @@ const Steps = ({ søker, mellomlagretSøknad }: PageProps) => {
 
   const { søknadState, søknadDispatch } = useSoknadContextStandard();
   const { oppslagDispatch, fastlege } = useSokerOppslag();
-  const { vedleggDispatch } = useVedleggContext();
   const { currentStep, stepList, stepWizardDispatch } = useStepWizard();
   const debouncedLagre = useDebounceLagreSoknad<Soknad>();
 
@@ -96,7 +94,7 @@ const Steps = ({ søker, mellomlagretSøknad }: PageProps) => {
       const postResponse = await postSøknad(søknad);
       if (postResponse?.ok) {
         const url = postResponse?.data?.uri;
-        vedleggDispatch({ type: VedleggActionKeys.ADD_SØKNAD_URL, payload: url });
+        søknadDispatch({ type: SoknadActionKeys.ADD_SØKNAD_URL, payload: url });
         router.push('kvittering');
       } else {
         // show post error

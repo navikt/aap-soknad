@@ -9,7 +9,6 @@ import { Modal } from '@navikt/ds-react';
 import links from '../src/translations/links.json';
 import { messages, flattenMessages } from '../src/utils/message';
 import { SokerOppslagProvider } from '../src/context/sokerOppslagContext';
-import { VedleggContextProvider } from '../src/context/vedleggContext';
 import { StepWizardProvider } from '../src/context/stepWizardContextV2';
 import { initAmplitude } from '../utils/amplitude';
 
@@ -36,11 +35,9 @@ const CustomApp = ({ Component, pageProps }: AppProps) => {
   return (
     <IntlProvider locale={locale} messages={currentMessages}>
       <SokerOppslagProvider>
-        <VedleggContextProvider>
-          <StepWizardProvider>
-            <Component {...pageProps} />
-          </StepWizardProvider>
-        </VedleggContextProvider>
+        <StepWizardProvider>
+          <Component {...pageProps} />
+        </StepWizardProvider>
       </SokerOppslagProvider>
     </IntlProvider>
   );

@@ -14,7 +14,6 @@ import OppsummeringBehandler from './OppsummeringBehandler/OppsummeringBehandler
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import SoknadFormWrapper from '../../../components/SoknadFormWrapper/SoknadFormWrapper';
-import { useVedleggContext } from '../../../context/vedleggContext';
 import { goToNamedStep, useStepWizard } from '../../../context/stepWizardContextV2';
 import { StepNames } from '../index';
 import { LucaGuidePanel } from '../../../components/LucaGuidePanel';
@@ -33,7 +32,6 @@ const Oppsummering = ({ onBackClick, onSubmitSoknad }: OppsummeringProps) => {
 
   const { søknadState, søknadDispatch } = useSoknadContextStandard();
   const { stepWizardDispatch } = useStepWizard();
-  const { vedleggState } = useVedleggContext();
   const { fastlege } = useSokerOppslag();
   const schema = yup.object().shape({});
   const {
@@ -256,7 +254,7 @@ const Oppsummering = ({ onBackClick, onSubmitSoknad }: OppsummeringProps) => {
           onEdit={() => editStep(StepNames.VEDLEGG)}
         >
           <>
-            {vedleggState?.requiredVedlegg?.map((vedlegg) => {
+            {søknadState?.requiredVedlegg?.map((vedlegg) => {
               if (
                 vedlegg?.filterType === Relasjon.FORELDER ||
                 vedlegg?.filterType === Relasjon.FOSTERFORELDER

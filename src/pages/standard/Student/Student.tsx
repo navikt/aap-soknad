@@ -10,13 +10,13 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import SoknadFormWrapper from '../../../components/SoknadFormWrapper/SoknadFormWrapper';
 import ColorPanel from '../../../components/panel/ColorPanel';
 import { LucaGuidePanel } from '../../../components/LucaGuidePanel';
+import { useFeatureToggleIntl } from '../../../hooks/useFeatureToggleIntl';
 import {
   addRequiredVedlegg,
   removeRequiredVedlegg,
-  useVedleggContext,
-} from '../../../context/vedleggContext';
-import { useFeatureToggleIntl } from '../../../hooks/useFeatureToggleIntl';
-import { slettLagretSoknadState, updateSøknadData } from '../../../context/soknadContextCommon';
+  slettLagretSoknadState,
+  updateSøknadData,
+} from '../../../context/soknadContextCommon';
 import { useSoknadContextStandard } from '../../../context/soknadContextStandard';
 import { useDebounceLagreSoknad } from '../../../hooks/useDebounceLagreSoknad';
 import { GenericSoknadContextState } from '../../../types/SoknadContext';
@@ -64,7 +64,6 @@ const Student = ({ onBackClick, onNext, defaultValues }: Props) => {
   });
   const { søknadState, søknadDispatch } = useSoknadContextStandard();
   const { stepList, stepWizardDispatch } = useStepWizard();
-  const { vedleggDispatch } = useVedleggContext();
   const {
     control,
     handleSubmit,
@@ -97,10 +96,10 @@ const Student = ({ onBackClick, onNext, defaultValues }: Props) => {
             description: formatMessage('søknad.student.vedlegg.description'),
           },
         ],
-        vedleggDispatch
+        søknadDispatch
       );
     } else {
-      removeRequiredVedlegg(AVBRUTT_STUDIE_VEDLEGG, vedleggDispatch);
+      removeRequiredVedlegg(AVBRUTT_STUDIE_VEDLEGG, søknadDispatch);
     }
   }, [erStudent]);
 

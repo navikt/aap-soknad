@@ -65,6 +65,28 @@ function soknadReducerStandard(
         },
       };
     }
+    case SoknadActionKeys.ADD_VEDLEGG: {
+      const vedleggList =
+        action?.payload?.filter(
+          (vedlegg) =>
+            !state?.requiredVedlegg?.find((e) => {
+              return e?.type === vedlegg?.type;
+            })
+        ) || [];
+      return {
+        ...state,
+        requiredVedlegg: [...state?.requiredVedlegg, ...vedleggList],
+      };
+    }
+    case SoknadActionKeys.REMOVE_VEDLEGG: {
+      const newVedleggList = state?.requiredVedlegg?.filter((e) => {
+        return !(e?.type === action?.payload);
+      });
+      return {
+        ...state,
+        requiredVedlegg: [...newVedleggList],
+      };
+    }
     default: {
       throw new Error(`Unhandled action type: ${action.type}`);
     }

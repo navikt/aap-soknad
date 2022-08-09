@@ -1,4 +1,4 @@
-import { GenericSoknadContextState, SøknadType } from '../types/SoknadContext';
+import { GenericSoknadContextState, RequiredVedlegg, SøknadType } from '../types/SoknadContext';
 import { Dispatch, ReactNode } from 'react';
 import { OppslagBarn } from './sokerOppslagContext';
 
@@ -15,6 +15,8 @@ export const soknadContextInititalState = {
   type: undefined,
   currentStep: undefined,
   søknad: undefined,
+  requiredVedlegg: [],
+  søknadUrl: undefined,
 };
 
 export enum SoknadActionKeys {
@@ -24,6 +26,9 @@ export enum SoknadActionKeys {
   UPDATE_SOKNAD = 'UPDATE_SOKNAD',
   SET_CURRENT_STEP = 'SET_CURRENT_STEP',
   ADD_BARN_IF_MISSING = 'ADD_BARN_IF_MISSING',
+  ADD_VEDLEGG = 'ADD_VEDLEGG',
+  REMOVE_VEDLEGG = 'REMOVE_VEDLEGG',
+  ADD_SØKNAD_URL = 'ADD_SØKNAD_URL',
 }
 type SetStateFromCache<T> = {
   type: SoknadActionKeys.SET_STATE_FROM_CACHE;
@@ -49,13 +54,28 @@ type AddBarnIfMissing = {
   type: SoknadActionKeys.ADD_BARN_IF_MISSING;
   payload: OppslagBarn[];
 };
+type AddVedlegg = {
+  type: SoknadActionKeys.ADD_VEDLEGG;
+  payload: RequiredVedlegg[];
+};
+type RemoveVedlegg = {
+  type: SoknadActionKeys.REMOVE_VEDLEGG;
+  payload?: string;
+};
+type AddSøknadUrl = {
+  type: SoknadActionKeys.ADD_SØKNAD_URL;
+  payload: string;
+};
 export type SoknadAction<SoknadStateType> =
   | SetStateFromCache<SoknadStateType>
   | SetSoknadType
   | SetSoknad<SoknadStateType>
   | UpdateSoknad<SoknadStateType>
   | SetCurrentStep
-  | AddBarnIfMissing;
+  | AddBarnIfMissing
+  | AddVedlegg
+  | RemoveVedlegg
+  | AddSøknadUrl;
 
 export async function hentSoknadState<SoknadStateType>(
   dispatch: Dispatch<SoknadAction<SoknadStateType>>,
@@ -114,4 +134,18 @@ export function updateSøknadData<SoknadStateType>(
   data: Partial<SoknadStateType>
 ) {
   dispatch({ type: SoknadActionKeys.UPDATE_SOKNAD, payload: data });
+}
+
+export async function addRequiredVedlegg<SoknadStateType>(
+  vedlegg: RequiredVedlegg[],
+  dispatch: Dispatch<SoknadAction<SoknadStateType>>
+) {
+  if (vedlegg) dispatch({ type: SoknadActionKeys.ADD_VEDLEGG, payload: vedlegg });
+}
+
+export async function removeRequiredVedlegg<SoknadStateType>(
+  vedleggType: string,
+  dispatch: Dispatch<SoknadAction<SoknadStateType>>
+) {
+  if (vedleggType) dispatch({ type: SoknadActionKeys.REMOVE_VEDLEGG, payload: vedleggType });
 }
