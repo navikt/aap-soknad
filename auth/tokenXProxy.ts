@@ -2,15 +2,7 @@ import { NextApiRequest, NextApiResponse } from 'next/dist/shared/lib/utils';
 import axios from 'axios';
 
 import { getTokenxToken } from './getTokenxToken';
-
-class ErrorMedStatus extends Error {
-  private status: number;
-
-  constructor(message: string, status: number) {
-    super(message);
-    this.status = status;
-  }
-}
+import logger from '../utils/logger';
 
 interface Opts {
   url: string;
@@ -29,30 +21,35 @@ export const tokenXProxy = async (opts: Opts) => {
     throw new ErrorMedStatus(`Støtter ikke metode ${opts.req.method}`, 404);
   }*/
 
-  const idportenToken = opts.bearerToken!.split(' ')[1];
-  const tokenxToken = await getTokenxToken(idportenToken, opts.audience);
-  const response = await fetch(opts.url, {
-    method: opts.method,
-    body: opts.data,
-    headers: {
-      Authorization: `Bearer ${tokenxToken}`,
-      'Content-Type': opts.contentType ?? 'application/json',
-    },
-  });
+  try {
+    const idportenToken = opts.bearerToken!.split(' ')[1];
+    const tokenxToken = await getTokenxToken(idportenToken, opts.audience);
+    const response = await fetch(opts.url, {
+      method: opts.method,
+      body: opts.data,
+      headers: {
+        Authorization: `Bearer ${tokenxToken}`,
+        'Content-Type': opts.contentType ?? 'application/json',
+      },
+    });
 
-  if (response.status < 200 || response.status > 300) {
-    console.log(
-      `Status for ${opts.url} er ${response.status}. Response json er: ${response.json()}`
-    );
-    throw new ErrorMedStatus(`Ikke 2XX svar fra ${opts.url}`, 500);
+    if (response.status < 200 || response.status > 300) {
+      logger.error(
+        await response.json(),
+        `tokenXProxy: status for ${opts.url} er ${response.status}`
+      );
+      return response;
+    }
+    if (opts.noResponse) {
+      return;
+    }
+    if (opts.rawResonse) {
+      return response;
+    }
+    return await response.json();
+  } catch (e) {
+    logger.error(e, 'tokenXProxy');
   }
-  if (opts.noResponse) {
-    return;
-  }
-  if (opts.rawResonse) {
-    return response;
-  }
-  return await response.json();
 };
 
 interface AxiosOpts {
@@ -67,12 +64,26 @@ export const tokenXAxiosProxy = async (opts: AxiosOpts) => {
   const idportenToken = opts.bearerToken!.split(' ')[1];
   const tokenxToken = await getTokenxToken(idportenToken, opts.audience);
 
-  const { data } = await axios.post(opts.url, opts.req, {
-    responseType: 'stream',
-    headers: {
-      'Content-Type': opts.req?.headers['content-type'] ?? '', // which is multipart/form-data with boundary included
-      Authorization: `Bearer ${tokenxToken}`,
-    },
-  });
-  return data.pipe(opts.res);
+  try {
+    const { data } = await axios.post(opts.url, opts.req, {
+      responseType: 'stream',
+      headers: {
+        'Content-Type': opts.req?.headers['content-type'] ?? '', // which is multipart/form-data with boundary included
+        Authorization: `Bearer ${tokenxToken}`,
+      },
+    });
+    return data.pipe(opts.res);
+  } catch (e: any) {
+    let msg = '';
+    await new Promise((resolve) => {
+      e.response.data
+        .on('data', (chunk: string) => {
+          msg += chunk;
+        })
+        .on('end', () => {
+          resolve(msg);
+        });
+    });
+    logger.error({ msg }, 'tokenXAxiosProxy');
+  }
 };
