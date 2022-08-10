@@ -2,7 +2,6 @@ import { FieldValues, useForm } from 'react-hook-form';
 import Soknad from '../../../types/Soknad';
 import React, { useEffect, useRef, useState } from 'react';
 import { Alert, BodyShort, Heading, Label, ReadMore } from '@navikt/ds-react';
-import { useVedleggContext } from '../../../context/vedleggContext';
 import ScanningGuide from '../../../components/ScanningGuide/ScanningGuide';
 import * as yup from 'yup';
 import { completeAndGoToNextStep, useStepWizard } from '../../../context/stepWizardContextV2';
@@ -36,7 +35,6 @@ const Vedlegg = ({ onBackClick, onNext, defaultValues }: Props) => {
   const [scanningGuideOpen, setScanningGuideOpen] = useState(false);
   const scanningGuideElement = useRef(null);
   const schema = yup.object().shape({});
-  const { vedleggState } = useVedleggContext();
   const { søknadState, søknadDispatch } = useSoknadContextStandard();
   const { stepList, stepWizardDispatch } = useStepWizard();
   const {
@@ -53,12 +51,14 @@ const Vedlegg = ({ onBackClick, onNext, defaultValues }: Props) => {
       [MANUELLE_BARN]: defaultValues?.søknad?.manuelleBarn,
     },
   });
+
   useEffect(() => {
     if (scanningGuideOpen) {
       if (scanningGuideElement?.current != null)
         (scanningGuideElement?.current as HTMLElement)?.scrollIntoView({ behavior: 'smooth' });
     }
   }, [scanningGuideOpen]);
+
   const scanningGuideOnClick = () => {
     setScanningGuideOpen(!scanningGuideOpen);
   };
@@ -90,11 +90,11 @@ const Vedlegg = ({ onBackClick, onNext, defaultValues }: Props) => {
         <BodyShort>{formatMessage('søknad.vedlegg.guide.text2')}</BodyShort>
       </LucaGuidePanel>
       <BodyShort>
-        {vedleggState?.requiredVedlegg?.length > 0 ? (
+        {søknadState?.requiredVedlegg?.length > 0 ? (
           <>
             <Label>{formatMessage('søknad.vedlegg.harVedlegg.title')}</Label>
             <ul>
-              {vedleggState?.requiredVedlegg?.map((vedlegg, index) => (
+              {søknadState?.requiredVedlegg?.map((vedlegg, index) => (
                 <li key={index}>{vedlegg?.description}</li>
               ))}
             </ul>
@@ -121,7 +121,7 @@ const Vedlegg = ({ onBackClick, onNext, defaultValues }: Props) => {
       >
         <ScanningGuide />
       </ReadMore>
-      {vedleggState?.requiredVedlegg?.find((e) => e.type === AVBRUTT_STUDIE_VEDLEGG) && (
+      {søknadState?.requiredVedlegg?.find((e) => e.type === AVBRUTT_STUDIE_VEDLEGG) && (
         <FieldArrayFileInput
           control={control}
           name={`${VEDLEGG}.${AVBRUTT_STUDIE_VEDLEGG}`}
@@ -132,9 +132,7 @@ const Vedlegg = ({ onBackClick, onNext, defaultValues }: Props) => {
           ingress={formatMessage('søknad.student.vedlegg.description')}
         />
       )}
-      {vedleggState?.requiredVedlegg?.find(
-        (e) => e.type === AttachmentType.LØNN_OG_ANDRE_GODER
-      ) && (
+      {søknadState?.requiredVedlegg?.find((e) => e.type === AttachmentType.LØNN_OG_ANDRE_GODER) && (
         <FieldArrayFileInput
           control={control}
           name={VEDLEGG_LØNN}
@@ -145,7 +143,7 @@ const Vedlegg = ({ onBackClick, onNext, defaultValues }: Props) => {
           ingress={formatMessage('søknad.andreUtbetalinger.vedlegg.andreGoder')}
         />
       )}
-      {vedleggState?.requiredVedlegg?.find((e) => e.type === AttachmentType.OMSORGSSTØNAD) && (
+      {søknadState?.requiredVedlegg?.find((e) => e.type === AttachmentType.OMSORGSSTØNAD) && (
         <FieldArrayFileInput
           control={control}
           name={VEDLEGG_OMSORGSSTØNAD}
@@ -156,7 +154,7 @@ const Vedlegg = ({ onBackClick, onNext, defaultValues }: Props) => {
           ingress={formatMessage('søknad.andreUtbetalinger.vedlegg.omsorgsstønad')}
         />
       )}
-      {vedleggState?.requiredVedlegg?.find((e) => e.type === AttachmentType.UTLANDSSTØNAD) && (
+      {søknadState?.requiredVedlegg?.find((e) => e.type === AttachmentType.UTLANDSSTØNAD) && (
         <FieldArrayFileInput
           control={control}
           name={VEDLEGG_UTLANDSSTØNAD}
@@ -168,7 +166,7 @@ const Vedlegg = ({ onBackClick, onNext, defaultValues }: Props) => {
         />
       )}
       {søknadState?.søknad?.manuelleBarn?.map((barn, index) => {
-        const requiredVedlegg = vedleggState?.requiredVedlegg.find((e) => e?.type === barn?.fnr);
+        const requiredVedlegg = søknadState?.requiredVedlegg.find((e) => e?.type === barn?.fnr);
         return (
           <FieldArrayFileInput
             control={control}

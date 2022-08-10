@@ -5,7 +5,7 @@ import { SøkerView } from '../../../context/sokerOppslagContext';
 import { Download } from '@navikt/ds-icons';
 import { SuccessStroke } from '@navikt/ds-icons';
 import { useFeatureToggleIntl } from '../../../hooks/useFeatureToggleIntl';
-import { useVedleggContext } from '../../../context/vedleggContext';
+import { useSoknadContextStandard } from '../../../context/soknadContextStandard';
 
 interface StudentProps {
   søker: SøkerView;
@@ -26,7 +26,7 @@ const getDownloadUrl = (url?: string) => {
 
 const Kvittering = ({ søker }: StudentProps) => {
   const { formatMessage, formatElement } = useFeatureToggleIntl();
-  const { vedleggState } = useVedleggContext();
+  const { søknadState } = useSoknadContextStandard();
 
   const dittNavUrl =
     typeof window !== 'undefined' && window.location.href.includes('www.nav.no')
@@ -63,7 +63,7 @@ const Kvittering = ({ søker }: StudentProps) => {
       </BodyLong>
       <Link
         target={'_blank'}
-        href={getDownloadUrl(vedleggState.søknadUrl)}
+        href={getDownloadUrl(søknadState.søknadUrl)}
         className={classes?.linkButton}
       >
         <Download />

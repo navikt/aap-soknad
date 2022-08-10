@@ -6,11 +6,6 @@ import { JaEllerNei } from '../../../types/Generic';
 import Soknad, { Barn, ManuelleBarn } from '../../../types/Soknad';
 import * as classes from './Barnetillegg.module.css';
 import { Add } from '@navikt/ds-icons';
-import {
-  addRequiredVedlegg,
-  removeRequiredVedlegg,
-  useVedleggContext,
-} from '../../../context/vedleggContext';
 import * as yup from 'yup';
 import { completeAndGoToNextStep, useStepWizard } from '../../../context/stepWizardContextV2';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -19,7 +14,11 @@ import { AddBarnModal, Relasjon, validateHarInntekt } from './AddBarnModal';
 import { formatNavn } from '../../../utils/StringFormatters';
 import { LucaGuidePanel } from '../../../components/LucaGuidePanel';
 import { useFeatureToggleIntl } from '../../../hooks/useFeatureToggleIntl';
-import { slettLagretSoknadState, updateSøknadData } from '../../../context/soknadContextCommon';
+import {
+  slettLagretSoknadState,
+  updateSøknadData,
+  addRequiredVedlegg,
+} from '../../../context/soknadContextCommon';
 import { useSoknadContextStandard } from '../../../context/soknadContextStandard';
 import { useDebounceLagreSoknad } from '../../../hooks/useDebounceLagreSoknad';
 import { GenericSoknadContextState } from '../../../types/SoknadContext';
@@ -83,7 +82,6 @@ export const Barnetillegg = ({ onBackClick, onNext, defaultValues }: Props) => {
       [MANUELLE_BARN]: defaultValues?.søknad?.manuelleBarn,
     },
   });
-  const { vedleggDispatch } = useVedleggContext();
   const [selectedBarnIndex, setSelectedBarnIndex] = useState<number | undefined>(undefined);
   const [showModal, setShowModal] = useState<boolean>(false);
   const { fields, update } = useFieldArray({
@@ -163,7 +161,7 @@ export const Barnetillegg = ({ onBackClick, onNext, defaultValues }: Props) => {
                 : `Bostedbevis for: ${barn?.navn?.fornavn} ${barn?.navn?.etternavn}`,
           },
         ],
-        vedleggDispatch
+        søknadDispatch
       );
     } else if (selectedBarnIndex !== undefined) {
       manuelleBarnUpdate(selectedBarnIndex, {

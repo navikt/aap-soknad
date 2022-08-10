@@ -3,11 +3,6 @@ import React, { useEffect, useMemo } from 'react';
 import { FieldValues, useForm } from 'react-hook-form';
 import CheckboxGroupWrapper from '../../../components/input/CheckboxGroupWrapper';
 import RadioGroupWrapper from '../../../components/input/RadioGroupWrapper/RadioGroupWrapper';
-import {
-  useVedleggContext,
-  addRequiredVedlegg,
-  removeRequiredVedlegg,
-} from '../../../context/vedleggContext';
 import { JaEllerNei } from '../../../types/Generic';
 import Soknad from '../../../types/Soknad';
 import * as yup from 'yup';
@@ -18,7 +13,12 @@ import TextFieldWrapper from '../../../components/input/TextFieldWrapper';
 import ColorPanel from '../../../components/panel/ColorPanel';
 import { LucaGuidePanel } from '../../../components/LucaGuidePanel';
 import { useFeatureToggleIntl } from '../../../hooks/useFeatureToggleIntl';
-import { slettLagretSoknadState, updateSøknadData } from '../../../context/soknadContextCommon';
+import {
+  addRequiredVedlegg,
+  removeRequiredVedlegg,
+  slettLagretSoknadState,
+  updateSøknadData,
+} from '../../../context/soknadContextCommon';
 import { useSoknadContextStandard } from '../../../context/soknadContextStandard';
 import { useDebounceLagreSoknad } from '../../../hooks/useDebounceLagreSoknad';
 import { GenericSoknadContextState } from '../../../types/SoknadContext';
@@ -65,7 +65,6 @@ export const AndreUtbetalinger = ({ onBackClick, onNext, defaultValues }: Props)
         .min(1, formatMessage('søknad.andreUtbetalinger.stønad.validation.required')),
     }),
   });
-  const { vedleggDispatch } = useVedleggContext();
   const { søknadState, søknadDispatch } = useSoknadContextStandard();
   const { stepList, stepWizardDispatch } = useStepWizard();
   const {
@@ -152,10 +151,10 @@ export const AndreUtbetalinger = ({ onBackClick, onNext, defaultValues }: Props)
   }, [stønadEllerVerv]);
 
   useEffect(() => {
-    removeRequiredVedlegg(AttachmentType.OMSORGSSTØNAD, vedleggDispatch);
-    removeRequiredVedlegg(AttachmentType.UTLANDSSTØNAD, vedleggDispatch);
-    removeRequiredVedlegg(AttachmentType.LØNN_OG_ANDRE_GODER, vedleggDispatch);
-    addRequiredVedlegg(Attachments, vedleggDispatch);
+    removeRequiredVedlegg(AttachmentType.OMSORGSSTØNAD, søknadDispatch);
+    removeRequiredVedlegg(AttachmentType.UTLANDSSTØNAD, søknadDispatch);
+    removeRequiredVedlegg(AttachmentType.LØNN_OG_ANDRE_GODER, søknadDispatch);
+    addRequiredVedlegg(Attachments, søknadDispatch);
   }, [Attachments]);
   return (
     <SoknadFormWrapper
