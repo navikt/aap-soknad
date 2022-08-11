@@ -133,7 +133,7 @@ const FileInput = ({
             <button
               type={'button'}
               onClick={() =>
-                fetch(`/aap/soknad-api/vedlegg/slett/${attachment?.vedleggId}`, {
+                fetch(`/aap/soknad-api/vedlegg/slett?uuids=${attachment?.vedleggId}`, {
                   method: 'DELETE',
                 }).then(() => remove(index))
               }

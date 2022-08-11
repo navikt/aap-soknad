@@ -85,7 +85,7 @@ export type Ferie = {
   fraDato?: Date;
   tilDato?: Date;
 };
-type Vedlegg = {
+export type Vedlegg = {
   name: string;
   size: string;
   vedleggId: string;

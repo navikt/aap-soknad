@@ -17,7 +17,10 @@ import {
   slettLagretSoknadState,
   updateSøknadData,
 } from '../../../context/soknadContextCommon';
-import { useSoknadContextStandard } from '../../../context/soknadContextStandard';
+import {
+  deleteOpplastedeVedlegg,
+  useSoknadContextStandard,
+} from '../../../context/soknadContextStandard';
 import { useDebounceLagreSoknad } from '../../../hooks/useDebounceLagreSoknad';
 import { GenericSoknadContextState } from '../../../types/SoknadContext';
 export const AVBRUTT_STUDIE_VEDLEGG = 'avbruttStudie';
@@ -112,7 +115,10 @@ const Student = ({ onBackClick, onNext, defaultValues }: Props) => {
         updateSøknadData<Soknad>(søknadDispatch, { ...søknadState.søknad });
         onBackClick();
       }}
-      onDelete={() => slettLagretSoknadState<Soknad>(søknadDispatch, søknadState)}
+      onDelete={async () => {
+        await deleteOpplastedeVedlegg(søknadState.søknad);
+        await slettLagretSoknadState<Soknad>(søknadDispatch, søknadState);
+      }}
       nextButtonText={'Neste steg'}
       backButtonText={'Forrige steg'}
       cancelButtonText={'Avbryt søknad'}

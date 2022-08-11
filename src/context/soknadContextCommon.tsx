@@ -1,6 +1,7 @@
 import { GenericSoknadContextState, RequiredVedlegg, SøknadType } from '../types/SoknadContext';
 import { Dispatch, ReactNode } from 'react';
 import { OppslagBarn } from './sokerOppslagContext';
+import { Vedlegg } from '../types/Soknad';
 
 export interface SoknadContextData<SoknadStateType> {
   søknadState: GenericSoknadContextState<SoknadStateType>;

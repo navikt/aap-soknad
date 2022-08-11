@@ -26,7 +26,10 @@ import * as yup from 'yup';
 import ColorPanel from '../../../components/panel/ColorPanel';
 import { LucaGuidePanel } from '../../../components/LucaGuidePanel';
 import { useFeatureToggleIntl } from '../../../hooks/useFeatureToggleIntl';
-import { useSoknadContextStandard } from '../../../context/soknadContextStandard';
+import {
+  deleteOpplastedeVedlegg,
+  useSoknadContextStandard,
+} from '../../../context/soknadContextStandard';
 import { slettLagretSoknadState, updateSøknadData } from '../../../context/soknadContextCommon';
 import { useDebounceLagreSoknad } from '../../../hooks/useDebounceLagreSoknad';
 import * as styles from './Medlemskap.module.css';
@@ -234,7 +237,10 @@ export const Medlemskap = ({ onBackClick, onNext, defaultValues }: Props) => {
           updateSøknadData<Soknad>(søknadDispatch, { ...søknadState.søknad });
           onBackClick();
         }}
-        onDelete={() => slettLagretSoknadState<Soknad>(søknadDispatch, søknadState)}
+        onDelete={async () => {
+          await deleteOpplastedeVedlegg(søknadState.søknad);
+          await slettLagretSoknadState<Soknad>(søknadDispatch, søknadState);
+        }}
         nextButtonText={formatMessage('navigation.next')}
         backButtonText={formatMessage('navigation.back')}
         cancelButtonText={formatMessage('navigation.cancel')}

@@ -14,7 +14,7 @@ interface Props {
   cancelButtonText: string;
   onNext: (data: any) => void;
   onBack: () => void;
-  onDelete: () => Promise<boolean>;
+  onDelete: () => Promise<any>;
   nextIsLoading?: boolean;
   focusOnErrors?: boolean;
   onStartNySøknad?: () => void;

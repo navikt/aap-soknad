@@ -12,7 +12,10 @@ import { AddBehandlerModal } from './AddBehandlerModal';
 import { LucaGuidePanel } from '../../../components/LucaGuidePanel';
 import * as classes from './Behandlere.module.css';
 import { useFeatureToggleIntl } from '../../../hooks/useFeatureToggleIntl';
-import { useSoknadContextStandard } from '../../../context/soknadContextStandard';
+import {
+  deleteOpplastedeVedlegg,
+  useSoknadContextStandard,
+} from '../../../context/soknadContextStandard';
 import { slettLagretSoknadState, updateSøknadData } from '../../../context/soknadContextCommon';
 import { useDebounceLagreSoknad } from '../../../hooks/useDebounceLagreSoknad';
 import { GenericSoknadContextState } from '../../../types/SoknadContext';
@@ -93,7 +96,10 @@ export const Behandlere = ({ onBackClick, onNext, defaultValues, fastlege }: Pro
           updateSøknadData<Soknad>(søknadDispatch, { ...søknadState.søknad });
           onBackClick();
         }}
-        onDelete={() => slettLagretSoknadState<Soknad>(søknadDispatch, søknadState)}
+        onDelete={async () => {
+          await deleteOpplastedeVedlegg(søknadState.søknad);
+          await slettLagretSoknadState<Soknad>(søknadDispatch, søknadState);
+        }}
         nextButtonText={formatMessage('navigation.next')}
         backButtonText={formatMessage('navigation.back')}
         cancelButtonText={formatMessage('navigation.cancel')}

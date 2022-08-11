@@ -19,7 +19,10 @@ import {
   updateSøknadData,
   addRequiredVedlegg,
 } from '../../../context/soknadContextCommon';
-import { useSoknadContextStandard } from '../../../context/soknadContextStandard';
+import {
+  deleteOpplastedeVedlegg,
+  useSoknadContextStandard,
+} from '../../../context/soknadContextStandard';
 import { useDebounceLagreSoknad } from '../../../hooks/useDebounceLagreSoknad';
 import { GenericSoknadContextState } from '../../../types/SoknadContext';
 import { formatDate } from '../../../utils/date';
@@ -180,7 +183,10 @@ export const Barnetillegg = ({ onBackClick, onNext, defaultValues }: Props) => {
           updateSøknadData<Soknad>(søknadDispatch, { ...søknadState.søknad });
           onBackClick();
         }}
-        onDelete={() => slettLagretSoknadState<Soknad>(søknadDispatch, søknadState)}
+        onDelete={async () => {
+          await deleteOpplastedeVedlegg(søknadState.søknad);
+          await slettLagretSoknadState<Soknad>(søknadDispatch, søknadState);
+        }}
         nextButtonText={formatMessage('navigation.next')}
         backButtonText={formatMessage('navigation.back')}
         cancelButtonText={formatMessage('navigation.cancel')}

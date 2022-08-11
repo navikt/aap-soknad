@@ -4,3 +4,10 @@ export const getStringFromPossiblyArrayQuery = (query: string | string[] | undef
   }
   return query;
 };
+
+export const getCommaSeparatedStringFromStringOrArray = (array: string | string[]) => {
+  if (Array.isArray(array)) {
+    return array.join(',');
+  }
+  return array;
+};

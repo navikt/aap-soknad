@@ -134,7 +134,7 @@ const FieldArrayFileInput = ({
                 fetch(
                   `${
                     process.env.NEXT_PUBLIC_TEMP_FILOPPLASTING_SLETT_URL ??
-                    '/aap/soknad-api/vedlegg/slett/'
+                    '/aap/soknad-api/vedlegg/slett?uuids='
                   }${attachment?.vedleggId}`,
                   {
                     method: 'DELETE',

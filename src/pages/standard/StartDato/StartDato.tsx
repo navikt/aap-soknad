@@ -15,7 +15,10 @@ import TextAreaWrapper from '../../../components/input/TextAreaWrapper';
 import { setErrorSummaryFocus } from '../../../utils/dom';
 import { LucaGuidePanel } from '../../../components/LucaGuidePanel';
 import { useFeatureToggleIntl } from '../../../hooks/useFeatureToggleIntl';
-import { useSoknadContextStandard } from '../../../context/soknadContextStandard';
+import {
+  deleteOpplastedeVedlegg,
+  useSoknadContextStandard,
+} from '../../../context/soknadContextStandard';
 import { slettLagretSoknadState, updateSøknadData } from '../../../context/soknadContextCommon';
 import { useDebounceLagreSoknad } from '../../../hooks/useDebounceLagreSoknad';
 import DatePickerWrapper from '../../../components/input/DatePickerWrapper/DatePickerWrapper';
@@ -148,7 +151,10 @@ const StartDato = ({ onBackClick, onNext, defaultValues }: Props) => {
         updateSøknadData<Soknad>(søknadDispatch, { ...søknadState.søknad });
         onBackClick();
       }}
-      onDelete={() => slettLagretSoknadState<Soknad>(søknadDispatch, søknadState)}
+      onDelete={async () => {
+        await deleteOpplastedeVedlegg(søknadState.søknad);
+        await slettLagretSoknadState<Soknad>(søknadDispatch, søknadState);
+      }}
       nextButtonText={formatMessage('navigation.next')}
       backButtonText={formatMessage('navigation.back')}
       cancelButtonText={formatMessage('navigation.cancel')}

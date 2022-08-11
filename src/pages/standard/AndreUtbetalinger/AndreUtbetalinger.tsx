@@ -6,7 +6,7 @@ import RadioGroupWrapper from '../../../components/input/RadioGroupWrapper/Radio
 import { JaEllerNei } from '../../../types/Generic';
 import Soknad from '../../../types/Soknad';
 import * as yup from 'yup';
-import { completeAndGoToNextStep, useStepWizard } from '../../../context/stepWizardContextV2';
+import { useStepWizard } from '../../../context/stepWizardContextV2';
 import { yupResolver } from '@hookform/resolvers/yup';
 import SoknadFormWrapper from '../../../components/SoknadFormWrapper/SoknadFormWrapper';
 import TextFieldWrapper from '../../../components/input/TextFieldWrapper';
@@ -19,7 +19,10 @@ import {
   slettLagretSoknadState,
   updateSøknadData,
 } from '../../../context/soknadContextCommon';
-import { useSoknadContextStandard } from '../../../context/soknadContextStandard';
+import {
+  deleteOpplastedeVedlegg,
+  useSoknadContextStandard,
+} from '../../../context/soknadContextStandard';
 import { useDebounceLagreSoknad } from '../../../hooks/useDebounceLagreSoknad';
 import { GenericSoknadContextState } from '../../../types/SoknadContext';
 
@@ -165,7 +168,10 @@ export const AndreUtbetalinger = ({ onBackClick, onNext, defaultValues }: Props)
         updateSøknadData<Soknad>(søknadDispatch, { ...søknadState.søknad });
         onBackClick();
       }}
-      onDelete={() => slettLagretSoknadState<Soknad>(søknadDispatch, søknadState)}
+      onDelete={async () => {
+        await deleteOpplastedeVedlegg(søknadState.søknad);
+        await slettLagretSoknadState<Soknad>(søknadDispatch, søknadState);
+      }}
       nextButtonText={formatMessage('navigation.next')}
       backButtonText={formatMessage('navigation.back')}
       cancelButtonText={formatMessage('navigation.cancel')}

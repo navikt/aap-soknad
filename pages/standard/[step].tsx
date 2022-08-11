@@ -235,8 +235,6 @@ export const getServerSideProps = beskyttetSide(
     const søker = await getSøker(bearerToken);
     const mellomlagretSøknad = await lesBucket('STANDARD', bearerToken);
 
-    console.log('getStaticProps is called');
-
     if (!mellomlagretSøknad.lagretStepList) {
       return {
         redirect: {

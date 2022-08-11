@@ -7,7 +7,7 @@ import {
   ProviderProps,
   SoknadActionKeys,
 } from './soknadContextCommon';
-import Soknad from '../types/Soknad';
+import Soknad, { Vedlegg } from '../types/Soknad';
 import { OppslagBarn } from './sokerOppslagContext';
 
 const soknadContextInititalStateStandard = {
@@ -125,4 +125,26 @@ export const useSoknadContextStandard = () => {
 
 export const addBarnIfMissing = (dispatch: Dispatch<SoknadAction<Soknad>>, data: OppslagBarn[]) => {
   dispatch({ type: SoknadActionKeys.ADD_BARN_IF_MISSING, payload: data });
+};
+
+export const getVedleggUuidsFromSoknad = (søknad?: Soknad) => {
+  const vedlegg = søknad?.vedlegg;
+  console.log('vedlegg', vedlegg);
+  return Object.values(vedlegg ?? {})
+    .reduce((acc: Vedlegg[], v: Vedlegg[]) => {
+      return acc.concat(v);
+    }, [])
+    .map((v) => v.vedleggId);
+};
+
+export const deleteOpplastedeVedlegg = async (søknad?: Soknad) => {
+  const vedleggUuids = getVedleggUuidsFromSoknad(søknad);
+  console.log('vedleggUuids', vedleggUuids);
+  if (vedleggUuids.length > 0) {
+    const commaSeparatedUuids = vedleggUuids.join(',');
+    console.log('fetch delete');
+    await fetch(`${process.env.NEXT_PUBLIC_TEMP_FILOPPLASTING_SLETT_URL}${commaSeparatedUuids}`, {
+      method: 'DELETE',
+    });
+  }
 };

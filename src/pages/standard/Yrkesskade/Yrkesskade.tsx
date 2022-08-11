@@ -11,7 +11,10 @@ import SoknadFormWrapper from '../../../components/SoknadFormWrapper/SoknadFormW
 import { LucaGuidePanel } from '../../../components/LucaGuidePanel';
 import { useFeatureToggleIntl } from '../../../hooks/useFeatureToggleIntl';
 import { slettLagretSoknadState, updateSøknadData } from '../../../context/soknadContextCommon';
-import { useSoknadContextStandard } from '../../../context/soknadContextStandard';
+import {
+  deleteOpplastedeVedlegg,
+  useSoknadContextStandard,
+} from '../../../context/soknadContextStandard';
 import { useDebounceLagreSoknad } from '../../../hooks/useDebounceLagreSoknad';
 import { GenericSoknadContextState } from '../../../types/SoknadContext';
 
@@ -60,7 +63,10 @@ export const Yrkesskade = ({ onBackClick, onNext, defaultValues }: Props) => {
         updateSøknadData<Soknad>(søknadDispatch, { ...søknadState.søknad });
         onBackClick();
       }}
-      onDelete={() => slettLagretSoknadState<Soknad>(søknadDispatch, søknadState)}
+      onDelete={async () => {
+        await deleteOpplastedeVedlegg(søknadState.søknad);
+        await slettLagretSoknadState<Soknad>(søknadDispatch, søknadState);
+      }}
       nextButtonText={formatMessage('navigation.next')}
       backButtonText={formatMessage('navigation.back')}
       cancelButtonText={formatMessage('navigation.cancel')}
