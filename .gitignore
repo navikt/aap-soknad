@@ -23,6 +23,7 @@
 .vscode/
 
 # misc
+.bucket.cache
 .DS_Store
 .env.development.local
 .env.test.local
