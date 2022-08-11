@@ -75,20 +75,17 @@
     "@types/react": "^17.0.0"
   },
   "scripts": {
-    "start": "cross-env NODE_ENV=localhost parcel src/index.html",
     "clean": "rimraf dist",
-    "build": "yarn run clean && parcel build src/index.html",
     "build:mock": "parcel build src/index.html",
-    "lint": "yarn lint:jsts",
     "lint:jsts": "npx eslint .",
     "test": "jest",
     "testtest": "jest StepWizard.test.tsx",
     "cypress:run": "cypress run",
     "cypress:open": "cypress open",
-    "next:dev": "next dev",
-    "next:build": "next build",
-    "next:start": "next start",
-    "next:lint": "next lint",
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
     "postinstall": "patch-package"
   },
   "husky": {
