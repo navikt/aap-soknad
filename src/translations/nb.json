@@ -248,17 +248,17 @@
         "text1": "NAV henter helseopplysninger fra fastlegen din når vi skal behandle søknaden din. Ved behov kan vi også hente inn opplysninger fra andre behandlere eller leger.",
         "text2": "Hvis vi allerede har tilstrekkelig med opplysninger om deg fra tidligere, innhenter vi ikke legeerklæring."
       },
+      "erRegistrertFastlegeRiktig": {
+        "label": "Er informasjonen om fastlegen din riktig?",
+        "alertInfo": "Takk for beskjed om at informasjonen er feil. Fyll ut hvilken lege vi kan kontakte for helseopplysninger under \"Legg til lege/behandler\". På helsenorge.no kan du bytte fastlege. Dette kan du gjøre etter at du har sendt inn AAP-søknaden."
+      },
       "registrertFastlege": {
         "title": "Din registrerte fastlege",
         "ingenFastlege": "Vi finner ingen informasjon om fastlege registrert på deg. På helsenorge.no kan du registrere helsekontakter, finne fastlege eller sette deg på venteliste. Dette kan du gjøre etter at du har sendt AAP-søknaden",
         "navn": "Navn",
         "legekontor": "Legekontor",
         "adresse": "Adresse",
-        "telefon": "Telefon",
-        "readMore": {
-          "title": "Hva om disse opplysningene ikke stemmer?",
-          "text": "På helsenorge.no kan du bytte fastlege. Dette kan du gjøre etter at du har sendt inn AAP-søknaden."
-        }
+        "telefon": "Telefon"
       },
       "annenBehandler": {
         "title": "Har du en annen lege eller behandler",
