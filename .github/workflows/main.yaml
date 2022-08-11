@@ -1,4 +1,4 @@
-name: "Build and deploy aap-soknad"
+name: "Build and deploy aap-soknad-next"
 on:
   workflow_dispatch:
   push:
@@ -31,35 +31,12 @@ jobs:
       - name: "install dependencies Yarn"
         if: "steps.cache-node-modules.outputs.cache-hit != 'true'"
         run: "yarn install --frozen-lockfile"
-      - name: "install server dependencies Yarn"
-        if: "steps.cache-server-node-modules.outputs.cache-hit != 'true'"
-        run: "yarn install --frozen-lockfile"
-        working-directory: "server"
-      - name: "server tests"
-        run: "yarn test"
-        working-directory: "server"
+      - name: Copy env-file for dev
+        run: cp .nais/dev.env .env.local
       - name: "client tests"
         run: "yarn test"
       - name: "Bygg klient(yarn run build)"
         run: "yarn run build"
-        env:
-          SENTRY_RELEASE: "{{ github.sha }}"
-      - name: "Bygg server(yarn run build)"
-        run: "yarn run build"
-        working-directory: "server"
-      - name: "Sentry release"
-        continue-on-error: true
-        uses: "getsentry/action-release@v1"
-        env:
-          SENTRY_AUTH_TOKEN: "${{ secrets.SENTRY_AUTH_TOKEN }}"
-          SENTRY_URL: "https://sentry.gc.nav.no"
-          SENTRY_ORG: "nav"
-          SENTRY_PROJECT: "aap-soknad"
-        with:
-          environment: "development"
-          version: "${{ github.sha }}"
-          set_commits: "skip"
-          sourcemaps: "./dist"
       - name: "Set up Docker Buildx"
         id: "buildx"
         uses: "docker/setup-buildx-action@v1"
@@ -73,14 +50,11 @@ jobs:
         uses: "docker/build-push-action@v2"
         with:
           context: .
+          file: Dockerfile
           tags: "${{ env.IMAGE }}"
           push: "true"
           cache-from: "type=gha"
           cache-to: "type=gha,mode=max"
-          secrets: |
-            "SENTRY_AUTH_TOKEN=${{ secrets.SENTRY_AUTH_TOKEN }}"
-          build-args: |
-            "SENTRY_RELEASE=${{ github.sha }}"
   "deployAppToDev":
     name: "Deploy app to dev"
     needs: "build"
