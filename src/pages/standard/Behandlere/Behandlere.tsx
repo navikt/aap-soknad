@@ -1,11 +1,11 @@
-import { Label, BodyLong, BodyShort, Button, Heading, ReadMore } from '@navikt/ds-react';
+import { Alert, Label, BodyLong, BodyShort, Button, Heading, Radio } from '@navikt/ds-react';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
 import { FastlegeView } from '../../../context/sokerOppslagContext';
 import { Add } from '@navikt/ds-icons';
 import Soknad, { Behandler } from '../../../types/Soknad';
 import * as yup from 'yup';
-import { completeAndGoToNextStep, useStepWizard } from '../../../context/stepWizardContextV2';
+import { useStepWizard } from '../../../context/stepWizardContextV2';
 import { yupResolver } from '@hookform/resolvers/yup';
 import SoknadFormWrapper from '../../../components/SoknadFormWrapper/SoknadFormWrapper';
 import { AddBehandlerModal } from './AddBehandlerModal';
@@ -16,6 +16,8 @@ import { useSoknadContextStandard } from '../../../context/soknadContextStandard
 import { slettLagretSoknadState, updateSøknadData } from '../../../context/soknadContextCommon';
 import { useDebounceLagreSoknad } from '../../../hooks/useDebounceLagreSoknad';
 import { GenericSoknadContextState } from '../../../types/SoknadContext';
+import RadioGroupWrapper from '../../../components/input/RadioGroupWrapper/RadioGroupWrapper';
+import { JaEllerNei } from '../../../types/Generic';
 
 interface Props {
   onBackClick: () => void;
@@ -24,19 +26,20 @@ interface Props {
   fastlege?: FastlegeView;
 }
 const BEHANDLERE = 'behandlere';
+const RIKTIG_FASTLEGE = 'erRegistrertFastlegeRiktig';
 
 export const Behandlere = ({ onBackClick, onNext, defaultValues, fastlege }: Props) => {
   const { formatMessage } = useFeatureToggleIntl();
 
   const schema = yup.object().shape({});
   const { søknadState, søknadDispatch } = useSoknadContextStandard();
-  const { stepList, stepWizardDispatch } = useStepWizard();
+  const { stepList } = useStepWizard();
   const {
     watch,
     control,
     handleSubmit,
     formState: { errors },
-  } = useForm<{ [BEHANDLERE]: Array<Behandler> }>({
+  } = useForm<{ [BEHANDLERE]: Array<Behandler>; [RIKTIG_FASTLEGE]: JaEllerNei }>({
     resolver: yupResolver(schema),
     defaultValues: {
       [BEHANDLERE]: defaultValues?.søknad?.behandlere,
@@ -45,6 +48,7 @@ export const Behandlere = ({ onBackClick, onNext, defaultValues, fastlege }: Pro
 
   const debouncedLagre = useDebounceLagreSoknad<Soknad>();
   const allFields = watch();
+  const erRegistrertFastlegeRiktig = watch(RIKTIG_FASTLEGE);
   useEffect(() => {
     debouncedLagre(søknadState, stepList, allFields);
   }, [allFields]);
@@ -140,12 +144,24 @@ export const Behandlere = ({ onBackClick, onNext, defaultValues, fastlege }: Pro
                 </dt>
                 <dl>{fastlege?.telefon}</dl>
               </dl>
-              <ReadMore
-                header={formatMessage('søknad.helseopplysninger.registrertFastlege.readMore.title')}
-                type={'button'}
+              <RadioGroupWrapper
+                name={RIKTIG_FASTLEGE}
+                legend={formatMessage(`søknad.helseopplysninger.erRegistrertFastlegeRiktig.label`)}
+                control={control}
+                error={errors?.[RIKTIG_FASTLEGE]?.message}
               >
-                {formatMessage('søknad.helseopplysninger.registrertFastlege.readMore.text')}
-              </ReadMore>
+                <Radio value={JaEllerNei.JA}>
+                  <BodyShort>{JaEllerNei.JA}</BodyShort>
+                </Radio>
+                <Radio value={JaEllerNei.NEI}>
+                  <BodyShort>{JaEllerNei.NEI}</BodyShort>
+                </Radio>
+              </RadioGroupWrapper>
+              {erRegistrertFastlegeRiktig === JaEllerNei.NEI && (
+                <Alert variant={'info'}>
+                  {formatMessage('søknad.helseopplysninger.erRegistrertFastlegeRiktig.alertInfo')}
+                </Alert>
+              )}
             </>
           )}
         </div>
