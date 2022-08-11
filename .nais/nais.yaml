@@ -12,28 +12,31 @@ spec:
   image: {{image}}
   port: 3000
   liveness:
-    path: "/aap/internal/isAlive"
+    path: "/aap/soknad/api/internal/isAlive"
     initialDelay: 20
     timeout: 60
   readiness:
-    path: "/aap/internal/isready"
+    path: "/aap/soknad/api/internal/isReady"
     initialDelay: 20
     timeout: 60
   replicas:
     min: 2
     max: 2
-  prometheus:
-    enabled: true
-    path: "/aap/internal/metrics"
+  resources:
+    requests:
+      cpu: 200m
+      memory: 256Mi
+    limits:
+      cpu: 200m
+      memory: 256Mi
   idporten:
     enabled: true
     sidecar:
       enabled: true
+      autoLogin: true
       level: Level4
   ingresses:
-  {{#each ingresses as |url|}}
-    - {{url}}
-  {{/each}}
+    - https://aap-soknad.dev.nav.no
   env:
   {{#each env}}
     - name: {{this.name }}

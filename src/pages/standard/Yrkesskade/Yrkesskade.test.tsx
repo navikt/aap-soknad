@@ -1,7 +1,6 @@
 import { StepWizardContext, StepWizardContextState } from '../../../context/stepWizardContextV2';
 import { findAllByRole, fireEvent, render, screen } from '../../../setupTests';
 import { Step, StepWizard } from '../../../components/StepWizard';
-import StartDato from '../StartDato/StartDato';
 import { JaNeiVetIkke } from '../../../types/Generic';
 import React from 'react';
 import { axe, toHaveNoViolations } from 'jest-axe';
@@ -9,6 +8,7 @@ import { SoknadContextData } from '../../../context/soknadContextCommon';
 import Soknad from '../../../types/Soknad';
 import { SøknadType } from '../../../types/SoknadContext';
 import { SoknadContextStandard } from '../../../context/soknadContextStandard';
+import { Yrkesskade } from './Yrkesskade';
 expect.extend(toHaveNoViolations);
 
 const YRKESSKADE = 'yrkesskade';
@@ -17,6 +17,7 @@ const soknadContext: SoknadContextData<Soknad> = {
   søknadState: {
     version: 1,
     type: SøknadType.STANDARD,
+    requiredVedlegg: [],
   },
   søknadDispatch: () => console.log('dispatch'),
 };
@@ -40,7 +41,7 @@ describe('Yrkesskade', () => {
     return (
       <StepWizard>
         <Step name={YRKESSKADE}>
-          <StartDato onBackClick={jest.fn()} onCancelClick={jest.fn()} />
+          <Yrkesskade onBackClick={jest.fn()} onCancelClick={jest.fn()} />
         </Step>
       </StepWizard>
     );
@@ -52,7 +53,7 @@ describe('Yrkesskade', () => {
     fireEvent.submit(screen.getByRole('button', { name: 'Neste steg' }));
     const errorSummary = await screen.findByRole('alert');
 
-    expect(await findAllByRole(errorSummary, 'link')).toHaveLength(2);
+    expect(await findAllByRole(errorSummary, 'link')).toHaveLength(1);
   });
   it('Riktig utfylt - enkleste vei', async () => {
     renderWithContext(<Component />, {});

@@ -17,6 +17,7 @@ const soknadContext: SoknadContextData<Soknad> = {
   søknadState: {
     version: 1,
     type: SøknadType.STANDARD,
+    requiredVedlegg: [],
   },
   søknadDispatch: () => console.log('dispatch'),
 };
@@ -52,17 +53,12 @@ describe('StartDato', () => {
     fireEvent.submit(screen.getByRole('button', { name: 'Neste steg' }));
     const errorSummary = await screen.findByRole('alert');
 
-    expect(await findAllByRole(errorSummary, 'link')).toHaveLength(2);
+    expect(await findAllByRole(errorSummary, 'link')).toHaveLength(1);
   });
 
   it('Riktig utfylt - enkleste vei', async () => {
     renderWithContext(<Component />, {});
 
-    fireEvent.input(screen.getByRole('textbox'), {
-      target: {
-        value: format(new Date(), 'dd.MM.yyyy'),
-      },
-    });
     fireEvent.click(screen.getByRole('radio', { name: JaNeiVetIkke.NEI }), {});
     expect(await screen.queryByRole('region')).toBeNull();
   });
