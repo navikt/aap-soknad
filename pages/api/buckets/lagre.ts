@@ -4,7 +4,7 @@ import { beskyttetApi } from '../../../auth/beskyttetApi';
 import { tokenXProxy } from '../../../auth/tokenXProxy';
 import { lagreCache } from '../../../mock/mellomlagringsCache';
 import { erGyldigSøknadsType, GYLDIGE_SØKNADS_TYPER, SøknadsType } from '../../../utils/api';
-import { isMock } from '../../../utils/environments';
+import { isLabs, isMock } from '../../../utils/environments';
 import { getStringFromPossiblyArrayQuery } from '../../../utils/string';
 
 const handler = beskyttetApi(async (req: NextApiRequest, res: NextApiResponse) => {
@@ -18,6 +18,7 @@ const handler = beskyttetApi(async (req: NextApiRequest, res: NextApiResponse) =
 });
 
 export const lagreBucket = async (type: SøknadsType, data: string, accessToken?: string) => {
+  if (isLabs()) return;
   if (isMock()) return await lagreCache(JSON.stringify(data));
   await tokenXProxy({
     url: `${process.env.SOKNAD_API_URL}/buckets/lagre/${type}`,

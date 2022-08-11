@@ -78,7 +78,7 @@ const Steps = ({ søker, mellomlagretSøknad }: PageProps) => {
 
   useEffect(() => {
     if (currentStep && currentStep.stepIndex !== undefined) {
-      router.push(currentStep.stepIndex.toString());
+      router.push(currentStep.stepIndex.toString(), undefined, { shallow: true });
     }
   }, [currentStep]);
 

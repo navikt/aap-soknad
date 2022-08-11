@@ -1,38 +1,39 @@
-name: "Deploy mocked client to labs"
+name: "Build and deploy aap-soknad to labs"
 on:
-  push:
-    branches: [ main ]
-  pull_request:
-    # The branches below must be a subset of the branches above
-    branches:
-      - 'main'
-      # Ignore snyk upgrade PRs
-      - '!snyk-upgrade-**'
   workflow_dispatch:
+  push:
+    branches:
+      - "main"
 env:
-  "IMAGE": "ghcr.io/${{ github.repository }}:${{ github.sha }}-labs"
+  "IMAGE": "ghcr.io/${{ github.repository }}:${{ github.sha }}"
 jobs:
   "build":
     name: "build"
-    runs-on: "ubuntu-18.04"
+    runs-on: "ubuntu-latest"
     steps:
       - uses: "actions/checkout@v2"
       - uses: "actions/setup-node@v2"
         with:
           node-version: "14"
           cache: "yarn"
-      - name: "install server dependencies Yarn"
-        run: "yarn install --frozen-lockfile"
-        working-directory: "server"
+      - name: "Cache client node_modules"
+        id: "cache-node-modules"
+        uses: "actions/cache@v2"
+        with:
+          path: 'node_modules'
+          key: "${{ runner.os }}-modules-${{ hashFiles('yarn.lock') }}"
       - name: "install dependencies Yarn"
+        if: "steps.cache-node-modules.outputs.cache-hit != 'true'"
         run: "yarn install --frozen-lockfile"
+      - name: Copy env-file for labs
+        run: cp .nais/labs.env .env.local
+      - name: "client tests"
+        run: "yarn test"
       - name: "Bygg klient(yarn run build)"
-        run: "yarn run build:mock"
-        env:
-          USE_MOCK: "true"
-      - name: "Bygg server(yarn run build)"
-        run: "yarn run build:mock"
-        working-directory: "server"
+        run: "yarn run build"
+      - name: "Set up Docker Buildx"
+        id: "buildx"
+        uses: "docker/setup-buildx-action@v1"
       - name: "Login to GitHub Docker Registry"
         uses: "docker/login-action@v1"
         with:
@@ -43,12 +44,15 @@ jobs:
         uses: "docker/build-push-action@v2"
         with:
           context: .
+          file: Dockerfile
           tags: "${{ env.IMAGE }}"
           push: "true"
+          cache-from: "type=gha"
+          cache-to: "type=gha,mode=max"
   "deployAppToLabs":
     name: "Deploy app to labs"
     needs: "build"
-    runs-on: "ubuntu-18.04"
+    runs-on: "ubuntu-latest"
     steps:
       - uses: "actions/checkout@v2"
       - name: "Deploy to LABS"
@@ -56,4 +60,5 @@ jobs:
         env:
           "APIKEY": "${{ secrets.NAIS_DEPLOY_APIKEY }}"
           "CLUSTER": "labs-gcp"
-          "RESOURCE": ".nais/labs-gcp.yaml"
+          "RESOURCE": ".nais/nais.yaml,.nais/alerts.yaml"
+          "VARS": ".nais/labs-gcp.yaml"

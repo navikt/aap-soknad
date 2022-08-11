@@ -3,8 +3,9 @@ import { getAccessTokenFromRequest } from '../../../auth/accessToken';
 import { beskyttetApi } from '../../../auth/beskyttetApi';
 import { tokenXProxy } from '../../../auth/tokenXProxy';
 import { lesCache } from '../../../mock/mellomlagringsCache';
+import { defaultStepList } from '../../../src/pages/standard';
 import { erGyldigSøknadsType, GYLDIGE_SØKNADS_TYPER, SøknadsType } from '../../../utils/api';
-import { isMock } from '../../../utils/environments';
+import { isLabs, isMock } from '../../../utils/environments';
 import { getStringFromPossiblyArrayQuery } from '../../../utils/string';
 
 const handler = beskyttetApi(async (req: NextApiRequest, res: NextApiResponse) => {
@@ -18,6 +19,14 @@ const handler = beskyttetApi(async (req: NextApiRequest, res: NextApiResponse) =
 });
 
 export const lesBucket = async (type: SøknadsType, accessToken?: string) => {
+  if (isLabs()) {
+    return {
+      type: 'STANDARD',
+      version: 1,
+      søknad: {},
+      lagretStepList: defaultStepList,
+    };
+  }
   if (isMock()) {
     const result = await lesCache();
     // @ts-ignore-line
