@@ -572,8 +572,8 @@
             "label": "Fødselsdato",
             "validation": {
               "required": "Du må fylle inn barnets fødselsdato.",
-              "min": "Du får ikke søke barnetillegg for barn over 18 år. Hvis barnet er under 18 år, har du satt feil fødselsdato.",
-              "max": "Du kan ikke registrere barn som ikke er født ennå. Velg en fødselsdato før eller lik dagens dato."
+              "min": "Du kan ikke få barnetillegg for barn over 18 år. Hvis barnet er under 18 år, må du rette opp fødselsdato.",
+              "max": "Barnets fødselsdato kan ikke være etter dagens dato. Velg en fødselsdato før eller lik dagens dato"
             }
           },
           "relasjon": {
