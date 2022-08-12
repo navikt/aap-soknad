@@ -32,7 +32,7 @@ interface Props {
   defaultValues?: GenericSoknadContextState<Soknad>;
 }
 
-export const getSchema = (formatMessage: (id: string) => string) => {
+export const getStartDatoSchema = (formatMessage: (id: string) => string) => {
   return yup.object().shape({
     [BEGRUNNELSE]: yup.string().nullable(),
     [FERIE]: yup.object().shape({
@@ -86,7 +86,7 @@ const StartDato = ({ onBackClick, onNext, defaultValues }: Props) => {
     setValue,
     formState: { errors },
   } = useForm<FieldValues>({
-    resolver: yupResolver(getSchema(formatMessage)),
+    resolver: yupResolver(getStartDatoSchema(formatMessage)),
     defaultValues: {
       begrunnelse: defaultValues?.søknad?.begrunnelse,
       ferie: {

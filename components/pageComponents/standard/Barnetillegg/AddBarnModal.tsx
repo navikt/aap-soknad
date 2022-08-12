@@ -42,16 +42,8 @@ const NAVN = 'navn';
 
 export const validateHarInntekt = (barnepensjon: JaEllerNei) => barnepensjon === JaEllerNei.NEI;
 
-export const AddBarnModal = ({
-  showModal,
-  onDeleteClick,
-  onCloseClick,
-  onSaveClick,
-  barn,
-}: Props) => {
-  const { formatMessage } = useFeatureToggleIntl();
-
-  const schema = yup.object().shape({
+export const getAddBarnSchema = (formatMessage: (id: string, options?: {}) => string) => {
+  return yup.object().shape({
     [NAVN]: yup.object().shape({
       fornavn: yup
         .string()
@@ -102,6 +94,17 @@ export const AddBarnModal = ({
           .nullable(),
     }),
   });
+};
+
+export const AddBarnModal = ({
+  showModal,
+  onDeleteClick,
+  onCloseClick,
+  onSaveClick,
+  barn,
+}: Props) => {
+  const { formatMessage } = useFeatureToggleIntl();
+
   const {
     control,
     handleSubmit,
@@ -110,7 +113,7 @@ export const AddBarnModal = ({
     watch,
     formState: { errors },
   } = useForm<FieldValues>({
-    resolver: yupResolver(schema),
+    resolver: yupResolver(getAddBarnSchema(formatMessage)),
     defaultValues: {
       ...(barn
         ? {
