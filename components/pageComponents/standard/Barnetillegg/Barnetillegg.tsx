@@ -18,6 +18,7 @@ import {
   slettLagretSoknadState,
   updateSøknadData,
   addRequiredVedlegg,
+  removeRequiredVedlegg,
 } from 'context/soknadContextCommon';
 import { deleteOpplastedeVedlegg, useSoknadContextStandard } from 'context/soknadContextStandard';
 import { useDebounceLagreSoknad } from 'hooks/useDebounceLagreSoknad';
@@ -389,7 +390,7 @@ export const Barnetillegg = ({ onBackClick, onNext, defaultValues }: Props) => {
         onDeleteClick={() => {
           if (selectedBarnIndex != undefined) {
             const barn = manuelleBarnFields[selectedBarnIndex];
-            removeRequiredVedlegg(barn?.fnr, vedleggDispatch);
+            removeRequiredVedlegg(barn?.fnr, søknadDispatch);
             manuelleBarnRemove(selectedBarnIndex);
 
             setShowModal(false);
