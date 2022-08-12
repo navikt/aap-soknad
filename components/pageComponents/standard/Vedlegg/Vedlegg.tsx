@@ -15,7 +15,7 @@ import { slettLagretSoknadState, updateSøknadData } from 'context/soknadContext
 import { deleteOpplastedeVedlegg, useSoknadContextStandard } from 'context/soknadContextStandard';
 import { useDebounceLagreSoknad } from 'hooks/useDebounceLagreSoknad';
 import { Relasjon } from '../Barnetillegg/AddBarnModal';
-import { MANUELLE_BARN } from '../Barnetillegg/Barnetillegg';
+import { getUniqueIshIdForBarn, MANUELLE_BARN } from '../Barnetillegg/Barnetillegg';
 import FieldArrayFileInput from 'components/input/FileInput/FieldArrayFileInput';
 import { GenericSoknadContextState } from 'types/SoknadContext';
 
@@ -169,7 +169,9 @@ const Vedlegg = ({ onBackClick, onNext, defaultValues }: Props) => {
         />
       )}
       {søknadState?.søknad?.manuelleBarn?.map((barn, index) => {
-        const requiredVedlegg = søknadState?.requiredVedlegg.find((e) => e?.type === barn?.fnr);
+        const requiredVedlegg = søknadState?.requiredVedlegg.find(
+          (e) => e?.type === getUniqueIshIdForBarn(barn)
+        );
         return (
           <FieldArrayFileInput
             control={control}

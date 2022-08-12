@@ -62,6 +62,7 @@ const Student = ({ onBackClick, onNext, defaultValues }: Props) => {
       }),
     }),
   });
+  console.log('defaultValues', defaultValues);
   const { søknadState, søknadDispatch } = useSoknadContextStandard();
   const { stepList } = useStepWizard();
   const {
@@ -86,7 +87,6 @@ const Student = ({ onBackClick, onNext, defaultValues }: Props) => {
   }, [allFields]);
 
   useEffect(() => {
-    setValue(`${STUDENT}.${KOMME_TILBAKE}`, undefined);
     clearErrors();
     if (erStudent === JaNeiAvbrutt.AVBRUTT) {
       addRequiredVedlegg(
@@ -100,6 +100,7 @@ const Student = ({ onBackClick, onNext, defaultValues }: Props) => {
       );
     } else {
       removeRequiredVedlegg(AVBRUTT_STUDIE_VEDLEGG, søknadDispatch);
+      setValue(`${STUDENT}.${KOMME_TILBAKE}`, undefined);
     }
   }, [erStudent]);
 
