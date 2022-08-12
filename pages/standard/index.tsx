@@ -25,7 +25,7 @@ export enum StepNames {
   TILLEGGSOPPLYSNINGER = 'TILLEGGSOPPLYSNINGER',
   OPPSUMMERING = 'OPPSUMMERING',
 }
-const defaultStepList = [
+export const defaultStepList = [
   { stepIndex: 1, name: StepNames.STARTDATO, active: true },
   { stepIndex: 2, name: StepNames.MEDLEMSKAP },
   { stepIndex: 3, name: StepNames.YRKESSKADE },
