@@ -107,6 +107,7 @@ export const AndreUtbetalinger = ({ onBackClick, onNext, defaultValues }: Props)
     }),
     [formatMessage]
   );
+  console.log('lønnEllerSluttpakke', lønnEtterlønnEllerSluttpakke);
   const Attachments = useMemo(() => {
     let attachments: Array<{ type: string; description: string }> = [];
 

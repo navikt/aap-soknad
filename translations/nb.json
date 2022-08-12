@@ -568,6 +568,14 @@
               "numberCharacters": "Fødeslsnummer / D-nummer må være 11 siffer."
             }
           },
+          "fødselsdato": {
+            "label": "Fødselsdato",
+            "validation": {
+              "required": "Du må fylle inn barnets fødselsdato.",
+              "min": "Du får ikke søke barnetillegg for barn over 18 år. Hvis barnet er under 18 år, har du satt feil fødselsdato.",
+              "max": "Du kan ikke registrere barn som ikke er født ennå. Velg en fødselsdato før eller lik dagens dato."
+            }
+          },
           "relasjon": {
             "label": "Hvilken relasjon har du til barnet?",
             "validation": {
