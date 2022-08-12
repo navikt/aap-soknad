@@ -1,0 +1,18 @@
+.veiledningContent {
+  margin: 0 auto;
+  display: flex;
+  max-width: 600px;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: var(--navds-spacing-10);
+}
+.veiledningContent h1 {
+  text-align: center;
+}
+.veiledningHeader {
+  text-align: center;
+  padding: var(--navds-spacing-10) 0;
+}
+.buttonWrapper {
+  composes: buttonWrapper from 'styles/layout.module.css';
+}

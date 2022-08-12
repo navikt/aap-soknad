@@ -1,5 +1,5 @@
 import { sub } from 'date-fns';
-import { formatDate } from '../src/utils/date';
+import { formatDate } from 'utils/date';
 
 export const mockSøker = {
   søker: {

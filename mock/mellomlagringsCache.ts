@@ -1,10 +1,9 @@
 import fs from 'fs/promises';
-import { SøknadsType } from '../utils/api';
+import { SøknadsType } from 'utils/api';
 
 export const lesCache = async () => {
   try {
-    const data = await fs.readFile('.bucket.cache', 'utf8');
-    return data;
+    return await fs.readFile('.bucket.cache', 'utf8');
   } catch (err) {
     console.log('err', err);
     return undefined;

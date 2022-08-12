@@ -1,11 +1,11 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { getAccessTokenFromRequest } from '../../../auth/accessToken';
-import { beskyttetApi } from '../../../auth/beskyttetApi';
-import { tokenXProxy } from '../../../auth/tokenXProxy';
-import { lesCache } from '../../../mock/mellomlagringsCache';
-import { erGyldigSøknadsType, GYLDIGE_SØKNADS_TYPER, SøknadsType } from '../../../utils/api';
-import { isMock } from '../../../utils/environments';
-import { getStringFromPossiblyArrayQuery } from '../../../utils/string';
+import { getAccessTokenFromRequest } from 'auth/accessToken';
+import { beskyttetApi } from 'auth/beskyttetApi';
+import { tokenXProxy } from 'auth/tokenXProxy';
+import { lesCache } from 'mock/mellomlagringsCache';
+import { erGyldigSøknadsType, GYLDIGE_SØKNADS_TYPER, SøknadsType } from 'utils/api';
+import { isMock } from 'utils/environments';
+import { getStringFromPossiblyArrayQuery } from 'utils/string';
 
 const handler = beskyttetApi(async (req: NextApiRequest, res: NextApiResponse) => {
   const type = getStringFromPossiblyArrayQuery(req.query.type);

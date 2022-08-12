@@ -1,9 +1,9 @@
 import { randomUUID } from 'crypto';
 import { NextApiRequest, NextApiResponse } from 'next';
-import { getAccessTokenFromRequest } from '../../../auth/accessToken';
-import { beskyttetApi } from '../../../auth/beskyttetApi';
-import { tokenXProxy } from '../../../auth/tokenXProxy';
-import { isMock } from '../../../utils/environments';
+import { getAccessTokenFromRequest } from 'auth/accessToken';
+import { beskyttetApi } from 'auth/beskyttetApi';
+import { tokenXProxy } from 'auth/tokenXProxy';
+import { isMock } from 'utils/environments';
 import { slettBucket } from '../buckets/slett';
 
 const handler = beskyttetApi(async (req: NextApiRequest, res: NextApiResponse) => {

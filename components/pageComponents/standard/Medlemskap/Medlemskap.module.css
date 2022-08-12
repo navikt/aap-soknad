@@ -1,0 +1,24 @@
+.deleteIcon {
+  color: var(--navds-semantic-color-interaction-danger);
+}
+
+.deleteIcon:hover {
+  color: var(--navds-semantic-color-interaction-danger-hover);
+}
+
+@media (max-width: 480px) {
+  .dataCell {
+    padding: 0px;
+  }
+
+  .tableRowButtonContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .dataCell span {
+    align-self: flex-start;
+    text-align: start;
+  }
+}

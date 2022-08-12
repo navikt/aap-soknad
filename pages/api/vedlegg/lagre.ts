@@ -1,9 +1,9 @@
 import { randomUUID } from 'crypto';
 import { NextApiRequest, NextApiResponse } from 'next';
-import { getAccessTokenFromRequest } from '../../../auth/accessToken';
-import { beskyttetApi } from '../../../auth/beskyttetApi';
-import { tokenXAxiosProxy } from '../../../auth/tokenXProxy';
-import { isMock } from '../../../utils/environments';
+import { getAccessTokenFromRequest } from 'auth/accessToken';
+import { beskyttetApi } from 'auth/beskyttetApi';
+import { tokenXAxiosProxy } from 'auth/tokenXProxy';
+import { isMock } from 'utils/environments';
 
 const handler = beskyttetApi(async (req: NextApiRequest, res: NextApiResponse) => {
   const accessToken = getAccessTokenFromRequest(req);

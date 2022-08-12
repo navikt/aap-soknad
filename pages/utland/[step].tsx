@@ -1,31 +1,23 @@
 import { PageHeader } from '@navikt/ds-react';
 import { useRouter } from 'next/router';
 import React, { useEffect } from 'react';
-import { hentSoknadState, updateSøknadData } from '../../src/context/soknadContextCommon';
+import { hentSoknadState, updateSøknadData } from 'context/soknadContextCommon';
 
-import {
-  SoknadContextProviderUtland,
-  useSoknadContextUtland,
-} from '../../src/context/soknadContextUtland';
-import {
-  useStepWizard,
-  setStepList,
-  completeAndGoToNextStep,
-  goToPreviousStep,
-} from '../../src/context/stepWizardContextV2';
-import { useFeatureToggleIntl } from '../../src/hooks/useFeatureToggleIntl';
-import { SøknadType } from '../../src/types/SoknadContext';
-import SoknadUtland from '../../src/types/SoknadUtland';
-import { useDebounceLagreSoknad } from '../../src/hooks/useDebounceLagreSoknad';
-import { fetchPOST } from '../../src/api/fetch';
-import { defaultStepList } from '../../src/pages/utland/Utland';
-import { StepWizard } from '../../src/components/StepWizard';
-import { formatDate } from '../../src/utils/date';
+import { SoknadContextProviderUtland, useSoknadContextUtland } from 'context/soknadContextUtland';
+import { useStepWizard, setStepList, completeAndGoToNextStep } from 'context/stepWizardContextV2';
+import { useFeatureToggleIntl } from 'hooks/useFeatureToggleIntl';
+import { SøknadType } from 'types/SoknadContext';
+import SoknadUtland from 'types/SoknadUtland';
+import { useDebounceLagreSoknad } from 'hooks/useDebounceLagreSoknad';
+import { fetchPOST } from 'api/fetch';
+import { defaultStepList } from 'components/pageComponents/utland/Utland';
+import { StepWizard } from 'components/StepWizard';
+import { formatDate } from 'utils/date';
 import {
   StepSelectCountry,
   StepSelectTravelPeriod,
   StepSummary,
-} from '../../src/pages/utland/Steps';
+} from 'components/pageComponents/utland/Steps';
 
 const Steps = () => {
   const router = useRouter();
@@ -73,9 +65,6 @@ const Steps = () => {
         tom: formatDate(data?.tilDato, 'yyyy-MM-dd'),
       },
     });
-  const onPreviousStep = () => {
-    goToPreviousStep(stepWizardDispatch);
-  };
 
   return (
     <>

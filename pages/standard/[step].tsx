@@ -1,45 +1,46 @@
 import { PageHeader } from '@navikt/ds-react';
 import { useRouter } from 'next/router';
 import React, { useEffect } from 'react';
-import { setSoknadStateFraProps, SoknadActionKeys } from '../../src/context/soknadContextCommon';
+import { setSoknadStateFraProps, SoknadActionKeys } from 'context/soknadContextCommon';
 import {
   useStepWizard,
   setStepList,
   completeAndGoToNextStep,
   goToPreviousStep,
-} from '../../src/context/stepWizardContextV2';
-import { useFeatureToggleIntl } from '../../src/hooks/useFeatureToggleIntl';
-import { GenericSoknadContextState } from '../../src/types/SoknadContext';
-import { useDebounceLagreSoknad } from '../../src/hooks/useDebounceLagreSoknad';
-import { StepWizard } from '../../src/components/StepWizard';
+} from 'context/stepWizardContextV2';
+import { useFeatureToggleIntl } from 'hooks/useFeatureToggleIntl';
+import { GenericSoknadContextState } from 'types/SoknadContext';
+import { useDebounceLagreSoknad } from 'hooks/useDebounceLagreSoknad';
+import { StepWizard } from 'components/StepWizard';
 import {
   SoknadContextProviderStandard,
   useSoknadContextStandard,
   addBarnIfMissing,
-} from '../../src/context/soknadContextStandard';
+} from 'context/soknadContextStandard';
 import {
   setSokerOppslagFraProps,
   SokerOppslagState,
   useSokerOppslag,
-} from '../../src/context/sokerOppslagContext';
-import { updateSøknadData } from '../../src/context/soknadContextCommon';
-import Soknad from '../../src/types/Soknad';
+} from 'context/sokerOppslagContext';
+import { updateSøknadData } from 'context/soknadContextCommon';
+import { Soknad } from 'types/Soknad';
 import { SubmitHandler } from 'react-hook-form';
-import { fetchPOST } from '../../src/api/fetch';
-import { mapSøknadToBackend, StepNames } from '../../src/pages/standard';
-import StartDato from '../../src/pages/standard/StartDato/StartDato';
-import { Medlemskap } from '../../src/pages/standard/Medlemskap/Medlemskap';
-import { Yrkesskade } from '../../src/pages/standard/Yrkesskade/Yrkesskade';
-import { Behandlere } from '../../src/pages/standard/Behandlere/Behandlere';
-import { Barnetillegg } from '../../src/pages/standard/Barnetillegg/Barnetillegg';
-import Student from '../../src/pages/standard/Student/Student';
-import { AndreUtbetalinger } from '../../src/pages/standard/AndreUtbetalinger/AndreUtbetalinger';
-import Tilleggsopplysninger from '../../src/pages/standard/Tilleggsopplysninger/Tilleggsopplysninger';
-import Vedlegg from '../../src/pages/standard/Vedlegg/Vedlegg';
-import Oppsummering from '../../src/pages/standard/Oppsummering/Oppsummering';
-import { beskyttetSide } from '../../auth/beskyttetSide';
+import { fetchPOST } from 'api/fetch';
+import { StepNames } from './index';
+import { mapSøknadToBackend } from 'utils/api';
+import StartDato from 'components/pageComponents/standard/StartDato/StartDato';
+import { Medlemskap } from 'components/pageComponents/standard/Medlemskap/Medlemskap';
+import { Yrkesskade } from 'components/pageComponents/standard/Yrkesskade/Yrkesskade';
+import { Behandlere } from 'components/pageComponents/standard/Behandlere/Behandlere';
+import { Barnetillegg } from 'components/pageComponents/standard/Barnetillegg/Barnetillegg';
+import Student from 'components/pageComponents/standard/Student/Student';
+import { AndreUtbetalinger } from 'components/pageComponents/standard/AndreUtbetalinger/AndreUtbetalinger';
+import Tilleggsopplysninger from 'components/pageComponents/standard/Tilleggsopplysninger/Tilleggsopplysninger';
+import Vedlegg from 'components/pageComponents/standard/Vedlegg/Vedlegg';
+import Oppsummering from 'components/pageComponents/standard/Oppsummering/Oppsummering';
+import { beskyttetSide } from 'auth/beskyttetSide';
 import { GetServerSidePropsResult, NextPageContext } from 'next';
-import { getAccessToken } from '../../auth/accessToken';
+import { getAccessToken } from 'auth/accessToken';
 import { getSøker } from '../api/oppslag/soeker';
 import { lesBucket } from '../api/buckets/les';
 

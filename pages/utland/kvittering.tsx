@@ -1,6 +1,6 @@
 import { GuidePanel } from '@navikt/ds-react';
 import React from 'react';
-import { useFeatureToggleIntl } from '../../src/hooks/useFeatureToggleIntl';
+import { useFeatureToggleIntl } from 'hooks/useFeatureToggleIntl';
 
 const Kvittering = () => {
   const { formatMessage } = useFeatureToggleIntl();

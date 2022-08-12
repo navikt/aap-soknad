@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router';
 import React from 'react';
-import { StepIntroduction } from '../../src/pages/utland/Steps';
+import { StepIntroduction } from 'components/pageComponents/utland/Steps';
 
 const Utland = () => {
   const router = useRouter();

@@ -1,18 +1,42 @@
-import { Veiledning } from '../../src/pages/standard/Veiledning/Veiledning';
+import { Veiledning } from 'components/pageComponents/standard/Veiledning/Veiledning';
 
 import { useEffect, useState } from 'react';
-import { SokerOppslagState, SøkerView } from '../../src/context/sokerOppslagContext';
+import { SokerOppslagState, SøkerView } from 'context/sokerOppslagContext';
 import React from 'react';
 import { useRouter } from 'next/router';
 import { GetServerSidePropsResult, NextPageContext } from 'next/types';
-import { beskyttetSide } from '../../auth/beskyttetSide';
-import { getAccessToken } from '../../auth/accessToken';
+import { beskyttetSide } from 'auth/beskyttetSide';
+import { getAccessToken } from 'auth/accessToken';
 import { getSøker } from '../api/oppslag/soeker';
-import { fetchPOST } from '../../src/api/fetch';
-import { defaultStepList } from '../../src/pages/standard';
+import { fetchPOST } from 'api/fetch';
 interface PageProps {
   søker: SokerOppslagState;
 }
+
+export enum StepNames {
+  STARTDATO = 'STARTDATO',
+  FASTLEGE = 'FASTLEGE',
+  MEDLEMSKAP = 'MEDLEMSKAP',
+  YRKESSKADE = 'YRKESSKADE',
+  STUDENT = 'STUDENT',
+  ANDRE_UTBETALINGER = 'ANDRE_UTBETALINGER',
+  BARNETILLEGG = 'BARNETILLEGG',
+  VEDLEGG = 'VEDLEGG',
+  TILLEGGSOPPLYSNINGER = 'TILLEGGSOPPLYSNINGER',
+  OPPSUMMERING = 'OPPSUMMERING',
+}
+const defaultStepList = [
+  { stepIndex: 1, name: StepNames.STARTDATO, active: true },
+  { stepIndex: 2, name: StepNames.MEDLEMSKAP },
+  { stepIndex: 3, name: StepNames.YRKESSKADE },
+  { stepIndex: 4, name: StepNames.FASTLEGE },
+  { stepIndex: 5, name: StepNames.BARNETILLEGG },
+  { stepIndex: 6, name: StepNames.STUDENT },
+  { stepIndex: 7, name: StepNames.ANDRE_UTBETALINGER },
+  { stepIndex: 8, name: StepNames.TILLEGGSOPPLYSNINGER },
+  { stepIndex: 9, name: StepNames.VEDLEGG },
+  { stepIndex: 10, name: StepNames.OPPSUMMERING },
+];
 
 const Introduksjon = ({ søker }: PageProps) => {
   const router = useRouter();
