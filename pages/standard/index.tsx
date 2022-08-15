@@ -9,8 +9,18 @@ import { beskyttetSide } from 'auth/beskyttetSide';
 import { getAccessToken } from 'auth/accessToken';
 import { getSøker } from '../api/oppslag/soeker';
 import { fetchPOST } from 'api/fetch';
+import { setStepList, useStepWizard } from 'context/stepWizardContextV2';
+import { setSoknadStateFraProps } from 'context/soknadContextCommon';
+import {
+  SoknadContextProviderStandard,
+  useSoknadContextStandard,
+} from 'context/soknadContextStandard';
+import { GenericSoknadContextState } from 'types/SoknadContext';
+import { Soknad } from 'types/Soknad';
+import { lesBucket } from 'pages/api/buckets/les';
 interface PageProps {
   søker: SokerOppslagState;
+  mellomlagretSøknad: GenericSoknadContextState<Soknad>;
 }
 
 export enum StepNames {
@@ -38,10 +48,21 @@ export const defaultStepList = [
   { stepIndex: 10, name: StepNames.OPPSUMMERING },
 ];
 
-const Introduksjon = ({ søker }: PageProps) => {
+const Introduksjon = ({ søker, mellomlagretSøknad }: PageProps) => {
   const router = useRouter();
 
   const [soker, setSoker] = useState({});
+  const { currentStep, stepWizardDispatch } = useStepWizard();
+  const { søknadState, søknadDispatch } = useSoknadContextStandard();
+
+  useEffect(() => {
+    if (søknadState?.søknad === undefined) {
+      setSoknadStateFraProps(mellomlagretSøknad, søknadDispatch);
+      if (mellomlagretSøknad.lagretStepList && mellomlagretSøknad?.lagretStepList?.length > 0) {
+        setStepList([...mellomlagretSøknad.lagretStepList], stepWizardDispatch);
+      }
+    }
+  });
 
   useEffect(() => {
     if (søker?.søker) {
@@ -53,6 +74,15 @@ const Introduksjon = ({ søker }: PageProps) => {
       setSoker(_søker);
     }
   }, [søker, setSoker]);
+
+  useEffect(() => {
+    if (currentStep && currentStep.stepIndex !== undefined) {
+      router.push(`standard/${currentStep.stepIndex.toString()}`, undefined, {
+        scroll: true,
+        shallow: true,
+      });
+    }
+  }, [currentStep]);
 
   const startSoknad = async () => {
     await fetchPOST(
@@ -78,15 +108,22 @@ const Introduksjon = ({ søker }: PageProps) => {
   );
 };
 
+const IntroduksjonWithContextProvider = ({ søker, mellomlagretSøknad }: PageProps) => (
+  <SoknadContextProviderStandard>
+    <Introduksjon søker={søker} mellomlagretSøknad={mellomlagretSøknad} />
+  </SoknadContextProviderStandard>
+);
+
 export const getServerSideProps = beskyttetSide(
   async (ctx: NextPageContext): Promise<GetServerSidePropsResult<{}>> => {
     const bearerToken = getAccessToken(ctx);
     const søker = await getSøker(bearerToken);
+    const mellomlagretSøknad = await lesBucket('STANDARD', bearerToken);
 
     return {
-      props: { søker },
+      props: { søker, mellomlagretSøknad },
     };
   }
 );
 
-export default Introduksjon;
+export default IntroduksjonWithContextProvider;
