@@ -1,12 +1,4 @@
-import React, {
-  createContext,
-  Dispatch,
-  ReactNode,
-  useCallback,
-  useContext,
-  useMemo,
-  useReducer,
-} from 'react';
+import React, { createContext, Dispatch, ReactNode, useContext, useMemo, useReducer } from 'react';
 import { StepType } from 'components/StepWizard/Step';
 
 interface DispatchStepWizardAction {

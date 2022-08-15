@@ -18,6 +18,7 @@ import {
 import { GenericSoknadContextState } from 'types/SoknadContext';
 import { Soknad } from 'types/Soknad';
 import { lesBucket } from 'pages/api/buckets/les';
+import { StepType } from 'components/StepWizard/Step';
 interface PageProps {
   søker: SokerOppslagState;
   mellomlagretSøknad: GenericSoknadContextState<Soknad>;
@@ -52,7 +53,7 @@ const Introduksjon = ({ søker, mellomlagretSøknad }: PageProps) => {
   const router = useRouter();
 
   const [soker, setSoker] = useState({});
-  const { currentStep, stepWizardDispatch } = useStepWizard();
+  const { stepWizardDispatch } = useStepWizard();
   const { søknadState, søknadDispatch } = useSoknadContextStandard();
 
   useEffect(() => {
@@ -62,7 +63,7 @@ const Introduksjon = ({ søker, mellomlagretSøknad }: PageProps) => {
         setStepList([...mellomlagretSøknad.lagretStepList], stepWizardDispatch);
       }
     }
-  });
+  }, []);
 
   useEffect(() => {
     if (søker?.søker) {
@@ -74,15 +75,6 @@ const Introduksjon = ({ søker, mellomlagretSøknad }: PageProps) => {
       setSoker(_søker);
     }
   }, [søker, setSoker]);
-
-  useEffect(() => {
-    if (currentStep && currentStep.stepIndex !== undefined) {
-      router.push(`standard/${currentStep.stepIndex.toString()}`, undefined, {
-        scroll: true,
-        shallow: true,
-      });
-    }
-  }, [currentStep]);
 
   const startSoknad = async () => {
     await fetchPOST(
@@ -119,7 +111,18 @@ export const getServerSideProps = beskyttetSide(
     const bearerToken = getAccessToken(ctx);
     const søker = await getSøker(bearerToken);
     const mellomlagretSøknad = await lesBucket('STANDARD', bearerToken);
+    const activeIndex = mellomlagretSøknad?.lagretStepList?.find(
+      (e: StepType) => e.active
+    )?.stepIndex;
 
+    if (activeIndex) {
+      return {
+        redirect: {
+          destination: `/standard/${activeIndex}`,
+          permanent: false,
+        },
+      };
+    }
     return {
       props: { søker, mellomlagretSøknad },
     };
