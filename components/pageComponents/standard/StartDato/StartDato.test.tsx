@@ -7,7 +7,7 @@ import { Step, StepWizard } from 'components/StepWizard';
 import { axe, toHaveNoViolations } from 'jest-axe';
 import { SoknadContextStandard } from 'context/soknadContextStandard';
 import { SoknadContextData } from 'context/soknadContextCommon';
-import Soknad from 'types/Soknad';
+import { Soknad } from 'types/Soknad';
 import { SøknadType } from 'types/SoknadContext';
 expect.extend(toHaveNoViolations);
 
@@ -40,7 +40,7 @@ describe('StartDato', () => {
     return (
       <StepWizard>
         <Step name={STARTDATO}>
-          <StartDato onBackClick={jest.fn()} onCancelClick={jest.fn()} />
+          <StartDato onBackClick={jest.fn()} onNext={jest.fn()} />
         </Step>
       </StepWizard>
     );

@@ -15,7 +15,7 @@ const OppsummeringBarn = ({ barn }: OppsummeringBarnProps) => {
       <Label>{'Navn'}</Label>
       <BodyShort>{formatNavn(barn?.navn)}</BodyShort>
       <Label>Fødselsdato</Label>
-      <BodyShort>{formatDate(barn?.fødselsdato)}</BodyShort>
+      <BodyShort>{formatDate(barn?.fødseldato)}</BodyShort>
       {barn?.relasjon && (
         <>
           <Label>Relasjon til barnet</Label>

@@ -61,10 +61,8 @@ const validateUtenlandsPeriode = (
   );
 };
 
-export const Medlemskap = ({ onBackClick, onNext, defaultValues }: Props) => {
-  const { formatMessage } = useFeatureToggleIntl();
-
-  const schema = yup.object().shape({
+export const getMedlemskapSchema = (formatMessage: (id: string) => string) => {
+  return yup.object().shape({
     [MEDLEMSKAP]: yup.object().shape({
       [BODD_I_NORGE]: yup
         .string()
@@ -135,6 +133,11 @@ export const Medlemskap = ({ onBackClick, onNext, defaultValues }: Props) => {
         }),
     }),
   });
+};
+
+export const Medlemskap = ({ onBackClick, onNext, defaultValues }: Props) => {
+  const { formatMessage } = useFeatureToggleIntl();
+
   const { søknadState, søknadDispatch } = useSoknadContextStandard();
   const {
     control,
@@ -146,7 +149,7 @@ export const Medlemskap = ({ onBackClick, onNext, defaultValues }: Props) => {
   } = useForm<{
     [MEDLEMSKAP]: MedlemskapType;
   }>({
-    resolver: yupResolver(schema),
+    resolver: yupResolver(getMedlemskapSchema(formatMessage)),
     defaultValues: {
       [MEDLEMSKAP]: defaultValues?.søknad?.medlemskap,
     },
