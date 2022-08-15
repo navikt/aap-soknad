@@ -35,6 +35,12 @@ export const MANUELLE_BARN = 'manuelleBarn';
 
 export const GRUNNBELØP = '111 477';
 
+export const getUniqueIshIdForBarn = (barn: ManuelleBarn) => {
+  return `${formatDate(barn.fødseldato, 'yyyy-MM-dd') ?? ''}_${barn.navn.fornavn}_${
+    barn.navn.etternavn
+  }`;
+};
+
 export const Barnetillegg = ({ onBackClick, onNext, defaultValues }: Props) => {
   const { formatMessage } = useFeatureToggleIntl();
 
@@ -48,21 +54,24 @@ export const Barnetillegg = ({ onBackClick, onNext, defaultValues }: Props) => {
           )
           .oneOf([JaEllerNei.JA, JaEllerNei.NEI])
           .nullable(),
-        harInntekt: yup.string().when('barnepensjon', {
-          is: validateHarInntekt,
-          then: (yupSchema) =>
-            yupSchema
-              .required(
-                formatMessage(
-                  'søknad.barnetillegg.leggTilBarn.modal.harInntekt.validation.required',
-                  {
-                    grunnbeløp: GRUNNBELØP,
-                  }
+        harInntekt: yup
+          .string()
+          .nullable()
+          .when('barnepensjon', {
+            is: validateHarInntekt,
+            then: (yupSchema) =>
+              yupSchema
+                .required(
+                  formatMessage(
+                    'søknad.barnetillegg.leggTilBarn.modal.harInntekt.validation.required',
+                    {
+                      grunnbeløp: GRUNNBELØP,
+                    }
+                  )
                 )
-              )
-              .oneOf([JaEllerNei.JA, JaEllerNei.NEI])
-              .nullable(),
-        }),
+                .oneOf([JaEllerNei.JA, JaEllerNei.NEI])
+                .nullable(),
+          }),
       })
     ),
   });
@@ -155,7 +164,7 @@ export const Barnetillegg = ({ onBackClick, onNext, defaultValues }: Props) => {
         [
           {
             filterType: barn.relasjon,
-            type: barn?.fnr,
+            type: getUniqueIshIdForBarn(barn),
             description:
               barn.relasjon === Relasjon.FORELDER
                 ? `Fødselsattest eller adopsjonsbevis for: ${barn?.navn?.fornavn} ${barn?.navn?.etternavn}`
@@ -390,7 +399,7 @@ export const Barnetillegg = ({ onBackClick, onNext, defaultValues }: Props) => {
         onDeleteClick={() => {
           if (selectedBarnIndex != undefined) {
             const barn = manuelleBarnFields[selectedBarnIndex];
-            removeRequiredVedlegg(barn?.fnr, søknadDispatch);
+            removeRequiredVedlegg(getUniqueIshIdForBarn(barn), søknadDispatch);
             manuelleBarnRemove(selectedBarnIndex);
 
             setShowModal(false);

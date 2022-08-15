@@ -66,9 +66,17 @@ export const AddBarnModal = ({
     }),
     fødseldato: yup
       .date()
-      .required('Du må fylle inn barnets fødselsdato.')
-      .min(sub(new Date(), { years: 18 }), 'Barnet kan ikke være over 18 år.')
-      .max(add(new Date(), { days: 1 }), 'Du kan ikke registrere barn som er født i fremtiden.'),
+      .required(
+        formatMessage('søknad.barnetillegg.leggTilBarn.modal.fødselsdato.validation.required')
+      )
+      .min(
+        sub(new Date(), { years: 18 }),
+        formatMessage('søknad.barnetillegg.leggTilBarn.modal.fødselsdato.validation.min')
+      )
+      .max(
+        add(new Date(), { days: 1 }),
+        formatMessage('søknad.barnetillegg.leggTilBarn.modal.fødselsdato.validation.max')
+      ),
     relasjon: yup
       .string()
       .required(formatMessage('søknad.barnetillegg.leggTilBarn.modal.relasjon.validation.required'))
@@ -158,11 +166,10 @@ export const AddBarnModal = ({
 
           <DatePickerWrapper
             control={control}
-            label="Fødselsdato"
+            label={formatMessage('søknad.barnetillegg.leggTilBarn.modal.fødselsdato.label')}
             name="fødseldato"
             error={errors?.fødseldato?.message}
           />
-          {errors?.fødseldato?.message}
 
           <RadioGroupWrapper
             control={control}
