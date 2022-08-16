@@ -6,7 +6,6 @@ import { lesCache } from 'mock/mellomlagringsCache';
 import { erGyldigSøknadsType, GYLDIGE_SØKNADS_TYPER, SøknadsType } from 'utils/api';
 import { isLabs, isMock } from 'utils/environments';
 import { getStringFromPossiblyArrayQuery } from 'utils/string';
-import { defaultStepList } from 'pages/standard';
 import { SØKNAD_CONTEXT_VERSION } from 'context/soknadContextCommon';
 import logger from 'utils/logger';
 
@@ -25,7 +24,6 @@ export const lesBucket = async (type: SøknadsType, accessToken?: string) => {
     type: 'STANDARD',
     version: SØKNAD_CONTEXT_VERSION,
     søknad: {},
-    lagretStepList: defaultStepList,
   };
   if (isLabs()) {
     return nySøknad;
