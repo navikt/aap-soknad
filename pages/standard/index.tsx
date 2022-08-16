@@ -11,7 +11,6 @@ import { getSøker } from '../api/oppslag/soeker';
 import { fetchPOST } from 'api/fetch';
 import { lesBucket } from 'pages/api/buckets/les';
 import { StepType } from 'components/StepWizard/Step';
-import logger from 'utils/logger';
 interface PageProps {
   søker: SokerOppslagState;
 }
@@ -87,7 +86,6 @@ export const getServerSideProps = beskyttetSide(
     const søker = await getSøker(bearerToken);
     const mellomlagretSøknad = await lesBucket('STANDARD', bearerToken);
     const activeStep = mellomlagretSøknad?.lagretStepList?.find((e: StepType) => e.active);
-    logger.debug(activeStep, 'aktivt steg');
     const activeIndex = activeStep?.stepIndex;
 
     if (activeIndex) {
