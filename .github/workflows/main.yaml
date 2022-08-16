@@ -32,7 +32,7 @@ jobs:
         if: "steps.cache-node-modules.outputs.cache-hit != 'true'"
         run: "yarn install --frozen-lockfile"
       - name: Copy env-file for dev
-        run: cp .nais/dev.env .env.local
+        run: cp .nais/dev.env .env.development
       - name: "client tests"
         run: "yarn test"
       - name: "Bygg klient(yarn run build)"
