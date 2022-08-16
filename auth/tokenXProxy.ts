@@ -77,15 +77,7 @@ export const tokenXAxiosProxy = async (opts: AxiosOpts) => {
     return data.pipe(opts.res);
   } catch (e: any) {
     let msg = '';
-    await new Promise((resolve) => {
-      e.response.data
-        .on('data', (chunk: string) => {
-          msg += chunk;
-        })
-        .on('end', () => {
-          resolve(msg);
-        });
-    });
     logger.error({ msg }, 'tokenXAxiosProxy');
+    return opts.res.status(500).json({ msg });
   }
 };
