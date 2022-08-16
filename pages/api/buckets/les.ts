@@ -7,6 +7,8 @@ import { erGyldigSøknadsType, GYLDIGE_SØKNADS_TYPER, SøknadsType } from 'util
 import { isLabs, isMock } from 'utils/environments';
 import { getStringFromPossiblyArrayQuery } from 'utils/string';
 import { defaultStepList } from 'pages/standard';
+import { SØKNAD_CONTEXT_VERSION } from 'context/soknadContextCommon';
+import logger from 'utils/logger';
 
 const handler = beskyttetApi(async (req: NextApiRequest, res: NextApiResponse) => {
   const type = getStringFromPossiblyArrayQuery(req.query.type);
@@ -19,13 +21,14 @@ const handler = beskyttetApi(async (req: NextApiRequest, res: NextApiResponse) =
 });
 
 export const lesBucket = async (type: SøknadsType, accessToken?: string) => {
+  const nySøknad = {
+    type: 'STANDARD',
+    version: SØKNAD_CONTEXT_VERSION,
+    søknad: {},
+    lagretStepList: defaultStepList,
+  };
   if (isLabs()) {
-    return {
-      type: 'STANDARD',
-      version: 1,
-      søknad: {},
-      lagretStepList: defaultStepList,
-    };
+    return nySøknad;
   }
   if (isMock()) {
     const result = await lesCache();
@@ -38,6 +41,11 @@ export const lesBucket = async (type: SøknadsType, accessToken?: string) => {
     audience: process.env.SOKNAD_API_AUDIENCE!,
     bearerToken: accessToken,
   });
+  if (mellomlagretSøknad?.version?.toString() !== SØKNAD_CONTEXT_VERSION?.toString()) {
+    logger.info({
+      cacheConflict: `Cache version: ${mellomlagretSøknad?.version}, SØKNAD_CONTEXT_VERSION: ${SØKNAD_CONTEXT_VERSION}`,
+    });
+  }
   return mellomlagretSøknad;
 };
 
