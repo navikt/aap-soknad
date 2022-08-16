@@ -9,9 +9,9 @@ import { beskyttetSide } from 'auth/beskyttetSide';
 import { getAccessToken } from 'auth/accessToken';
 import { getSøker } from '../api/oppslag/soeker';
 import { fetchPOST } from 'api/fetch';
-import { SoknadContextProviderStandard } from 'context/soknadContextStandard';
 import { lesBucket } from 'pages/api/buckets/les';
 import { StepType } from 'components/StepWizard/Step';
+import logger from 'utils/logger';
 interface PageProps {
   søker: SokerOppslagState;
 }
@@ -81,20 +81,14 @@ const Introduksjon = ({ søker }: PageProps) => {
   );
 };
 
-const IntroduksjonWithContextProvider = ({ søker, mellomlagretSøknad }: PageProps) => (
-  <SoknadContextProviderStandard>
-    <Introduksjon søker={søker} mellomlagretSøknad={mellomlagretSøknad} />
-  </SoknadContextProviderStandard>
-);
-
 export const getServerSideProps = beskyttetSide(
   async (ctx: NextPageContext): Promise<GetServerSidePropsResult<{}>> => {
     const bearerToken = getAccessToken(ctx);
     const søker = await getSøker(bearerToken);
     const mellomlagretSøknad = await lesBucket('STANDARD', bearerToken);
-    const activeIndex = mellomlagretSøknad?.lagretStepList?.find(
-      (e: StepType) => e.active
-    )?.stepIndex;
+    const activeStep = mellomlagretSøknad?.lagretStepList?.find((e: StepType) => e.active);
+    logger.debug(activeStep, 'aktivt steg');
+    const activeIndex = activeStep?.stepIndex;
 
     if (activeIndex) {
       return {
@@ -110,4 +104,4 @@ export const getServerSideProps = beskyttetSide(
   }
 );
 
-export default IntroduksjonWithContextProvider;
+export default Introduksjon;
