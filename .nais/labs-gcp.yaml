@@ -11,16 +11,13 @@ spec:
   ingresses:
     - "https://aap-soknad.labs.nais.io/"
   liveness:
-    path: "/aap/internal/isAlive"
+    path: "/aap/soknad/api/internal/isAlive"
     initialDelay: 20
     timeout: 60
   readiness:
-    path: "/aap/internal/isready"
+    path: "/aap/soknad/api/internal/isready"
     initialDelay: 20
     timeout: 60
   replicas:
     min: 2
     max: 2
-  env:
-    - name: "REACT_APP_USE_MOCK"
-      value: "true"
