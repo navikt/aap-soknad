@@ -5,7 +5,7 @@ on:
     branches:
       - "main"
 env:
-  "IMAGE": "ghcr.io/${{ github.repository }}:${{ github.sha }}"
+  "IMAGE": "ghcr.io/${{ github.repository }}-labs:${{ github.sha }}"
 jobs:
   "build":
     name: "build"
