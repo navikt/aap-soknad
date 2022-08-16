@@ -15,7 +15,7 @@ spec:
     initialDelay: 20
     timeout: 60
   readiness:
-    path: "/aap/internal/isready"
+    path: "/aap/internal/isReady"
     initialDelay: 20
     timeout: 60
   replicas:
