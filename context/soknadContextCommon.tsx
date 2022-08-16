@@ -9,9 +9,10 @@ export interface SoknadContextData<SoknadStateType> {
 export interface ProviderProps {
   children: ReactNode;
 }
+export const SØKNAD_CONTEXT_VERSION = 1;
 
 export const soknadContextInititalState = {
-  version: 1,
+  version: SØKNAD_CONTEXT_VERSION,
   type: undefined,
   currentStep: undefined,
   søknad: undefined,

@@ -11,6 +11,7 @@ import { getSøker } from '../api/oppslag/soeker';
 import { fetchPOST } from 'api/fetch';
 import { lesBucket } from 'pages/api/buckets/les';
 import { StepType } from 'components/StepWizard/Step';
+import { SØKNAD_CONTEXT_VERSION } from 'context/soknadContextCommon';
 interface PageProps {
   søker: SokerOppslagState;
 }
@@ -61,7 +62,7 @@ const Introduksjon = ({ søker }: PageProps) => {
       `${process.env.NEXT_PUBLIC_TEMP_LAGRE_URL ?? '/aap/soknad-api/buckets/lagre/'}STANDARD`,
       {
         type: 'STANDARD',
-        version: 1,
+        version: SØKNAD_CONTEXT_VERSION,
         søknad: {},
         lagretStepList: defaultStepList,
       }
