@@ -15,7 +15,7 @@ spec:
     initialDelay: 20
     timeout: 60
   readiness:
-    path: "/aap/soknad/api/internal/isready"
+    path: "/aap/soknad/api/internal/isReady"
     initialDelay: 20
     timeout: 60
   replicas:
