@@ -21,6 +21,7 @@ export const tokenXProxy = async (opts: Opts) => {
     throw new ErrorMedStatus(`Støtter ikke metode ${opts.req.method}`, 404);
   }*/
 
+  logger.info('starter request mot ' + opts.url);
   try {
     const idportenToken = opts.bearerToken!.split(' ')[1];
     const tokenxToken = await getTokenxToken(idportenToken, opts.audience);
@@ -64,6 +65,7 @@ export const tokenXAxiosProxy = async (opts: AxiosOpts) => {
   const idportenToken = opts.bearerToken!.split(' ')[1];
   const tokenxToken = await getTokenxToken(idportenToken, opts.audience);
 
+  logger.info('starter opplasting av fil til ' + opts.url);
   try {
     const { data } = await axios.post(opts.url, opts.req, {
       responseType: 'stream',
