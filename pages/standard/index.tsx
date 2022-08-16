@@ -9,19 +9,11 @@ import { beskyttetSide } from 'auth/beskyttetSide';
 import { getAccessToken } from 'auth/accessToken';
 import { getSøker } from '../api/oppslag/soeker';
 import { fetchPOST } from 'api/fetch';
-import { setStepList, useStepWizard } from 'context/stepWizardContextV2';
-import { setSoknadStateFraProps } from 'context/soknadContextCommon';
-import {
-  SoknadContextProviderStandard,
-  useSoknadContextStandard,
-} from 'context/soknadContextStandard';
-import { GenericSoknadContextState } from 'types/SoknadContext';
-import { Soknad } from 'types/Soknad';
+import { SoknadContextProviderStandard } from 'context/soknadContextStandard';
 import { lesBucket } from 'pages/api/buckets/les';
 import { StepType } from 'components/StepWizard/Step';
 interface PageProps {
   søker: SokerOppslagState;
-  mellomlagretSøknad: GenericSoknadContextState<Soknad>;
 }
 
 export enum StepNames {
@@ -49,21 +41,10 @@ export const defaultStepList = [
   { stepIndex: 10, name: StepNames.OPPSUMMERING },
 ];
 
-const Introduksjon = ({ søker, mellomlagretSøknad }: PageProps) => {
+const Introduksjon = ({ søker }: PageProps) => {
   const router = useRouter();
 
   const [soker, setSoker] = useState({});
-  const { stepWizardDispatch } = useStepWizard();
-  const { søknadState, søknadDispatch } = useSoknadContextStandard();
-
-  useEffect(() => {
-    if (søknadState?.søknad === undefined) {
-      setSoknadStateFraProps(mellomlagretSøknad, søknadDispatch);
-      if (mellomlagretSøknad.lagretStepList && mellomlagretSøknad?.lagretStepList?.length > 0) {
-        setStepList([...mellomlagretSøknad.lagretStepList], stepWizardDispatch);
-      }
-    }
-  }, []);
 
   useEffect(() => {
     if (søker?.søker) {
@@ -124,7 +105,7 @@ export const getServerSideProps = beskyttetSide(
       };
     }
     return {
-      props: { søker, mellomlagretSøknad },
+      props: { søker },
     };
   }
 );
