@@ -42,6 +42,7 @@ export type Behandler = {
   postnummer: string;
   poststed: string;
   telefon: string;
+  id: string;
 };
 type Student = {
   erStudent?: JaEllerNei;
@@ -74,6 +75,7 @@ export type Barn = {
 
 export type ManuelleBarn = {
   navn: Navn;
+  id: string;
   fødseldato?: Date;
   harInntekt?: string;
   barnepensjon?: string;

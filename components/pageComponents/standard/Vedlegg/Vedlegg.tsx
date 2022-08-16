@@ -170,7 +170,7 @@ const Vedlegg = ({ onBackClick, onNext, defaultValues }: Props) => {
       )}
       {søknadState?.søknad?.manuelleBarn?.map((barn, index) => {
         const requiredVedlegg = søknadState?.requiredVedlegg.find(
-          (e) => e?.type === getUniqueIshIdForBarn(barn)
+          (e) => e?.type === `barn-${barn.id}`
         );
         return (
           <FieldArrayFileInput
