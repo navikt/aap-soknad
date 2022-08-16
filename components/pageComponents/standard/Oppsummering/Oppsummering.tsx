@@ -191,7 +191,7 @@ const Oppsummering = ({ onBackClick, onSubmitSoknad }: OppsummeringProps) => {
               <BodyShort>{`Telefon: ${fastlege?.telefon}`}</BodyShort>
             </article>
             {søknadState?.søknad?.behandlere?.map((behandler) => (
-              <OppsummeringBehandler behandler={behandler} />
+              <OppsummeringBehandler key={behandler.id} behandler={behandler} />
             ))}
           </>
         </AccordianItemOppsummering>
@@ -206,7 +206,7 @@ const Oppsummering = ({ onBackClick, onSubmitSoknad }: OppsummeringProps) => {
               <OppsummeringBarn barn={barn} />
             ))}
             {søknadState?.søknad?.manuelleBarn?.map((barn) => (
-              <OppsummeringBarn barn={barn} />
+              <OppsummeringBarn key={barn.id} barn={barn} />
             ))}
           </>
         </AccordianItemOppsummering>
@@ -271,7 +271,7 @@ const Oppsummering = ({ onBackClick, onSubmitSoknad }: OppsummeringProps) => {
             })}
             {søknadState?.søknad?.manuelleBarn?.map((barn, i) => {
               const label = søknadState?.requiredVedlegg?.find(
-                (e) => e.type === barn.fnr
+                (e) => e.type === `barn-${barn.id}`
               )?.description;
               return (
                 <div key={i}>

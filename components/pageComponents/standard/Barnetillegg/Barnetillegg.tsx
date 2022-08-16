@@ -164,7 +164,7 @@ export const Barnetillegg = ({ onBackClick, onNext, defaultValues }: Props) => {
         [
           {
             filterType: barn.relasjon,
-            type: getUniqueIshIdForBarn(barn),
+            type: `barn-${barn.id}`,
             description:
               barn.relasjon === Relasjon.FORELDER
                 ? `Fødselsattest eller adopsjonsbevis for: ${barn?.navn?.fornavn} ${barn?.navn?.etternavn}`
@@ -180,6 +180,8 @@ export const Barnetillegg = ({ onBackClick, onNext, defaultValues }: Props) => {
     }
     setShowModal(false);
   };
+
+  console.log('manuelleBarn', manuelleBarnFields);
   return (
     <>
       <SoknadFormWrapper
@@ -399,7 +401,7 @@ export const Barnetillegg = ({ onBackClick, onNext, defaultValues }: Props) => {
         onDeleteClick={() => {
           if (selectedBarnIndex != undefined) {
             const barn = manuelleBarnFields[selectedBarnIndex];
-            removeRequiredVedlegg(getUniqueIshIdForBarn(barn), søknadDispatch);
+            removeRequiredVedlegg(`barn-${barn.id}`, søknadDispatch);
             manuelleBarnRemove(selectedBarnIndex);
 
             setShowModal(false);
