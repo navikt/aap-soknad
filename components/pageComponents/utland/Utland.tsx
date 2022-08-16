@@ -1,7 +1,7 @@
 import { PageHeader } from '@navikt/ds-react';
-import { Step, StepWizard } from '../../components/StepWizard';
+import { Step, StepWizard } from 'components/StepWizard';
 import React, { useEffect, useState } from 'react';
-import { useFeatureToggleIntl } from '../../hooks/useFeatureToggleIntl';
+import { useFeatureToggleIntl } from 'hooks/useFeatureToggleIntl';
 import {
   StepIntroduction,
   StepKvittering,
@@ -9,21 +9,21 @@ import {
   StepSelectTravelPeriod,
   StepSummary,
 } from './Steps';
-import { fetchPOST } from '../../api/fetch';
-import { formatDate } from '../../utils/date';
-import { hentSoknadState } from '../../context/soknadContextCommon';
-import { useSoknadContextUtland } from '../../context/soknadContextUtland';
+import { fetchPOST } from 'api/fetch';
+import { formatDate } from 'utils/date';
+import { hentSoknadState } from 'context/soknadContextCommon';
+import { useSoknadContextUtland } from 'context/soknadContextUtland';
 import {
   completeAndGoToNextStep,
   goToPreviousStep,
   setStepList,
   useStepWizard,
-} from '../../context/stepWizardContextV2';
+} from 'context/stepWizardContextV2';
 
-import SoknadUtland from '../../types/SoknadUtland';
-import { SøknadType } from '../../types/SoknadContext';
-import { useDebounceLagreSoknad } from '../../hooks/useDebounceLagreSoknad';
-import { updateSøknadData } from '../../context/soknadContextCommon';
+import SoknadUtland from 'types/SoknadUtland';
+import { SøknadType } from 'types/SoknadContext';
+import { useDebounceLagreSoknad } from 'hooks/useDebounceLagreSoknad';
+import { updateSøknadData } from 'context/soknadContextCommon';
 
 export enum StepNames {
   DESTINATION = 'DESTINATION',
