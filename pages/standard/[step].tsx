@@ -44,6 +44,7 @@ import { GetServerSidePropsResult, NextPageContext } from 'next';
 import { getAccessToken } from 'auth/accessToken';
 import { getSøker } from '../api/oppslag/soeker';
 import { lesBucket } from '../api/buckets/les';
+import { isLabs } from 'utils/environments';
 
 interface PageProps {
   søker: SokerOppslagState;
@@ -237,7 +238,7 @@ export const getServerSideProps = beskyttetSide(
     const søker = await getSøker(bearerToken);
     const mellomlagretSøknad = await lesBucket('STANDARD', bearerToken);
 
-    if (!mellomlagretSøknad.lagretStepList) {
+    if (!mellomlagretSøknad.lagretStepList && !isLabs()) {
       return {
         redirect: {
           destination: '/standard',
