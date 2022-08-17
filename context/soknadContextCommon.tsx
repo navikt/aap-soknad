@@ -122,11 +122,6 @@ export async function slettLagretSoknadState<SoknadStateType>(
       method: 'DELETE',
     }
   );
-  deleteResponse?.ok &&
-    dispatch({
-      type: SoknadActionKeys.SET_STATE_FROM_CACHE,
-      payload: soknadContextInititalState,
-    });
   return !!deleteResponse?.ok;
 }
 

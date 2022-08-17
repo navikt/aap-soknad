@@ -16,7 +16,6 @@ interface Props {
   onDelete: () => Promise<any>;
   nextIsLoading?: boolean;
   focusOnErrors?: boolean;
-  onStartNySøknad?: () => void;
   errors: FieldErrors;
 }
 
@@ -40,7 +39,9 @@ export const LagreModal = ({ isOpen, onClose }: LagreModalProps) => {
             type="button"
             onClick={() => {
               if (window?.location) {
-                window.location.href = formatMessage('applinks.dineSaker');
+                window.location.href = formatMessage('applinks.dineSaker', {
+                  navhostname: process.env.NEXT_PUBLIC_NAV_HOSTNAME_URL,
+                });
               }
             }}
           >
@@ -61,7 +62,6 @@ interface SlettModalProps {
   slettSøknadSuccess: boolean;
   isDeletingSøknad: boolean;
   slettSøknadOgAvbryt: () => void;
-  startNySøknad: () => void;
 }
 export const SlettModal = ({
   isOpen,
@@ -69,7 +69,6 @@ export const SlettModal = ({
   slettSøknadSuccess,
   isDeletingSøknad,
   slettSøknadOgAvbryt,
-  startNySøknad,
 }: SlettModalProps) => {
   const { formatMessage } = useFeatureToggleIntl();
   return (
@@ -114,14 +113,27 @@ export const SlettModal = ({
                 onClick={() => {
                   if (window?.location) {
                     window.location.href = formatMessage('applinks.dittNav', {
-                      hostname: process.env.NAV_HOSTNAME_URL,
+                      navhostname: process.env.NEXT_PUBLIC_NAV_HOSTNAME_URL,
                     });
                   }
                 }}
               >
                 {formatMessage('avbrytOgSlettModal.lukkButtonText')}
               </Button>
-              <Button variant="tertiary" type="button" onClick={() => startNySøknad()}>
+              <Button
+                variant="tertiary"
+                type="button"
+                onClick={() => {
+                  if (window?.location) {
+                    window.location.href =
+                      process.env.NEXT_PUBLIC_ENVIRONMENT === 'localhost'
+                        ? `http://localhost:3000/aap/soknad/standard`
+                        : formatMessage('applinks.standardSoknadForside', {
+                            navhostname: process.env.NEXT_PUBLIC_NAV_HOSTNAME_URL,
+                          });
+                  }
+                }}
+              >
                 {formatMessage('avbrytOgSlettModal.sendNyButtonText')}
               </Button>
             </div>
@@ -141,10 +153,7 @@ const SøknadFormWrapper = ({
   onDelete,
   errors,
   nextIsLoading = false,
-  onStartNySøknad,
 }: Props) => {
-  //const navigate = useNavigate();
-
   const { formatMessage } = useFeatureToggleIntl();
   const [showLagreModal, setShowLagreModal] = useState<boolean>(false);
   const [showAvbrytModal, setShowAvbrytModal] = useState<boolean>(false);
@@ -154,7 +163,6 @@ const SøknadFormWrapper = ({
     try {
       setIsSlettingSøknad(true);
       await onDelete();
-      // await slettLagretSoknadState(søknadDispatch, søknadState);
       setIsSlettingSøknad(false);
       setSlettSøknadSuccess(true);
     } catch (err) {
@@ -211,9 +219,6 @@ const SøknadFormWrapper = ({
         slettSøknadSuccess={slettSøknadSuccess}
         isDeletingSøknad={isSlettingSøknad}
         slettSøknadOgAvbryt={() => slettSøknadOgAvbryt()}
-        startNySøknad={() =>
-          onStartNySøknad ? onStartNySøknad() : console.log('navigate is not implemented')
-        }
       />
     </>
   );
