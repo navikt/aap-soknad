@@ -8,7 +8,7 @@ import OppsummeringBarn from './OppsummeringBarn/OppsummeringBarn';
 import { isNonEmptyPeriode } from 'utils/periode';
 import OppsummeringPeriode from './OppsummeringPeriode/OppsummeringPeriode';
 import OppsummeringKontaktinfo from './OppsummeringKontaktinfo/OppsummeringKontaktinfo';
-import { getFullAdresse, getFulltNavn, useSokerOppslag } from 'context/sokerOppslagContext';
+import { getFullAdresse, getFulltNavn } from 'context/sokerOppslagContext';
 import OppsummeringUtenlandsopphold from './OppsummeringUtenlandsopphold/OppsummeringUtenlandsopphold';
 import OppsummeringBehandler from './OppsummeringBehandler/OppsummeringBehandler';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -32,7 +32,6 @@ const Oppsummering = ({ onBackClick, onSubmitSoknad }: OppsummeringProps) => {
 
   const { søknadState, søknadDispatch } = useSoknadContextStandard();
   const { stepWizardDispatch } = useStepWizard();
-  const { fastlege } = useSokerOppslag();
   const schema = yup.object().shape({});
   const {
     control,
@@ -189,7 +188,7 @@ const Oppsummering = ({ onBackClick, onSubmitSoknad }: OppsummeringProps) => {
                 <BodyShort>{getFulltNavn(behandler.navn)}</BodyShort>
                 <BodyShort>{behandler.kontaktinformasjon.kontor}</BodyShort>
                 <BodyShort>{getFullAdresse(behandler.kontaktinformasjon.adresse)}</BodyShort>
-                <BodyShort>{`Telefon: ${fastlege?.telefon}`}</BodyShort>
+                <BodyShort>{`Telefon: ${behandler.kontaktinformasjon.telefon}`}</BodyShort>
                 <BodyShort>{`${formatMessage(
                   'søknad.oppsummering.helseopplysninger.informasjonOmFastlege'
                 )} ${behandler.erRegistrertFastlegeRiktig}`}</BodyShort>

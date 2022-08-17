@@ -62,6 +62,7 @@ export const mockSøker = {
     {
       type: 'FASTLEGE',
       navn: { fornavn: 'Nina Unni', etternavn: 'Borge' },
+      kategori: 'LEGE',
       kontaktinformasjon: {
         behandlerRef: 'd182f24b-ebca-4f44-bf86-65901ec6141b',
         kontor: 'ASKØY KOMMUNE SAMFUNNSMEDISINSK AVD ALMENNLEGETJENESTEN',

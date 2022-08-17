@@ -57,7 +57,7 @@ const Steps = ({ søker, mellomlagretSøknad }: PageProps) => {
   const { formatMessage } = useFeatureToggleIntl();
 
   const { søknadState, søknadDispatch } = useSoknadContextStandard();
-  const { oppslagDispatch, fastlege } = useSokerOppslag();
+  const { oppslagDispatch } = useSokerOppslag();
   const { currentStep, stepList, stepWizardDispatch } = useStepWizard();
   const debouncedLagre = useDebounceLagreSoknad<Soknad>();
 
@@ -69,10 +69,7 @@ const Steps = ({ søker, mellomlagretSøknad }: PageProps) => {
       }
       const oppslag = setSokerOppslagFraProps(søker, oppslagDispatch);
       if (oppslag?.søker?.barn) addBarnIfMissing(søknadDispatch, oppslag.søker.barn);
-      if (oppslag?.behandlere) {
-        // legg til fastlege fra props
-        addBehandlerIfMissing(søknadDispatch, søker.behandlere);
-      }
+      if (søker.behandlere) addBehandlerIfMissing(søknadDispatch, søker.behandlere);
     }
   }, []);
 
@@ -171,7 +168,6 @@ const Steps = ({ søker, mellomlagretSøknad }: PageProps) => {
               onNext={(data) => {
                 onNextStep(data);
               }}
-              fastlege={fastlege}
             />
           )}
           {step === '5' && (

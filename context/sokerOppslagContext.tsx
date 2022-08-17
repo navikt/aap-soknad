@@ -8,6 +8,7 @@ export const getFullAdresse = (adresse?: Adresse) =>
   `${adresse?.adressenavn} ${adresse?.husnummer}${adresse?.husbokstav ? adresse.husbokstav : ''}, ${
     adresse?.postnummer?.postnr
   } ${adresse?.postnummer?.poststed}`;
+
 interface DispatchSokerOppslagAction {
   payload?: any;
   error?: any;
@@ -72,17 +73,14 @@ export type KontaktInfoView = {
 };
 export type SokerOppslagState = {
   søker: Soker;
-  fastlege: Fastlege;
   behandlere: Array<OppslagBehandler>;
 };
 const søkerOppslagInitialValue = {
   barn: [],
 };
 type SokerOppslagContextState = {
-  // oppslagState: SokerOppslagState;
   oppslagDispatch: Dispatch<DispatchSokerOppslagAction>;
   søker: SøkerView;
-  fastlege?: FastlegeView;
   kontaktInfo?: KontaktInfoView;
 };
 const SokerOppslagContext = createContext<SokerOppslagContextState | undefined>(undefined);
@@ -103,20 +101,6 @@ interface Props {
 }
 function SokerOppslagProvider({ children }: Props) {
   const [state, dispatch] = useReducer(stateReducer, søkerOppslagInitialValue);
-  const fastlege: FastlegeView | undefined = useMemo(() => {
-    const fastlege = state?.behandlere?.find((e: any) => e?.type === 'FASTLEGE');
-    if (!fastlege) return;
-    return {
-      fulltNavn: getFulltNavn(fastlege?.navn),
-      originalNavn: fastlege?.navn,
-      legekontor: fastlege?.kontaktinformasjon?.kontor,
-      orgnummer: fastlege?.orgnummer,
-      behandlerRef: fastlege?.behandlerRef,
-      adresse: getFullAdresse(fastlege?.kontaktinformasjon?.adresse),
-      originalAdresse: fastlege?.kontaktinformasjon?.adresse,
-      telefon: fastlege?.kontaktinformasjon?.telefon,
-    };
-  }, [state]);
   const søker: SøkerView | undefined = useMemo(
     () => ({
       fulltNavn: getFulltNavn(state?.søker?.navn),
@@ -134,10 +118,8 @@ function SokerOppslagProvider({ children }: Props) {
   );
   const contextValue = useMemo(() => {
     return {
-      // oppslagState: state,
       oppslagDispatch: dispatch,
       søker,
-      fastlege,
       kontaktInfo,
     };
   }, [state, dispatch]);
@@ -145,14 +127,6 @@ function SokerOppslagProvider({ children }: Props) {
     <SokerOppslagContext.Provider value={contextValue}>{children}</SokerOppslagContext.Provider>
   );
 }
-
-export const hentSokerOppslag = async (dispatch: Dispatch<DispatchSokerOppslagAction>) => {
-  const oppslag: SokerOppslagState = await fetch('/aap/soknad-api/oppslag/soeker').then((res) =>
-    res.ok ? res.json() : undefined
-  );
-  if (oppslag) dispatch({ type: 'SET_SOKER_OPPSLAG', payload: oppslag });
-  return oppslag;
-};
 
 export const setSokerOppslagFraProps = (
   oppslag: SokerOppslagState,

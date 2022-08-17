@@ -23,13 +23,12 @@ interface Props {
   onBackClick: () => void;
   onNext: (data: any) => void;
   defaultValues?: GenericSoknadContextState<Soknad>;
-  fastlege?: FastlegeView;
 }
 const REGISTRERTE_BEHANDLERE = 'registrerteBehandlere';
 const ANDRE_BEHANDLERE = 'andreBehandlere';
 const RIKTIG_FASTLEGE = 'erRegistrertFastlegeRiktig';
 
-export const Behandlere = ({ onBackClick, onNext, defaultValues, fastlege }: Props) => {
+export const Behandlere = ({ onBackClick, onNext, defaultValues }: Props) => {
   const { formatMessage } = useFeatureToggleIntl();
 
   const schema = yup.object().shape({});
@@ -186,14 +185,6 @@ export const Behandlere = ({ onBackClick, onNext, defaultValues, fastlege }: Pro
               )}
             </div>
           ))}
-
-          {!fastlege ? (
-            <BodyLong>
-              {formatMessage('søknad.helseopplysninger.registrertFastlege.ingenFastlege')}
-            </BodyLong>
-          ) : (
-            <></>
-          )}
         </div>
         <Heading size={'small'} level={'3'}>
           {formatMessage('søknad.helseopplysninger.annenBehandler.title')}
