@@ -104,7 +104,7 @@ export interface Soknad {
   begrunnelse?: string;
   yrkesskade?: Yrkesskade;
   medlemskap?: Medlemskap;
-  behandlere?: Behandler[];
+  manuelleBehandlere?: Behandler[];
   student?: Student;
   andreUtbetalinger?: AndreUtbetalinger;
   barnetillegg?: Barn[];

@@ -68,6 +68,9 @@ const Steps = ({ søker, mellomlagretSøknad }: PageProps) => {
       }
       const oppslag = setSokerOppslagFraProps(søker, oppslagDispatch);
       if (oppslag?.søker?.barn) addBarnIfMissing(søknadDispatch, oppslag.søker.barn);
+      if (oppslag?.behandlere) {
+        // legg til fastlege fra props
+      }
     }
   }, []);
 

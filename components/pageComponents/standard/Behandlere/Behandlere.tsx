@@ -25,7 +25,7 @@ interface Props {
   defaultValues?: GenericSoknadContextState<Soknad>;
   fastlege?: FastlegeView;
 }
-const BEHANDLERE = 'behandlere';
+const BEHANDLERE = 'manuelleBehandlere';
 const RIKTIG_FASTLEGE = 'erRegistrertFastlegeRiktig';
 
 export const Behandlere = ({ onBackClick, onNext, defaultValues, fastlege }: Props) => {
@@ -42,7 +42,7 @@ export const Behandlere = ({ onBackClick, onNext, defaultValues, fastlege }: Pro
   } = useForm<{ [BEHANDLERE]: Array<Behandler>; [RIKTIG_FASTLEGE]: JaEllerNei }>({
     resolver: yupResolver(schema),
     defaultValues: {
-      [BEHANDLERE]: defaultValues?.søknad?.behandlere,
+      [BEHANDLERE]: defaultValues?.søknad?.manuelleBehandlere,
     },
   });
 

@@ -190,7 +190,7 @@ const Oppsummering = ({ onBackClick, onSubmitSoknad }: OppsummeringProps) => {
               <BodyShort>{fastlege?.adresse}</BodyShort>
               <BodyShort>{`Telefon: ${fastlege?.telefon}`}</BodyShort>
             </article>
-            {søknadState?.søknad?.behandlere?.map((behandler) => (
+            {søknadState?.søknad?.manuelleBehandlere?.map((behandler) => (
               <OppsummeringBehandler key={behandler.id} behandler={behandler} />
             ))}
           </>

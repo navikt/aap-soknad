@@ -30,7 +30,7 @@ export interface SøknadBackendState {
     kommeTilbake?: 'JA' | 'NEI' | 'VET_IKKE';
     vedlegg?: Array<string>;
   };
-  behandlere: Array<Behandler>;
+  manuelleBehandlere: Array<BehandlerBackendState>;
   yrkesskadeType?: 'JA' | 'NEI' | 'VET_IKKE';
   utbetalinger: {
     fraArbeidsgiver?: boolean;
@@ -56,7 +56,7 @@ export interface SøknadBackendState {
   tilleggsopplysninger?: string;
 }
 
-interface Behandler {
+export interface BehandlerBackendState {
   type: 'FASTLEGE' | 'ANNEN_BEHANDLER';
   navn: { fornavn?: string; mellomnavn?: string; etternavn?: string };
   kontaktinformasjon: {

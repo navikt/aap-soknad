@@ -5,7 +5,7 @@ import {
 } from 'components/pageComponents/standard/AndreUtbetalinger/AndreUtbetalinger';
 import { FastlegeView } from 'context/sokerOppslagContext';
 import { Soknad, Behandler } from 'types/Soknad';
-import { SøknadBackendState } from 'types/SoknadBackendState';
+import { BehandlerBackendState, SøknadBackendState } from 'types/SoknadBackendState';
 import { formatDate } from './date';
 
 export type SøknadsType = 'UTLAND' | 'STANDARD';
@@ -69,8 +69,8 @@ export const mapSøknadToBackend = (
   const ferieType = getFerieType(søknad?.ferie?.skalHaFerie, søknad?.ferie?.ferieType);
   const mappedFastlege = mapFastlege(fastlege);
 
-  const behandlere = mappedFastlege.concat(
-    søknad?.behandlere?.map((behandler) => {
+  const manuelleBehandlere: BehandlerBackendState[] =
+    søknad?.manuelleBehandlere?.map((behandler) => {
       return {
         type: 'ANNEN_BEHANDLER',
         navn: {
@@ -89,8 +89,7 @@ export const mapSøknadToBackend = (
           },
         },
       };
-    }) ?? []
-  );
+    }) ?? [];
 
   return {
     startDato: {
@@ -135,7 +134,7 @@ export const mapSøknadToBackend = (
           }
         : {}),
     },
-    behandlere,
+    manuelleBehandlere,
     yrkesskadeType: getJaNeiVetIkke(søknad?.yrkesskade),
     utbetalinger: {
       ...(søknad?.andreUtbetalinger?.lønn
