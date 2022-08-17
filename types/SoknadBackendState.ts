@@ -68,4 +68,5 @@ export interface BehandlerBackendState {
     adresse?: Adresse;
     telefon?: string;
   };
+  erRegistrertFastlegeRiktig?: boolean;
 }

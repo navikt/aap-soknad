@@ -8,7 +8,7 @@ import OppsummeringBarn from './OppsummeringBarn/OppsummeringBarn';
 import { isNonEmptyPeriode } from 'utils/periode';
 import OppsummeringPeriode from './OppsummeringPeriode/OppsummeringPeriode';
 import OppsummeringKontaktinfo from './OppsummeringKontaktinfo/OppsummeringKontaktinfo';
-import { useSokerOppslag } from 'context/sokerOppslagContext';
+import { getFullAdresse, getFulltNavn, useSokerOppslag } from 'context/sokerOppslagContext';
 import OppsummeringUtenlandsopphold from './OppsummeringUtenlandsopphold/OppsummeringUtenlandsopphold';
 import OppsummeringBehandler from './OppsummeringBehandler/OppsummeringBehandler';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -181,16 +181,22 @@ const Oppsummering = ({ onBackClick, onSubmitSoknad }: OppsummeringProps) => {
           onEdit={() => editStep(StepNames.FASTLEGE)}
         >
           <>
-            <article>
-              <Heading size={'small'} level={'3'}>
-                {formatMessage('søknad.oppsummering.helseopplysninger.fastlege')}
-              </Heading>
-              <BodyShort>{fastlege?.fulltNavn}</BodyShort>
-              <BodyShort>{fastlege?.legekontor}</BodyShort>
-              <BodyShort>{fastlege?.adresse}</BodyShort>
-              <BodyShort>{`Telefon: ${fastlege?.telefon}`}</BodyShort>
-            </article>
-            {søknadState?.søknad?.manuelleBehandlere?.map((behandler) => (
+            {søknadState?.søknad?.registrerteBehandlere?.map((behandler) => (
+              <article>
+                <Heading size={'small'} level={'3'}>
+                  {formatMessage('søknad.oppsummering.helseopplysninger.fastlege')}
+                </Heading>
+                <BodyShort>{getFulltNavn(behandler.navn)}</BodyShort>
+                <BodyShort>{behandler.kontaktinformasjon.kontor}</BodyShort>
+                <BodyShort>{getFullAdresse(behandler.kontaktinformasjon.adresse)}</BodyShort>
+                <BodyShort>{`Telefon: ${fastlege?.telefon}`}</BodyShort>
+                <BodyShort>{`${formatMessage(
+                  'søknad.oppsummering.helseopplysninger.informasjonOmFastlege'
+                )} ${behandler.erRegistrertFastlegeRiktig}`}</BodyShort>
+              </article>
+            ))}
+
+            {søknadState?.søknad?.andreBehandlere?.map((behandler) => (
               <OppsummeringBehandler key={behandler.id} behandler={behandler} />
             ))}
           </>

@@ -6,6 +6,7 @@ import { Relasjon } from 'components/pageComponents/standard/Barnetillegg/AddBar
 import { JaEllerNei, JaNeiVetIkke } from './Generic';
 import { AVBRUTT_STUDIE_VEDLEGG } from 'components/pageComponents/standard/Student/Student';
 import { BehandlerBackendState } from './SoknadBackendState';
+import { OppslagBehandler } from 'context/sokerOppslagContext';
 
 export type FieldAndLabel<T> = {
   label?: string;
@@ -45,7 +46,7 @@ export type Behandler = {
   telefon: string;
   id: string;
 };
-export interface RegistrertBehandler extends BehandlerBackendState {
+export interface RegistrertBehandler extends OppslagBehandler {
   erRegistrertFastlegeRiktig?: JaEllerNei;
 }
 type Student = {
@@ -109,7 +110,7 @@ export interface Soknad {
   yrkesskade?: Yrkesskade;
   medlemskap?: Medlemskap;
   registrerteBehandlere?: RegistrertBehandler[];
-  manuelleBehandlere?: Behandler[];
+  andreBehandlere?: Behandler[];
   student?: Student;
   andreUtbetalinger?: AndreUtbetalinger;
   barnetillegg?: Barn[];

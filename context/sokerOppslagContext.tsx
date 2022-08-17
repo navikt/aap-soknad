@@ -1,5 +1,13 @@
 import React, { createContext, Dispatch, ReactNode, useReducer, useContext, useMemo } from 'react';
 
+export const getFulltNavn = (navn?: Navn) =>
+  `${navn?.fornavn || ''}${navn?.mellomnavn ? ` ${navn?.mellomnavn}` : ''} ${
+    navn?.etternavn || ''
+  }`;
+export const getFullAdresse = (adresse?: Adresse) =>
+  `${adresse?.adressenavn} ${adresse?.husnummer}${adresse?.husbokstav ? adresse.husbokstav : ''}, ${
+    adresse?.postnummer?.postnr
+  } ${adresse?.postnummer?.poststed}`;
 interface DispatchSokerOppslagAction {
   payload?: any;
   error?: any;
@@ -94,14 +102,6 @@ interface Props {
   children: ReactNode;
 }
 function SokerOppslagProvider({ children }: Props) {
-  const getFulltNavn = (navn: Navn) =>
-    `${navn?.fornavn || ''}${navn?.mellomnavn ? ` ${navn?.mellomnavn}` : ''} ${
-      navn?.etternavn || ''
-    }`;
-  const getFullAdresse = (adresse: Adresse) =>
-    `${adresse?.adressenavn} ${adresse?.husnummer}${
-      adresse?.husbokstav ? adresse.husbokstav : ''
-    }, ${adresse?.postnummer?.postnr} ${adresse?.postnummer?.poststed}`;
   const [state, dispatch] = useReducer(stateReducer, søkerOppslagInitialValue);
   const fastlege: FastlegeView | undefined = useMemo(() => {
     const fastlege = state?.behandlere?.find((e: any) => e?.type === 'FASTLEGE');

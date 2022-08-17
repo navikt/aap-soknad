@@ -1,9 +1,9 @@
 import { Alert, Label, BodyLong, BodyShort, Button, Heading, Radio } from '@navikt/ds-react';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
-import { FastlegeView } from 'context/sokerOppslagContext';
+import { FastlegeView, getFullAdresse, getFulltNavn } from 'context/sokerOppslagContext';
 import { Add } from '@navikt/ds-icons';
-import { Soknad, Behandler } from 'types/Soknad';
+import { Soknad, Behandler, RegistrertBehandler } from 'types/Soknad';
 import * as yup from 'yup';
 import { useStepWizard } from 'context/stepWizardContextV2';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -25,7 +25,8 @@ interface Props {
   defaultValues?: GenericSoknadContextState<Soknad>;
   fastlege?: FastlegeView;
 }
-const BEHANDLERE = 'manuelleBehandlere';
+const REGISTRERTE_BEHANDLERE = 'registrerteBehandlere';
+const ANDRE_BEHANDLERE = 'andreBehandlere';
 const RIKTIG_FASTLEGE = 'erRegistrertFastlegeRiktig';
 
 export const Behandlere = ({ onBackClick, onNext, defaultValues, fastlege }: Props) => {
@@ -39,16 +40,20 @@ export const Behandlere = ({ onBackClick, onNext, defaultValues, fastlege }: Pro
     control,
     handleSubmit,
     formState: { errors },
-  } = useForm<{ [BEHANDLERE]: Array<Behandler>; [RIKTIG_FASTLEGE]: JaEllerNei }>({
+  } = useForm<{
+    [REGISTRERTE_BEHANDLERE]: Array<RegistrertBehandler>;
+    [ANDRE_BEHANDLERE]: Array<Behandler>;
+  }>({
     resolver: yupResolver(schema),
     defaultValues: {
-      [BEHANDLERE]: defaultValues?.søknad?.manuelleBehandlere,
+      [REGISTRERTE_BEHANDLERE]: defaultValues?.søknad?.registrerteBehandlere,
+      [ANDRE_BEHANDLERE]: defaultValues?.søknad?.andreBehandlere,
     },
   });
 
   const debouncedLagre = useDebounceLagreSoknad<Soknad>();
   const allFields = watch();
-  const erRegistrertFastlegeRiktig = watch(RIKTIG_FASTLEGE);
+
   useEffect(() => {
     debouncedLagre(søknadState, stepList, allFields);
   }, [allFields]);
@@ -57,14 +62,27 @@ export const Behandlere = ({ onBackClick, onNext, defaultValues, fastlege }: Pro
     undefined
   );
 
+  const { fields: registrertBehandlerFields, update: registrertBehandlerUpdate } = useFieldArray({
+    name: REGISTRERTE_BEHANDLERE,
+    control,
+  });
+
   const { fields, append, remove, update } = useFieldArray({
-    name: BEHANDLERE,
+    name: ANDRE_BEHANDLERE,
     control,
   });
   const selectedBehandler = useMemo(() => {
     if (selectedBehandlerIndex === undefined) return undefined;
     return fields[selectedBehandlerIndex];
   }, [selectedBehandlerIndex, fields]);
+
+  const watchFieldArray = watch(REGISTRERTE_BEHANDLERE);
+  const controlledFields = registrertBehandlerFields.map((field, index) => {
+    return {
+      ...field,
+      ...watchFieldArray[index],
+    };
+  });
 
   const editNyBehandler = (index: number) => {
     setSelectedBehandlerIndex(index);
@@ -117,41 +135,42 @@ export const Behandlere = ({ onBackClick, onNext, defaultValues, fastlege }: Pro
           <Heading size={'small'} level={'3'}>
             {formatMessage('søknad.helseopplysninger.registrertFastlege.title')}
           </Heading>
-          {!fastlege ? (
+          {controlledFields.length === 0 && (
             <BodyLong>
               {formatMessage('søknad.helseopplysninger.registrertFastlege.ingenFastlege')}
             </BodyLong>
-          ) : (
-            <>
+          )}
+          {controlledFields.map((field, index) => (
+            <div key={field.id}>
               <dl className={classes?.fastLege}>
                 <dt>
                   <Label>{formatMessage('søknad.helseopplysninger.registrertFastlege.navn')}</Label>
                 </dt>
-                <dl>{fastlege?.fulltNavn}</dl>
+                <dl>{getFulltNavn(field.navn)}</dl>
                 <dt>
                   <Label>
                     {formatMessage('søknad.helseopplysninger.registrertFastlege.legekontor')}
                   </Label>
                 </dt>
-                <dl>{fastlege?.legekontor}</dl>
+                <dl>{field.kontaktinformasjon.kontor}</dl>
                 <dt>
                   <Label>
                     {formatMessage('søknad.helseopplysninger.registrertFastlege.adresse')}
                   </Label>
                 </dt>
-                <dl>{fastlege?.adresse}</dl>
+                <dl>{getFullAdresse(field.kontaktinformasjon.adresse)}</dl>
                 <dt>
                   <Label>
                     {formatMessage('søknad.helseopplysninger.registrertFastlege.telefon')}
                   </Label>
                 </dt>
-                <dl>{fastlege?.telefon}</dl>
+                <dl>{field.kontaktinformasjon.telefon}</dl>
               </dl>
               <RadioGroupWrapper
-                name={RIKTIG_FASTLEGE}
+                name={`${REGISTRERTE_BEHANDLERE}.${index}.${RIKTIG_FASTLEGE}`}
                 legend={formatMessage(`søknad.helseopplysninger.erRegistrertFastlegeRiktig.label`)}
                 control={control}
-                error={errors?.[RIKTIG_FASTLEGE]?.message}
+                error={errors?.[REGISTRERTE_BEHANDLERE]?.[index]?.[RIKTIG_FASTLEGE]?.message}
               >
                 <Radio value={JaEllerNei.JA}>
                   <BodyShort>{JaEllerNei.JA}</BodyShort>
@@ -160,12 +179,20 @@ export const Behandlere = ({ onBackClick, onNext, defaultValues, fastlege }: Pro
                   <BodyShort>{JaEllerNei.NEI}</BodyShort>
                 </Radio>
               </RadioGroupWrapper>
-              {erRegistrertFastlegeRiktig === JaEllerNei.NEI && (
+              {field.erRegistrertFastlegeRiktig === JaEllerNei.NEI && (
                 <Alert variant={'info'}>
                   {formatMessage('søknad.helseopplysninger.erRegistrertFastlegeRiktig.alertInfo')}
                 </Alert>
               )}
-            </>
+            </div>
+          ))}
+
+          {!fastlege ? (
+            <BodyLong>
+              {formatMessage('søknad.helseopplysninger.registrertFastlege.ingenFastlege')}
+            </BodyLong>
+          ) : (
+            <></>
           )}
         </div>
         <Heading size={'small'} level={'3'}>

@@ -4,7 +4,7 @@ import {
   StønadType,
 } from 'components/pageComponents/standard/AndreUtbetalinger/AndreUtbetalinger';
 import { FastlegeView } from 'context/sokerOppslagContext';
-import { Soknad, Behandler } from 'types/Soknad';
+import { Soknad } from 'types/Soknad';
 import { BehandlerBackendState, SøknadBackendState } from 'types/SoknadBackendState';
 import { formatDate } from './date';
 
@@ -43,34 +43,19 @@ const jaNeiToBoolean = (value?: string) => {
   return undefined;
 };
 
-const mapFastlege = (fastlege?: FastlegeView): Behandler[] => {
-  if (fastlege) {
-    return [
-      {
-        type: 'FASTLEGE',
-        navn: fastlege.originalNavn,
-        kontaktinformasjon: {
-          behandlerRef: fastlege.behandlerRef,
-          kontor: fastlege.legekontor,
-          orgnummer: fastlege.orgnummer,
-          telefon: fastlege.telefon,
-          adresse: fastlege.originalAdresse,
-        },
-      },
-    ];
-  }
-  return [];
-};
-
 export const mapSøknadToBackend = (
   søknad?: Soknad,
   fastlege?: FastlegeView
 ): SøknadBackendState => {
   const ferieType = getFerieType(søknad?.ferie?.skalHaFerie, søknad?.ferie?.ferieType);
-  const mappedFastlege = mapFastlege(fastlege);
+  const registrerteBehandlere: BehandlerBackendState[] =
+    søknad?.registrerteBehandlere?.map((behandler) => ({
+      ...behandler,
+      erRegistrertFastlegeRiktig: jaNeiToBoolean(behandler.erRegistrertFastlegeRiktig),
+    })) ?? [];
 
   const andreBehandlere: BehandlerBackendState[] =
-    søknad?.manuelleBehandlere?.map((behandler) => {
+    søknad?.andreBehandlere?.map((behandler) => {
       return {
         type: 'SYKMELDER',
         navn: {
@@ -134,6 +119,7 @@ export const mapSøknadToBackend = (
           }
         : {}),
     },
+    registrerteBehandlere,
     andreBehandlere,
     yrkesskadeType: getJaNeiVetIkke(søknad?.yrkesskade),
     utbetalinger: {
