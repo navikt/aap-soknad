@@ -4,9 +4,9 @@ import { SøknadsType } from 'utils/api';
 export const lesCache = async () => {
   try {
     return await fs.readFile('.bucket.cache', 'utf8');
-  } catch (err) {
-    console.log('err', err);
-    return undefined;
+  } catch (err: any) {
+    if (err.code === 'ENOENT') return await fs.writeFile('.bucket.cache', '');
+    else return undefined;
   }
 };
 
