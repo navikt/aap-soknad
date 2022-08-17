@@ -10,7 +10,7 @@ type Navn = {
   mellomnavn: string;
   etternavn: string;
 };
-type Adresse = {
+export type Adresse = {
   adressenavn?: string;
   husbokstav?: string;
   husnummer?: string;
@@ -24,6 +24,17 @@ export type OppslagBarn = {
   fødselsdato: string;
   fnr: string;
 };
+export interface OppslagBehandler {
+  type: 'FASTLEGE' | 'SYKMELDER';
+  navn: Navn;
+  kategori: 'LEGE' | 'FYSIOTERAPEUT' | 'KIROPRAKTOR' | 'MANUELLTERAPEUT' | 'TANNLEGE';
+  kontaktinformasjon: {
+    kontor: string;
+    orgnummer: string;
+    telefon: string;
+    adresse: Adresse;
+  };
+}
 export type Soker = {
   navn: Navn;
   fødseldato: string;
@@ -54,6 +65,7 @@ export type KontaktInfoView = {
 export type SokerOppslagState = {
   søker: Soker;
   fastlege: Fastlege;
+  behandlere: Array<OppslagBehandler>;
 };
 const søkerOppslagInitialValue = {
   barn: [],

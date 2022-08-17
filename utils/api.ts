@@ -69,10 +69,10 @@ export const mapSøknadToBackend = (
   const ferieType = getFerieType(søknad?.ferie?.skalHaFerie, søknad?.ferie?.ferieType);
   const mappedFastlege = mapFastlege(fastlege);
 
-  const manuelleBehandlere: BehandlerBackendState[] =
+  const andreBehandlere: BehandlerBackendState[] =
     søknad?.manuelleBehandlere?.map((behandler) => {
       return {
-        type: 'ANNEN_BEHANDLER',
+        type: 'SYKMELDER',
         navn: {
           fornavn: behandler.firstname,
           etternavn: behandler.lastname,
@@ -134,7 +134,7 @@ export const mapSøknadToBackend = (
           }
         : {}),
     },
-    manuelleBehandlere,
+    andreBehandlere,
     yrkesskadeType: getJaNeiVetIkke(søknad?.yrkesskade),
     utbetalinger: {
       ...(søknad?.andreUtbetalinger?.lønn

@@ -5,6 +5,7 @@ import {
 import { Relasjon } from 'components/pageComponents/standard/Barnetillegg/AddBarnModal';
 import { JaEllerNei, JaNeiVetIkke } from './Generic';
 import { AVBRUTT_STUDIE_VEDLEGG } from 'components/pageComponents/standard/Student/Student';
+import { BehandlerBackendState } from './SoknadBackendState';
 
 export type FieldAndLabel<T> = {
   label?: string;
@@ -44,6 +45,9 @@ export type Behandler = {
   telefon: string;
   id: string;
 };
+export interface RegistrertBehandler extends BehandlerBackendState {
+  erRegistrertFastlegeRiktig?: JaEllerNei;
+}
 type Student = {
   erStudent?: JaEllerNei;
   kommeTilbake?: JaNeiVetIkke;
@@ -104,6 +108,7 @@ export interface Soknad {
   begrunnelse?: string;
   yrkesskade?: Yrkesskade;
   medlemskap?: Medlemskap;
+  registrerteBehandlere?: RegistrertBehandler[];
   manuelleBehandlere?: Behandler[];
   student?: Student;
   andreUtbetalinger?: AndreUtbetalinger;

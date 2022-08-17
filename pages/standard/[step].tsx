@@ -16,6 +16,7 @@ import {
   SoknadContextProviderStandard,
   useSoknadContextStandard,
   addBarnIfMissing,
+  addBehandlerIfMissing,
 } from 'context/soknadContextStandard';
 import {
   setSokerOppslagFraProps,
@@ -70,6 +71,7 @@ const Steps = ({ søker, mellomlagretSøknad }: PageProps) => {
       if (oppslag?.søker?.barn) addBarnIfMissing(søknadDispatch, oppslag.søker.barn);
       if (oppslag?.behandlere) {
         // legg til fastlege fra props
+        addBehandlerIfMissing(søknadDispatch, søker.behandlere);
       }
     }
   }, []);

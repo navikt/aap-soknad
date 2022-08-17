@@ -7,8 +7,8 @@ import {
   ProviderProps,
   SoknadActionKeys,
 } from './soknadContextCommon';
-import { Soknad, Vedlegg } from 'types/Soknad';
-import { OppslagBarn } from './sokerOppslagContext';
+import { RegistrertBehandler, Soknad, Vedlegg } from 'types/Soknad';
+import { OppslagBarn, OppslagBehandler } from './sokerOppslagContext';
 
 const soknadContextInititalStateStandard = {
   ...soknadContextInititalState,
@@ -62,6 +62,20 @@ function soknadReducerStandard(
         søknad: {
           ...state.søknad,
           barnetillegg: [...barn, ...newBarn],
+        },
+      };
+    }
+    case SoknadActionKeys.ADD_BEHANDLER_IF_MISSING: {
+      console.log('behandler', action.payload);
+      const registrerteBehandlere: RegistrertBehandler[] = action.payload.filter(
+        (behandler) => behandler.type === 'FASTLEGE'
+      );
+
+      return {
+        ...state,
+        søknad: {
+          ...state.søknad,
+          registrerteBehandlere: registrerteBehandlere,
         },
       };
     }
@@ -125,6 +139,13 @@ export const useSoknadContextStandard = () => {
 
 export const addBarnIfMissing = (dispatch: Dispatch<SoknadAction<Soknad>>, data: OppslagBarn[]) => {
   dispatch({ type: SoknadActionKeys.ADD_BARN_IF_MISSING, payload: data });
+};
+
+export const addBehandlerIfMissing = (
+  dispatch: Dispatch<SoknadAction<Soknad>>,
+  data: OppslagBehandler[]
+) => {
+  dispatch({ type: SoknadActionKeys.ADD_BEHANDLER_IF_MISSING, payload: data });
 };
 
 export const getVedleggUuidsFromSoknad = (søknad?: Soknad) => {
