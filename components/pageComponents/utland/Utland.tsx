@@ -1,4 +1,4 @@
-import { PageHeader } from '@navikt/ds-react';
+import PageHeader from 'components/PageHeader';
 import { Step, StepWizard } from 'components/StepWizard';
 import React, { useEffect, useState } from 'react';
 import { useFeatureToggleIntl } from 'hooks/useFeatureToggleIntl';

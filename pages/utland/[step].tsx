@@ -1,4 +1,4 @@
-import { PageHeader } from '@navikt/ds-react';
+import PageHeader from 'components/PageHeader';
 import { useRouter } from 'next/router';
 import React, { useEffect } from 'react';
 import { hentSoknadState, updateSøknadData } from 'context/soknadContextCommon';

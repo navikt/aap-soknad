@@ -1,4 +1,4 @@
-import { PageHeader } from '@navikt/ds-react';
+import PageHeader from 'components/PageHeader';
 import { useRouter } from 'next/router';
 import React, { useEffect } from 'react';
 import { setSoknadStateFraProps, SoknadActionKeys } from 'context/soknadContextCommon';
@@ -44,7 +44,6 @@ import { GetServerSidePropsResult, NextPageContext } from 'next';
 import { getAccessToken } from 'auth/accessToken';
 import { getSøker } from '../api/oppslag/soeker';
 import { lesBucket } from '../api/buckets/les';
-import { isLabs } from 'utils/environments';
 
 interface PageProps {
   søker: SokerOppslagState;

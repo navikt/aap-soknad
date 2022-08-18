@@ -1,4 +1,4 @@
-import { PageHeader } from '@navikt/ds-react';
+import PageHeader from 'components/PageHeader';
 import React from 'react';
 import { useSokerOppslag } from 'context/sokerOppslagContext';
 import { SoknadContextProviderStandard } from 'context/soknadContextStandard';
