@@ -1,6 +1,6 @@
 import { GenericSoknadContextState, RequiredVedlegg, SøknadType } from 'types/SoknadContext';
 import { Dispatch, ReactNode } from 'react';
-import { OppslagBarn } from 'context/sokerOppslagContext';
+import { OppslagBarn, OppslagBehandler } from 'context/sokerOppslagContext';
 
 export interface SoknadContextData<SoknadStateType> {
   søknadState: GenericSoknadContextState<SoknadStateType>;
@@ -27,6 +27,7 @@ export enum SoknadActionKeys {
   UPDATE_SOKNAD = 'UPDATE_SOKNAD',
   SET_CURRENT_STEP = 'SET_CURRENT_STEP',
   ADD_BARN_IF_MISSING = 'ADD_BARN_IF_MISSING',
+  ADD_BEHANDLER_IF_MISSING = 'ADD_BEHANDLER_IF_MISSING',
   ADD_VEDLEGG = 'ADD_VEDLEGG',
   REMOVE_VEDLEGG = 'REMOVE_VEDLEGG',
   ADD_SØKNAD_URL = 'ADD_SØKNAD_URL',
@@ -55,6 +56,10 @@ type AddBarnIfMissing = {
   type: SoknadActionKeys.ADD_BARN_IF_MISSING;
   payload: OppslagBarn[];
 };
+type AddBehandlerIfMissing = {
+  type: SoknadActionKeys.ADD_BEHANDLER_IF_MISSING;
+  payload: OppslagBehandler[];
+};
 type AddVedlegg = {
   type: SoknadActionKeys.ADD_VEDLEGG;
   payload: RequiredVedlegg[];
@@ -74,6 +79,7 @@ export type SoknadAction<SoknadStateType> =
   | UpdateSoknad<SoknadStateType>
   | SetCurrentStep
   | AddBarnIfMissing
+  | AddBehandlerIfMissing
   | AddVedlegg
   | RemoveVedlegg
   | AddSøknadUrl;

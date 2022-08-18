@@ -12,6 +12,7 @@ import { fetchPOST } from 'api/fetch';
 import { lesBucket } from 'pages/api/buckets/les';
 import { StepType } from 'components/StepWizard/Step';
 import { SØKNAD_CONTEXT_VERSION } from 'context/soknadContextCommon';
+import { isLabs } from 'utils/environments';
 interface PageProps {
   søker: SokerOppslagState;
 }
@@ -89,7 +90,7 @@ export const getServerSideProps = beskyttetSide(
     const activeStep = mellomlagretSøknad?.lagretStepList?.find((e: StepType) => e.active);
     const activeIndex = activeStep?.stepIndex;
 
-    if (activeIndex) {
+    if (activeIndex && !isLabs()) {
       return {
         redirect: {
           destination: `/standard/${activeIndex}`,

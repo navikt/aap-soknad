@@ -4,8 +4,8 @@ import {
   StønadType,
 } from 'components/pageComponents/standard/AndreUtbetalinger/AndreUtbetalinger';
 import { FastlegeView } from 'context/sokerOppslagContext';
-import { Soknad, Behandler } from 'types/Soknad';
-import { SøknadBackendState } from 'types/SoknadBackendState';
+import { Soknad } from 'types/Soknad';
+import { BehandlerBackendState, SøknadBackendState } from 'types/SoknadBackendState';
 import { formatDate } from './date';
 
 export type SøknadsType = 'UTLAND' | 'STANDARD';
@@ -43,36 +43,21 @@ const jaNeiToBoolean = (value?: string) => {
   return undefined;
 };
 
-const mapFastlege = (fastlege?: FastlegeView): Behandler[] => {
-  if (fastlege) {
-    return [
-      {
-        type: 'FASTLEGE',
-        navn: fastlege.originalNavn,
-        kontaktinformasjon: {
-          behandlerRef: fastlege.behandlerRef,
-          kontor: fastlege.legekontor,
-          orgnummer: fastlege.orgnummer,
-          telefon: fastlege.telefon,
-          adresse: fastlege.originalAdresse,
-        },
-      },
-    ];
-  }
-  return [];
-};
-
 export const mapSøknadToBackend = (
   søknad?: Soknad,
   fastlege?: FastlegeView
 ): SøknadBackendState => {
   const ferieType = getFerieType(søknad?.ferie?.skalHaFerie, søknad?.ferie?.ferieType);
-  const mappedFastlege = mapFastlege(fastlege);
+  const registrerteBehandlere: BehandlerBackendState[] =
+    søknad?.registrerteBehandlere?.map((behandler) => ({
+      ...behandler,
+      erRegistrertFastlegeRiktig: jaNeiToBoolean(behandler.erRegistrertFastlegeRiktig),
+    })) ?? [];
 
-  const behandlere = mappedFastlege.concat(
-    søknad?.behandlere?.map((behandler) => {
+  const andreBehandlere: BehandlerBackendState[] =
+    søknad?.andreBehandlere?.map((behandler) => {
       return {
-        type: 'ANNEN_BEHANDLER',
+        type: 'SYKMELDER',
         navn: {
           fornavn: behandler.firstname,
           etternavn: behandler.lastname,
@@ -89,8 +74,7 @@ export const mapSøknadToBackend = (
           },
         },
       };
-    }) ?? []
-  );
+    }) ?? [];
 
   return {
     startDato: {
@@ -135,7 +119,8 @@ export const mapSøknadToBackend = (
           }
         : {}),
     },
-    behandlere,
+    registrerteBehandlere,
+    andreBehandlere,
     yrkesskadeType: getJaNeiVetIkke(søknad?.yrkesskade),
     utbetalinger: {
       ...(søknad?.andreUtbetalinger?.lønn

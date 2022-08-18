@@ -16,6 +16,7 @@ import {
   SoknadContextProviderStandard,
   useSoknadContextStandard,
   addBarnIfMissing,
+  addBehandlerIfMissing,
 } from 'context/soknadContextStandard';
 import {
   setSokerOppslagFraProps,
@@ -43,6 +44,7 @@ import { GetServerSidePropsResult, NextPageContext } from 'next';
 import { getAccessToken } from 'auth/accessToken';
 import { getSøker } from '../api/oppslag/soeker';
 import { lesBucket } from '../api/buckets/les';
+import { isLabs } from 'utils/environments';
 
 interface PageProps {
   søker: SokerOppslagState;
@@ -56,7 +58,7 @@ const Steps = ({ søker, mellomlagretSøknad }: PageProps) => {
   const { formatMessage } = useFeatureToggleIntl();
 
   const { søknadState, søknadDispatch } = useSoknadContextStandard();
-  const { oppslagDispatch, fastlege } = useSokerOppslag();
+  const { oppslagDispatch } = useSokerOppslag();
   const { currentStep, stepList, stepWizardDispatch } = useStepWizard();
   const debouncedLagre = useDebounceLagreSoknad<Soknad>();
 
@@ -68,6 +70,7 @@ const Steps = ({ søker, mellomlagretSøknad }: PageProps) => {
       }
       const oppslag = setSokerOppslagFraProps(søker, oppslagDispatch);
       if (oppslag?.søker?.barn) addBarnIfMissing(søknadDispatch, oppslag.søker.barn);
+      if (søker.behandlere) addBehandlerIfMissing(søknadDispatch, søker.behandlere);
     }
   }, []);
 
@@ -166,7 +169,6 @@ const Steps = ({ søker, mellomlagretSøknad }: PageProps) => {
               onNext={(data) => {
                 onNextStep(data);
               }}
-              fastlege={fastlege}
             />
           )}
           {step === '5' && (

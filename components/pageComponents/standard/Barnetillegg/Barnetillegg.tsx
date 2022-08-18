@@ -216,7 +216,6 @@ export const Barnetillegg = ({ onBackClick, onNext, defaultValues }: Props) => {
         {fields.length > 0 && (
           <ul className={classes.barnList}>
             {fields.map((barn, index) => {
-              console.log('barn', barn);
               return (
                 <li key={barn?.id}>
                   <article className={classes.barneKort}>

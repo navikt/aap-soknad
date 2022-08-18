@@ -477,7 +477,8 @@
         "title": "Kontaktperson for helseopplysninger",
         "editText": "Endre informasjon om kontaktperson for helseopplysninger",
         "fastlege": "Fastlege",
-        "behandler": "Behandler"
+        "behandler": "Behandler",
+        "informasjonOmFastlege": "Er informasjonen om fastlegen din riktig?"
       },
       "barnetillegg": {
         "title": "Barnetillegg",
