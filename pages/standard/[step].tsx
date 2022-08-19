@@ -44,6 +44,7 @@ import { GetServerSidePropsResult, NextPageContext } from 'next';
 import { getAccessToken } from 'auth/accessToken';
 import { getSøker } from '../api/oppslag/soeker';
 import { lesBucket } from '../api/buckets/les';
+import { logSkjemaFullførtEvent, logSkjemastegFullførtEvent } from 'utils/amplitude';
 
 interface PageProps {
   søker: SokerOppslagState;
@@ -96,6 +97,7 @@ const Steps = ({ søker, mellomlagretSøknad }: PageProps) => {
 
       const postResponse = await postSøknad(søknad);
       if (postResponse?.ok) {
+        logSkjemaFullførtEvent();
         const url = postResponse?.data?.uri;
         søknadDispatch({ type: SoknadActionKeys.ADD_SØKNAD_URL, payload: url });
         router.push('kvittering');
@@ -123,6 +125,7 @@ const Steps = ({ søker, mellomlagretSøknad }: PageProps) => {
   };
 
   const onNextStep = async (data: any) => {
+    logSkjemastegFullførtEvent(currentStep.stepIndex ?? 0);
     updateSøknadData<Soknad>(søknadDispatch, data);
     completeAndGoToNextStep(stepWizardDispatch);
   };

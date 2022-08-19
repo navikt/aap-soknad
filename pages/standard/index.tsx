@@ -13,6 +13,7 @@ import { lesBucket } from 'pages/api/buckets/les';
 import { StepType } from 'components/StepWizard/Step';
 import { SØKNAD_CONTEXT_VERSION } from 'context/soknadContextCommon';
 import { isLabs } from 'utils/environments';
+import { logSkjemaStartetEvent } from 'utils/amplitude';
 interface PageProps {
   søker: SokerOppslagState;
 }
@@ -59,6 +60,7 @@ const Introduksjon = ({ søker }: PageProps) => {
   }, [søker, setSoker]);
 
   const startSoknad = async () => {
+    logSkjemaStartetEvent();
     await fetchPOST(
       `${process.env.NEXT_PUBLIC_TEMP_LAGRE_URL ?? '/aap/soknad-api/buckets/lagre/'}STANDARD`,
       {

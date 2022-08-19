@@ -25,3 +25,25 @@ export function logAmplitudeEvent(eventName: string, eventData?: Record<string, 
     }
   });
 }
+
+export function logSkjemaStartetEvent() {
+  logAmplitudeEvent('skjema startet', {
+    skjemanavn: 'aap-søknad-standard',
+    skjemaId: 'aap-søknad-standard',
+  });
+}
+
+export function logSkjemaFullførtEvent() {
+  logAmplitudeEvent('skjema fullført', {
+    skjemanavn: 'aap-søknad-standard',
+    skjemaId: 'aap-søknad-standard',
+  });
+}
+
+export function logSkjemastegFullførtEvent(steg: number) {
+  logAmplitudeEvent('skjemasteg fullført', {
+    skjemanavn: 'aap-søknad-standard',
+    skjemaId: 'aap-søknad-standard',
+    steg,
+  });
+}
