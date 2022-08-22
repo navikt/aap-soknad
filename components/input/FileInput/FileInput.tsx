@@ -124,7 +124,7 @@ const FileInput = ({
                 <FileSuccess color={'var(--navds-semantic-color-feedback-success-icon)'} />
               </div>
               <div>
-                <Link target={'_blank'} href={`/aap/vedleggvisning/${attachment?.vedleggId}`}>
+                <Link target={'_blank'} href={`/aap/soknad/vedlegg/${attachment?.vedleggId}`}>
                   {attachment?.name}
                 </Link>
                 <Detail>{attachment?.size}</Detail>
