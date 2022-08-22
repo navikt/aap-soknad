@@ -60,7 +60,6 @@
     "jest-axe": "^5.0.1",
     "jest-css-modules-transform": "^4.3.0",
     "msw": "^0.44.2",
-    "parcel": "2.5.0",
     "patch-package": "^6.4.7",
     "pino-pretty": "8.1.0",
     "prettier": "^2.5.1",
