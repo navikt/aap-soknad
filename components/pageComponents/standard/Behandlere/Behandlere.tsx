@@ -1,7 +1,7 @@
 import { Alert, Label, BodyLong, BodyShort, Button, Heading, Radio } from '@navikt/ds-react';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
-import { FastlegeView, getFullAdresse, getFulltNavn } from 'context/sokerOppslagContext';
+import { getFullAdresse, getFulltNavn } from 'context/sokerOppslagContext';
 import { Add } from '@navikt/ds-icons';
 import { Soknad, Behandler, RegistrertBehandler } from 'types/Soknad';
 import * as yup from 'yup';
@@ -197,7 +197,7 @@ export const Behandlere = ({ onBackClick, onNext, defaultValues }: Props) => {
             </Heading>
             <ul className={classes?.legeList}>
               {fields.map((field, index) => (
-                <li>
+                <li key={field.id}>
                   <BodyShort>
                     {field?.firstname} {field?.lastname}
                   </BodyShort>

@@ -1,7 +1,6 @@
 import { Accordion, BodyShort, Button, Heading, Label, Link } from '@navikt/ds-react';
 import { useForm } from 'react-hook-form';
 import ConfirmationPanelWrapper from 'components/input/ConfirmationPanelWrapper';
-import HeadingHelloName from 'components/async/HeadingHelloName';
 import { SøkerView } from 'context/sokerOppslagContext';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -17,11 +16,10 @@ const initVeiledning: VeiledningType = {
   veiledningConfirm: false,
 };
 interface VeiledningProps {
-  loading: boolean;
   søker: SøkerView;
   onSubmit: () => void;
 }
-export const Veiledning = ({ søker, loading, onSubmit }: VeiledningProps) => {
+export const Veiledning = ({ søker, onSubmit }: VeiledningProps) => {
   const { formatMessage } = useFeatureToggleIntl();
 
   const schema = yup.object().shape({
@@ -49,7 +47,9 @@ export const Veiledning = ({ søker, loading, onSubmit }: VeiledningProps) => {
       </header>
       <main className={classes?.veiledningContent}>
         <LucaGuidePanel>
-          <HeadingHelloName size={'medium'} level={'2'} name={søker?.fulltNavn} loading={loading} />
+          <Heading size="medium" level="2">
+            {formatMessage('søknad.veiledning.guide.title', { name: søker.fulltNavn })}
+          </Heading>
           <BodyShort spacing>{formatMessage('søknad.veiledning.guide.text1')}</BodyShort>
           <BodyShort spacing>{formatMessage('søknad.veiledning.guide.text2')}</BodyShort>
         </LucaGuidePanel>

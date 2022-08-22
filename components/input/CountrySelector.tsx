@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import countries from 'i18n-iso-countries';
 import SelectWrapper from './SelectWrapper';
 import { Control } from 'react-hook-form';
-import Soknad from 'types/Soknad';
+import { Soknad } from 'types/Soknad';
 
 // Support norwegian & english languages.
 countries.registerLocale(require('i18n-iso-countries/langs/en.json'));

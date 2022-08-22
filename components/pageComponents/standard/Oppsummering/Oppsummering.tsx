@@ -292,7 +292,7 @@ const Oppsummering = ({ onBackClick, onSubmitSoknad }: OppsummeringProps) => {
                 <>
                   <Label>{'Annet:'}</Label>
                   {søknadState?.søknad?.vedlegg?.annet?.map((vedleggFile) => (
-                    <BodyShort>{vedleggFile?.name}</BodyShort>
+                    <BodyShort key={vedleggFile.vedleggId}>{vedleggFile?.name}</BodyShort>
                   ))}
                 </>
               )}

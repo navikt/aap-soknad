@@ -75,7 +75,6 @@ const Introduksjon = ({ søker }: PageProps) => {
   return (
     <Veiledning
       søker={soker}
-      loading={false}
       onSubmit={async () => {
         await startSoknad();
         router.push('standard/1');
