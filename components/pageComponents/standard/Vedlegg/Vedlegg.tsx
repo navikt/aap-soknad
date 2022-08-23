@@ -169,11 +169,13 @@ const Vedlegg = ({ onBackClick, onNext, defaultValues }: Props) => {
         />
       )}
       {søknadState?.søknad?.manuelleBarn?.map((barn, index) => {
+        console.log('barn', barn);
         const requiredVedlegg = søknadState?.requiredVedlegg.find(
-          (e) => e?.type === `barn-${barn.id}`
+          (e) => e?.type === `barn-${barn.internId}`
         );
         return (
           <FieldArrayFileInput
+            key={barn.internId}
             control={control}
             name={`${MANUELLE_BARN}.${index}.vedlegg`}
             errors={errors}

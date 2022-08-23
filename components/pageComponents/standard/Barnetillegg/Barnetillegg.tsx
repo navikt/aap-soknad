@@ -24,6 +24,7 @@ import { deleteOpplastedeVedlegg, useSoknadContextStandard } from 'context/sokna
 import { useDebounceLagreSoknad } from 'hooks/useDebounceLagreSoknad';
 import { GenericSoknadContextState } from 'types/SoknadContext';
 import { formatDate } from 'utils/date';
+import { randomUUID } from 'crypto';
 
 interface Props {
   onBackClick: () => void;
@@ -157,6 +158,7 @@ export const Barnetillegg = ({ onBackClick, onNext, defaultValues }: Props) => {
   };
   const saveNyttBarn = (barn: ManuelleBarn) => {
     if (selectedBarn === undefined) {
+      barn.internId = crypto.randomUUID();
       manuelleBarnAppend({
         ...barn,
       });
@@ -164,7 +166,7 @@ export const Barnetillegg = ({ onBackClick, onNext, defaultValues }: Props) => {
         [
           {
             filterType: barn.relasjon,
-            type: `barn-${barn.id}`,
+            type: `barn-${barn.internId}`,
             description:
               barn.relasjon === Relasjon.FORELDER
                 ? `Fødselsattest eller adopsjonsbevis for: ${barn?.navn?.fornavn} ${barn?.navn?.etternavn}`

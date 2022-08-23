@@ -276,7 +276,7 @@ const Oppsummering = ({ onBackClick, onSubmitSoknad }: OppsummeringProps) => {
             })}
             {søknadState?.søknad?.manuelleBarn?.map((barn, i) => {
               const label = søknadState?.requiredVedlegg?.find(
-                (e) => e.type === `barn-${barn.id}`
+                (e) => e.type === `barn-${barn.internId}`
               )?.description;
               return (
                 <div key={i}>
