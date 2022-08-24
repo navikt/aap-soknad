@@ -104,7 +104,7 @@ export const mapSøknadToBackend = (
             fom: formatDate(utenlandsopphold.fraDato, 'yyyy-MM-dd'),
             tom: formatDate(utenlandsopphold.tilDato, 'yyyy-MM-dd'),
           },
-          arbeidet: utenlandsopphold.iArbeid,
+          arbeidet: jaNeiToBoolean(utenlandsopphold.iArbeid),
           id: utenlandsopphold.utenlandsId,
           landsNavn: '', // TODO: Hente navn fra landkode
         })) ?? [],
@@ -112,12 +112,7 @@ export const mapSøknadToBackend = (
     studier: {
       erStudent: getJaNeiAvbrutt(søknad?.student?.erStudent),
       kommeTilbake: getJaNeiVetIkke(søknad?.student?.kommeTilbake),
-      ...(søknad?.vedlegg?.[AVBRUTT_STUDIE_VEDLEGG]?.[0]?.vedleggId
-        ? {
-            vedlegg:
-              søknad?.vedlegg?.[AVBRUTT_STUDIE_VEDLEGG]?.map((vedlegg) => vedlegg.vedleggId) ?? [],
-          }
-        : {}),
+      vedlegg: søknad?.vedlegg?.[AVBRUTT_STUDIE_VEDLEGG]?.map((vedlegg) => vedlegg.vedleggId) ?? [],
     },
     registrerteBehandlere,
     andreBehandlere,

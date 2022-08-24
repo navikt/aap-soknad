@@ -29,9 +29,10 @@ export interface SøknadBackendState {
   studier: {
     erStudent?: 'JA' | 'NEI' | 'AVBRUTT';
     kommeTilbake?: 'JA' | 'NEI' | 'VET_IKKE';
-    vedlegg?: Array<string>;
+    vedlegg: Array<string>;
   };
   andreBehandlere: Array<BehandlerBackendState>;
+  registrerteBehandlere: Array<BehandlerBackendState>;
   yrkesskadeType?: 'JA' | 'NEI' | 'VET_IKKE';
   utbetalinger: {
     fraArbeidsgiver?: boolean;
