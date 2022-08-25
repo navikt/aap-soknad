@@ -164,7 +164,7 @@ export const deleteOpplastedeVedlegg = async (søknad?: Soknad) => {
   if (vedleggUuids.length > 0) {
     const commaSeparatedUuids = vedleggUuids.join(',');
     console.log('fetch delete');
-    await fetch(`${process.env.NEXT_PUBLIC_TEMP_FILOPPLASTING_SLETT_URL}${commaSeparatedUuids}`, {
+    await fetch(`/aap/soknad/api/vedlegg/slett/?uuids=${commaSeparatedUuids}`, {
       method: 'DELETE',
     });
   }

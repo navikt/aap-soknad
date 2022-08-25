@@ -84,13 +84,10 @@ const FieldArrayFileInput = ({
     const data = new FormData();
     data.append('vedlegg', file);
     setLoading(true);
-    const vedlegg = await fetch(
-      process.env.NEXT_PUBLIC_TEMP_FILOPPLASTING_URL ?? '/aap/soknad-api/vedlegg/lagre',
-      {
-        method: 'POST',
-        body: data,
-      }
-    );
+    const vedlegg = await fetch('/aap/soknad/api/vedlegg/lagre/', {
+      method: 'POST',
+      body: data,
+    });
     setLoading(false);
     if (vedlegg.ok) {
       const id = await vedlegg.json();
@@ -131,15 +128,9 @@ const FieldArrayFileInput = ({
             <button
               type={'button'}
               onClick={() =>
-                fetch(
-                  `${
-                    process.env.NEXT_PUBLIC_TEMP_FILOPPLASTING_SLETT_URL ??
-                    '/aap/soknad-api/vedlegg/slett?uuids='
-                  }${attachment?.vedleggId}`,
-                  {
-                    method: 'DELETE',
-                  }
-                ).then(() => remove(index))
+                fetch(`/aap/soknad/api/vedlegg/slett/?uuids=${attachment?.vedleggId}`, {
+                  method: 'DELETE',
+                }).then(() => remove(index))
               }
               tabIndex={0}
               onKeyPress={(event) => {

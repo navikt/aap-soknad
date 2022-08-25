@@ -122,12 +122,9 @@ export async function slettLagretSoknadState<SoknadStateType>(
   dispatch: Dispatch<SoknadAction<SoknadStateType>>,
   state: GenericSoknadContextState<SoknadStateType>
 ) {
-  const deleteResponse = await fetch(
-    `${process.env.NEXT_PUBLIC_TEMP_SLETT_URL ?? '/aap/soknad-api/buckets/slett/'}${state.type}`,
-    {
-      method: 'DELETE',
-    }
-  );
+  const deleteResponse = await fetch(`/aap/soknad/api/buckets/slett/?type=${state.type}`, {
+    method: 'DELETE',
+  });
   return !!deleteResponse?.ok;
 }
 

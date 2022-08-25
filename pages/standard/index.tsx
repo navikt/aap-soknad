@@ -61,15 +61,12 @@ const Introduksjon = ({ søker }: PageProps) => {
 
   const startSoknad = async () => {
     logSkjemaStartetEvent();
-    await fetchPOST(
-      `${process.env.NEXT_PUBLIC_TEMP_LAGRE_URL ?? '/aap/soknad-api/buckets/lagre/'}STANDARD`,
-      {
-        type: 'STANDARD',
-        version: SØKNAD_CONTEXT_VERSION,
-        søknad: {},
-        lagretStepList: defaultStepList,
-      }
-    );
+    await fetchPOST('/aap/soknad/api/buckets/lagre/?type=STANDARD', {
+      type: 'STANDARD',
+      version: SØKNAD_CONTEXT_VERSION,
+      søknad: {},
+      lagretStepList: defaultStepList,
+    });
   };
 
   return (

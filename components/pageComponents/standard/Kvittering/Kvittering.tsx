@@ -16,7 +16,7 @@ const getUUUIDfromString = (str: string) => {
 };
 
 const getDownloadUrl = (url?: string) => {
-  const filopplastingUrl = process.env.NEXT_PUBLIC_TEMP_FILOPPLASTING_LES_URL;
+  const filopplastingUrl = '/aap/soknad/api/vedlegg/les/?uuid=';
   if (filopplastingUrl && url) {
     return `${filopplastingUrl}${getUUUIDfromString(url)}`;
   }
