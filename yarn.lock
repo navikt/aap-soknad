@@ -1040,15 +1040,15 @@
     strict-event-emitter "^0.2.4"
     web-encoding "^1.1.5"
 
-"@navikt/ds-css@1.0.1":
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/@navikt/ds-css/-/ds-css-1.0.1.tgz#f88702bd204b610a58e190e90820bc75e98b52b4"
-  integrity sha512-BRZcnEJ0dIzSVQqG35bBXr0Y0BCrRclxbNU5TkgUAjpxH6/E0FgaXtcGp5rIF+fEUX9bSTb+WaTUKvNSsMPFAw==
-
 "@navikt/ds-css@^0.18.18":
   version "0.18.29"
   resolved "https://registry.yarnpkg.com/@navikt/ds-css/-/ds-css-0.18.29.tgz#c8727d6240f87bdc41d83d1306b34ab892afbd96"
   integrity sha512-nzJvSI5AYEYJhWqvYuWqnDWDpMkaPAfY/uL/4LLkdpsgyOnOfcLbZu3jrXMVrKMvpD2AKYNSDSG7f/r6bA+jpg==
+
+"@navikt/ds-css@^1.2.0":
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/@navikt/ds-css/-/ds-css-1.2.0.tgz#83a97cc9f65805820522e543a903b7c34b50611b"
+  integrity sha512-6BJ/gNvIiroEOtYOsfpwc2M1ZoM21rWgO0qgcJNgUsTXrThEdQI9L//SnehsVLsDAnzvM2mNauofpXVbKnSUZw==
 
 "@navikt/ds-datepicker@^3.1.1":
   version "3.1.1"
@@ -1059,11 +1059,6 @@
     "@navikt/ds-react" "^0.19.14"
     focus-trap-react "^8.8.2"
 
-"@navikt/ds-icons@1.0.2", "@navikt/ds-icons@^1.0.1":
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/@navikt/ds-icons/-/ds-icons-1.0.2.tgz#4ca74e4f1a687f35fd67d2d7e70ef0762f3edace"
-  integrity sha512-WdmEfgZ32bhnLBiKUOnKysgU4aDYrPAa29DqSxlZqZ9cgYGdd/Wbmmr3ZGsLjxlrhY6qX5s9S22x0mwmHr7kvA==
-
 "@navikt/ds-icons@^0.8.20":
   version "0.8.20"
   resolved "https://registry.yarnpkg.com/@navikt/ds-icons/-/ds-icons-0.8.20.tgz#b3c52f1839929d2e755b1ce6da44b4e02caf6f7e"
@@ -1071,17 +1066,10 @@
   dependencies:
     uuid "^8.3.2"
 
-"@navikt/ds-react@1.0.1":
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/@navikt/ds-react/-/ds-react-1.0.1.tgz#21f246a6e3bd85745d3a1e54d28f0732a14c73f5"
-  integrity sha512-eDtJMTMxhLphTRG2PKySqyONyYNzxW4xLVYpMVkhDpWXF3aCltkJJcSzohs3P5vXnniWQR4SI/rPXABE45bblQ==
-  dependencies:
-    "@floating-ui/react-dom-interactions" "0.9.2"
-    "@navikt/ds-icons" "^1.0.1"
-    "@radix-ui/react-tabs" "1.0.0"
-    "@radix-ui/react-toggle-group" "1.0.0"
-    clsx "^1.1.1"
-    react-modal "3.15.1"
+"@navikt/ds-icons@^1.2.0":
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/@navikt/ds-icons/-/ds-icons-1.2.0.tgz#e529d7aa3612d1578044dae3547138199af675b0"
+  integrity sha512-89damtzHc5Sjao88XM1mxIj/+13dHgWucGSzdAJ4rQzKIqRS+qAsbx1RxsOVwV7HOi0BaoMkTkLVIJFuZ7YRZw==
 
 "@navikt/ds-react@^0.19.14":
   version "0.19.27"
@@ -1100,6 +1088,18 @@
     react-modal "3.15.1"
     react-popper "^2.2.5"
     uuid "^8.3.2"
+
+"@navikt/ds-react@^1.2.0":
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/@navikt/ds-react/-/ds-react-1.2.0.tgz#50b18156040dbcb3de514608e709b3661f99dd6d"
+  integrity sha512-RpY3AfL9fqvEKkJJ6fe4dwIKo+zZXDKefyiMJQVNyPrV+LOhLXMHty5Lv12EQQJ+jRKdFiYJ3EVxUh+6fWejUA==
+  dependencies:
+    "@floating-ui/react-dom-interactions" "0.9.2"
+    "@navikt/ds-icons" "^1.2.0"
+    "@radix-ui/react-tabs" "1.0.0"
+    "@radix-ui/react-toggle-group" "1.0.0"
+    clsx "^1.1.1"
+    react-modal "3.15.1"
 
 "@navikt/nav-dekoratoren-moduler@^1.6.9":
   version "1.6.9"
