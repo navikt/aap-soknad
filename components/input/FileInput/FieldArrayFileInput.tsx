@@ -96,21 +96,27 @@ const FieldArrayFileInput = ({
     const data = new FormData();
     data.append('vedlegg', file);
     setLoading(true);
-    const vedlegg = await fetch('/aap/soknad/api/vedlegg/lagre/', {
-      method: 'POST',
-      body: data,
-    });
-    setLoading(false);
-    if (vedlegg.ok) {
-      const id = await vedlegg.json();
-      append({ name: file?.name, size: file?.size, vedleggId: id });
-      setTotalUploadedBytes(totalUploadedBytes + file.size);
-      updateRequiredVedlegg({ type: 'OMSORGSSTØNAD', completed: true }, søknadDispatch);
-    } else {
-      setFilename(file?.name);
-      setError(inputId, { type: 'custom', message: errorText(vedlegg.status) });
+    try {
+      const vedlegg = await fetch('/aap/soknad/api/vedlegg/lagre/', {
+        method: 'POST',
+        body: data,
+        redirect: 'manual',
+      });
+      setLoading(false);
+      if (vedlegg.ok) {
+        const id = await vedlegg.json();
+        append({ name: file?.name, size: file?.size, vedleggId: id });
+        setTotalUploadedBytes(totalUploadedBytes + file.size);
+        updateRequiredVedlegg({ type: 'OMSORGSSTØNAD', completed: true }, søknadDispatch);
+      } else {
+        setFilename(file?.name);
+        setError(inputId, { type: 'custom', message: errorText(vedlegg.status) });
+      }
+      setDragOver(false);
+    } catch (err: any) {
+      console.log('network error', err?.type);
+      console.log(err);
     }
-    setDragOver(false);
   };
   const onDelete = (index: number) => {
     remove(index);
