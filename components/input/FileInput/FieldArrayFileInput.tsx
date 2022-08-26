@@ -7,7 +7,7 @@ import { Cancel, Delete, FileError, FileSuccess } from '@navikt/ds-icons';
 import { Upload as SvgUpload } from '@navikt/ds-icons';
 import { useSoknadContextStandard } from 'context/soknadContextStandard';
 import { updateRequiredVedlegg } from 'context/soknadContextCommon';
-import { router } from 'next/client';
+import { useRouter } from 'next/router';
 type Props = {
   setError: (name: string, error: FieldError) => void;
   clearErrors: (name?: string | string[]) => void;
@@ -40,6 +40,7 @@ const FieldArrayFileInput = ({
   const { formatMessage } = useFeatureToggleIntl();
 
   const { søknadDispatch } = useSoknadContextStandard();
+  const router = useRouter();
 
   const [dragOver, setDragOver] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
