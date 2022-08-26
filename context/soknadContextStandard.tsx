@@ -92,6 +92,17 @@ function soknadReducerStandard(
         requiredVedlegg: [...state?.requiredVedlegg, ...vedleggList],
       };
     }
+    case SoknadActionKeys.UPDATE_VEDLEGG: {
+      console.log('action', action);
+      console.log('requiredVedlegg', state?.requiredVedlegg);
+      const vedleggList = state?.requiredVedlegg.map((requiredVedlegg) => {
+        if (requiredVedlegg.type === action.payload.type)
+          return { ...requiredVedlegg, completed: action.payload.completed };
+        return requiredVedlegg;
+      });
+      console.log('vedleggList', vedleggList);
+      return { ...state, requiredVedlegg: [...vedleggList] };
+    }
     case SoknadActionKeys.REMOVE_VEDLEGG: {
       const newVedleggList = state?.requiredVedlegg?.filter((e) => {
         return !(e?.type === action?.payload);
@@ -160,10 +171,8 @@ export const getVedleggUuidsFromSoknad = (søknad?: Soknad) => {
 
 export const deleteOpplastedeVedlegg = async (søknad?: Soknad) => {
   const vedleggUuids = getVedleggUuidsFromSoknad(søknad);
-  console.log('vedleggUuids', vedleggUuids);
   if (vedleggUuids.length > 0) {
     const commaSeparatedUuids = vedleggUuids.join(',');
-    console.log('fetch delete');
     await fetch(`/aap/soknad/api/vedlegg/slett/?uuids=${commaSeparatedUuids}`, {
       method: 'DELETE',
     });

@@ -9,6 +9,7 @@ export type RequiredVedlegg = {
   type: string;
   description: string;
   filterType?: string;
+  completed?: boolean;
 };
 export interface GenericSoknadContextState<SoknadStateType> {
   version: number;

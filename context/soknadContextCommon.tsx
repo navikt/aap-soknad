@@ -1,6 +1,7 @@
 import { GenericSoknadContextState, RequiredVedlegg, SøknadType } from 'types/SoknadContext';
 import { Dispatch, ReactNode } from 'react';
 import { OppslagBarn, OppslagBehandler } from 'context/sokerOppslagContext';
+import { Vedlegg } from 'types/Soknad';
 
 export interface SoknadContextData<SoknadStateType> {
   søknadState: GenericSoknadContextState<SoknadStateType>;
@@ -29,6 +30,7 @@ export enum SoknadActionKeys {
   ADD_BARN_IF_MISSING = 'ADD_BARN_IF_MISSING',
   ADD_BEHANDLER_IF_MISSING = 'ADD_BEHANDLER_IF_MISSING',
   ADD_VEDLEGG = 'ADD_VEDLEGG',
+  UPDATE_VEDLEGG = 'UPDATE_VEDLEGG',
   REMOVE_VEDLEGG = 'REMOVE_VEDLEGG',
   ADD_SØKNAD_URL = 'ADD_SØKNAD_URL',
 }
@@ -64,6 +66,10 @@ type AddVedlegg = {
   type: SoknadActionKeys.ADD_VEDLEGG;
   payload: RequiredVedlegg[];
 };
+type UpdateVedlegg = {
+  type: SoknadActionKeys.UPDATE_VEDLEGG;
+  payload: { type: string; completed: boolean };
+};
 type RemoveVedlegg = {
   type: SoknadActionKeys.REMOVE_VEDLEGG;
   payload?: string;
@@ -81,6 +87,7 @@ export type SoknadAction<SoknadStateType> =
   | AddBarnIfMissing
   | AddBehandlerIfMissing
   | AddVedlegg
+  | UpdateVedlegg
   | RemoveVedlegg
   | AddSøknadUrl;
 
@@ -140,6 +147,13 @@ export async function addRequiredVedlegg<SoknadStateType>(
   dispatch: Dispatch<SoknadAction<SoknadStateType>>
 ) {
   if (vedlegg) dispatch({ type: SoknadActionKeys.ADD_VEDLEGG, payload: vedlegg });
+}
+
+export async function updateRequiredVedlegg<SoknadStateType>(
+  data: { type: string; completed: boolean },
+  dispatch: Dispatch<SoknadAction<SoknadStateType>>
+) {
+  dispatch({ type: SoknadActionKeys.UPDATE_VEDLEGG, payload: data });
 }
 
 export async function removeRequiredVedlegg<SoknadStateType>(

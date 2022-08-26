@@ -21,6 +21,7 @@ import { useFeatureToggleIntl } from 'hooks/useFeatureToggleIntl';
 import { slettLagretSoknadState } from 'context/soknadContextCommon';
 import { useSoknadContextStandard } from 'context/soknadContextStandard';
 import { Relasjon } from '../Barnetillegg/AddBarnModal';
+import { OppsummeringVedlegg } from './OppsummeringVedlegg/OppsummeringVedlegg';
 
 interface OppsummeringProps {
   onBackClick: () => void;
@@ -258,45 +259,7 @@ const Oppsummering = ({ onBackClick, onSubmitSoknad }: OppsummeringProps) => {
           toggleAll={toggleAll}
           onEdit={() => editStep(StepNames.VEDLEGG)}
         >
-          <>
-            {søknadState?.requiredVedlegg?.map((vedlegg) => {
-              if (
-                vedlegg?.filterType === Relasjon.FORELDER ||
-                vedlegg?.filterType === Relasjon.FOSTERFORELDER
-              )
-                return <></>;
-              return (
-                <>
-                  <Label>{vedlegg?.description}</Label>
-                  {søknadState?.søknad?.vedlegg?.[vedlegg.type]?.map((vedleggFile) => (
-                    <BodyShort>{vedleggFile?.name}</BodyShort>
-                  ))}
-                </>
-              );
-            })}
-            {søknadState?.søknad?.manuelleBarn?.map((barn, i) => {
-              const label = søknadState?.requiredVedlegg?.find(
-                (e) => e.type === `barn-${barn.internId}`
-              )?.description;
-              return (
-                <div key={i}>
-                  <Label>{label}</Label>
-                  {barn?.vedlegg?.map((vedlegg, j) => (
-                    <BodyShort key={j}>{vedlegg?.name}</BodyShort>
-                  ))}
-                </div>
-              );
-            })}
-            {søknadState?.søknad?.vedlegg?.annet &&
-              søknadState?.søknad?.vedlegg?.annet?.length > 0 && (
-                <>
-                  <Label>{'Annet:'}</Label>
-                  {søknadState?.søknad?.vedlegg?.annet?.map((vedleggFile) => (
-                    <BodyShort key={vedleggFile.vedleggId}>{vedleggFile?.name}</BodyShort>
-                  ))}
-                </>
-              )}
-          </>
+          <OppsummeringVedlegg søknadState={søknadState} />
         </AccordianItemOppsummering>
       </Accordion>
       <ConfirmationPanelWrapper

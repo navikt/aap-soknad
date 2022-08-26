@@ -1,14 +1,17 @@
 import { Control, FieldError, FieldErrors, useFieldArray } from 'react-hook-form';
 import { useFeatureToggleIntl } from 'hooks/useFeatureToggleIntl';
-import React, { DragEventHandler, useRef, useState } from 'react';
+import React, { DragEventHandler, useEffect, useRef, useState } from 'react';
 import * as classes from './FileInput.module.css';
 import { BodyShort, Detail, Heading, Label, Link, Loader, Panel } from '@navikt/ds-react';
 import { Cancel, Delete, FileError, FileSuccess } from '@navikt/ds-icons';
 import { Upload as SvgUpload } from '@navikt/ds-icons';
+import { useSoknadContextStandard } from 'context/soknadContextStandard';
+import { updateRequiredVedlegg } from 'context/soknadContextCommon';
 type Props = {
   setError: (name: string, error: FieldError) => void;
   clearErrors: (name?: string | string[]) => void;
   name: string;
+  type: string;
   heading: string;
   ingress?: string;
   errors?: FieldErrors;
@@ -18,6 +21,7 @@ const FieldArrayFileInput = ({
   heading,
   ingress,
   name,
+  type,
   setError,
   clearErrors,
   control,
@@ -27,7 +31,15 @@ const FieldArrayFileInput = ({
     name: name,
     control,
   });
+
+  useEffect(() => {
+    updateRequiredVedlegg({ type: type, completed: fields.length > 0 }, søknadDispatch);
+  }, [fields]);
+
   const { formatMessage } = useFeatureToggleIntl();
+
+  const { søknadDispatch } = useSoknadContextStandard();
+
   const [dragOver, setDragOver] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
   const [filename, setFilename] = useState<string | undefined>();
@@ -93,11 +105,15 @@ const FieldArrayFileInput = ({
       const id = await vedlegg.json();
       append({ name: file?.name, size: file?.size, vedleggId: id });
       setTotalUploadedBytes(totalUploadedBytes + file.size);
+      updateRequiredVedlegg({ type: 'OMSORGSSTØNAD', completed: true }, søknadDispatch);
     } else {
       setFilename(file?.name);
       setError(inputId, { type: 'custom', message: errorText(vedlegg.status) });
     }
     setDragOver(false);
+  };
+  const onDelete = (index: number) => {
+    remove(index);
   };
   const fileSizeString = (size: number) => {
     const kb = size / 1024;
@@ -130,12 +146,14 @@ const FieldArrayFileInput = ({
               onClick={() =>
                 fetch(`/aap/soknad/api/vedlegg/slett/?uuids=${attachment?.vedleggId}`, {
                   method: 'DELETE',
-                }).then(() => remove(index))
+                }).then(() => {
+                  onDelete(index);
+                })
               }
               tabIndex={0}
               onKeyPress={(event) => {
                 if (event.key === 'Enter') {
-                  remove(index);
+                  onDelete(index);
                 }
               }}
               className={classes?.deleteAttachment}
