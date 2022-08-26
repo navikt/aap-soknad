@@ -7,6 +7,7 @@ import { Cancel, Delete, FileError, FileSuccess } from '@navikt/ds-icons';
 import { Upload as SvgUpload } from '@navikt/ds-icons';
 import { useSoknadContextStandard } from 'context/soknadContextStandard';
 import { updateRequiredVedlegg } from 'context/soknadContextCommon';
+import { router } from 'next/client';
 type Props = {
   setError: (name: string, error: FieldError) => void;
   clearErrors: (name?: string | string[]) => void;
@@ -101,6 +102,10 @@ const FieldArrayFileInput = ({
       body: data,
     });
     setLoading(false);
+    if (vedlegg.status === 307) {
+      const path = window?.location?.pathname;
+      router.push(`/oauth2/login?redirect=${path}`);
+    }
     if (vedlegg.ok) {
       const id = await vedlegg.json();
       append({ name: file?.name, size: file?.size, vedleggId: id });
