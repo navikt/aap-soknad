@@ -102,6 +102,7 @@ const FieldArrayFileInput = ({
         body: data,
         redirect: 'manual',
       });
+      console.log('vedlegg response status', vedlegg.status);
       setLoading(false);
       if (vedlegg.ok) {
         const id = await vedlegg.json();
