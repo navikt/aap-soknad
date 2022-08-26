@@ -10,7 +10,7 @@ import { SøknadApiType } from 'pages/api/oppslag/soeknader';
 
 interface StudentProps {
   søker: SøkerView;
-  kontaktinformasjon: { epost?: string; mobil?: string };
+  kontaktinformasjon?: { epost?: string; mobil?: string };
   søknad?: SøknadApiType;
 }
 
@@ -76,10 +76,10 @@ const Kvittering = ({ søker, kontaktinformasjon, søknad }: StudentProps) => {
         {formatMessage('søknad.kvittering.bekreftelse.title')}
         <ul>
           <li>
-            {formatMessage('søknad.kvittering.bekreftelse.sms')}: {kontaktinformasjon.mobil}
+            {formatMessage('søknad.kvittering.bekreftelse.sms')}: {kontaktinformasjon?.mobil}
           </li>
           <li>
-            {formatMessage('søknad.kvittering.bekreftelse.epost')}: {kontaktinformasjon.epost}
+            {formatMessage('søknad.kvittering.bekreftelse.epost')}: {kontaktinformasjon?.epost}
           </li>
         </ul>
       </BodyLong>
