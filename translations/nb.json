@@ -54,13 +54,13 @@
         "bulletPointArbeid": "opplysninger om arbeidsforholdet ditt fra Arbeidsgiver- og arbeidstakerregisteret",
         "bulletPointAndreOpplysninger": "opplysninger om deg vi har fra før",
         "folketrygdloven": "Dette gjør vi for å vurdere om du har rett til AAP etter folketrygdloven kapittel 11.",
-        "bulletPointDeler": "Vi deler hva du får utbetalt i AAP med Skatteetaten og Statistisk sentralbyrå",
-        "bulletPointForbedre": "Vi kan bruke opplysninger om deg til å bedre våre tjenester",
+        "bulletPointDeler": "Vi deler opplysninger om hva du får utbetalt i AAP med Skatteetaten og Statistisk sentralbyrå",
+        "bulletPointForbedre": "Vi kan bruke opplysninger om deg til å forbedre våre tjenester",
         "personopplysningerNavNo": "Du kan lese mer om hvordan NAV behandler personopplysninger på nav.no (åpnes i ny fane)"
       },
       "veiledningConfirm": {
         "title": "Vi stoler på deg",
-        "label": "Jeg bekrefter at jeg vil gi så riktige og fullstendige opplysninger som mulig.",
+        "label": "Jeg vil svare så godt jeg kan på spørsmålene i søknaden.",
         "validation": {
           "required": "Du må bekrefte at du vil gi så riktige opplysninger som mulig."
         }
