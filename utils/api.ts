@@ -7,6 +7,7 @@ import { FastlegeView } from 'context/sokerOppslagContext';
 import { Soknad } from 'types/Soknad';
 import { BehandlerBackendState, SøknadBackendState } from 'types/SoknadBackendState';
 import { formatDate } from './date';
+import { JaEllerNei } from 'types/Generic';
 
 export type SøknadsType = 'UTLAND' | 'STANDARD';
 
@@ -92,7 +93,6 @@ export const mapSøknadToBackend = (
     },
     medlemsskap: {
       boddINorgeSammenhengendeSiste5: jaNeiToBoolean(søknad?.medlemskap?.harBoddINorgeSiste5År),
-      jobbetUtenforNorgeFørSyk: jaNeiToBoolean(søknad?.medlemskap?.arbeidetUtenforNorgeFørSykdom),
       jobbetSammenhengendeINorgeSiste5: jaNeiToBoolean(
         søknad?.medlemskap?.harArbeidetINorgeSiste5År
       ),
@@ -178,5 +178,134 @@ export const mapSøknadToBackend = (
     ...(søknad?.vedlegg?.annet
       ? { andreVedlegg: søknad?.vedlegg?.annet?.map((e) => e?.vedleggId) }
       : {}),
+  };
+};
+const createField = (felt: string, verdi: string | undefined, skipIfFalsy = false) =>
+  skipIfFalsy && !verdi
+    ? []
+    : [
+        {
+          type: 'FELT',
+          felt,
+          verdi,
+        },
+      ];
+const createFritekst = (felt: string, verdi: string | undefined, skipIfFalsy = false) =>
+  skipIfFalsy && !verdi
+    ? []
+    : [
+        {
+          type: 'FRITEKST',
+          felt,
+          verdi,
+        },
+      ];
+const createTabellrad = (
+  venstretekst: string,
+  høyretekst: string | undefined,
+  skipIfFalsy = false
+) =>
+  skipIfFalsy && !høyretekst
+    ? []
+    : [
+        {
+          type: 'TABELLRAD',
+          venstretekst,
+          høyretekst,
+        },
+      ];
+const createGruppe = (tabellrader: any[]) => ({
+  type: 'GRUPPE',
+  tabellrader,
+});
+const createTema = (overskrift: string, rader: any[]) => ({
+  type: 'TEMA',
+  overskrift,
+  underblokker: rader,
+});
+export const mapSøknadToPdf = (søknad: Soknad, formatMessage: any) => {
+  const getStartDato = (søknad?: Soknad) => {
+    const begrunnelse = søknad?.begrunnelse
+      ? createFritekst('Fritekst - Ønsker startdato tilbake i tid', søknad?.begrunnelse)
+      : [];
+    const rows = [
+      ...begrunnelse,
+      ...createField(
+        formatMessage('søknad.startDato.skalHaFerie.label'),
+        søknad?.ferie?.skalHaFerie
+      ),
+      ...createField(formatMessage('søknad.startDato.ferieType.label'), søknad?.ferie?.ferieType),
+      ...createField(
+        'Periode',
+        søknad?.ferie?.fraDato
+          ? `Fra ${søknad?.ferie?.fraDato} til ${søknad?.ferie?.tilDato}`
+          : undefined,
+        true
+      ),
+      ...createField('Antall dager', søknad?.ferie?.antallDager, true),
+    ];
+    return createTema('Startdato', rows);
+  };
+  const getMedlemskap = (søknad: Soknad) => {
+    const utenlandsOpphold = søknad?.medlemskap?.utenlandsOpphold
+      ? søknad?.medlemskap?.utenlandsOpphold?.map((opphold) =>
+          createGruppe([
+            ...createTabellrad('Land', opphold?.land),
+            ...createTabellrad('Periode', `Fra ${opphold?.fraDato} til ${opphold?.tilDato}`),
+            ...createTabellrad(
+              formatMessage('søknad.medlemskap.utenlandsperiode.modal.iArbeid.label'),
+              opphold?.iArbeid
+            ),
+            ...createTabellrad(
+              formatMessage('søknad.medlemskap.utenlandsperiode.modal.utenlandsId.label'),
+              opphold?.utenlandsId,
+              true
+            ),
+          ])
+        )
+      : [];
+    const rader = [
+      ...createField(
+        formatMessage('søknad.medlemskap.harBoddINorgeSiste5År.label'),
+        søknad?.medlemskap?.harBoddINorgeSiste5År
+      ),
+      ...createField(
+        formatMessage('søknad.medlemskap.harArbeidetINorgeSiste5År.label'),
+        søknad?.medlemskap?.harArbeidetINorgeSiste5År,
+        true
+      ),
+      ...createField(
+        formatMessage('søknad.medlemskap.arbeidUtenforNorge.label'),
+        søknad?.medlemskap?.arbeidetUtenforNorgeFørSykdom,
+        true
+      ),
+      ...createField(
+        formatMessage('søknad.medlemskap.iTilleggArbeidUtenforNorge.label'),
+        søknad?.medlemskap?.iTilleggArbeidUtenforNorge,
+        true
+      ),
+      ...utenlandsOpphold,
+    ];
+    return createTema('Tilknytning til Norge', rader);
+  };
+  const getYrkesskade = (søknad: Soknad) => {
+    return createTema('Yrkesskade', [
+      ...createField(formatMessage(`søknad.yrkesskade.harDuYrkesskade.label`), søknad?.yrkesskade),
+    ]);
+  };
+  const getAndreYtelser = (søknad: Soknad) => {
+    return createTema('Andre ytelser', [
+      ...createField(
+        formatMessage('søknad.andreUtbetalinger.lønn.label'),
+        formatMessage(`answerOptions.jaEllerNei.${søknad?.andreUtbetalinger?.lønn}`)
+      ),
+      ...createField(
+        formatMessage('søknad.andreUtbetalinger.stønad.label'),
+        søknad?.andreUtbetalinger?.stønad?.join(', ')
+      ),
+    ]);
+  };
+  return {
+    temaer: [getStartDato(søknad), getMedlemskap(søknad), getYrkesskade(søknad)],
   };
 };

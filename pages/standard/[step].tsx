@@ -28,7 +28,7 @@ import { Soknad } from 'types/Soknad';
 import { SubmitHandler } from 'react-hook-form';
 import { fetchPOST } from 'api/fetch';
 import { StepNames } from './index';
-import { mapSøknadToBackend } from 'utils/api';
+import { mapSøknadToBackend, mapSøknadToPdf } from 'utils/api';
 import StartDato from 'components/pageComponents/standard/StartDato/StartDato';
 import { Medlemskap } from 'components/pageComponents/standard/Medlemskap/Medlemskap';
 import { Yrkesskade } from 'components/pageComponents/standard/Yrkesskade/Yrkesskade';
@@ -93,7 +93,10 @@ const Steps = ({ søker, mellomlagretSøknad }: PageProps) => {
       // Må massere dataene litt før vi sender de inn
       const søknad = mapSøknadToBackend(søknadState?.søknad);
 
+      const søknadPdf = mapSøknadToPdf(søknadState?.søknad || {}, formatMessage);
+
       console.log('søknad', søknad);
+      console.log('søknadPDF', søknadPdf);
 
       const postResponse = await postSøknad(søknad);
       if (postResponse?.ok) {
