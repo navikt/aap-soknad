@@ -6,6 +6,7 @@ import { Download } from '@navikt/ds-icons';
 import { SuccessStroke } from '@navikt/ds-icons';
 import { useFeatureToggleIntl } from 'hooks/useFeatureToggleIntl';
 import { useSoknadContextStandard } from 'context/soknadContextStandard';
+import { useRouter } from 'next/router';
 
 interface StudentProps {
   søker: SøkerView;
@@ -26,6 +27,8 @@ const getDownloadUrl = (url?: string) => {
 const Kvittering = ({ søker }: StudentProps) => {
   const { formatMessage, formatElement } = useFeatureToggleIntl();
   const { søknadState } = useSoknadContextStandard();
+
+  const router = useRouter();
 
   const dittNavUrl =
     typeof window !== 'undefined' && window.location.href.includes('www.nav.no')
@@ -69,7 +72,9 @@ const Kvittering = ({ søker }: StudentProps) => {
         {formatMessage('søknad.kvittering.lastNedSøknad')}
       </Link>
       <form action={dittNavUrl}>
-        <Button variant={'primary'}>{formatMessage('søknad.kvittering.dittNavKnapp')}</Button>
+        <Button as={'a'} variant={'primary'} href={process.env.NEXT_PUBLIC_MINE_AAP_URL ?? ''}>
+          {formatMessage('søknad.kvittering.dittNavKnapp')}
+        </Button>
       </form>
     </div>
   );
