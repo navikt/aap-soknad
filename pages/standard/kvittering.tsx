@@ -10,6 +10,7 @@ import { GetServerSidePropsResult, NextPageContext } from 'next';
 import { getAccessToken } from 'auth/accessToken';
 import { getSøknader, SøknadApiType } from 'pages/api/oppslag/soeknader';
 import { getSøker } from 'pages/api/oppslag/soeker';
+import logger from 'utils/logger';
 interface PageProps {
   søker: SokerOppslagState;
   søknader: SøknadApiType[];
@@ -50,6 +51,7 @@ export const getServerSideProps = beskyttetSide(
     const bearerToken = getAccessToken(ctx);
     const søknader = await getSøknader(bearerToken);
     const søker = await getSøker(bearerToken);
+    logger.info(søker, 'søkeroppslag fra API');
 
     return {
       props: { søknader, søker },
