@@ -2,12 +2,12 @@ import { AVBRUTT_STUDIE_VEDLEGG } from 'components/pageComponents/standard/Stude
 import {
   AttachmentType,
   StønadType,
+  stønadTypeToAlternativNøkkel,
 } from 'components/pageComponents/standard/AndreUtbetalinger/AndreUtbetalinger';
 import { FastlegeView } from 'context/sokerOppslagContext';
 import { Soknad } from 'types/Soknad';
 import { BehandlerBackendState, SøknadBackendState } from 'types/SoknadBackendState';
 import { formatDate } from './date';
-import { JaEllerNei } from 'types/Generic';
 
 export type SøknadsType = 'UTLAND' | 'STANDARD';
 
@@ -214,7 +214,7 @@ const createTabellrad = (
           høyretekst,
         },
       ];
-const createGruppe = (tabellrader: any[]) => ({
+const createGruppe = (overskrift: string, tabellrader: any[]) => ({
   type: 'GRUPPE',
   tabellrader,
 });
@@ -249,7 +249,7 @@ export const mapSøknadToPdf = (søknad: Soknad, formatMessage: any) => {
   const getMedlemskap = (søknad: Soknad) => {
     const utenlandsOpphold = søknad?.medlemskap?.utenlandsOpphold
       ? søknad?.medlemskap?.utenlandsOpphold?.map((opphold) =>
-          createGruppe([
+          createGruppe('', [
             ...createTabellrad('Land', opphold?.land),
             ...createTabellrad('Periode', `Fra ${opphold?.fraDato} til ${opphold?.tilDato}`),
             ...createTabellrad(
@@ -294,18 +294,25 @@ export const mapSøknadToPdf = (søknad: Soknad, formatMessage: any) => {
     ]);
   };
   const getAndreYtelser = (søknad: Soknad) => {
+    const stønader =
+      søknad?.andreUtbetalinger?.stønad?.map(
+        (stønadType) =>
+          createTabellrad(formatMessage(stønadTypeToAlternativNøkkel(stønadType)), '')[0]
+      ) || [];
     return createTema('Andre ytelser', [
       ...createField(
         formatMessage('søknad.andreUtbetalinger.lønn.label'),
         formatMessage(`answerOptions.jaEllerNei.${søknad?.andreUtbetalinger?.lønn}`)
       ),
-      ...createField(
-        formatMessage('søknad.andreUtbetalinger.stønad.label'),
-        søknad?.andreUtbetalinger?.stønad?.join(', ')
-      ),
+      createGruppe(formatMessage('søknad.andreUtbetalinger.stønad.label'), stønader),
     ]);
   };
   return {
-    temaer: [getStartDato(søknad), getMedlemskap(søknad), getYrkesskade(søknad)],
+    temaer: [
+      getStartDato(søknad),
+      getMedlemskap(søknad),
+      getYrkesskade(søknad),
+      getAndreYtelser(søknad),
+    ],
   };
 };
