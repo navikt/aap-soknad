@@ -37,7 +37,9 @@ export const tokenXProxy = async (opts: Opts) => {
     if (response.status < 200 || response.status > 300) {
       const resJson = await response.json();
       logger.error(
-        `tokenXProxy: status for ${opts.url} er ${response.status}. Response er ${resJson}`
+        `tokenXProxy: status for ${opts.url} er ${response.status}. Response er ${JSON.stringify(
+          resJson
+        )}`
       );
       return response;
     }
