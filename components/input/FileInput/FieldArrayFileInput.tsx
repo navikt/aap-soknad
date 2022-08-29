@@ -104,7 +104,12 @@ const FieldArrayFileInput = ({
       redirect: 'manual',
     });
     if (vedlegg.status === 0) {
-      router.push('/oauth2/login?redirect=/aap/soknad/standard');
+      router.push(
+        formatMessage('appLinks.login', {
+          navhostname: process.env.NEXT_PUBLIC_NAV_HOSTNAME_URL,
+          redirect: '/aap/soknad/standard',
+        })
+      );
     }
     setLoading(false);
     if (vedlegg.ok) {
