@@ -1,4 +1,4 @@
-import { Alert, BodyLong, Button, Heading, Link } from '@navikt/ds-react';
+import { Alert, BodyLong, BodyShort, Button, Heading, Link } from '@navikt/ds-react';
 import React from 'react';
 import * as classes from './Kvittering.module.css';
 import { SøkerView } from 'context/sokerOppslagContext';
@@ -6,10 +6,12 @@ import { Download } from '@navikt/ds-icons';
 import { SuccessStroke } from '@navikt/ds-icons';
 import { useFeatureToggleIntl } from 'hooks/useFeatureToggleIntl';
 import { useSoknadContextStandard } from 'context/soknadContextStandard';
-import { useRouter } from 'next/router';
+import { SøknadApiType } from 'pages/api/oppslag/soeknader';
 
 interface StudentProps {
   søker: SøkerView;
+  kontaktinformasjon?: { epost?: string; mobil?: string };
+  søknad?: SøknadApiType;
 }
 
 const getUUUIDfromString = (str: string) => {
@@ -24,11 +26,9 @@ const getDownloadUrl = (url?: string) => {
   return url;
 };
 
-const Kvittering = ({ søker }: StudentProps) => {
+const Kvittering = ({ søker, kontaktinformasjon, søknad }: StudentProps) => {
   const { formatMessage, formatElement } = useFeatureToggleIntl();
   const { søknadState } = useSoknadContextStandard();
-
-  const router = useRouter();
 
   const dittNavUrl =
     typeof window !== 'undefined' && window.location.href.includes('www.nav.no')
@@ -49,6 +49,22 @@ const Kvittering = ({ søker }: StudentProps) => {
       <Alert variant={'success'}>
         <BodyLong>{formatMessage('søknad.kvittering.alert.text')}</BodyLong>
       </Alert>
+      {søknad?.mangler?.length > 0 && (
+        <Alert variant="warning">
+          <BodyShort spacing>
+            Vi mangler dokumentasjon fra deg for å kunne behandle søknaden.{' '}
+            <Link
+              href={`${process.env.NEXT_PUBLIC_MINE_AAP_URL}/${søknad?.søknadId}/ettersendelse/`}
+            >
+              Her kan du ettersende dokumentasjon digitalt.
+            </Link>
+          </BodyShort>
+          <BodyShort spacing>
+            Du kan også <Link href="#">ettersende per post</Link>, eller levere dokumetansjon på
+            ditt lokale NAV-kontor.
+          </BodyShort>
+        </Alert>
+      )}
       <BodyLong spacing>
         {formatElement('søknad.kvittering.saksbehandlingstid', {
           a: (chunks: string[]) => (
@@ -59,8 +75,12 @@ const Kvittering = ({ søker }: StudentProps) => {
       <BodyLong>
         {formatMessage('søknad.kvittering.bekreftelse.title')}
         <ul>
-          <li>{formatMessage('søknad.kvittering.bekreftelse.sms')}: 99999999</li>
-          <li>{formatMessage('søknad.kvittering.bekreftelse.epost')}: dittnavn@online.no</li>
+          <li>
+            {formatMessage('søknad.kvittering.bekreftelse.sms')}: {kontaktinformasjon?.mobil}
+          </li>
+          <li>
+            {formatMessage('søknad.kvittering.bekreftelse.epost')}: {kontaktinformasjon?.epost}
+          </li>
         </ul>
       </BodyLong>
       <Link

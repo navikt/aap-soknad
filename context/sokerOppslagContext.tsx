@@ -74,6 +74,10 @@ export type KontaktInfoView = {
 export type SokerOppslagState = {
   søker: Soker;
   behandlere: Array<OppslagBehandler>;
+  kontaktinformasjon?: {
+    epost?: string;
+    mobil?: string;
+  };
 };
 const søkerOppslagInitialValue = {
   barn: [],

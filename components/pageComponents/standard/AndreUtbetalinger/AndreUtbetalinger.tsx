@@ -32,6 +32,8 @@ export enum AttachmentType {
   LØNN_OG_ANDRE_GODER = 'LØNN_OG_ANDRE_GODER',
   OMSORGSSTØNAD = 'OMSORGSSTØNAD',
   UTLANDSSTØNAD = 'UTLANDSSTØNAD',
+  AVBRUTT_STUDIE = 'avbruttStudie',
+  ANNET = 'ANNET',
 }
 
 export enum StønadType {

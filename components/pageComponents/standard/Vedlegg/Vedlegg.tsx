@@ -128,6 +128,7 @@ const Vedlegg = ({ onBackClick, onNext, defaultValues }: Props) => {
         <FieldArrayFileInput
           control={control}
           name={`${VEDLEGG}.${AVBRUTT_STUDIE_VEDLEGG}`}
+          type={AttachmentType.AVBRUTT_STUDIE}
           errors={errors}
           setError={setError}
           clearErrors={clearErrors}
@@ -139,6 +140,7 @@ const Vedlegg = ({ onBackClick, onNext, defaultValues }: Props) => {
         <FieldArrayFileInput
           control={control}
           name={VEDLEGG_LØNN}
+          type={AttachmentType.LØNN_OG_ANDRE_GODER}
           errors={errors}
           setError={setError}
           clearErrors={clearErrors}
@@ -150,6 +152,7 @@ const Vedlegg = ({ onBackClick, onNext, defaultValues }: Props) => {
         <FieldArrayFileInput
           control={control}
           name={VEDLEGG_OMSORGSSTØNAD}
+          type={AttachmentType.OMSORGSSTØNAD}
           errors={errors}
           setError={setError}
           clearErrors={clearErrors}
@@ -161,6 +164,7 @@ const Vedlegg = ({ onBackClick, onNext, defaultValues }: Props) => {
         <FieldArrayFileInput
           control={control}
           name={VEDLEGG_UTLANDSSTØNAD}
+          type={AttachmentType.UTLANDSSTØNAD}
           errors={errors}
           setError={setError}
           clearErrors={clearErrors}
@@ -178,6 +182,7 @@ const Vedlegg = ({ onBackClick, onNext, defaultValues }: Props) => {
             key={barn.internId}
             control={control}
             name={`${MANUELLE_BARN}.${index}.vedlegg`}
+            type={`barn-${barn.internId}`}
             errors={errors}
             setError={setError}
             clearErrors={clearErrors}
@@ -192,6 +197,7 @@ const Vedlegg = ({ onBackClick, onNext, defaultValues }: Props) => {
       })}
       <FieldArrayFileInput
         name={VEDLEGG_ANNET}
+        type={AttachmentType.ANNET}
         control={control}
         errors={errors}
         setError={setError}
