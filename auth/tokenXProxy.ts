@@ -59,7 +59,7 @@ export const tokenXAxiosProxy = async (opts: AxiosOpts) => {
   const idportenToken = opts.bearerToken!.split(' ')[1];
   const tokenxToken = await getTokenxToken(idportenToken, opts.audience);
 
-  logger.info('starter opplasting av fil til ' + opts.url);
+  logger.info('Starter opplasting av fil til ' + opts.url);
   try {
     const { data } = await axios.post(opts.url, opts.req, {
       responseType: 'stream',
@@ -68,7 +68,7 @@ export const tokenXAxiosProxy = async (opts: AxiosOpts) => {
         Authorization: `Bearer ${tokenxToken}`,
       },
     });
-    logger.info('vellykket opplasting av fil til ' + opts.url);
+    logger.info('Vellykket opplasting av fil til ' + opts.url);
     return data.pipe(opts.res);
   } catch (e: any) {
     let msg = '';
