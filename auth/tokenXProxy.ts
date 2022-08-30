@@ -68,10 +68,11 @@ export const tokenXAxiosProxy = async (opts: AxiosOpts) => {
         Authorization: `Bearer ${tokenxToken}`,
       },
     });
+    logger.info('vellykket opplasting av fil til ' + opts.url);
     return data.pipe(opts.res);
   } catch (e: any) {
     let msg = '';
-    logger.error({ msg }, 'tokenXAxiosProxy');
+    logger.error({ e }, 'tokenXAxiosProxy');
     return opts.res.status(500).json({ msg });
   }
 };
