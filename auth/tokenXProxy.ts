@@ -3,6 +3,7 @@ import axios from 'axios';
 
 import { getTokenxToken } from './getTokenxToken';
 import logger from '../utils/logger';
+import { ErrorMedStatus } from './ErrorMedStatus';
 
 interface Opts {
   url: string;
@@ -17,42 +18,33 @@ interface Opts {
 }
 
 export const tokenXProxy = async (opts: Opts) => {
-  /*if (opts.req.method !== opts.method) {
-    throw new ErrorMedStatus(`Støtter ikke metode ${opts.req.method}`, 404);
-  }*/
-
   logger.info('starter request mot ' + opts.url);
-  try {
-    const idportenToken = opts.bearerToken!.split(' ')[1];
-    const tokenxToken = await getTokenxToken(idportenToken, opts.audience);
-    const response = await fetch(opts.url, {
-      method: opts.method,
-      body: opts.data,
-      headers: {
-        Authorization: `Bearer ${tokenxToken}`,
-        'Content-Type': opts.contentType ?? 'application/json',
-      },
-    });
 
-    if (response.status < 200 || response.status > 300) {
-      const resJson = await response.json();
-      logger.error(
-        `tokenXProxy: status for ${opts.url} er ${response.status}. Response er ${JSON.stringify(
-          resJson
-        )}`
-      );
-      return response;
-    }
-    if (opts.noResponse) {
-      return;
-    }
-    if (opts.rawResonse) {
-      return response;
-    }
-    return await response.json();
-  } catch (e) {
-    logger.error(e, 'tokenXProxy');
+  const idportenToken = opts.bearerToken!.split(' ')[1];
+  const tokenxToken = await getTokenxToken(idportenToken, opts.audience);
+  const response = await fetch(opts.url, {
+    method: opts.method,
+    body: opts.data,
+    headers: {
+      Authorization: `Bearer ${tokenxToken}`,
+      'Content-Type': opts.contentType ?? 'application/json',
+    },
+  });
+
+  if (response.status < 200 || response.status > 300) {
+    logger.error(`tokenXProxy: status for ${opts.url} er ${response.status}.`);
+    throw new ErrorMedStatus(
+      `tokenXProxy: status for ${opts.url} er ${response.status}.`,
+      response.status
+    );
   }
+  if (opts.noResponse) {
+    return;
+  }
+  if (opts.rawResonse) {
+    return response;
+  }
+  return await response.json();
 };
 
 interface AxiosOpts {
