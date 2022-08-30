@@ -35,7 +35,9 @@ export function beskyttetApi(handler: ApiHandler): ApiHandler {
       return handler(req, res);
     } catch (e) {
       logger.error(e);
+      logger.info('handling error in beskyttetApi');
       if (e instanceof ErrorMedStatus) {
+        logger.info(`sending error with status ${e.status} and message ${e.message}`);
         return res.status(e.status).json({ message: e.message });
       }
       }
