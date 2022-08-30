@@ -240,7 +240,7 @@ export const getServerSideProps = beskyttetSide(
     const søker = await getSøker(bearerToken);
     const mellomlagretSøknad = await lesBucket('STANDARD', bearerToken);
 
-    if (!mellomlagretSøknad.lagretStepList) {
+    if (!mellomlagretSøknad?.lagretStepList) {
       return {
         redirect: {
           destination: '/standard',

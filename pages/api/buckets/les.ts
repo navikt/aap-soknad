@@ -35,18 +35,23 @@ export const lesBucket = async (type: SøknadsType, accessToken?: string) => {
     // @ts-ignore-line
     return result ? JSON.parse(result) : {};
   }
-  const mellomlagretSøknad = await tokenXProxy({
-    url: `${process.env.SOKNAD_API_URL}/buckets/les/${type}`,
-    method: 'GET',
-    audience: process.env.SOKNAD_API_AUDIENCE!,
-    bearerToken: accessToken,
-  });
-  if (mellomlagretSøknad?.version?.toString() !== SØKNAD_CONTEXT_VERSION?.toString()) {
-    logger.info({
-      cacheConflict: `Cache version: ${mellomlagretSøknad?.version}, SØKNAD_CONTEXT_VERSION: ${SØKNAD_CONTEXT_VERSION}`,
+  try {
+    const mellomlagretSøknad = await tokenXProxy({
+      url: `${process.env.SOKNAD_API_URL}/buckets/les/${type}`,
+      method: 'GET',
+      audience: process.env.SOKNAD_API_AUDIENCE!,
+      bearerToken: accessToken,
     });
+    if (mellomlagretSøknad?.version?.toString() !== SØKNAD_CONTEXT_VERSION?.toString()) {
+      logger.info(
+        `Cache version: ${mellomlagretSøknad?.version}, SØKNAD_CONTEXT_VERSION: ${SØKNAD_CONTEXT_VERSION}`
+      );
+    }
+    return mellomlagretSøknad;
+  } catch (error) {
+    logger.info('Fant ingen mellomlagret søknad');
+    return undefined;
   }
-  return mellomlagretSøknad;
 };
 
 export default handler;
