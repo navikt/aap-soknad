@@ -40,8 +40,7 @@ export function beskyttetApi(handler: ApiHandler): ApiHandler {
         logger.info(`sending error with status ${e.status} and message ${e.message}`);
         return res.status(e.status).json({ message: e.message });
       }
-      }
-      return send500();
     }
+    return send500();
   };
 }
