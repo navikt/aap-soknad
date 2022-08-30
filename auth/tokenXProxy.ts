@@ -72,7 +72,7 @@ export const tokenXAxiosProxy = async (opts: AxiosOpts) => {
     return data.pipe(opts.res);
   } catch (e: any) {
     let msg = '';
-    logger.error({ e }, 'tokenXAxiosProxy oops ' + e.message);
+    logger.error({ e }, 'tokenXAxiosProxy oops ' + e.class + ',' + e.stackTrace);
     return opts.res.status(500).json({ msg });
   }
 };
