@@ -8,6 +8,7 @@ import { FastlegeView } from 'context/sokerOppslagContext';
 import { Soknad } from 'types/Soknad';
 import { BehandlerBackendState, SøknadBackendState } from 'types/SoknadBackendState';
 import { formatDate } from './date';
+import { formatNavn, getFullAdresse } from 'utils/StringFormatters';
 
 export type SøknadsType = 'UTLAND' | 'STANDARD';
 
@@ -216,6 +217,7 @@ const createTabellrad = (
       ];
 const createGruppe = (overskrift: string, tabellrader: any[]) => ({
   type: 'GRUPPE',
+  overskrift,
   tabellrader,
 });
 const createTema = (overskrift: string, rader: any[]) => ({
@@ -293,11 +295,53 @@ export const mapSøknadToPdf = (søknad: Soknad, formatMessage: any) => {
       ...createField(formatMessage(`søknad.yrkesskade.harDuYrkesskade.label`), søknad?.yrkesskade),
     ]);
   };
+  const getBehandlere = (søknad: Soknad) => {
+    const registrerteBehandlere =
+      søknad?.registrerteBehandlere?.map((behandler) =>
+        createGruppe('', [
+          ...createTabellrad('Type', behandler?.type),
+          ...createTabellrad('Kategori', behandler?.kategori),
+          ...createTabellrad(formatNavn(behandler?.navn), ''),
+          ...createTabellrad(behandler?.kontaktinformasjon?.kontor, ''),
+          ...createTabellrad(getFullAdresse(behandler?.kontaktinformasjon?.adresse), ''),
+          ...createTabellrad(behandler?.kontaktinformasjon?.telefon, ''),
+          ...createTabellrad(
+            formatMessage(`søknad.helseopplysninger.erRegistrertFastlegeRiktig.label`),
+            behandler?.erRegistrertFastlegeRiktig
+          ),
+        ])
+      ) || [];
+    const andreBehandlere =
+      søknad?.andreBehandlere?.map((behandler) =>
+        createGruppe('', [
+          ...createTabellrad(
+            formatNavn({ fornavn: behandler?.firstname, etternavn: behandler?.lastname }),
+            ''
+          ),
+          ...createTabellrad(behandler?.legekontor, ''),
+          ...createTabellrad(
+            getFullAdresse({
+              adressenavn: behandler?.gateadresse,
+              postnummer: {
+                postnr: behandler?.postnummer,
+                poststed: behandler?.poststed,
+              },
+            }),
+            ''
+          ),
+          ...createTabellrad(behandler?.telefon, ''),
+        ])
+      ) || [];
+    return [...registrerteBehandlere, ...andreBehandlere];
+  };
   const getAndreYtelser = (søknad: Soknad) => {
     const stønader =
       søknad?.andreUtbetalinger?.stønad?.map(
         (stønadType) =>
-          createTabellrad(formatMessage(stønadTypeToAlternativNøkkel(stønadType)), '')[0]
+          createTabellrad(
+            formatMessage(stønadTypeToAlternativNøkkel(stønadType)),
+            stønadType === StønadType.AFP ? `Utbetaler: ${søknad?.andreUtbetalinger?.afp}` : ''
+          )[0]
       ) || [];
     return createTema('Andre ytelser', [
       ...createField(
@@ -312,6 +356,7 @@ export const mapSøknadToPdf = (søknad: Soknad, formatMessage: any) => {
       getStartDato(søknad),
       getMedlemskap(søknad),
       getYrkesskade(søknad),
+      getBehandlere(søknad),
       getAndreYtelser(søknad),
     ],
   };
