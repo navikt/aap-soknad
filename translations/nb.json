@@ -8,6 +8,7 @@
         "description": "Du regnes som student hvis du tar et studie som gir rett til lån fra Statens lånekasse for utdanning. Du trenger ikke å ha mottatt lån/stipend.",
         "ja": "Ja, helt eller delvis",
         "avbrutt": "Ja, men har avbrutt studiet helt på grunn av sykdom",
+        "nei": "Nei",
         "required": "Du må svare på om du er student."
       },
       "kommeTilbake": {
@@ -656,7 +657,8 @@
       },
       "lastNedSøknad": "Last ned søknaden som pdf",
       "dittNavKnapp": "Se saken din på Ditt NAV"
-    }
+    },
+    "ettersendelseFrist": "Du kan ettersende dette innen 14 dager per post eller digitalt. Du kan også levere dette på ditt lokale NAV kontor"
   },
   "utland": {
     "title": "Søknad om Arbeidsavklaringspenger (AAP) utland",

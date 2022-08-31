@@ -52,6 +52,28 @@ const ANDRE_UTBETALINGER = 'andreUtbetalinger';
 const LØNN = 'lønn';
 const STØNAD = 'stønad';
 
+export const stønadTypeToAlternativNøkkel = (stønadType: StønadType) => {
+  switch (stønadType) {
+    case StønadType.ØKONOMISK_SOSIALHJELP:
+      return `søknad.${ANDRE_UTBETALINGER}.${STØNAD}.values.økonomiskSosialhjelp`;
+    case StønadType.OMSORGSSTØNAD:
+      return `søknad.${ANDRE_UTBETALINGER}.${STØNAD}.values.omsorgsstønad`;
+    case StønadType.INTRODUKSJONSSTØNAD:
+      return `søknad.${ANDRE_UTBETALINGER}.${STØNAD}.values.introduksjonsStønad`;
+    case StønadType.KVALIFISERINGSSTØNAD:
+      return `søknad.${ANDRE_UTBETALINGER}.${STØNAD}.values.kvalifiseringsstønad`;
+    case StønadType.VERV:
+      return `søknad.${ANDRE_UTBETALINGER}.${STØNAD}.values.verv`;
+    case StønadType.UTLAND:
+      return `søknad.${ANDRE_UTBETALINGER}.${STØNAD}.values.utland`;
+    case StønadType.AFP:
+      return `søknad.${ANDRE_UTBETALINGER}.${STØNAD}.values.afp`;
+    case StønadType.STIPEND:
+      return `søknad.${ANDRE_UTBETALINGER}.${STØNAD}.values.stipend`;
+    case StønadType.NEI:
+      return `søknad.${ANDRE_UTBETALINGER}.${STØNAD}.values.nei`;
+  }
+};
 export const AndreUtbetalinger = ({ onBackClick, onNext, defaultValues }: Props) => {
   const { formatMessage } = useFeatureToggleIntl();
 
@@ -91,25 +113,26 @@ export const AndreUtbetalinger = ({ onBackClick, onNext, defaultValues }: Props)
   const stønadEllerVerv = watch(`${ANDRE_UTBETALINGER}.${STØNAD}`);
   const StønadAlternativer = useMemo(
     () => ({
-      ØKONOMISK_SOSIALHJELP: formatMessage(
-        `søknad.${ANDRE_UTBETALINGER}.${STØNAD}.values.økonomiskSosialhjelp`
+      [StønadType.ØKONOMISK_SOSIALHJELP]: formatMessage(
+        stønadTypeToAlternativNøkkel(StønadType.ØKONOMISK_SOSIALHJELP)
       ),
-      OMSORGSSTØNAD: formatMessage(`søknad.${ANDRE_UTBETALINGER}.${STØNAD}.values.omsorgsstønad`),
-      INTRODUKSJONSSTØNAD: formatMessage(
-        `søknad.${ANDRE_UTBETALINGER}.${STØNAD}.values.introduksjonsStønad`
+      [StønadType.OMSORGSSTØNAD]: formatMessage(
+        stønadTypeToAlternativNøkkel(StønadType.OMSORGSSTØNAD)
       ),
-      KVALIFISERINGSSTØNAD: formatMessage(
-        `søknad.${ANDRE_UTBETALINGER}.${STØNAD}.values.kvalifiseringsstønad`
+      [StønadType.INTRODUKSJONSSTØNAD]: formatMessage(
+        stønadTypeToAlternativNøkkel(StønadType.INTRODUKSJONSSTØNAD)
       ),
-      VERV: formatMessage(`søknad.${ANDRE_UTBETALINGER}.${STØNAD}.values.verv`),
-      UTLAND: formatMessage(`søknad.${ANDRE_UTBETALINGER}.${STØNAD}.values.utland`),
-      AFP: formatMessage(`søknad.${ANDRE_UTBETALINGER}.${STØNAD}.values.afp`),
-      STIPEND: formatMessage(`søknad.${ANDRE_UTBETALINGER}.${STØNAD}.values.stipend`),
-      NEI: formatMessage(`søknad.${ANDRE_UTBETALINGER}.${STØNAD}.values.nei`),
+      [StønadType.KVALIFISERINGSSTØNAD]: formatMessage(
+        stønadTypeToAlternativNøkkel(StønadType.KVALIFISERINGSSTØNAD)
+      ),
+      [StønadType.VERV]: formatMessage(stønadTypeToAlternativNøkkel(StønadType.VERV)),
+      [StønadType.UTLAND]: formatMessage(stønadTypeToAlternativNøkkel(StønadType.UTLAND)),
+      [StønadType.AFP]: formatMessage(stønadTypeToAlternativNøkkel(StønadType.AFP)),
+      [StønadType.STIPEND]: formatMessage(stønadTypeToAlternativNøkkel(StønadType.STIPEND)),
+      [StønadType.NEI]: formatMessage(stønadTypeToAlternativNøkkel(StønadType.NEI)),
     }),
     [formatMessage]
   );
-  console.log('lønnEllerSluttpakke', lønnEtterlønnEllerSluttpakke);
   const Attachments = useMemo(() => {
     let attachments: Array<{ type: string; description: string }> = [];
 
