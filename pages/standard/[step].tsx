@@ -1,6 +1,6 @@
 import PageHeader from 'components/PageHeader';
 import { useRouter } from 'next/router';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { setSoknadStateFraProps, SoknadActionKeys } from 'context/soknadContextCommon';
 import {
   useStepWizard,
@@ -45,6 +45,7 @@ import { getAccessToken } from 'auth/accessToken';
 import { getSøker } from '../api/oppslag/soeker';
 import { lesBucket } from '../api/buckets/les';
 import { logSkjemaFullførtEvent, logSkjemastegFullførtEvent } from 'utils/amplitude';
+import { Alert } from '@navikt/ds-react';
 
 interface PageProps {
   søker: SokerOppslagState;
@@ -61,6 +62,8 @@ const Steps = ({ søker, mellomlagretSøknad }: PageProps) => {
   const { oppslagDispatch } = useSokerOppslag();
   const { currentStep, stepList, stepWizardDispatch } = useStepWizard();
   const debouncedLagre = useDebounceLagreSoknad<Soknad>();
+
+  const [showFetchErrorMessage, setShowFetchErrorMessage] = useState(false);
 
   useEffect(() => {
     if (søknadState?.søknad === undefined) {
@@ -88,6 +91,7 @@ const Steps = ({ søker, mellomlagretSøknad }: PageProps) => {
 
   const submitSoknad: SubmitHandler<Soknad> = async (data) => {
     if (currentStep?.name === StepNames.OPPSUMMERING) {
+      setShowFetchErrorMessage(false);
       console.log('post søknad', søknadState?.søknad);
       const sendtTimestamp = new Date();
 
@@ -112,11 +116,8 @@ const Steps = ({ søker, mellomlagretSøknad }: PageProps) => {
         søknadDispatch({ type: SoknadActionKeys.ADD_SØKNAD_URL, payload: url });
         router.push('kvittering');
       } else {
-        // show post error
+        setShowFetchErrorMessage(true);
       }
-      setTimeout(() => {
-        router.push('kvittering');
-      }, 2000);
     } else {
       completeAndGoToNextStep(stepWizardDispatch);
     }
@@ -231,6 +232,11 @@ const Steps = ({ søker, mellomlagretSøknad }: PageProps) => {
           {step === '10' && (
             <Oppsummering onBackClick={onPreviousStep} onSubmitSoknad={submitSoknad} />
           )}
+          {showFetchErrorMessage && (
+            <Alert variant="error">
+              Det oppstod en feil under sending av søknaden. Prøv igjen senere.
+            </Alert>
+          )}
         </StepWizard>
       )}
     </>
@@ -250,7 +256,7 @@ export const getServerSideProps = beskyttetSide(
     const søker = await getSøker(bearerToken);
     const mellomlagretSøknad = await lesBucket('STANDARD', bearerToken);
 
-    if (!mellomlagretSøknad.lagretStepList) {
+    if (!mellomlagretSøknad?.lagretStepList) {
       return {
         redirect: {
           destination: '/standard',

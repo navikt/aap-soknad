@@ -2,6 +2,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import { isMock } from '../utils/environments';
 import { verifyIdportenAccessToken } from './verifyIdPortenAccessToken';
 import logger from '../utils/logger';
+import { ErrorMedStatus } from './ErrorMedStatus';
 
 type ApiHandler = (req: NextApiRequest, res: NextApiResponse) => void | Promise<void>;
 
@@ -34,7 +35,12 @@ export function beskyttetApi(handler: ApiHandler): ApiHandler {
       return handler(req, res);
     } catch (e) {
       logger.error(e);
-      return send500();
+      logger.info('handling error in beskyttetApi');
+      if (e instanceof ErrorMedStatus) {
+        logger.info(`sending error with status ${e.status} and message ${e.message}`);
+        return res.status(e.status).json({ message: e.message });
+      }
     }
+    return send500();
   };
 }

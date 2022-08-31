@@ -1,22 +1,6 @@
 import pino from 'pino';
+import ecsFormat from '@elastic/ecs-pino-format';
 
-const logger = pino({
-  browser: {},
-  level: 'debug',
-  ...(process.env.NEXT_PUBLIC_ENVIRONMENT === 'localhost'
-    ? {
-        timestamp: false,
-        transport: {
-          target: 'pino-pretty',
-          options: {
-            colorize: true,
-          },
-        },
-      }
-    : {}),
-  base: {
-    env: process.env.NODE_ENV,
-  },
-});
+const ecsLogger = pino(ecsFormat());
 
-export default logger;
+export default ecsLogger;

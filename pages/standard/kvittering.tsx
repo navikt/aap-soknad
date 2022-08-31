@@ -51,7 +51,7 @@ export const getServerSideProps = beskyttetSide(
     const bearerToken = getAccessToken(ctx);
     const søknader = await getSøknader(bearerToken);
     const søker = await getSøker(bearerToken);
-    logger.info(søker, 'søkeroppslag fra API');
+    logger.info(`søkeroppslag fra API: ${JSON.stringify(søker)}`);
 
     return {
       props: { søknader, søker },
