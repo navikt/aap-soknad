@@ -2,7 +2,7 @@ import { Soknad } from 'types/Soknad';
 import RadioGroupWrapper from 'components/input/RadioGroupWrapper/RadioGroupWrapper';
 import { BodyShort, Heading, Radio, Alert } from '@navikt/ds-react';
 import { JaNeiVetIkke } from 'types/Generic';
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import * as yup from 'yup';
 import { useStepWizard } from 'context/stepWizardContextV2';
 import { FieldValues, useForm } from 'react-hook-form';
@@ -22,15 +22,25 @@ import { useDebounceLagreSoknad } from 'hooks/useDebounceLagreSoknad';
 import { GenericSoknadContextState } from 'types/SoknadContext';
 
 export const AVBRUTT_STUDIE_VEDLEGG = 'avbruttStudie';
-const STUDENT = 'student';
-const ER_STUDENT = 'erStudent';
-const KOMME_TILBAKE = 'kommeTilbake';
+export const STUDENT = 'student';
+export const ER_STUDENT = 'erStudent';
+export const KOMME_TILBAKE = 'kommeTilbake';
 
 enum JaNeiAvbrutt {
   JA = 'Ja',
   NEI = 'Nei',
   AVBRUTT = 'Avbrutt',
 }
+export const jaNeiAvbruttToTekstnøkkel = (jaNeiAvbrutt: JaNeiAvbrutt) => {
+  switch (jaNeiAvbrutt) {
+    case JaNeiAvbrutt.JA:
+      return 'søknad.student.erStudent.ja';
+    case JaNeiAvbrutt.AVBRUTT:
+      return 'søknad.student.erStudent.avbrutt';
+    case JaNeiAvbrutt.NEI:
+      return 'søknad.student.erStudent.nei';
+  }
+};
 interface Props {
   onBackClick: () => void;
   onNext: (data: any) => void;
@@ -85,6 +95,14 @@ const Student = ({ onBackClick, onNext, defaultValues }: Props) => {
   useEffect(() => {
     debouncedLagre(søknadState, stepList, allFields);
   }, [allFields]);
+  const ErStudentAlternativer = useMemo(
+    () => ({
+      [JaNeiAvbrutt.JA]: formatMessage(jaNeiAvbruttToTekstnøkkel(JaNeiAvbrutt.JA)),
+      [JaNeiAvbrutt.NEI]: formatMessage(jaNeiAvbruttToTekstnøkkel(JaNeiAvbrutt.NEI)),
+      [JaNeiAvbrutt.AVBRUTT]: formatMessage(jaNeiAvbruttToTekstnøkkel(JaNeiAvbrutt.AVBRUTT)),
+    }),
+    [formatMessage]
+  );
 
   useEffect(() => {
     clearErrors();
@@ -137,13 +155,13 @@ const Student = ({ onBackClick, onNext, defaultValues }: Props) => {
         error={errors?.[STUDENT]?.[ER_STUDENT]?.message}
       >
         <Radio value={JaNeiAvbrutt.JA}>
-          <BodyShort>{formatMessage('søknad.student.erStudent.ja')}</BodyShort>
+          <BodyShort>{ErStudentAlternativer?.[JaNeiAvbrutt.JA]}</BodyShort>
         </Radio>
         <Radio value={JaNeiAvbrutt.AVBRUTT}>
-          <BodyShort>{formatMessage('søknad.student.erStudent.avbrutt')}</BodyShort>
+          <BodyShort>{ErStudentAlternativer?.[JaNeiAvbrutt.AVBRUTT]}</BodyShort>
         </Radio>
         <Radio value={JaNeiAvbrutt.NEI}>
-          <BodyShort>{JaNeiAvbrutt.NEI}</BodyShort>
+          <BodyShort>{ErStudentAlternativer?.[JaNeiAvbrutt.NEI]}</BodyShort>
         </Radio>
       </RadioGroupWrapper>
       {erStudent === JaNeiAvbrutt.AVBRUTT && (

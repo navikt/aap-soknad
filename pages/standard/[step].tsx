@@ -89,11 +89,18 @@ const Steps = ({ søker, mellomlagretSøknad }: PageProps) => {
   const submitSoknad: SubmitHandler<Soknad> = async (data) => {
     if (currentStep?.name === StepNames.OPPSUMMERING) {
       console.log('post søknad', søknadState?.søknad);
+      const sendtTimestamp = new Date();
 
       // Må massere dataene litt før vi sender de inn
       const søknad = mapSøknadToBackend(søknadState?.søknad);
 
-      const søknadPdf = mapSøknadToPdf(søknadState?.søknad || {}, formatMessage);
+      const søknadPdf = mapSøknadToPdf(
+        søknadState?.søknad,
+        sendtTimestamp,
+        formatMessage,
+        søknadState?.requiredVedlegg,
+        søker?.søker
+      );
 
       console.log('søknad', søknad);
       console.log('søknadPDF', søknadPdf);

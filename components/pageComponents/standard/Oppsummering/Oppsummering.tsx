@@ -20,7 +20,6 @@ import { LucaGuidePanel } from 'components/LucaGuidePanel';
 import { useFeatureToggleIntl } from 'hooks/useFeatureToggleIntl';
 import { slettLagretSoknadState } from 'context/soknadContextCommon';
 import { useSoknadContextStandard } from 'context/soknadContextStandard';
-import { Relasjon } from '../Barnetillegg/AddBarnModal';
 import { OppsummeringVedlegg } from './OppsummeringVedlegg/OppsummeringVedlegg';
 
 interface OppsummeringProps {
@@ -142,7 +141,7 @@ const Oppsummering = ({ onBackClick, onSubmitSoknad }: OppsummeringProps) => {
             value={søknadState?.søknad?.medlemskap?.harArbeidetINorgeSiste5År}
           />
           <SummaryRowIfExists
-            labelKey={'søknad.medlemskap.arbeidUtenforNorge.legend'}
+            labelKey={'søknad.medlemskap.arbeidUtenforNorge.label'}
             value={søknadState?.søknad?.medlemskap?.arbeidetUtenforNorgeFørSykdom}
           />
           <SummaryRowIfExists
