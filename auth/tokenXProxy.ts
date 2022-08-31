@@ -44,6 +44,7 @@ export const tokenXProxy = async (opts: Opts) => {
   if (opts.rawResonse) {
     return response;
   }
+  logger.info(`Vellyket tokenXProxy-request mot ${opts.url}`);
   return await response.json();
 };
 
