@@ -38,13 +38,13 @@ export const tokenXProxy = async (opts: Opts) => {
       response.status
     );
   }
+  logger.info(`Vellyket tokenXProxy-request mot ${opts.url}. Status: ${response.status}`);
   if (opts.noResponse) {
     return;
   }
   if (opts.rawResonse) {
     return response;
   }
-  logger.info(`Vellyket tokenXProxy-request mot ${opts.url}`);
   return await response.json();
 };
 
