@@ -8,6 +8,7 @@ import { Upload as SvgUpload } from '@navikt/ds-icons';
 import { useSoknadContextStandard } from 'context/soknadContextStandard';
 import { updateRequiredVedlegg } from 'context/soknadContextCommon';
 import { useRouter } from 'next/router';
+import useClientFetch from 'hooks/useClientFetch';
 type Props = {
   setError: (name: string, error: FieldError) => void;
   clearErrors: (name?: string | string[]) => void;
@@ -41,6 +42,7 @@ const FieldArrayFileInput = ({
 
   const { søknadDispatch } = useSoknadContextStandard();
   const router = useRouter();
+  const { clientFetch } = useClientFetch();
 
   const [dragOver, setDragOver] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
@@ -98,19 +100,20 @@ const FieldArrayFileInput = ({
     const data = new FormData();
     data.append('vedlegg', file);
     setLoading(true);
-    const vedlegg = await fetch('/aap/soknad/api/vedlegg/lagre/', {
-      method: 'POST',
-      body: data,
-      redirect: 'manual',
-    });
-    if (vedlegg.status === 0) {
-      router.push(
-        formatMessage('appLinks.login', {
-          navhostname: process.env.NEXT_PUBLIC_NAV_HOSTNAME_URL,
-          redirect: '/aap/soknad/standard',
-        })
-      );
-    }
+    const vedlegg = await clientFetch('/aap/soknad/api/vedlegg/lagre/', 'POST', data);
+    // const vedlegg = await fetch('/aap/soknad/api/vedlegg/lagre/', {
+    //   method: 'POST',
+    //   body: data,
+    //   redirect: 'manual',
+    // });
+    // if (vedlegg.status === 0) {
+    //   router.push(
+    //     formatMessage('appLinks.login', {
+    //       navhostname: process.env.NEXT_PUBLIC_NAV_HOSTNAME_URL,
+    //       redirect: '/aap/soknad/standard',
+    //     })
+    //   );
+    // }
     setLoading(false);
     if (vedlegg.ok) {
       const id = await vedlegg.json();
