@@ -11,7 +11,6 @@
     "@navikt/ds-react": "^1.2.0",
     "@navikt/nav-dekoratoren-moduler": "^1.6.9",
     "@sentry/nextjs": "^7.8.0",
-    "@sentry/react": "7.12.1",
     "@sentry/tracing": "6.18.1",
     "amplitude-js": "^8.19.0",
     "axios": "^0.27.2",
