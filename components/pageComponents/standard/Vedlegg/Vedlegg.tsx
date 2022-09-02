@@ -15,7 +15,7 @@ import { slettLagretSoknadState, updateSøknadData } from 'context/soknadContext
 import { deleteOpplastedeVedlegg, useSoknadContextStandard } from 'context/soknadContextStandard';
 import { useDebounceLagreSoknad } from 'hooks/useDebounceLagreSoknad';
 import { Relasjon } from '../Barnetillegg/AddBarnModal';
-import { getUniqueIshIdForBarn, MANUELLE_BARN } from '../Barnetillegg/Barnetillegg';
+import { MANUELLE_BARN } from '../Barnetillegg/Barnetillegg';
 import FieldArrayFileInput from 'components/input/FileInput/FieldArrayFileInput';
 import { GenericSoknadContextState } from 'types/SoknadContext';
 
@@ -28,6 +28,7 @@ const VEDLEGG = 'vedlegg';
 const VEDLEGG_LØNN = `${VEDLEGG}.${AttachmentType.LØNN_OG_ANDRE_GODER}`;
 const VEDLEGG_OMSORGSSTØNAD = `${VEDLEGG}.${AttachmentType.OMSORGSSTØNAD}`;
 const VEDLEGG_UTLANDSSTØNAD = `${VEDLEGG}.${AttachmentType.UTLANDSSTØNAD}`;
+const VEDLEGG_SYKESTIPEND = `${VEDLEGG}.${AttachmentType.SYKESTIPEND}`;
 const VEDLEGG_ANNET = `${VEDLEGG}.annet`;
 
 const Vedlegg = ({ onBackClick, onNext, defaultValues }: Props) => {
@@ -170,6 +171,18 @@ const Vedlegg = ({ onBackClick, onNext, defaultValues }: Props) => {
           clearErrors={clearErrors}
           heading={formatMessage('søknad.andreUtbetalinger.stønad.values.utland')}
           ingress={formatMessage('søknad.andreUtbetalinger.vedlegg.utlandsStønad')}
+        />
+      )}
+      {søknadState?.requiredVedlegg?.find((e) => e.type === AttachmentType.SYKESTIPEND) && (
+        <FieldArrayFileInput
+          control={control}
+          name={VEDLEGG_SYKESTIPEND}
+          type={AttachmentType.SYKESTIPEND}
+          errors={errors}
+          setError={setError}
+          clearErrors={clearErrors}
+          heading={formatMessage('søknad.andreUtbetalinger.stønad.values.stipend')}
+          ingress={formatMessage('søknad.andreUtbetalinger.vedlegg.sykeStipend')}
         />
       )}
       {søknadState?.søknad?.manuelleBarn?.map((barn, index) => {

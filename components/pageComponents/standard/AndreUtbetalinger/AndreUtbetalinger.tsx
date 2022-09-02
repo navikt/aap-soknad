@@ -33,6 +33,7 @@ export enum AttachmentType {
   OMSORGSSTØNAD = 'OMSORGSSTØNAD',
   UTLANDSSTØNAD = 'UTLANDSSTØNAD',
   AVBRUTT_STUDIE = 'avbruttStudie',
+  SYKESTIPEND = 'SYKESTIPEND',
   ANNET = 'ANNET',
 }
 
@@ -154,6 +155,15 @@ export const AndreUtbetalinger = ({ onBackClick, onNext, defaultValues }: Props)
         },
       ];
     }
+    if (stønadEllerVerv?.includes(StønadType.STIPEND)) {
+      attachments = [
+        ...attachments,
+        {
+          type: AttachmentType.SYKESTIPEND,
+          description: formatMessage(`søknad.andreUtbetalinger.vedlegg.sykeStipend`),
+        },
+      ];
+    }
     if (lønnEtterlønnEllerSluttpakke === JaEllerNei.JA) {
       attachments = [
         ...attachments,
@@ -179,6 +189,7 @@ export const AndreUtbetalinger = ({ onBackClick, onNext, defaultValues }: Props)
   useEffect(() => {
     removeRequiredVedlegg(AttachmentType.OMSORGSSTØNAD, søknadDispatch);
     removeRequiredVedlegg(AttachmentType.UTLANDSSTØNAD, søknadDispatch);
+    removeRequiredVedlegg(AttachmentType.SYKESTIPEND, søknadDispatch);
     removeRequiredVedlegg(AttachmentType.LØNN_OG_ANDRE_GODER, søknadDispatch);
     addRequiredVedlegg(Attachments, søknadDispatch);
   }, [Attachments]);

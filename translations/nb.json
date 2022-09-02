@@ -361,7 +361,8 @@
       "vedlegg": {
         "omsorgsstønad": "Kopi av avtalen om omsorgsstønad fra kommunen din",
         "utlandsStønad": "Dokumentasjon av ytelser fra utenlandske trygdemyndigheter",
-        "andreGoder": "Dokumentasjon av ekstra utbetalinger fra arbeidsgiver, for eksempel kopi av inngått sluttpakke, avtale om etterlønn eller andre goder. Både beløpet på utbetalingen og perioden den gjelder for bør være dokumentert"
+        "andreGoder": "Dokumentasjon av ekstra utbetalinger fra arbeidsgiver, for eksempel kopi av inngått sluttpakke, avtale om etterlønn eller andre goder. Både beløpet på utbetalingen og perioden den gjelder for bør være dokumentert",
+        "sykeStipend": "Hvis du har søkt eller mottar sykestipend, trenger vi kopi av vedtaket eller søknaden."
       },
       "alert": {
         "leggeVedTekst": "Du må legge ved:",
