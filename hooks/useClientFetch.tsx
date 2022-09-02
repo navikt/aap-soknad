@@ -10,13 +10,12 @@ const useClientFetch = () => {
         redirect: 'manual',
       });
       if (res.status === 0) {
-        router.push(
-          `https://aap-soknad.${process.env.NEXT_PUBLIC_NAV_HOSTNAME_URL}/oauth2/login?redirect=/aap/soknad/standard`
-        );
-        return;
-      } else {
-        return res;
+        // eslint-disable-next-line max-len
+        const path = `https://aap-soknad.${process.env.NEXT_PUBLIC_NAV_HOSTNAME_URL}/oauth2/login?redirect=/aap/soknad/standard`;
+        console.log('redirect to ', path);
+        await router.push(path);
       }
+      return res;
     } catch (err) {
       //global error handling for network errors (4.., 5..)
     }
