@@ -17,30 +17,23 @@
  */
 
 import * as Sentry from '@sentry/nextjs';
-import Link from 'next/link';
+import NextErrorComponent from 'next/error';
 
-function Error({ statusCode }) {
-  return (
-    <div className="error-container">
-      {statusCode && <h1>Error: {statusCode}</h1>}
-      <p>
-        Beklager, her har det skjedd noe galt. Vi har spart på svarene dine slik at du kan fortsette
-        der du slapp senere.
-      </p>
-      <Link href="/standard" shallow={false}>
-        Gå tilbake til søknad
-      </Link>
-    </div>
-  );
-}
+const CustomErrorComponent = (props) => {
+  // If you're using a Nextjs version prior to 12.2.1, uncomment this to
+  // compensate for https://github.com/vercel/next.js/issues/8592
+  // Sentry.captureUnderscoreErrorException(props);
 
-Error.getInitialProps = async ({ res, err }) => {
-  // In case this is running in a serverless function, await this in order to give Sentry
-  // time to send the error before the lambda exits
-  await Sentry.captureUnderscoreErrorException({ res, err });
-
-  const statusCode = res ? res.statusCode : err ? err.statusCode : 404;
-  return { statusCode };
+  return <NextErrorComponent statusCode={props.statusCode} />;
 };
 
-export default Error;
+CustomErrorComponent.getInitialProps = async (contextData) => {
+  // In case this is running in a serverless function, await this in order to give Sentry
+  // time to send the error before the lambda exits
+  await Sentry.captureUnderscoreErrorException(contextData);
+
+  // This will contain the status code of the response
+  return NextErrorComponent.getInitialProps(contextData);
+};
+
+export default CustomErrorComponent;

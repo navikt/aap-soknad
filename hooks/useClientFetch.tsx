@@ -1,3 +1,10 @@
+class FetchError extends Error {
+  constructor(message: string, cause?: Error) {
+    super(message);
+    this.cause = cause;
+    this.name = 'FetchError';
+  }
+}
 const useClientFetch = () => {
   const clientFetch = async (url: string, method?: string, body?: any) => {
     try {
@@ -17,7 +24,7 @@ const useClientFetch = () => {
         const isJson = res.headers.get('content-type')?.includes('application/json');
         const data = isJson ? await res.json() : null;
         // get error message from body or default to response status
-        const error = { status: res.status, msg: data && data.message };
+        const error = new FetchError(`status: ${res.status}, msg: ${data?.message}`);
         return Promise.reject(error);
       }
       return res;
