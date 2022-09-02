@@ -13,7 +13,11 @@ const useClientFetch = () => {
         // eslint-disable-next-line max-len
         const path = `https://aap-soknad.${process.env.NEXT_PUBLIC_NAV_HOSTNAME_URL}/oauth2/login?redirect=/aap/soknad/standard`;
         console.log('redirect to ', path);
-        await router.push(path);
+        // await router.push(path);
+        if (window) {
+          // @ts-ignore
+          window.location = path;
+        }
       }
       return res;
     } catch (err) {
