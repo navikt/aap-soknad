@@ -17,6 +17,7 @@ const useClientFetch = () => {
       }
       return res;
     } catch (err) {
+      console.log('useClientFetch error:', err);
       //global error handling for network errors (4.., 5..)
     }
   };
