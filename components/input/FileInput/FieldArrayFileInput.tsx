@@ -7,7 +7,6 @@ import { Cancel, Delete, FileError, FileSuccess } from '@navikt/ds-icons';
 import { Upload as SvgUpload } from '@navikt/ds-icons';
 import { useSoknadContextStandard } from 'context/soknadContextStandard';
 import { updateRequiredVedlegg } from 'context/soknadContextCommon';
-import { useRouter } from 'next/router';
 import useClientFetch from 'hooks/useClientFetch';
 type Props = {
   setError: (name: string, error: FieldError) => void;
@@ -41,7 +40,6 @@ const FieldArrayFileInput = ({
   const { formatMessage } = useFeatureToggleIntl();
 
   const { søknadDispatch } = useSoknadContextStandard();
-  const router = useRouter();
   const { clientFetch } = useClientFetch();
 
   const [dragOver, setDragOver] = useState<boolean>(false);
@@ -101,19 +99,6 @@ const FieldArrayFileInput = ({
     data.append('vedlegg', file);
     setLoading(true);
     const vedlegg = await clientFetch('/aap/soknad/api/vedlegg/lagre/', 'POST', data);
-    // const vedlegg = await fetch('/aap/soknad/api/vedlegg/lagre/', {
-    //   method: 'POST',
-    //   body: data,
-    //   redirect: 'manual',
-    // });
-    // if (vedlegg.status === 0) {
-    //   router.push(
-    //     formatMessage('appLinks.login', {
-    //       navhostname: process.env.NEXT_PUBLIC_NAV_HOSTNAME_URL,
-    //       redirect: '/aap/soknad/standard',
-    //     })
-    //   );
-    // }
     setLoading(false);
     if (vedlegg.ok) {
       const id = await vedlegg.json();
@@ -122,7 +107,7 @@ const FieldArrayFileInput = ({
       updateRequiredVedlegg({ type: 'OMSORGSSTØNAD', completed: true }, søknadDispatch);
     } else {
       setFilename(file?.name);
-      setError(inputId, { type: 'custom', message: errorText(vedlegg.status) });
+      setError(inputId, { type: 'custom', message: errorText(vedlegg?.status) });
     }
     setDragOver(false);
   };
