@@ -17,29 +17,28 @@
  */
 
 import * as Sentry from '@sentry/nextjs';
-import Image from 'next/image';
+import Link from 'next/link';
 
 function Error({ statusCode }) {
   return (
     <div className="error-container">
-      <Image src={'/assets/nav-logo-red.svg'} alt="Nav logo" width="350px" height="300px" />
       {statusCode && <h1>Error: {statusCode}</h1>}
       <p>
         Beklager, her har det skjedd noe galt. Vi har spart på svarene dine slik at du kan fortsette
         der du slapp senere.
       </p>
-      <Link href="/" shallow={false}>
+      <Link href="/standard" shallow={false}>
         Gå tilbake til søknad
       </Link>
     </div>
   );
 }
 
-Error.getInitialProps = async ({ res, err }) => {
+Error.getInitialProps = async (contextData) => {
   // In case this is running in a serverless function, await this in order to give Sentry
   // time to send the error before the lambda exits
   await Sentry.captureUnderscoreErrorException(contextData);
-
+  const { res, err } = contextData;
   const statusCode = res ? res.statusCode : err ? err.statusCode : 404;
   return { statusCode };
 };
