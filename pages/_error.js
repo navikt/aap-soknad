@@ -34,11 +34,11 @@ function Error({ statusCode }) {
   );
 }
 
-Error.getInitialProps = async (contextData) => {
+Error.getInitialProps = async ({ res, err }) => {
   // In case this is running in a serverless function, await this in order to give Sentry
   // time to send the error before the lambda exits
-  await Sentry.captureUnderscoreErrorException(contextData);
-  const { res, err } = contextData;
+  await Sentry.captureUnderscoreErrorException({ res, err });
+
   const statusCode = res ? res.statusCode : err ? err.statusCode : 404;
   return { statusCode };
 };
