@@ -21,6 +21,7 @@ import { useFeatureToggleIntl } from 'hooks/useFeatureToggleIntl';
 import { slettLagretSoknadState } from 'context/soknadContextCommon';
 import { useSoknadContextStandard } from 'context/soknadContextStandard';
 import { OppsummeringVedlegg } from './OppsummeringVedlegg/OppsummeringVedlegg';
+import { KOMME_TILBAKE, STUDENT } from 'components/pageComponents/standard/Student/Student';
 
 interface OppsummeringProps {
   onBackClick: () => void;
@@ -224,6 +225,10 @@ const Oppsummering = ({ onBackClick, onSubmitSoknad }: OppsummeringProps) => {
           <SummaryRowIfExists
             labelKey={`søknad.student.erStudent.legend`}
             value={søknadState?.søknad?.student?.erStudent}
+          />
+          <SummaryRowIfExists
+            labelKey={`søknad.${STUDENT}.${KOMME_TILBAKE}.legend`}
+            value={søknadState?.søknad?.student?.kommeTilbake}
           />
         </AccordianItemOppsummering>
         <AccordianItemOppsummering
