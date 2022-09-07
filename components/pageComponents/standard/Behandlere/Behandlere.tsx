@@ -31,7 +31,17 @@ const RIKTIG_FASTLEGE = 'erRegistrertFastlegeRiktig';
 export const Behandlere = ({ onBackClick, onNext, defaultValues }: Props) => {
   const { formatMessage } = useFeatureToggleIntl();
 
-  const schema = yup.object().shape({});
+  const schema = yup.object().shape({
+    [REGISTRERTE_BEHANDLERE]: yup.array().of(
+      yup.object().shape({
+        [RIKTIG_FASTLEGE]: yup
+          .string()
+          .required(formatMessage(`søknad.helseopplysninger.erRegistrertFastlegeRiktig.required`))
+          .oneOf([JaEllerNei.JA, JaEllerNei.NEI])
+          .nullable(),
+      })
+    ),
+  });
   const { søknadState, søknadDispatch } = useSoknadContextStandard();
   const { stepList } = useStepWizard();
   const {

@@ -251,7 +251,8 @@
       },
       "erRegistrertFastlegeRiktig": {
         "label": "Er informasjonen om fastlegen din riktig?",
-        "alertInfo": "Takk for beskjed om at informasjonen er feil. Fyll ut hvilken lege vi kan kontakte for helseopplysninger under \"Legg til lege/behandler\". På helsenorge.no kan du bytte fastlege. Dette kan du gjøre etter at du har sendt inn AAP-søknaden."
+        "alertInfo": "Takk for beskjed om at informasjonen er feil. Fyll ut hvilken lege vi kan kontakte for helseopplysninger under \"Legg til lege/behandler\". På helsenorge.no kan du bytte fastlege. Dette kan du gjøre etter at du har sendt inn AAP-søknaden.",
+        "required": "Du må svare på om informasjonen om din registrerte behandler er riktig."
       },
       "registrertFastlege": {
         "title": "Din registrerte fastlege",
