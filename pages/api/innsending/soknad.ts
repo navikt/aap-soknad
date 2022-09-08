@@ -3,7 +3,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import { getAccessTokenFromRequest } from 'auth/accessToken';
 import { beskyttetApi } from 'auth/beskyttetApi';
 import { tokenXProxy } from 'auth/tokenXProxy';
-import { isMock } from 'utils/environments';
+import { isMock, isLabs } from 'utils/environments';
 import { slettBucket } from '../buckets/slett';
 
 const handler = beskyttetApi(async (req: NextApiRequest, res: NextApiResponse) => {
@@ -12,6 +12,9 @@ const handler = beskyttetApi(async (req: NextApiRequest, res: NextApiResponse) =
 });
 
 export const sendSoknad = async (data: string, accessToken?: string) => {
+  if (isLabs()) {
+    return { uri: `https://localhost:3000/aap/soknad/api/vedlegg/les?uuid=${randomUUID()}` };
+  }
   if (isMock()) {
     await slettBucket('STANDARD', accessToken);
     return { uri: `https://localhost:3000/aap/soknad/api/vedlegg/les?uuid=${randomUUID()}` };
