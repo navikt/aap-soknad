@@ -38,24 +38,6 @@ export const mockSøker = {
         },
         fødseldato: formatDate(sub(new Date(), { years: 2 }), 'yyyy-MM-dd'),
       },
-      {
-        fnr: '789',
-        navn: {
-          fornavn: 'Barn',
-          mellomnavn: 'Nummer',
-          etternavn: 'Tre',
-        },
-        fødseldato: formatDate(sub(new Date(), { years: 3 }), 'yyyy-MM-dd'),
-      },
-      {
-        fnr: '012',
-        navn: {
-          fornavn: 'Barn',
-          mellomnavn: 'Nummer',
-          etternavn: 'Fire',
-        },
-        fødseldato: formatDate(sub(new Date(), { years: 4 }), 'yyyy-MM-dd'),
-      },
     ],
   },
   behandlere: [
