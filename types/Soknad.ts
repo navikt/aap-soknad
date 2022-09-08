@@ -5,7 +5,6 @@ import {
 import { Relasjon } from 'components/pageComponents/standard/Barnetillegg/AddBarnModal';
 import { JaEllerNei, JaNeiVetIkke } from './Generic';
 import { AVBRUTT_STUDIE_VEDLEGG } from 'components/pageComponents/standard/Student/Student';
-import { BehandlerBackendState } from './SoknadBackendState';
 import { OppslagBehandler } from 'context/sokerOppslagContext';
 
 export type FieldAndLabel<T> = {
@@ -121,6 +120,7 @@ export interface Soknad {
     [AttachmentType.LØNN_OG_ANDRE_GODER]: Vedlegg[];
     [AttachmentType.OMSORGSSTØNAD]: Vedlegg[];
     [AttachmentType.UTLANDSSTØNAD]: Vedlegg[];
+    [AttachmentType.SYKESTIPEND]: Vedlegg[];
     [AVBRUTT_STUDIE_VEDLEGG]: Vedlegg[];
     annet: Vedlegg[];
   };

@@ -39,10 +39,10 @@ interface Props {
 }
 
 const UTENLANDSOPPHOLD = 'utenlandsOpphold';
-const BODD_I_NORGE = 'harBoddINorgeSiste5År';
+export const BODD_I_NORGE = 'harBoddINorgeSiste5År';
 const ARBEID_UTENFOR_NORGE_FØR_SYKDOM = 'arbeidetUtenforNorgeFørSykdom';
 const OGSÅ_ARBEID_UTENFOR_NORGE = 'iTilleggArbeidUtenforNorge';
-const ARBEID_I_NORGE = 'harArbeidetINorgeSiste5År';
+export const ARBEID_I_NORGE = 'harArbeidetINorgeSiste5År';
 const MEDLEMSKAP = 'medlemskap';
 const validateArbeidINorge = (boddINorge?: JaEllerNei) => boddINorge === JaEllerNei.NEI;
 const validateArbeidUtenforNorgeFørSykdom = (boddINorge?: JaEllerNei) =>
@@ -134,7 +134,15 @@ export const getMedlemskapSchema = (formatMessage: (id: string) => string) => {
     }),
   });
 };
-
+export const utenlandsPeriodeArbeidEllerBodd = (
+  arbeidINorge?: JaEllerNei,
+  boddINorge?: JaEllerNei
+) => {
+  if (boddINorge === JaEllerNei.NEI && arbeidINorge === JaEllerNei.NEI) {
+    return ArbeidEllerBodd.BODD;
+  }
+  return ArbeidEllerBodd.ARBEID;
+};
 export const Medlemskap = ({ onBackClick, onNext, defaultValues }: Props) => {
   const { formatMessage } = useFeatureToggleIntl();
 
@@ -193,12 +201,10 @@ export const Medlemskap = ({ onBackClick, onNext, defaultValues }: Props) => {
     [arbeidINorge, arbeidUtenforNorge, iTilleggArbeidUtenforNorge]
   );
 
-  const arbeidEllerBodd = useMemo(() => {
-    if (boddINorge === JaEllerNei.NEI && arbeidINorge === JaEllerNei.NEI) {
-      return ArbeidEllerBodd.BODD;
-    }
-    return ArbeidEllerBodd.ARBEID;
-  }, [boddINorge, arbeidINorge]);
+  const arbeidEllerBodd = useMemo(
+    () => utenlandsPeriodeArbeidEllerBodd(arbeidINorge, boddINorge),
+    [boddINorge, arbeidINorge]
+  );
   useEffect(() => {
     if (boddINorge !== søknadState.søknad?.medlemskap?.harBoddINorgeSiste5År) {
       setValue(`${MEDLEMSKAP}.${ARBEID_UTENFOR_NORGE_FØR_SYKDOM}`, undefined);
@@ -227,6 +233,9 @@ export const Medlemskap = ({ onBackClick, onNext, defaultValues }: Props) => {
     }
   }, [fields]);
 
+  // @ts-ignore
+  // @ts-ignore
+  // @ts-ignore
   return (
     <>
       <SoknadFormWrapper
@@ -350,14 +359,16 @@ export const Medlemskap = ({ onBackClick, onNext, defaultValues }: Props) => {
             <BodyLong>
               {formatMessage(`søknad.medlemskap.utenlandsperiode.modal.ingress.${arbeidEllerBodd}`)}
             </BodyLong>
-            {fields?.length > 0 && (
+            {fields?.length > 0 ? (
               <Heading size="xsmall" level="3">
                 {formatMessage(
                   `søknad.medlemskap.utenlandsperiode.perioder.title.${arbeidEllerBodd}`
                 )}
               </Heading>
+            ) : (
+              <></>
             )}
-            {fields?.length > 0 && (
+            {fields?.length > 0 ? (
               <Table size="medium">
                 <Table.Body>
                   {fields?.map((field, index) => (
@@ -402,8 +413,9 @@ export const Medlemskap = ({ onBackClick, onNext, defaultValues }: Props) => {
                   ))}
                 </Table.Body>
               </Table>
+            ) : (
+              <></>
             )}
-
             <Grid>
               <Cell xs={12}>
                 <Button
@@ -424,11 +436,13 @@ export const Medlemskap = ({ onBackClick, onNext, defaultValues }: Props) => {
 
             {/* TODO: react-hook-form antar at vi kun har validering på hvert enkelt field i FieldArrays */}
             {/* @ts-ignore-line */}
-            {errors?.[MEDLEMSKAP]?.[UTENLANDSOPPHOLD]?.message && (
+            {errors?.[MEDLEMSKAP]?.[UTENLANDSOPPHOLD]?.message ? (
               <div className={'navds-error-message navds-error-message--medium navds-label'}>
                 {/* @ts-ignore-line*/}
                 {errors?.[MEDLEMSKAP]?.[UTENLANDSOPPHOLD]?.message}
               </div>
+            ) : (
+              <></>
             )}
           </ColorPanel>
         )}

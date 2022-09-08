@@ -11,13 +11,18 @@ import {
   stønadTypeToAlternativNøkkel,
 } from 'components/pageComponents/standard/AndreUtbetalinger/AndreUtbetalinger';
 import { FastlegeView, Soker } from 'context/sokerOppslagContext';
-import { Soknad } from 'types/Soknad';
+import { Soknad, Vedlegg } from 'types/Soknad';
 import { BehandlerBackendState, SøknadBackendState } from 'types/SoknadBackendState';
 import { formatDate, formatDateTime } from './date';
 import { formatNavn, getFullAdresse } from 'utils/StringFormatters';
 import { GRUNNBELØP } from 'components/pageComponents/standard/Barnetillegg/Barnetillegg';
 import { RequiredVedlegg } from 'types/SoknadContext';
 import { Relasjon } from 'components/pageComponents/standard/Barnetillegg/AddBarnModal';
+import {
+  ARBEID_I_NORGE,
+  BODD_I_NORGE,
+  utenlandsPeriodeArbeidEllerBodd,
+} from 'components/pageComponents/standard/Medlemskap/Medlemskap';
 
 export type SøknadsType = 'UTLAND' | 'STANDARD';
 
@@ -155,6 +160,14 @@ export const mapSøknadToBackend = (
                     (vedlegg) => vedlegg.vedleggId
                   ) ?? [],
               };
+            case StønadType.STIPEND:
+              return {
+                type: stønad,
+                vedlegg:
+                  søknad?.vedlegg?.[AttachmentType.SYKESTIPEND]?.map(
+                    (vedlegg) => vedlegg.vedleggId
+                  ) ?? [],
+              };
             case StønadType.UTLAND:
               return {
                 type: stønad,
@@ -190,48 +203,49 @@ export const mapSøknadToBackend = (
       : {}),
   };
 };
-const createField = (felt: string, verdi: string | undefined, skipIfFalsy = false) =>
-  skipIfFalsy && !verdi
-    ? []
-    : [
-        {
-          type: 'FELT',
-          felt,
-          verdi,
-        },
-      ];
-const createFritekst = (tekst: string, skipIfFalsy = false) =>
-  skipIfFalsy && !tekst
-    ? []
-    : [
-        {
-          type: 'FRITEKST',
-          tekst,
-        },
-      ];
-const createTabellrad = (
-  venstretekst: string,
-  høyretekst: string | undefined,
-  skipIfFalsy = false
-) =>
-  skipIfFalsy && !høyretekst
-    ? []
-    : [
-        {
-          type: 'TABELLRAD',
-          venstretekst,
-          høyretekst,
-        },
-      ];
+
+enum Types {
+  FRITEKST = 'FRITEKST',
+  FELT = 'FELT',
+}
+type Felt = {
+  type: Types.FELT;
+  felt?: string;
+  verdi?: string;
+};
+type Fritekst = {
+  type: Types.FRITEKST;
+  tekst?: string;
+  indent?: boolean;
+};
+const createField = (felt: string, verdi: string | undefined, skipIfFalsy = false) => {
+  if (skipIfFalsy && !verdi) return [];
+  const res: Felt = {
+    type: Types.FELT,
+    felt,
+    verdi,
+  };
+  return [res];
+};
+const createFritekst = (tekst: string, skipIfFalsy = false, indent = false) => {
+  if (skipIfFalsy && !tekst) return [];
+  const fritekst: Fritekst = {
+    type: Types.FRITEKST,
+    tekst,
+    ...(indent ? { indent: true } : {}),
+  };
+  return [fritekst];
+};
+
 const createGruppe = (overskrift: string, tabellrader: any[]) => ({
   type: 'GRUPPE',
   overskrift,
   tabellrader,
 });
-const createGruppeliste = (overskrift: string, tabellrader: any[]) => ({
-  type: 'GRUPPELISTE',
+const createFeltgruppe = (felter: any[], overskrift?: string) => ({
+  type: 'FELTGRUPPE',
+  felter,
   overskrift,
-  tabellrader,
 });
 const createTema = (overskrift: string, rader: any[]) => ({
   type: 'TEMA',
@@ -266,7 +280,11 @@ export const mapSøknadToPdf = (
         formatMessage('søknad.startDato.skalHaFerie.label'),
         søknad?.ferie?.skalHaFerie
       ),
-      ...createField(formatMessage('søknad.startDato.ferieType.label'), søknad?.ferie?.ferieType),
+      ...createField(
+        formatMessage('søknad.startDato.ferieType.label'),
+        søknad?.ferie?.ferieType,
+        true
+      ),
       ...createField(
         'Periode',
         søknad?.ferie?.fraDato
@@ -282,19 +300,25 @@ export const mapSøknadToPdf = (
     const utenlandsOpphold = søknad?.medlemskap?.utenlandsOpphold
       ? [
           createGruppe(
-            'Utenlandsopphold',
+            formatMessage(
+              `søknad.medlemskap.utenlandsperiode.modal.ingress.${utenlandsPeriodeArbeidEllerBodd(
+                søknad?.medlemskap?.[ARBEID_I_NORGE],
+                søknad?.medlemskap?.[BODD_I_NORGE]
+              )}`
+            ),
             søknad?.medlemskap?.utenlandsOpphold?.map((opphold) =>
-              createGruppeliste('', [
-                ...createTabellrad('Land', opphold?.land),
-                ...createTabellrad(
+              createFeltgruppe([
+                ...createField('Land', opphold?.land),
+                ...createField(
                   'Periode',
                   `Fra ${formatDate(opphold?.fraDato)} til ${formatDate(opphold?.tilDato)}`
                 ),
-                ...createTabellrad(
+                ...createField(
                   formatMessage('søknad.medlemskap.utenlandsperiode.modal.iArbeid.label'),
-                  opphold?.iArbeid
+                  opphold?.iArbeid,
+                  true
                 ),
-                ...createTabellrad(
+                ...createField(
                   formatMessage('søknad.medlemskap.utenlandsperiode.modal.utenlandsId.label'),
                   opphold?.utenlandsId,
                   true
@@ -336,14 +360,14 @@ export const mapSøknadToPdf = (
   const getRegistrerteBehandlere = (søknad?: Soknad) => {
     const registrerteBehandlere =
       søknad?.registrerteBehandlere?.map((behandler) =>
-        createGruppeliste('', [
-          ...createTabellrad('Type', behandler?.type),
-          ...createTabellrad('Kategori', behandler?.kategori),
-          ...createTabellrad('Navn', formatNavn(behandler?.navn)),
-          ...createTabellrad('Kontor', behandler?.kontaktinformasjon?.kontor),
-          ...createTabellrad('Adresse', getFullAdresse(behandler?.kontaktinformasjon?.adresse)),
-          ...createTabellrad('Telefon', behandler?.kontaktinformasjon?.telefon),
-          ...createTabellrad(
+        createFeltgruppe([
+          ...createField('Type', behandler?.type),
+          ...createField('Kategori', behandler?.kategori),
+          ...createField('Navn', formatNavn(behandler?.navn)),
+          ...createField('Kontor', behandler?.kontaktinformasjon?.kontor),
+          ...createField('Adresse', getFullAdresse(behandler?.kontaktinformasjon?.adresse)),
+          ...createField('Telefon', behandler?.kontaktinformasjon?.telefon),
+          ...createField(
             formatMessage(`søknad.helseopplysninger.erRegistrertFastlegeRiktig.label`),
             behandler?.erRegistrertFastlegeRiktig
           ),
@@ -354,13 +378,13 @@ export const mapSøknadToPdf = (
   const getAndreBehandlere = (søknad?: Soknad) => {
     const andreBehandlere =
       søknad?.andreBehandlere?.map((behandler) =>
-        createGruppeliste('', [
-          ...createTabellrad(
+        createFeltgruppe([
+          ...createField(
             'Navn',
             formatNavn({ fornavn: behandler?.firstname, etternavn: behandler?.lastname })
           ),
-          ...createTabellrad('Kontor', behandler?.legekontor),
-          ...createTabellrad(
+          ...createField('Kontor', behandler?.legekontor),
+          ...createField(
             'Adresse',
             getFullAdresse({
               adressenavn: behandler?.gateadresse,
@@ -370,7 +394,7 @@ export const mapSøknadToPdf = (
               },
             })
           ),
-          ...createTabellrad('Telefon', behandler?.telefon),
+          ...createField('Telefon', behandler?.telefon),
         ])
       ) || [];
     return createTema('Andre behandlere', andreBehandlere);
@@ -378,14 +402,14 @@ export const mapSøknadToPdf = (
   const getBarn = (søknad?: Soknad) => {
     const registrerteBarn =
       søknad?.barnetillegg?.map((barn) =>
-        createGruppeliste('', [
-          ...createTabellrad('Navn', formatNavn(barn?.navn)),
-          ...createTabellrad('Fødselsdato', barn?.fødseldato || ''),
-          ...createTabellrad(
+        createFeltgruppe([
+          ...createField('Navn', formatNavn(barn?.navn)),
+          ...createField('Fødselsdato', barn?.fødseldato || ''),
+          ...createField(
             formatMessage('søknad.barnetillegg.registrerteBarn.barnepensjon.label'),
             barn?.barnepensjon
           ),
-          ...createTabellrad(
+          ...createField(
             formatMessage('søknad.barnetillegg.registrerteBarn.harInntekt.label', {
               grunnbeløp: GRUNNBELØP,
             }),
@@ -396,18 +420,18 @@ export const mapSøknadToPdf = (
       ) || [];
     const andreBarn =
       søknad?.manuelleBarn?.map((barn) =>
-        createGruppe('', [
-          ...createTabellrad('Navn', formatNavn(barn?.navn)),
-          ...createTabellrad('Fødselsdato', barn?.fødseldato ? formatDate(barn.fødseldato) : ''),
-          ...createTabellrad(
+        createFeltgruppe([
+          ...createField('Navn', formatNavn(barn?.navn)),
+          ...createField('Fødselsdato', barn?.fødseldato ? formatDate(barn.fødseldato) : ''),
+          ...createField(
             formatMessage('søknad.barnetillegg.leggTilBarn.modal.relasjon.label'),
             barn?.relasjon
           ),
-          ...createTabellrad(
+          ...createField(
             formatMessage('søknad.barnetillegg.registrerteBarn.barnepensjon.label'),
             barn?.barnepensjon
           ),
-          ...createTabellrad(
+          ...createField(
             formatMessage(
               'søknad.barnetillegg.registrerteBarn.harInntekt.label',
               {
@@ -415,7 +439,8 @@ export const mapSøknadToPdf = (
               },
               true
             ),
-            barn?.harInntekt
+            barn?.harInntekt,
+            true
           ),
         ])
       ) || [];
@@ -423,21 +448,27 @@ export const mapSøknadToPdf = (
   };
   const getAndreYtelser = (søknad?: Soknad) => {
     const stønader =
-      søknad?.andreUtbetalinger?.stønad?.map(
-        (stønadType) =>
-          createTabellrad(
-            formatMessage(stønadTypeToAlternativNøkkel(stønadType)),
-            stønadType === StønadType.AFP
-              ? `Utbetaler: ${søknad?.andreUtbetalinger?.afp?.hvemBetaler}`
-              : ''
-          )[0]
-      ) || [];
+      søknad?.andreUtbetalinger?.stønad?.reduce((acc: Fritekst[], stønadType: StønadType) => {
+        const ekstra =
+          stønadType === StønadType.AFP
+            ? createFritekst(
+                `Utbetaler: ${søknad?.andreUtbetalinger?.afp?.hvemBetaler}`,
+                false,
+                true
+              )
+            : [];
+        return [
+          ...acc,
+          ...createFritekst(formatMessage(stønadTypeToAlternativNøkkel(stønadType))),
+          ...ekstra,
+        ];
+      }, []) || [];
     return createTema('Andre ytelser', [
       ...createField(
         formatMessage('søknad.andreUtbetalinger.lønn.label'),
         formatMessage(`answerOptions.jaEllerNei.${søknad?.andreUtbetalinger?.lønn}`)
       ),
-      createGruppe(formatMessage('søknad.andreUtbetalinger.stønad.label'), stønader),
+      createFeltgruppe(stønader, formatMessage('søknad.andreUtbetalinger.stønad.label')),
     ]);
   };
   const getStudent = (søknad?: Soknad) => {
@@ -469,7 +500,9 @@ export const mapSøknadToPdf = (
         (e) => e?.filterType !== Relasjon.FORELDER && e?.filterType !== Relasjon.FOSTERFORELDER
       )
       .map((vedlegg) => {
-        const vedleggListe = søknad?.vedlegg?.[vedlegg?.type]?.map((file) => file?.name);
+        const vedleggListe = søknad?.vedlegg?.[vedlegg?.type as AttachmentType]?.map(
+          (file: Vedlegg) => file?.name
+        );
         return createGruppe(vedlegg?.description, [createListe('', vedleggListe)]);
       });
     const manuelleBarnVedlegg =
@@ -501,10 +534,7 @@ export const mapSøknadToPdf = (
     const manglendeVedlegg = requiredVedlegg
       ?.filter((vedlegg) => !vedlegg?.completed)
       ?.map((e) => e?.description);
-    return createTema('Manglende vedlegg', [
-      createListe('', manglendeVedlegg),
-      ...createFritekst(formatMessage('søknad.ettersendelseFrist')),
-    ]);
+    return createTema('Manglende vedlegg', [createListe('', manglendeVedlegg)]);
   };
   return {
     søker: {
@@ -527,6 +557,9 @@ export const mapSøknadToPdf = (
       getTilleggsopplysninger(søknad),
       getVedlegg(søknad, requiredVedlegg),
       getManglendeVedlegg(søknad, requiredVedlegg),
+      createTema('Bekreftelse', [
+        ...createFritekst(formatMessage('søknad.oppsummering.confirmation.text')),
+      ]),
     ],
   };
 };

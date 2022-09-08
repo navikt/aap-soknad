@@ -1,7 +1,7 @@
 import { Navn } from 'types/Soknad';
 import { Adresse } from 'context/sokerOppslagContext';
 
-export const formatNavn = (navn: Navn) =>
+export const formatNavn = (navn?: Navn) =>
   `${navn?.fornavn || ''}${navn?.mellomnavn ? ` ${navn?.mellomnavn}` : ''} ${
     navn?.etternavn || ''
   }`;
