@@ -72,7 +72,6 @@ const Student = ({ onBackClick, onNext, defaultValues }: Props) => {
       }),
     }),
   });
-  console.log('defaultValues', defaultValues);
   const { søknadState, søknadDispatch } = useSoknadContextStandard();
   const { stepList } = useStepWizard();
   const {
@@ -90,6 +89,7 @@ const Student = ({ onBackClick, onNext, defaultValues }: Props) => {
   });
 
   const erStudent = watch(`${STUDENT}.${ER_STUDENT}`);
+  const kommeTilbake = watch(`${STUDENT}.${KOMME_TILBAKE}`);
   const debouncedLagre = useDebounceLagreSoknad<Soknad>();
   const allFields = watch();
   useEffect(() => {
@@ -106,7 +106,13 @@ const Student = ({ onBackClick, onNext, defaultValues }: Props) => {
 
   useEffect(() => {
     clearErrors();
-    if (erStudent === JaNeiAvbrutt.AVBRUTT) {
+    if (erStudent !== JaNeiAvbrutt.AVBRUTT) {
+      setValue(`${STUDENT}.${KOMME_TILBAKE}`, undefined);
+    }
+  }, [erStudent]);
+
+  useEffect(() => {
+    if (kommeTilbake === JaNeiVetIkke.NEI) {
       addRequiredVedlegg(
         [
           {
@@ -118,9 +124,8 @@ const Student = ({ onBackClick, onNext, defaultValues }: Props) => {
       );
     } else {
       removeRequiredVedlegg(AVBRUTT_STUDIE_VEDLEGG, søknadDispatch);
-      setValue(`${STUDENT}.${KOMME_TILBAKE}`, undefined);
     }
-  }, [erStudent]);
+  }, [kommeTilbake]);
 
   return (
     <SoknadFormWrapper
@@ -184,7 +189,7 @@ const Student = ({ onBackClick, onNext, defaultValues }: Props) => {
           </RadioGroupWrapper>
         </ColorPanel>
       )}
-      {erStudent === JaNeiAvbrutt.AVBRUTT && (
+      {kommeTilbake === JaNeiVetIkke.NEI && (
         <Alert variant="info">
           <BodyShort>{formatMessage('søknad.student.vedlegg.title')}</BodyShort>
           <ul>
