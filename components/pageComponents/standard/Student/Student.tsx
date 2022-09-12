@@ -112,7 +112,7 @@ const Student = ({ onBackClick, onNext, defaultValues }: Props) => {
   }, [erStudent]);
 
   useEffect(() => {
-    if (kommeTilbake === JaNeiVetIkke.NEI) {
+    if (kommeTilbake === JaNeiVetIkke.JA) {
       addRequiredVedlegg(
         [
           {
@@ -189,7 +189,7 @@ const Student = ({ onBackClick, onNext, defaultValues }: Props) => {
           </RadioGroupWrapper>
         </ColorPanel>
       )}
-      {kommeTilbake === JaNeiVetIkke.NEI && (
+      {kommeTilbake === JaNeiVetIkke.JA && (
         <Alert variant="info">
           <BodyShort>{formatMessage('søknad.student.vedlegg.title')}</BodyShort>
           <ul>
