@@ -218,8 +218,6 @@ const Vedlegg = ({ onBackClick, onNext, defaultValues }: Props) => {
         heading={'Annen dokumentasjon'}
         ingress={'Hvis du har noe annet du ønsker å legge ved kan du laste det opp her'}
       />
-
-      <Alert variant={'info'}>{formatMessage('søknad.vedlegg.alert.text')}</Alert>
     </SoknadFormWrapper>
   );
 };
