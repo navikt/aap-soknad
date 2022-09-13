@@ -1,4 +1,4 @@
-import { FieldValues, useForm } from 'react-hook-form';
+import { FieldValues, useForm, useWatch } from 'react-hook-form';
 import { Soknad } from 'types/Soknad';
 import React, { useEffect, useMemo } from 'react';
 import { Alert, BodyShort, Cell, Grid, Heading, Radio, ReadMore } from '@navikt/ds-react';
@@ -82,7 +82,6 @@ const StartDato = ({ onBackClick, onNext, defaultValues }: Props) => {
   const {
     control,
     handleSubmit,
-    watch,
     setValue,
     formState: { errors },
   } = useForm<FieldValues>({
@@ -97,12 +96,13 @@ const StartDato = ({ onBackClick, onNext, defaultValues }: Props) => {
     },
   });
   const debouncedLagre = useDebounceLagreSoknad<Soknad>();
-  const allFields = watch();
+  const allFields = useWatch({ control });
+  const memoFields = useMemo(() => allFields, [allFields]);
   useEffect(() => {
-    debouncedLagre(søknadState, stepList, allFields);
-  }, [allFields]);
-  const skalHaFerie = watch(`${FERIE}.${SKALHAFERIE}`);
-  const ferieType = watch(`${FERIE}.${FERIETYPE}`);
+    debouncedLagre(søknadState, stepList, memoFields);
+  }, [memoFields]);
+  const skalHaFerie = useWatch({ control, name: `${FERIE}.${SKALHAFERIE}` });
+  const ferieType = useWatch({ control, name: `${FERIE}.${FERIETYPE}` });
   const FerieType = useMemo(
     () => ({
       PERIODE: formatMessage('søknad.startDato.ferieType.values.periode'),
@@ -110,6 +110,9 @@ const StartDato = ({ onBackClick, onNext, defaultValues }: Props) => {
     }),
     [formatMessage]
   );
+  useEffect(() => {
+    console.log('søknadstate', søknadState);
+  }, [søknadState]);
 
   useEffect(() => {
     if (skalHaFerie !== JaNeiVetIkke.JA) {

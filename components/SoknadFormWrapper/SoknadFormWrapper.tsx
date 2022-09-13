@@ -1,10 +1,11 @@
 import { FieldErrors } from 'react-hook-form';
 import React, { useState } from 'react';
-import { Alert, Loader, BodyShort, Heading, Modal, Button } from '@navikt/ds-react';
+import { Detail, Alert, Loader, BodyShort, Heading, Modal, Button } from '@navikt/ds-react';
 import { FormErrorSummary } from '../schema/FormErrorSummary';
 import * as classes from './SoknadFormWrapper.module.css';
 import { SuccessStroke } from '@navikt/ds-icons';
 import { useFeatureToggleIntl } from 'hooks/useFeatureToggleIntl';
+import { useSoknadContextStandard } from 'context/soknadContextStandard';
 
 interface Props {
   children?: React.ReactNode;
@@ -155,6 +156,7 @@ const SøknadFormWrapper = ({
   nextIsLoading = false,
 }: Props) => {
   const { formatMessage } = useFeatureToggleIntl();
+  const { søknadState } = useSoknadContextStandard();
   const [showLagreModal, setShowLagreModal] = useState<boolean>(false);
   const [showAvbrytModal, setShowAvbrytModal] = useState<boolean>(false);
   const [isSlettingSøknad, setIsSlettingSøknad] = useState<boolean>(false);
@@ -194,6 +196,12 @@ const SøknadFormWrapper = ({
             {nextButtonText}
           </Button>
           <span className={classes?.separatorLine} />
+          {søknadState?.sistLagret && (
+            <Detail
+              className={classes?.sistLagret}
+              spacing
+            >{`Sist lagret: ${søknadState?.sistLagret}`}</Detail>
+          )}
           <Button
             className={classes?.buttonSave}
             variant="tertiary"

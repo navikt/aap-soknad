@@ -12,11 +12,12 @@
   display: grid;
   grid-template-columns: auto 3% auto 1fr;
   /*grid-column-gap: var(--navds-spacing-2);*/
-  grid-template-rows: auto 1px auto;
-  grid-row-gap: var(--navds-spacing-10);
+  grid-template-rows: auto 1px auto auto;
+  grid-row-gap: var(--navds-spacing-5);
   grid-template-areas:
     'buttonBack . buttonNext .'
     'sep sep sep sep'
+    'sistLagret sistLagret sistLagret sistLagret'
     'buttonSave . buttonCancel .';
 }
 .separatorLine {
@@ -34,6 +35,9 @@
 }
 .buttonCancel {
   grid-area: buttonCancel;
+}
+.sistLagret {
+  grid-area: sistLagret;
 }
 @media (max-width: 480px) {
   .fourButtonWrapper {
