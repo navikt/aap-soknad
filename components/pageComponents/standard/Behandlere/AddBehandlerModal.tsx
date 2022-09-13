@@ -36,26 +36,6 @@ export const AddBehandlerModal = ({
       .string()
       .required(formatMessage('søknad.helseopplysninger.modal.etternavn.validation.required'))
       .nullable(),
-    legekontor: yup
-      .string()
-      .required(formatMessage('søknad.helseopplysninger.modal.legekontor.validation.required'))
-      .nullable(),
-    gateadresse: yup
-      .string()
-      .required(formatMessage('søknad.helseopplysninger.modal.gateadresse.validation.required'))
-      .nullable(),
-    postnummer: yup
-      .string()
-      .required(formatMessage('søknad.helseopplysninger.modal.postnummer.validation.required'))
-      .nullable(),
-    poststed: yup
-      .string()
-      .required(formatMessage('søknad.helseopplysninger.modal.poststed.validation.required'))
-      .nullable(),
-    telefon: yup
-      .string()
-      .required(formatMessage('søknad.helseopplysninger.modal.telefonnummer.validation.required'))
-      .nullable(),
   });
   const {
     control,

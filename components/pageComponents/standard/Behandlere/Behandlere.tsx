@@ -211,13 +211,13 @@ export const Behandlere = ({ onBackClick, onNext, defaultValues }: Props) => {
                   <BodyShort>
                     {field?.firstname} {field?.lastname}
                   </BodyShort>
-                  <BodyShort>{field?.legekontor}</BodyShort>
-                  <BodyShort>
+                  {field?.legekontor && <BodyShort>{field?.legekontor}</BodyShort>}
+                  {field?.gateadresse && <BodyShort>
                     {field?.gateadresse}, {field?.postnummer} {field?.poststed}
-                  </BodyShort>
-                  <BodyShort>{`${formatMessage(
+                  </BodyShort>}
+                  {field?.telefon && <BodyShort>{`${formatMessage(
                     'søknad.helseopplysninger.dineBehandlere.telefon'
-                  )}: ${field?.telefon}`}</BodyShort>
+                  )}: ${field?.telefon}`}</BodyShort>}
                   <Button type="button" variant="tertiary" onClick={() => editNyBehandler(index)}>
                     {formatMessage('søknad.helseopplysninger.dineBehandlere.editButton')}
                   </Button>

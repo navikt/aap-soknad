@@ -16,11 +16,11 @@ const OppsummeringBehandler = ({ behandler }: Props) => {
         {formatMessage('søknad.oppsummering.helseopplysninger.behandler')}
       </Heading>
       <BodyShort>{`${behandler?.firstname} ${behandler?.lastname}`}</BodyShort>
-      <BodyShort>{behandler?.legekontor}</BodyShort>
-      <BodyShort>{`${behandler?.gateadresse}, ${behandler?.postnummer} ${behandler?.poststed}`}</BodyShort>
-      <BodyShort>{`${formatMessage('søknad.helseopplysninger.dineBehandlere.telefon')}: ${
+      {behandler?.legekontor && <BodyShort>{behandler?.legekontor}</BodyShort>}
+      {behandler?.gateadresse && <BodyShort>{`${behandler?.gateadresse}, ${behandler?.postnummer} ${behandler?.poststed}`}</BodyShort>}
+      {behandler?.telefon && <BodyShort>{`${formatMessage('søknad.helseopplysninger.dineBehandlere.telefon')}: ${
         behandler?.telefon
-      }`}</BodyShort>
+      }`}</BodyShort>}
     </article>
   );
 };

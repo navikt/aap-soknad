@@ -150,7 +150,7 @@ const Student = ({ onBackClick, onNext, defaultValues }: Props) => {
       </Heading>
       <LucaGuidePanel>
         <BodyShort spacing>{formatMessage('søknad.student.guide.guide1')}</BodyShort>
-        <BodyShort>{formatMessage('søknad.student.guide.guide2')}</BodyShort>
+
       </LucaGuidePanel>
       <RadioGroupWrapper
         name={`${STUDENT}.${ER_STUDENT}`}

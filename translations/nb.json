@@ -16,8 +16,7 @@
         "required": "Du må svare på om du har planer om å komme tilbake til studiet."
       },
       "guide": {
-        "guide1": "Hvis du er student, gjelder det ulike regler avhengig av om du fortsetter på studiet, eller avbryter helt.",
-        "guide2": "Du regnes som student hvis du tar et studie som gir rett til lån fra Statens lånekasse for utdanning. Du trenger ikke å ha mottatt lån/stipend."
+        "guide1": "Hvis du er student, gjelder det ulike regler avhengig av om du fortsetter på studiet, eller avbryter helt."
       },
       "vedlegg": {
         "title": "Du må legge ved:",
@@ -288,34 +287,19 @@
           }
         },
         "legekontor": {
-          "label": "Legekontor",
-          "validation": {
-            "required": "Vennligst oppgi legekontor."
-          }
+          "label": "Legekontor"
         },
         "gateadresse": {
-          "label": "Gateadresse",
-          "validation": {
-            "required": "Vennligst oppgi gateadresse."
-          }
+          "label": "Gateadresse"
         },
         "postnummer": {
-          "label": "Postnummer",
-          "validation": {
-            "required": "Vennligst oppgi postnummer."
-          }
+          "label": "Postnummer"
         },
         "poststed": {
-          "label": "Poststed",
-          "validation": {
-            "required": "Vennligst oppgi poststed."
-          }
+          "label": "Poststed"
         },
         "telefonnummer": {
-          "label": "Telefonnummer",
-          "validation": {
-            "required": "Vennligst oppgi telefonnummer."
-          }
+          "label": "Telefonnummer"
         },
         "buttons": {
           "lagre": "Lagre",
@@ -658,7 +642,7 @@
         "epost": "E-post"
       },
       "lastNedSøknad": "Last ned søknaden som pdf",
-      "dittNavKnapp": "Se saken din på Ditt NAV"
+      "dittNavKnapp": "Les mer på Mine Arbeidsavklaringspenger"
     },
     "ettersendelseFrist": "Du kan ettersende dette innen 14 dager per post eller digitalt. Du kan også levere dette på ditt lokale NAV kontor"
   },
