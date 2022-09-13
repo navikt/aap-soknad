@@ -17,10 +17,14 @@ const OppsummeringBehandler = ({ behandler }: Props) => {
       </Heading>
       <BodyShort>{`${behandler?.firstname} ${behandler?.lastname}`}</BodyShort>
       {behandler?.legekontor && <BodyShort>{behandler?.legekontor}</BodyShort>}
-      {behandler?.gateadresse && <BodyShort>{`${behandler?.gateadresse}, ${behandler?.postnummer} ${behandler?.poststed}`}</BodyShort>}
-      {behandler?.telefon && <BodyShort>{`${formatMessage('søknad.helseopplysninger.dineBehandlere.telefon')}: ${
-        behandler?.telefon
-      }`}</BodyShort>}
+      {behandler?.gateadresse && (
+        <BodyShort>{`${behandler?.gateadresse}, ${behandler?.postnummer} ${behandler?.poststed}`}</BodyShort>
+      )}
+      {behandler?.telefon && (
+        <BodyShort>{`${formatMessage('søknad.helseopplysninger.dineBehandlere.telefon')}: ${
+          behandler?.telefon
+        }`}</BodyShort>
+      )}
     </article>
   );
 };
