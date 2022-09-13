@@ -132,6 +132,7 @@ export const Behandlere = ({ onBackClick, onNext, defaultValues }: Props) => {
         backButtonText={formatMessage('navigation.back')}
         cancelButtonText={formatMessage('navigation.cancel')}
         errors={errors}
+        sistLagret={søknadState?.sistLagret}
       >
         <Heading size="large" level="2">
           {formatMessage('søknad.helseopplysninger.title')}

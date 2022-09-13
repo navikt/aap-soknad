@@ -144,6 +144,7 @@ const Student = ({ onBackClick, onNext, defaultValues }: Props) => {
       backButtonText={'Forrige steg'}
       cancelButtonText={'Avbryt søknad'}
       errors={errors}
+      sistLagret={søknadState?.sistLagret}
     >
       <Heading size="large" level="2">
         {formatMessage('søknad.student.title')}

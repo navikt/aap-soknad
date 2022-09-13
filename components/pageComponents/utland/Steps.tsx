@@ -81,6 +81,7 @@ export const StepSelectCountry = ({ onBackClick, onNext }: SelectCountryProps) =
         backButtonText={'Forrige steg'}
         cancelButtonText={'Avbryt søknad'}
         errors={errors}
+        sistLagret={søknadState?.sistLagret}
       >
         <CountrySelector
           name={LAND}
@@ -147,6 +148,7 @@ export const StepSelectTravelPeriod = ({
       backButtonText={'Forrige steg'}
       cancelButtonText={'Avbryt søknad'}
       errors={errors}
+      sistLagret={søknadState?.sistLagret}
     >
       <DatePickerWrapper
         name={FRA_DATO}
@@ -217,6 +219,7 @@ export const StepSummary = ({ data, onBackClick, onNext }: SummaryProps) => {
         backButtonText={'Forrige steg'}
         cancelButtonText={'Avbryt søknad'}
         errors={errors}
+        sistLagret={søknadState?.sistLagret}
       >
         <ConfirmationPanelWrapper
           name={BEKREFT}
