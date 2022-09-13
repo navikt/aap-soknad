@@ -16,8 +16,7 @@
         "required": "Du må svare på om du har planer om å komme tilbake til studiet."
       },
       "guide": {
-        "guide1": "Hvis du er student, gjelder det ulike regler avhengig av om du fortsetter på studiet, eller avbryter helt.",
-        "guide2": "Du regnes som student hvis du tar et studie som gir rett til lån fra Statens lånekasse for utdanning. Du trenger ikke å ha mottatt lån/stipend."
+        "guide1": "Hvis du er student, gjelder det ulike regler avhengig av om du fortsetter på studiet, eller avbryter helt."
       },
       "vedlegg": {
         "title": "Du må legge ved:",
