@@ -29,7 +29,7 @@ const Steps = () => {
   const { søknadState, søknadDispatch } = useSoknadContextUtland();
   const { currentStep, stepList, stepWizardDispatch } = useStepWizard();
 
-  const debouncedLagre = useDebounceLagreSoknad();
+  const debouncedLagre = useDebounceLagreSoknad(søknadDispatch);
   const { formatMessage } = useFeatureToggleIntl();
 
   useEffect(() => {

@@ -149,7 +149,7 @@ export const SoknadContextProviderStandard = ({ children }: ProviderProps) => {
 export const useSoknadContextStandard = () => {
   const context = useContext(SoknadContextStandard);
   if (context === undefined) {
-    throw new Error('useSoknadContextUtland must be used within a SoknadContextProviderUtland');
+    throw new Error('useSoknadContextStandard must be used within a SoknadContextProviderStandard');
   }
   return context;
 };

@@ -18,7 +18,7 @@ export const soknadContextInititalState = {
   søknad: undefined,
   requiredVedlegg: [],
   søknadUrl: undefined,
-  sistLagret: undefined,
+  sistLagret: '',
 };
 
 export enum SoknadActionKeys {

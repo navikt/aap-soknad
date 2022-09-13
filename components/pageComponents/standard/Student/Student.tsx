@@ -90,7 +90,7 @@ const Student = ({ onBackClick, onNext, defaultValues }: Props) => {
 
   const erStudent = watch(`${STUDENT}.${ER_STUDENT}`);
   const kommeTilbake = watch(`${STUDENT}.${KOMME_TILBAKE}`);
-  const debouncedLagre = useDebounceLagreSoknad<Soknad>();
+  const debouncedLagre = useDebounceLagreSoknad<Soknad>(søknadDispatch);
   const allFields = watch();
   useEffect(() => {
     debouncedLagre(søknadState, stepList, allFields);
@@ -150,7 +150,6 @@ const Student = ({ onBackClick, onNext, defaultValues }: Props) => {
       </Heading>
       <LucaGuidePanel>
         <BodyShort spacing>{formatMessage('søknad.student.guide.guide1')}</BodyShort>
-
       </LucaGuidePanel>
       <RadioGroupWrapper
         name={`${STUDENT}.${ER_STUDENT}`}

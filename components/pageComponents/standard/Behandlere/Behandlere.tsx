@@ -60,7 +60,7 @@ export const Behandlere = ({ onBackClick, onNext, defaultValues }: Props) => {
     },
   });
 
-  const debouncedLagre = useDebounceLagreSoknad<Soknad>();
+  const debouncedLagre = useDebounceLagreSoknad<Soknad>(søknadDispatch);
   const allFields = watch();
 
   useEffect(() => {
@@ -212,12 +212,16 @@ export const Behandlere = ({ onBackClick, onNext, defaultValues }: Props) => {
                     {field?.firstname} {field?.lastname}
                   </BodyShort>
                   {field?.legekontor && <BodyShort>{field?.legekontor}</BodyShort>}
-                  {field?.gateadresse && <BodyShort>
-                    {field?.gateadresse}, {field?.postnummer} {field?.poststed}
-                  </BodyShort>}
-                  {field?.telefon && <BodyShort>{`${formatMessage(
-                    'søknad.helseopplysninger.dineBehandlere.telefon'
-                  )}: ${field?.telefon}`}</BodyShort>}
+                  {field?.gateadresse && (
+                    <BodyShort>
+                      {field?.gateadresse}, {field?.postnummer} {field?.poststed}
+                    </BodyShort>
+                  )}
+                  {field?.telefon && (
+                    <BodyShort>{`${formatMessage(
+                      'søknad.helseopplysninger.dineBehandlere.telefon'
+                    )}: ${field?.telefon}`}</BodyShort>
+                  )}
                   <Button type="button" variant="tertiary" onClick={() => editNyBehandler(index)}>
                     {formatMessage('søknad.helseopplysninger.dineBehandlere.editButton')}
                   </Button>

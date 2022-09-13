@@ -45,7 +45,7 @@ export const Yrkesskade = ({ onBackClick, onNext, defaultValues }: Props) => {
       [YRKESSKADE]: defaultValues?.søknad?.yrkesskade,
     },
   });
-  const debouncedLagre = useDebounceLagreSoknad<Soknad>();
+  const debouncedLagre = useDebounceLagreSoknad<Soknad>(søknadDispatch);
   const allFields = watch();
   useEffect(() => {
     debouncedLagre(søknadState, stepList, allFields);

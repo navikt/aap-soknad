@@ -105,7 +105,7 @@ export const AndreUtbetalinger = ({ onBackClick, onNext, defaultValues }: Props)
     },
   });
 
-  const debouncedLagre = useDebounceLagreSoknad<Soknad>();
+  const debouncedLagre = useDebounceLagreSoknad<Soknad>(søknadDispatch);
   const allFields = watch();
   useEffect(() => {
     debouncedLagre(søknadState, stepList, allFields);

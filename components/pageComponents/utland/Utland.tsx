@@ -42,7 +42,7 @@ const Utland = (): JSX.Element => {
   const { søknadState, søknadDispatch } = useSoknadContextUtland();
   const { currentStep, stepList, stepWizardDispatch } = useStepWizard();
   const [isVeiledning, setIsVeiledning] = useState<boolean>(true);
-  const debouncedLagre = useDebounceLagreSoknad();
+  const debouncedLagre = useDebounceLagreSoknad(søknadDispatch);
   const { formatMessage } = useFeatureToggleIntl();
   useEffect(() => {
     const getSoknadState = async () => {

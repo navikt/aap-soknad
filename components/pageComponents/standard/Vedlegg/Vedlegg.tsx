@@ -63,7 +63,7 @@ const Vedlegg = ({ onBackClick, onNext, defaultValues }: Props) => {
   const scanningGuideOnClick = () => {
     setScanningGuideOpen(!scanningGuideOpen);
   };
-  const debouncedLagre = useDebounceLagreSoknad<Soknad>();
+  const debouncedLagre = useDebounceLagreSoknad<Soknad>(søknadDispatch);
   const allFields = watch();
   useEffect(() => {
     debouncedLagre(søknadState, stepList, allFields);

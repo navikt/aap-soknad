@@ -95,7 +95,7 @@ const StartDato = ({ onBackClick, onNext, defaultValues }: Props) => {
       },
     },
   });
-  const debouncedLagre = useDebounceLagreSoknad<Soknad>();
+  const debouncedLagre = useDebounceLagreSoknad<Soknad>(søknadDispatch);
   const allFields = useWatch({ control });
   const memoFields = useMemo(() => allFields, [allFields]);
   useEffect(() => {

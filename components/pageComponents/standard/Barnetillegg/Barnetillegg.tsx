@@ -110,7 +110,7 @@ export const Barnetillegg = ({ onBackClick, onNext, defaultValues }: Props) => {
     control,
   });
 
-  const debouncedLagre = useDebounceLagreSoknad<Soknad>();
+  const debouncedLagre = useDebounceLagreSoknad<Soknad>(søknadDispatch);
   const allFields = watch();
   useEffect(() => {
     debouncedLagre(søknadState, stepList, allFields);

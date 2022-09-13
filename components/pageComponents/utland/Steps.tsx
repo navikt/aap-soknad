@@ -52,7 +52,7 @@ export const StepSelectCountry = ({ onBackClick, onNext }: SelectCountryProps) =
   });
   const { søknadState, søknadDispatch } = useSoknadContextUtland();
   const { stepList } = useStepWizard();
-  const debouncedLagre = useDebounceLagreSoknad<SoknadUtland>();
+  const debouncedLagre = useDebounceLagreSoknad<SoknadUtland>(søknadDispatch);
   const {
     control,
     handleSubmit,
@@ -117,8 +117,8 @@ export const StepSelectTravelPeriod = ({
           fromDate && yup.min(fromDate, formatMessage('utland.periode.tilDato.afterfromdate'))
       ),
   });
-  const debouncedLagre = useDebounceLagreSoknad<SoknadUtland>();
   const { søknadState, søknadDispatch } = useSoknadContextUtland();
+  const debouncedLagre = useDebounceLagreSoknad<SoknadUtland>(søknadDispatch);
   const { stepList } = useStepWizard();
   const {
     watch,
@@ -179,8 +179,8 @@ export const StepSummary = ({ data, onBackClick, onNext }: SummaryProps) => {
       .required(formatMessage('utland.oppsummering.bekreftelse.required'))
       .oneOf([true], formatMessage('utland.oppsummering.bekreftelse.required')),
   });
-  const debouncedLagre = useDebounceLagreSoknad<SoknadUtland>();
   const { søknadState, søknadDispatch } = useSoknadContextUtland();
+  const debouncedLagre = useDebounceLagreSoknad<SoknadUtland>(søknadDispatch);
   const { stepList } = useStepWizard();
   const {
     watch,

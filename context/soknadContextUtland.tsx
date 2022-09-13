@@ -43,6 +43,12 @@ function soknadReducerUtland(
           ...action.payload,
         },
       };
+    case SoknadActionKeys.SET_SIST_LAGRET: {
+      return {
+        ...state,
+        sistLagret: action?.payload,
+      };
+    }
     default: {
       throw new Error(`Unhandled action type: ${action.type}`);
     }

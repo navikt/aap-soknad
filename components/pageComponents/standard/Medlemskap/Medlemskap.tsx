@@ -177,7 +177,7 @@ export const Medlemskap = ({ onBackClick, onNext, defaultValues }: Props) => {
   }, [selectedUtenlandsPeriodeIndex, fields]);
 
   const { stepList } = useStepWizard();
-  const debouncedLagre = useDebounceLagreSoknad<Soknad>();
+  const debouncedLagre = useDebounceLagreSoknad<Soknad>(søknadDispatch);
   const allFields = useWatch({ control });
   useEffect(() => {
     debouncedLagre(søknadState, stepList, allFields);
