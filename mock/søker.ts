@@ -4,9 +4,9 @@ import { formatDate } from 'utils/date';
 export const mockSøker = {
   søker: {
     navn: {
-      fornavn: 'Ola',
+      fornavn: 'Jackie',
       mellomnavn: '',
-      etternavn: 'Normann',
+      etternavn: 'Li',
     },
     fødselsnummer: '10029099999',
     adresse: {
