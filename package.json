@@ -82,6 +82,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
+    "prepare": "husky install",
     "postinstall": "patch-package"
   },
   "husky": {
