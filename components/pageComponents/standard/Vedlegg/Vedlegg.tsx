@@ -1,4 +1,4 @@
-import { FieldValues, useForm } from 'react-hook-form';
+import { FieldValues, useForm, useWatch } from 'react-hook-form';
 import { Soknad } from 'types/Soknad';
 import React, { useEffect, useRef, useState } from 'react';
 import { Alert, BodyShort, Heading, Label, ReadMore } from '@navikt/ds-react';
@@ -39,7 +39,6 @@ const Vedlegg = ({ onBackClick, onNext, defaultValues }: Props) => {
   const { søknadState, søknadDispatch } = useSoknadContextStandard();
   const { stepList } = useStepWizard();
   const {
-    watch,
     clearErrors,
     setError,
     control,
@@ -64,7 +63,7 @@ const Vedlegg = ({ onBackClick, onNext, defaultValues }: Props) => {
     setScanningGuideOpen(!scanningGuideOpen);
   };
   const debouncedLagre = useDebounceLagreSoknad<Soknad>(søknadDispatch);
-  const allFields = watch();
+  const allFields = useWatch({ control });
   useEffect(() => {
     debouncedLagre(søknadState, stepList, allFields);
   }, [allFields]);

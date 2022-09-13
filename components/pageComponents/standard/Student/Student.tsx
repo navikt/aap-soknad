@@ -5,7 +5,7 @@ import { JaNeiVetIkke } from 'types/Generic';
 import React, { useEffect, useMemo } from 'react';
 import * as yup from 'yup';
 import { useStepWizard } from 'context/stepWizardContextV2';
-import { FieldValues, useForm } from 'react-hook-form';
+import { FieldValues, useForm, useWatch } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import SoknadFormWrapper from 'components/SoknadFormWrapper/SoknadFormWrapper';
 import ColorPanel from 'components/panel/ColorPanel';
@@ -79,7 +79,6 @@ const Student = ({ onBackClick, onNext, defaultValues }: Props) => {
     handleSubmit,
     setValue,
     clearErrors,
-    watch,
     formState: { errors },
   } = useForm<FieldValues>({
     resolver: yupResolver(schema),
@@ -88,10 +87,10 @@ const Student = ({ onBackClick, onNext, defaultValues }: Props) => {
     },
   });
 
-  const erStudent = watch(`${STUDENT}.${ER_STUDENT}`);
-  const kommeTilbake = watch(`${STUDENT}.${KOMME_TILBAKE}`);
+  const erStudent = useWatch({ control, name: `${STUDENT}.${ER_STUDENT}` });
+  const kommeTilbake = useWatch({ control, name: `${STUDENT}.${KOMME_TILBAKE}` });
   const debouncedLagre = useDebounceLagreSoknad<Soknad>(søknadDispatch);
-  const allFields = watch();
+  const allFields = useWatch({ control });
   useEffect(() => {
     debouncedLagre(søknadState, stepList, allFields);
   }, [allFields]);

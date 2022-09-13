@@ -1,6 +1,6 @@
 import { Alert, Label, BodyLong, BodyShort, Button, Heading, Radio } from '@navikt/ds-react';
 import React, { useEffect, useMemo, useState } from 'react';
-import { useFieldArray, useForm } from 'react-hook-form';
+import { useFieldArray, useForm, useWatch } from 'react-hook-form';
 import { getFullAdresse, getFulltNavn } from 'context/sokerOppslagContext';
 import { Add } from '@navikt/ds-icons';
 import { Soknad, Behandler, RegistrertBehandler } from 'types/Soknad';
@@ -45,7 +45,6 @@ export const Behandlere = ({ onBackClick, onNext, defaultValues }: Props) => {
   const { søknadState, søknadDispatch } = useSoknadContextStandard();
   const { stepList } = useStepWizard();
   const {
-    watch,
     control,
     handleSubmit,
     formState: { errors },
@@ -61,7 +60,7 @@ export const Behandlere = ({ onBackClick, onNext, defaultValues }: Props) => {
   });
 
   const debouncedLagre = useDebounceLagreSoknad<Soknad>(søknadDispatch);
-  const allFields = watch();
+  const allFields = useWatch({ control });
 
   useEffect(() => {
     debouncedLagre(søknadState, stepList, allFields);
@@ -85,7 +84,7 @@ export const Behandlere = ({ onBackClick, onNext, defaultValues }: Props) => {
     return fields[selectedBehandlerIndex];
   }, [selectedBehandlerIndex, fields]);
 
-  const watchFieldArray = watch(REGISTRERTE_BEHANDLERE);
+  const watchFieldArray = useWatch({ control, name: REGISTRERTE_BEHANDLERE });
   const controlledFields = registrertBehandlerFields.map((field, index) => {
     return {
       ...field,

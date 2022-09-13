@@ -1,4 +1,4 @@
-import { FieldValues, useForm } from 'react-hook-form';
+import { FieldValues, useForm, useWatch } from 'react-hook-form';
 import { Soknad } from 'types/Soknad';
 import React, { useEffect } from 'react';
 import TextAreaWrapper from 'components/input/TextAreaWrapper';
@@ -28,7 +28,6 @@ const Tilleggsopplysninger = ({ onBackClick, onNext, defaultValues }: Props) => 
   const { søknadState, søknadDispatch } = useSoknadContextStandard();
   const { stepList } = useStepWizard();
   const {
-    watch,
     control,
     handleSubmit,
     formState: { errors },
@@ -39,7 +38,7 @@ const Tilleggsopplysninger = ({ onBackClick, onNext, defaultValues }: Props) => 
     },
   });
   const debouncedLagre = useDebounceLagreSoknad<Soknad>(søknadDispatch);
-  const allFields = watch();
+  const allFields = useWatch({ control });
   useEffect(() => {
     debouncedLagre(søknadState, stepList, allFields);
   }, [allFields]);
