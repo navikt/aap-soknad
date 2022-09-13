@@ -79,7 +79,7 @@
         }
       },
       "begrunnelse": {
-        "description": "Ja, hvis du har vært alvorlig syk eller NAV har gitt feilaktig informasjon til deg.  Det må ha vært umulig for deg å sende inn søknaden tidligere. Hvis du mener dette gjelder deg, kan du forklare kort i tekstfeltet. "
+        "description": "Ja, hvis du har vært alvorlig syk (f.eks. ligget i koma) eller NAV har gitt feilaktig informasjon til deg.  Det må ha vært umulig for deg å sende inn søknaden tidligere. Hvis du mener dette gjelder deg, kan du forklare kort i tekstfeltet."
       },
       "skalHaFerie": {
         "label": "Planlegger du å ta ferie før startdato på AAP?",
