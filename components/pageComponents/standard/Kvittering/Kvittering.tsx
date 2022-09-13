@@ -58,6 +58,7 @@ const Kvittering = ({ søker, kontaktinformasjon, søknad }: StudentProps) => {
             >
               Her kan du ettersende dokumentasjon digitalt.
             </Link>
+            . Ettersend dette til oss så raskt du kan.
           </BodyShort>
           <BodyShort spacing>
             Du kan også <Link href="#">ettersende per post</Link>, eller levere dokumetansjon på
