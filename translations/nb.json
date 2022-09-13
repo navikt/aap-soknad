@@ -288,34 +288,19 @@
           }
         },
         "legekontor": {
-          "label": "Legekontor",
-          "validation": {
-            "required": "Vennligst oppgi legekontor."
-          }
+          "label": "Legekontor"
         },
         "gateadresse": {
-          "label": "Gateadresse",
-          "validation": {
-            "required": "Vennligst oppgi gateadresse."
-          }
+          "label": "Gateadresse"
         },
         "postnummer": {
-          "label": "Postnummer",
-          "validation": {
-            "required": "Vennligst oppgi postnummer."
-          }
+          "label": "Postnummer"
         },
         "poststed": {
-          "label": "Poststed",
-          "validation": {
-            "required": "Vennligst oppgi poststed."
-          }
+          "label": "Poststed"
         },
         "telefonnummer": {
-          "label": "Telefonnummer",
-          "validation": {
-            "required": "Vennligst oppgi telefonnummer."
-          }
+          "label": "Telefonnummer"
         },
         "buttons": {
           "lagre": "Lagre",
