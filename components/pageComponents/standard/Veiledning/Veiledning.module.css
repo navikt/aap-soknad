@@ -2,6 +2,7 @@
   margin: 0 auto;
   display: flex;
   max-width: 600px;
+  width: 100%;
   flex-direction: column;
   justify-content: space-between;
   gap: var(--navds-spacing-10);
