@@ -10,7 +10,7 @@ import {
   Grid,
 } from '@navikt/ds-react';
 import React, { useState, useEffect, useMemo } from 'react';
-import { useFieldArray, useForm } from 'react-hook-form';
+import { useFieldArray, useForm, useWatch } from 'react-hook-form';
 import { JaEllerNei, JaNeiVetIkke } from 'types/Generic';
 import { Add, Delete } from '@navikt/ds-icons';
 import UtenlandsPeriodeVelger, {
@@ -150,7 +150,6 @@ export const Medlemskap = ({ onBackClick, onNext, defaultValues }: Props) => {
   const {
     control,
     handleSubmit,
-    watch,
     setValue,
     clearErrors,
     formState: { errors },
@@ -179,14 +178,20 @@ export const Medlemskap = ({ onBackClick, onNext, defaultValues }: Props) => {
 
   const { stepList } = useStepWizard();
   const debouncedLagre = useDebounceLagreSoknad<Soknad>();
-  const allFields = watch();
+  const allFields = useWatch({ control });
   useEffect(() => {
     debouncedLagre(søknadState, stepList, allFields);
   }, [allFields]);
-  const boddINorge = watch(`${MEDLEMSKAP}.${BODD_I_NORGE}`);
-  const arbeidINorge = watch(`${MEDLEMSKAP}.${ARBEID_I_NORGE}`);
-  const arbeidUtenforNorge = watch(`${MEDLEMSKAP}.${ARBEID_UTENFOR_NORGE_FØR_SYKDOM}`);
-  const iTilleggArbeidUtenforNorge = watch(`${MEDLEMSKAP}.${OGSÅ_ARBEID_UTENFOR_NORGE}`);
+  const boddINorge = useWatch({ control, name: `${MEDLEMSKAP}.${BODD_I_NORGE}` });
+  const arbeidINorge = useWatch({ control, name: `${MEDLEMSKAP}.${ARBEID_I_NORGE}` });
+  const arbeidUtenforNorge = useWatch({
+    control,
+    name: `${MEDLEMSKAP}.${ARBEID_UTENFOR_NORGE_FØR_SYKDOM}`,
+  });
+  const iTilleggArbeidUtenforNorge = useWatch({
+    control,
+    name: `${MEDLEMSKAP}.${OGSÅ_ARBEID_UTENFOR_NORGE}`,
+  });
   const showArbeidINorge = useMemo(() => validateArbeidINorge(boddINorge), [boddINorge]);
   const showArbeidUtenforNorgeFørSykdom = useMemo(
     () => validateArbeidUtenforNorgeFørSykdom(boddINorge),
@@ -233,9 +238,6 @@ export const Medlemskap = ({ onBackClick, onNext, defaultValues }: Props) => {
     }
   }, [fields]);
 
-  // @ts-ignore
-  // @ts-ignore
-  // @ts-ignore
   return (
     <>
       <SoknadFormWrapper
