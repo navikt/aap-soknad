@@ -5,7 +5,6 @@ import { FormErrorSummary } from '../schema/FormErrorSummary';
 import * as classes from './SoknadFormWrapper.module.css';
 import { SuccessStroke } from '@navikt/ds-icons';
 import { useFeatureToggleIntl } from 'hooks/useFeatureToggleIntl';
-import { useSoknadContextStandard } from 'context/soknadContextStandard';
 
 interface Props {
   children?: React.ReactNode;
@@ -18,6 +17,7 @@ interface Props {
   nextIsLoading?: boolean;
   focusOnErrors?: boolean;
   errors: FieldErrors;
+  sistLagret?: string;
 }
 
 interface LagreModalProps {
@@ -154,9 +154,9 @@ const SøknadFormWrapper = ({
   onDelete,
   errors,
   nextIsLoading = false,
+  sistLagret,
 }: Props) => {
   const { formatMessage } = useFeatureToggleIntl();
-  const { søknadState } = useSoknadContextStandard();
   const [showLagreModal, setShowLagreModal] = useState<boolean>(false);
   const [showAvbrytModal, setShowAvbrytModal] = useState<boolean>(false);
   const [isSlettingSøknad, setIsSlettingSøknad] = useState<boolean>(false);
@@ -196,11 +196,8 @@ const SøknadFormWrapper = ({
             {nextButtonText}
           </Button>
           <span className={classes?.separatorLine} />
-          {søknadState?.sistLagret && (
-            <Detail
-              className={classes?.sistLagret}
-              spacing
-            >{`Sist lagret: ${søknadState?.sistLagret}`}</Detail>
+          {sistLagret && (
+            <Detail className={classes?.sistLagret} spacing>{`Sist lagret: ${sistLagret}`}</Detail>
           )}
           <Button
             className={classes?.buttonSave}
