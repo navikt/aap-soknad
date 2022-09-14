@@ -22,6 +22,10 @@ import { slettLagretSoknadState } from 'context/soknadContextCommon';
 import { useSoknadContextStandard } from 'context/soknadContextStandard';
 import { OppsummeringVedlegg } from './OppsummeringVedlegg/OppsummeringVedlegg';
 import { KOMME_TILBAKE, STUDENT } from 'components/pageComponents/standard/Student/Student';
+import {
+  StønadType,
+  stønadTypeToAlternativNøkkel,
+} from 'components/pageComponents/standard/AndreUtbetalinger/AndreUtbetalinger';
 
 interface OppsummeringProps {
   onBackClick: () => void;
@@ -49,7 +53,7 @@ const Oppsummering = ({ onBackClick, onSubmitSoknad }: OppsummeringProps) => {
     return value ? (
       <BodyShort>
         <Label>{formatMessage(labelKey)}</Label>
-        <span>{value}</span>
+        <BodyShort>{value}</BodyShort>
       </BodyShort>
     ) : (
       <></>
@@ -242,10 +246,23 @@ const Oppsummering = ({ onBackClick, onSubmitSoknad }: OppsummeringProps) => {
             labelKey={`søknad.andreUtbetalinger.lønn.label`}
             value={søknadState?.søknad?.andreUtbetalinger?.lønn}
           />
-          <SummaryRowIfExists
-            labelKey={`søknad.andreUtbetalinger.stønad.label`}
-            value={søknadState?.søknad?.andreUtbetalinger?.stønad?.join(', ')}
-          />
+          {søknadState?.søknad?.andreUtbetalinger ? (
+            <BodyShort>
+              <Label>{formatMessage(`søknad.andreUtbetalinger.stønad.label`)}</Label>
+              {søknadState?.søknad?.andreUtbetalinger?.stønad?.map((stønadType: StønadType) => {
+                const stønadTekst = formatMessage(stønadTypeToAlternativNøkkel(stønadType));
+                return (
+                  <BodyShort>
+                    {stønadType === StønadType.AFP
+                      ? `${stønadTekst}, Utbetaler: ${søknadState?.søknad?.andreUtbetalinger?.afp?.hvemBetaler}`
+                      : stønadTekst}
+                  </BodyShort>
+                );
+              })}
+            </BodyShort>
+          ) : (
+            <></>
+          )}
         </AccordianItemOppsummering>
         <AccordianItemOppsummering
           title={formatMessage('søknad.oppsummering.tilleggsopplysninger.title')}
