@@ -61,6 +61,7 @@ export const tokenXAxiosProxy = async (opts: AxiosOpts) => {
   const tokenxToken = await getTokenxToken(idportenToken, opts.audience);
 
   logger.info('Starter opplasting av fil til ' + opts.url);
+  logger.info('content-type fra klient' + opts.req?.headers['content-type']);
   try {
     const { data } = await axios.post(opts.url, opts.req, {
       responseType: 'stream',

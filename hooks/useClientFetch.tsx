@@ -6,11 +6,11 @@ class FetchError extends Error {
   }
 }
 const useClientFetch = () => {
-  const clientFetch = async (url: string, method?: string, body?: any) => {
+  const clientFetch = async (url: string, method?: string, body?: any, skipStringify = false) => {
     try {
       const res = await fetch(url, {
         method: method || 'GET',
-        ...(body ? { body: JSON.stringify(body) } : {}),
+        ...(skipStringify ? { body } : body ? { body: JSON.stringify(body) } : {}),
         redirect: 'manual',
       });
       if (res.status === 0) {
