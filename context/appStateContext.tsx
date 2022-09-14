@@ -9,11 +9,11 @@ export type AppState = {
   sistLagret?: string;
 };
 const appStateInitialValue = {};
-type AppStateContextState = {
+export type AppStateContextState = {
   appStateDispatch: Dispatch<DispatchAppStateAction>;
   appState: AppState;
 };
-const AppStateContext = createContext<AppStateContextState | undefined>(undefined);
+export const AppStateContext = createContext<AppStateContextState | undefined>(undefined);
 
 function stateReducer(state: AppState, action: DispatchAppStateAction) {
   console.log(action.type, action.payload);

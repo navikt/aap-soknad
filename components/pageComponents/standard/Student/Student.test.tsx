@@ -9,6 +9,7 @@ import Soknad from 'types/Soknad';
 import { SoknadContextData } from 'context/soknadContextCommon';
 import { SøknadType } from 'types/SoknadContext';
 import { SoknadContextStandard } from 'context/soknadContextStandard';
+import { AppStateContext, AppStateContextState } from 'context/appStateContext';
 expect.extend(toHaveNoViolations);
 
 const STUDENT = 'student';
@@ -26,16 +27,24 @@ const wizardContext: StepWizardContextState = {
   currentStepIndex: 0,
   stepWizardDispatch: () => ({}),
 };
+const appContext: AppStateContextState = {
+  appState: {
+    sistLagret: 'i dag',
+  },
+  appStateDispatch: () => console.log('dispatch'),
+};
 
 const renderWithContext = (ui: any, { ...renderOptions }: any) => {
   return render(
-    <SoknadContextStandard.Provider value={{ ...soknadContext }}>
-      <StepWizardContext.Provider value={{ ...wizardContext }}>{ui}</StepWizardContext.Provider>,
-    </SoknadContextStandard.Provider>,
+    <AppStateContext.Provider value={{ ...appContext }}>
+      <SoknadContextStandard.Provider value={{ ...soknadContext }}>
+        <StepWizardContext.Provider value={{ ...wizardContext }}>{ui}</StepWizardContext.Provider>,
+      </SoknadContextStandard.Provider>
+    </AppStateContext.Provider>,
     renderOptions
   );
 };
-describe('Yrkesskade', () => {
+describe('Student', () => {
   const Component = () => {
     return (
       <StepWizard>
