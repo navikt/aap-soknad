@@ -98,7 +98,7 @@ const FieldArrayFileInput = ({
     const data = new FormData();
     data.append('vedlegg', file);
     setLoading(true);
-    const vedlegg = await clientFetch('/aap/soknad/api/vedlegg/lagre/', 'POST', data);
+    const vedlegg = await clientFetch('/aap/soknad/api/vedlegg/lagre/', 'POST', data, true);
     setLoading(false);
     if (vedlegg.ok) {
       const id = await vedlegg.json();
