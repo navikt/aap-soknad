@@ -137,8 +137,8 @@ export const Behandlere = ({ onBackClick, onNext, defaultValues }: Props) => {
           {formatMessage('søknad.helseopplysninger.title')}
         </Heading>
         <LucaGuidePanel>
-          <BodyLong>{formatMessage('søknad.helseopplysninger.guide.text1')}</BodyLong>
-          <BodyLong>{formatMessage('søknad.helseopplysninger.guide.text2')}</BodyLong>
+          <BodyShort spacing>{formatMessage('søknad.helseopplysninger.guide.text1')}</BodyShort>
+          <BodyShort spacing>{formatMessage('søknad.helseopplysninger.guide.text2')}</BodyShort>
         </LucaGuidePanel>
         <div>
           <Heading size={'small'} level={'3'}>
