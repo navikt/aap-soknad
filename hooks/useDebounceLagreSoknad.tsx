@@ -1,13 +1,12 @@
 import { GenericSoknadContextState } from 'types/SoknadContext';
 import { StepType } from 'components/StepWizard/Step';
 import { fetchPOST } from 'api/fetch';
-import { Dispatch, useCallback } from 'react';
+import { useCallback } from 'react';
 import { formatDateTime } from 'utils/date';
-import { setSistLagret, SoknadAction } from 'context/soknadContextCommon';
+import { setSistLagret, useAppStateContext } from 'context/appStateContext';
 
-export function useDebounceLagreSoknad<SoknadStateType>(
-  dispatch: Dispatch<SoknadAction<SoknadStateType>>
-) {
+export function useDebounceLagreSoknad<SoknadStateType>() {
+  const { appStateDispatch } = useAppStateContext();
   async function lagrePartialSøknad<SoknadStateType>(
     state: GenericSoknadContextState<SoknadStateType>,
     stepList: StepType[],
@@ -21,7 +20,7 @@ export function useDebounceLagreSoknad<SoknadStateType>(
         sistLagret: formatDateTime(new Date()),
       };
       const res = await fetchPOST(`/aap/soknad/api/buckets/lagre/?type=${payload.type}`, payload);
-      // if (res.ok) setSistLagret(dispatch, formatDateTime(new Date()));
+      if (res.ok) setSistLagret(formatDateTime(new Date()), appStateDispatch);
     }
   }
   const debouncedLagre = () => {

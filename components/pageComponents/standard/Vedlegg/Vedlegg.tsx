@@ -1,7 +1,7 @@
 import { FieldValues, useForm, useWatch } from 'react-hook-form';
 import { Soknad } from 'types/Soknad';
 import React, { useEffect, useRef, useState } from 'react';
-import { Alert, BodyShort, Heading, Label, ReadMore } from '@navikt/ds-react';
+import { BodyShort, Heading, Label, ReadMore } from '@navikt/ds-react';
 import ScanningGuide from 'components/ScanningGuide/ScanningGuide';
 import * as yup from 'yup';
 import { useStepWizard } from 'context/stepWizardContextV2';
@@ -62,7 +62,7 @@ const Vedlegg = ({ onBackClick, onNext, defaultValues }: Props) => {
   const scanningGuideOnClick = () => {
     setScanningGuideOpen(!scanningGuideOpen);
   };
-  const debouncedLagre = useDebounceLagreSoknad<Soknad>(søknadDispatch);
+  const debouncedLagre = useDebounceLagreSoknad<Soknad>();
   const allFields = useWatch({ control });
   useEffect(() => {
     debouncedLagre(søknadState, stepList, allFields);
@@ -84,7 +84,6 @@ const Vedlegg = ({ onBackClick, onNext, defaultValues }: Props) => {
       backButtonText={formatMessage('navigation.back')}
       cancelButtonText={formatMessage('navigation.cancel')}
       errors={errors}
-      sistLagret={søknadState?.sistLagret}
     >
       <Heading size="large" level="2">
         {formatMessage('søknad.vedlegg.title')}

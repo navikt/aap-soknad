@@ -89,7 +89,7 @@ const Student = ({ onBackClick, onNext, defaultValues }: Props) => {
 
   const erStudent = useWatch({ control, name: `${STUDENT}.${ER_STUDENT}` });
   const kommeTilbake = useWatch({ control, name: `${STUDENT}.${KOMME_TILBAKE}` });
-  const debouncedLagre = useDebounceLagreSoknad<Soknad>(søknadDispatch);
+  const debouncedLagre = useDebounceLagreSoknad<Soknad>();
   const allFields = useWatch({ control });
   useEffect(() => {
     debouncedLagre(søknadState, stepList, allFields);
@@ -143,7 +143,6 @@ const Student = ({ onBackClick, onNext, defaultValues }: Props) => {
       backButtonText={'Forrige steg'}
       cancelButtonText={'Avbryt søknad'}
       errors={errors}
-      sistLagret={søknadState?.sistLagret}
     >
       <Heading size="large" level="2">
         {formatMessage('søknad.student.title')}

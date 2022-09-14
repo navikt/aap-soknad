@@ -177,7 +177,7 @@ export const Medlemskap = ({ onBackClick, onNext, defaultValues }: Props) => {
   }, [selectedUtenlandsPeriodeIndex, fields]);
 
   const { stepList } = useStepWizard();
-  const debouncedLagre = useDebounceLagreSoknad<Soknad>(søknadDispatch);
+  const debouncedLagre = useDebounceLagreSoknad<Soknad>();
   const allFields = useWatch({ control });
   useEffect(() => {
     debouncedLagre(søknadState, stepList, allFields);
@@ -256,7 +256,6 @@ export const Medlemskap = ({ onBackClick, onNext, defaultValues }: Props) => {
         backButtonText={formatMessage('navigation.back')}
         cancelButtonText={formatMessage('navigation.cancel')}
         errors={errors}
-        sistLagret={søknadState?.sistLagret}
       >
         <Heading size="large" level="2">
           {formatMessage('søknad.medlemskap.title')}

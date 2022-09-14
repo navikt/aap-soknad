@@ -18,7 +18,6 @@ export const soknadContextInititalState = {
   søknad: undefined,
   requiredVedlegg: [],
   søknadUrl: undefined,
-  sistLagret: '',
 };
 
 export enum SoknadActionKeys {
@@ -27,7 +26,6 @@ export enum SoknadActionKeys {
   SET_SOKNAD = 'SET_SOKNAD',
   UPDATE_SOKNAD = 'UPDATE_SOKNAD',
   SET_CURRENT_STEP = 'SET_CURRENT_STEP',
-  SET_SIST_LAGRET = 'SET_SIST_LAGRET',
   ADD_BARN_IF_MISSING = 'ADD_BARN_IF_MISSING',
   ADD_BEHANDLER_IF_MISSING = 'ADD_BEHANDLER_IF_MISSING',
   ADD_VEDLEGG = 'ADD_VEDLEGG',
@@ -50,10 +48,6 @@ type SetSoknad<T> = {
 type UpdateSoknad<T> = {
   type: SoknadActionKeys.UPDATE_SOKNAD;
   payload?: Partial<T>;
-};
-type SetSistLagret = {
-  type: SoknadActionKeys.SET_SIST_LAGRET;
-  payload: string;
 };
 type SetCurrentStep = {
   type: SoknadActionKeys.SET_CURRENT_STEP;
@@ -89,7 +83,6 @@ export type SoknadAction<SoknadStateType> =
   | SetSoknad<SoknadStateType>
   | UpdateSoknad<SoknadStateType>
   | SetCurrentStep
-  | SetSistLagret
   | AddBarnIfMissing
   | AddBehandlerIfMissing
   | AddVedlegg
@@ -131,15 +124,6 @@ export function setSoknadStateFraProps<SoknadStateType>(
   return props;
 }
 
-export async function setSistLagret<SoknadStateType>(
-  dispatch: Dispatch<SoknadAction<SoknadStateType>>,
-  sistLagret: string
-) {
-  dispatch({
-    type: SoknadActionKeys.SET_SIST_LAGRET,
-    payload: sistLagret,
-  });
-}
 export async function slettLagretSoknadState<SoknadStateType>(
   dispatch: Dispatch<SoknadAction<SoknadStateType>>,
   state: GenericSoknadContextState<SoknadStateType>
