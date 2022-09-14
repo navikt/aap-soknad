@@ -1,6 +1,6 @@
 import { Alert, BodyShort, Button, Cell, Grid, Heading, Radio, ReadMore } from '@navikt/ds-react';
 import React, { useEffect, useMemo, useState } from 'react';
-import { useFieldArray, useForm } from 'react-hook-form';
+import { useFieldArray, useForm, useWatch } from 'react-hook-form';
 import RadioGroupWrapper from 'components/input/RadioGroupWrapper/RadioGroupWrapper';
 import { JaEllerNei } from 'types/Generic';
 import { Soknad, Barn, ManuelleBarn } from 'types/Soknad';
@@ -81,7 +81,6 @@ export const Barnetillegg = ({ onBackClick, onNext, defaultValues }: Props) => {
     control,
     handleSubmit,
     formState: { errors },
-    watch,
   } = useForm<{
     [BARNETILLEGG]: Array<Barn>;
     [MANUELLE_BARN]: Array<ManuelleBarn>;
@@ -110,11 +109,11 @@ export const Barnetillegg = ({ onBackClick, onNext, defaultValues }: Props) => {
   });
 
   const debouncedLagre = useDebounceLagreSoknad<Soknad>(søknadDispatch);
-  const allFields = watch();
+  const allFields = useWatch({ control });
   useEffect(() => {
     debouncedLagre(søknadState, stepList, allFields);
   }, [allFields]);
-  const watchFieldArray = watch(BARNETILLEGG);
+  const watchFieldArray = useWatch({ control, name: BARNETILLEGG });
   const controlledFields = fields.map((field, index) => {
     return {
       ...field,
@@ -182,7 +181,6 @@ export const Barnetillegg = ({ onBackClick, onNext, defaultValues }: Props) => {
     setShowModal(false);
   };
 
-  console.log('manuelleBarn', manuelleBarnFields);
   return (
     <>
       <SoknadFormWrapper

@@ -1,4 +1,4 @@
-import { FieldValues, useForm } from 'react-hook-form';
+import { FieldValues, useForm, useWatch } from 'react-hook-form';
 import React, { useEffect } from 'react';
 import { ReadMore, BodyLong, BodyShort, Heading, Radio, Alert, Link } from '@navikt/ds-react';
 import RadioGroupWrapper from 'components/input/RadioGroupWrapper/RadioGroupWrapper';
@@ -37,7 +37,6 @@ export const Yrkesskade = ({ onBackClick, onNext, defaultValues }: Props) => {
   const {
     control,
     handleSubmit,
-    watch,
     formState: { errors },
   } = useForm<FieldValues>({
     resolver: yupResolver(schema),
@@ -46,11 +45,11 @@ export const Yrkesskade = ({ onBackClick, onNext, defaultValues }: Props) => {
     },
   });
   const debouncedLagre = useDebounceLagreSoknad<Soknad>(søknadDispatch);
-  const allFields = watch();
+  const allFields = useWatch({ control });
   useEffect(() => {
     debouncedLagre(søknadState, stepList, allFields);
   }, [allFields]);
-  const harSkadeEllerSykdom = watch(`${YRKESSKADE}`);
+  const harSkadeEllerSykdom = useWatch({ control, name: `${YRKESSKADE}` });
   return (
     <SoknadFormWrapper
       onNext={handleSubmit((data) => {

@@ -1,6 +1,6 @@
 import { Alert, BodyShort, Cell, Checkbox, Grid, Heading, Radio, ReadMore } from '@navikt/ds-react';
 import React, { useEffect, useMemo } from 'react';
-import { FieldValues, useForm } from 'react-hook-form';
+import { FieldValues, useForm, useWatch } from 'react-hook-form';
 import CheckboxGroupWrapper from 'components/input/CheckboxGroupWrapper';
 import RadioGroupWrapper from 'components/input/RadioGroupWrapper/RadioGroupWrapper';
 import { JaEllerNei } from 'types/Generic';
@@ -95,7 +95,6 @@ export const AndreUtbetalinger = ({ onBackClick, onNext, defaultValues }: Props)
   const {
     control,
     handleSubmit,
-    watch,
     setValue,
     formState: { errors },
   } = useForm<FieldValues>({
@@ -106,12 +105,12 @@ export const AndreUtbetalinger = ({ onBackClick, onNext, defaultValues }: Props)
   });
 
   const debouncedLagre = useDebounceLagreSoknad<Soknad>(søknadDispatch);
-  const allFields = watch();
+  const allFields = useWatch({ control });
   useEffect(() => {
     debouncedLagre(søknadState, stepList, allFields);
   }, [allFields]);
-  const lønnEtterlønnEllerSluttpakke = watch(`${ANDRE_UTBETALINGER}.${LØNN}`);
-  const stønadEllerVerv = watch(`${ANDRE_UTBETALINGER}.${STØNAD}`);
+  const lønnEtterlønnEllerSluttpakke = useWatch({ control, name: `${ANDRE_UTBETALINGER}.${LØNN}` });
+  const stønadEllerVerv = useWatch({ control, name: `${ANDRE_UTBETALINGER}.${STØNAD}` });
   const StønadAlternativer = useMemo(
     () => ({
       [StønadType.ØKONOMISK_SOSIALHJELP]: formatMessage(
