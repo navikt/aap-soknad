@@ -1,17 +1,15 @@
 # AAP Søknad
 
-Basert på create-react-app fra nav-frontend-moduler. Kjører med mock lokalt og server i dev og prod for autentisering.
-
-Prosjektet kjører `pretty-quick` on-`git commit` for automatisk kjøring av prettier, samt linting av js/ts on-`git push`.
+Søknad for arbeidsavklaringspenger med idporten innlogging (wonderwall). Skrevet i NextJS.
 
 Kom i gang lokalt:
 
 ```
-yarn install
-yarn start
+yarn
+yarn run dev
 ```
 
-Push til master bygges og deployes til dev-gcp.
+Push til main bygges og deployes til dev-gcp.
 
 # EsLint autofix
 
