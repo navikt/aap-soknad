@@ -7,6 +7,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as classes from './Veiledning.module.css';
 import { LucaGuidePanel } from 'components/LucaGuidePanel';
 import { useFeatureToggleIntl } from 'hooks/useFeatureToggleIntl';
+import { useState } from 'react';
 
 const VEILEDNING_CONFIRM = 'veiledningConfirm';
 type VeiledningType = {
@@ -21,6 +22,7 @@ interface VeiledningProps {
 }
 export const Veiledning = ({ søker, onSubmit }: VeiledningProps) => {
   const { formatMessage } = useFeatureToggleIntl();
+  const [isLoading, setIsLoading] = useState(false);
 
   const schema = yup.object().shape({
     veiledningConfirm: yup
@@ -126,7 +128,10 @@ export const Veiledning = ({ søker, onSubmit }: VeiledningProps) => {
         </article>
 
         <form
-          onSubmit={handleSubmit(() => onSubmit())}
+          onSubmit={handleSubmit(() => {
+            setIsLoading(true);
+            return onSubmit();
+          })}
           className={classes?.veiledningContent}
           autoComplete="off"
         >
@@ -139,7 +144,7 @@ export const Veiledning = ({ søker, onSubmit }: VeiledningProps) => {
             <Label as={'span'}>{formatMessage('søknad.veiledning.veiledningConfirm.title')}</Label>
           </ConfirmationPanelWrapper>
           <div className={classes?.buttonWrapper}>
-            <Button variant="primary" type="submit">
+            <Button variant="primary" type="submit" loading={isLoading}>
               {formatMessage(`søknad.veiledning.startSøknad`)}
             </Button>
             <Button variant="tertiary" type="button" onClick={() => console.log('TODO')}>
