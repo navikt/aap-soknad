@@ -49,7 +49,7 @@ const Kvittering = ({ søker, kontaktinformasjon, søknad }: StudentProps) => {
       <Alert variant={'success'}>
         <BodyLong>{formatMessage('søknad.kvittering.alert.text')}</BodyLong>
       </Alert>
-      {søknad?.mangler?.length > 0 && (
+      {søknad?.manglendeVedlegg?.length > 0 && (
         <Alert variant="warning">
           <BodyShort spacing>
             Vi mangler dokumentasjon fra deg for å kunne behandle søknaden.{' '}

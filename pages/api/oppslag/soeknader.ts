@@ -22,10 +22,13 @@ export const getSøknader = async (accessToken?: string): Promise<SøknadApiType
 };
 
 export interface SøknadApiType {
-  opprettet: string;
+  innsendtDato: string;
   søknadId: string;
-  innsendte: ['ARBEIDSGIVER' | 'STUDIER' | 'ANDREBARN' | 'OMSORG' | 'UTLAND' | 'ANNET'];
-  mangler: ['ARBEIDSGIVER' | 'STUDIER' | 'ANDREBARN' | 'OMSORG' | 'UTLAND' | 'ANNET'];
+  innsendteVedlegg: {
+    vedleggType: ['ARBEIDSGIVER' | 'STUDIER' | 'ANDREBARN' | 'OMSORG' | 'UTLAND' | 'ANNET'];
+    innsendtDato: string;
+  }[];
+  manglendeVedlegg: ['ARBEIDSGIVER' | 'STUDIER' | 'ANDREBARN' | 'OMSORG' | 'UTLAND' | 'ANNET'];
 }
 
 export default handler;

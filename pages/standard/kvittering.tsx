@@ -1,6 +1,6 @@
 import PageHeader from 'components/PageHeader';
 import React, { useEffect, useState } from 'react';
-import { SokerOppslagState, SøkerView, useSokerOppslag } from 'context/sokerOppslagContext';
+import { SokerOppslagState, SøkerView } from 'context/sokerOppslagContext';
 import { SoknadContextProviderStandard } from 'context/soknadContextStandard';
 import { useFeatureToggleIntl } from 'hooks/useFeatureToggleIntl';
 import Kvittering from 'components/pageComponents/standard/Kvittering/Kvittering';
@@ -51,7 +51,7 @@ export const getServerSideProps = beskyttetSide(
     const bearerToken = getAccessToken(ctx);
     const søknader = await getSøknader(bearerToken);
     const søker = await getSøker(bearerToken);
-    logger.info(`søkeroppslag fra API: ${JSON.stringify(søker)}`);
+    logger.info(`søkeroppslag fra API: ${JSON.stringify(søknader)}`);
 
     return {
       props: { søknader, søker },
