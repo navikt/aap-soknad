@@ -14,16 +14,12 @@ interface StudentProps {
   søknad?: SøknadApiType;
 }
 
-const getUUUIDfromString = (str: string) => {
-  return str.split('/').pop();
-};
-
-const getDownloadUrl = (url?: string) => {
-  const filopplastingUrl = '/aap/soknad/api/vedlegg/les/?uuid=';
-  if (filopplastingUrl && url) {
-    return `${filopplastingUrl}${getUUUIDfromString(url)}`;
+const getDownloadUrl = (journalpostId?: string) => {
+  const filopplastingUrl = '/aap/soknad/api/oppslag/journalpost/?journalpostId=';
+  if (journalpostId) {
+    return `${filopplastingUrl}${journalpostId}`;
   }
-  return url;
+  return journalpostId;
 };
 
 const Kvittering = ({ søker, kontaktinformasjon, søknad }: StudentProps) => {
@@ -49,7 +45,7 @@ const Kvittering = ({ søker, kontaktinformasjon, søknad }: StudentProps) => {
       <Alert variant={'success'}>
         <BodyLong>{formatMessage('søknad.kvittering.alert.text')}</BodyLong>
       </Alert>
-      {søknad?.manglendeVedlegg?.length > 0 && (
+      {(søknad?.manglendeVedlegg?.length ?? 0) > 0 && (
         <Alert variant="warning">
           <BodyShort spacing>
             Vi mangler dokumentasjon fra deg for å kunne behandle søknaden.{' '}
@@ -89,7 +85,7 @@ const Kvittering = ({ søker, kontaktinformasjon, søknad }: StudentProps) => {
       </BodyLong>
       <Link
         target={'_blank'}
-        href={getDownloadUrl(søknadState.søknadUrl)}
+        href={getDownloadUrl(søknad?.journalpostId)}
         className={classes?.linkButton}
       >
         <Download />
