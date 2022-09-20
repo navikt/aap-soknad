@@ -43,6 +43,7 @@
         "bulletPointOppfølging": "Du har rett til oppfølging fra NAV",
         "bulletPointPlikt": "Du har plikt til å bidra til å avklare om du kan beholde eller komme i jobb",
         "bulletPointMeldekort": "Du må sende inn meldekort hver 14. dag",
+        "bulletPointTilbakebetaling": "Hvis jeg får penger jeg ikke har rett til, er jeg forberedt på at jeg må betale dem tilbake.",
         "bulletPointBeskjed": "Du har plikt til å gi beskjed hvis situasjonen din endrer seg"
       },
       "accordionInformasjon": {
@@ -124,9 +125,9 @@
       }
     },
     "medlemskap": {
-      "title": "Medlem i folketrygden",
+      "title": "Bosted og jobb",
       "guide": {
-        "text": "Vi trenger å vite om du har jobbet eller bodd i utlandet, for å finne ut om du oppfyller kravene til medlemskap i folketrygden."
+        "text": "For å finne ut om du oppfyller kravene til medlemskap i folketrygden, trenger vi å vite om du har bodd eller jobbet i utlandet."
       },
       "harBoddINorgeSiste5År": {
         "label": "Har du bodd sammenhengende i Norge de fem siste årene?",

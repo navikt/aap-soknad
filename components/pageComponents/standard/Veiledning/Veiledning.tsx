@@ -73,6 +73,9 @@ export const Veiledning = ({ søker, onSubmit }: VeiledningProps) => {
                   <li>{formatMessage('søknad.veiledning.accordionHvis.bulletPointOppfølging')}</li>
                   <li>{formatMessage('søknad.veiledning.accordionHvis.bulletPointPlikt')}</li>
                   <li>{formatMessage('søknad.veiledning.accordionHvis.bulletPointMeldekort')}</li>
+                  <li>
+                    {formatMessage('søknad.veiledning.accordionHvis.bulletPointTilbakebetaling')}
+                  </li>
                   <li>{formatMessage('søknad.veiledning.accordionHvis.bulletPointBeskjed')}</li>
                 </ul>
               </Accordion.Content>
@@ -128,9 +131,10 @@ export const Veiledning = ({ søker, onSubmit }: VeiledningProps) => {
         </article>
 
         <form
-          onSubmit={handleSubmit(() => {
+          onSubmit={handleSubmit(async () => {
             setIsLoading(true);
-            return onSubmit();
+            await onSubmit();
+            setIsLoading(false);
           })}
           className={classes?.veiledningContent}
           autoComplete="off"
