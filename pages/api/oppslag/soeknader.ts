@@ -24,10 +24,7 @@ export const getSøknader = async (accessToken?: string): Promise<SøknadApiType
 export interface SøknadApiType {
   innsendtDato: string;
   søknadId: string;
-  innsendteVedlegg: {
-    vedleggType: ['ARBEIDSGIVER' | 'STUDIER' | 'ANDREBARN' | 'OMSORG' | 'UTLAND' | 'ANNET'];
-    innsendtDato: string;
-  }[];
+  journalpostId?: string;
   manglendeVedlegg: ['ARBEIDSGIVER' | 'STUDIER' | 'ANDREBARN' | 'OMSORG' | 'UTLAND' | 'ANNET'];
 }
 
