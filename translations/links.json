@@ -4,7 +4,7 @@
   "dineSaker": "https://www.{navhostname}/person/dine-saker",
   "ettersending": "https://www.nav.no/soknader/nb/person/arbeid/arbeidsavklaringspenger/NAV%2011-13.05/ettersendelse",
   "standardSoknadForside": "https://www.${navhostname}/aap/soknad/standard",
-  "saksbehandlingstid": "https://www.nav.no/saksbehandlingstid",
+  "saksbehandlingstid": "https://www.nav.no/saksbehandlingstider#arbeidsavklaringspenger-aap",
   "personOpplysninger": "https://www.nav.no/no/nav-og-samfunn/om-nav/personvern-i-arbeids-og-velferdsetaten/personvernerklaering-for-arbeids-og-velferdsetaten",
   "forskriftOmYrkessykdommer": "https://lovdata.no/dokument/SF/forskrift/1960-02-19-6",
   "folkeregisteret": "https://www.skatteetaten.no/person/folkeregister/flytte/",
