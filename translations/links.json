@@ -2,6 +2,7 @@
   "dittNav": "https://www.{navhostname}/person/dittnav",
   "login": "https://aap-soknad.{navhostname}/oauth2/login?redirect={redirect}",
   "dineSaker": "https://www.{navhostname}/person/dine-saker",
+  "ettersending": "https://www.nav.no/soknader/nb/person/arbeid/arbeidsavklaringspenger/NAV%2011-13.05/ettersendelse",
   "standardSoknadForside": "https://www.${navhostname}/aap/soknad/standard",
   "saksbehandlingstid": "https://www.nav.no/saksbehandlingstid",
   "personOpplysninger": "https://www.nav.no/no/nav-og-samfunn/om-nav/personvern-i-arbeids-og-velferdsetaten/personvernerklaering-for-arbeids-og-velferdsetaten",

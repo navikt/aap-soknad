@@ -61,8 +61,11 @@ const Kvittering = ({ søker, kontaktinformasjon, søknad }: StudentProps) => {
             . Ettersend dette til oss så raskt du kan.
           </BodyShort>
           <BodyShort spacing>
-            Du kan også <Link href="#">ettersende per post</Link>, eller levere dokumetansjon på
-            ditt lokale NAV-kontor.
+            Du kan også{' '}
+            <Link target={'_blank'} href={formatMessage('applinks.ettersending')}>
+              ettersende per post (åpnes i ny fane)
+            </Link>
+            , eller levere dokumetansjon på ditt lokale NAV-kontor.
           </BodyShort>
         </Alert>
       )}
