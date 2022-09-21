@@ -2,17 +2,6 @@ import { StønadType } from 'components/pageComponents/standard/AndreUtbetalinge
 import { Adresse } from 'context/sokerOppslagContext';
 
 export interface SøknadBackendState {
-  startDato: {
-    beskrivelse?: string;
-  };
-  ferie: {
-    ferieType?: 'PERIODE' | 'DAGER' | 'NEI' | 'VET_IKKE';
-    periode?: {
-      fom?: string;
-      tom?: string;
-    };
-    dager?: number | string;
-  };
   medlemsskap: {
     boddINorgeSammenhengendeSiste5?: boolean;
     jobbetUtenforNorgeFørSyk?: boolean;

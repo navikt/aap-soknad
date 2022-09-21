@@ -96,42 +96,6 @@ const Oppsummering = ({ onBackClick, onSubmitSoknad }: OppsummeringProps) => {
         </AccordianItemOppsummering>
 
         <AccordianItemOppsummering
-          title={formatMessage('søknad.oppsummering.startDato.title')}
-          editText={formatMessage('søknad.oppsummering.startDato.editText')}
-          toggleAll={toggleAll}
-          onEdit={() => editStep(StepNames.STARTDATO)}
-        >
-          <SummaryRowIfExists
-            labelKey={'søknad.startDato.skalHaFerie.label'}
-            value={søknadState?.søknad?.ferie?.skalHaFerie}
-          />
-          <SummaryRowIfExists
-            labelKey={'søknad.startDato.ferieType.label'}
-            value={søknadState?.søknad?.ferie?.ferieType}
-          />
-          <SummaryRowIfExists
-            labelKey={'søknad.startDato.antallDager.label'}
-            value={søknadState?.søknad?.ferie?.antallDager}
-          />
-          {isNonEmptyPeriode({
-            fraDato: søknadState?.søknad?.ferie?.fraDato,
-            tilDato: søknadState?.søknad?.ferie?.tilDato,
-          }) ? (
-            <div>
-              <Label>{formatMessage('søknad.oppsummering.startDato.planlagtFerie')}</Label>
-              <OppsummeringPeriode
-                periode={{
-                  fraDato: søknadState?.søknad?.ferie?.fraDato,
-                  tilDato: søknadState?.søknad?.ferie?.tilDato,
-                }}
-              />
-            </div>
-          ) : (
-            <></>
-          )}
-        </AccordianItemOppsummering>
-
-        <AccordianItemOppsummering
           title={formatMessage('søknad.oppsummering.medlemskap.title')}
           editText={formatMessage('søknad.oppsummering.medlemskap.editText')}
           toggleAll={toggleAll}
