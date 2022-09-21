@@ -300,15 +300,6 @@
         "lasteOppVedleggTekst": "Dette laster du opp senere i søknaden. Du kan også ettersende vedlegg."
       }
     },
-    "tilleggsopplysninger": {
-      "title": "Tilleggsopplysninger",
-      "guide": {
-        "text": "Dette spørsmålet er valgfritt å svare på."
-      },
-      "tilleggsopplysninger": {
-        "label": "Hvis du har flere opplysninger du mener er viktig for søknaden din, kan du skrive dem her (valgfritt)"
-      }
-    },
     "vedlegg": {
       "title": "Vedlegg",
       "guide": {
@@ -416,10 +407,6 @@
       "utbetalinger": {
         "title": "Utbetalinger",
         "editText": "Endre opplysninger om utbetalinger"
-      },
-      "tilleggsopplysninger": {
-        "title": "Tilleggsopplysninger",
-        "editText": "Endre tilleggsopplysninger"
       },
       "vedlegg": {
         "title": "Vedlegg",
