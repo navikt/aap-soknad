@@ -54,6 +54,7 @@ export const Veiledning = ({ søker, onSubmit }: VeiledningProps) => {
           </Heading>
           <BodyShort spacing>{formatMessage('søknad.veiledning.guide.text1')}</BodyShort>
           <BodyShort spacing>{formatMessage('søknad.veiledning.guide.text2')}</BodyShort>
+          <BodyShort spacing>{formatMessage('søknad.veiledning.guide.text3')}</BodyShort>
         </LucaGuidePanel>
         <article>
           <Heading size={'small'} level={'2'} spacing>
@@ -61,6 +62,7 @@ export const Veiledning = ({ søker, onSubmit }: VeiledningProps) => {
           </Heading>
           <BodyShort spacing>{formatMessage('søknad.veiledning.søknadsdato.text1')}</BodyShort>
           <BodyShort spacing>{formatMessage('søknad.veiledning.søknadsdato.text2')}</BodyShort>
+          <BodyShort spacing>{formatMessage('søknad.veiledning.søknadsdato.text3')}</BodyShort>
         </article>
         <article>
           <Accordion>

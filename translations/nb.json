@@ -31,12 +31,14 @@
       "guide": {
         "title": "Hei, {name}!",
         "text1": "Jeg er her for å veilede deg gjennom søknaden. Svarene dine lagres underveis, slik at du trygt kan gå tilbake og endre dem.",
-        "text2": "Arbeidsavklaringspenger forkortes ofte med “AAP”. AAP skal sikre deg inntekt når du på grunn av sykdom eller skade har behov for å få avklart mulighetene dine til å jobbe."
+        "text2": "Arbeidsavklaringspenger forkortes ofte med “AAP”.",
+        "text3": "AAP skal sikre deg inntekt når du på grunn av sykdom eller skade har behov for å få avklart mulighetene dine til å jobbe."
       },
       "søknadsdato": {
         "title": "Søknadsdato er viktig for eventuell utbetaling av AAP",
         "text1": "Vanligvis kan du tidligst få AAP fra den dagen du søker.",
-        "text2": "Du kan søke om AAP selv om om du ikke har mottatt sykepenger."
+        "text2": "Hvis du mottar sykepenger, får du vanligvis AAP fra første dag etter at sykepengene dine er ferdig.",
+        "text3": "Du kan søke om AAP selv om om du ikke har mottatt sykepenger."
       },
       "accordionHvis": {
         "title": "Hvis du får AAP gjelder dette",
