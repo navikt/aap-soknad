@@ -10,7 +10,7 @@ import * as yup from 'yup';
 import { useStepWizard } from 'context/stepWizardContextV2';
 import { yupResolver } from '@hookform/resolvers/yup';
 import SoknadFormWrapper from 'components/SoknadFormWrapper/SoknadFormWrapper';
-import { AddBarnModal, Relasjon, validateHarInntekt } from './AddBarnModal';
+import { AddBarnModal, Relasjon } from './AddBarnModal';
 import { formatNavn } from 'utils/StringFormatters';
 import { LucaGuidePanel } from 'components/LucaGuidePanel';
 import { useFeatureToggleIntl } from 'hooks/useFeatureToggleIntl';
@@ -30,7 +30,7 @@ interface Props {
   onNext: (data: any) => void;
   defaultValues?: GenericSoknadContextState<Soknad>;
 }
-const BARNETILLEGG = 'barnetillegg';
+export const BARN = 'barn';
 export const MANUELLE_BARN = 'manuelleBarn';
 
 export const GRUNNBELØP = '111 477';
@@ -45,33 +45,18 @@ export const Barnetillegg = ({ onBackClick, onNext, defaultValues }: Props) => {
   const { formatMessage } = useFeatureToggleIntl();
 
   const schema = yup.object().shape({
-    [BARNETILLEGG]: yup.array().of(
+    [BARN]: yup.array().of(
       yup.object().shape({
-        barnepensjon: yup
-          .string()
-          .required(
-            formatMessage('søknad.barnetillegg.leggTilBarn.modal.barnepensjon.validation.required')
-          )
-          .oneOf([JaEllerNei.JA, JaEllerNei.NEI])
-          .nullable(),
         harInntekt: yup
           .string()
           .nullable()
-          .when('barnepensjon', {
-            is: validateHarInntekt,
-            then: (yupSchema) =>
-              yupSchema
-                .required(
-                  formatMessage(
-                    'søknad.barnetillegg.leggTilBarn.modal.harInntekt.validation.required',
-                    {
-                      grunnbeløp: GRUNNBELØP,
-                    }
-                  )
-                )
-                .oneOf([JaEllerNei.JA, JaEllerNei.NEI])
-                .nullable(),
-          }),
+          .required(
+            formatMessage('søknad.barnetillegg.leggTilBarn.modal.harInntekt.validation.required', {
+              grunnbeløp: GRUNNBELØP,
+            })
+          )
+          .oneOf([JaEllerNei.JA, JaEllerNei.NEI])
+          .nullable(),
       })
     ),
   });
@@ -82,19 +67,19 @@ export const Barnetillegg = ({ onBackClick, onNext, defaultValues }: Props) => {
     handleSubmit,
     formState: { errors },
   } = useForm<{
-    [BARNETILLEGG]: Array<Barn>;
+    [BARN]: Array<Barn>;
     [MANUELLE_BARN]: Array<ManuelleBarn>;
   }>({
     resolver: yupResolver(schema),
     defaultValues: {
-      [BARNETILLEGG]: defaultValues?.søknad?.barnetillegg,
+      [BARN]: defaultValues?.søknad?.barnetillegg,
       [MANUELLE_BARN]: defaultValues?.søknad?.manuelleBarn,
     },
   });
   const [selectedBarnIndex, setSelectedBarnIndex] = useState<number | undefined>(undefined);
   const [showModal, setShowModal] = useState<boolean>(false);
-  const { fields, update } = useFieldArray({
-    name: BARNETILLEGG,
+  const { fields } = useFieldArray({
+    name: BARN,
     control,
   });
 
@@ -113,21 +98,6 @@ export const Barnetillegg = ({ onBackClick, onNext, defaultValues }: Props) => {
   useEffect(() => {
     debouncedLagre(søknadState, stepList, allFields);
   }, [allFields]);
-  const watchFieldArray = useWatch({ control, name: BARNETILLEGG });
-  const controlledFields = fields.map((field, index) => {
-    return {
-      ...field,
-      ...watchFieldArray[index],
-    };
-  });
-
-  useEffect(() => {
-    controlledFields?.forEach((barn, index) => {
-      if (barn.barnepensjon === JaEllerNei.JA && barn.harInntekt) {
-        update(index, { ...barn, harInntekt: undefined });
-      }
-    });
-  }, [controlledFields]);
 
   useEffect(() => {
     if (showModal === false) {
@@ -225,19 +195,25 @@ export const Barnetillegg = ({ onBackClick, onNext, defaultValues }: Props) => {
 
                     <RadioGroupWrapper
                       legend={formatMessage(
-                        'søknad.barnetillegg.registrerteBarn.barnepensjon.label'
+                        'søknad.barnetillegg.registrerteBarn.harInntekt.label',
+                        {
+                          grunnbeløp: GRUNNBELØP,
+                        }
                       )}
-                      name={`${BARNETILLEGG}.${index}.barnepensjon`}
+                      name={`${BARN}.${index}.harInntekt`}
                       control={control}
-                      error={errors?.[BARNETILLEGG]?.[index]?.barnepensjon?.message}
+                      error={errors?.[BARN]?.[index]?.harInntekt?.message}
                     >
                       <ReadMore
                         header={formatMessage(
-                          'søknad.barnetillegg.registrerteBarn.barnepensjon.readMore.title'
+                          'søknad.barnetillegg.registrerteBarn.harInntekt.readMore.title'
                         )}
                       >
                         {formatMessage(
-                          'søknad.barnetillegg.registrerteBarn.barnepensjon.readMore.text'
+                          'søknad.barnetillegg.registrerteBarn.harInntekt.readMore.text',
+                          {
+                            grunnbeløp: GRUNNBELØP,
+                          }
                         )}
                       </ReadMore>
                       <Radio value={JaEllerNei.JA}>
@@ -251,42 +227,7 @@ export const Barnetillegg = ({ onBackClick, onNext, defaultValues }: Props) => {
                         </BodyShort>
                       </Radio>
                     </RadioGroupWrapper>
-                    {controlledFields[index]?.barnepensjon === JaEllerNei.NEI && (
-                      <RadioGroupWrapper
-                        legend={formatMessage(
-                          'søknad.barnetillegg.registrerteBarn.harInntekt.label',
-                          {
-                            grunnbeløp: GRUNNBELØP,
-                          }
-                        )}
-                        name={`${BARNETILLEGG}.${index}.harInntekt`}
-                        control={control}
-                        error={errors?.[BARNETILLEGG]?.[index]?.harInntekt?.message}
-                      >
-                        <ReadMore
-                          header={formatMessage(
-                            'søknad.barnetillegg.registrerteBarn.harInntekt.readMore.title'
-                          )}
-                        >
-                          {formatMessage(
-                            'søknad.barnetillegg.registrerteBarn.harInntekt.readMore.text',
-                            {
-                              grunnbeløp: GRUNNBELØP,
-                            }
-                          )}
-                        </ReadMore>
-                        <Radio value={JaEllerNei.JA}>
-                          <BodyShort>
-                            {formatMessage(`answerOptions.jaEllerNei.${JaEllerNei.JA}`)}
-                          </BodyShort>
-                        </Radio>
-                        <Radio value={JaEllerNei.NEI}>
-                          <BodyShort>
-                            {formatMessage(`answerOptions.jaEllerNei.${JaEllerNei.NEI}`)}
-                          </BodyShort>
-                        </Radio>
-                      </RadioGroupWrapper>
-                    )}
+                    {/*)}*/}
                   </article>
                 </li>
               );
@@ -317,16 +258,6 @@ export const Barnetillegg = ({ onBackClick, onNext, defaultValues }: Props) => {
                     {barn?.relasjon === Relasjon.FOSTERFORELDER && (
                       <BodyShort>
                         {formatMessage('søknad.barnetillegg.manuelleBarn.erFosterforelder')}
-                      </BodyShort>
-                    )}
-                    {barn?.barnepensjon === JaEllerNei.JA && (
-                      <BodyShort>
-                        {formatMessage('søknad.barnetillegg.manuelleBarn.mottarBarnepensjon')}
-                      </BodyShort>
-                    )}
-                    {barn?.barnepensjon === JaEllerNei.NEI && (
-                      <BodyShort>
-                        {formatMessage('søknad.barnetillegg.manuelleBarn.mottarIkkeBarnepensjon')}
                       </BodyShort>
                     )}
                     {barn?.harInntekt === JaEllerNei.JA && (

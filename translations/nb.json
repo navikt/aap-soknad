@@ -493,7 +493,7 @@
     "barnetillegg": {
       "title": "Barnetillegg",
       "guide": {
-        "text1": "Du kan få barnetillegg for barn under 18 år som du har forsørgeransvar for.",
+        "text1": "Dersom du forsørger barn under 18 år, får du utbetalt noe mer AAP. Dette kalles barnetillegg.",
         "text2": "Du kan få barnetillegg selv om barnet ikke bor sammen med deg. Barnetillegget får du også for adoptivbarn, fosterbarn og andre barn som du har forsørgeransvar for."
       },
       "registrerteBarn": {
@@ -566,16 +566,6 @@
             "label": "Hvilken relasjon har du til barnet?",
             "validation": {
               "required": "Du må svare på hvilken relasjon du har til barnet."
-            }
-          },
-          "barnepensjon": {
-            "label": "Mottar barnet barnepensjon?",
-            "readMore": {
-              "title": "Hvorfor spør vi om dette?",
-              "text": "Hvis barnet mottar barnepensjon, får du ikke barnetillegg for barnet."
-            },
-            "validation": {
-              "required": "Du må svare på om barnet mottar barnepensjon."
             }
           },
           "harInntekt": {

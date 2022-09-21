@@ -40,8 +40,6 @@ export enum Relasjon {
 
 const NAVN = 'navn';
 
-export const validateHarInntekt = (barnepensjon: JaEllerNei) => barnepensjon === JaEllerNei.NEI;
-
 export const getAddBarnSchema = (formatMessage: (id: string, options?: {}) => string) => {
   return yup.object().shape({
     [NAVN]: yup.object().shape({
@@ -74,25 +72,16 @@ export const getAddBarnSchema = (formatMessage: (id: string, options?: {}) => st
       .required(formatMessage('søknad.barnetillegg.leggTilBarn.modal.relasjon.validation.required'))
       .oneOf([Relasjon.FORELDER, Relasjon.FOSTERFORELDER])
       .nullable(),
-    barnepensjon: yup
+    harInntekt: yup
       .string()
+      .nullable()
       .required(
-        formatMessage('søknad.barnetillegg.leggTilBarn.modal.barnepensjon.validation.required')
+        formatMessage('søknad.barnetillegg.leggTilBarn.modal.harInntekt.validation.required', {
+          grunnbeløp: GRUNNBELØP,
+        })
       )
       .oneOf([JaEllerNei.JA, JaEllerNei.NEI])
       .nullable(),
-    harInntekt: yup.string().when('barnepensjon', {
-      is: validateHarInntekt,
-      then: (yupSchema) =>
-        yupSchema
-          .required(
-            formatMessage('søknad.barnetillegg.leggTilBarn.modal.harInntekt.validation.required', {
-              grunnbeløp: GRUNNBELØP,
-            })
-          )
-          .oneOf([JaEllerNei.JA, JaEllerNei.NEI])
-          .nullable(),
-    }),
   });
 };
 
@@ -191,16 +180,20 @@ export const AddBarnModal = ({
           </RadioGroupWrapper>
           <RadioGroupWrapper
             control={control}
-            legend={formatMessage('søknad.barnetillegg.leggTilBarn.modal.barnepensjon.label')}
-            name={'barnepensjon'}
-            error={errors?.barnepensjon?.message}
+            legend={formatMessage('søknad.barnetillegg.leggTilBarn.modal.harInntekt.label', {
+              grunnbeløp: GRUNNBELØP,
+            })}
+            name={'harInntekt'}
+            error={errors?.harInntekt?.message}
           >
             <ReadMore
               header={formatMessage(
-                'søknad.barnetillegg.leggTilBarn.modal.barnepensjon.readMore.title'
+                'søknad.barnetillegg.leggTilBarn.modal.harInntekt.readMore.title'
               )}
             >
-              {formatMessage('søknad.barnetillegg.leggTilBarn.modal.barnepensjon.readMore.text')}
+              {formatMessage('søknad.barnetillegg.leggTilBarn.modal.harInntekt.readMore.text', {
+                grunnbeløp: GRUNNBELØP,
+              })}
             </ReadMore>
             <Radio value={JaEllerNei.JA}>
               <BodyShort>{formatMessage(`answerOptions.jaEllerNei.${JaEllerNei.JA}`)}</BodyShort>
@@ -209,32 +202,6 @@ export const AddBarnModal = ({
               <BodyShort>{formatMessage(`answerOptions.jaEllerNei.${JaEllerNei.NEI}`)}</BodyShort>
             </Radio>
           </RadioGroupWrapper>
-          {barnepensjon === JaEllerNei.NEI && (
-            <RadioGroupWrapper
-              control={control}
-              legend={formatMessage('søknad.barnetillegg.leggTilBarn.modal.harInntekt.label', {
-                grunnbeløp: GRUNNBELØP,
-              })}
-              name={'harInntekt'}
-              error={errors?.harInntekt?.message}
-            >
-              <ReadMore
-                header={formatMessage(
-                  'søknad.barnetillegg.leggTilBarn.modal.harInntekt.readMore.title'
-                )}
-              >
-                {formatMessage('søknad.barnetillegg.leggTilBarn.modal.harInntekt.readMore.text', {
-                  grunnbeløp: GRUNNBELØP,
-                })}
-              </ReadMore>
-              <Radio value={JaEllerNei.JA}>
-                <BodyShort>{formatMessage(`answerOptions.jaEllerNei.${JaEllerNei.JA}`)}</BodyShort>
-              </Radio>
-              <Radio value={JaEllerNei.NEI}>
-                <BodyShort>{formatMessage(`answerOptions.jaEllerNei.${JaEllerNei.NEI}`)}</BodyShort>
-              </Radio>
-            </RadioGroupWrapper>
-          )}
 
           {relasjon === Relasjon.FORELDER && (
             <Alert variant={'info'}>

@@ -15,7 +15,7 @@ import { Soknad, Vedlegg } from 'types/Soknad';
 import { BehandlerBackendState, SøknadBackendState } from 'types/SoknadBackendState';
 import { formatDate, formatDateTime } from './date';
 import { formatNavn, getFullAdresse } from 'utils/StringFormatters';
-import { GRUNNBELØP } from 'components/pageComponents/standard/Barnetillegg/Barnetillegg';
+import { BARN, GRUNNBELØP } from 'components/pageComponents/standard/Barnetillegg/Barnetillegg';
 import { RequiredVedlegg } from 'types/SoknadContext';
 import { Relasjon } from 'components/pageComponents/standard/Barnetillegg/AddBarnModal';
 import {
@@ -182,9 +182,8 @@ export const mapSøknadToBackend = (
         }) ?? [],
     },
     registrerteBarn:
-      søknad?.barnetillegg?.map((barn) => ({
+      søknad?.[BARN]?.map((barn) => ({
         merEnnIG: jaNeiToBoolean(barn.harInntekt),
-        barnepensjon: jaNeiToBoolean(barn.barnepensjon),
       })) ?? [],
     andreBarn:
       søknad?.manuelleBarn?.map((barn) => ({
@@ -194,7 +193,6 @@ export const mapSøknadToBackend = (
         },
         relasjon: barn.relasjon,
         merEnnIG: jaNeiToBoolean(barn.harInntekt),
-        barnepensjon: jaNeiToBoolean(barn.barnepensjon),
         vedlegg: barn?.vedlegg?.map((e) => e?.vedleggId),
       })) ?? [],
     tilleggsopplysninger: søknad?.tilleggsopplysninger,
@@ -401,14 +399,10 @@ export const mapSøknadToPdf = (
   };
   const getBarn = (søknad?: Soknad) => {
     const registrerteBarn =
-      søknad?.barnetillegg?.map((barn) =>
+      søknad?.[BARN]?.map((barn) =>
         createFeltgruppe([
           ...createField('Navn', formatNavn(barn?.navn)),
           ...createField('Fødselsdato', barn?.fødseldato || ''),
-          ...createField(
-            formatMessage('søknad.barnetillegg.registrerteBarn.barnepensjon.label'),
-            barn?.barnepensjon
-          ),
           ...createField(
             formatMessage('søknad.barnetillegg.registrerteBarn.harInntekt.label', {
               grunnbeløp: GRUNNBELØP,
@@ -426,10 +420,6 @@ export const mapSøknadToPdf = (
           ...createField(
             formatMessage('søknad.barnetillegg.leggTilBarn.modal.relasjon.label'),
             barn?.relasjon
-          ),
-          ...createField(
-            formatMessage('søknad.barnetillegg.registrerteBarn.barnepensjon.label'),
-            barn?.barnepensjon
           ),
           ...createField(
             formatMessage(

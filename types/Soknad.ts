@@ -6,6 +6,7 @@ import { Relasjon } from 'components/pageComponents/standard/Barnetillegg/AddBar
 import { JaEllerNei, JaNeiVetIkke } from './Generic';
 import { AVBRUTT_STUDIE_VEDLEGG } from 'components/pageComponents/standard/Student/Student';
 import { OppslagBehandler } from 'context/sokerOppslagContext';
+import { BARN } from 'components/pageComponents/standard/Barnetillegg/Barnetillegg';
 
 export type FieldAndLabel<T> = {
   label?: string;
@@ -72,7 +73,6 @@ export type Barn = {
   fødseldato?: string;
   fnr: string;
   harInntekt?: string;
-  barnepensjon?: string;
   manueltOpprettet?: boolean;
   relasjon?: 'FORELDER' | 'FOSTERFORELDER';
 };
@@ -82,7 +82,6 @@ export type ManuelleBarn = {
   internId: string;
   fødseldato?: Date;
   harInntekt?: string;
-  barnepensjon?: string;
   relasjon: Relasjon;
   vedlegg?: Vedlegg[];
 };
@@ -112,7 +111,7 @@ export interface Soknad {
   andreBehandlere?: Behandler[];
   student?: Student;
   andreUtbetalinger?: AndreUtbetalinger;
-  barnetillegg?: Barn[];
+  [BARN]?: Barn[];
   manuelleBarn?: ManuelleBarn[];
   tilleggsopplysninger?: string;
   ferie?: Ferie;
