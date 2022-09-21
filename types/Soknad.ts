@@ -86,25 +86,13 @@ export type ManuelleBarn = {
   vedlegg?: Vedlegg[];
 };
 
-export type Ferie = {
-  skalHaFerie?: string;
-  ferieType?: string;
-  antallDager?: string;
-  fraDato?: Date;
-  tilDato?: Date;
-};
 export type Vedlegg = {
   name: string;
   size: string;
   vedleggId: string;
 };
 
-export type StartDato = Date;
-
 export interface Soknad {
-  startDato?: StartDato;
-  hvorfor?: string;
-  begrunnelse?: string;
   yrkesskade?: Yrkesskade;
   medlemskap?: Medlemskap;
   registrerteBehandlere?: RegistrertBehandler[];
@@ -114,7 +102,6 @@ export interface Soknad {
   [BARN]?: Barn[];
   manuelleBarn?: ManuelleBarn[];
   tilleggsopplysninger?: string;
-  ferie?: Ferie;
   vedlegg?: {
     [AttachmentType.LØNN_OG_ANDRE_GODER]: Vedlegg[];
     [AttachmentType.OMSORGSSTØNAD]: Vedlegg[];

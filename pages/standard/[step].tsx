@@ -29,7 +29,6 @@ import { SubmitHandler } from 'react-hook-form';
 import { fetchPOST } from 'api/fetch';
 import { StepNames } from './index';
 import { mapSøknadToBackend, mapSøknadToPdf } from 'utils/api';
-import StartDato from 'components/pageComponents/standard/StartDato/StartDato';
 import { Medlemskap } from 'components/pageComponents/standard/Medlemskap/Medlemskap';
 import { Yrkesskade } from 'components/pageComponents/standard/Yrkesskade/Yrkesskade';
 import { Behandlere } from 'components/pageComponents/standard/Behandlere/Behandlere';
@@ -128,7 +127,7 @@ const Steps = ({ søker, mellomlagretSøknad }: PageProps) => {
     });
 
   const onPreviousStep = async () => {
-    if (currentStep?.name === StepNames.STARTDATO) {
+    if (currentStep?.stepIndex === 1) {
       router.push('/standard');
     } else {
       goToPreviousStep(stepWizardDispatch);
@@ -149,15 +148,6 @@ const Steps = ({ søker, mellomlagretSøknad }: PageProps) => {
       {søknadState?.søknad && (
         <StepWizard>
           {step === '1' && (
-            <StartDato
-              onBackClick={onPreviousStep}
-              defaultValues={søknadState}
-              onNext={(data) => {
-                onNextStep(data);
-              }}
-            />
-          )}
-          {step === '2' && (
             <Medlemskap
               onBackClick={onPreviousStep}
               defaultValues={søknadState}
@@ -166,7 +156,7 @@ const Steps = ({ søker, mellomlagretSøknad }: PageProps) => {
               }}
             />
           )}
-          {step === '3' && (
+          {step === '2' && (
             <Yrkesskade
               onBackClick={onPreviousStep}
               defaultValues={søknadState}
@@ -175,7 +165,7 @@ const Steps = ({ søker, mellomlagretSøknad }: PageProps) => {
               }}
             />
           )}
-          {step === '4' && (
+          {step === '3' && (
             <Behandlere
               onBackClick={onPreviousStep}
               defaultValues={søknadState}
@@ -184,7 +174,7 @@ const Steps = ({ søker, mellomlagretSøknad }: PageProps) => {
               }}
             />
           )}
-          {step === '5' && (
+          {step === '4' && (
             <Barnetillegg
               onBackClick={onPreviousStep}
               defaultValues={søknadState}
@@ -193,7 +183,7 @@ const Steps = ({ søker, mellomlagretSøknad }: PageProps) => {
               }}
             />
           )}
-          {step === '6' && (
+          {step === '5' && (
             <Student
               onBackClick={onPreviousStep}
               defaultValues={søknadState}
@@ -202,7 +192,7 @@ const Steps = ({ søker, mellomlagretSøknad }: PageProps) => {
               }}
             />
           )}
-          {step === '7' && (
+          {step === '6' && (
             <AndreUtbetalinger
               onBackClick={onPreviousStep}
               defaultValues={søknadState}
@@ -211,7 +201,7 @@ const Steps = ({ søker, mellomlagretSøknad }: PageProps) => {
               }}
             />
           )}
-          {step === '8' && (
+          {step === '7' && (
             <Tilleggsopplysninger
               onBackClick={onPreviousStep}
               defaultValues={søknadState}
@@ -220,7 +210,7 @@ const Steps = ({ søker, mellomlagretSøknad }: PageProps) => {
               }}
             />
           )}
-          {step === '9' && (
+          {step === '8' && (
             <Vedlegg
               onBackClick={onPreviousStep}
               defaultValues={søknadState}
@@ -229,7 +219,7 @@ const Steps = ({ søker, mellomlagretSøknad }: PageProps) => {
               }}
             />
           )}
-          {step === '10' && (
+          {step === '9' && (
             <Oppsummering onBackClick={onPreviousStep} onSubmitSoknad={submitSoknad} />
           )}
           {showFetchErrorMessage && (

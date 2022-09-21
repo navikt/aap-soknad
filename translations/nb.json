@@ -69,61 +69,6 @@
       "startSøknad": "Start søknad",
       "avbrytSøknad": "Avbryt søknad"
     },
-    "startDato": {
-      "title": "Startdato",
-      "guide": {
-        "text1": "Hovedregelen er at du tidligst kan få AAP fra den dagen du sender inn søknaden.",
-        "text2": "Hvis du mottar sykepenger får du vanligvis AAP første dagen etter at sykepengene dine er ferdig.",
-        "readMore": {
-          "title": "Kan jeg søke om AAP tilbake i tid?",
-          "text": "Hvis du av helsemessige årsaker ikke har kunnet søke tidligere, kan du få innvilget AAP tilbake i tid. Du kan også få AAP tilbake i tid hvis du har fått feil informasjon fra NAV og dette er grunnen til at du ikke har søkt tidligere."
-        }
-      },
-      "begrunnelse": {
-        "description": "Ja, hvis du har vært alvorlig syk (f.eks. ligget i koma) eller NAV har gitt feilaktig informasjon til deg.  Det må ha vært umulig for deg å sende inn søknaden tidligere. Hvis du mener dette gjelder deg, kan du forklare kort i tekstfeltet."
-      },
-      "skalHaFerie": {
-        "label": "Planlegger du å ta ferie før startdato på AAP?",
-        "description": "Hvis du tar ut ferie kan startdatoen forskyve seg.",
-        "validation": {
-          "required": "Du må svare på om du planlegger å ta ferie."
-        }
-      },
-      "ferieType": {
-        "label": "Vet du når du skal ta ut ferie?",
-        "values": {
-          "periode": "Ja",
-          "dager": "Nei, men jeg vet antall feriedager"
-        },
-        "validation": {
-          "required": "Du må svare på om du vet når du skal ta ut ferie."
-        }
-      },
-      "periode": {
-        "fraDato": {
-          "label": "Fra dato (dd.mm.åååå)",
-          "validation": {
-            "required": "Du må fylle ut feriens fra-dato. Fyll inn slik: dd.mm.åååå."
-          }
-        },
-        "tilDato": {
-          "label": "Til dato (dd.mm.åååå)",
-          "validation": {
-            "required": "Du må fylle ut feriens til-dato. Fyll inn slik: dd.mm.åååå.",
-            "fraDatoEtterTilDato": "Fra-dato må være eldre enn til-dato. Fyll inn slik: dd.mm.åååå."
-          }
-        }
-      },
-      "antallDager": {
-        "label": "Skriv inn antall dager du skal ha ferie",
-        "validation": {
-          "required": "Du må skrive inn antall dager du skal ha ferie."
-        }
-      },
-      "alert": {
-        "text": "Det er viktig at du gir oss beskjed hvis du bestemmer deg for å ta ferie, fordi det kan påvirke startdatoen din. Dette påvirker spesielt deg som får sykepenger."
-      }
-    },
     "medlemskap": {
       "title": "Bosted og jobb",
       "guide": {
@@ -439,11 +384,6 @@
           }
         }
       },
-      "startDato": {
-        "title": "Ønsket startdato",
-        "editText": "Endre opplysninger om startdato",
-        "planlagtFerie": "Planlagt ferie"
-      },
       "medlemskap": {
         "title": "Medlem i folketrygden",
         "editText": "Endre opplysninger om hvor du har bodd og jobbet",
@@ -630,7 +570,7 @@
         "epost": "E-post"
       },
       "lastNedSøknad": "Last ned søknaden som pdf",
-      "dittNavKnapp": "Les mer på Mine Arbeidsavklaringspenger"
+      "dittNavKnapp": "Følg saken på Mine Arbeidsavklaringspenger"
     },
     "ettersendelseFrist": "Du kan ettersende dette innen 14 dager per post eller digitalt. Du kan også levere dette på ditt lokale NAV kontor"
   },

@@ -22,12 +22,6 @@ const OppsummeringBarn = ({ barn }: OppsummeringBarnProps) => {
           <BodyShort>{barn?.relasjon}</BodyShort>
         </>
       )}
-      {barn?.barnepensjon && (
-        <>
-          <Label>Har barnepensjon:</Label>
-          <BodyShort>{barn?.barnepensjon}</BodyShort>
-        </>
-      )}
       {barn?.harInntekt && (
         <>
           <Label>{'Har inntekt over 1G:'}</Label>
