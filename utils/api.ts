@@ -199,7 +199,7 @@ export const mapSøknadToBackend = (
       })) ?? [],
     tilleggsopplysninger: søknad?.tilleggsopplysninger,
     ...(søknad?.vedlegg?.annet
-      ? { andreVedlegg: søknad?.vedlegg?.annet?.map((e) => e?.vedleggId) }
+      ? { vedlegg: søknad?.vedlegg?.annet?.map((e) => e?.vedleggId) }
       : {}),
   };
 };
