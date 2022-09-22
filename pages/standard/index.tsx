@@ -26,7 +26,6 @@ export enum StepNames {
   ANDRE_UTBETALINGER = 'ANDRE_UTBETALINGER',
   BARNETILLEGG = 'BARNETILLEGG',
   VEDLEGG = 'VEDLEGG',
-  TILLEGGSOPPLYSNINGER = 'TILLEGGSOPPLYSNINGER',
   OPPSUMMERING = 'OPPSUMMERING',
 }
 export const defaultStepList = [
@@ -36,9 +35,8 @@ export const defaultStepList = [
   { stepIndex: 4, name: StepNames.BARNETILLEGG },
   { stepIndex: 5, name: StepNames.STUDENT },
   { stepIndex: 6, name: StepNames.ANDRE_UTBETALINGER },
-  { stepIndex: 7, name: StepNames.TILLEGGSOPPLYSNINGER },
-  { stepIndex: 8, name: StepNames.VEDLEGG },
-  { stepIndex: 9, name: StepNames.OPPSUMMERING },
+  { stepIndex: 7, name: StepNames.VEDLEGG },
+  { stepIndex: 8, name: StepNames.OPPSUMMERING },
 ];
 
 const Introduksjon = ({ søker }: PageProps) => {
