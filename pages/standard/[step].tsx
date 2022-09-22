@@ -108,7 +108,7 @@ const Steps = ({ søker, mellomlagretSøknad }: PageProps) => {
       console.log('søknad', søknad);
       console.log('søknadPDF', søknadPdf);
 
-      const postResponse = await postSøknad(søknad);
+      const postResponse = await postSøknad({ søknad, kvittering: søknadPdf });
       if (postResponse?.ok) {
         logSkjemaFullførtEvent();
         const url = postResponse?.data?.uri;

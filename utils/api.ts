@@ -10,10 +10,10 @@ import {
   StønadType,
   stønadTypeToAlternativNøkkel,
 } from 'components/pageComponents/standard/AndreUtbetalinger/AndreUtbetalinger';
-import { FastlegeView, Soker } from 'context/sokerOppslagContext';
+import { Soker } from 'context/sokerOppslagContext';
 import { Soknad, Vedlegg } from 'types/Soknad';
 import { BehandlerBackendState, SøknadBackendState } from 'types/SoknadBackendState';
-import { formatDate, formatDateTime } from './date';
+import { formatDate } from './date';
 import { formatNavn, getFullAdresse } from 'utils/StringFormatters';
 import { BARN, GRUNNBELØP } from 'components/pageComponents/standard/Barnetillegg/Barnetillegg';
 import { RequiredVedlegg } from 'types/SoknadContext';
@@ -471,14 +471,6 @@ export const mapSøknadToPdf = (
     return createTema('Manglende vedlegg', [createListe('', manglendeVedlegg)]);
   };
   return {
-    søker: {
-      id: søker?.fødseldato,
-      navn: formatNavn(søker?.navn),
-    },
-    mottattdato: {
-      beskrivelse: 'Sendt til NAV',
-      datotid: formatDateTime(sendtTimestamp),
-    },
     temaer: [
       getMedlemskap(søknad),
       getYrkesskade(søknad),
