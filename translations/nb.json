@@ -233,19 +233,19 @@
           }
         },
         "legekontor": {
-          "label": "Legekontor"
+          "label": "Legekontor (valgfritt)"
         },
         "gateadresse": {
-          "label": "Gateadresse"
+          "label": "Gateadresse (valgfritt)"
         },
         "postnummer": {
-          "label": "Postnummer"
+          "label": "Postnummer (valgfritt)"
         },
         "poststed": {
-          "label": "Poststed"
+          "label": "Poststed (valgfritt)"
         },
         "telefonnummer": {
-          "label": "Telefonnummer"
+          "label": "Telefonnummer (valgfritt)"
         },
         "buttons": {
           "lagre": "Lagre",
