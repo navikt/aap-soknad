@@ -238,37 +238,39 @@ export const mapSøknadToPdf = (
   søker?: Soker
 ) => {
   const getMedlemskap = (søknad?: Soknad) => {
-    const utenlandsOpphold = søknad?.medlemskap?.utenlandsOpphold
-      ? [
-          createGruppe(
-            formatMessage(
-              `søknad.medlemskap.utenlandsperiode.modal.ingress.${utenlandsPeriodeArbeidEllerBodd(
-                søknad?.medlemskap?.[ARBEID_I_NORGE],
-                søknad?.medlemskap?.[BODD_I_NORGE]
-              )}`
+    const utenlandsOpphold =
+      søknad?.medlemskap?.utenlandsOpphold?.length &&
+      søknad?.medlemskap?.utenlandsOpphold?.length > 0
+        ? [
+            createGruppe(
+              formatMessage(
+                `søknad.medlemskap.utenlandsperiode.modal.ingress.${utenlandsPeriodeArbeidEllerBodd(
+                  søknad?.medlemskap?.[ARBEID_I_NORGE],
+                  søknad?.medlemskap?.[BODD_I_NORGE]
+                )}`
+              ),
+              søknad?.medlemskap?.utenlandsOpphold?.map((opphold) =>
+                createFeltgruppe([
+                  ...createField('Land', opphold?.land),
+                  ...createField(
+                    'Periode',
+                    `Fra ${formatDate(opphold?.fraDato)} til ${formatDate(opphold?.tilDato)}`
+                  ),
+                  ...createField(
+                    formatMessage('søknad.medlemskap.utenlandsperiode.modal.iArbeid.label'),
+                    opphold?.iArbeid,
+                    true
+                  ),
+                  ...createField(
+                    formatMessage('søknad.medlemskap.utenlandsperiode.modal.utenlandsId.label'),
+                    opphold?.utenlandsId,
+                    true
+                  ),
+                ])
+              )
             ),
-            søknad?.medlemskap?.utenlandsOpphold?.map((opphold) =>
-              createFeltgruppe([
-                ...createField('Land', opphold?.land),
-                ...createField(
-                  'Periode',
-                  `Fra ${formatDate(opphold?.fraDato)} til ${formatDate(opphold?.tilDato)}`
-                ),
-                ...createField(
-                  formatMessage('søknad.medlemskap.utenlandsperiode.modal.iArbeid.label'),
-                  opphold?.iArbeid,
-                  true
-                ),
-                ...createField(
-                  formatMessage('søknad.medlemskap.utenlandsperiode.modal.utenlandsId.label'),
-                  opphold?.utenlandsId,
-                  true
-                ),
-              ])
-            )
-          ),
-        ]
-      : [];
+          ]
+        : [];
     const rader = [
       ...createField(
         formatMessage('søknad.medlemskap.harBoddINorgeSiste5År.label'),
@@ -291,7 +293,7 @@ export const mapSøknadToPdf = (
       ),
       ...utenlandsOpphold,
     ];
-    return createTema('Tilknytning til Norge', rader);
+    return createTema(formatMessage('søknad.medlemskap.title'), rader);
   };
   const getYrkesskade = (søknad?: Soknad) => {
     return createTema('Yrkesskade', [
