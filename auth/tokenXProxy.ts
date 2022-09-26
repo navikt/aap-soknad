@@ -32,7 +32,12 @@ export const tokenXProxy = async (opts: Opts) => {
   });
 
   if (response.status < 200 || response.status > 300) {
-    logger.error(`tokenXProxy: status for ${opts.url} er ${response.status}.`);
+    logger.error({
+      message: `tokenXProxy: status for ${opts.url} er ${response.status}.`,
+      response: response?.body,
+    });
+    //DEBUG
+    console.log(response);
     throw new ErrorMedStatus(
       `tokenXProxy: status for ${opts.url} er ${response.status}.`,
       response.status
