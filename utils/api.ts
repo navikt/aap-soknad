@@ -340,7 +340,7 @@ export const mapSøknadToPdf = (
           ...createField('Telefon', behandler?.telefon),
         ])
       ) || [];
-    return createTema('Andre behandlere', andreBehandlere);
+    return andreBehandlere.length > 0 ? createTema('Andre behandlere', andreBehandlere) : undefined;
   };
   const getBarn = (søknad?: Soknad) => {
     const registrerteBarn =
@@ -468,7 +468,7 @@ export const mapSøknadToPdf = (
       getMedlemskap(søknad),
       getYrkesskade(søknad),
       getRegistrerteBehandlere(søknad),
-      getAndreBehandlere(søknad),
+      ...(getAndreBehandlere(søknad) ? [getAndreBehandlere(søknad)] : []),
       getBarn(søknad),
       getStudent(søknad),
       getAndreYtelser(søknad),
