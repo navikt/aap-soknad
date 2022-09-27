@@ -72,17 +72,23 @@ const Kvittering = ({ søker, kontaktinformasjon, søknad }: StudentProps) => {
           ),
         })}
       </BodyLong>
-      <BodyLong>
-        {formatMessage('søknad.kvittering.bekreftelse.title')}
-        <ul>
-          <li>
-            {formatMessage('søknad.kvittering.bekreftelse.sms')}: {kontaktinformasjon?.mobil}
-          </li>
-          <li>
-            {formatMessage('søknad.kvittering.bekreftelse.epost')}: {kontaktinformasjon?.epost}
-          </li>
-        </ul>
-      </BodyLong>
+      {(kontaktinformasjon?.mobil || kontaktinformasjon?.epost) && (
+        <BodyLong>
+          {formatMessage('søknad.kvittering.bekreftelse.title')}
+          <ul>
+            {kontaktinformasjon?.mobil && (
+              <li>
+                {formatMessage('søknad.kvittering.bekreftelse.sms')}: {kontaktinformasjon?.mobil}
+              </li>
+            )}
+            {kontaktinformasjon?.epost && (
+              <li>
+                {formatMessage('søknad.kvittering.bekreftelse.epost')}: {kontaktinformasjon?.epost}
+              </li>
+            )}
+          </ul>
+        </BodyLong>
+      )}
       <Link
         target={'_blank'}
         href={getDownloadUrl(søknad?.journalpostId)}
