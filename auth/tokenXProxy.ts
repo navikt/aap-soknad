@@ -35,8 +35,6 @@ export const tokenXProxy = async (opts: Opts) => {
     logger.error(
       `tokenXProxy: status for ${opts.url} er ${response.status}: ${response.statusText}.`
     );
-    //DEBUG
-    console.log(response);
     throw new ErrorMedStatus(
       `tokenXProxy: status for ${opts.url} er ${response.status}.`,
       response.status
