@@ -12,6 +12,9 @@ const handler = beskyttetApi(async (req: NextApiRequest, res: NextApiResponse) =
   }
   const accessToken = getAccessTokenFromRequest(req);
   const result = await lesJournalpost(journalpostId as string, accessToken);
+
+  res.setHeader('Content-Type', result.headers.get('Content-Type') ?? '');
+  res.setHeader('Content-Disposition', result.headers.get('Content-Disposition') ?? '');
   res.status(200).send(result.body);
 });
 
