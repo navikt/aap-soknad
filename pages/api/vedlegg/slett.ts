@@ -20,6 +20,7 @@ export const slettVedlegg = async (uuids: string | string[], accessToken?: strin
   const commaSeparatedUuids = getCommaSeparatedStringFromStringOrArray(uuids);
   await tokenXProxy({
     url: `${process.env.SOKNAD_API_URL}/vedlegg/slett?uuids=${commaSeparatedUuids}`,
+    prometheusPath: 'vedlegg/slett',
     method: 'DELETE',
     noResponse: true,
     audience: process.env.SOKNAD_API_AUDIENCE!,

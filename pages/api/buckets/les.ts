@@ -38,6 +38,7 @@ export const lesBucket = async (type: SøknadsType, accessToken?: string) => {
   try {
     const mellomlagretSøknad = await tokenXProxy({
       url: `${process.env.SOKNAD_API_URL}/buckets/les/${type}`,
+      prometheusPath: `buckets/les/${type}`,
       method: 'GET',
       audience: process.env.SOKNAD_API_AUDIENCE!,
       bearerToken: accessToken,

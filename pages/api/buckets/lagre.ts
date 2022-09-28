@@ -22,6 +22,7 @@ export const lagreBucket = async (type: SøknadsType, data: string, accessToken?
   if (isMock()) return await lagreCache(JSON.stringify(data));
   await tokenXProxy({
     url: `${process.env.SOKNAD_API_URL}/buckets/lagre/${type}`,
+    prometheusPath: `buckets/lagre/${type}`,
     method: 'POST',
     data: JSON.stringify(data),
     audience: process.env.SOKNAD_API_AUDIENCE!,

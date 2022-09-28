@@ -4,9 +4,11 @@ import axios from 'axios';
 import { getTokenxToken } from './getTokenxToken';
 import logger from '../utils/logger';
 import { ErrorMedStatus } from './ErrorMedStatus';
+import metrics from 'utils/metrics';
 
 interface Opts {
   url: string;
+  prometheusPath: string;
   audience: string;
   method: 'GET' | 'POST' | 'DELETE';
   data?: string;
@@ -22,6 +24,8 @@ export const tokenXProxy = async (opts: Opts) => {
 
   const idportenToken = opts.bearerToken!.split(' ')[1];
   const tokenxToken = await getTokenxToken(idportenToken, opts.audience);
+
+  const stopTimer = metrics.backendApiDurationHistogram.startTimer({ path: opts.prometheusPath });
   const response = await fetch(opts.url, {
     method: opts.method,
     body: opts.data,
@@ -30,6 +34,7 @@ export const tokenXProxy = async (opts: Opts) => {
       'Content-Type': opts.contentType ?? 'application/json',
     },
   });
+  stopTimer();
 
   if (response.status < 200 || response.status > 300) {
     const isJson = response.headers.get('content-type')?.includes('application/json');

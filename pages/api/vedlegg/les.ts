@@ -20,6 +20,7 @@ export const lesVedlegg = async (uuid: string, accessToken?: string) => {
   if (isMock()) return await fetch('http://localhost:3000/aap/soknad/Rød.png');
   return await tokenXProxy({
     url: `${process.env.SOKNAD_API_URL}/vedlegg/les/${uuid}`,
+    prometheusPath: 'vedlegg/les/{uuid}',
     method: 'GET',
     audience: process.env.SOKNAD_API_AUDIENCE!,
     bearerToken: accessToken,

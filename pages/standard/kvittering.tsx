@@ -11,6 +11,7 @@ import { getAccessToken } from 'auth/accessToken';
 import { getSøknader, SøknadApiType } from 'pages/api/oppslag/soeknader';
 import { getSøker } from 'pages/api/oppslag/soeker';
 import logger from 'utils/logger';
+import metrics from 'utils/metrics';
 interface PageProps {
   søker: SokerOppslagState;
   søknader: SøknadApiType[];
@@ -48,11 +49,15 @@ const KvitteringPage = ({ søker, søknader }: PageProps) => {
 
 export const getServerSideProps = beskyttetSide(
   async (ctx: NextPageContext): Promise<GetServerSidePropsResult<{}>> => {
+    const stopTimer = metrics.getServersidePropsDurationHistogram.startTimer({
+      path: '/standard/kvittering',
+    });
     const bearerToken = getAccessToken(ctx);
     const søknader = await getSøknader(bearerToken);
     const søker = await getSøker(bearerToken);
     logger.info(`søkeroppslag fra API: ${JSON.stringify(søknader)}`);
 
+    stopTimer();
     return {
       props: { søknader, søker },
     };

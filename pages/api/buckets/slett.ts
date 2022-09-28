@@ -25,6 +25,7 @@ export const slettBucket = async (type: SøknadsType, accessToken?: string) => {
   }
   await tokenXProxy({
     url: `${process.env.SOKNAD_API_URL}/buckets/slett/${type}`,
+    prometheusPath: `buckets/slett/${type}`,
     method: 'DELETE',
     noResponse: true,
     audience: process.env.SOKNAD_API_AUDIENCE!,

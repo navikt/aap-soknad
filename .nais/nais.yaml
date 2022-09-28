@@ -28,6 +28,9 @@ spec:
       memory: 256Mi
     limits:
       memory: 256Mi
+  prometheus:
+    enabled: true
+    path: /aap/soknad/api/internal/prometheus/
   idporten:
     enabled: true
     sidecar:

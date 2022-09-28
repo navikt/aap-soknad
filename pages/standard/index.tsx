@@ -14,6 +14,7 @@ import { StepType } from 'components/StepWizard/Step';
 import { SØKNAD_CONTEXT_VERSION } from 'context/soknadContextCommon';
 import { isLabs } from 'utils/environments';
 import { logSkjemaStartetEvent } from 'utils/amplitude';
+import metrics from 'utils/metrics';
 interface PageProps {
   søker: SokerOppslagState;
 }
@@ -78,12 +79,14 @@ const Introduksjon = ({ søker }: PageProps) => {
 
 export const getServerSideProps = beskyttetSide(
   async (ctx: NextPageContext): Promise<GetServerSidePropsResult<{}>> => {
+    const stopTimer = metrics.getServersidePropsDurationHistogram.startTimer({ path: '/' });
     const bearerToken = getAccessToken(ctx);
     const søker = await getSøker(bearerToken);
     const mellomlagretSøknad = await lesBucket('STANDARD', bearerToken);
     const activeStep = mellomlagretSøknad?.lagretStepList?.find((e: StepType) => e.active);
     const activeIndex = activeStep?.stepIndex;
 
+    stopTimer();
     if (activeIndex && !isLabs()) {
       return {
         redirect: {

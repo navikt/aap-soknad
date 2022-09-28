@@ -31,6 +31,7 @@ export const sendSoknad = async (data: string, accessToken?: string) => {
   }
   const søknad = await tokenXProxy({
     url: `${process.env.SOKNAD_API_URL}/innsending/soknad`,
+    prometheusPath: 'innsending/soknad',
     method: 'POST',
     data: JSON.stringify(data),
     audience: process.env.SOKNAD_API_AUDIENCE!,

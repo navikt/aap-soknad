@@ -44,6 +44,7 @@ import { getSøker } from '../api/oppslag/soeker';
 import { lesBucket } from '../api/buckets/les';
 import { logSkjemaFullførtEvent, logSkjemastegFullførtEvent } from 'utils/amplitude';
 import { Alert } from '@navikt/ds-react';
+import metrics from 'utils/metrics';
 
 interface PageProps {
   søker: SokerOppslagState;
@@ -232,11 +233,15 @@ const StepsWithContextProvider = ({ søker, mellomlagretSøknad }: PageProps) =>
 
 export const getServerSideProps = beskyttetSide(
   async (ctx: NextPageContext): Promise<GetServerSidePropsResult<{}>> => {
+    const stopTimer = metrics.getServersidePropsDurationHistogram.startTimer({
+      path: '/standard/[steg]',
+    });
     const { step } = ctx.query;
     const bearerToken = getAccessToken(ctx);
     const søker = await getSøker(bearerToken);
     const mellomlagretSøknad = await lesBucket('STANDARD', bearerToken);
 
+    stopTimer();
     if (!mellomlagretSøknad?.lagretStepList) {
       return {
         redirect: {
