@@ -20,7 +20,7 @@ export const sendSoknad = async (data: string, accessToken?: string) => {
     return { uri: `https://localhost:3000/aap/soknad/api/vedlegg/les?uuid=${randomUUID()}` };
   }
   const søknad = await tokenXProxy({
-    url: `${process.env.SOKNAD_API_URL}/innsending/soknad`,
+    url: `${process.env.SOKNAD_API_URL}/innsending/soknadfeil`,
     method: 'POST',
     data: JSON.stringify(data),
     audience: process.env.SOKNAD_API_AUDIENCE!,
