@@ -126,7 +126,7 @@ const Steps = ({ søker, mellomlagretSøknad }: PageProps) => {
     }
   };
   const postSøknad = async (data?: any) =>
-    fetchPOST('/aap/soknad/api/innsending/soknadfeil', {
+    fetchPOST('/aap/soknad/api/innsending/soknad', {
       ...data,
     });
 
