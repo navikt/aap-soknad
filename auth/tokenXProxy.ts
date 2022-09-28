@@ -35,10 +35,10 @@ export const tokenXProxy = async (opts: Opts) => {
     logger.error(
       `tokenXProxy: status for ${opts.url} er ${response.status}: ${response.statusText}.`
     );
-    throw new ErrorMedStatus(
-      `tokenXProxy: status for ${opts.url} er ${response.status}.`,
-      response.status
-    );
+    // throw new ErrorMedStatus(
+    //   `tokenXProxy: status for ${opts.url} er ${response.status}.`,
+    //   response.status
+    // );
   }
   logger.info(`Vellyket tokenXProxy-request mot ${opts.url}. Status: ${response.status}`);
   if (opts.noResponse) {
