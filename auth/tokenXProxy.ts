@@ -32,12 +32,16 @@ export const tokenXProxy = async (opts: Opts) => {
   });
 
   if (response.status < 200 || response.status > 300) {
-    logger.error(
-      `tokenXProxy: status for ${opts.url} er ${response.status}: ${response.statusText}.`
-    );
+    const isJson = response.headers.get('content-type')?.includes('application/json');
+    const data = isJson ? await response.json() : null;
+    logger.error({
+      msg: `tokenXProxy: status for ${opts.url} er ${response.status}: ${response.statusText}.`,
+      navCallId: data?.['Nav-CallId'],
+    });
     throw new ErrorMedStatus(
       `tokenXProxy: status for ${opts.url} er ${response.status}.`,
-      response.status
+      response.status,
+      data?.['Nav-CallId'] || ''
     );
   }
   logger.info(`Vellyket tokenXProxy-request mot ${opts.url}. Status: ${response.status}`);

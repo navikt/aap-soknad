@@ -108,14 +108,16 @@ const Steps = ({ søker, mellomlagretSøknad }: PageProps) => {
       console.log('søknad', søknad);
       console.log('søknadPDF', søknadPdf);
 
-      const postResponse = await postSøknad({ søknad, kvittering: søknadPdf });
+      // const postResponse = await postSøknad({ søknad, kvittering: søknadPdf });
+      // DEBUG
+      const postResponse = await postSøknad({ kvittering: søknadPdf });
       if (postResponse?.ok) {
         logSkjemaFullførtEvent();
         const url = postResponse?.data?.uri;
         søknadDispatch({ type: SoknadActionKeys.ADD_SØKNAD_URL, payload: url });
         router.push('kvittering');
       } else {
-        const navCallid = postResponse?.data?.['Nav-CallId'];
+        const navCallid = postResponse?.data?.navCallId;
         setFetchErrorMessage(
           `Det oppstod en feil under sending av søknaden. Prøv igjen senere. Nav-CallId: ${navCallid}`
         );

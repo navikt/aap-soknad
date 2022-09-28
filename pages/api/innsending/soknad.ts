@@ -5,10 +5,20 @@ import { beskyttetApi } from 'auth/beskyttetApi';
 import { tokenXProxy } from 'auth/tokenXProxy';
 import { isMock, isLabs } from 'utils/environments';
 import { slettBucket } from '../buckets/slett';
+import { ErrorMedStatus } from 'auth/ErrorMedStatus';
 
 const handler = beskyttetApi(async (req: NextApiRequest, res: NextApiResponse) => {
   const accessToken = getAccessTokenFromRequest(req);
-  res.status(201).json(await sendSoknad(req.body, accessToken));
+  try {
+    const soknadRes = await sendSoknad(req.body, accessToken);
+    res.status(201).json(soknadRes);
+  } catch (err) {
+    if (err instanceof ErrorMedStatus) {
+      res.status(err.status).json({ navCallId: err.navCallId });
+    } else {
+      throw err;
+    }
+  }
 });
 
 export const sendSoknad = async (data: string, accessToken?: string) => {
