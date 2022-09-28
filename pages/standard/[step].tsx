@@ -62,6 +62,7 @@ const Steps = ({ søker, mellomlagretSøknad }: PageProps) => {
   const debouncedLagre = useDebounceLagreSoknad<Soknad>(søknadDispatch);
 
   const [showFetchErrorMessage, setShowFetchErrorMessage] = useState(false);
+  const [fetchErrorMessage, setFetchErrorMessage] = useState('');
 
   useEffect(() => {
     if (søknadState?.søknad === undefined) {
@@ -114,6 +115,10 @@ const Steps = ({ søker, mellomlagretSøknad }: PageProps) => {
         søknadDispatch({ type: SoknadActionKeys.ADD_SØKNAD_URL, payload: url });
         router.push('kvittering');
       } else {
+        const navCallid = postResponse?.data?.['Nav-CallId'];
+        setFetchErrorMessage(
+          `Det oppstod en feil under sending av søknaden. Prøv igjen senere. Nav-CallId: ${navCallid}`
+        );
         setShowFetchErrorMessage(true);
       }
     } else {
@@ -121,7 +126,7 @@ const Steps = ({ søker, mellomlagretSøknad }: PageProps) => {
     }
   };
   const postSøknad = async (data?: any) =>
-    fetchPOST('/aap/soknad/api/innsending/soknad', {
+    fetchPOST('/aap/soknad/api/innsending/soknadfeil', {
       ...data,
     });
 
@@ -212,11 +217,7 @@ const Steps = ({ søker, mellomlagretSøknad }: PageProps) => {
           {step === '8' && (
             <Oppsummering onBackClick={onPreviousStep} onSubmitSoknad={submitSoknad} />
           )}
-          {showFetchErrorMessage && (
-            <Alert variant="error">
-              Det oppstod en feil under sending av søknaden. Prøv igjen senere.
-            </Alert>
-          )}
+          {showFetchErrorMessage && <Alert variant="error">{fetchErrorMessage}</Alert>}
         </StepWizard>
       )}
     </>
