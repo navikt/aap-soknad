@@ -88,7 +88,6 @@
       },
       "arbeidUtenforNorge": {
         "label": "Har du jobbet utenfor Norge de fem siste årene?",
-        "description": "Hvis du har jobbet utenfor Norge, kan du i noen tilfeller få mer utbetalt i AAP. NAV bruker bare denne inntekten hvis det er til fordel for deg.",
         "readMore": {
           "title": "Regnes ytelser fra utenlandske myndigheter som jobb i utlandet?",
           "text": "Hvis du har mottatt ytelser (for eksempel dagpenger, sykepenger og foreldrepenger) fra utenlandske myndigheter, regnes dette som jobb utenfor Norge. Pensjon regnes ikke som erstatning for jobb."

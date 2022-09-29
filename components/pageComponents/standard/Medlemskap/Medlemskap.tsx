@@ -309,7 +309,6 @@ export const Medlemskap = ({ onBackClick, onNext, defaultValues }: Props) => {
             <RadioGroupWrapper
               name={`${MEDLEMSKAP}.${ARBEID_UTENFOR_NORGE_FØR_SYKDOM}`}
               legend={formatMessage('søknad.medlemskap.arbeidUtenforNorge.label')}
-              description={formatMessage('søknad.medlemskap.arbeidUtenforNorge.description')}
               control={control}
               error={errors?.[MEDLEMSKAP]?.[ARBEID_UTENFOR_NORGE_FØR_SYKDOM]?.message}
             >
