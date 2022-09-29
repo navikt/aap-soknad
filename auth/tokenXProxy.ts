@@ -88,7 +88,8 @@ export const tokenXAxiosProxy = async (opts: AxiosOpts) => {
   } catch (e: any) {
     console.log('catching error', e.response.status, e.response.data);
     if (e.response.status === 422) {
-      return opts.res.status(422).json(e.response.data);
+      e.response.data?.on('data', (data: string) => console.log(data));
+      return opts.res.status(422);
     }
     let msg = '';
     logger.error({ e }, 'tokenXAxiosProxy oops ' + e.message);
