@@ -86,7 +86,7 @@ export const tokenXAxiosProxy = async (opts: AxiosOpts) => {
     logger.info('Vellykket opplasting av fil til ' + opts.url);
     return data.pipe(opts.res);
   } catch (e: any) {
-    if (e.response.status === 422) {
+    if (e?.response?.status && e?.response?.status === 422) {
       e.response.data?.pipe(opts.res);
       return opts.res.status(422);
     }
