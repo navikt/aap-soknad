@@ -110,8 +110,8 @@ const FieldArrayFileInput = ({
         }
         setLoading(false);
       })
-      .catch((errData: any) => {
-        const message = errData?.detail || errorText(errData?.status);
+      .catch((err: any) => {
+        const message = errorText(err?.status || 500);
         setFilename(file?.name);
         setError(inputId, { type: 'custom', message });
         setLoading(false);
