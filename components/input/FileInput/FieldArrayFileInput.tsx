@@ -102,16 +102,22 @@ const FieldArrayFileInput = ({
     const data = new FormData();
     data.append('vedlegg', file);
     setLoading(true);
-    lagreVedlegg(data)
-      .then((resData: string) => {
-        console.log('lagret vedlegg ok', resData);
-        append({ name: file?.name, size: file?.size, vedleggId: resData });
-        setTotalUploadedBytes(totalUploadedBytes + file.size);
-        updateRequiredVedlegg({ type: 'OMSORGSSTØNAD', completed: true }, søknadDispatch);
+    fetch('/aap/soknad/api/vedlegg/lagre/', { method: 'POST', body: data })
+      .then(async (res) => {
+        const resData = await res.json();
+        console.log('lagret vedlegg', res.ok);
+        if (!res.ok) {
+          const message = resData?.detail || errorText(resData?.status);
+          setFilename(file?.name);
+          setError(inputId, { type: 'custom', message });
+        } else {
+          append({ name: file?.name, size: file?.size, vedleggId: resData });
+          setTotalUploadedBytes(totalUploadedBytes + file.size);
+          updateRequiredVedlegg({ type: 'OMSORGSSTØNAD', completed: true }, søknadDispatch);
+        }
         setLoading(false);
       })
       .catch((errData: any) => {
-        console.log('lagret vedlegg err', errData);
         const message = errData?.detail || errorText(errData?.status);
         setFilename(file?.name);
         setError(inputId, { type: 'custom', message });
