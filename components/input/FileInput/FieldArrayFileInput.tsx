@@ -106,8 +106,10 @@ const FieldArrayFileInput = ({
       setTotalUploadedBytes(totalUploadedBytes + file.size);
       updateRequiredVedlegg({ type: 'OMSORGSSTØNAD', completed: true }, søknadDispatch);
     } else {
+      const feilData = await vedlegg.json();
+      const message = feilData?.detail || errorText(vedlegg?.status);
       setFilename(file?.name);
-      setError(inputId, { type: 'custom', message: errorText(vedlegg?.status) });
+      setError(inputId, { type: 'custom', message });
     }
     setDragOver(false);
   };
