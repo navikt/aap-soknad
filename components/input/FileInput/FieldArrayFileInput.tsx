@@ -81,6 +81,10 @@ const FieldArrayFileInput = ({
         return '';
     }
   };
+  const lagreVedlegg = async (data: FormData) =>
+    fetch('/aap/soknad/api/vedlegg/lagre/', { method: 'POST', body: data }).then((res) =>
+      res.json()
+    );
   const uploadFile = async (file: any) => {
     clearErrors(inputId);
     if (!['image/png', 'image/jpg', 'image/jpeg', 'application/pdf'].includes(file?.type)) {
@@ -98,24 +102,35 @@ const FieldArrayFileInput = ({
     const data = new FormData();
     data.append('vedlegg', file);
     setLoading(true);
-    const vedlegg = await clientFetch('/aap/soknad/api/vedlegg/lagre/', 'POST', data, true);
-    const responseData = await vedlegg.json();
-    console.log('lagre response', vedlegg);
-    console.log('response ok', vedlegg.ok);
-    console.log('responsedata', responseData);
-
-    setLoading(false);
-    if (vedlegg.ok) {
-      const id = await vedlegg.json();
-      append({ name: file?.name, size: file?.size, vedleggId: id });
-      setTotalUploadedBytes(totalUploadedBytes + file.size);
-      updateRequiredVedlegg({ type: 'OMSORGSSTØNAD', completed: true }, søknadDispatch);
-    } else {
-      const feilData = await vedlegg.json();
-      const message = feilData?.detail || errorText(vedlegg?.status);
-      setFilename(file?.name);
-      setError(inputId, { type: 'custom', message });
-    }
+    lagreVedlegg(data)
+      .then((resData: string) => {
+        console.log('lagret vedlegg ok', resData);
+        append({ name: file?.name, size: file?.size, vedleggId: resData });
+        setTotalUploadedBytes(totalUploadedBytes + file.size);
+        updateRequiredVedlegg({ type: 'OMSORGSSTØNAD', completed: true }, søknadDispatch);
+        setLoading(false);
+      })
+      .catch((errData: any) => {
+        console.log('lagret vedlegg err', errData);
+        const message = errData?.detail || errorText(errData?.status);
+        setFilename(file?.name);
+        setError(inputId, { type: 'custom', message });
+        setLoading(false);
+      });
+    // const vedlegg = await clientFetch('/aap/soknad/api/vedlegg/lagre/', 'POST', data, true);
+    // const responseData = await vedlegg.json();
+    // setLoading(false);
+    // if (vedlegg.ok) {
+    //   const id = await vedlegg.json();
+    //   append({ name: file?.name, size: file?.size, vedleggId: id });
+    //   setTotalUploadedBytes(totalUploadedBytes + file.size);
+    //   updateRequiredVedlegg({ type: 'OMSORGSSTØNAD', completed: true }, søknadDispatch);
+    // } else {
+    //   const feilData = await vedlegg.json();
+    //   const message = feilData?.detail || errorText(vedlegg?.status);
+    //   setFilename(file?.name);
+    //   setError(inputId, { type: 'custom', message });
+    // }
     setDragOver(false);
   };
   const onDelete = (index: number) => {
