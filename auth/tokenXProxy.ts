@@ -86,14 +86,11 @@ export const tokenXAxiosProxy = async (opts: AxiosOpts) => {
     logger.info('Vellykket opplasting av fil til ' + opts.url);
     return data.pipe(opts.res);
   } catch (e: any) {
-    if (e?.response?.status && e?.response?.status === 422) {
+    if (e?.response?.status) {
       e.response.data?.pipe(opts.res);
-      return opts.res.status(422);
+      return opts.res.status(e.response.status);
     }
-    throw new ErrorMedStatus(
-      `tokenXAxiosProxy: status for ${opts.url} er ${e?.response?.status}.`,
-      e?.response?.status,
-      e?.response?.data?.['Nav-CallId'] || ''
-    );
+    logger.error(e);
+    return opts.res.status(500).json('tokenXAxiosProxy server error');
   }
 };
