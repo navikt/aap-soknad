@@ -99,6 +99,11 @@ const FieldArrayFileInput = ({
     data.append('vedlegg', file);
     setLoading(true);
     const vedlegg = await clientFetch('/aap/soknad/api/vedlegg/lagre/', 'POST', data, true);
+    const responseData = await vedlegg.json();
+    console.log('lagre response', vedlegg);
+    console.log('response ok', vedlegg.ok);
+    console.log('responsedata', responseData);
+
     setLoading(false);
     if (vedlegg.ok) {
       const id = await vedlegg.json();
