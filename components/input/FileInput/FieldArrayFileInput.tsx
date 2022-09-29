@@ -96,27 +96,28 @@ const FieldArrayFileInput = ({
     const data = new FormData();
     data.append('vedlegg', file);
     setLoading(true);
-    fetch('/aap/soknad/api/vedlegg/lagre/', { method: 'POST', body: data })
-      .then(async (res) => {
-        const resData = await res.json();
-        if (!res.ok) {
-          const message = resData?.detail || errorText(resData?.status);
-          setFilename(file?.name);
-          setError(inputId, { type: 'custom', message });
-        } else {
-          append({ name: file?.name, size: file?.size, vedleggId: resData });
-          setTotalUploadedBytes(totalUploadedBytes + file.size);
-          updateRequiredVedlegg({ type: 'OMSORGSSTØNAD', completed: true }, søknadDispatch);
-        }
-        setLoading(false);
-      })
-      .catch((err: any) => {
-        console.log('catch error', err);
-        const message = errorText(err?.status || 500);
+    try {
+      const res = await fetch('/aap/soknad/api/vedlegg/lagre/', { method: 'POST', body: data });
+      const resData = await res.json();
+      console.log('lagre ok', res.ok);
+      console.log('resData', resData);
+      if (!res.ok) {
+        const message = resData?.detail || errorText(resData?.status);
         setFilename(file?.name);
         setError(inputId, { type: 'custom', message });
-        setLoading(false);
-      });
+      } else {
+        append({ name: file?.name, size: file?.size, vedleggId: resData });
+        setTotalUploadedBytes(totalUploadedBytes + file.size);
+        updateRequiredVedlegg({ type: 'OMSORGSSTØNAD', completed: true }, søknadDispatch);
+      }
+      setLoading(false);
+    } catch (err: any) {
+      console.log('catch error', err);
+      const message = errorText(err?.status || 500);
+      setFilename(file?.name);
+      setError(inputId, { type: 'custom', message });
+      setLoading(false);
+    }
     setDragOver(false);
   };
   const onDelete = (index: number) => {
