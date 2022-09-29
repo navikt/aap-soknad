@@ -99,10 +99,10 @@ const FieldArrayFileInput = ({
     try {
       const res = await fetch('/aap/soknad/api/vedlegg/lagre/', { method: 'POST', body: data });
       const resData = await res.json();
-      console.log('lagre ok', res.ok);
+      console.log('lagre ok', res.ok, res.status);
       console.log('resData', resData);
       if (!res.ok) {
-        const message = resData?.detail || errorText(resData?.status);
+        const message = errorText(res?.status);
         setFilename(file?.name);
         setError(inputId, { type: 'custom', message });
       } else {
