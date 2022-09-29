@@ -4,7 +4,7 @@
     "student": {
       "title": "Student",
       "erStudent": {
-        "legend": "Er du student nå?",
+        "legend": "Er du student?",
         "description": "Du regnes som student hvis du tar et studie som gir rett til lån fra Statens lånekasse for utdanning. Du trenger ikke å ha mottatt lån/stipend.",
         "ja": "Ja, helt eller delvis",
         "avbrutt": "Ja, men har avbrutt studiet helt på grunn av sykdom",
