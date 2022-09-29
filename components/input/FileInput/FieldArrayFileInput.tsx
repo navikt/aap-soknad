@@ -7,7 +7,6 @@ import { Cancel, Delete, FileError, FileSuccess } from '@navikt/ds-icons';
 import { Upload as SvgUpload } from '@navikt/ds-icons';
 import { useSoknadContextStandard } from 'context/soknadContextStandard';
 import { updateRequiredVedlegg } from 'context/soknadContextCommon';
-import useClientFetch from 'hooks/useClientFetch';
 type Props = {
   setError: (name: string, error: FieldError) => void;
   clearErrors: (name?: string | string[]) => void;
@@ -40,7 +39,6 @@ const FieldArrayFileInput = ({
   const { formatMessage } = useFeatureToggleIntl();
 
   const { søknadDispatch } = useSoknadContextStandard();
-  const { clientFetch } = useClientFetch();
 
   const [dragOver, setDragOver] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
@@ -81,10 +79,6 @@ const FieldArrayFileInput = ({
         return '';
     }
   };
-  const lagreVedlegg = async (data: FormData) =>
-    fetch('/aap/soknad/api/vedlegg/lagre/', { method: 'POST', body: data }).then((res) =>
-      res.json()
-    );
   const uploadFile = async (file: any) => {
     clearErrors(inputId);
     if (!['image/png', 'image/jpg', 'image/jpeg', 'application/pdf'].includes(file?.type)) {
@@ -105,7 +99,6 @@ const FieldArrayFileInput = ({
     fetch('/aap/soknad/api/vedlegg/lagre/', { method: 'POST', body: data })
       .then(async (res) => {
         const resData = await res.json();
-        console.log('lagret vedlegg', res.ok);
         if (!res.ok) {
           const message = resData?.detail || errorText(resData?.status);
           setFilename(file?.name);
@@ -123,20 +116,6 @@ const FieldArrayFileInput = ({
         setError(inputId, { type: 'custom', message });
         setLoading(false);
       });
-    // const vedlegg = await clientFetch('/aap/soknad/api/vedlegg/lagre/', 'POST', data, true);
-    // const responseData = await vedlegg.json();
-    // setLoading(false);
-    // if (vedlegg.ok) {
-    //   const id = await vedlegg.json();
-    //   append({ name: file?.name, size: file?.size, vedleggId: id });
-    //   setTotalUploadedBytes(totalUploadedBytes + file.size);
-    //   updateRequiredVedlegg({ type: 'OMSORGSSTØNAD', completed: true }, søknadDispatch);
-    // } else {
-    //   const feilData = await vedlegg.json();
-    //   const message = feilData?.detail || errorText(vedlegg?.status);
-    //   setFilename(file?.name);
-    //   setError(inputId, { type: 'custom', message });
-    // }
     setDragOver(false);
   };
   const onDelete = (index: number) => {
