@@ -111,6 +111,7 @@ const FieldArrayFileInput = ({
         setLoading(false);
       })
       .catch((err: any) => {
+        console.log('catch error', err);
         const message = errorText(err?.status || 500);
         setFilename(file?.name);
         setError(inputId, { type: 'custom', message });

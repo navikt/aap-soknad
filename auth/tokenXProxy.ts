@@ -90,8 +90,10 @@ export const tokenXAxiosProxy = async (opts: AxiosOpts) => {
       e.response.data?.pipe(opts.res);
       return opts.res.status(422);
     }
-    let msg = '';
-    logger.error({ e }, 'tokenXAxiosProxy oops ' + e.message);
-    return opts.res.status(500).json({ msg });
+    throw new ErrorMedStatus(
+      `tokenXAxiosProxy: status for ${opts.url} er ${e?.response?.status}.`,
+      e?.response?.status,
+      e?.response?.data?.['Nav-CallId'] || ''
+    );
   }
 };
