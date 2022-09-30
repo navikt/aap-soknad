@@ -12,13 +12,11 @@ export const fetchPOST = async (url: string, payload: object, opts: RequestOptio
       body: JSON.stringify(payload),
       headers,
     });
-    if (res.ok) {
-      const data = await res.json();
-      return { ok: res.ok, data };
-    } else {
-      return { ok: res.ok, error: res.statusText };
-    }
+    const contentType = res.headers.get('content-type') || [''];
+    const data = contentType.includes('application/json') ? await res.json() : {};
+    return { ok: res.ok, status: res.status, data };
   } catch (e) {
-    return { error: `useFetchPOST: ${e}` };
+    console.error(e);
+    return { ok: false, error: e };
   }
 };
