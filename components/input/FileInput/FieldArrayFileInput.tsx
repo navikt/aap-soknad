@@ -65,16 +65,24 @@ const FieldArrayFileInput = ({
   const handleFiles = (fileList: FileList) => {
     Array.from(fileList).forEach(uploadFile);
   };
-  const errorText = (statusCode: number) => {
+  const errorText = (statusCode: number, substatus = '') => {
     switch (statusCode) {
       case 422:
-        return formatMessage('fileInputErrors.virus');
+        return error422Text(substatus);
       case 413:
         return formatMessage('fileInputErrors.fileTooLarge');
       case 415:
         return formatMessage('fileInputErrors.unsupportedMediaType');
-      case 500:
+      default:
         return formatMessage('fileInputErrors.other');
+    }
+  };
+  const error422Text = (subType: string) => {
+    switch (subType) {
+      case 'PASSWORD_PROTECTED':
+        return formatMessage('fileInputErrors.passordbeskyttet');
+      case 'VIRUS':
+        return formatMessage('fileInputErrors.virus');
       default:
         return '';
     }
@@ -102,7 +110,7 @@ const FieldArrayFileInput = ({
       console.log('lagre ok', res.ok, res.status);
       console.log('resData', resData);
       if (!res.ok) {
-        const message = errorText(res?.status);
+        const message = errorText(res?.status, resData?.substatus);
         setFilename(file?.name);
         setError(inputId, { type: 'custom', message });
       } else {
