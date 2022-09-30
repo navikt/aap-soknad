@@ -5,8 +5,6 @@ import React, { useState } from 'react';
 import ConfirmationPanelWrapper from 'components/input/ConfirmationPanelWrapper';
 import AccordianItemOppsummering from './AccordianItemOppsummering/AccordianItemOppsummering';
 import OppsummeringBarn from './OppsummeringBarn/OppsummeringBarn';
-import { isNonEmptyPeriode } from 'utils/periode';
-import OppsummeringPeriode from './OppsummeringPeriode/OppsummeringPeriode';
 import OppsummeringKontaktinfo from './OppsummeringKontaktinfo/OppsummeringKontaktinfo';
 import { getFullAdresse, getFulltNavn } from 'context/sokerOppslagContext';
 import OppsummeringUtenlandsopphold from './OppsummeringUtenlandsopphold/OppsummeringUtenlandsopphold';
@@ -34,6 +32,7 @@ interface OppsummeringProps {
 
 const Oppsummering = ({ onBackClick, onSubmitSoknad }: OppsummeringProps) => {
   const { formatMessage } = useFeatureToggleIntl();
+  const [nextIsLoading, setNextIsLoading] = useState<boolean>(false);
 
   const { søknadState, søknadDispatch } = useSoknadContextStandard();
   const { stepWizardDispatch } = useStepWizard();
@@ -62,9 +61,12 @@ const Oppsummering = ({ onBackClick, onSubmitSoknad }: OppsummeringProps) => {
   const editStep = (stepName: string) => goToNamedStep(stepWizardDispatch, stepName);
   return (
     <SoknadFormWrapper
-      onNext={handleSubmit((data) => {
-        onSubmitSoknad(data);
+      onNext={handleSubmit(async (data) => {
+        setNextIsLoading(true);
+        await onSubmitSoknad(data);
+        setNextIsLoading(false);
       })}
+      nextIsLoading={nextIsLoading}
       onBack={() => onBackClick()}
       onDelete={() => slettLagretSoknadState<Soknad>(søknadDispatch, søknadState)}
       nextButtonText={formatMessage('navigation.send')}
