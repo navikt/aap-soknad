@@ -42,6 +42,7 @@ export const tokenXProxy = async (opts: Opts) => {
     logger.error({
       msg: `tokenXProxy: status for ${opts.url} er ${response.status}: ${response.statusText}.`,
       navCallId: data?.['Nav-CallId'],
+      data,
     });
     throw new ErrorMedStatus(
       `tokenXProxy: status for ${opts.url} er ${response.status}.`,
