@@ -132,12 +132,19 @@ const UtenlandsPeriodeVelger = ({
   return (
     <Modal open={open} onClose={onClose}>
       <Modal.Content className={classes.utenlandsPeriodeVelger}>
-        <Heading size={'medium'} level={'2'}>
+        <Heading size={'medium'} level={'2'} spacing>
           {formatMessage(`søknad.medlemskap.utenlandsperiode.modal.title.${arbeidEllerBodd}`)}
         </Heading>
-        <Ingress>
+        <Ingress spacing>
           {formatMessage(`søknad.medlemskap.utenlandsperiode.modal.ingress.${arbeidEllerBodd}`)}
         </Ingress>
+        {arbeidEllerBodd === 'BODD' && (
+          <Ingress spacing>
+            {formatMessage(
+              `søknad.medlemskap.utenlandsperiode.modal.ingress.${arbeidEllerBodd}_2`
+            )}
+          </Ingress>
+        )}
         <form
           className={classes.modalForm}
           onSubmit={handleSubmit((data) => {

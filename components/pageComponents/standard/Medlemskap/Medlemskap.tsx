@@ -357,9 +357,16 @@ export const Medlemskap = ({ onBackClick, onNext, defaultValues }: Props) => {
         )}
         {showLeggTilUtenlandsPeriode && (
           <ColorPanel>
-            <BodyLong>
+            <BodyShort spacing>
               {formatMessage(`søknad.medlemskap.utenlandsperiode.modal.ingress.${arbeidEllerBodd}`)}
-            </BodyLong>
+            </BodyShort>
+            {arbeidEllerBodd === 'BODD' && (
+              <BodyShort spacing>
+                {formatMessage(
+                  `søknad.medlemskap.utenlandsperiode.modal.ingress.${arbeidEllerBodd}_2`
+                )}
+              </BodyShort>
+            )}
             {fields?.length > 0 ? (
               <Heading size="xsmall" level="3">
                 {formatMessage(

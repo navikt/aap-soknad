@@ -308,7 +308,7 @@ export const Barnetillegg = ({ onBackClick, onNext, defaultValues }: Props) => {
           </Cell>
         </Grid>
         {(erForelderTilManueltBarn || erFosterforelderTilManueltBarn) && (
-          <Alert variant={'info'}>
+          <Alert variant='info'>
             {formatMessage('søknad.barnetillegg.alert.leggeVedTekst')}
             <ul>
               {erForelderTilManueltBarn && (
@@ -321,6 +321,17 @@ export const Barnetillegg = ({ onBackClick, onNext, defaultValues }: Props) => {
               )}
             </ul>
             {formatMessage('søknad.barnetillegg.alert.lasteOppVedleggTekst')}
+          </Alert>
+        )}
+        {(fields.length > 0 || manuelleBarnFields.length > 0) && (
+          <Alert variant='info'>
+            {formatMessage('søknad.barnetillegg.alert.barneTillegg.title')}
+            <ul>
+              <li>{formatMessage('søknad.barnetillegg.alert.barneTillegg.bulletpoint1')}</li>
+              <li>{formatMessage('søknad.barnetillegg.alert.barneTillegg.bulletpoint2')}</li>
+              <li>{formatMessage('søknad.barnetillegg.alert.barneTillegg.bulletpoint3')}</li>
+              <li>{formatMessage('søknad.barnetillegg.alert.barneTillegg.bulletpoint4')}</li>
+            </ul>
           </Alert>
         )}
       </SoknadFormWrapper>

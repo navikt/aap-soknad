@@ -49,7 +49,7 @@ export const Veiledning = ({ søker, onSubmit }: VeiledningProps) => {
       </header>
       <main className={classes?.veiledningContent}>
         <LucaGuidePanel>
-          <Heading size="medium" level="2">
+          <Heading size="medium" level="2" spacing>
             {formatMessage('søknad.veiledning.guide.title', { name: søker.fulltNavn })}
           </Heading>
           <BodyShort spacing>{formatMessage('søknad.veiledning.guide.text1')}</BodyShort>

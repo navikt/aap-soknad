@@ -116,12 +116,6 @@ export const Yrkesskade = ({ onBackClick, onNext, defaultValues }: Props) => {
             <li>{formatMessage('søknad.yrkesskade.alert.bulletPointGodkjent')}</li>
             <li>{formatMessage('søknad.yrkesskade.alert.bulletPointArbeidsevne')}</li>
           </ul>
-          {formatMessage('søknad.yrkesskade.alert.daGjelder')}
-          <ul>
-            <li>{formatMessage('søknad.yrkesskade.alert.bulletPointMedlem')}</li>
-            <li>{formatMessage('søknad.yrkesskade.alert.bulletpointRedusertArbeidsevne')}</li>
-            <li>{formatMessage('søknad.yrkesskade.alert.bulletPointNavBeregner')}</li>
-          </ul>
         </Alert>
       )}
     </SoknadFormWrapper>

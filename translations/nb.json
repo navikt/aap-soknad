@@ -35,7 +35,7 @@
         "text3": "AAP skal sikre deg inntekt når du på grunn av sykdom eller skade har behov for å få avklart mulighetene dine til å jobbe."
       },
       "søknadsdato": {
-        "title": "Søknadsdato er viktig for eventuell utbetaling av AAP",
+        "title": "Søknadsdato er viktig for utbetaling av AAP",
         "text1": "Vanligvis kan du tidligst få AAP fra den dagen du søker.",
         "text2": "Hvis du mottar sykepenger, får du vanligvis AAP fra første dag etter at sykepengene dine er ferdig.",
         "text3": "Du kan søke om AAP selv om om du ikke har mottatt sykepenger."
@@ -146,7 +146,8 @@
           },
           "ingress": {
             "ARBEID": "Nå må du oppgi i hvilke perioder du har jobbet utenfor Norge de fem siste årene. Oppgi også hvilket land du var i.",
-            "BODD": "Nå må du oppgi i hvilke perioder du har bodd eller jobbet utenfor Norge. Oppgi også hvilket land du var i. Ta med alle perioder siden du var 16 år."
+            "BODD": "Nå må du oppgi i hvilke perioder du har bodd, studert eller jobbet utenfor Norge. Oppgi også hvilket land du var i.",
+            "BODD_2": "Ta med alle perioder siden du var 16 år."
           },
           "land": {
             "label": {
@@ -209,7 +210,7 @@
         "telefon": "Telefon"
       },
       "annenBehandler": {
-        "title": "Har du en annen lege eller behandler",
+        "title": "Annen lege eller behandler",
         "description": "Hvis du har en annen lege eller behandler som du ønsker at NAV skal kunne kontakte for helseopplysninger, kan du legge til denne her.",
         "addBehandlerButton": "Legg til lege/behandler",
         "accessibleButtonTitle": "Legg til"
@@ -517,7 +518,14 @@
         "leggeVedTekst": "Du må legge ved:",
         "bulletPointVedleggForelder": "Bekreftelse på at du er forelder til barnet, og fra når (fødselstidspunkt eller adoptivtidspunkt). Dette kan for eksempel være fødselsattest eller adopsjonsdokumenter.",
         "bulletPointVedleggFosterforelder": "Dokumentasjon på at du er fosterforelder til barnet, og fra når. For eksempel en bekreftelse fra barneverntjenesten.",
-        "lasteOppVedleggTekst": "Dette laster du opp senere i søknaden. Du kan også ettersende vedlegg."
+        "lasteOppVedleggTekst": "Dette laster du opp senere i søknaden. Du kan også ettersende vedlegg.",
+        "barneTillegg": {
+          "title": "Du får ikke barnetillegg hvis:",
+          "bulletpoint1": "Barnet mottar barnepensjon.",
+          "bulletpoint2": "Barnet har en årlig inntekt som er høyere enn grunnbeløpet i folketrygden.",
+          "bulletpoint3": "Barnet oppholder seg utenfor EØS i over 90 dager i løpet av en tolvmånedersperiode.",
+          "bulletpoint4": "Barnet er bosatt utenfor EØS."
+        }
       }
     },
     "yrkesskade": {
@@ -537,13 +545,9 @@
         }
       },
       "alert": {
-        "navVilSjekke": "NAV vil nå sjekke om yrkesskaden/yrkessykdommen din er:",
-        "bulletPointGodkjent": "Godkjent av NAV",
-        "bulletPointArbeidsevne": "helt eller delvis årsak til at arbeidsevnen din er nedsatt.",
-        "daGjelder": "Da gjelder dette:",
-        "bulletPointMedlem": "Det holder at du var medlem i folketrygden da du ble skadet/syk, og er det når du søker AAP.",
-        "bulletpointRedusertArbeidsevne": "Arbeidsevnen din trenger ikke være redusert med mer enn 30 prosent.",
-        "bulletPointNavBeregner": "Når NAV beregner hva du får i AAP, kan vi bruke inntekten du hadde da du fikk skaden/sykdommen som grunnlag. Dette gjør vi bare hvis det lønner seg for deg."
+        "navVilSjekke": "NAV vil sjekke om yrkesskaden/yrkessykdommen din er:",
+        "bulletPointGodkjent": "godkjent av NAV",
+        "bulletPointArbeidsevne": "helt eller delvis årsak til at arbeidsevnen din er nedsatt."
       }
     },
     "kvittering": {
