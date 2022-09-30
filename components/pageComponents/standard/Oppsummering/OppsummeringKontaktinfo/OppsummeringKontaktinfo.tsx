@@ -17,22 +17,24 @@ const OppsummeringKontaktinfo = () => {
         <Label>{formatMessage('søknad.oppsummering.contactInformation.personnummer')}</Label>
         <BodyShort>{søker?.fødselsnummer}</BodyShort>
       </div>
-      <div>
-        <Label>{formatMessage('søknad.oppsummering.contactInformation.adresse.label')}</Label>
-        <BodyShort>{søker?.fullAdresse}</BodyShort>
-        <ReadMore
-          header={formatMessage('søknad.oppsummering.contactInformation.adresse.readMore.title')}
-          type={'button'}
-        >
-          {formatElement('søknad.oppsummering.contactInformation.adresse.readMore.text', {
-            a: (chunks: string[]) => (
-              <Link target="_blank" href={formatMessage('applinks.folkeregisteret')}>
-                {chunks}
-              </Link>
-            ),
-          })}
-        </ReadMore>
-      </div>
+      {søker?.fullAdresse && (
+        <div>
+          <Label>{formatMessage('søknad.oppsummering.contactInformation.adresse.label')}</Label>
+          <BodyShort>{søker?.fullAdresse}</BodyShort>
+          <ReadMore
+            header={formatMessage('søknad.oppsummering.contactInformation.adresse.readMore.title')}
+            type={'button'}
+          >
+            {formatElement('søknad.oppsummering.contactInformation.adresse.readMore.text', {
+              a: (chunks: string[]) => (
+                <Link target="_blank" href={formatMessage('applinks.folkeregisteret')}>
+                  {chunks}
+                </Link>
+              ),
+            })}
+          </ReadMore>
+        </div>
+      )}
       <div>
         <Label>{formatMessage('søknad.oppsummering.contactInformation.telefonnummer.label')}</Label>
         <BodyShort>{kontaktInfo?.mobil}</BodyShort>

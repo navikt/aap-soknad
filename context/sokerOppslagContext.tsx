@@ -49,9 +49,6 @@ export type Soker = {
   fødseldato: string;
   barn: Array<OppslagBarn>;
 };
-type Fastlege = {
-  navn: Navn;
-};
 export type FastlegeView = {
   fulltNavn?: string;
   originalNavn?: any;
@@ -108,7 +105,7 @@ function SokerOppslagProvider({ children }: Props) {
   const søker: SøkerView | undefined = useMemo(
     () => ({
       fulltNavn: getFulltNavn(state?.søker?.navn),
-      fullAdresse: getFullAdresse(state?.søker?.adresse),
+      fullAdresse: state?.søker?.adresse ? getFullAdresse(state?.søker?.adresse) : '',
       fødselsnummer: state?.søker?.fødselsnummer,
     }),
     [state]
