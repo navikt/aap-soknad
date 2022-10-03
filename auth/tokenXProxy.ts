@@ -78,13 +78,15 @@ export const tokenXAxiosProxy = async (opts: AxiosOpts) => {
   logger.info('content-type fra klient' + opts.req?.headers['content-type']);
   try {
     const stopTimer = metrics.backendApiDurationHistogram.startTimer({ path: opts.prometheusPath });
-    const { data } = await axios.post(opts.url, opts.req, {
+    const response = await axios.post(opts.url, opts.req, {
       responseType: 'stream',
       headers: {
         'Content-Type': opts.req?.headers['content-type'] ?? '', // which is multipart/form-data with boundary included
         Authorization: `Bearer ${tokenxToken}`,
       },
     });
+    console.log(response);
+    const { data } = response?.data;
     stopTimer();
     metrics.backendApiStatusCodeCounter.inc({ path: opts.prometheusPath, status: response.status });
     logger.info('Vellykket opplasting av fil til ' + opts.url);
@@ -96,7 +98,7 @@ export const tokenXAxiosProxy = async (opts: AxiosOpts) => {
       e.response.data?.pipe(opts.res);
       metrics.backendApiStatusCodeCounter.inc({
         path: opts.prometheusPath,
-        status: response.status,
+        status: e.response.status,
       });
       return opts.res.status(e.response.status);
     }
