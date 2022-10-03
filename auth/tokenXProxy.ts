@@ -86,7 +86,7 @@ export const tokenXAxiosProxy = async (opts: AxiosOpts) => {
       },
     });
     console.log(response);
-    const { data } = response?.data;
+    const data = response?.data;
     stopTimer();
     metrics.backendApiStatusCodeCounter.inc({ path: opts.prometheusPath, status: response.status });
     logger.info('Vellykket opplasting av fil til ' + opts.url);
