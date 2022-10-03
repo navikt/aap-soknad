@@ -3,7 +3,7 @@ import React, { useEffect } from 'react';
 import { ReadMore, BodyLong, BodyShort, Heading, Radio, Alert, Link } from '@navikt/ds-react';
 import RadioGroupWrapper from 'components/input/RadioGroupWrapper/RadioGroupWrapper';
 import { Soknad } from 'types/Soknad';
-import { JaNeiVetIkke } from 'types/Generic';
+import { JaEllerNei, JaNeiVetIkke } from 'types/Generic';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useStepWizard } from 'context/stepWizardContextV2';
@@ -29,7 +29,7 @@ export const Yrkesskade = ({ onBackClick, onNext, defaultValues }: Props) => {
     [YRKESSKADE]: yup
       .string()
       .required(formatMessage('søknad.yrkesskade.harDuYrkesskade.validation.required'))
-      .oneOf([JaNeiVetIkke.JA, JaNeiVetIkke.NEI, JaNeiVetIkke.VET_IKKE])
+      .oneOf([JaEllerNei.JA, JaEllerNei.NEI])
       .nullable(),
   });
   const { søknadState, søknadDispatch } = useSoknadContextStandard();
@@ -104,9 +104,6 @@ export const Yrkesskade = ({ onBackClick, onNext, defaultValues }: Props) => {
         </Radio>
         <Radio value={JaNeiVetIkke.NEI}>
           <BodyShort>{JaNeiVetIkke.NEI}</BodyShort>
-        </Radio>
-        <Radio value={JaNeiVetIkke.VET_IKKE}>
-          <BodyShort>{JaNeiVetIkke.VET_IKKE}</BodyShort>
         </Radio>
       </RadioGroupWrapper>
       {harSkadeEllerSykdom && harSkadeEllerSykdom !== JaNeiVetIkke.NEI && (

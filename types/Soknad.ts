@@ -28,7 +28,7 @@ export type UtenlandsPeriode = {
   iArbeid: JaEllerNei;
   utenlandsId?: string;
 };
-type Yrkesskade = string;
+type Yrkesskade = JaEllerNei;
 export type Medlemskap = {
   harBoddINorgeSiste5År?: JaEllerNei;
   harArbeidetINorgeSiste5År?: JaEllerNei;

@@ -22,7 +22,7 @@ export interface SøknadBackendState {
   };
   andreBehandlere: Array<BehandlerBackendState>;
   registrerteBehandlere: Array<BehandlerBackendState>;
-  yrkesskadeType?: 'JA' | 'NEI' | 'VET_IKKE';
+  yrkesskadeType?: 'JA' | 'NEI';
   utbetalinger: {
     fraArbeidsgiver?: boolean;
     andreStønader: Array<{ type: StønadType; hvemUtbetalerAFP?: string; vedlegg?: Array<string> }>;

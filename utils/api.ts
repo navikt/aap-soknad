@@ -51,6 +51,12 @@ const jaNeiToBoolean = (value?: string) => {
   return undefined;
 };
 
+const getJaEllerNei = (value?: string) => {
+  if (value === 'Ja') return 'JA';
+  if (value === 'Nei') return 'NEI';
+  return undefined;
+};
+
 export const mapSøknadToBackend = (søknad?: Soknad): SøknadBackendState => {
   const registrerteBehandlere: BehandlerBackendState[] =
     søknad?.registrerteBehandlere?.map((behandler) => ({
@@ -106,7 +112,7 @@ export const mapSøknadToBackend = (søknad?: Soknad): SøknadBackendState => {
     },
     registrerteBehandlere,
     andreBehandlere,
-    yrkesskadeType: getJaNeiVetIkke(søknad?.yrkesskade),
+    yrkesskadeType: getJaEllerNei(søknad?.yrkesskade),
     utbetalinger: {
       ...(søknad?.andreUtbetalinger?.lønn
         ? {
