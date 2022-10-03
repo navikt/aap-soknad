@@ -95,14 +95,13 @@ export const mapSøknadToBackend = (søknad?: Soknad): SøknadBackendState => {
       iTilleggArbeidUtenforNorge: jaNeiToBoolean(søknad?.medlemskap?.iTilleggArbeidUtenforNorge),
       utenlandsopphold:
         søknad?.medlemskap?.utenlandsOpphold?.map((utenlandsopphold) => ({
-          land: utenlandsopphold.land,
+          land: utenlandsopphold.land.split(':')[0],
           periode: {
             fom: formatDate(utenlandsopphold.fraDato, 'yyyy-MM-dd'),
             tom: formatDate(utenlandsopphold.tilDato, 'yyyy-MM-dd'),
           },
           arbeidet: jaNeiToBoolean(utenlandsopphold.iArbeid),
           id: utenlandsopphold.utenlandsId,
-          landsNavn: '', // TODO: Hente navn fra landkode
         })) ?? [],
     },
     studier: {
@@ -145,9 +144,7 @@ export const mapSøknadToBackend = (søknad?: Soknad): SøknadBackendState => {
               return {
                 type: stønad,
                 vedlegg:
-                  søknad?.vedlegg?.[AttachmentType.LÅN]?.map(
-                    (vedlegg) => vedlegg.vedleggId
-                  ) ?? [],
+                  søknad?.vedlegg?.[AttachmentType.LÅN]?.map((vedlegg) => vedlegg.vedleggId) ?? [],
               };
             case StønadType.STIPEND:
               return {
@@ -265,7 +262,7 @@ export const mapSøknadToPdf = (
               ),
               søknad?.medlemskap?.utenlandsOpphold?.map((opphold) =>
                 createFeltgruppe([
-                  ...createField('Land', opphold?.land),
+                  ...createField('Land', opphold?.land.split(':')[1]),
                   ...createField(
                     'Periode',
                     `Fra ${formatDate(opphold?.fraDato)} til ${formatDate(opphold?.tilDato)}`
