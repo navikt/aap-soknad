@@ -106,6 +106,7 @@ export interface Soknad {
     [AttachmentType.OMSORGSSTØNAD]: Vedlegg[];
     [AttachmentType.UTLANDSSTØNAD]: Vedlegg[];
     [AttachmentType.SYKESTIPEND]: Vedlegg[];
+    [AttachmentType.LÅN]: Vedlegg[];
     [AVBRUTT_STUDIE_VEDLEGG]: Vedlegg[];
     annet: Vedlegg[];
   };

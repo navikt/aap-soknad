@@ -29,6 +29,7 @@ const VEDLEGG_LØNN = `${VEDLEGG}.${AttachmentType.LØNN_OG_ANDRE_GODER}`;
 const VEDLEGG_OMSORGSSTØNAD = `${VEDLEGG}.${AttachmentType.OMSORGSSTØNAD}`;
 const VEDLEGG_UTLANDSSTØNAD = `${VEDLEGG}.${AttachmentType.UTLANDSSTØNAD}`;
 const VEDLEGG_SYKESTIPEND = `${VEDLEGG}.${AttachmentType.SYKESTIPEND}`;
+const VEDLEGG_LÅN = `${VEDLEGG}.${AttachmentType.LÅN}`;
 const VEDLEGG_ANNET = `${VEDLEGG}.annet`;
 
 const Vedlegg = ({ onBackClick, onNext, defaultValues }: Props) => {
@@ -170,6 +171,18 @@ const Vedlegg = ({ onBackClick, onNext, defaultValues }: Props) => {
           clearErrors={clearErrors}
           heading={formatMessage('søknad.andreUtbetalinger.stønad.values.utland')}
           ingress={formatMessage('søknad.andreUtbetalinger.vedlegg.utlandsStønad')}
+        />
+      )}
+      {søknadState?.requiredVedlegg?.find((e) => e.type === AttachmentType.LÅN) && (
+        <FieldArrayFileInput
+          control={control}
+          name={VEDLEGG_LÅN}
+          type={AttachmentType.LÅN}
+          errors={errors}
+          setError={setError}
+          clearErrors={clearErrors}
+          heading={formatMessage('søknad.andreUtbetalinger.stønad.values.lån')}
+          ingress={formatMessage('søknad.andreUtbetalinger.vedlegg.lån')}
         />
       )}
       {søknadState?.requiredVedlegg?.find((e) => e.type === AttachmentType.SYKESTIPEND) && (

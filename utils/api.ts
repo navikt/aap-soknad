@@ -141,6 +141,14 @@ export const mapSøknadToBackend = (søknad?: Soknad): SøknadBackendState => {
                     (vedlegg) => vedlegg.vedleggId
                   ) ?? [],
               };
+            case StønadType.LÅN:
+              return {
+                type: stønad,
+                vedlegg:
+                  søknad?.vedlegg?.[AttachmentType.LÅN]?.map(
+                    (vedlegg) => vedlegg.vedleggId
+                  ) ?? [],
+              };
             case StønadType.STIPEND:
               return {
                 type: stønad,

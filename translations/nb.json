@@ -281,7 +281,8 @@
           "verv": "Godtgjørelse eller lønn for verv",
           "utland": "Ytelser fra utenlandske trygdemyndigheter",
           "afp": "Avtalefestet pensjon (AFP)",
-          "stipend": "Lån, stipend eller sykestipend fra Lånekassen",
+          "stipend": "Sykestipend fra Lånekassen",
+          "lån": "Lån fra Lånekassen",
           "nei": "Ingen av disse"
         },
         "validation": {
@@ -295,7 +296,8 @@
         "omsorgsstønad": "Kopi av avtalen om omsorgsstønad fra kommunen din",
         "utlandsStønad": "Dokumentasjon av ytelser fra utenlandske trygdemyndigheter",
         "andreGoder": "Dokumentasjon av ekstra utbetalinger fra arbeidsgiver, for eksempel kopi av inngått sluttpakke, avtale om etterlønn eller andre goder. Både beløpet på utbetalingen og perioden den gjelder for bør være dokumentert",
-        "sykeStipend": "Hvis du har søkt eller mottar sykestipend, trenger vi kopi av vedtaket eller søknaden."
+        "sykeStipend": "Kopi av vedtaket eller søknaden om sykestipend fra Lånekassen",
+        "lån": "Dokumentasjon på studielån fra Lånekassen"
       },
       "alert": {
         "leggeVedTekst": "Du må legge ved:",

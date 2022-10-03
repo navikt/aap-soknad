@@ -34,6 +34,7 @@ export enum AttachmentType {
   UTLANDSSTØNAD = 'UTLANDSSTØNAD',
   AVBRUTT_STUDIE = 'avbruttStudie',
   SYKESTIPEND = 'SYKESTIPEND',
+  LÅN = 'LÅN',
   ANNET = 'ANNET',
 }
 
@@ -46,6 +47,7 @@ export enum StønadType {
   UTLAND = 'UTLAND',
   AFP = 'AFP',
   STIPEND = 'STIPEND',
+  LÅN = 'LÅN',
   NEI = 'NEI',
 }
 
@@ -71,6 +73,8 @@ export const stønadTypeToAlternativNøkkel = (stønadType: StønadType) => {
       return `søknad.${ANDRE_UTBETALINGER}.${STØNAD}.values.afp`;
     case StønadType.STIPEND:
       return `søknad.${ANDRE_UTBETALINGER}.${STØNAD}.values.stipend`;
+    case StønadType.LÅN:
+      return `søknad.${ANDRE_UTBETALINGER}.${STØNAD}.values.lån`;
     case StønadType.NEI:
       return `søknad.${ANDRE_UTBETALINGER}.${STØNAD}.values.nei`;
   }
@@ -129,6 +133,7 @@ export const AndreUtbetalinger = ({ onBackClick, onNext, defaultValues }: Props)
       [StønadType.UTLAND]: formatMessage(stønadTypeToAlternativNøkkel(StønadType.UTLAND)),
       [StønadType.AFP]: formatMessage(stønadTypeToAlternativNøkkel(StønadType.AFP)),
       [StønadType.STIPEND]: formatMessage(stønadTypeToAlternativNøkkel(StønadType.STIPEND)),
+      [StønadType.LÅN]: formatMessage(stønadTypeToAlternativNøkkel(StønadType.LÅN)),
       [StønadType.NEI]: formatMessage(stønadTypeToAlternativNøkkel(StønadType.NEI)),
     }),
     [formatMessage]
@@ -163,6 +168,15 @@ export const AndreUtbetalinger = ({ onBackClick, onNext, defaultValues }: Props)
         },
       ];
     }
+    if (stønadEllerVerv?.includes(StønadType.LÅN)) {
+      attachments = [
+        ...attachments,
+        {
+          type: AttachmentType.LÅN,
+          description: formatMessage(`søknad.andreUtbetalinger.vedlegg.lån`),
+        },
+      ];
+    }
     if (lønnEtterlønnEllerSluttpakke === JaEllerNei.JA) {
       attachments = [
         ...attachments,
@@ -189,6 +203,7 @@ export const AndreUtbetalinger = ({ onBackClick, onNext, defaultValues }: Props)
     removeRequiredVedlegg(AttachmentType.OMSORGSSTØNAD, søknadDispatch);
     removeRequiredVedlegg(AttachmentType.UTLANDSSTØNAD, søknadDispatch);
     removeRequiredVedlegg(AttachmentType.SYKESTIPEND, søknadDispatch);
+    removeRequiredVedlegg(AttachmentType.LÅN, søknadDispatch);
     removeRequiredVedlegg(AttachmentType.LØNN_OG_ANDRE_GODER, søknadDispatch);
     addRequiredVedlegg(Attachments, søknadDispatch);
   }, [Attachments]);
@@ -266,6 +281,7 @@ export const AndreUtbetalinger = ({ onBackClick, onNext, defaultValues }: Props)
             </Grid>
           </ColorPanel>
         )}
+        <Checkbox value={StønadType.LÅN}>{StønadAlternativer.LÅN}</Checkbox>
         <Checkbox value={StønadType.STIPEND}>{StønadAlternativer.STIPEND}</Checkbox>
         <Checkbox value={StønadType.NEI}>{StønadAlternativer.NEI}</Checkbox>
       </CheckboxGroupWrapper>
