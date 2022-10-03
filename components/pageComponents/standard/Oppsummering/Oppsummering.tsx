@@ -151,8 +151,8 @@ const Oppsummering = ({ onBackClick, onSubmitSoknad }: OppsummeringProps) => {
           onEdit={() => editStep(StepNames.FASTLEGE)}
         >
           <>
-            {søknadState?.søknad?.registrerteBehandlere?.map((behandler) => (
-              <article>
+            {søknadState?.søknad?.registrerteBehandlere?.map((behandler, index) => (
+              <article key={'behandler-' + index}>
                 <Heading size={'small'} level={'3'}>
                   {formatMessage('søknad.oppsummering.helseopplysninger.fastlege')}
                 </Heading>
@@ -178,8 +178,8 @@ const Oppsummering = ({ onBackClick, onSubmitSoknad }: OppsummeringProps) => {
           onEdit={() => editStep(StepNames.BARNETILLEGG)}
         >
           <>
-            {søknadState?.søknad?.barnetillegg?.map((barn) => (
-              <OppsummeringBarn barn={barn} />
+            {søknadState?.søknad?.barnetillegg?.map((barn, index) => (
+              <OppsummeringBarn barn={barn} key={'barn-' + index} />
             ))}
             {søknadState?.søknad?.manuelleBarn?.map((barn) => (
               <OppsummeringBarn key={barn.id} barn={barn} />
@@ -214,16 +214,18 @@ const Oppsummering = ({ onBackClick, onSubmitSoknad }: OppsummeringProps) => {
           {søknadState?.søknad?.andreUtbetalinger ? (
             <BodyShort>
               <Label>{formatMessage(`søknad.andreUtbetalinger.stønad.label`)}</Label>
-              {søknadState?.søknad?.andreUtbetalinger?.stønad?.map((stønadType: StønadType) => {
-                const stønadTekst = formatMessage(stønadTypeToAlternativNøkkel(stønadType));
-                return (
-                  <BodyShort>
-                    {stønadType === StønadType.AFP
-                      ? `${stønadTekst}, Utbetaler: ${søknadState?.søknad?.andreUtbetalinger?.afp?.hvemBetaler}`
-                      : stønadTekst}
-                  </BodyShort>
-                );
-              })}
+              {søknadState?.søknad?.andreUtbetalinger?.stønad?.map(
+                (stønadType: StønadType, index) => {
+                  const stønadTekst = formatMessage(stønadTypeToAlternativNøkkel(stønadType));
+                  return (
+                    <BodyShort key={'stønad-' + index}>
+                      {stønadType === StønadType.AFP
+                        ? `${stønadTekst}, Utbetaler: ${søknadState?.søknad?.andreUtbetalinger?.afp?.hvemBetaler}`
+                        : stønadTekst}
+                    </BodyShort>
+                  );
+                }
+              )}
             </BodyShort>
           ) : (
             <></>
