@@ -17,6 +17,12 @@ export class AppMetrics {
     labelNames: ['path'],
   });
 
+  public backendApiStatusCodeCounter = new Counter({
+    name: 'aap_soknad_requests_status_code',
+    help: 'Status code for API call to soknad-api-backend',
+    labelNames: ['path', 'status'],
+  });
+
   public getServersidePropsDurationHistogram = new Histogram({
     name: 'aap_soknad_get_serverside_props_duration_seconds',
     help: 'Load time for getServerSideProps',

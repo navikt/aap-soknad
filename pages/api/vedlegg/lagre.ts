@@ -14,6 +14,7 @@ const handler = beskyttetApi(async (req: NextApiRequest, res: NextApiResponse) =
   } else {
     await tokenXAxiosProxy({
       url: `${process.env.SOKNAD_API_URL}/vedlegg/lagre`,
+      prometheusPath: 'vedlegg/lagre',
       req,
       res,
       audience: process.env.SOKNAD_API_AUDIENCE!,
