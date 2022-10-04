@@ -43,6 +43,9 @@ export const defaultStepList = [
 const Introduksjon = ({ søker }: PageProps) => {
   const router = useRouter();
 
+  const [isLoading, setIsLoading] = useState(false);
+  const [hasError, setHasError] = useState(false);
+
   const [soker, setSoker] = useState({});
 
   useEffect(() => {
@@ -57,21 +60,30 @@ const Introduksjon = ({ søker }: PageProps) => {
   }, [søker, setSoker]);
 
   const startSoknad = async () => {
+    setIsLoading(true);
+    setHasError(false);
     logSkjemaStartetEvent();
-    await fetchPOST('/aap/soknad/api/buckets/lagre/?type=STANDARD', {
+    const result = await fetchPOST('/aap/soknad/api/buckets/lagre/?type=STANDARD', {
       type: 'STANDARD',
       version: SØKNAD_CONTEXT_VERSION,
       søknad: {},
       lagretStepList: defaultStepList,
     });
+    if (!result.ok) {
+      setIsLoading(false);
+      setHasError(true);
+    } else {
+      router.push('standard/1');
+    }
   };
 
   return (
     <Veiledning
       søker={soker}
+      isLoading={isLoading}
+      hasError={hasError}
       onSubmit={async () => {
         await startSoknad();
-        router.push('standard/1');
       }}
     />
   );

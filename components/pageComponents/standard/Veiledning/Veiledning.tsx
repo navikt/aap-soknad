@@ -1,4 +1,4 @@
-import { Accordion, BodyShort, Button, Heading, Label, Link } from '@navikt/ds-react';
+import { Accordion, Alert, BodyShort, Button, Heading, Label, Link } from '@navikt/ds-react';
 import { useForm } from 'react-hook-form';
 import ConfirmationPanelWrapper from 'components/input/ConfirmationPanelWrapper';
 import { SøkerView } from 'context/sokerOppslagContext';
@@ -7,7 +7,6 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as classes from './Veiledning.module.css';
 import { LucaGuidePanel } from 'components/LucaGuidePanel';
 import { useFeatureToggleIntl } from 'hooks/useFeatureToggleIntl';
-import { useState } from 'react';
 
 const VEILEDNING_CONFIRM = 'veiledningConfirm';
 type VeiledningType = {
@@ -18,11 +17,12 @@ const initVeiledning: VeiledningType = {
 };
 interface VeiledningProps {
   søker: SøkerView;
+  isLoading: boolean;
+  hasError: boolean;
   onSubmit: () => void;
 }
-export const Veiledning = ({ søker, onSubmit }: VeiledningProps) => {
+export const Veiledning = ({ søker, isLoading, hasError, onSubmit }: VeiledningProps) => {
   const { formatMessage } = useFeatureToggleIntl();
-  const [isLoading, setIsLoading] = useState(false);
 
   const schema = yup.object().shape({
     veiledningConfirm: yup
@@ -134,9 +134,7 @@ export const Veiledning = ({ søker, onSubmit }: VeiledningProps) => {
 
         <form
           onSubmit={handleSubmit(async () => {
-            setIsLoading(true);
             await onSubmit();
-            setIsLoading(false);
           })}
           className={classes?.veiledningContent}
           autoComplete="off"
@@ -149,6 +147,9 @@ export const Veiledning = ({ søker, onSubmit }: VeiledningProps) => {
           >
             <Label as={'span'}>{formatMessage('søknad.veiledning.veiledningConfirm.title')}</Label>
           </ConfirmationPanelWrapper>
+          {hasError && (
+            <Alert variant="error">Beklager, det er litt rusk i NAVet. Prøv igjen senere.</Alert>
+          )}
           <div className={classes?.buttonWrapper}>
             <Button variant="primary" type="submit" loading={isLoading}>
               {formatMessage(`søknad.veiledning.startSøknad`)}
