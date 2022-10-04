@@ -102,7 +102,7 @@ export const Behandlere = ({ onBackClick, onNext, defaultValues }: Props) => {
         ...behandler,
       });
     } else {
-      if (selectedBehandlerIndex)
+      if (selectedBehandlerIndex !== undefined)
         update(selectedBehandlerIndex, {
           ...behandler,
         });

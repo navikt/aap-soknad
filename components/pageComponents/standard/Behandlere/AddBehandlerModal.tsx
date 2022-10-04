@@ -26,7 +26,6 @@ export const AddBehandlerModal = ({
   behandler,
 }: Props) => {
   const { formatMessage } = useFeatureToggleIntl();
-
   const schema = yup.object().shape({
     firstname: yup
       .string()
@@ -54,17 +53,6 @@ export const AddBehandlerModal = ({
     reset({ ...behandler });
   }, [behandler, reset]);
 
-  const clearModal = () => {
-    // TODO: Update med behandler props
-    setValue('firstname', '');
-    setValue('lastname', '');
-    setValue('legekontor', '');
-    setValue('gateadresse', '');
-    setValue('postnummer', '');
-    setValue('poststed', '');
-    setValue('telefon', '');
-  };
-
   return (
     <Modal open={showModal} onClose={() => onCloseClick()}>
       <Modal.Content className={classes?.addBehandlerModalContent}>
@@ -74,7 +62,6 @@ export const AddBehandlerModal = ({
         <form
           onSubmit={handleSubmit((data) => {
             const newData = { ...data };
-            clearModal();
             onSaveClick(newData);
           })}
         >
