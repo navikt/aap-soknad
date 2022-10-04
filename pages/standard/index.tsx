@@ -79,7 +79,7 @@ const Introduksjon = ({ søker }: PageProps) => {
 
 export const getServerSideProps = beskyttetSide(
   async (ctx: NextPageContext): Promise<GetServerSidePropsResult<{}>> => {
-    const stopTimer = metrics.getServersidePropsDurationHistogram.startTimer({ path: '/' });
+    const stopTimer = metrics.getServersidePropsDurationHistogram.startTimer({ path: '/standard' });
     const bearerToken = getAccessToken(ctx);
     const søker = await getSøker(bearerToken);
     const mellomlagretSøknad = await lesBucket('STANDARD', bearerToken);
