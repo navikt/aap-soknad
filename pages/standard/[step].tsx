@@ -1,6 +1,6 @@
 import PageHeader from 'components/PageHeader';
 import { useRouter } from 'next/router';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { setSoknadStateFraProps, SoknadActionKeys } from 'context/soknadContextCommon';
 import {
   useStepWizard,
@@ -45,6 +45,7 @@ import { lesBucket } from '../api/buckets/les';
 import { logSkjemaFullførtEvent, logSkjemastegFullførtEvent } from 'utils/amplitude';
 import { Alert } from '@navikt/ds-react';
 import metrics from 'utils/metrics';
+import { scrollRefIntoView } from 'utils/dom';
 
 interface PageProps {
   søker: SokerOppslagState;
@@ -63,7 +64,7 @@ const Steps = ({ søker, mellomlagretSøknad }: PageProps) => {
   const debouncedLagre = useDebounceLagreSoknad<Soknad>(søknadDispatch);
 
   const [showFetchErrorMessage, setShowFetchErrorMessage] = useState(false);
-  const [fetchErrorMessage, setFetchErrorMessage] = useState('');
+  const submitErrorMessageRef = useRef(null);
 
   useEffect(() => {
     if (søknadState?.søknad === undefined) {
@@ -88,6 +89,12 @@ const Steps = ({ søker, mellomlagretSøknad }: PageProps) => {
       router.push(currentStep.stepIndex.toString(), undefined, { scroll: true, shallow: true });
     }
   }, [currentStep]);
+
+  useEffect(() => {
+    if (showFetchErrorMessage) {
+      if (submitErrorMessageRef?.current != null) scrollRefIntoView(submitErrorMessageRef);
+    }
+  }, [showFetchErrorMessage]);
 
   const submitSoknad: SubmitHandler<Soknad> = async (data) => {
     if (currentStep?.name === StepNames.OPPSUMMERING) {
@@ -117,9 +124,6 @@ const Steps = ({ søker, mellomlagretSøknad }: PageProps) => {
         router.push('kvittering');
       } else {
         const navCallid = postResponse?.data?.navCallId;
-        setFetchErrorMessage(
-          `Det oppstod en feil under sending av søknaden. Prøv igjen senere. Nav-CallId: ${navCallid}`
-        );
         setShowFetchErrorMessage(true);
       }
     } else {
@@ -216,9 +220,13 @@ const Steps = ({ søker, mellomlagretSøknad }: PageProps) => {
             />
           )}
           {step === '8' && (
-            <Oppsummering onBackClick={onPreviousStep} onSubmitSoknad={submitSoknad} />
+            <Oppsummering
+              onBackClick={onPreviousStep}
+              onSubmitSoknad={submitSoknad}
+              submitErrorMessageRef={submitErrorMessageRef}
+              hasSubmitError={showFetchErrorMessage}
+            />
           )}
-          {showFetchErrorMessage && <Alert variant="error">{fetchErrorMessage}</Alert>}
         </StepWizard>
       )}
     </>

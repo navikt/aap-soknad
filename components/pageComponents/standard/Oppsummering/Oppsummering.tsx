@@ -1,6 +1,6 @@
 import { FieldValues, useForm } from 'react-hook-form';
 import { Soknad } from 'types/Soknad';
-import { Accordion, BodyShort, Heading, Label, Switch } from '@navikt/ds-react';
+import { Accordion, Alert, BodyShort, Heading, Label, Switch } from '@navikt/ds-react';
 import React, { useState } from 'react';
 import ConfirmationPanelWrapper from 'components/input/ConfirmationPanelWrapper';
 import AccordianItemOppsummering from './AccordianItemOppsummering/AccordianItemOppsummering';
@@ -28,9 +28,16 @@ import { formatNavn, formatFullAdresse } from 'utils/StringFormatters';
 interface OppsummeringProps {
   onBackClick: () => void;
   onSubmitSoknad: (data: Soknad) => void;
+  submitErrorMessageRef: React.MutableRefObject<string | null>;
+  hasSubmitError: boolean;
 }
 
-const Oppsummering = ({ onBackClick, onSubmitSoknad }: OppsummeringProps) => {
+const Oppsummering = ({
+  onBackClick,
+  onSubmitSoknad,
+  submitErrorMessageRef,
+  hasSubmitError,
+}: OppsummeringProps) => {
   const { formatMessage } = useFeatureToggleIntl();
   const [nextIsLoading, setNextIsLoading] = useState<boolean>(false);
 
@@ -77,6 +84,14 @@ const Oppsummering = ({ onBackClick, onSubmitSoknad }: OppsummeringProps) => {
       <Heading size="large" level="2">
         {formatMessage('søknad.oppsummering.title')}
       </Heading>
+      <div aria-live="polite" ref={submitErrorMessageRef}>
+        {hasSubmitError && (
+          <Alert variant="error">
+            Det kan dessverre se ut til at vi har noen tekniske problemer akkurat nå. Prøv igjen
+            senere.
+          </Alert>
+        )}
+      </div>
       <LucaGuidePanel>
         <BodyShort>{formatMessage('søknad.oppsummering.guide.text')}</BodyShort>
       </LucaGuidePanel>
