@@ -346,7 +346,7 @@ export const Medlemskap = ({ onBackClick, onNext, defaultValues }: Props) => {
           </>
         )}
         {showLeggTilUtenlandsPeriode && (
-          <ColorPanel>
+          <ColorPanel padding={false}>
             <BodyShort spacing>
               {formatMessage(`søknad.medlemskap.utenlandsperiode.modal.ingress.${arbeidEllerBodd}`)}
             </BodyShort>
@@ -358,16 +358,18 @@ export const Medlemskap = ({ onBackClick, onNext, defaultValues }: Props) => {
               </BodyShort>
             )}
             {fields?.length > 0 ? (
-              <Heading size="xsmall" level="3">
-                {formatMessage(
-                  `søknad.medlemskap.utenlandsperiode.perioder.title.${arbeidEllerBodd}`
-                )}
-              </Heading>
-            ) : (
-              <></>
-            )}
-            {fields?.length > 0 ? (
               <Table size="medium">
+                <Table.Header>
+                  <Table.Row>
+                    <Table.HeaderCell>
+                      <Heading size="xsmall" level="3">
+                        {formatMessage(
+                          `søknad.medlemskap.utenlandsperiode.perioder.title.${arbeidEllerBodd}`
+                        )}
+                      </Heading>
+                    </Table.HeaderCell>
+                  </Table.Row>
+                </Table.Header>
                 <Table.Body>
                   {fields?.map((field, index) => (
                     <Table.Row key={field.id}>
@@ -392,20 +394,27 @@ export const Medlemskap = ({ onBackClick, onNext, defaultValues }: Props) => {
                         </Button>
                       </Table.DataCell>
                       <Table.DataCell>
-                        {
-                          <Delete
-                            className={styles.deleteIcon}
-                            onClick={() => remove(index)}
-                            title={'Slett utenlandsopphold'}
-                            role={'button'}
-                            tabIndex={0}
-                            onKeyPress={(event) => {
-                              if (event.key === 'Enter') {
-                                remove(index);
-                              }
-                            }}
-                          />
-                        }
+                        <Button
+                          type={'button'}
+                          variant={'tertiary'}
+                          onKeyPress={(event) => {
+                            if (event.key === 'Enter') {
+                              remove(index);
+                            }
+                          }}
+                          onClick={() => remove(index)}
+                          icon={
+                            <Delete
+                              className={styles.deleteIcon}
+                              title={'Slett utenlandsopphold'}
+                              role={'button'}
+                              tabIndex={0}
+                            />
+                          }
+                          iconPosition={'right'}
+                        >
+                          Fjern
+                        </Button>
                       </Table.DataCell>
                     </Table.Row>
                   ))}
