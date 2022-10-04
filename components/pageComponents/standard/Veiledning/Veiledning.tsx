@@ -19,9 +19,16 @@ interface VeiledningProps {
   søker: SøkerView;
   isLoading: boolean;
   hasError: boolean;
+  errorMessageRef: React.MutableRefObject<HTMLDivElement | undefined>;
   onSubmit: () => void;
 }
-export const Veiledning = ({ søker, isLoading, hasError, onSubmit }: VeiledningProps) => {
+export const Veiledning = ({
+  søker,
+  isLoading,
+  hasError,
+  errorMessageRef,
+  onSubmit,
+}: VeiledningProps) => {
   const { formatMessage } = useFeatureToggleIntl();
 
   const schema = yup.object().shape({
@@ -48,6 +55,15 @@ export const Veiledning = ({ søker, isLoading, hasError, onSubmit }: Veiledning
         </Heading>
       </header>
       <main className={classes?.veiledningContent}>
+        <div aria-live="polite" ref={errorMessageRef}>
+          {hasError && (
+            <Alert variant="error">
+              Det kan dessverre se ut til at vi har noen tekniske problemer akkurat nå. Prøv igjen
+              senere.
+            </Alert>
+          )}
+        </div>
+
         <LucaGuidePanel>
           <Heading size="medium" level="2" spacing>
             {formatMessage('søknad.veiledning.guide.title', { name: søker.fulltNavn })}
@@ -147,9 +163,7 @@ export const Veiledning = ({ søker, isLoading, hasError, onSubmit }: Veiledning
           >
             <Label as={'span'}>{formatMessage('søknad.veiledning.veiledningConfirm.title')}</Label>
           </ConfirmationPanelWrapper>
-          {hasError && (
-            <Alert variant="error">Beklager, det er litt rusk i NAVet. Prøv igjen senere.</Alert>
-          )}
+
           <div className={classes?.buttonWrapper}>
             <Button variant="primary" type="submit" loading={isLoading}>
               {formatMessage(`søknad.veiledning.startSøknad`)}

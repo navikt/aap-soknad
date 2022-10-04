@@ -1,6 +1,6 @@
 import { Veiledning } from 'components/pageComponents/standard/Veiledning/Veiledning';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { SokerOppslagState, SøkerView } from 'context/sokerOppslagContext';
 import React from 'react';
 import { useRouter } from 'next/router';
@@ -46,6 +46,8 @@ const Introduksjon = ({ søker }: PageProps) => {
   const [isLoading, setIsLoading] = useState(false);
   const [hasError, setHasError] = useState(false);
 
+  const errorMessageRef = useRef();
+
   const [soker, setSoker] = useState({});
 
   useEffect(() => {
@@ -77,11 +79,22 @@ const Introduksjon = ({ søker }: PageProps) => {
     }
   };
 
+  useEffect(() => {
+    if (hasError) {
+      if (errorMessageRef?.current != undefined)
+        (errorMessageRef?.current as HTMLElement)?.scrollIntoView({
+          behavior: 'smooth',
+          block: 'center',
+        });
+    }
+  }, [hasError]);
+
   return (
     <Veiledning
       søker={soker}
       isLoading={isLoading}
       hasError={hasError}
+      errorMessageRef={errorMessageRef}
       onSubmit={async () => {
         await startSoknad();
       }}
