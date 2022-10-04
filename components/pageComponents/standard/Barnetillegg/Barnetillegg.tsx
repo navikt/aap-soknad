@@ -297,18 +297,19 @@ export const Barnetillegg = ({ onBackClick, onNext, defaultValues }: Props) => {
             <Button
               variant="tertiary"
               type="button"
+              icon={<Add title={'Legg til'} />}
+              iconPosition={'left'}
               onClick={() => {
                 setSelectedBarnIndex(undefined);
                 setShowModal(true);
               }}
             >
-              <Add title={'Legg til'} />
               {formatMessage('søknad.barnetillegg.leggTilBarn.buttonText')}
             </Button>
           </Cell>
         </Grid>
         {(erForelderTilManueltBarn || erFosterforelderTilManueltBarn) && (
-          <Alert variant='info'>
+          <Alert variant="info">
             {formatMessage('søknad.barnetillegg.alert.leggeVedTekst')}
             <ul>
               {erForelderTilManueltBarn && (
@@ -324,7 +325,7 @@ export const Barnetillegg = ({ onBackClick, onNext, defaultValues }: Props) => {
           </Alert>
         )}
         {(fields.length > 0 || manuelleBarnFields.length > 0) && (
-          <Alert variant='info'>
+          <Alert variant="info">
             {formatMessage('søknad.barnetillegg.alert.barneTillegg.title')}
             <ul>
               <li>{formatMessage('søknad.barnetillegg.alert.barneTillegg.bulletpoint1')}</li>

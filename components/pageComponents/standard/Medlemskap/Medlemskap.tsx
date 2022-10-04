@@ -1,14 +1,4 @@
-import {
-  BodyShort,
-  Radio,
-  Button,
-  Table,
-  BodyLong,
-  Heading,
-  ReadMore,
-  Cell,
-  Grid,
-} from '@navikt/ds-react';
+import { BodyShort, Radio, Button, Table, Heading, ReadMore, Cell, Grid } from '@navikt/ds-react';
 import React, { useState, useEffect, useMemo } from 'react';
 import { useFieldArray, useForm, useWatch } from 'react-hook-form';
 import { JaEllerNei, JaNeiVetIkke } from 'types/Generic';
@@ -429,12 +419,13 @@ export const Medlemskap = ({ onBackClick, onNext, defaultValues }: Props) => {
                 <Button
                   variant="secondary"
                   type="button"
+                  icon={<Add title={'Legg til'} />}
+                  iconPosition={'left'}
                   onClick={() => {
                     setSelectedUtenlandsPeriodeIndex(undefined);
                     setShowUtenlandsPeriodeModal(true);
                   }}
                 >
-                  <Add title={'Legg til'} />
                   {arbeidINorge === JaEllerNei.NEI
                     ? 'Registrer utenlandsopphold'
                     : 'Registrer periode med jobb utenfor Norge'}

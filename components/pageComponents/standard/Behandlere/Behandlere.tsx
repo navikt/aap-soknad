@@ -237,14 +237,19 @@ export const Behandlere = ({ onBackClick, onNext, defaultValues }: Props) => {
           <Button
             variant="tertiary"
             type="button"
+            icon={
+              <Add
+                title={formatMessage(
+                  'søknad.helseopplysninger.annenBehandler.accessibleButtonTitle'
+                )}
+              />
+            }
+            iconPosition={'left'}
             onClick={() => {
               setSelectedBehandlerIndex(undefined);
               setShowModal(true);
             }}
           >
-            <Add
-              title={formatMessage('søknad.helseopplysninger.annenBehandler.accessibleButtonTitle')}
-            />
             {formatMessage('søknad.helseopplysninger.annenBehandler.addBehandlerButton')}
           </Button>
         </div>
