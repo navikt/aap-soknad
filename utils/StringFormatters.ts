@@ -8,7 +8,9 @@ export const formatNavn = (navn?: Navn) =>
 
 export const landNavnFraSelector = (str: string) => str?.split(':')?.[1];
 
-export const getFullAdresse = (adresse?: Adresse) =>
-  `${adresse?.adressenavn} ${adresse?.husnummer}${adresse?.husbokstav ? adresse.husbokstav : ''}, ${
-    adresse?.postnummer?.postnr
-  } ${adresse?.postnummer?.poststed}`;
+export const formatFullAdresse = (adresse?: Adresse) =>
+  `${adresse?.adressenavn}${adresse?.husnummer || adresse?.husbokstav ? ' ' : ''}${
+    adresse?.husnummer ?? ''
+  }${adresse?.husbokstav ? adresse.husbokstav : ''}${
+    adresse?.postnummer?.postnr || adresse?.postnummer?.poststed ? ',' : ''
+  } ${adresse?.postnummer?.postnr ?? ''} ${adresse?.postnummer?.poststed ?? ''}`;

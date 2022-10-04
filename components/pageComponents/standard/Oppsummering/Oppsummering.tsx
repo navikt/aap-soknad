@@ -6,7 +6,6 @@ import ConfirmationPanelWrapper from 'components/input/ConfirmationPanelWrapper'
 import AccordianItemOppsummering from './AccordianItemOppsummering/AccordianItemOppsummering';
 import OppsummeringBarn from './OppsummeringBarn/OppsummeringBarn';
 import OppsummeringKontaktinfo from './OppsummeringKontaktinfo/OppsummeringKontaktinfo';
-import { getFullAdresse, getFulltNavn } from 'context/sokerOppslagContext';
 import OppsummeringUtenlandsopphold from './OppsummeringUtenlandsopphold/OppsummeringUtenlandsopphold';
 import OppsummeringBehandler from './OppsummeringBehandler/OppsummeringBehandler';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -24,6 +23,7 @@ import {
   StønadType,
   stønadTypeToAlternativNøkkel,
 } from 'components/pageComponents/standard/AndreUtbetalinger/AndreUtbetalinger';
+import { formatNavn, formatFullAdresse } from 'utils/StringFormatters';
 
 interface OppsummeringProps {
   onBackClick: () => void;
@@ -156,9 +156,9 @@ const Oppsummering = ({ onBackClick, onSubmitSoknad }: OppsummeringProps) => {
                 <Heading size={'small'} level={'3'}>
                   {formatMessage('søknad.oppsummering.helseopplysninger.fastlege')}
                 </Heading>
-                <BodyShort>{getFulltNavn(behandler.navn)}</BodyShort>
+                <BodyShort>{formatNavn(behandler.navn)}</BodyShort>
                 <BodyShort>{behandler.kontaktinformasjon.kontor}</BodyShort>
-                <BodyShort>{getFullAdresse(behandler.kontaktinformasjon.adresse)}</BodyShort>
+                <BodyShort>{formatFullAdresse(behandler.kontaktinformasjon.adresse)}</BodyShort>
                 <BodyShort>{`Telefon: ${behandler.kontaktinformasjon.telefon}`}</BodyShort>
                 <BodyShort>{`${formatMessage(
                   'søknad.oppsummering.helseopplysninger.informasjonOmFastlege'

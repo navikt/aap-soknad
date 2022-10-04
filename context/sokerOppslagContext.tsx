@@ -1,13 +1,5 @@
 import React, { createContext, Dispatch, ReactNode, useReducer, useContext, useMemo } from 'react';
-
-export const getFulltNavn = (navn?: Navn) =>
-  `${navn?.fornavn || ''}${navn?.mellomnavn ? ` ${navn?.mellomnavn}` : ''} ${
-    navn?.etternavn || ''
-  }`;
-export const getFullAdresse = (adresse?: Adresse) =>
-  `${adresse?.adressenavn} ${adresse?.husnummer}${adresse?.husbokstav ? adresse.husbokstav : ''}, ${
-    adresse?.postnummer?.postnr
-  } ${adresse?.postnummer?.poststed}`;
+import { formatNavn, formatFullAdresse } from 'utils/StringFormatters';
 
 interface DispatchSokerOppslagAction {
   payload?: any;
@@ -104,8 +96,8 @@ function SokerOppslagProvider({ children }: Props) {
   const [state, dispatch] = useReducer(stateReducer, søkerOppslagInitialValue);
   const søker: SøkerView | undefined = useMemo(
     () => ({
-      fulltNavn: getFulltNavn(state?.søker?.navn),
-      fullAdresse: state?.søker?.adresse ? getFullAdresse(state?.søker?.adresse) : '',
+      fulltNavn: formatNavn(state?.søker?.navn),
+      fullAdresse: state?.søker?.adresse ? formatFullAdresse(state?.søker?.adresse) : '',
       fødselsnummer: state?.søker?.fødselsnummer,
     }),
     [state]

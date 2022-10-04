@@ -14,7 +14,7 @@ import { Soker } from 'context/sokerOppslagContext';
 import { Soknad, Vedlegg } from 'types/Soknad';
 import { BehandlerBackendState, SøknadBackendState } from 'types/SoknadBackendState';
 import { formatDate } from './date';
-import { formatNavn, getFullAdresse } from 'utils/StringFormatters';
+import { formatNavn, formatFullAdresse } from 'utils/StringFormatters';
 import { BARN, GRUNNBELØP } from 'components/pageComponents/standard/Barnetillegg/Barnetillegg';
 import { RequiredVedlegg } from 'types/SoknadContext';
 import { Relasjon } from 'components/pageComponents/standard/Barnetillegg/AddBarnModal';
@@ -319,7 +319,7 @@ export const mapSøknadToPdf = (
           ...createField('Kategori', behandler?.kategori),
           ...createField('Navn', formatNavn(behandler?.navn)),
           ...createField('Kontor', behandler?.kontaktinformasjon?.kontor),
-          ...createField('Adresse', getFullAdresse(behandler?.kontaktinformasjon?.adresse)),
+          ...createField('Adresse', formatFullAdresse(behandler?.kontaktinformasjon?.adresse)),
           ...createField('Telefon', behandler?.kontaktinformasjon?.telefon),
           ...createField(
             formatMessage(`søknad.helseopplysninger.erRegistrertFastlegeRiktig.label`),
@@ -340,7 +340,7 @@ export const mapSøknadToPdf = (
           ...createField('Kontor', behandler?.legekontor),
           ...createField(
             'Adresse',
-            getFullAdresse({
+            formatFullAdresse({
               adressenavn: behandler?.gateadresse,
               postnummer: {
                 postnr: behandler?.postnummer,

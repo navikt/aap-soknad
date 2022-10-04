@@ -1,7 +1,6 @@
 import { Alert, Label, BodyLong, BodyShort, Button, Heading, Radio } from '@navikt/ds-react';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useFieldArray, useForm, useWatch } from 'react-hook-form';
-import { getFullAdresse, getFulltNavn } from 'context/sokerOppslagContext';
 import { Add } from '@navikt/ds-icons';
 import { Soknad, Behandler, RegistrertBehandler } from 'types/Soknad';
 import * as yup from 'yup';
@@ -18,6 +17,7 @@ import { useDebounceLagreSoknad } from 'hooks/useDebounceLagreSoknad';
 import { GenericSoknadContextState } from 'types/SoknadContext';
 import RadioGroupWrapper from 'components/input/RadioGroupWrapper/RadioGroupWrapper';
 import { JaEllerNei } from 'types/Generic';
+import { formatNavn, formatFullAdresse } from 'utils/StringFormatters';
 
 interface Props {
   onBackClick: () => void;
@@ -154,7 +154,7 @@ export const Behandlere = ({ onBackClick, onNext, defaultValues }: Props) => {
                 <dt>
                   <Label>{formatMessage('søknad.helseopplysninger.registrertFastlege.navn')}</Label>
                 </dt>
-                <dl>{getFulltNavn(field.navn)}</dl>
+                <dl>{formatNavn(field.navn)}</dl>
                 <dt>
                   <Label>
                     {formatMessage('søknad.helseopplysninger.registrertFastlege.legekontor')}
@@ -166,7 +166,7 @@ export const Behandlere = ({ onBackClick, onNext, defaultValues }: Props) => {
                     {formatMessage('søknad.helseopplysninger.registrertFastlege.adresse')}
                   </Label>
                 </dt>
-                <dl>{getFullAdresse(field.kontaktinformasjon.adresse)}</dl>
+                <dl>{formatFullAdresse(field.kontaktinformasjon.adresse)}</dl>
                 <dt>
                   <Label>
                     {formatMessage('søknad.helseopplysninger.registrertFastlege.telefon')}
@@ -213,7 +213,10 @@ export const Behandlere = ({ onBackClick, onNext, defaultValues }: Props) => {
                   {field?.legekontor && <BodyShort>{field?.legekontor}</BodyShort>}
                   {field?.gateadresse && (
                     <BodyShort>
-                      {field?.gateadresse}, {field?.postnummer} {field?.poststed}
+                      {formatFullAdresse({
+                        adressenavn: field.gateadresse,
+                        postnummer: { postnr: field.postnummer, poststed: field.poststed },
+                      })}
                     </BodyShort>
                   )}
                   {field?.telefon && (
