@@ -175,7 +175,7 @@ const SøknadFormWrapper = ({
   return (
     <>
       <form onSubmit={onNext} className={classes?.formContent}>
-        <FormErrorSummary id="skjema-feil-liste" errors={errors} data-testid={'error-summary'} />
+        <FormErrorSummary errors={errors} data-testid={'error-summary'} />
         {children}
         <div className={classes?.fourButtonWrapper}>
           <Button

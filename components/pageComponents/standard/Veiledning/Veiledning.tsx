@@ -19,7 +19,7 @@ interface VeiledningProps {
   søker: SøkerView;
   isLoading: boolean;
   hasError: boolean;
-  errorMessageRef: React.MutableRefObject<HTMLDivElement | undefined>;
+  errorMessageRef: React.MutableRefObject<HTMLDivElement | null>;
   onSubmit: () => void;
 }
 export const Veiledning = ({

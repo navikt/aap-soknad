@@ -15,6 +15,7 @@ import { SØKNAD_CONTEXT_VERSION } from 'context/soknadContextCommon';
 import { isLabs } from 'utils/environments';
 import { logSkjemaStartetEvent } from 'utils/amplitude';
 import metrics from 'utils/metrics';
+import { scrollRefIntoView } from 'utils/dom';
 interface PageProps {
   søker: SokerOppslagState;
 }
@@ -46,7 +47,7 @@ const Introduksjon = ({ søker }: PageProps) => {
   const [isLoading, setIsLoading] = useState(false);
   const [hasError, setHasError] = useState(false);
 
-  const errorMessageRef = useRef();
+  const errorMessageRef = useRef(null);
 
   const [soker, setSoker] = useState({});
 
@@ -81,11 +82,7 @@ const Introduksjon = ({ søker }: PageProps) => {
 
   useEffect(() => {
     if (hasError) {
-      if (errorMessageRef?.current != undefined)
-        (errorMessageRef?.current as HTMLElement)?.scrollIntoView({
-          behavior: 'smooth',
-          block: 'center',
-        });
+      if (errorMessageRef?.current != null) scrollRefIntoView(errorMessageRef);
     }
   }, [hasError]);
 

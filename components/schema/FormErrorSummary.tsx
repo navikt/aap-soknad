@@ -1,8 +1,9 @@
-import React, { useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { FieldErrors } from 'react-hook-form';
 import { ErrorSummary } from '@navikt/ds-react';
 import * as classes from './FormErrorSummary.module.css';
 import { useFeatureToggleIntl } from 'hooks/useFeatureToggleIntl';
+import { scrollRefIntoView } from 'utils/dom';
 
 const FormErrorSummary = (props: FieldErrors) => {
   const { formatMessage } = useFeatureToggleIntl();
@@ -10,6 +11,13 @@ const FormErrorSummary = (props: FieldErrors) => {
   const flatErrors = flatObj(props?.errors);
   const keyList = Object.keys(flatErrors).filter((e) => e);
   const errorSummaryElement = useRef(null);
+
+  useEffect(() => {
+    if (keyList?.length > 0) {
+      scrollRefIntoView(errorSummaryElement);
+    }
+  }, [keyList]);
+
   if (keyList?.length < 1) {
     return (
       <ErrorSummary

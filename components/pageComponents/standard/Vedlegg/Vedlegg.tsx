@@ -18,6 +18,7 @@ import { Relasjon } from '../Barnetillegg/AddBarnModal';
 import { MANUELLE_BARN } from '../Barnetillegg/Barnetillegg';
 import FieldArrayFileInput from 'components/input/FileInput/FieldArrayFileInput';
 import { GenericSoknadContextState } from 'types/SoknadContext';
+import { scrollRefIntoView } from 'utils/dom';
 
 interface Props {
   onBackClick: () => void;
@@ -55,8 +56,7 @@ const Vedlegg = ({ onBackClick, onNext, defaultValues }: Props) => {
 
   useEffect(() => {
     if (scanningGuideOpen) {
-      if (scanningGuideElement?.current != null)
-        (scanningGuideElement?.current as HTMLElement)?.scrollIntoView({ behavior: 'smooth' });
+      if (scanningGuideElement?.current != null) scrollRefIntoView(scanningGuideElement);
     }
   }, [scanningGuideOpen]);
 

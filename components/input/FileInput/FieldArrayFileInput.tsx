@@ -91,7 +91,7 @@ const FieldArrayFileInput = ({
     clearErrors(inputId);
     if (!['image/png', 'image/jpg', 'image/jpeg', 'application/pdf'].includes(file?.type)) {
       setFilename(file?.name);
-      setError(inputId, { type: 'custom', message: errorText(415) });
+      setError(`${type}-${inputId}`, { type: 'custom', message: errorText(415) });
       setDragOver(false);
       return;
     }
@@ -180,9 +180,13 @@ const FieldArrayFileInput = ({
           </Panel>
         );
       })}
-      {errors?.[inputId]?.message && (
+      {errors?.[`${type}-${inputId}`]?.message && (
         <>
-          <Panel className={`${classes?.fileCard} ${classes?.error}`} id={name} tabIndex={0}>
+          <Panel
+            id={`${type}-${inputId}`}
+            className={`${classes?.fileCard} ${classes?.error}`}
+            tabIndex={0}
+          >
             <div className={classes?.fileCardLeftContent}>
               <div className={classes?.fileError}>
                 <FileError color={'var(--navds-semantic-color-interaction-danger-hover)'} />
@@ -211,7 +215,7 @@ const FieldArrayFileInput = ({
             </button>
           </Panel>
           <div className={'navds-error-message navds-error-message--medium navds-label'}>
-            {errors?.[inputId]?.message}
+            {errors?.[`${type}-${inputId}`]?.message}
           </div>
         </>
       )}

@@ -1,4 +1,6 @@
-export const setErrorSummaryFocus = () => {
-  const errorSummaryElement = document && document.getElementById('skjema-feil-liste');
-  if (errorSummaryElement) errorSummaryElement.focus();
+export const scrollRefIntoView = (ref: React.RefObject<HTMLElement | null>) => {
+  (ref?.current as HTMLElement | null)?.scrollIntoView({
+    behavior: 'smooth',
+    block: 'center',
+  });
 };
