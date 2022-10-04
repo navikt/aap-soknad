@@ -53,6 +53,10 @@ export const AddBehandlerModal = ({
     reset({ ...behandler });
   }, [behandler, reset]);
 
+  const clearModal = () => {
+    reset({});
+  };
+
   return (
     <Modal open={showModal} onClose={() => onCloseClick()}>
       <Modal.Content className={classes?.addBehandlerModalContent}>
@@ -130,6 +134,7 @@ export const AddBehandlerModal = ({
                 type="button"
                 variant={'secondary'}
                 onClick={() => {
+                  clearModal();
                   onCloseClick();
                 }}
               >
@@ -146,6 +151,7 @@ export const AddBehandlerModal = ({
                 type="button"
                 variant={'secondary'}
                 onClick={() => {
+                  clearModal();
                   onCloseClick();
                 }}
               >
