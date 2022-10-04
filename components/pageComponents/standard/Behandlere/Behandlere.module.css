@@ -9,3 +9,11 @@
   flex-direction: column;
   row-gap: var(--navds-spacing-10);
 }
+
+.legeKort {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--navds-spacing-5);
+  background-color: var(--navds-semantic-color-component-background-alternate);
+}

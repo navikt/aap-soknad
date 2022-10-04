@@ -18,6 +18,7 @@ import { GenericSoknadContextState } from 'types/SoknadContext';
 import RadioGroupWrapper from 'components/input/RadioGroupWrapper/RadioGroupWrapper';
 import { JaEllerNei } from 'types/Generic';
 import { formatNavn, formatFullAdresse } from 'utils/StringFormatters';
+import ColorPanel from 'components/panel/ColorPanel';
 
 interface Props {
   onBackClick: () => void;
@@ -207,26 +208,32 @@ export const Behandlere = ({ onBackClick, onNext, defaultValues }: Props) => {
             <ul className={classes?.legeList}>
               {fields.map((field, index) => (
                 <li key={field.id}>
-                  <BodyShort>
-                    {field?.firstname} {field?.lastname}
-                  </BodyShort>
-                  {field?.legekontor && <BodyShort>{field?.legekontor}</BodyShort>}
-                  {field?.gateadresse && (
+                  <article className={classes?.legeKort}>
                     <BodyShort>
-                      {formatFullAdresse({
-                        adressenavn: field.gateadresse,
-                        postnummer: { postnr: field.postnummer, poststed: field.poststed },
-                      })}
+                      Navn: {field?.firstname} {field?.lastname}
                     </BodyShort>
-                  )}
-                  {field?.telefon && (
-                    <BodyShort>{`${formatMessage(
-                      'søknad.helseopplysninger.dineBehandlere.telefon'
-                    )}: ${field?.telefon}`}</BodyShort>
-                  )}
-                  <Button type="button" variant="tertiary" onClick={() => editNyBehandler(index)}>
-                    {formatMessage('søknad.helseopplysninger.dineBehandlere.editButton')}
-                  </Button>
+                    {field?.legekontor && <BodyShort>Legekontor: {field?.legekontor}</BodyShort>}
+                    {field?.gateadresse && (
+                      <BodyShort>
+                        Adresse:{' '}
+                        {formatFullAdresse({
+                          adressenavn: field.gateadresse,
+                          postnummer: { postnr: field.postnummer, poststed: field.poststed },
+                        })}
+                      </BodyShort>
+                    )}
+                    {field?.telefon && (
+                      <BodyShort>
+                        Telefon:{' '}
+                        {`${formatMessage('søknad.helseopplysninger.dineBehandlere.telefon')}: ${
+                          field?.telefon
+                        }`}
+                      </BodyShort>
+                    )}
+                    <Button type="button" variant="tertiary" onClick={() => editNyBehandler(index)}>
+                      {formatMessage('søknad.helseopplysninger.dineBehandlere.editButton')}
+                    </Button>
+                  </article>
                 </li>
               ))}
             </ul>
