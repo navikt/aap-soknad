@@ -1,4 +1,14 @@
-import { Alert, BodyShort, Button, Cell, Grid, Heading, Radio, ReadMore } from '@navikt/ds-react';
+import {
+  Alert,
+  BodyShort,
+  Button,
+  Cell,
+  Grid,
+  Heading,
+  Label,
+  Radio,
+  ReadMore,
+} from '@navikt/ds-react';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useFieldArray, useForm, useWatch } from 'react-hook-form';
 import RadioGroupWrapper from 'components/input/RadioGroupWrapper/RadioGroupWrapper';
@@ -188,11 +198,16 @@ export const Barnetillegg = ({ onBackClick, onNext, defaultValues }: Props) => {
               return (
                 <li key={barn?.id}>
                   <article className={classes.barneKort}>
-                    <Heading size="xsmall" level="3">{`${formatNavn(barn?.navn)}`}</Heading>
-                    <BodyShort>{`${formatMessage(
-                      'søknad.barnetillegg.registrerteBarn.fødselsdato'
-                    )}: ${formatDate(barn?.fødseldato)}`}</BodyShort>
-
+                    <BodyShort>
+                      <Label>{formatMessage('søknad.barnetillegg.registrerteBarn.navn')}: </Label>
+                      {formatNavn(barn?.navn)}
+                    </BodyShort>
+                    <BodyShort>
+                      <Label>
+                        {formatMessage('søknad.barnetillegg.registrerteBarn.fødselsdato')}:{' '}
+                      </Label>
+                      {formatDate(barn?.fødseldato)}
+                    </BodyShort>
                     <RadioGroupWrapper
                       legend={formatMessage(
                         'søknad.barnetillegg.registrerteBarn.harInntekt.label',
@@ -245,9 +260,15 @@ export const Barnetillegg = ({ onBackClick, onNext, defaultValues }: Props) => {
               return (
                 <li key={barn?.id}>
                   <article className={classes.barneKort}>
-                    <Heading size="xsmall" level="3">{`${formatNavn(barn?.navn)}`}</Heading>
                     <BodyShort>
-                      {formatMessage('søknad.barnetillegg.manuelleBarn.fødselsdato')}:{' '}
+                      <Label>{formatMessage('søknad.barnetillegg.registrerteBarn.navn')}: </Label>
+                      {formatNavn(barn?.navn)}
+                    </BodyShort>
+                    <BodyShort>
+                      <Label>
+                        {formatMessage('søknad.barnetillegg.manuelleBarn.fødselsdato')}:{' '}
+                      </Label>
+
                       {formatDate(barn?.fødseldato)}
                     </BodyShort>
                     {barn?.relasjon === Relasjon.FORELDER && (

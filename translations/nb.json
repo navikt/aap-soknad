@@ -216,6 +216,9 @@
         "accessibleButtonTitle": "Legg til"
       },
       "dineBehandlere": {
+        "navn": "Navn",
+        "legekontor": "Legekontor",
+        "adresse": "Adresse",
         "title": "Dine lege/behandlere",
         "telefon": "Telefon",
         "editButton": "Endre lege / behandler"
@@ -428,6 +431,7 @@
         "text2": "Du kan få barnetillegg selv om barnet ikke bor sammen med deg. Barnetillegget får du også for adoptivbarn, fosterbarn og andre barn som du har forsørgeransvar for."
       },
       "registrerteBarn": {
+        "navn": "Navn",
         "title": "Barn vi har funnet som er registrert på deg:",
         "fødselsnummer": "Fødselsnummer / D-nummer",
         "fødselsdato": "Fødselsdato",

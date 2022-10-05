@@ -210,12 +210,15 @@ export const Behandlere = ({ onBackClick, onNext, defaultValues }: Props) => {
                 <li key={field.id}>
                   <article className={classes?.legeKort}>
                     <BodyShort>
-                      Navn: {field?.firstname} {field?.lastname}
+                      <Label>{formatMessage('søknad.helseopplysninger.dineBehandlere.navn')}:{" "}</Label>{field?.firstname} {field?.lastname}
                     </BodyShort>
-                    {field?.legekontor && <BodyShort>Legekontor: {field?.legekontor}</BodyShort>}
+                    {field?.legekontor && <BodyShort>
+                      <Label>{formatMessage('søknad.helseopplysninger.dineBehandlere.telefon')}:{" "}</Label>
+                      {field?.legekontor}
+                    </BodyShort>}
                     {field?.gateadresse && (
                       <BodyShort>
-                        Adresse:{' '}
+                        <Label>{formatMessage('søknad.helseopplysninger.dineBehandlere.adresse')}:{" "}</Label>
                         {formatFullAdresse({
                           adressenavn: field.gateadresse,
                           postnummer: { postnr: field.postnummer, poststed: field.poststed },
@@ -224,10 +227,10 @@ export const Behandlere = ({ onBackClick, onNext, defaultValues }: Props) => {
                     )}
                     {field?.telefon && (
                       <BodyShort>
-                        Telefon:{' '}
-                        {`${formatMessage('søknad.helseopplysninger.dineBehandlere.telefon')}: ${
+                        <Label>{formatMessage('søknad.helseopplysninger.dineBehandlere.telefon')}:{" "}</Label>
+                         {
                           field?.telefon
-                        }`}
+                        }
                       </BodyShort>
                     )}
                     <Button type="button" variant="tertiary" onClick={() => editNyBehandler(index)}>
