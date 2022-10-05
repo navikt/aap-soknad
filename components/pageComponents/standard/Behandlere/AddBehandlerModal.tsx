@@ -58,7 +58,12 @@ export const AddBehandlerModal = ({
   };
 
   return (
-    <Modal open={showModal} onClose={() => onCloseClick()}>
+    <Modal
+      open={showModal}
+      onClose={() => {
+        clearModal();
+        onCloseClick();
+      }}>
       <Modal.Content className={classes?.addBehandlerModalContent}>
         <Heading size={'small'} level={'3'}>
           {formatMessage('søknad.helseopplysninger.modal.title')}
