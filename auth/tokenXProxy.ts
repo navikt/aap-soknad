@@ -38,8 +38,9 @@ export const tokenXProxy = async (opts: Opts) => {
   metrics.backendApiStatusCodeCounter.inc({ path: opts.prometheusPath, status: response.status });
 
   if (response.status < 200 || response.status > 300) {
-    const isJson = response.headers.get('content-type')?.includes('application/json');
-    console.log('---', opts.url, '  ,content-type: ', response.headers.get('content-type'));
+    const headers = response.headers.get('content-type');
+    const isJson =
+      headers?.includes('application/json') || headers?.includes('application/problem+json');
     let data;
     try {
       data = isJson ? await response.json() : response.text();
