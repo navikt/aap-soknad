@@ -210,15 +210,24 @@ export const Behandlere = ({ onBackClick, onNext, defaultValues }: Props) => {
                 <li key={field.id}>
                   <article className={classes?.legeKort}>
                     <BodyShort>
-                      <Label>{formatMessage('søknad.helseopplysninger.dineBehandlere.navn')}:{" "}</Label>{field?.firstname} {field?.lastname}
+                      <Label>
+                        {formatMessage('søknad.helseopplysninger.dineBehandlere.navn')}:{' '}
+                      </Label>
+                      {field?.firstname} {field?.lastname}
                     </BodyShort>
-                    {field?.legekontor && <BodyShort>
-                      <Label>{formatMessage('søknad.helseopplysninger.dineBehandlere.telefon')}:{" "}</Label>
-                      {field?.legekontor}
-                    </BodyShort>}
+                    {field?.legekontor && (
+                      <BodyShort>
+                        <Label>
+                          {formatMessage('søknad.helseopplysninger.dineBehandlere.telefon')}:{' '}
+                        </Label>
+                        {field?.legekontor}
+                      </BodyShort>
+                    )}
                     {field?.gateadresse && (
                       <BodyShort>
-                        <Label>{formatMessage('søknad.helseopplysninger.dineBehandlere.adresse')}:{" "}</Label>
+                        <Label>
+                          {formatMessage('søknad.helseopplysninger.dineBehandlere.adresse')}:{' '}
+                        </Label>
                         {formatFullAdresse({
                           adressenavn: field.gateadresse,
                           postnummer: { postnr: field.postnummer, poststed: field.poststed },
@@ -227,10 +236,10 @@ export const Behandlere = ({ onBackClick, onNext, defaultValues }: Props) => {
                     )}
                     {field?.telefon && (
                       <BodyShort>
-                        <Label>{formatMessage('søknad.helseopplysninger.dineBehandlere.telefon')}:{" "}</Label>
-                         {
-                          field?.telefon
-                        }
+                        <Label>
+                          {formatMessage('søknad.helseopplysninger.dineBehandlere.telefon')}:{' '}
+                        </Label>
+                        {field?.telefon}
                       </BodyShort>
                     )}
                     <Button type="button" variant="tertiary" onClick={() => editNyBehandler(index)}>
