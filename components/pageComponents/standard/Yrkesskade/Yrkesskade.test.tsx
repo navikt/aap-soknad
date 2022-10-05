@@ -46,6 +46,7 @@ const renderWithContext = (ui: any, { ...renderOptions }: any) => {
   );
 };
 describe('Yrkesskade', () => {
+  window.HTMLElement.prototype.scrollIntoView = function () {};
   const Component = () => {
     return (
       <StepWizard>

@@ -45,6 +45,7 @@ const renderWithContext = (ui: any, { ...renderOptions }: any) => {
   );
 };
 describe('Student', () => {
+  window.HTMLElement.prototype.scrollIntoView = function () {};
   const Component = () => {
     return (
       <StepWizard>
