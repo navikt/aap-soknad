@@ -39,7 +39,13 @@ export const tokenXProxy = async (opts: Opts) => {
 
   if (response.status < 200 || response.status > 300) {
     const isJson = response.headers.get('content-type')?.includes('application/json');
-    const data = isJson ? await response.json() : null;
+    console.log('---', opts.url, '  ,content-type: ', response.headers.get('content-type'));
+    let data;
+    try {
+      data = isJson ? await response.json() : response.text();
+    } catch (err: any) {
+      logger.error({ msg: `unable to parse data from ${opts.url}`, error: err.toString() });
+    }
     logger.error({
       msg: `tokenXProxy: status for ${opts.url} er ${response.status}: ${response.statusText}.`,
       navCallId: data?.['Nav-CallId'],
