@@ -17,3 +17,10 @@
   gap: var(--navds-spacing-5);
   background-color: var(--navds-semantic-color-component-background-alternate);
 }
+.cardButtonWrapper {
+  composes: buttonWrapper from '/styles/layout.module.css';
+}
+.cardButtonWrapper > button {
+  min-width: 195px;
+  max-width: 195px;
+}

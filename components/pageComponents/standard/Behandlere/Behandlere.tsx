@@ -1,7 +1,7 @@
 import { Alert, Label, BodyLong, BodyShort, Button, Heading, Radio } from '@navikt/ds-react';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useFieldArray, useForm, useWatch } from 'react-hook-form';
-import { Add } from '@navikt/ds-icons';
+import { Add, Delete } from '@navikt/ds-icons';
 import { Soknad, Behandler, RegistrertBehandler } from 'types/Soknad';
 import * as yup from 'yup';
 import { useStepWizard } from 'context/stepWizardContextV2';
@@ -18,7 +18,6 @@ import { GenericSoknadContextState } from 'types/SoknadContext';
 import RadioGroupWrapper from 'components/input/RadioGroupWrapper/RadioGroupWrapper';
 import { JaEllerNei } from 'types/Generic';
 import { formatNavn, formatFullAdresse } from 'utils/StringFormatters';
-import ColorPanel from 'components/panel/ColorPanel';
 
 interface Props {
   onBackClick: () => void;
@@ -71,7 +70,7 @@ export const Behandlere = ({ onBackClick, onNext, defaultValues }: Props) => {
     undefined
   );
 
-  const { fields: registrertBehandlerFields, update: registrertBehandlerUpdate } = useFieldArray({
+  const { fields: registrertBehandlerFields } = useFieldArray({
     name: REGISTRERTE_BEHANDLERE,
     control,
   });
@@ -110,9 +109,10 @@ export const Behandlere = ({ onBackClick, onNext, defaultValues }: Props) => {
     }
     setShowModal(false);
   };
-  const slettSelectedBehandler = () => {
-    remove(selectedBehandlerIndex);
+  const slettBehandler = (index: number) => {
+    remove(index);
     setSelectedBehandlerIndex(undefined);
+    setShowModal(false);
   };
   return (
     <>
@@ -242,9 +242,26 @@ export const Behandlere = ({ onBackClick, onNext, defaultValues }: Props) => {
                         {field?.telefon}
                       </BodyShort>
                     )}
-                    <Button type="button" variant="tertiary" onClick={() => editNyBehandler(index)}>
-                      {formatMessage('søknad.helseopplysninger.dineBehandlere.editButton')}
-                    </Button>
+                    <div className={classes?.cardButtonWrapper}>
+                      <Button
+                        type="button"
+                        variant="tertiary"
+                        onClick={() => editNyBehandler(index)}
+                      >
+                        {formatMessage('søknad.helseopplysninger.dineBehandlere.editButton')}
+                      </Button>
+                      <Button
+                        variant="tertiary"
+                        type="button"
+                        icon={<Delete title={'Slett'} />}
+                        iconPosition={'left'}
+                        onClick={() => {
+                          slettBehandler(index);
+                        }}
+                      >
+                        {formatMessage('søknad.helseopplysninger.dineBehandlere.slettButton')}
+                      </Button>
+                    </div>
                   </article>
                 </li>
               ))}
@@ -276,10 +293,6 @@ export const Behandlere = ({ onBackClick, onNext, defaultValues }: Props) => {
       <AddBehandlerModal
         onCloseClick={() => setShowModal(false)}
         onSaveClick={saveNyBehandler}
-        onDeleteClick={() => {
-          slettSelectedBehandler();
-          setShowModal(false);
-        }}
         showModal={showModal}
         behandler={selectedBehandler}
       />

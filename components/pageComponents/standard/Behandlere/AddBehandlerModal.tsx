@@ -13,18 +13,11 @@ interface Props {
   søknad?: Soknad;
   onCloseClick: () => void;
   onSaveClick: (data: any) => void;
-  onDeleteClick: () => void;
   showModal: boolean;
   behandler?: any;
 }
 
-export const AddBehandlerModal = ({
-  showModal,
-  onDeleteClick,
-  onCloseClick,
-  onSaveClick,
-  behandler,
-}: Props) => {
+export const AddBehandlerModal = ({ showModal, onCloseClick, onSaveClick, behandler }: Props) => {
   const { formatMessage } = useFeatureToggleIntl();
   const schema = yup.object().shape({
     firstname: yup
@@ -40,7 +33,6 @@ export const AddBehandlerModal = ({
     control,
     formState: { errors },
     handleSubmit,
-    setValue,
     reset,
   } = useForm<FieldValues>({
     resolver: yupResolver(schema),
@@ -63,7 +55,8 @@ export const AddBehandlerModal = ({
       onClose={() => {
         clearModal();
         onCloseClick();
-      }}>
+      }}
+    >
       <Modal.Content className={classes?.addBehandlerModalContent}>
         <Heading size={'small'} level={'3'}>
           {formatMessage('søknad.helseopplysninger.modal.title')}
@@ -123,46 +116,19 @@ export const AddBehandlerModal = ({
             error={errors?.telefon?.message}
           />
           <ModalButtonWrapper>
-            {behandler ? (
-              <Button
-                type="button"
-                variant={'danger'}
-                onClick={() => {
-                  clearModal();
-                  onDeleteClick();
-                }}
-              >
-                {formatMessage('søknad.helseopplysninger.modal.buttons.slett')}
-              </Button>
-            ) : (
-              <Button
-                type="button"
-                variant={'secondary'}
-                onClick={() => {
-                  clearModal();
-                  onCloseClick();
-                }}
-              >
-                {formatMessage('søknad.helseopplysninger.modal.buttons.avbryt')}
-              </Button>
-            )}
-
             <Button type={'submit'}>
               {formatMessage('søknad.helseopplysninger.modal.buttons.lagre')}
             </Button>
-
-            {behandler && (
-              <Button
-                type="button"
-                variant={'secondary'}
-                onClick={() => {
-                  clearModal();
-                  onCloseClick();
-                }}
-              >
-                {formatMessage('søknad.helseopplysninger.modal.buttons.avbryt')}
-              </Button>
-            )}
+            <Button
+              type="button"
+              variant={'secondary'}
+              onClick={() => {
+                clearModal();
+                onCloseClick();
+              }}
+            >
+              {formatMessage('søknad.helseopplysninger.modal.buttons.avbryt')}
+            </Button>
           </ModalButtonWrapper>
         </form>
       </Modal.Content>

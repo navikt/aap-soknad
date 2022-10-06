@@ -221,7 +221,8 @@
         "adresse": "Adresse",
         "title": "Dine lege/behandlere",
         "telefon": "Telefon",
-        "editButton": "Endre lege / behandler"
+        "editButton": "Endre informasjon",
+        "slettButton": "Slett behandler"
       },
       "modal": {
         "title": "Legg til annen lege eller behandler",
