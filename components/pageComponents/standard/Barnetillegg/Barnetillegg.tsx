@@ -15,7 +15,7 @@ import RadioGroupWrapper from 'components/input/RadioGroupWrapper/RadioGroupWrap
 import { JaEllerNei } from 'types/Generic';
 import { Soknad, Barn, ManuelleBarn } from 'types/Soknad';
 import * as classes from './Barnetillegg.module.css';
-import { Add } from '@navikt/ds-icons';
+import { Add, Delete } from '@navikt/ds-icons';
 import * as yup from 'yup';
 import { useStepWizard } from 'context/stepWizardContextV2';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -160,6 +160,14 @@ export const Barnetillegg = ({ onBackClick, onNext, defaultValues }: Props) => {
     }
     setShowModal(false);
   };
+  const slettBarn = (index: number) => {
+    if (index != undefined) {
+      const barn = manuelleBarnFields[index];
+      removeRequiredVedlegg(`barn-${barn.id}`, søknadDispatch);
+      manuelleBarnRemove(index);
+      setShowModal(false);
+    }
+  };
 
   return (
     <>
@@ -295,17 +303,22 @@ export const Barnetillegg = ({ onBackClick, onNext, defaultValues }: Props) => {
                         })}
                       </BodyShort>
                     )}
-                    <Grid>
-                      <Cell xs={4} md={12}>
-                        <Button
-                          variant="tertiary"
-                          type="button"
-                          onClick={() => editNyttBarn(index)}
-                        >
-                          {formatMessage('søknad.barnetillegg.manuelleBarn.redigerBarn')}
-                        </Button>
-                      </Cell>
-                    </Grid>
+                    <div className={classes?.cardButtonWrapper}>
+                      <Button variant="tertiary" type="button" onClick={() => editNyttBarn(index)}>
+                        {formatMessage('søknad.barnetillegg.manuelleBarn.redigerBarn')}
+                      </Button>
+                      <Button
+                        variant="tertiary"
+                        type="button"
+                        icon={<Delete title={'Slett'} />}
+                        iconPosition={'left'}
+                        onClick={() => {
+                          slettBarn(index);
+                        }}
+                      >
+                        {formatMessage('søknad.barnetillegg.manuelleBarn.slettBarn')}
+                      </Button>
+                    </div>
                   </article>
                 </li>
               );
@@ -360,15 +373,6 @@ export const Barnetillegg = ({ onBackClick, onNext, defaultValues }: Props) => {
       <AddBarnModal
         onCloseClick={() => setShowModal(false)}
         onSaveClick={saveNyttBarn}
-        onDeleteClick={() => {
-          if (selectedBarnIndex != undefined) {
-            const barn = manuelleBarnFields[selectedBarnIndex];
-            removeRequiredVedlegg(`barn-${barn.id}`, søknadDispatch);
-            manuelleBarnRemove(selectedBarnIndex);
-
-            setShowModal(false);
-          }
-        }}
         showModal={showModal}
         barn={selectedBarn}
       />

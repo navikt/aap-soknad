@@ -460,7 +460,8 @@
         "mottarIkkeBarnepensjon": "Barnet mottar ikke barnepensjon",
         "inntektOver1G": "Barnet har årlig inntekt over {grunnbeløp}kr",
         "inntektIkkeOver1G": "Barnet har ikke årlig inntekt over {grunnbeløp}kr",
-        "redigerBarn": "Endre informasjon om barnet"
+        "redigerBarn": "Endre informasjon",
+        "slettBarn": "Slett barn"
       },
       "leggTilBarn": {
         "description": "Du kan legge til adoptivbarn, fosterbarn og andre barn under 18 år som du har forsørgeransvar for.",

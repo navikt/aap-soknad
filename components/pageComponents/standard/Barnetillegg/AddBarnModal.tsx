@@ -28,7 +28,6 @@ interface Props {
   søknad?: Soknad;
   onCloseClick: () => void;
   onSaveClick: (data: any) => void;
-  onDeleteClick: () => void;
   showModal: boolean;
   barn?: ManuelleBarn;
 }
@@ -85,13 +84,7 @@ export const getAddBarnSchema = (formatMessage: (id: string, options?: {}) => st
   });
 };
 
-export const AddBarnModal = ({
-  showModal,
-  onDeleteClick,
-  onCloseClick,
-  onSaveClick,
-  barn,
-}: Props) => {
+export const AddBarnModal = ({ showModal, onCloseClick, onSaveClick, barn }: Props) => {
   const { formatMessage } = useFeatureToggleIntl();
 
   const {
@@ -224,41 +217,18 @@ export const AddBarnModal = ({
             </Alert>
           )}
           <ModalButtonWrapper>
-            {barn ? (
-              <Button
-                type="button"
-                variant={'danger'}
-                onClick={() => {
-                  onDeleteClick();
-                }}
-              >
-                {formatMessage('søknad.barnetillegg.leggTilBarn.modal.buttons.slett')}
-              </Button>
-            ) : (
-              <Button
-                type="button"
-                variant={'secondary'}
-                onClick={() => {
-                  onCloseClick();
-                }}
-              >
-                {formatMessage('søknad.barnetillegg.leggTilBarn.modal.buttons.avbryt')}
-              </Button>
-            )}
             <Button type={'submit'}>
               {formatMessage('søknad.barnetillegg.leggTilBarn.modal.buttons.lagre')}
             </Button>
-            {barn && (
-              <Button
-                type="button"
-                variant={'secondary'}
-                onClick={() => {
-                  onCloseClick();
-                }}
-              >
-                {formatMessage('søknad.barnetillegg.leggTilBarn.modal.buttons.avbryt')}
-              </Button>
-            )}
+            <Button
+              type="button"
+              variant={'secondary'}
+              onClick={() => {
+                onCloseClick();
+              }}
+            >
+              {formatMessage('søknad.barnetillegg.leggTilBarn.modal.buttons.avbryt')}
+            </Button>
           </ModalButtonWrapper>
         </form>
       </Modal.Content>
