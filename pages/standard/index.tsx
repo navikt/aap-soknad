@@ -7,7 +7,6 @@ import { useRouter } from 'next/router';
 import { GetServerSidePropsResult, NextPageContext } from 'next/types';
 import { beskyttetSide } from 'auth/beskyttetSide';
 import { getAccessToken } from 'auth/accessToken';
-import { getSøker } from '../api/oppslag/soeker';
 import { fetchPOST } from 'api/fetch';
 import { lesBucket } from 'pages/api/buckets/les';
 import { StepType } from 'components/StepWizard/Step';
@@ -16,6 +15,7 @@ import { isLabs } from 'utils/environments';
 import { logSkjemaStartetEvent } from 'utils/amplitude';
 import metrics from 'utils/metrics';
 import { scrollRefIntoView } from 'utils/dom';
+import { getSøkerUtenBarn } from 'pages/api/oppslag/soekerUtenBarn';
 interface PageProps {
   søker: SokerOppslagState;
 }
@@ -103,7 +103,7 @@ export const getServerSideProps = beskyttetSide(
   async (ctx: NextPageContext): Promise<GetServerSidePropsResult<{}>> => {
     const stopTimer = metrics.getServersidePropsDurationHistogram.startTimer({ path: '/standard' });
     const bearerToken = getAccessToken(ctx);
-    const søker = await getSøker(bearerToken);
+    const søker = await getSøkerUtenBarn(bearerToken);
     const mellomlagretSøknad = await lesBucket('STANDARD', bearerToken);
     const activeStep = mellomlagretSøknad?.lagretStepList?.find((e: StepType) => e.active);
     const activeIndex = activeStep?.stepIndex;
