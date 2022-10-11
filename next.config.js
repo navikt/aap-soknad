@@ -17,6 +17,11 @@ const nextConfig = {
     ignoreBuildErrors: true, // Ignorerer feil frem til vi har løst TS-feil i parcel-app
   },
 
+  i18n: {
+    locales: ['nb', 'nn'],
+    defaultLocale: 'nb',
+  },
+
   async headers() {
     return [
       {
