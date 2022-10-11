@@ -10,6 +10,7 @@ import { SokerOppslagProvider } from 'context/sokerOppslagContext';
 import { StepWizardProvider } from 'context/stepWizardContextV2';
 import { initAmplitude } from 'utils/amplitude';
 import { AppStateContextProvider } from 'context/appStateContext';
+import Head from 'next/head';
 const CustomApp = ({ Component, pageProps }: AppProps) => {
   const locale = 'nb';
 
@@ -31,6 +32,9 @@ const CustomApp = ({ Component, pageProps }: AppProps) => {
       <AppStateContextProvider>
         <SokerOppslagProvider>
           <StepWizardProvider>
+            <Head>
+              <title>Søknad om arbeidsavklaringspenger (AAP)</title>
+            </Head>
             <Component {...pageProps} />
           </StepWizardProvider>
         </SokerOppslagProvider>
