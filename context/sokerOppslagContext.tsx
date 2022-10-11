@@ -6,7 +6,7 @@ interface DispatchSokerOppslagAction {
   error?: any;
   type: 'SET_SOKER_OPPSLAG';
 }
-type Navn = {
+export type Navn = {
   fornavn: string;
   mellomnavn: string;
   etternavn: string;

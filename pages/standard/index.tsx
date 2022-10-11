@@ -1,7 +1,7 @@
 import { Veiledning } from 'components/pageComponents/standard/Veiledning/Veiledning';
 
 import { useEffect, useRef, useState } from 'react';
-import { SokerOppslagState, SøkerView } from 'context/sokerOppslagContext';
+import { Navn, SokerOppslagState, SøkerView } from 'context/sokerOppslagContext';
 import React from 'react';
 import { useRouter } from 'next/router';
 import { GetServerSidePropsResult, NextPageContext } from 'next/types';
@@ -17,7 +17,9 @@ import metrics from 'utils/metrics';
 import { scrollRefIntoView } from 'utils/dom';
 import { getSøkerUtenBarn } from 'pages/api/oppslag/soekerUtenBarn';
 interface PageProps {
-  søker: SokerOppslagState;
+  søker: {
+    navn: Navn;
+  };
 }
 
 export enum StepNames {
@@ -52,10 +54,10 @@ const Introduksjon = ({ søker }: PageProps) => {
   const [soker, setSoker] = useState({});
 
   useEffect(() => {
-    if (søker?.søker) {
+    if (søker?.navn) {
       const _søker: SøkerView = {
-        fulltNavn: `${søker.søker.navn.fornavn ?? ''} ${søker.søker.navn.mellomnavn ?? ''} ${
-          søker.søker.navn.etternavn ?? ''
+        fulltNavn: `${søker.navn.fornavn ?? ''} ${søker.navn.mellomnavn ?? ''} ${
+          søker.navn.etternavn ?? ''
         }`,
       };
       setSoker(_søker);
