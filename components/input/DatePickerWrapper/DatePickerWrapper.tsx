@@ -1,6 +1,5 @@
-import '@navikt/ds-datepicker/lib/index.css';
-import { Datepicker } from '@navikt/ds-datepicker';
 import { Controller } from 'react-hook-form';
+import { UNSAFE_DatePicker } from '@navikt/ds-react';
 
 export interface DatePickerProps {
   name: string;
@@ -18,23 +17,15 @@ const DatePickerWrapper = ({ name, label, control, error }: DatePickerProps) => 
       name={name}
       control={control}
       render={({ field: { name, value, onChange } }) => (
-        <Datepicker
-          locale={'nb'}
-          inputName={name}
-          id={name}
-          label={label}
-          value={value}
-          error={error}
-          onChange={onChange}
-          inputProps={{
-            'aria-invalid': !!error,
-          }}
-          calendarSettings={{ showWeekNumbers: false, position: 'fullscreen' }}
-          showYearSelector={true}
-          limitations={{
-            weekendsNotSelectable: false,
-          }}
-        />
+        <UNSAFE_DatePicker>
+          <UNSAFE_DatePicker.Input
+            id={name}
+            label={label}
+            error={error}
+            onChange={onChange}
+            error={error}
+          />
+        </UNSAFE_DatePicker>
       )}
     />
   );

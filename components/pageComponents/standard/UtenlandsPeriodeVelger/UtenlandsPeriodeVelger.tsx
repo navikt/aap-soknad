@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo } from 'react';
 const { eeaMember } = require('is-european');
-import { FieldValues, useForm } from 'react-hook-form';
+import { Controller, FieldValues, useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as classes from './UtenlandsPeriode.module.css';
@@ -11,6 +11,7 @@ import {
   Heading,
   Ingress,
   Modal,
+  UNSAFE_MonthPicker,
   Radio,
   Cell,
   Grid,
@@ -24,6 +25,7 @@ import DatePickerWrapper from 'components/input/DatePickerWrapper/DatePickerWrap
 import { ModalButtonWrapper } from 'components/ButtonWrapper/ModalButtonWrapper';
 import { UtenlandsPeriode } from 'types/Soknad';
 import { formatDate } from 'utils/date';
+import { MonthPickerWrapper } from 'components/input/MonthPickerWrapper/MonthPickerWrapper';
 
 export enum ArbeidEllerBodd {
   ARBEID = 'ARBEID',
@@ -140,9 +142,7 @@ const UtenlandsPeriodeVelger = ({
         </Ingress>
         {arbeidEllerBodd === 'BODD' && (
           <Ingress spacing>
-            {formatMessage(
-              `søknad.medlemskap.utenlandsperiode.modal.ingress.${arbeidEllerBodd}_2`
-            )}
+            {formatMessage(`søknad.medlemskap.utenlandsperiode.modal.ingress.${arbeidEllerBodd}_2`)}
           </Ingress>
         )}
         <form
@@ -169,23 +169,23 @@ const UtenlandsPeriodeVelger = ({
             </Label>
             <Grid>
               <Cell xs={12} lg={5}>
-                <DatePickerWrapper
+                <MonthPickerWrapper
                   name="fraDato"
+                  control={control}
                   label={formatMessage(
                     'søknad.medlemskap.utenlandsperiode.modal.periode.fraDato.label'
                   )}
-                  control={control}
-                  error={errors.fraDato?.message}
+                  error={errors?.fraDato?.message}
                 />
               </Cell>
               <Cell xs={12} lg={5}>
-                <DatePickerWrapper
+                <MonthPickerWrapper
                   name="tilDato"
+                  control={control}
                   label={formatMessage(
                     'søknad.medlemskap.utenlandsperiode.modal.periode.tilDato.label'
                   )}
-                  control={control}
-                  error={errors.tilDato?.message}
+                  error={errors?.tilDato?.message}
                 />
               </Cell>
             </Grid>
