@@ -1,29 +1,35 @@
-import { UNSAFE_MonthPicker } from '@navikt/ds-react';
-import { Controller } from 'react-hook-form';
+import { UNSAFE_MonthPicker, UNSAFE_useMonthpicker } from '@navikt/ds-react';
+import { useEffect } from 'react';
 
 export interface MonthPickerProps {
   name: string;
   label: string;
-  control: any;
+  setValue: any;
+  fromDate?: Date;
+  toDate?: Date;
   error?: string;
 }
 
-export const MonthPickerWrapper = ({ name, label, control, error }: MonthPickerProps) => {
+export const MonthPickerWrapper = ({
+  name,
+  label,
+  setValue,
+  fromDate,
+  toDate,
+  error,
+}: MonthPickerProps) => {
+  const { monthpickerProps, inputProps, selectedMonth } = UNSAFE_useMonthpicker({
+    fromDate: fromDate,
+    toDate: toDate,
+  });
+
+  useEffect(() => {
+    setValue(name, selectedMonth);
+  }, [selectedMonth]);
+
   return (
-    <Controller
-      name={name}
-      control={control}
-      render={({ field: { name, value, onChange } }) => (
-        <UNSAFE_MonthPicker>
-          <UNSAFE_MonthPicker.Input
-            id={name}
-            label={label}
-            error={error}
-            value={value}
-            onChange={onChange}
-          />
-        </UNSAFE_MonthPicker>
-      )}
-    />
+    <UNSAFE_MonthPicker {...monthpickerProps} dropdownCaption={fromDate && toDate ? true : false}>
+      <UNSAFE_MonthPicker.Input {...inputProps} id={name} label={label} error={error} />
+    </UNSAFE_MonthPicker>
   );
 };

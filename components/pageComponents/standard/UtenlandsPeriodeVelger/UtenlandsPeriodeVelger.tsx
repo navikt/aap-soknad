@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo } from 'react';
 const { eeaMember } = require('is-european');
-import { Controller, FieldValues, useForm } from 'react-hook-form';
+import { FieldValues, useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as classes from './UtenlandsPeriode.module.css';
@@ -11,7 +11,6 @@ import {
   Heading,
   Ingress,
   Modal,
-  UNSAFE_MonthPicker,
   Radio,
   Cell,
   Grid,
@@ -21,11 +20,11 @@ import RadioGroupWrapper from 'components/input/RadioGroupWrapper/RadioGroupWrap
 import CountrySelector from 'components/input/CountrySelector';
 import TextFieldWrapper from 'components/input/TextFieldWrapper';
 import { useFeatureToggleIntl } from 'hooks/useFeatureToggleIntl';
-import DatePickerWrapper from 'components/input/DatePickerWrapper/DatePickerWrapper';
 import { ModalButtonWrapper } from 'components/ButtonWrapper/ModalButtonWrapper';
 import { UtenlandsPeriode } from 'types/Soknad';
 import { formatDate } from 'utils/date';
 import { MonthPickerWrapper } from 'components/input/MonthPickerWrapper/MonthPickerWrapper';
+import { subYears } from 'date-fns';
 
 export enum ArbeidEllerBodd {
   ARBEID = 'ARBEID',
@@ -113,6 +112,8 @@ const UtenlandsPeriodeVelger = ({
     });
   }, [utenlandsPeriode, open, reset]);
 
+  const antallÅrTilbake = arbeidEllerBodd === ArbeidEllerBodd.ARBEID ? 5 : 60;
+
   const valgtLand = watch('land');
   const showUtenlandsId = useMemo(() => {
     const landKode = valgtLand?.split(':')?.[0];
@@ -171,20 +172,24 @@ const UtenlandsPeriodeVelger = ({
               <Cell xs={12} lg={5}>
                 <MonthPickerWrapper
                   name="fraDato"
-                  control={control}
+                  setValue={setValue}
                   label={formatMessage(
                     'søknad.medlemskap.utenlandsperiode.modal.periode.fraDato.label'
                   )}
+                  fromDate={subYears(new Date(), antallÅrTilbake)}
+                  toDate={new Date()}
                   error={errors?.fraDato?.message}
                 />
               </Cell>
               <Cell xs={12} lg={5}>
                 <MonthPickerWrapper
                   name="tilDato"
-                  control={control}
+                  setValue={setValue}
                   label={formatMessage(
                     'søknad.medlemskap.utenlandsperiode.modal.periode.tilDato.label'
                   )}
+                  fromDate={subYears(new Date(), antallÅrTilbake)}
+                  toDate={new Date()}
                   error={errors?.tilDato?.message}
                 />
               </Cell>

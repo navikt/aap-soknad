@@ -1,33 +1,29 @@
-import { Controller } from 'react-hook-form';
-import { UNSAFE_DatePicker } from '@navikt/ds-react';
+import { UNSAFE_DatePicker, UNSAFE_useDatepicker } from '@navikt/ds-react';
+import { useEffect } from 'react';
 
 export interface DatePickerProps {
   name: string;
   label: string;
-  control: any;
-  description?: React.ReactChild | React.ReactChild[];
+  setValue: any;
+  fromDate?: Date;
+  toDate?: Date;
   error?: string;
-  required?: string;
-  validate?: () => any;
 }
 
-const DatePickerWrapper = ({ name, label, control, error }: DatePickerProps) => {
+const DatePickerWrapper = ({ name, label, setValue, fromDate, toDate, error }: DatePickerProps) => {
+  const { datepickerProps, inputProps, selectedDay } = UNSAFE_useDatepicker({
+    fromDate: fromDate,
+    toDate: toDate,
+  });
+
+  useEffect(() => {
+    setValue(name, selectedDay);
+  }, [selectedDay]);
+
   return (
-    <Controller
-      name={name}
-      control={control}
-      render={({ field: { name, value, onChange } }) => (
-        <UNSAFE_DatePicker>
-          <UNSAFE_DatePicker.Input
-            id={name}
-            label={label}
-            error={error}
-            onChange={onChange}
-            error={error}
-          />
-        </UNSAFE_DatePicker>
-      )}
-    />
+    <UNSAFE_DatePicker {...datepickerProps} dropdownCaption={fromDate && toDate ? true : false}>
+      <UNSAFE_DatePicker.Input {...inputProps} id={name} label={label} error={error} />
+    </UNSAFE_DatePicker>
   );
 };
 
