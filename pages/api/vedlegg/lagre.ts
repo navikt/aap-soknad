@@ -4,7 +4,7 @@ import { getAccessTokenFromRequest } from 'auth/accessToken';
 import { beskyttetApi } from 'auth/beskyttetApi';
 import { tokenXAxiosProxy } from 'auth/tokenXProxy';
 import { isMock } from 'utils/environments';
-import logger from 'utils/logger';
+import { logger } from '@navikt/aap-felles-innbygger-utils';
 
 const handler = beskyttetApi(async (req: NextApiRequest, res: NextApiResponse) => {
   logger.info('Har mottatt request om filopplasting');

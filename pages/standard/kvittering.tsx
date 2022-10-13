@@ -10,7 +10,7 @@ import { GetServerSidePropsResult, NextPageContext } from 'next';
 import { getAccessToken } from 'auth/accessToken';
 import { getSøknader, SøknadApiType } from 'pages/api/oppslag/soeknader';
 import { getSøker } from 'pages/api/oppslag/soeker';
-import logger from 'utils/logger';
+import { logger } from '@navikt/aap-felles-innbygger-utils';
 import metrics from 'utils/metrics';
 interface PageProps {
   søker: SokerOppslagState;

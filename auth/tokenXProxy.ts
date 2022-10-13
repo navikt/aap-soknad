@@ -1,8 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next/dist/shared/lib/utils';
 import axios from 'axios';
-
-import { getTokenxToken } from './getTokenxToken';
-import logger from '../utils/logger';
+import { getTokenX } from '@navikt/aap-felles-innbygger-auth';
+import { logger } from '@navikt/aap-felles-innbygger-utils';
 import { ErrorMedStatus } from './ErrorMedStatus';
 import metrics from 'utils/metrics';
 
@@ -23,7 +22,12 @@ export const tokenXProxy = async (opts: Opts) => {
   logger.info('starter request mot ' + opts.url);
 
   const idportenToken = opts.bearerToken!.split(' ')[1];
-  const tokenxToken = await getTokenxToken(idportenToken, opts.audience);
+  let tokenxToken;
+  try {
+    tokenxToken = await getTokenX(idportenToken, opts.audience);
+  } catch (err: any) {
+    logger.error({ msg: 'getTokenXError', error: err });
+  }
 
   const stopTimer = metrics.backendApiDurationHistogram.startTimer({ path: opts.prometheusPath });
   const response = await fetch(opts.url, {
@@ -79,7 +83,7 @@ interface AxiosOpts {
 
 export const tokenXAxiosProxy = async (opts: AxiosOpts) => {
   const idportenToken = opts.bearerToken!.split(' ')[1];
-  const tokenxToken = await getTokenxToken(idportenToken, opts.audience);
+  const tokenxToken = await getTokenX(idportenToken, opts.audience);
 
   logger.info('Starter opplasting av fil til ' + opts.url);
   logger.info('content-type fra klient' + opts.req?.headers['content-type']);

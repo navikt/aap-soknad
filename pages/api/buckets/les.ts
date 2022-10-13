@@ -7,7 +7,7 @@ import { erGyldigSøknadsType, GYLDIGE_SØKNADS_TYPER, SøknadsType } from 'util
 import { isLabs, isMock } from 'utils/environments';
 import { getStringFromPossiblyArrayQuery } from 'utils/string';
 import { SØKNAD_CONTEXT_VERSION } from 'context/soknadContextCommon';
-import logger from 'utils/logger';
+import { logger } from '@navikt/aap-felles-innbygger-utils';
 import { defaultStepList } from 'pages/standard';
 
 const handler = beskyttetApi(async (req: NextApiRequest, res: NextApiResponse) => {

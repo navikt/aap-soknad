@@ -49,7 +49,7 @@ spec:
   accessPolicy:
     outbound:
       rules:
-        - application: aap-soknad-api
+        - application: soknad-api
       external:
         {{#each externals as |host|}}
         - host: {{host}}
