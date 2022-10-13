@@ -8,7 +8,7 @@ type PageHandler = (context: NextPageContext) => void | Promise<GetServerSidePro
 
 const wonderwallRedirect = {
   redirect: {
-    destination: '/oauth2/login?redirect=/aap/innsyn',
+    destination: '/oauth2/login?redirect=/aap/soknad',
     permanent: false,
   },
 };
