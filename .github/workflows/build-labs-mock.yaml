@@ -11,15 +11,15 @@ jobs:
     name: "build"
     runs-on: "ubuntu-latest"
     steps:
-      - uses: "actions/checkout@v2"
-      - uses: "actions/setup-node@v2"
+      - uses: "actions/checkout@v3"
+      - uses: "actions/setup-node@v3"
         with:
           node-version: "16"
           registry-url: "https://npm.pkg.github.com"
           cache: "yarn"
       - name: "Cache client node_modules"
         id: "cache-node-modules"
-        uses: "actions/cache@v2"
+        uses: "actions/cache@v3"
         with:
           path: 'node_modules'
           key: "${{ runner.os }}-modules-${{ hashFiles('yarn.lock') }}"
@@ -57,7 +57,7 @@ jobs:
     needs: "build"
     runs-on: "ubuntu-latest"
     steps:
-      - uses: "actions/checkout@v2"
+      - uses: "actions/checkout@v3"
       - name: "Deploy to LABS"
         uses: "nais/deploy/actions/deploy@v1"
         env:
