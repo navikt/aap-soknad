@@ -5,8 +5,8 @@ import { SøkerView } from 'context/sokerOppslagContext';
 import { Download } from '@navikt/ds-icons';
 import { SuccessStroke } from '@navikt/ds-icons';
 import { useFeatureToggleIntl } from 'hooks/useFeatureToggleIntl';
-import { useSoknadContextStandard } from 'context/soknadContextStandard';
 import { SøknadApiType } from 'pages/api/oppslag/soeknader';
+import { clientSideIsProd } from 'utils/environments';
 
 interface StudentProps {
   søker: SøkerView;
@@ -24,12 +24,10 @@ const getDownloadUrl = (journalpostId?: string) => {
 
 const Kvittering = ({ søker, kontaktinformasjon, søknad }: StudentProps) => {
   const { formatMessage, formatElement } = useFeatureToggleIntl();
-  const { søknadState } = useSoknadContextStandard();
 
-  const dittNavUrl =
-    typeof window !== 'undefined' && window.location.href.includes('www.nav.no')
-      ? 'https://www.nav.no/person/dittnav/'
-      : 'https://www.dev.nav.no/person/dittnav/';
+  const dittNavUrl = clientSideIsProd()
+    ? 'https://www.nav.no/person/dittnav/'
+    : 'https://www.dev.nav.no/person/dittnav/';
 
   return (
     <div className={classes?.kvitteringContent}>
