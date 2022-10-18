@@ -45,11 +45,11 @@ jobs:
         uses: "docker/build-push-action@v2"
         with:
           context: .
-          file: Dockerfile
+          file: DockerfileV2
           tags: "${{ env.IMAGE }}"
           push: "true"
-          cache-from: "type=gha"
-          cache-to: "type=gha,mode=max"
+#          cache-from: "type=gha"
+#          cache-to: "type=gha,mode=max"
   "deployDev":
     name: "Deploy app to dev"
     needs: "build"
