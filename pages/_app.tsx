@@ -13,6 +13,7 @@ import { AppStateContextProvider } from 'context/appStateContext';
 import Head from 'next/head';
 import { SUPPORTED_LOCALE } from 'lib/translations/locale';
 import { useRouter } from 'next/router';
+import { NavDecorator } from 'components/NavDecorator/NavDecorator';
 
 const getLocaleOrFallback = (locale?: string) => {
   if (locale && SUPPORTED_LOCALE.includes(locale)) {
@@ -43,12 +44,14 @@ const CustomApp = ({ Component, pageProps }: AppProps) => {
     <IntlProvider locale={locale} messages={currentMessages}>
       <AppStateContextProvider>
         <SokerOppslagProvider>
-          <StepWizardProvider>
-            <Head>
-              <title>Søknad om arbeidsavklaringspenger (AAP)</title>
-            </Head>
-            <Component {...pageProps} />
-          </StepWizardProvider>
+          <NavDecorator>
+            <StepWizardProvider>
+              <Head>
+                <title>Søknad om arbeidsavklaringspenger (AAP)</title>
+              </Head>
+              <Component {...pageProps} />
+            </StepWizardProvider>
+          </NavDecorator>
         </SokerOppslagProvider>
       </AppStateContextProvider>
     </IntlProvider>
