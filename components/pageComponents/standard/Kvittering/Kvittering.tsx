@@ -6,7 +6,7 @@ import { Download } from '@navikt/ds-icons';
 import { SuccessStroke } from '@navikt/ds-icons';
 import { useFeatureToggleIntl } from 'hooks/useFeatureToggleIntl';
 import { SøknadApiType } from 'pages/api/oppslag/soeknader';
-import { clientSideIsProd } from 'utils/environments';
+import { clientSideIsLabs, clientSideIsProd } from 'utils/environments';
 
 interface StudentProps {
   søker: SøkerView;
@@ -25,6 +25,11 @@ const getDownloadUrl = (journalpostId?: string) => {
 const Kvittering = ({ søker, kontaktinformasjon, søknad }: StudentProps) => {
   const { formatMessage, formatElement } = useFeatureToggleIntl();
 
+  const mineAapUrl = clientSideIsLabs()
+    ? process.env.NEXT_PUBLIC_MINE_AAP_URL
+    : clientSideIsProd()
+    ? 'https://nav.no/aap/mine-aap'
+    : 'https://aap-innsyn.dev.nav.no/aap/mine-aap';
   const dittNavUrl = clientSideIsProd()
     ? 'https://www.nav.no/person/dittnav/'
     : 'https://www.dev.nav.no/person/dittnav/';
@@ -47,9 +52,7 @@ const Kvittering = ({ søker, kontaktinformasjon, søknad }: StudentProps) => {
         <Alert variant="warning">
           <BodyShort spacing>
             Vi mangler dokumentasjon fra deg for å kunne behandle søknaden.{' '}
-            <Link
-              href={`${process.env.NEXT_PUBLIC_MINE_AAP_URL}/${søknad?.søknadId}/ettersendelse/`}
-            >
+            <Link href={`${mineAapUrl}/${søknad?.søknadId}/ettersendelse/`}>
               Her kan du ettersende dokumentasjon digitalt.
             </Link>
             . Ettersend dette til oss så raskt du kan.
@@ -96,7 +99,7 @@ const Kvittering = ({ søker, kontaktinformasjon, søknad }: StudentProps) => {
         {formatMessage('søknad.kvittering.lastNedSøknad')}
       </Link>
       <form action={dittNavUrl}>
-        <Button as={'a'} variant={'primary'} href={process.env.NEXT_PUBLIC_MINE_AAP_URL ?? ''}>
+        <Button as={'a'} variant={'primary'} href={mineAapUrl}>
           {formatMessage('søknad.kvittering.dittNavKnapp')}
         </Button>
       </form>
