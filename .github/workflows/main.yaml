@@ -40,6 +40,8 @@ jobs:
         run: cat .env.local
       - name: "client tests"
         run: "yarn test"
+      - name: "check diff on translations"
+        run: "yarn intl:diff"
       - name: "Bygg klient(yarn run build)"
         run: "yarn run build"
       - name: "Set up Docker Buildx"
