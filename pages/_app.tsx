@@ -11,8 +11,20 @@ import { StepWizardProvider } from 'context/stepWizardContextV2';
 import { initAmplitude } from 'utils/amplitude';
 import { AppStateContextProvider } from 'context/appStateContext';
 import Head from 'next/head';
+import { SUPPORTED_LOCALE } from 'lib/translations/locale';
+import { useRouter } from 'next/router';
+
+const getLocaleOrFallback = (locale?: string) => {
+  if (locale && SUPPORTED_LOCALE.includes(locale)) {
+    return locale;
+  }
+
+  return 'nb';
+};
+
 const CustomApp = ({ Component, pageProps }: AppProps) => {
-  const locale = 'nb';
+  const router = useRouter();
+  const locale = getLocaleOrFallback(router.locale);
 
   const currentMessages = useMemo(
     () => ({ ...messages[locale], ...flattenMessages({ applinks: links }) }),
