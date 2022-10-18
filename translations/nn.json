@@ -616,42 +616,42 @@
   },
   "fileInputErrors": {
     "unsupportedMediaType": "Filtypen er ikkje støtta. Last opp dokumentet i eit anna format (PDF, PNG, JPG eller heic).",
-    "fileTooLarge": "Éi eller fleire av filene du lasta opp, er større enn det som er tillate.",
-    "virus": "Last opp éi eller fleire fil med ein samla storleik på maks 50 MB.",
-    "passordbeskyttet": "Det er oppdaga virus på fila du prøver å laste opp. Last opp ei anna fil.",
-    "other": "Fila er sikra med passord og vil ikkje vere mogleg for ein saksbehandlar å lese. Opphev passordsikringa og prøv igjen"
+    "fileTooLarge": "Éi eller fleire av filene du lasta opp, er større enn det som er tillate. Last opp éi eller fleire fil med ein samla storleik på maks 50 MB.",
+    "virus": "Det er oppdaga virus på fila du prøver å laste opp. Last opp ei anna fil.",
+    "passordbeskyttet": "Fila er sikra med passord og vil ikkje vere mogleg for ein saksbehandlar å lese. Opphev passordsikringa og prøv igjen",
+    "other": "Opplastinga var mislukka. Prøv på nytt"
   },
   "answerOptions": {
     "jaEllerNei": {
-      "Ja": "Opplastinga var mislukka. Prøv på nytt",
-      "Nei": "Ja"
+      "Ja": "Ja",
+      "Nei": "Nei"
     },
     "relasjon": {
-      "FORELDER": "Nei",
-      "FOSTERFORELDER": "Forelder"
+      "FORELDER": "Forelder",
+      "FOSTERFORELDER": "Fosterforelder"
     }
   },
   "navigation": {
-    "next": "Fosterforelder",
-    "back": "Neste steg",
-    "send": "Førre steg",
-    "save": "Send søknad",
-    "cancel": "Hald fram seinare"
+    "next": "Neste steg",
+    "back": "Førre steg",
+    "send": "Send søknad",
+    "save": "Hald fram seinare",
+    "cancel": "Slett søknad"
   },
   "lagreModal": {
-    "heading": "Slett søknad",
-    "text": "Halde fram seinare",
-    "lagreButtonText": "Søknaden din blir lagra i 7 dagar, og du kan kome tilbake og halde fram der du slapp.",
-    "avbrytButtonText": "Hald fram seinare"
+    "heading": "Halde fram seinare",
+    "text": "Søknaden din blir lagra i 7 dagar, og du kan kome tilbake og halde fram der du slapp.",
+    "lagreButtonText": "Hald fram seinare",
+    "avbrytButtonText": "Avbryt"
   },
   "avbrytOgSlettModal": {
-    "heading": "Avbryt",
-    "avbrytOgSlettButtonText": "Vil du avbryte og slette søknaden?",
-    "avbrytButtonText": "Ja, avbryt og slett søknaden",
-    "sendNyButtonText": "Nei, ikkje avbryt og slett",
-    "lukkButtonText": "Send ny søknad"
+    "heading": "Vil du avbryte og slette søknaden?",
+    "avbrytOgSlettButtonText": "Ja, avbryt og slett søknaden",
+    "avbrytButtonText": "Nei, ikkje avbryt og slett",
+    "sendNyButtonText": "Send ny søknad",
+    "lukkButtonText": "Lukk"
   },
   "errorSummary": {
-    "title": "Lukk"
+    "title": "Du må rette opp i desse feila før du kan halde fram:"
   }
 }
