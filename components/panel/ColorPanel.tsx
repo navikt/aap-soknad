@@ -4,7 +4,7 @@ interface Props {
   children?: React.ReactChild | React.ReactChild[];
   className?: string;
   color?: 'grey';
-  padding: boolean;
+  padding?: boolean;
 }
 
 const ColorPanel = ({ children, className, color, padding = true }: Props) => {

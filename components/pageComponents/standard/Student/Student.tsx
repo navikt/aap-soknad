@@ -168,7 +168,7 @@ const Student = ({ onBackClick, onNext, defaultValues }: Props) => {
         </Radio>
       </RadioGroupWrapper>
       {erStudent === JaNeiAvbrutt.AVBRUTT && (
-        <ColorPanel>
+        <ColorPanel color={'grey'}>
           <RadioGroupWrapper
             name={`${STUDENT}.${KOMME_TILBAKE}`}
             legend={formatMessage(`søknad.${STUDENT}.${KOMME_TILBAKE}.legend`)}
