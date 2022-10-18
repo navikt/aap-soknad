@@ -20,6 +20,6 @@ env:
 - name: SOKNAD_API_AUDIENCE
   value: "dev-gcp:aap:soknad-api"
 - name: ENABLE_SENTRY
-  value: "false"
+  value: false
 externals:
   - "dekoratoren.dev.nav.no"
