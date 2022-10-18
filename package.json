@@ -64,6 +64,7 @@
     "jest-axe": "^6.0.0",
     "jest-css-modules-transform": "^4.3.0",
     "jest-environment-jsdom": "^29.0.3",
+    "json-diff": "^0.9.0",
     "msw": "^0.44.2",
     "patch-package": "^6.4.7",
     "prettier": "^2.5.1",
@@ -88,6 +89,7 @@
     "start": "next start",
     "lint": "next lint",
     "prepare": "husky install",
+    "intl:diff": "json-diff -k ./translations/nb.json ./translations/nn.json",
     "postinstall": "patch-package"
   },
   "husky": {
