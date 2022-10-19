@@ -122,8 +122,8 @@ export const StepSelectTravelPeriod = ({
   const { stepList } = useStepWizard();
   const {
     watch,
-    control,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = useForm<FieldValues>({
     resolver: yupResolver(schema),
@@ -151,13 +151,13 @@ export const StepSelectTravelPeriod = ({
       <DatePickerWrapper
         name={FRA_DATO}
         label={formatMessage('utland.periode.fraDato.label')}
-        control={control}
+        setValue={setValue}
         error={errors?.[FRA_DATO]?.message}
       />
       <DatePickerWrapper
         name={TIL_DATO}
         label={formatMessage('utland.periode.tilDato.label')}
-        control={control}
+        setValue={setValue}
         error={errors?.[TIL_DATO]?.message}
       />
     </SoknadFormWrapper>

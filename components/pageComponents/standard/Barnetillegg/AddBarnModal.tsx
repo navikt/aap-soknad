@@ -21,7 +21,7 @@ import { ModalButtonWrapper } from 'components/ButtonWrapper/ModalButtonWrapper'
 import { useFeatureToggleIntl } from 'hooks/useFeatureToggleIntl';
 import { GRUNNBELØP } from './Barnetillegg';
 import DatePickerWrapper from 'components/input/DatePickerWrapper/DatePickerWrapper';
-import { add, sub } from 'date-fns';
+import { add, sub, subYears } from 'date-fns';
 import { formatDate } from 'utils/date';
 
 interface Props {
@@ -38,6 +38,8 @@ export enum Relasjon {
 }
 
 const NAVN = 'navn';
+
+const ALDER_BARN_ÅR = 18;
 
 export const getAddBarnSchema = (formatMessage: (id: string, options?: {}) => string) => {
   return yup.object().shape({
@@ -59,7 +61,7 @@ export const getAddBarnSchema = (formatMessage: (id: string, options?: {}) => st
         formatMessage('søknad.barnetillegg.leggTilBarn.modal.fødselsdato.validation.required')
       )
       .min(
-        sub(new Date(), { years: 18 }),
+        sub(new Date(), { years: ALDER_BARN_ÅR }),
         formatMessage('søknad.barnetillegg.leggTilBarn.modal.fødselsdato.validation.min')
       )
       .max(
@@ -150,9 +152,11 @@ export const AddBarnModal = ({ showModal, onCloseClick, onSaveClick, barn }: Pro
           />
 
           <DatePickerWrapper
-            control={control}
+            setValue={setValue}
             label={formatMessage('søknad.barnetillegg.leggTilBarn.modal.fødselsdato.label')}
             name="fødseldato"
+            fromDate={subYears(new Date(), ALDER_BARN_ÅR)}
+            toDate={new Date()}
             error={errors?.fødseldato?.message}
           />
 
