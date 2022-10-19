@@ -5,13 +5,21 @@ env:
   value: "https://dekoratoren.dev.nav.no"
 - name: DECORATOR_ENV
   value: "dev"
-- name: LOGINSERVICE_URL
-  value: "https://loginservice.dev.nav.no/login"
 - name: APP_URL
   value: "https://aap-soknad.dev.nav.no"
 - name: SOKNAD_API_URL
   value: "https://aap-soknad-api.dev.intern.nav.no"
 - name: SOKNAD_API_AUDIENCE
   value: "dev-gcp:aap:soknad-api"
+- name: RUNTIME_ENVIRONMENT
+  value: "dev"
+- name:  DECORATOR_ENV
+  value: "dev"
+- name: SOKNAD_API_URL
+  value: "http://soknad-api"
+- name: SOKNAD_API_AUDIENCE
+  value: "dev-gcp:aap:soknad-api"
+- name: ENABLE_SENTRY
+  value: "disabled"
 externals:
   - "dekoratoren.dev.nav.no"

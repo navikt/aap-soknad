@@ -39,7 +39,7 @@ const nextConfig = {
   },
 };
 
-if (process.env.ENABLE_SENTRY === 'true') {
+if (process.env.ENABLE_SENTRY === 'enabled') {
   console.log('sentry enabled', process.env.ENABLE_SENTRY);
   module.exports = withSentryConfig(nextConfig, sentryWebpackPluginOptions);
 } else {

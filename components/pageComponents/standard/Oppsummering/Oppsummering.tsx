@@ -71,7 +71,6 @@ const Oppsummering = ({
       onNext={handleSubmit(async (data) => {
         setNextIsLoading(true);
         await onSubmitSoknad(data);
-        setNextIsLoading(false);
       })}
       nextIsLoading={nextIsLoading}
       onBack={() => onBackClick()}

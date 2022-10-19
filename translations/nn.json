@@ -1,0 +1,657 @@
+{
+  "test": "Test",
+  "søknad": {
+    "student": {
+      "title": "Student",
+      "erStudent": {
+        "legend": "Er du student?",
+        "description": "Du blir rekna som student dersom du tek eit studium som gir rett til lån frå Statens lånekasse for utdanning. Du treng ikkje å ha fått lån/stipend.",
+        "ja": "Ja, heilt eller delvis",
+        "avbrutt": "Ja, men eg avbraut studiet heilt grunna sjukdom",
+        "nei": "Nei",
+        "required": "Du må svare på om du er student."
+      },
+      "kommeTilbake": {
+        "legend": "Har du planar om å halde fram studiet?",
+        "required": "Du må svare på om du har planar om å halde fram studiet."
+      },
+      "guide": {
+        "guide1": "Dersom du er student, gjeld det ulike reglar avhengig av om du held fram på studiet eller avbryt det heilt."
+      },
+      "vedlegg": {
+        "title": "Du må leggje ved følgjande:",
+        "name": "Stadfesting av avbrote studie",
+        "description": "Stadfesting frå studiestaden på kva dato studiet blei avbrote.",
+        "lastOppSenere": "Dokumenta lastar du opp seinare i søknaden. Du kan også ettersende vedlegg."
+      }
+    },
+    "pagetitle": "Søknad om arbeidsavklaringspengar (AAP)",
+    "veiledning": {
+      "title": "Søknad om arbeidsavklaringspengar (AAP)",
+      "guide": {
+        "title": "Hei, {name}!",
+        "text1": "Eg er her for å rettleie deg gjennom søknaden. Svara dine blir lagra undervegs, slik at du trygt kan gå tilbake og endre dei.",
+        "text2": "Arbeidsavklaringspengar blir ofte forkorta med «AAP».",
+        "text3": "AAP skal sikre deg inntekt når sjukdom/skade gjer at du treng å få avklart moglegheitene dine til å jobbe."
+      },
+      "søknadsdato": {
+        "title": "Søknadsdato er viktig for utbetaling av AAP",
+        "text1": "Vanlegvis kan du få AAP tidlegast frå den dagen du søkjer.",
+        "text2": "Dersom du får sjukepengar, blir AAP vanlegvis gitt frå første dag etter at sjukepengane er avvikla.",
+        "text3": "Du kan søkje om AAP sjølv om du ikkje har fått sjukepengar."
+      },
+      "accordionHvis": {
+        "title": "Dersom du får AAP, gjeld følgjande",
+        "bulletPointOppfølging": "Du har rett til oppfølging frå NAV",
+        "bulletPointPlikt": "Du har plikt til å bidra til å avklare om du kan behalde eller kome i jobb",
+        "bulletPointMeldekort": "Du må sende inn meldekort kvar 14. dag",
+        "bulletPointTilbakebetaling": "Dersom eg får pengar eg ikkje har rett på, er eg førebudd på å betale dei tilbake.",
+        "bulletPointBeskjed": "Du pliktar å gi beskjed dersom situasjonen din endrar seg"
+      },
+      "accordionInformasjon": {
+        "title": "Vi vil innhente og bruke informasjon om deg",
+        "informasjonDuOppgir": "I tillegg til informasjonen du oppgir i søknaden, hentar vi følgjande:",
+        "bulletPointPersoninformasjon": "personinformasjon om deg og barna dine frå Folkeregisteret",
+        "bulletPontSkatt": "inntektsinformasjon frå Skatteetaten",
+        "bulletpointHelse": "helseinformasjon frå lege/behandlar for å kartleggje arbeidsevna di",
+        "bulletPointArbeid": "opplysningar om arbeidsforholdet ditt frå Arbeidsgivar- og arbeidstakarregisteret",
+        "bulletPointAndreOpplysninger": "opplysningar vi har om deg frå før",
+        "folketrygdloven": "Dette gjer vi for å vurdere om du har rett til AAP etter folketrygdlova kapittel 11.",
+        "bulletPointDeler": "Vi deler opplysningar om kva du får utbetalt i AAP, med Skatteetaten og Statistisk sentralbyrå",
+        "bulletPointForbedre": "Vi kan bruke opplysningar om deg for å førebu tenestene våre",
+        "personopplysningerNavNo": "Du kan lese meir om korleis NAV behandlar personopplysningar på nav.no (blir opna i ny fane)"
+      },
+      "veiledningConfirm": {
+        "title": "Vi stolar på deg",
+        "label": "Eg vil svare så godt eg kan på spørsmåla i søknaden.",
+        "validation": {
+          "required": "Du må stadfeste at du vil gi så rette opplysningar som mogleg."
+        }
+      },
+      "startSøknad": "Start søknad",
+      "avbrytSøknad": "Avbryt søknad"
+    },
+    "medlemskap": {
+      "title": "Bustad og jobb",
+      "guide": {
+        "text": "For å finne ut om du oppfyller krava til medlemskap i folketrygda, må vi å vite om du har budd eller jobba i utlandet."
+      },
+      "harBoddINorgeSiste5År": {
+        "label": "Har du budd samanhengande i Noreg dei fem siste åra?",
+        "readMore": {
+          "title": "Kva vil det seie å ha «budd samanhengande”»?",
+          "text": "Dette betyr at du har opphalde deg i Noreg mesteparten av kvart av desse åra."
+        },
+        "validation": {
+          "required": "Du må svare på om du har budd samanhengande i Noreg dei fem siste åra."
+        }
+      },
+      "arbeidUtenforNorge": {
+        "label": "Har du jobba utanfor Noreg dei fem siste åra?",
+        "readMore": {
+          "title": "Blir ytingar frå utanlandske styresmakter rekna som jobb i utlandet?",
+          "text": "Dersom du har fått ytingar (t.d. dagpengar, sjukepengar og foreldrepengar) frå utanlandske styresmakter, blir dette rekna som jobb utanfor Noreg. Pensjon blir ikkje rekna som erstatning for jobb."
+        },
+        "validation": {
+          "required": "Du må svare på om du har jobba utanfor Noreg dei fem siste åra."
+        }
+      },
+      "harArbeidetINorgeSiste5År": {
+        "label": "Har du jobba samanhengande i Noreg dei fem siste åra?",
+        "readMore": {
+          "title": "Blir ytingar frå norske styresmakter rekna som jobb?",
+          "text": "Som «jobb» reknar ein også offentlege ytingar du har fått som erstatning for arbeid (t.d. dagpengar, sjukepengar og foreldrepengar). Pensjon blir ikkje rekna som erstatning for jobb."
+        },
+        "validation": {
+          "required": "Du må svare på om du har jobba samanhengande i Noreg dei fem siste åra."
+        }
+      },
+      "iTilleggArbeidUtenforNorge": {
+        "label": "Har du i tillegg til jobb i Noreg, jobba i eit anna land dei fem siste åra?",
+        "description": "Dersom du har jobba i eit anna land, kan du i enkelte tilfelle få meir utbetalt i AAP. NAV bruker denne inntekta berre viss det er til fordel for deg.",
+        "readMore": {
+          "title": "Blir ytingar frå utanlandske styresmakter rekna som jobb i eit anna land?",
+          "text": "Dersom du har fått ytingar (t.d. dagpengar, sjukepengar og foreldrepengar) frå utanlandske styresmakter, blir dette rekna som jobb utanfor Noreg. Pensjon blir ikkje rekna som erstatning for jobb."
+        },
+        "validation": {
+          "required": "Du må svare på om du i tillegg til jobb i Noreg, har jobba i eit anna land dei fem siste åra."
+        }
+      },
+      "utenlandsperiode": {
+        "perioder": {
+          "title": {
+            "ARBEID": "Dine periodar med jobb utanfor Noreg",
+            "BODD": "Dine utanlandsopphald"
+          }
+        },
+        "boddINorgeArbeidUtenforNorge": {
+          "validation": {
+            "required": "Du har svart at du har jobba utanfor Noreg dei fem siste åra. Du må difor leggje til minst éin periode med jobb utanfor Noreg."
+          }
+        },
+        "ogsåArbeidUtenforNorge": {
+          "validation": {
+            "required": "Du har svart at du også har jobba utanfor Noreg dei fem siste åra. Du må difor leggje til minst éin periode med jobb utanfor Noreg."
+          }
+        },
+        "arbeidINorge": {
+          "validation": {
+            "required": "Du har svart at du ikkje har jobba samanhengande i Noreg dei fem siste åra. Du må difor leggje til minst éin periode med utanlandsopphald."
+          }
+        },
+        "modal": {
+          "title": {
+            "ARBEID": "Legg til periode med jobb utanfor Noreg",
+            "BODD": "Legg til utanlandsopphald"
+          },
+          "ingress": {
+            "ARBEID": "Oppgi i kva periodar i løpet av dei fem siste åra du har jobba utanfor Noreg. Oppgi også kva land du var i.",
+            "BODD": "Oppgi i kva periodar du har budd, studert eller jobba utanfor Noreg. Oppgi også kva land du var i.",
+            "BODD_2": "Ta med alle periodar sidan du fylte 16 år."
+          },
+          "land": {
+            "label": {
+              "ARBEID": "Kva land jobba du i?",
+              "BODD": "Kva land var du i?"
+            },
+            "validation": {
+              "required": "Oppgi land"
+            }
+          },
+          "periode": {
+            "label": {
+              "ARBEID": "I kva periode jobba du der?",
+              "BODD": "I kva periode var du der?"
+            },
+            "fraDato": {
+              "label": "Frå og med dato (dd.mm.åååå)",
+              "validation": {
+                "required": "Oppgi frå-dato"
+              }
+            },
+            "tilDato": {
+              "label": "Til og med dato (dd.mm.åååå)",
+              "validation": {
+                "required": "Oppgi til-dato",
+                "fraDatoEtterTilDato": "Frå-datoen må vere eldre enn til-datoen. Fyll inn slik: dd.mm.åååå."
+              }
+            }
+          },
+          "iArbeid": {
+            "label": "Jobba du i dette landet i denne perioden?"
+          },
+          "utenlandsId": {
+            "label": "ID-nummer/personnummer for landet du har jobba i (valfritt)"
+          },
+          "buttons": {
+            "lagre": "Lagre",
+            "avbryt": "Avbryt"
+          }
+        }
+      }
+    },
+    "helseopplysninger": {
+      "title": "Kontaktperson for helseopplysningar",
+      "guide": {
+        "text1": "NAV hentar helseopplysningar frå fastlegen i samband med behandlinga av søknaden din. Ved behov kan vi også hente inn opplysningar frå andre behandlarar eller legar.",
+        "text2": "Dersom vi har tilstrekkeleg med opplysningar om deg frå før, innhentar vi ikkje legeerklæring."
+      },
+      "erRegistrertFastlegeRiktig": {
+        "label": "Er informasjonen om fastlegen din rett?",
+        "alertInfo": "Takk for at du seier frå om at informasjonen er feil. Fyll ut under «Legg til lege/behandlar» kva lege vi kan kontakte for å få helseopplysningar om deg. Du kan byte fastlege på helsenorge.no. Du kan gjere dette etter at du har sendt inn AAP-søknaden.",
+        "required": "Du må svare på om informasjonen din om registrert behandlar er rett."
+      },
+      "registrertFastlege": {
+        "title": "Din registrerte fastlege",
+        "ingenFastlege": "Vi finn ikkje nokon informasjon om fastlege registrert på deg. På helsenorge.no kan du registrere helsekontakter, finne fastlege eller setje deg på venteliste. Du kan gjere dette etter at du har sendt AAP-søknaden",
+        "navn": "Namn",
+        "legekontor": "Legekontor",
+        "adresse": "Adresse",
+        "telefon": "Telefon"
+      },
+      "annenBehandler": {
+        "title": "Annan lege eller behandlar",
+        "description": "Dersom du har ein annan lege eller behandlar du vil at NAV skal kunne kontakte for helseopplysningar, kan du leggje til vedkomande her.",
+        "addBehandlerButton": "Legg til lege/behandlar",
+        "accessibleButtonTitle": "Legg til"
+      },
+      "dineBehandlere": {
+        "navn": "Namn",
+        "legekontor": "Legekontor",
+        "adresse": "Adresse",
+        "title": "Dine legar/behandlarar",
+        "telefon": "Telefon",
+        "editButton": "Endre informasjon",
+        "slettButton": "Slett behandlar"
+      },
+      "modal": {
+        "title": "Legg til annan lege eller behandlar",
+        "fornavn": {
+          "label": "Fornamn",
+          "validation": {
+            "required": "Oppgi fornamn."
+          }
+        },
+        "etternavn": {
+          "label": "Etternamn",
+          "validation": {
+            "required": "Oppgi etternamn."
+          }
+        },
+        "legekontor": {
+          "label": "Legekontor (valfritt)"
+        },
+        "gateadresse": {
+          "label": "Gateadresse (valfritt)"
+        },
+        "postnummer": {
+          "label": "Postnummer (valfritt)"
+        },
+        "poststed": {
+          "label": "Poststad (valfritt)"
+        },
+        "telefonnummer": {
+          "label": "Telefonnummer (valfritt)"
+        },
+        "buttons": {
+          "lagre": "Lagre",
+          "avbryt": "Avbryt",
+          "slett": "Slett"
+        }
+      }
+    },
+    "andreUtbetalinger": {
+      "title": "Utbetalingar",
+      "guide": {
+        "text": "Dersom du får utbetalingar frå NAV, arbeidsgivar eller andre, kan AAP-en din bli redusert. Vi spør om dette fordi du ikkje alltid har krav på å få fleire typar utbetalingar samstundes. Vi prøver å unngå feilutbetalingar."
+      },
+      "lønn": {
+        "label": "Har du fått eller skal du få ekstra utbetalingar frå arbeidsgivar?",
+        "readMore": {
+          "title": "Kva vil «ekstra utbetalingar» seie?",
+          "text": "Dette kan til dømes vere sluttpakke, etterløn eller andre gode. Svar «Nei» dersom du berre får vanleg løn eller feriepengar."
+        },
+        "validation": {
+          "required": "Kryss av for om du har fått eller skal få ekstra utbetalingar frå arbeidsgivar."
+        }
+      },
+      "stønad": {
+        "label": "Kryss av for utbetalingar du får, eller nyleg har søkt om:",
+        "values": {
+          "økonomiskSosialhjelp": "Økonomisk sosialhjelp",
+          "omsorgsstønad": "Omsorgsstønad (tidlegare omsorgsløn)",
+          "introduksjonsStønad": "Introduksjonsstønad (introduksjonsprogrammet)",
+          "kvalifiseringsstønad": "Kvalifiseringsstønad (kvalifiseringsprogrammet)",
+          "verv": "Godtgjersle eller løn for verv",
+          "utland": "Ytingar frå utanlandske trygdemakter",
+          "afp": "Avtalefesta pensjon (AFP)",
+          "stipend": "Sjukestipend frå Lånekassa",
+          "lån": "Lån frå Lånekassa",
+          "nei": "Ingen av desse"
+        },
+        "validation": {
+          "required": "Du må krysse av for om du får eller nyleg har søkt om nokon av utbetalingane over."
+        }
+      },
+      "hvemBetalerAfp": {
+        "label": "Kven betaler ut avtalefesta pensjon (AFP)?"
+      },
+      "vedlegg": {
+        "omsorgsstønad": "Kopi av avtalen om omsorgsstønad frå kommunen din",
+        "utlandsStønad": "Dokumentasjon på ytingar frå utanlandske trygdemakter",
+        "andreGoder": "Dokumentasjon på ekstra utbetalingar frå arbeidsgivar (t.d. kopi av inngått sluttpakke, avtale om etterløn eller andre gode). Både det utbetalte beløpet og perioden det gjeld, bør vere dokumentert",
+        "sykeStipend": "Kopi av vedtaket eller søknaden om sjukestipend frå Lånekassa",
+        "lån": "Dokumentasjon på studielån frå Lånekassa"
+      },
+      "alert": {
+        "leggeVedTekst": "Du må leggje ved følgjande:",
+        "lasteOppVedleggTekst": "Dette lastar du opp seinare i søknaden. Du kan også ettersende vedlegg."
+      }
+    },
+    "vedlegg": {
+      "title": "Vedlegg",
+      "guide": {
+        "text1": "Du kan tidlegast få AAP frå og med den dagen vi får søknaden din. Det kan difor vere lurt å sende søknaden sjølv om du på noverande tidspunkt ikkje har alle vedlegga vi ber om.",
+        "text2": "Dersom du skal ettersende vedlegg, må du sende desse innan 14 dagar. Du kan ettersende anten digitalt eller per post. Treng du meir tid, kan du be om å få forlenga fristen. Dette kan du gjere via nav.no eller ved å ringje oss etter at søknaden er send inn."
+      },
+      "ingenVedlegg": {
+        "title": "Ut frå svara dine har vi ikkje registrert vedlegg som må lastast opp.",
+        "readMore": {
+          "title": "Kan eg laste opp andre vedlegg?",
+          "text": "Dersom du har meir du ønskjer å leggje ved, kan du laste det opp her."
+        }
+      },
+      "harVedlegg": {
+        "title": "Ut frå det du har svart i søknaden, må du leggje ved følgjande:"
+      },
+      "vedleggPåPapir": {
+        "text": "Dersom du har vedlegg på papir og ikkje har skannar, kan du til dømes ta bilete av dokumentet med mobiltelefon.",
+        "readMore": {
+          "title": "Slik tek du eit godt bilete av dokumentet",
+          "alert": {
+            "takePictureTitle": "Slik tek du eit godt bilete",
+            "bulletPointTakePicture1": "Hald mobilen eller kameraet direkte over dokumentet.",
+            "bulletPointTakePicture2": "Dokumentet skal fylle heile biletet. Biletet skal ikkje innehalde annan dokumentasjon eller gjenstandar.",
+            "bulletPointTakePicture3": "Biletet må innehalde all teksten i dokumentet. Dersom dokumentet er på meir enn éi side, bør du laste opp fleire bilete.",
+            "checkPictureTitle": "Etter at du har teke biletet, sjekkar du følgjande før du lastar det opp:",
+            "bulletPointCheckPicture1": "Dokumentet har rett retning.",
+            "bulletPointCheckPicture2": "Teksten i dokumentet er godt leseleg.",
+            "bulletPointCheckPicture3": "Biletet er godt opplyst, utan skuggar.",
+            "examplesPicturesTitle": "Døme på bra og dårlege bilete av dokument",
+            "exampleLabelGood": "Bra",
+            "exampleLabelBad": "Dårleg",
+            "exampleGood": "Dokumentet fyller heile biletet",
+            "exampleKeystone": "Biletet er ikkje teken ovanfrå",
+            "exampleHorizontal": "Biletet har ikkje rett retning",
+            "exampleShaddow": "Biletet har skugge på dokumentet"
+          }
+        }
+      }
+    },
+    "oppsummering": {
+      "title": "Oppsummering",
+      "guide": {
+        "text": "Alt du har fylt inn, er no lagra. Her kan du sjå over at alt er rett, og eventuelt endre opplysningar, før du sender inn søknaden."
+      },
+      "toggle": {
+        "open": "Opne alle",
+        "close": "Lukk alle"
+      },
+      "contactInformation": {
+        "title": "Om deg",
+        "navn": "Namn",
+        "personnummer": "Personnummer",
+        "adresse": {
+          "label": "Folkeregistrert adresse",
+          "readMore": {
+            "title": "Kva gjer eg viss eg har ei anna adresse?",
+            "text": "Dersom adressa ikkje stemmer, kan du endre henne i <a>Folkeregisteret (blir opna i ny fane).</a>"
+          }
+        },
+        "telefonnummer": {
+          "label": "Telefonnummer",
+          "readMore": {
+            "title": "Kva gjer eg viss eg har eit anna telefonnummer?",
+            "text": "Dersom telefonnummeret ikkje stemmer, kan du endre det i <a>Kontakt- og reservasjonsregisteret (blir opna i ny fane).</a>"
+          }
+        },
+        "epost": {
+          "label": "E-postadresse",
+          "readMore": {
+            "title": "Kva gjer eg viss eg har ei anna e-postadresse?",
+            "text": "Dersom e-postadressa ikkje stemmer, kan du endre henne i <a>Kontakt- og reservasjonsregisteret (blir opna i ny fane).</a>"
+          }
+        }
+      },
+      "medlemskap": {
+        "title": "Medlem av folketrygda",
+        "editText": "Endre opplysningar om kor du har budd og jobba",
+        "utenlandsopphold": {
+          "title": "Utanlandsopphald",
+          "land": "Land",
+          "periode": "Periode",
+          "jobbetIPerioden": "Jobba i perioden"
+        }
+      },
+      "yrkesskade": {
+        "title": "Yrkesskade",
+        "editText": "Endre opplysningar om yrkesskade"
+      },
+      "helseopplysninger": {
+        "title": "Kontaktperson for helseopplysningar",
+        "editText": "Endre informasjon om kontaktperson for helseopplysningar",
+        "fastlege": "Fastlege",
+        "behandler": "Behandlar",
+        "informasjonOmFastlege": "Er informasjonen om fastlegen din rett?"
+      },
+      "barnetillegg": {
+        "title": "Barnetillegg",
+        "editText": "Endre opplysningar om barn"
+      },
+      "student": {
+        "title": "Student",
+        "editText": "Endre på om du er student"
+      },
+      "utbetalinger": {
+        "title": "Utbetalingar",
+        "editText": "Endre opplysningar om utbetalingar"
+      },
+      "vedlegg": {
+        "title": "Vedlegg",
+        "editText": "Endre vedlegg"
+      },
+      "confirmation": {
+        "title": "Vi stolar på deg",
+        "text": "Eg har lest all informasjonen eg har fått i søknaden, og stadfestar at eg har gitt korrekte opplysningar."
+      }
+    },
+    "barnetillegg": {
+      "title": "Barnetillegg",
+      "guide": {
+        "text1": "Dersom du forsørgjer barn under 18 år, får du utbetalt litt meir AAP. Dette blir kalla barnetillegg.",
+        "text2": "Du kan få barnetillegg sjølv om barnet ikkje bur saman med deg. Barnetillegg får du også for adoptivbarn, fosterbarn og andre barn du har forsørgjaransvar for."
+      },
+      "registrerteBarn": {
+        "navn": "Namn",
+        "title": "Barn du er registrert med:",
+        "fødselsnummer": "Fødselsnummer/D-nummer",
+        "fødselsdato": "Fødselsdato",
+        "barnepensjon": {
+          "label": "Får barnet barnepensjon?",
+          "readMore": {
+            "title": "Kvifor spør vi om dette?",
+            "text": "Dersom barnet får barnepensjon, har du ikkje rett på barnetillegg for barnet."
+          }
+        },
+        "harInntekt": {
+          "label": "Har barnet ei årleg inntekt over {grunnbeløp}kr?",
+          "readMore": {
+            "title": "Kvifor spør vi om dette?",
+            "text": "Dersom barnet har ei årleg inntekt over {grunnbeløp}kr ({grunnbeløp}kr = 1G), har du vanlegvis ikkje rett på barnetillegg for barnet."
+          }
+        }
+      },
+      "manuelleBarn": {
+        "title": "Barn du har lagt til:",
+        "fødselsnummer": "Fødselsnummer/D-nummer",
+        "fødselsdato": "Fødselsdato",
+        "erForelder": "Du er forelder til barnet",
+        "erFosterforelder": "Du er fosterforelder til barnet",
+        "mottarBarnepensjon": "Barnet får barnepensjon",
+        "mottarIkkeBarnepensjon": "Barnet får ikkje barnepensjon",
+        "inntektOver1G": "Barnet har ei årleg inntekt over {grunnbeløp}kr",
+        "inntektIkkeOver1G": "Barnet har ikkje ei årleg inntekt over {grunnbeløp}kr",
+        "redigerBarn": "Endre informasjon",
+        "slettBarn": "Slett barn"
+      },
+      "leggTilBarn": {
+        "description": "Du kan leggje til adoptivbarn, fosterbarn og andre barn under 18 år du har forsørgjaransvar for.",
+        "buttonText": "Legg til barn",
+        "modal": {
+          "title": "Legg til barn",
+          "description": "Du kan leggje til adoptivbarn, fosterbarn og andre barn under 18 år du har forsørgjaransvar for.",
+          "navn": {
+            "fornavn": {
+              "label": "Fornamn og mellomnamn",
+              "validation": {
+                "required": "Du må fylle inn fornamnet og mellomnamnet til barnet."
+              }
+            },
+            "etternavn": {
+              "label": "Etternamn",
+              "validation": {
+                "required": "Du må fylle inn etternamnet til barnet."
+              }
+            }
+          },
+          "fødselsnummer": {
+            "label": "Fødselsnummer/D-nummer",
+            "validation": {
+              "required": "Du må fylle inn fødselsnummeret/D-nummeret til barnet.",
+              "numberCharacters": "Fødselsnummeret/D-nummeret må bestå av 11 siffer."
+            }
+          },
+          "fødselsdato": {
+            "label": "Fødselsdato",
+            "validation": {
+              "required": "Du må fylle inn fødselsdatoen til barnet.",
+              "min": "Du kan ikkje få barnetillegg for barn over 18 år. Dersom barnet er under 18 år, må du rette opp fødselsdatoen.",
+              "max": "Fødselsdatoen til barnet kan ikkje vere etter dags dato. Vel ein fødselsdato før eller lik dags dato"
+            }
+          },
+          "relasjon": {
+            "label": "Kva relasjon har du til barnet?",
+            "validation": {
+              "required": "Du må svare på kva relasjon du har til barnet."
+            }
+          },
+          "harInntekt": {
+            "label": "Har barnet ei årleg inntekt over {grunnbeløp}kr?",
+            "readMore": {
+              "title": "Kvifor spør vi om dette?",
+              "text": "Dersom barnet har ei årleg inntekt over {grunnbeløp}kr ({grunnbeløp}kr = 1G), har du vanlegvis ikkje rett på barnetillegg for barnet."
+            },
+            "validation": {
+              "required": "Du må svare på om barnet har ei årleg inntekt over {grunnbeløp}kr"
+            }
+          },
+          "buttons": {
+            "lagre": "Lagre",
+            "avbryt": "Avbryt",
+            "slett": "Slett"
+          }
+        }
+      },
+      "alert": {
+        "leggeVedTekst": "Du må leggje ved følgjande",
+        "bulletPointVedleggForelder": "Stadfesting på at du er forelder til barnet, og frå når (fødselstidspunkt eller tidspunkt for adopsjon). Dette kan til dømes vere fødselsattest eller adopsjonsdokument.",
+        "bulletPointVedleggFosterforelder": "Dokumentasjon på at du er fosterforelder til barnet, og frå når. Dette kan til dømes vere ei stadfesting frå barneverntenesta.",
+        "lasteOppVedleggTekst": "Dette lastar du opp seinare i søknaden. Du kan også ettersende vedlegg.",
+        "barneTillegg": {
+          "title": "I følgjande tilfelle har du ikkje rett på barnetillegg:",
+          "bulletpoint1": "Barnet får barnepensjon.",
+          "bulletpoint2": "Barnet har ei årleg inntekt som er høgare enn grunnbeløpet i folketrygda.",
+          "bulletpoint3": "Barnet oppheld seg utanfor EØS i over 90 dagar i løpet av ein periode på 12 månader.",
+          "bulletpoint4": "Barnet er busett utanfor EØS."
+        }
+      }
+    },
+    "yrkesskade": {
+      "title": "Yrkesskade",
+      "guide": {
+        "text": "Dersom arbeidsevna din er nedsett grunna yrkesskade eller yrkessjukdom, blir saka di behandla etter andre reglar. Dette kan gi deg fordelar."
+      },
+      "harDuYrkesskade": {
+        "label": "Har du ein yrkessjukdom eller yrkesskade som påverkar kor mykje du kan jobbe?",
+        "readMore": {
+          "title": "Kva blir rekna som yrkesskade eller yrkessjukdom?",
+          "text1": "Ein yrkesskade er å forstå som ein skade du har fått grunna ei arbeidsulukke.",
+          "text2": "Yrkessjukdom vil seie sjukdom du har fått grunna skadeleg påverknad frå arbeidsmiljøet. Sjukdommen må i tillegg vere nemnd i <a>forskrift om yrkessjukdomar (blir opna i ny fane)</a>."
+        },
+        "validation": {
+          "required": "Du må svare på om du har ein yrkesskade eller yrkessjukdom."
+        }
+      },
+      "alert": {
+        "navVilSjekke": "NAV vil sjekke om yrkesskaden/yrkessjukdommen din er",
+        "bulletPointGodkjent": "godkjend av NAV",
+        "bulletPointArbeidsevne": "heilt eller delvis årsak til at arbeidsevna di er nedsett"
+      }
+    },
+    "kvittering": {
+      "title": "Takk for søknaden, {namn}",
+      "alert": {
+        "text": "Vi har nå fått søknaden din om AAP. Saka din ligg inne til behandling hos NAV."
+      },
+      "saksbehandlingstid": "<a>Du kan sjekke forventa saksbehandlingstid på nav.no/saksbehandlingstid.</a>",
+      "bekreftelse": {
+        "title": "Vi sender deg i tillegg ei stadfesting på",
+        "sms": "SMS",
+        "epost": "e-post"
+      },
+      "lastNedSøknad": "Last ned søknaden som PDF-fil",
+      "dittNavKnapp": "Følg saka på Mine Arbeidsavklaringspengar"
+    },
+    "ettersendelseFrist": "Du kan ettersende dette innan 14 dagar per post eller digitalt. Du kan også levere dette på ditt lokale NAV-kontor"
+  },
+  "utland": {
+    "title": "Søknad om Arbeidsavklaringspengar (AAP) utland",
+    "veiledning": {
+      "guide": {
+        "text": "Du treng ikkje søkje dersom du er EU/EØS-borgar eller sveitsisk statsborgar og skal opphalde deg innanfor EU/EØS eller Sveits."
+      }
+    },
+    "land": {
+      "guide": {
+        "text": "Du må som hovudregel opphalde deg i Noreg eller eit anna EU/EØS-land for å få AAP. Viss du er statsborgar i eit EU/EØS-land, må du søkje om å få AAP i ein avgrensa periode dersom du oppheld deg utanfor eit EU/EØS-land. Ved utanlandsopphald må du må sørgje for at du kan gjennomføre den aktiviteten du har avtalt med NAV."
+      },
+      "select": {
+        "label": "Landet du skal opphalde deg i",
+        "required": "Vel eit land."
+      }
+    },
+    "periode": {
+      "fraDato": {
+        "label": "Frå-dato",
+        "required": "Vel ein dato."
+      },
+      "tilDato": {
+        "label": "Til-dato",
+        "required": "Vel ein dato.",
+        "afterfromdate": "Til-datoen må vere etter frå-datoen"
+      }
+    },
+    "oppsummering": {
+      "title": "Oppsummering",
+      "bekreftelse": {
+        "label": "Eg stadfestar at utanlandsopphaldet ikkje er til hinder for avtalt aktivitet som behandling, arbeidsretta tiltak eller oppfølging frå NAV",
+        "required": "Kryss av for å stadfeste."
+      }
+    },
+    "kvittering": {
+      "guide": {
+        "text": "Takk, søknaden er motteken. Vi tek oss av resten."
+      }
+    }
+  },
+  "fileInputErrors": {
+    "unsupportedMediaType": "Filtypen er ikkje støtta. Last opp dokumentet i eit anna format (PDF, PNG, JPG eller heic).",
+    "fileTooLarge": "Éi eller fleire av filene du lasta opp, er større enn det som er tillate. Last opp éi eller fleire fil med ein samla storleik på maks 50 MB.",
+    "virus": "Det er oppdaga virus på fila du prøver å laste opp. Last opp ei anna fil.",
+    "passordbeskyttet": "Fila er sikra med passord og vil ikkje vere mogleg for ein saksbehandlar å lese. Opphev passordsikringa og prøv igjen",
+    "other": "Opplastinga var mislukka. Prøv på nytt"
+  },
+  "answerOptions": {
+    "jaEllerNei": {
+      "Ja": "Ja",
+      "Nei": "Nei"
+    },
+    "relasjon": {
+      "FORELDER": "Forelder",
+      "FOSTERFORELDER": "Fosterforelder"
+    }
+  },
+  "navigation": {
+    "next": "Neste steg",
+    "back": "Førre steg",
+    "send": "Send søknad",
+    "save": "Hald fram seinare",
+    "cancel": "Slett søknad"
+  },
+  "lagreModal": {
+    "heading": "Halde fram seinare",
+    "text": "Søknaden din blir lagra i 7 dagar, og du kan kome tilbake og halde fram der du slapp.",
+    "lagreButtonText": "Hald fram seinare",
+    "avbrytButtonText": "Avbryt"
+  },
+  "avbrytOgSlettModal": {
+    "heading": "Vil du avbryte og slette søknaden?",
+    "avbrytOgSlettButtonText": "Ja, avbryt og slett søknaden",
+    "avbrytButtonText": "Nei, ikkje avbryt og slett",
+    "sendNyButtonText": "Send ny søknad",
+    "lukkButtonText": "Lukk"
+  },
+  "errorSummary": {
+    "title": "Du må rette opp i desse feila før du kan halde fram:"
+  }
+}

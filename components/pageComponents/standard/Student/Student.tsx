@@ -153,7 +153,6 @@ const Student = ({ onBackClick, onNext, defaultValues }: Props) => {
       <RadioGroupWrapper
         name={`${STUDENT}.${ER_STUDENT}`}
         legend={formatMessage(`søknad.${STUDENT}.${ER_STUDENT}.legend`)}
-        description={formatMessage(`søknad.${STUDENT}.${ER_STUDENT}.description`)}
         control={control}
         error={errors?.[STUDENT]?.[ER_STUDENT]?.message}
       >
@@ -168,7 +167,7 @@ const Student = ({ onBackClick, onNext, defaultValues }: Props) => {
         </Radio>
       </RadioGroupWrapper>
       {erStudent === JaNeiAvbrutt.AVBRUTT && (
-        <ColorPanel>
+        <ColorPanel color={'grey'}>
           <RadioGroupWrapper
             name={`${STUDENT}.${KOMME_TILBAKE}`}
             legend={formatMessage(`søknad.${STUDENT}.${KOMME_TILBAKE}.legend`)}

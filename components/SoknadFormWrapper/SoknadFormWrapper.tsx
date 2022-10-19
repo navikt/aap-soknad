@@ -6,6 +6,8 @@ import * as classes from './SoknadFormWrapper.module.css';
 import { SuccessStroke } from '@navikt/ds-icons';
 import { useFeatureToggleIntl } from 'hooks/useFeatureToggleIntl';
 import { useAppStateContext } from 'context/appStateContext';
+import { clientSideIsProd } from 'utils/environments';
+import { useRouter } from 'next/router';
 
 interface Props {
   children?: React.ReactNode;
@@ -40,9 +42,9 @@ export const LagreModal = ({ isOpen, onClose }: LagreModalProps) => {
             type="button"
             onClick={() => {
               if (window?.location) {
-                window.location.href = formatMessage('applinks.dineSaker', {
-                  navhostname: process.env.NEXT_PUBLIC_NAV_HOSTNAME_URL,
-                });
+                window.location.href = clientSideIsProd()
+                  ? 'https://www.nav.no/person/dine-saker'
+                  : 'https://www.dev.nav.no/person/dine-saker';
               }
             }}
           >
@@ -72,6 +74,7 @@ export const SlettModal = ({
   slettSøknadOgAvbryt,
 }: SlettModalProps) => {
   const { formatMessage } = useFeatureToggleIntl();
+  const router = useRouter();
   return (
     <Modal
       open={isOpen}
@@ -113,9 +116,9 @@ export const SlettModal = ({
                 type="button"
                 onClick={() => {
                   if (window?.location) {
-                    window.location.href = formatMessage('applinks.dittNav', {
-                      navhostname: process.env.NEXT_PUBLIC_NAV_HOSTNAME_URL,
-                    });
+                    window.location.href = clientSideIsProd()
+                      ? 'https://www.nav.no/person/dittnav'
+                      : 'https://www.dev.nav.no/person/dittnav';
                   }
                 }}
               >
@@ -126,12 +129,7 @@ export const SlettModal = ({
                 type="button"
                 onClick={() => {
                   if (window?.location) {
-                    window.location.href =
-                      process.env.NEXT_PUBLIC_ENVIRONMENT === 'localhost'
-                        ? `http://localhost:3000/aap/soknad/standard`
-                        : formatMessage('applinks.standardSoknadForside', {
-                            navhostname: process.env.NEXT_PUBLIC_NAV_HOSTNAME_URL,
-                          });
+                    router.reload();
                   }
                 }}
               >
