@@ -82,8 +82,8 @@ export const Barnetillegg = ({ onBackClick, onNext, defaultValues }: Props) => {
   }>({
     resolver: yupResolver(schema),
     defaultValues: {
-      [BARN]: defaultValues?.søknad?.barnetillegg,
-      [MANUELLE_BARN]: defaultValues?.søknad?.manuelleBarn,
+      [BARN]: defaultValues?.søknad?.[BARN],
+      [MANUELLE_BARN]: defaultValues?.søknad?.[MANUELLE_BARN],
     },
   });
   const [selectedBarnIndex, setSelectedBarnIndex] = useState<number | undefined>(undefined);
