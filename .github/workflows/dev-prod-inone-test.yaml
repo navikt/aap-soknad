@@ -1,9 +1,9 @@
 name: "Bygg og deploy søknad til dev og prod"
 on:
   workflow_dispatch:
-#  push:
-#    branches:
-#      - "main"
+  push:
+    branches:
+      - "main"
 env:
   "IMAGE": "ghcr.io/${{ github.repository }}:${{ github.sha }}"
 jobs:

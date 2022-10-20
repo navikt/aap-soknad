@@ -1,9 +1,9 @@
 name: "Build and deploy aap-soknad-next"
 on:
   workflow_dispatch:
-  push:
-    branches:
-      - "main"
+#  push:
+#    branches:
+#      - "main"
 env:
   "IMAGE": "ghcr.io/${{ github.repository }}:${{ github.sha }}"
 jobs:
