@@ -1,5 +1,5 @@
 {
-  "test": "Test",
+  "midlertidigAlertMelding": "Denne søknaden er ikke aktiv og kan ikke brukes til å søke om arbeidsavklaringspenger (AAP). For å søke AAP, gå til <a>AAP søknad</a>.",
   "søknad": {
     "student": {
       "title": "Student",

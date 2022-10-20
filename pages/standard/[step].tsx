@@ -43,7 +43,7 @@ import { getAccessToken } from 'auth/accessToken';
 import { getSøker } from '../api/oppslag/soeker';
 import { lesBucket } from '../api/buckets/les';
 import { logSkjemaFullførtEvent, logSkjemastegFullførtEvent } from 'utils/amplitude';
-import { Alert } from '@navikt/ds-react';
+import { Alert, Link } from '@navikt/ds-react';
 import metrics from 'utils/metrics';
 import { scrollRefIntoView } from 'utils/dom';
 
@@ -154,6 +154,16 @@ const Steps = ({ søker, mellomlagretSøknad }: PageProps) => {
       <header>
         <PageHeader align="center">{formatMessage('søknad.pagetitle')}</PageHeader>
       </header>
+      <Alert variant={'error'}>
+        {formatMessage('midlertidigAlertMelding', {
+          // @ts-ignore
+          a: (chunks: string[]) => (
+            <Link target="_blank" href="https://tjenester.nav.no/soknadaap/app/start">
+              {chunks}
+            </Link>
+          ),
+        })}
+      </Alert>
       {søknadState?.søknad && (
         <StepWizard>
           {step === '1' && (

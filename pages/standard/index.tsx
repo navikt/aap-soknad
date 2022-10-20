@@ -1,7 +1,6 @@
 import { Veiledning } from 'components/pageComponents/standard/Veiledning/Veiledning';
-
 import { useEffect, useRef, useState } from 'react';
-import { Navn, SokerOppslagState, SøkerView } from 'context/sokerOppslagContext';
+import { Navn, SøkerView } from 'context/sokerOppslagContext';
 import React from 'react';
 import { useRouter } from 'next/router';
 import { GetServerSidePropsResult, NextPageContext } from 'next/types';
@@ -16,6 +15,8 @@ import { logSkjemaStartetEvent } from 'utils/amplitude';
 import metrics from 'utils/metrics';
 import { scrollRefIntoView } from 'utils/dom';
 import { getSøkerUtenBarn } from 'pages/api/oppslag/soekerUtenBarn';
+import { Alert, Link } from '@navikt/ds-react';
+import { useFeatureToggleIntl } from 'hooks/useFeatureToggleIntl';
 interface PageProps {
   søker: {
     navn: Navn;
@@ -45,6 +46,7 @@ export const defaultStepList = [
 
 const Introduksjon = ({ søker }: PageProps) => {
   const router = useRouter();
+  const { formatMessage } = useFeatureToggleIntl();
 
   const [isLoading, setIsLoading] = useState(false);
   const [hasError, setHasError] = useState(false);
@@ -89,15 +91,27 @@ const Introduksjon = ({ søker }: PageProps) => {
   }, [hasError]);
 
   return (
-    <Veiledning
-      søker={soker}
-      isLoading={isLoading}
-      hasError={hasError}
-      errorMessageRef={errorMessageRef}
-      onSubmit={async () => {
-        await startSoknad();
-      }}
-    />
+    <>
+      <Alert variant={'error'}>
+        {formatMessage('midlertidigAlertMelding', {
+          // @ts-ignore
+          a: (chunks: string[]) => (
+            <Link target="_blank" href="https://tjenester.nav.no/soknadaap/app/start">
+              {chunks}
+            </Link>
+          ),
+        })}
+      </Alert>
+      <Veiledning
+        søker={soker}
+        isLoading={isLoading}
+        hasError={hasError}
+        errorMessageRef={errorMessageRef}
+        onSubmit={async () => {
+          await startSoknad();
+        }}
+      />
+    </>
   );
 };
 
