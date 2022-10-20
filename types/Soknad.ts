@@ -101,6 +101,7 @@ export interface Soknad {
   andreUtbetalinger?: AndreUtbetalinger;
   [BARN]?: Barn[];
   manuelleBarn?: ManuelleBarn[];
+  tilleggsopplysninger?: string;
   vedlegg?: {
     [AttachmentType.LØNN_OG_ANDRE_GODER]: Vedlegg[];
     [AttachmentType.OMSORGSSTØNAD]: Vedlegg[];

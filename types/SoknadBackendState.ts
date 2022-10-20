@@ -44,6 +44,7 @@ export interface SøknadBackendState {
     merEnnIG?: boolean;
     barnepensjon?: boolean;
   }>;
+  tilleggsopplysninger?: string;
 }
 
 export interface BehandlerBackendState {

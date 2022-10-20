@@ -34,6 +34,7 @@ import { Yrkesskade } from 'components/pageComponents/standard/Yrkesskade/Yrkess
 import { Behandlere } from 'components/pageComponents/standard/Behandlere/Behandlere';
 import { Barnetillegg } from 'components/pageComponents/standard/Barnetillegg/Barnetillegg';
 import Student from 'components/pageComponents/standard/Student/Student';
+import Tilleggsopplysninger from 'components/pageComponents/standard/Tilleggsopplysninger/Tilleggsopplysninger';
 import { AndreUtbetalinger } from 'components/pageComponents/standard/AndreUtbetalinger/AndreUtbetalinger';
 import Vedlegg from 'components/pageComponents/standard/Vedlegg/Vedlegg';
 import Oppsummering from 'components/pageComponents/standard/Oppsummering/Oppsummering';
@@ -221,6 +222,15 @@ const Steps = ({ søker, mellomlagretSøknad }: PageProps) => {
             />
           )}
           {step === '7' && (
+            <Tilleggsopplysninger
+            onBackClick={onPreviousStep}
+            defaultValues={søknadState}
+            onNext={(data) => {
+              onNextStep(data);
+            }}
+            />
+          )}
+          {step === '8' && (
             <Vedlegg
               onBackClick={onPreviousStep}
               defaultValues={søknadState}
@@ -229,7 +239,7 @@ const Steps = ({ søker, mellomlagretSøknad }: PageProps) => {
               }}
             />
           )}
-          {step === '8' && (
+          {step === '9' && (
             <Oppsummering
               onBackClick={onPreviousStep}
               onSubmitSoknad={submitSoknad}

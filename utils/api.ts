@@ -181,6 +181,7 @@ export const mapSøknadToBackend = (søknad?: Soknad): SøknadBackendState => {
         merEnnIG: jaNeiToBoolean(barn.harInntekt),
         vedlegg: barn?.vedlegg?.map((e) => e?.vedleggId),
       })) ?? [],
+    tilleggsopplysninger: søknad?.tilleggsopplysninger,
     ...(søknad?.vedlegg?.annet
       ? { vedlegg: søknad?.vedlegg?.annet?.map((e) => e?.vedleggId) }
       : {}),
@@ -431,6 +432,14 @@ export const mapSøknadToPdf = (
       ),
     ]);
   };
+  const getTilleggsopplysninger = (søknad?: Soknad) => {
+    return createTema('Tillegsopplysninger', [
+      createGruppe(
+        formatMessage(`søknad.tilleggsopplysninger.tilleggsopplysninger.label`),
+        createFritekst(søknad?.tilleggsopplysninger || 'Ingen tilleggsopplysninger')
+      ),
+    ]);
+  };
   const getVedlegg = (søknad?: Soknad, requiredVedlegg?: RequiredVedlegg[]) => {
     const opplastedeVedlegg = requiredVedlegg?.filter((vedlegg) => vedlegg?.completed) || [];
     const ordinæreVedlegg = opplastedeVedlegg
@@ -482,6 +491,7 @@ export const mapSøknadToPdf = (
       ...(getAndreBehandlere(søknad) ? [getAndreBehandlere(søknad)] : []),
       getBarn(søknad),
       getStudent(søknad),
+      getTilleggsopplysninger(søknad),
       getAndreYtelser(søknad),
       getVedlegg(søknad, requiredVedlegg),
       getManglendeVedlegg(søknad, requiredVedlegg),

@@ -246,6 +246,17 @@ const Oppsummering = ({
           )}
         </AccordianItemOppsummering>
         <AccordianItemOppsummering
+           title={formatMessage('søknad.oppsummering.tilleggsopplysninger.title')}
+           editText={formatMessage('søknad.oppsummering.tilleggsopplysninger.editText')}
+           toggleAll={toggleAll}
+           onEdit={() => editStep(StepNames.TILLEGGSOPPLYSNINGER)}
+         >
+           <SummaryRowIfExists
+             labelKey={`søknad.tilleggsopplysninger.tilleggsopplysninger.label`}
+             value={søknadState?.søknad?.tilleggsopplysninger}
+           />
+         </AccordianItemOppsummering>
+        <AccordianItemOppsummering
           title={formatMessage('søknad.oppsummering.vedlegg.title')}
           editText={formatMessage('søknad.oppsummering.vedlegg.editText')}
           toggleAll={toggleAll}
