@@ -29,11 +29,13 @@ import { SubmitHandler } from 'react-hook-form';
 import { fetchPOST } from 'api/fetch';
 import { StepNames } from './index';
 import { mapSøknadToBackend, mapSøknadToPdf } from 'utils/api';
+import StartDato from 'components/pageComponents/standard/StartDato/StartDato';
 import { Medlemskap } from 'components/pageComponents/standard/Medlemskap/Medlemskap';
 import { Yrkesskade } from 'components/pageComponents/standard/Yrkesskade/Yrkesskade';
 import { Behandlere } from 'components/pageComponents/standard/Behandlere/Behandlere';
 import { Barnetillegg } from 'components/pageComponents/standard/Barnetillegg/Barnetillegg';
 import Student from 'components/pageComponents/standard/Student/Student';
+import Tilleggsopplysninger from 'components/pageComponents/standard/Tilleggsopplysninger/Tilleggsopplysninger';
 import { AndreUtbetalinger } from 'components/pageComponents/standard/AndreUtbetalinger/AndreUtbetalinger';
 import Vedlegg from 'components/pageComponents/standard/Vedlegg/Vedlegg';
 import Oppsummering from 'components/pageComponents/standard/Oppsummering/Oppsummering';
@@ -136,7 +138,7 @@ const Steps = ({ søker, mellomlagretSøknad }: PageProps) => {
     });
 
   const onPreviousStep = async () => {
-    if (currentStep?.stepIndex === 1) {
+    if (currentStep?.name === StepNames.STARTDATO) {
       router.push('/standard');
     } else {
       goToPreviousStep(stepWizardDispatch);
@@ -167,7 +169,7 @@ const Steps = ({ søker, mellomlagretSøknad }: PageProps) => {
       {søknadState?.søknad && (
         <StepWizard>
           {step === '1' && (
-            <Medlemskap
+            <StartDato
               onBackClick={onPreviousStep}
               defaultValues={søknadState}
               onNext={(data) => {
@@ -176,7 +178,7 @@ const Steps = ({ søker, mellomlagretSøknad }: PageProps) => {
             />
           )}
           {step === '2' && (
-            <Yrkesskade
+            <Medlemskap
               onBackClick={onPreviousStep}
               defaultValues={søknadState}
               onNext={(data) => {
@@ -185,7 +187,7 @@ const Steps = ({ søker, mellomlagretSøknad }: PageProps) => {
             />
           )}
           {step === '3' && (
-            <Behandlere
+            <Yrkesskade
               onBackClick={onPreviousStep}
               defaultValues={søknadState}
               onNext={(data) => {
@@ -194,7 +196,7 @@ const Steps = ({ søker, mellomlagretSøknad }: PageProps) => {
             />
           )}
           {step === '4' && (
-            <Barnetillegg
+            <Behandlere
               onBackClick={onPreviousStep}
               defaultValues={søknadState}
               onNext={(data) => {
@@ -203,7 +205,7 @@ const Steps = ({ søker, mellomlagretSøknad }: PageProps) => {
             />
           )}
           {step === '5' && (
-            <Student
+            <Barnetillegg
               onBackClick={onPreviousStep}
               defaultValues={søknadState}
               onNext={(data) => {
@@ -212,7 +214,7 @@ const Steps = ({ søker, mellomlagretSøknad }: PageProps) => {
             />
           )}
           {step === '6' && (
-            <AndreUtbetalinger
+            <Student
               onBackClick={onPreviousStep}
               defaultValues={søknadState}
               onNext={(data) => {
@@ -221,7 +223,7 @@ const Steps = ({ søker, mellomlagretSøknad }: PageProps) => {
             />
           )}
           {step === '7' && (
-            <Vedlegg
+            <AndreUtbetalinger
               onBackClick={onPreviousStep}
               defaultValues={søknadState}
               onNext={(data) => {
@@ -230,6 +232,24 @@ const Steps = ({ søker, mellomlagretSøknad }: PageProps) => {
             />
           )}
           {step === '8' && (
+            <Tilleggsopplysninger
+              onBackClick={onPreviousStep}
+              defaultValues={søknadState}
+              onNext={(data) => {
+                onNextStep(data);
+              }}
+            />
+          )}
+          {step === '9' && (
+            <Vedlegg
+              onBackClick={onPreviousStep}
+              defaultValues={søknadState}
+              onNext={(data) => {
+                onNextStep(data);
+              }}
+            />
+          )}
+          {step === '10' && (
             <Oppsummering
               onBackClick={onPreviousStep}
               onSubmitSoknad={submitSoknad}

@@ -31,6 +31,14 @@ export const GYLDIGE_SØKNADS_TYPER = ['UTLAND', 'STANDARD'];
 export const erGyldigSøknadsType = (type?: string) =>
   typeof type === 'undefined' || !GYLDIGE_SØKNADS_TYPER.includes(type);
 
+const getFerieType = (skalHaFerie?: string, ferieType?: string) => {
+  if (skalHaFerie === 'Ja' && ferieType === 'Ja') return 'PERIODE';
+  if (skalHaFerie === 'Ja' && ferieType === 'Nei, men jeg vet antall dager') return 'DAGER';
+  if (skalHaFerie === 'Nei') return 'NEI';
+  if (skalHaFerie === 'Vet ikke') return 'VET_IKKE';
+  return undefined;
+};
+
 const getJaNeiVetIkke = (value?: string) => {
   if (value === 'Ja') return 'JA';
   if (value === 'Nei') return 'NEI';
@@ -58,6 +66,7 @@ const getJaEllerNei = (value?: string) => {
 };
 
 export const mapSøknadToBackend = (søknad?: Soknad): SøknadBackendState => {
+  const ferieType = getFerieType(søknad?.ferie?.skalHaFerie, søknad?.ferie?.ferieType);
   const registrerteBehandlere: BehandlerBackendState[] =
     søknad?.registrerteBehandlere?.map((behandler) => ({
       ...behandler,
@@ -87,6 +96,19 @@ export const mapSøknadToBackend = (søknad?: Soknad): SøknadBackendState => {
     }) ?? [];
 
   return {
+    startDato: {
+      beskrivelse: søknad?.begrunnelse,
+    },
+    ferie: {
+      ferieType,
+      ...(ferieType === 'PERIODE' && {
+        periode: {
+          fom: formatDate(søknad?.ferie?.fraDato, 'yyyy-MM-dd'),
+          tom: formatDate(søknad?.ferie?.tilDato, 'yyyy-MM-dd'),
+        },
+      }),
+      dager: søknad?.ferie?.antallDager,
+    },
     medlemsskap: {
       boddINorgeSammenhengendeSiste5: jaNeiToBoolean(søknad?.medlemskap?.harBoddINorgeSiste5År),
       jobbetSammenhengendeINorgeSiste5: jaNeiToBoolean(
@@ -181,6 +203,7 @@ export const mapSøknadToBackend = (søknad?: Soknad): SøknadBackendState => {
         merEnnIG: jaNeiToBoolean(barn.harInntekt),
         vedlegg: barn?.vedlegg?.map((e) => e?.vedleggId),
       })) ?? [],
+    tilleggsopplysninger: søknad?.tilleggsopplysninger,
     ...(søknad?.vedlegg?.annet
       ? { vedlegg: søknad?.vedlegg?.annet?.map((e) => e?.vedleggId) }
       : {}),
@@ -248,6 +271,37 @@ export const mapSøknadToPdf = (
   requiredVedlegg?: RequiredVedlegg[],
   søker?: Soker
 ) => {
+  const getStartDato = (søknad?: Soknad) => {
+    const begrunnelse = søknad?.begrunnelse
+      ? [
+          createGruppe(
+            'Fritekst - Ønsker startdato tilbake i tid',
+            createFritekst(søknad?.begrunnelse)
+          ),
+        ]
+      : [];
+    const rows = [
+      ...begrunnelse,
+      ...createField(
+        formatMessage('søknad.startDato.skalHaFerie.label'),
+        søknad?.ferie?.skalHaFerie
+      ),
+      ...createField(
+        formatMessage('søknad.startDato.ferieType.label'),
+        søknad?.ferie?.ferieType,
+        true
+      ),
+      ...createField(
+        'Periode',
+        søknad?.ferie?.fraDato
+          ? `Fra ${søknad?.ferie?.fraDato} til ${søknad?.ferie?.tilDato}`
+          : undefined,
+        true
+      ),
+      ...createField('Antall dager', søknad?.ferie?.antallDager, true),
+    ];
+    return createTema('Startdato', rows);
+  };
   const getMedlemskap = (søknad?: Soknad) => {
     const utenlandsOpphold =
       søknad?.medlemskap?.utenlandsOpphold?.length &&
@@ -431,6 +485,14 @@ export const mapSøknadToPdf = (
       ),
     ]);
   };
+  const getTilleggsopplysninger = (søknad?: Soknad) => {
+    return createTema('Tillegsopplysninger', [
+      createGruppe(
+        formatMessage(`søknad.tilleggsopplysninger.tilleggsopplysninger.label`),
+        createFritekst(søknad?.begrunnelse || 'Ingen tilleggsopplysninger')
+      ),
+    ]);
+  };
   const getVedlegg = (søknad?: Soknad, requiredVedlegg?: RequiredVedlegg[]) => {
     const opplastedeVedlegg = requiredVedlegg?.filter((vedlegg) => vedlegg?.completed) || [];
     const ordinæreVedlegg = opplastedeVedlegg
@@ -476,12 +538,14 @@ export const mapSøknadToPdf = (
   };
   return {
     temaer: [
+      getStartDato(søknad),
       getMedlemskap(søknad),
       getYrkesskade(søknad),
       getRegistrerteBehandlere(søknad),
       ...(getAndreBehandlere(søknad) ? [getAndreBehandlere(søknad)] : []),
       getBarn(søknad),
       getStudent(søknad),
+      getTilleggsopplysninger(søknad),
       getAndreYtelser(søknad),
       getVedlegg(søknad, requiredVedlegg),
       getManglendeVedlegg(søknad, requiredVedlegg),
