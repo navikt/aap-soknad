@@ -7,6 +7,7 @@ import * as classes from './UtenlandsPeriode.module.css';
 import {
   Label,
   BodyShort,
+  BodyLong,
   Button,
   Heading,
   Ingress,
@@ -138,13 +139,13 @@ const UtenlandsPeriodeVelger = ({
         <Heading size={'medium'} level={'2'} spacing>
           {formatMessage(`søknad.medlemskap.utenlandsperiode.modal.title.${arbeidEllerBodd}`)}
         </Heading>
-        <Ingress spacing>
+        <BodyLong spacing={!(arbeidEllerBodd === 'BODD')}>
           {formatMessage(`søknad.medlemskap.utenlandsperiode.modal.ingress.${arbeidEllerBodd}`)}
-        </Ingress>
+        </BodyLong>
         {arbeidEllerBodd === 'BODD' && (
-          <Ingress spacing>
+          <BodyLong spacing>
             {formatMessage(`søknad.medlemskap.utenlandsperiode.modal.ingress.${arbeidEllerBodd}_2`)}
-          </Ingress>
+          </BodyLong>
         )}
         <form
           className={classes.modalForm}
