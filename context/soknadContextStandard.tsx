@@ -9,6 +9,7 @@ import {
 } from './soknadContextCommon';
 import { RegistrertBehandler, Soknad, Vedlegg } from 'types/Soknad';
 import { OppslagBarn, OppslagBehandler } from './sokerOppslagContext';
+import { BARN } from 'components/pageComponents/standard/Barnetillegg/Barnetillegg';
 
 const soknadContextInititalStateStandard = {
   ...soknadContextInititalState,
@@ -55,13 +56,13 @@ function soknadReducerStandard(
       };
     }
     case SoknadActionKeys.ADD_BARN_IF_MISSING: {
-      const barn = state?.søknad?.barnetillegg || [];
+      const barn = state?.søknad?.[BARN] || [];
       const newBarn = action.payload?.filter((e: any) => !barn.find((a: any) => a?.fnr === e?.fnr));
       return {
         ...state,
         søknad: {
           ...state.søknad,
-          barnetillegg: [...barn, ...newBarn],
+          [BARN]: [...barn, ...newBarn],
         },
       };
     }

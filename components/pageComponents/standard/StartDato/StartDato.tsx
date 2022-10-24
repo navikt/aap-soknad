@@ -167,7 +167,7 @@ const StartDato = ({ onBackClick, onNext, defaultValues }: Props) => {
         <Radio value={JaNeiVetIkke.VET_IKKE}>{JaNeiVetIkke.VET_IKKE}</Radio>
       </RadioGroupWrapper>
       {skalHaFerie === JaNeiVetIkke.JA && (
-        <ColorPanel>
+        <ColorPanel color={'grey'}>
           <RadioGroupWrapper
             legend={formatMessage('søknad.startDato.ferieType.label')}
             name={`${FERIE}.${FERIETYPE}`}
