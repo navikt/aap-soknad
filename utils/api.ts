@@ -96,19 +96,19 @@ export const mapSøknadToBackend = (søknad?: Soknad): SøknadBackendState => {
     }) ?? [];
 
   return {
-    startDato: {
-      beskrivelse: søknad?.begrunnelse,
-    },
-    ferie: {
-      ferieType,
-      ...(ferieType === 'PERIODE' && {
-        periode: {
-          fom: formatDate(søknad?.ferie?.fraDato, 'yyyy-MM-dd'),
-          tom: formatDate(søknad?.ferie?.tilDato, 'yyyy-MM-dd'),
-        },
-      }),
-      dager: søknad?.ferie?.antallDager,
-    },
+    // startDato: {
+    //   beskrivelse: søknad?.begrunnelse,
+    // },
+    // ferie: {
+    //   ferieType,
+    //   ...(ferieType === 'PERIODE' && {
+    //     periode: {
+    //       fom: formatDate(søknad?.ferie?.fraDato, 'yyyy-MM-dd'),
+    //       tom: formatDate(søknad?.ferie?.tilDato, 'yyyy-MM-dd'),
+    //     },
+    //   }),
+    //   dager: søknad?.ferie?.antallDager,
+    // },
     medlemsskap: {
       boddINorgeSammenhengendeSiste5: jaNeiToBoolean(søknad?.medlemskap?.harBoddINorgeSiste5År),
       jobbetSammenhengendeINorgeSiste5: jaNeiToBoolean(
@@ -203,7 +203,7 @@ export const mapSøknadToBackend = (søknad?: Soknad): SøknadBackendState => {
         merEnnIG: jaNeiToBoolean(barn.harInntekt),
         vedlegg: barn?.vedlegg?.map((e) => e?.vedleggId),
       })) ?? [],
-    tilleggsopplysninger: søknad?.tilleggsopplysninger,
+    // tilleggsopplysninger: søknad?.tilleggsopplysninger,
     ...(søknad?.vedlegg?.annet
       ? { vedlegg: søknad?.vedlegg?.annet?.map((e) => e?.vedleggId) }
       : {}),
