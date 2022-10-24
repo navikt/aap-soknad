@@ -219,16 +219,16 @@
               "BODD": "I kva periode var du der?"
             },
             "fraDato": {
-              "label": "Frå og med dato (dd.mm.åååå)",
+              "label": "Frå og med måned (mm.åååå)",
               "validation": {
                 "required": "Oppgi frå-dato"
               }
             },
             "tilDato": {
-              "label": "Til og med dato (dd.mm.åååå)",
+              "label": "Til og med måned (mm.åååå)",
               "validation": {
                 "required": "Oppgi til-dato",
-                "fraDatoEtterTilDato": "Frå-datoen må vere eldre enn til-datoen. Fyll inn slik: dd.mm.åååå."
+                "fraDatoEtterTilDato": "Frå-datoen må vere eldre enn til-datoen. Fyll inn slik: mm.åååå."
               }
             }
           },
