@@ -489,7 +489,7 @@ export const mapSøknadToPdf = (
     return createTema('Tillegsopplysninger', [
       createGruppe(
         formatMessage(`søknad.tilleggsopplysninger.tilleggsopplysninger.label`),
-        createFritekst(søknad?.begrunnelse || 'Ingen tilleggsopplysninger')
+        createFritekst(søknad?.tilleggsopplysninger || 'Ingen tilleggsopplysninger')
       ),
     ]);
   };
@@ -545,8 +545,8 @@ export const mapSøknadToPdf = (
       ...(getAndreBehandlere(søknad) ? [getAndreBehandlere(søknad)] : []),
       getBarn(søknad),
       getStudent(søknad),
-      getTilleggsopplysninger(søknad),
       getAndreYtelser(søknad),
+      getTilleggsopplysninger(søknad),
       getVedlegg(søknad, requiredVedlegg),
       getManglendeVedlegg(søknad, requiredVedlegg),
       createTema('Bekreftelse', [
