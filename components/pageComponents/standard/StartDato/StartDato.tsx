@@ -1,7 +1,7 @@
 import { FieldValues, useForm, useWatch } from 'react-hook-form';
 import { Soknad } from 'types/Soknad';
 import React, { useEffect, useMemo } from 'react';
-import { Alert, BodyShort, Cell, Grid, Heading, Radio, ReadMore } from '@navikt/ds-react';
+import { Alert, BodyShort, Cell, Grid, Heading, Radio } from '@navikt/ds-react';
 import RadioGroupWrapper from 'components/input/RadioGroupWrapper/RadioGroupWrapper';
 import { JaNeiVetIkke } from 'types/Generic';
 import TextFieldWrapper from 'components/input/TextFieldWrapper';
@@ -10,7 +10,6 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import SoknadFormWrapper from 'components/SoknadFormWrapper/SoknadFormWrapper';
 import { useStepWizard } from 'context/stepWizardContextV2';
-import TextAreaWrapper from 'components/input/TextAreaWrapper';
 import { setErrorSummaryFocus } from 'utils/dom';
 import { LucaGuidePanel } from 'components/LucaGuidePanel';
 import { useFeatureToggleIntl } from 'hooks/useFeatureToggleIntl';
@@ -24,7 +23,6 @@ import { formatDate } from 'utils/date';
 const FERIE = 'ferie';
 const FERIETYPE = 'ferieType';
 const SKALHAFERIE = 'skalHaFerie';
-const BEGRUNNELSE = 'begrunnelse';
 
 interface Props {
   onBackClick: () => void;
@@ -34,7 +32,6 @@ interface Props {
 
 export const getStartDatoSchema = (formatMessage: (id: string) => string) => {
   return yup.object().shape({
-    [BEGRUNNELSE]: yup.string().nullable(),
     [FERIE]: yup.object().shape({
       [SKALHAFERIE]: yup
         .string()
@@ -87,7 +84,6 @@ const StartDato = ({ onBackClick, onNext, defaultValues }: Props) => {
   } = useForm<FieldValues>({
     resolver: yupResolver(getStartDatoSchema(formatMessage)),
     defaultValues: {
-      begrunnelse: defaultValues?.søknad?.begrunnelse,
       ferie: {
         ...defaultValues?.søknad?.ferie,
         fraDato: formatDate(defaultValues?.søknad?.ferie?.fraDato, 'yyyy-MM-dd'),
@@ -220,17 +216,6 @@ const StartDato = ({ onBackClick, onNext, defaultValues }: Props) => {
       {skalHaFerie === JaNeiVetIkke.VET_IKKE && (
         <Alert variant={'info'}>{formatMessage('søknad.startDato.alert.text')}</Alert>
       )}
-      <ReadMore header={formatMessage('søknad.startDato.guide.readMore.title')} type={'button'}>
-        <div>
-          <TextAreaWrapper
-            name={BEGRUNNELSE}
-            label={''}
-            description={formatMessage('søknad.startDato.begrunnelse.description')}
-            control={control}
-            error={errors?.begrunnelse?.message}
-          />
-        </div>
-      </ReadMore>
     </SoknadFormWrapper>
   );
 };

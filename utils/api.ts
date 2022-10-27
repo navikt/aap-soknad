@@ -97,7 +97,6 @@ export const mapSøknadToBackend = (søknad?: Soknad): SøknadBackendState => {
 
   return {
     // startDato: {
-    //   beskrivelse: søknad?.begrunnelse,
     // },
     // ferie: {
     //   ferieType,
@@ -272,16 +271,7 @@ export const mapSøknadToPdf = (
   søker?: Soker
 ) => {
   const getStartDato = (søknad?: Soknad) => {
-    const begrunnelse = søknad?.begrunnelse
-      ? [
-          createGruppe(
-            'Fritekst - Ønsker startdato tilbake i tid',
-            createFritekst(søknad?.begrunnelse)
-          ),
-        ]
-      : [];
     const rows = [
-      ...begrunnelse,
       ...createField(
         formatMessage('søknad.startDato.skalHaFerie.label'),
         søknad?.ferie?.skalHaFerie

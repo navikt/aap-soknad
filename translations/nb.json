@@ -75,14 +75,7 @@
       "title": "Startdato",
       "guide": {
         "text1": "Hovedregelen er at du tidligst kan få AAP fra den dagen du sender inn søknaden.",
-        "text2": "Hvis du mottar sykepenger får du vanligvis AAP første dagen etter at sykepengene dine er ferdig.",
-        "readMore": {
-          "title": "Kan jeg søke om AAP tilbake i tid?",
-          "text": "Hvis du av helsemessige årsaker ikke har kunnet søke tidligere, kan du få innvilget AAP tilbake i tid. Du kan også få AAP tilbake i tid hvis du har fått feil informasjon fra NAV og dette er grunnen til at du ikke har søkt tidligere."
-        }
-      },
-      "begrunnelse": {
-        "description": "Ja, hvis du har vært alvorlig syk (f.eks. ligget i koma) eller NAV har gitt feilaktig informasjon til deg.  Det må ha vært umulig for deg å sende inn søknaden tidligere. Hvis du mener dette gjelder deg, kan du forklare kort i tekstfeltet."
+        "text2": "Hvis du mottar sykepenger får du vanligvis AAP første dagen etter at sykepengene dine er ferdig."
       },
       "skalHaFerie": {
         "label": "Planlegger du å ta ferie før startdato på AAP?",
