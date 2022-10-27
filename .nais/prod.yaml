@@ -11,8 +11,10 @@ env:
   value: "http://soknad-api"
 - name: SOKNAD_API_AUDIENCE
   value: "prod-gcp:aap:soknad-api"
-- name: RUNTIME_ENVIRONMENT="prod"
-- name: DECORATOR_ENV="prod"
+- name: RUNTIME_ENVIRONMENT
+  value: "prod"
+- name: DECORATOR_ENV
+  value: "prod"
 - name:  SOKNAD_API_URL
   value: "http://soknad-api"
 - name:  SOKNAD_API_AUDIENCE
