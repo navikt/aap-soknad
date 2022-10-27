@@ -471,7 +471,8 @@ export const mapSøknadToPdf = (
       ),
       ...createField(
         formatMessage(`søknad.${STUDENT}.${KOMME_TILBAKE}.legend`),
-        søknad?.student?.kommeTilbake
+        søknad?.student?.kommeTilbake,
+        true
       ),
     ]);
   };
