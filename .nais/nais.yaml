@@ -38,7 +38,9 @@ spec:
       autoLogin: true
       level: Level4
   ingresses:
-    - https://aap-soknad.dev.nav.no
+  {{#each ingresses as |url|}}
+     - {{url}}
+  {{/each}}
   env:
   {{#each env}}
     - name: {{this.name }}
