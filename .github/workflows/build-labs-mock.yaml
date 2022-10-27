@@ -63,4 +63,4 @@ jobs:
         env:
           "APIKEY": "${{ secrets.NAIS_DEPLOY_APIKEY }}"
           "CLUSTER": "labs-gcp"
-          "RESOURCE": ".nais/labs-gcp.yaml,.nais/alerts.yaml"
+          "RESOURCE": ".nais/labs-gcp.yaml"
