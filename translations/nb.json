@@ -382,7 +382,10 @@
         "title": "Ut fra det du har svart i søknaden, må du legge ved dette:"
       },
       "vedleggPåPapir": {
-        "text": "Hvis du har vedlegg på papir og ikke har skanner, kan du for eksempel ta bilde av dokumentet med mobiltelefonen din."
+        "text": "Hvis du har vedlegg på papir og ikke har skanner, kan du for eksempel ta bilde av dokumentet med mobiltelefonen din.",
+        "readMore": {
+          "title": "Slik tar du et godt bilde av dokumentet"
+        }
       }
     },
     "oppsummering": {

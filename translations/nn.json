@@ -373,7 +373,10 @@
         "title": "Ut frå det du har svart i søknaden, må du leggje ved følgjande:"
       },
       "vedleggPåPapir": {
-        "text": "Dersom du har vedlegg på papir og ikkje har skannar, kan du til dømes ta bilete av dokumentet med mobiltelefon."
+        "text": "Dersom du har vedlegg på papir og ikkje har skannar, kan du til dømes ta bilete av dokumentet med mobiltelefon.",
+        "readMore": {
+          "title": "Slik tek du eit godt bilete av dokumentet"
+        }
       }
     },
     "tilleggsopplysninger": {
