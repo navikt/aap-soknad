@@ -38,7 +38,7 @@
         "title": "Søknadsdato er viktig for utbetaling av AAP",
         "text1": "Vanligvis kan du tidligst få AAP fra den dagen du søker.",
         "text2": "Hvis du mottar sykepenger, får du vanligvis AAP fra første dag etter at sykepengene dine er ferdig.",
-        "text3": "Du kan søke om AAP selv om om du ikke har mottatt sykepenger."
+        "text3": "Du kan søke om AAP selv om du ikke har mottatt sykepenger."
       },
       "accordionHvis": {
         "title": "Hvis du får AAP gjelder dette",
@@ -328,7 +328,7 @@
         "values": {
           "økonomiskSosialhjelp": "Økonomisk sosialhjelp",
           "omsorgsstønad": "Omsorgsstønad (tidligere omsorgslønn)",
-          "introduksjonsStønad": "Introduksjonssønad (introduksjonsprogrammet)",
+          "introduksjonsStønad": "Introduksjonsstønad (introduksjonsprogrammet)",
           "kvalifiseringsstønad": "Kvalifiseringsstønad (kvalifiseringsprogrammet)",
           "verv": "Godtgjørelse eller lønn for verv",
           "utland": "Ytelser fra utenlandske trygdemyndigheter",
@@ -554,7 +554,7 @@
             "label": "Fødselsnummer / D-nummer",
             "validation": {
               "required": "Du må fylle inn barnets fødselsnummer / D-nummer.",
-              "numberCharacters": "Fødeslsnummer / D-nummer må være 11 siffer."
+              "numberCharacters": "Fødselsnummer / D-nummer må være 11 siffer."
             }
           },
           "fødselsdato": {
@@ -649,21 +649,21 @@
     },
     "land": {
       "guide": {
-        "text": "Du må som hovedregel oppholde deg i Norge eller i et annet EU/EØS-land for å få AAP. Er du statsborger i et EU/EØS-land, må du søke om å motta AAP i en begrenset periode hvis du oppholder deg utenfor et EU/EØS-land. Du må sørge for at du kan gjennomføre den aktiviteten du har avtalt medNAV ved utenlandsopphold."
+        "text": "Du må som hovedregel oppholde deg i Norge eller i et annet EU/EØS-land for å få AAP. Er du statsborger i et EU/EØS-land, må du søke om å motta AAP i en begrenset periode hvis du oppholder deg utenfor et EU/EØS-land. Du må sørge for at du kan gjennomføre den aktiviteten du har avtalt med NAV ved utenlandsopphold."
       },
       "select": {
         "label": "Landet du skal oppholde deg i",
-        "required": "Venligst velg et land."
+        "required": "Vennligst velg et land."
       }
     },
     "periode": {
       "fraDato": {
         "label": "Fra dato",
-        "required": "Venligst velg en dato."
+        "required": "Vennligst velg en dato."
       },
       "tilDato": {
         "label": "Til dato",
-        "required": "Venligst velg en dato.",
+        "required": "Vennligst velg en dato.",
         "afterfromdate": "Til dato må være etter Fra dato"
       }
     },
