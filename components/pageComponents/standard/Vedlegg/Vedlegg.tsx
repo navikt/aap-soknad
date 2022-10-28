@@ -2,13 +2,11 @@ import { FieldValues, useForm, useWatch } from 'react-hook-form';
 import { Soknad } from 'types/Soknad';
 import React, { useEffect, useRef, useState } from 'react';
 import { BodyShort, Heading, Label, ReadMore } from '@navikt/ds-react';
-import ScanningGuide from 'components/ScanningGuide/ScanningGuide';
 import * as yup from 'yup';
 import { useStepWizard } from 'context/stepWizardContextV2';
 import { yupResolver } from '@hookform/resolvers/yup';
 import SoknadFormWrapper from 'components/SoknadFormWrapper/SoknadFormWrapper';
 import { AttachmentType } from '../AndreUtbetalinger/AndreUtbetalinger';
-import { LucaGuidePanel } from 'components/LucaGuidePanel';
 import { AVBRUTT_STUDIE_VEDLEGG } from '../Student/Student';
 import { useFeatureToggleIntl } from 'hooks/useFeatureToggleIntl';
 import { slettLagretSoknadState, updateSøknadData } from 'context/soknadContextCommon';
@@ -19,6 +17,8 @@ import { MANUELLE_BARN } from '../Barnetillegg/Barnetillegg';
 import FieldArrayFileInput from 'components/input/FileInput/FieldArrayFileInput';
 import { GenericSoknadContextState } from 'types/SoknadContext';
 import { scrollRefIntoView } from 'utils/dom';
+import { ScanningGuide, LucaGuidePanel } from '@navikt/aap-felles-innbygger-react';
+import { useIntl } from 'react-intl';
 
 interface Props {
   onBackClick: () => void;
@@ -40,6 +40,7 @@ const Vedlegg = ({ onBackClick, onNext, defaultValues }: Props) => {
   const schema = yup.object().shape({});
   const { søknadState, søknadDispatch } = useSoknadContextStandard();
   const { stepList } = useStepWizard();
+  const { locale } = useIntl();
   const {
     clearErrors,
     setError,
@@ -123,7 +124,7 @@ const Vedlegg = ({ onBackClick, onNext, defaultValues }: Props) => {
         onClick={scanningGuideOnClick}
         ref={scanningGuideElement}
       >
-        <ScanningGuide />
+        <ScanningGuide locale={locale} />
       </ReadMore>
       {søknadState?.requiredVedlegg?.find((e) => e.type === AVBRUTT_STUDIE_VEDLEGG) && (
         <FieldArrayFileInput

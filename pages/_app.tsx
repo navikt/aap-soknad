@@ -1,4 +1,5 @@
 import '@navikt/ds-css';
+import '@navikt/aap-felles-innbygger-css';
 import 'styles/index.css';
 import React, { useEffect, useMemo } from 'react';
 import { IntlProvider } from 'react-intl';

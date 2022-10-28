@@ -11,7 +11,7 @@ import * as yup from 'yup';
 import SoknadFormWrapper from 'components/SoknadFormWrapper/SoknadFormWrapper';
 import { useStepWizard } from 'context/stepWizardContextV2';
 import { setErrorSummaryFocus } from 'utils/dom';
-import { LucaGuidePanel } from 'components/LucaGuidePanel';
+import { LucaGuidePanel } from '@navikt/aap-felles-innbygger-react';
 import { useFeatureToggleIntl } from 'hooks/useFeatureToggleIntl';
 import { deleteOpplastedeVedlegg, useSoknadContextStandard } from 'context/soknadContextStandard';
 import { slettLagretSoknadState, updateSøknadData } from 'context/soknadContextCommon';

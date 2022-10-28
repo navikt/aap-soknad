@@ -13,7 +13,7 @@ import * as yup from 'yup';
 import SoknadFormWrapper from 'components/SoknadFormWrapper/SoknadFormWrapper';
 import { goToNamedStep, useStepWizard } from 'context/stepWizardContextV2';
 import { StepNames } from 'pages/standard';
-import { LucaGuidePanel } from 'components/LucaGuidePanel';
+import { LucaGuidePanel } from '@navikt/aap-felles-innbygger-react';
 import { useFeatureToggleIntl } from 'hooks/useFeatureToggleIntl';
 import { slettLagretSoknadState } from 'context/soknadContextCommon';
 import { useSoknadContextStandard } from 'context/soknadContextStandard';

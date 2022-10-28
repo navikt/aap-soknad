@@ -8,7 +8,7 @@ import { useStepWizard } from 'context/stepWizardContextV2';
 import { yupResolver } from '@hookform/resolvers/yup';
 import SoknadFormWrapper from 'components/SoknadFormWrapper/SoknadFormWrapper';
 import { AddBehandlerModal } from './AddBehandlerModal';
-import { LucaGuidePanel } from 'components/LucaGuidePanel';
+import { LucaGuidePanel } from '@navikt/aap-felles-innbygger-react';
 import * as classes from './Behandlere.module.css';
 import { useFeatureToggleIntl } from 'hooks/useFeatureToggleIntl';
 import { deleteOpplastedeVedlegg, useSoknadContextStandard } from 'context/soknadContextStandard';
