@@ -11,21 +11,21 @@ spec:
     slack:
       channel: '#po-aap-innbygger-prod-varslinger'
   alerts:
-    - alert: soknad-app-nede
+    - alert: Søknad - app nede
       expr: kube_deployment_status_replicas_unavailable{deployment="soknad",job="kubernetes-service-endpoints"} > 0
       for: 5m
       description: "soknad har utilgjengelige podder i aap"
       action: "kubectl describe pod -l app=soknad -n aap` for events og `kubectl get pods -l app=soknad -n aap` for å se feilende podder"
       sla: respond within 1h, during office hours
       severity: danger
-    - alert: soknad-kontinuerlig-restart
+    - alert: Søknad -kontinuerlig restart
       expr: sum(increase(kube_pod_container_status_restarts_total{container=~"soknad"}[5m])) by (container) > 2
       for: 2m
       description: "soknad har restartet flere ganger de siste 5 minuttene!"
       action: "Se `kubectl describe pod soknad` for events, og `kubectl logs soknad` for logger"
       sla: respond within 1h, during office hours
       severity: danger
-    - alert: høy feilrate i logger
+    - alert: Søknad - høy feilrate i logger
       expr: (100 * sum by (log_app, log_namespace) (rate(logd_messages_total{log_app="soknad",log_level=~"Error"}[10m])) / sum by (log_app, log_namespace) (rate(logd_messages_total{log_app="soknad"}[10m]))) > 15
       for: 5m
-      action: "<https://logs.adeo.no/goto/1d394a6a4c647c93c51eda75e60999ed|Check logs>"
+      action: "<https://logs.adeo.no/goto/1e8b3180-56c8-11ed-b3e8-d969437dd878|Check logs>"
