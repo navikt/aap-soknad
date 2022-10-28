@@ -15,80 +15,20 @@ interface PageProps {
 
 const KvitteringPage = ({ søker }: PageProps) => {
   const onButtonClick = async () => {
-    const søknadData = await fetchPOST('/aap/soknad/api/innsending/soknad', {
-      medlemsskap: {
-        boddINorgeSammenhengendeSiste5: true,
-        utenlandsopphold: [
-          {
-            land: 'DZ:blabla',
-            periode: {
-              fom: '1990-02-10',
-              tom: '2008-02-10',
-            },
-          },
-        ],
-      },
-      studier: {
-        erStudent: 'NEI',
-        vedlegg: [],
-      },
-      registrerteBehandlere: [
-        {
-          type: 'FASTLEGE',
-          navn: {
-            fornavn: 'Nina Unni',
-            etternavn: 'Borge',
-          },
-          kategori: 'LEGE',
-          kontaktinformasjon: {
-            behandlerRef: 'd182f24b-ebca-4f44-bf86-65901ec6141b',
-            kontor: 'ASKØY KOMMUNE SAMFUNNSMEDISINSK AVD ALMENNLEGETJENESTEN',
-            orgnummer: '976673867',
-            adresse: {
-              adressenavn: 'Kleppeveien',
-              husnummer: '17',
-              postnummer: {
-                postnr: '5300',
-                poststed: 'KLEPPESTØ',
-              },
-            },
-            telefon: '56 15 83 10',
-          },
-        },
-      ],
-      andreBehandlere: [],
-      yrkesskadeType: 'JA',
-      utbetalinger: {
-        ekstraFraArbeidsgiver: {
-          fraArbeidsgiver: false,
-          vedlegg: [],
-        },
-        andreStønader: [
-          {
-            type: 'NEI',
-          },
-        ],
-      },
-      registrerteBarn: [
-        {
-          merEnnIG: false,
-        },
-        {
-          merEnnIG: false,
-        },
-      ],
-      andreBarn: [],
-      vedlegg: [],
-    });
-    console.log('søknadData', søknadData);
+    const søknadData = await fetchPOST('/aap/soknad/api/innsending/soknad', {});
   };
+  const onServerErrorButtonClick = async () =>
+    await fetch('/aap/soknad/api/log/logerror', { method: 'GET' });
   return (
     <SoknadContextProviderStandard>
       <PageHeader align="center" className={classes?.pageHeader}>
         {'Testside'}
       </PageHeader>
       <Button onClick={onButtonClick} type={'button'} variant={'primary'}>
-        Test
+        Send tom søknad
+      </Button>
+      <Button onClick={onServerErrorButtonClick} type={'button'} variant={'primary'}>
+        Log feil på nextjs server
       </Button>
     </SoknadContextProviderStandard>
   );
