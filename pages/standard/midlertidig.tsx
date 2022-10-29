@@ -30,6 +30,9 @@ const KvitteringPage = ({ søker }: PageProps) => {
       <Button onClick={onServerErrorButtonClick} type={'button'} variant={'primary'}>
         Log feil på nextjs server
       </Button>
+      <Button onClick={onServerErrorButtonClick} type={'button'} variant={'primary'}>
+        Log søknad sendt
+      </Button>
     </SoknadContextProviderStandard>
   );
 };
