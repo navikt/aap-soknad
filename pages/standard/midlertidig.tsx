@@ -19,6 +19,8 @@ const KvitteringPage = ({ søker }: PageProps) => {
   };
   const onServerErrorButtonClick = async () =>
     await fetch('/aap/soknad/api/log/logerror', { method: 'GET' });
+  const onSendtButtonClick = async () =>
+    await fetch('/aap/soknad/api/log/sendtsoknad', { method: 'GET' });
   return (
     <SoknadContextProviderStandard>
       <PageHeader align="center" className={classes?.pageHeader}>
@@ -30,7 +32,7 @@ const KvitteringPage = ({ søker }: PageProps) => {
       <Button onClick={onServerErrorButtonClick} type={'button'} variant={'primary'}>
         Log feil på nextjs server
       </Button>
-      <Button onClick={onServerErrorButtonClick} type={'button'} variant={'primary'}>
+      <Button onClick={onSendtButtonClick} type={'button'} variant={'primary'}>
         Log søknad sendt
       </Button>
     </SoknadContextProviderStandard>
