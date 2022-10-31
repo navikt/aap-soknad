@@ -41,25 +41,25 @@
         "text3": "Du kan søke om AAP selv om du ikke har mottatt sykepenger."
       },
       "accordionHvis": {
-        "title": "Hvis du får AAP gjelder dette",
+        "title": "Hvis du får AAP, gjelder dette",
         "bulletPointOppfølging": "Du har rett til oppfølging fra NAV",
         "bulletPointPlikt": "Du har plikt til å bidra til å avklare om du kan beholde eller komme i jobb",
         "bulletPointMeldekort": "Du må sende inn meldekort hver 14. dag",
-        "bulletPointTilbakebetaling": "Hvis jeg får penger jeg ikke har rett til, er jeg forberedt på at jeg må betale dem tilbake.",
+        "bulletPointTilbakebetaling": "Hvis du får penger du ikke har rett til, er du forberedt på at du må betale dem tilbake.",
         "bulletPointBeskjed": "Du har plikt til å gi beskjed hvis situasjonen din endrer seg"
       },
       "accordionInformasjon": {
         "title": "Vi vil hente og bruke informasjon om deg",
         "informasjonDuOppgir": "I tillegg til den informasjonen du oppgir i søknaden, henter vi:",
-        "bulletPointPersoninformasjon": "personinformasjon om deg og barna dine fra Folkeregisteret",
-        "bulletPontSkatt": "inntektsinformasjon fra Skatteetaten",
-        "bulletpointHelse": "helseinformasjon fra lege/behandler for å kartlegge arbeidsevnen din",
-        "bulletPointArbeid": "opplysninger om arbeidsforholdet ditt fra Arbeidsgiver- og arbeidstakerregisteret",
-        "bulletPointAndreOpplysninger": "opplysninger om deg vi har fra før",
+        "bulletPointPersoninformasjon": "Personinformasjon om deg og barna dine fra Folkeregisteret.",
+        "bulletPontSkatt": "Inntektsinformasjon fra Skatteetaten.",
+        "bulletpointHelse": "Helseinformasjon fra lege/behandler for å kartlegge arbeidsevnen din.",
+        "bulletPointArbeid": "Opplysninger om arbeidsforholdet ditt fra Arbeidsgiver- og arbeidstakerregisteret.",
+        "bulletPointAndreOpplysninger": "opplysninger om deg vi har fra før.",
         "folketrygdloven": "Dette gjør vi for å vurdere om du har rett til AAP etter folketrygdloven kapittel 11.",
-        "bulletPointDeler": "Vi deler opplysninger om hva du får utbetalt i AAP med Skatteetaten og Statistisk sentralbyrå",
-        "bulletPointForbedre": "Vi kan bruke opplysninger om deg til å forbedre våre tjenester",
-        "personopplysningerNavNo": "Du kan lese mer om hvordan NAV behandler personopplysninger på nav.no (åpnes i ny fane)"
+        "bulletPointDeler": "Vi deler opplysninger om hva du får utbetalt i AAP med Skatteetaten og Statistisk sentralbyrå.",
+        "bulletPointForbedre": "Vi kan bruke opplysninger om deg til å forbedre våre tjenester.",
+        "personopplysningerNavNo": "Du kan lese mer om hvordan NAV behandler personopplysninger på nav.no (åpnes i ny fane)."
       },
       "veiledningConfirm": {
         "title": "Vi stoler på deg",
@@ -75,11 +75,11 @@
       "title": "Startdato",
       "guide": {
         "text1": "Hovedregelen er at du tidligst kan få AAP fra den dagen du sender inn søknaden.",
-        "text2": "Hvis du mottar sykepenger får du vanligvis AAP første dagen etter at sykepengene dine er ferdig."
+        "text2": "Hvis du mottar sykepenger, får du vanligvis AAP første dagen etter at sykepengene dine er ferdig."
       },
       "skalHaFerie": {
         "label": "Planlegger du å ta ferie før startdato på AAP?",
-        "description": "Hvis du tar ut ferie kan startdatoen forskyve seg.",
+        "description": "Hvis du tar ut ferie, kan startdatoen forskyve seg.",
         "validation": {
           "required": "Du må svare på om du planlegger å ta ferie."
         }
@@ -128,7 +128,7 @@
         "label": "Har du bodd sammenhengende i Norge de fem siste årene?",
         "readMore": {
           "title": "Hva menes med å ha \"bodd sammenhengende\"?",
-          "text": "Dette betyr at du har oppholdt deg i Norge mesteparten av hver av disse årene."
+          "text": "Dette betyr at du har oppholdt deg i Norge mesteparten av hvert av disse årene."
         },
         "validation": {
           "required": "Du må svare på om du har bodd sammenhengende i Norge de fem siste årene."
@@ -193,8 +193,8 @@
             "BODD": "Legg til utenlandsopphold"
           },
           "ingress": {
-            "ARBEID": "Nå må du oppgi i hvilke perioder du har jobbet utenfor Norge de fem siste årene. Oppgi også hvilket land du var i.",
-            "BODD": "Nå må du oppgi i hvilke perioder du har bodd, studert eller jobbet utenfor Norge. Oppgi også hvilket land du var i.",
+            "ARBEID": "Oppgi i hvilke perioder du har jobbet utenfor Norge de fem siste årene. Oppgi også hvilket land du var i.",
+            "BODD": "Oppgi i hvilke perioder du har bodd, studert eller jobbet utenfor Norge. Oppgi også hvilket land du var i.",
             "BODD_2": "Ta med alle perioder siden du var 16 år."
           },
           "land": {

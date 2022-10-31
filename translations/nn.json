@@ -30,11 +30,11 @@
       "title": "Startdato",
       "guide": {
         "text1": "Hovedregelen er at du tidligst kan få AAP fra den dagen du sender inn søknaden.",
-        "text2": "Hvis du mottar sykepenger får du vanligvis AAP første dagen etter at sykepengene dine er ferdig."
+        "text2": "Hvis du mottar sykepenger, får du vanligvis AAP første dagen etter at sykepengene dine er ferdig."
       },
       "skalHaFerie": {
         "label": "Planlegger du å ta ferie før startdato på AAP?",
-        "description": "Hvis du tar ut ferie kan startdatoen forskyve seg.",
+        "description": "Hvis du tar ut ferie, kan startdatoen forskyve seg.",
         "validation": {
           "required": "Du må svare på om du planlegger å ta ferie."
         }
@@ -93,21 +93,21 @@
         "bulletPointOppfølging": "Du har rett til oppfølging frå NAV",
         "bulletPointPlikt": "Du har plikt til å bidra til å avklare om du kan behalde eller kome i jobb",
         "bulletPointMeldekort": "Du må sende inn meldekort kvar 14. dag",
-        "bulletPointTilbakebetaling": "Dersom eg får pengar eg ikkje har rett på, er eg førebudd på å betale dei tilbake.",
+        "bulletPointTilbakebetaling": "Dersom du får pengar du ikkje har rett på, er du førebudd på å betale dei tilbake.",
         "bulletPointBeskjed": "Du pliktar å gi beskjed dersom situasjonen din endrar seg"
       },
       "accordionInformasjon": {
         "title": "Vi vil innhente og bruke informasjon om deg",
         "informasjonDuOppgir": "I tillegg til informasjonen du oppgir i søknaden, hentar vi følgjande:",
-        "bulletPointPersoninformasjon": "personinformasjon om deg og barna dine frå Folkeregisteret",
-        "bulletPontSkatt": "inntektsinformasjon frå Skatteetaten",
-        "bulletpointHelse": "helseinformasjon frå lege/behandlar for å kartleggje arbeidsevna di",
-        "bulletPointArbeid": "opplysningar om arbeidsforholdet ditt frå Arbeidsgivar- og arbeidstakarregisteret",
-        "bulletPointAndreOpplysninger": "opplysningar vi har om deg frå før",
+        "bulletPointPersoninformasjon": "Personinformasjon om deg og barna dine frå Folkeregisteret.",
+        "bulletPontSkatt": "Inntektsinformasjon frå Skatteetaten.",
+        "bulletpointHelse": "Helseinformasjon frå lege/behandlar for å kartleggje arbeidsevna di.",
+        "bulletPointArbeid": "Opplysningar om arbeidsforholdet ditt frå Arbeidsgivar- og arbeidstakarregisteret.",
+        "bulletPointAndreOpplysninger": "Opplysningar vi har om deg frå før.",
         "folketrygdloven": "Dette gjer vi for å vurdere om du har rett til AAP etter folketrygdlova kapittel 11.",
-        "bulletPointDeler": "Vi deler opplysningar om kva du får utbetalt i AAP, med Skatteetaten og Statistisk sentralbyrå",
-        "bulletPointForbedre": "Vi kan bruke opplysningar om deg for å førebu tenestene våre",
-        "personopplysningerNavNo": "Du kan lese meir om korleis NAV behandlar personopplysningar på nav.no (blir opna i ny fane)"
+        "bulletPointDeler": "Vi deler opplysningar om kva du får utbetalt i AAP, med Skatteetaten og Statistisk sentralbyrå.",
+        "bulletPointForbedre": "Vi kan bruke opplysningar om deg for å førebu tenestene våre.",
+        "personopplysningerNavNo": "Du kan lese meir om korleis NAV behandlar personopplysningar på nav.no (blir opna i ny fane)."
       },
       "veiledningConfirm": {
         "title": "Vi stolar på deg",
