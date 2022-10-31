@@ -471,7 +471,8 @@
       },
       "confirmation": {
         "title": "Vi stoler på deg",
-        "text": "Jeg har lest all informasjonen jeg har fått i søknaden og bekrefter at opplysningene jeg har gitt er korrekte."
+        "text": "Jeg har lest all informasjonen jeg har fått i søknaden og bekrefter at opplysningene jeg har gitt er korrekte.",
+        "required": "Vennligst bekreft at du har lest all informasjon i søknaden og at opplysningene du har gitt er korrekte."
       }
     },
     "barnetillegg": {
