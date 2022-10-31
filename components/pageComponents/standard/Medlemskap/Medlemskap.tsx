@@ -385,9 +385,9 @@ export const Medlemskap = ({ onBackClick, onNext, defaultValues }: Props) => {
                           <div className={styles.tableRowButtonContainer}>
                             <span>{`${field?.land?.split(':')?.[1]} `}</span>
                             <span>
-                              {`${formatDate(field?.fraDato, 'dd.MM.yyyy')} - ${formatDate(
+                              {`${formatDate(field?.fraDato, 'MMMM yyyy')} - ${formatDate(
                                 field?.tilDato,
-                                'dd.MM.yyyy'
+                                'MMMM yyyy'
                               )}${field?.iArbeid === 'Ja' ? ' (Jobb)' : ''}`}
                             </span>
                           </div>
