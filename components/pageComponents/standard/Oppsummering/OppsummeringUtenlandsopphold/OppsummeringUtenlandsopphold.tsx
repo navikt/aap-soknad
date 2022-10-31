@@ -31,7 +31,7 @@ const OppsummeringUtenlandsopphold = ({ opphold }: Props) => {
           {etOpphold?.iArbeid && (
             <div>
               <Label>
-                {formatMessage('søknad.oppsummering.medlemskap.utenlandsopphold.arbeidetIPerioden')}
+                {formatMessage('søknad.oppsummering.medlemskap.utenlandsopphold.jobbetIPerioden')}
               </Label>
               <BodyShort>{etOpphold?.iArbeid}</BodyShort>
             </div>
