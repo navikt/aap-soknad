@@ -38,20 +38,11 @@ function soknadReducerStandard(
         søknad: action.payload,
       };
     case SoknadActionKeys.UPDATE_SOKNAD: {
-      const manuelleBarn = state?.søknad?.manuelleBarn || [];
       return {
         ...state,
         søknad: {
           ...state?.søknad,
           ...action.payload,
-          ...(action?.payload?.manuelleBarn && manuelleBarn.length > 0
-            ? {
-                manuelleBarn: manuelleBarn.map((e, i) => ({
-                  ...e,
-                  ...action?.payload?.manuelleBarn?.[i],
-                })),
-              }
-            : {}),
         },
       };
     }

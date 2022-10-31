@@ -26,6 +26,7 @@ import {
 import { formatNavn, formatFullAdresse } from 'utils/StringFormatters';
 import OppsummeringPeriode from './OppsummeringPeriode/OppsummeringPeriode';
 import { isNonEmptyPeriode } from 'utils/periode';
+import { BARN } from 'components/pageComponents/standard/Barnetillegg/Barnetillegg';
 const SØKNAD_BEKREFT = 'søknadBekreft';
 
 interface OppsummeringProps {
@@ -234,11 +235,11 @@ const Oppsummering = ({
           onEdit={() => editStep(StepNames.BARNETILLEGG)}
         >
           <>
-            {søknadState?.søknad?.barnetillegg?.map((barn, index) => (
+            {søknadState?.søknad?.[BARN]?.map((barn, index) => (
               <OppsummeringBarn barn={barn} key={'barn-' + index} />
             ))}
             {søknadState?.søknad?.manuelleBarn?.map((barn) => (
-              <OppsummeringBarn key={barn.id} barn={barn} />
+              <OppsummeringBarn key={barn.internId} barn={barn} />
             ))}
           </>
         </AccordianItemOppsummering>

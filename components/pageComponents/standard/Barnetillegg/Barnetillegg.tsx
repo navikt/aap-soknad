@@ -163,7 +163,7 @@ export const Barnetillegg = ({ onBackClick, onNext, defaultValues }: Props) => {
   const slettBarn = (index: number) => {
     if (index != undefined) {
       const barn = manuelleBarnFields[index];
-      removeRequiredVedlegg(`barn-${barn.id}`, søknadDispatch);
+      removeRequiredVedlegg(`barn-${barn.internId}`, søknadDispatch);
       manuelleBarnRemove(index);
       setShowModal(false);
     }
