@@ -26,6 +26,7 @@ import {
 import { formatNavn, formatFullAdresse } from 'utils/StringFormatters';
 import OppsummeringPeriode from './OppsummeringPeriode/OppsummeringPeriode';
 import { isNonEmptyPeriode } from 'utils/periode';
+const SØKNAD_BEKREFT = 'søknadBekreft';
 
 interface OppsummeringProps {
   onBackClick: () => void;
@@ -45,7 +46,12 @@ const Oppsummering = ({
 
   const { søknadState, søknadDispatch } = useSoknadContextStandard();
   const { stepWizardDispatch } = useStepWizard();
-  const schema = yup.object().shape({});
+  const schema = yup.object().shape({
+    [SØKNAD_BEKREFT]: yup
+      .boolean()
+      .required()
+      .oneOf([true], formatMessage('søknad.oppsummering.confirmation.required')),
+  });
   const {
     control,
     handleSubmit,
@@ -304,8 +310,8 @@ const Oppsummering = ({
       <ConfirmationPanelWrapper
         label={formatMessage('søknad.oppsummering.confirmation.text')}
         control={control}
-        name="søknadBekreft"
-        error={errors?.søknadBekreft?.message}
+        name={SØKNAD_BEKREFT}
+        error={errors?.[SØKNAD_BEKREFT]?.message}
       >
         <Label>{formatMessage('søknad.oppsummering.confirmation.title')}</Label>
       </ConfirmationPanelWrapper>
