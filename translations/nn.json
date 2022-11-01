@@ -33,7 +33,8 @@
       },
       "sykepenger": {
         "legend": "Har du sjukepengar no?",
-        "description": "Viss du mottar sjukepengar, får du AAP frå første dag etter at sjukepengane er ferdig."
+        "description": "Viss du mottar sjukepengar, får du AAP frå første dag etter at sjukepengane er ferdig.",
+        "required": "Du må svare på om du mottar sykepenger"
       },
       "skalHaFerie": {
         "label": "Har du planar om å ta ferie?",

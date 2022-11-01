@@ -7,6 +7,7 @@ import { JaEllerNei, JaNeiVetIkke } from './Generic';
 import { AVBRUTT_STUDIE_VEDLEGG } from 'components/pageComponents/standard/Student/Student';
 import { OppslagBehandler } from 'context/sokerOppslagContext';
 import { BARN } from 'components/pageComponents/standard/Barnetillegg/Barnetillegg';
+import { SYKEPENGER } from 'components/pageComponents/standard/StartDato/StartDato';
 
 export type FieldAndLabel<T> = {
   label?: string;
@@ -100,12 +101,8 @@ export type Vedlegg = {
   vedleggId: string;
 };
 
-export type StartDato = Date;
-
 export interface Soknad {
-  startDato?: StartDato;
-  hvorfor?: string;
-  begrunnelse?: string;
+  [SYKEPENGER]: JaEllerNei;
   yrkesskade?: Yrkesskade;
   medlemskap?: Medlemskap;
   registrerteBehandlere?: RegistrertBehandler[];

@@ -23,6 +23,7 @@ import {
   BODD_I_NORGE,
   utenlandsPeriodeArbeidEllerBodd,
 } from 'components/pageComponents/standard/Medlemskap/Medlemskap';
+import { SYKEPENGER } from 'components/pageComponents/standard/StartDato/StartDato';
 
 export type SøknadsType = 'UTLAND' | 'STANDARD';
 
@@ -272,6 +273,7 @@ export const mapSøknadToPdf = (
 ) => {
   const getStartDato = (søknad?: Soknad) => {
     const rows = [
+      ...createField(formatMessage('søknad.startDato.sykepenger.legend'), søknad?.[SYKEPENGER]),
       ...createField(
         formatMessage('søknad.startDato.skalHaFerie.label'),
         søknad?.ferie?.skalHaFerie
