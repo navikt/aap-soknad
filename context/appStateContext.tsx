@@ -16,7 +16,6 @@ export type AppStateContextState = {
 export const AppStateContext = createContext<AppStateContextState | undefined>(undefined);
 
 function stateReducer(state: AppState, action: DispatchAppStateAction) {
-  console.log(action.type, action.payload);
   switch (action.type) {
     case 'SET_APP_STATE': {
       return { ...state, ...action.payload };

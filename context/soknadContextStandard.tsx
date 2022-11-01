@@ -20,7 +20,6 @@ function soknadReducerStandard(
   state: GenericSoknadContextState<Soknad>,
   action: SoknadAction<Soknad>
 ): GenericSoknadContextState<Soknad> {
-  console.log('soknadReducer', action.type, action.payload);
   switch (action.type) {
     case SoknadActionKeys.SET_STATE_FROM_CACHE:
       return {
