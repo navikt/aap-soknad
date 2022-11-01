@@ -116,6 +116,8 @@ const StartDato = ({ onBackClick, onNext, defaultValues }: Props) => {
     }
   }, [skalHaFerie]);
 
+  console.log('allFields', allFields);
+
   useEffect(() => {
     if (ferieType !== søknadState?.søknad?.ferie?.ferieType) {
       setValue(`${FERIE}.fraDato`, undefined);
@@ -183,6 +185,7 @@ const StartDato = ({ onBackClick, onNext, defaultValues }: Props) => {
                 <DatePickerWrapper
                   setValue={setValue}
                   label={formatMessage('søknad.startDato.periode.fraDato.label')}
+                  selectedDate={allFields.ferie?.fraDato}
                   name={`${FERIE}.fraDato`}
                   fromDate={new Date()}
                   error={errors?.[`${FERIE}`]?.fraDato?.message}
@@ -192,6 +195,7 @@ const StartDato = ({ onBackClick, onNext, defaultValues }: Props) => {
                 <DatePickerWrapper
                   setValue={setValue}
                   label={formatMessage('søknad.startDato.periode.tilDato.label')}
+                  selectedDate={allFields?.ferie.tilDato}
                   name={`${FERIE}.tilDato`}
                   fromDate={new Date()}
                   error={errors?.[`${FERIE}`]?.tilDato?.message}

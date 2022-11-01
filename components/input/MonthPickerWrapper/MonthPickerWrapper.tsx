@@ -4,6 +4,7 @@ import { useEffect } from 'react';
 export interface MonthPickerProps {
   name: string;
   label: string;
+  selectedDate?: string | Date;
   setValue: any;
   fromDate?: Date;
   toDate?: Date;
@@ -13,12 +14,14 @@ export interface MonthPickerProps {
 export const MonthPickerWrapper = ({
   name,
   label,
+  selectedDate,
   setValue,
   fromDate,
   toDate,
   error,
 }: MonthPickerProps) => {
   const { monthpickerProps, inputProps, selectedMonth } = UNSAFE_useMonthpicker({
+    defaultSelected: selectedDate ? new Date(selectedDate) : undefined,
     fromDate: fromDate,
     toDate: toDate,
   });

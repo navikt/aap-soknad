@@ -173,6 +173,7 @@ const UtenlandsPeriodeVelger = ({
               <Cell xs={12} lg={5}>
                 <MonthPickerWrapper
                   name="fraDato"
+                  selectedDate={utenlandsPeriode?.fraDato}
                   setValue={setValue}
                   label={formatMessage(
                     'søknad.medlemskap.utenlandsperiode.modal.periode.fraDato.label'
@@ -185,6 +186,7 @@ const UtenlandsPeriodeVelger = ({
               <Cell xs={12} lg={5}>
                 <MonthPickerWrapper
                   name="tilDato"
+                  selectedDate={utenlandsPeriode?.tilDato}
                   setValue={setValue}
                   label={formatMessage(
                     'søknad.medlemskap.utenlandsperiode.modal.periode.tilDato.label'

@@ -4,14 +4,24 @@ import { useEffect } from 'react';
 export interface DatePickerProps {
   name: string;
   label: string;
+  selectedDate?: string | Date;
   setValue: any;
   fromDate?: Date;
   toDate?: Date;
   error?: string;
 }
 
-const DatePickerWrapper = ({ name, label, setValue, fromDate, toDate, error }: DatePickerProps) => {
+const DatePickerWrapper = ({
+  name,
+  label,
+  selectedDate,
+  setValue,
+  fromDate,
+  toDate,
+  error,
+}: DatePickerProps) => {
   const { datepickerProps, inputProps, selectedDay } = UNSAFE_useDatepicker({
+    defaultSelected: selectedDate ? new Date(selectedDate) : undefined,
     fromDate: fromDate,
     toDate: toDate,
   });

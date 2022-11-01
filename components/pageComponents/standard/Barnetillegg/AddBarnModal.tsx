@@ -154,6 +154,7 @@ export const AddBarnModal = ({ showModal, onCloseClick, onSaveClick, barn }: Pro
           <DatePickerWrapper
             setValue={setValue}
             label={formatMessage('søknad.barnetillegg.leggTilBarn.modal.fødselsdato.label')}
+            selectedDate={barn?.fødseldato}
             name="fødseldato"
             fromDate={subYears(new Date(), ALDER_BARN_ÅR)}
             toDate={new Date()}
