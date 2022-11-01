@@ -1,0 +1,23 @@
+apiVersion: "nais.io/v1alpha1"
+kind: "Application"
+metadata:
+  name: "aap-soknad-frozen"
+  namespace: "aap"
+  labels:
+    "team": "aap"
+spec:
+  image: {{image}}
+  port: 3000
+  ingresses:
+    - "https://aap-soknad-v1.labs.nais.io/"
+  liveness:
+    path: "/aap/soknad/api/internal/isAlive"
+    initialDelay: 20
+    timeout: 60
+  readiness:
+    path: "/aap/soknad/api/internal/isReady"
+    initialDelay: 20
+    timeout: 60
+  replicas:
+    min: 2
+    max: 2
