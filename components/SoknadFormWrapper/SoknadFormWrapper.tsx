@@ -85,7 +85,7 @@ export const SlettModal = ({
       <Modal.Content className={classes?.modalContent}>
         {!slettSøknadSuccess && (
           <>
-            <Heading size={'small'} level={'1'}>
+            <Heading className={classes?.modalHeading} size={'small'} level={'1'}>
               {formatMessage('avbrytOgSlettModal.heading')}
             </Heading>
             <div className={classes?.buttonWrapper}>

@@ -1,9 +1,9 @@
 import { FieldValues, useForm, useWatch } from 'react-hook-form';
 import { Soknad } from 'types/Soknad';
 import React, { useEffect, useMemo } from 'react';
-import { Alert, BodyShort, Cell, Grid, Heading, Radio } from '@navikt/ds-react';
+import { Label, Alert, BodyShort, Cell, Grid, Heading, Radio } from '@navikt/ds-react';
 import RadioGroupWrapper from 'components/input/RadioGroupWrapper/RadioGroupWrapper';
-import { JaNeiVetIkke } from 'types/Generic';
+import { JaEllerNei, JaNeiVetIkke } from 'types/Generic';
 import TextFieldWrapper from 'components/input/TextFieldWrapper';
 import ColorPanel from 'components/panel/ColorPanel';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -18,9 +18,11 @@ import { slettLagretSoknadState, updateSøknadData } from 'context/soknadContext
 import { useDebounceLagreSoknad } from 'hooks/useDebounceLagreSoknad';
 import DatePickerWrapper from 'components/input/DatePickerWrapper/DatePickerWrapper';
 import { GenericSoknadContextState } from 'types/SoknadContext';
+import * as classes from './StartDato.module.css';
 import { formatDate } from 'utils/date';
 
 const FERIE = 'ferie';
+const SYKEPENGER = 'sykepenger';
 const FERIETYPE = 'ferieType';
 const SKALHAFERIE = 'skalHaFerie';
 
@@ -80,6 +82,7 @@ const StartDato = ({ onBackClick, onNext, defaultValues }: Props) => {
     control,
     handleSubmit,
     setValue,
+    clearErrors,
     formState: { errors },
   } = useForm<FieldValues>({
     resolver: yupResolver(getStartDatoSchema(formatMessage)),
@@ -106,17 +109,13 @@ const StartDato = ({ onBackClick, onNext, defaultValues }: Props) => {
     }),
     [formatMessage]
   );
-  useEffect(() => {
-    console.log('søknadstate', søknadState);
-  }, [søknadState]);
 
   useEffect(() => {
-    if (skalHaFerie !== JaNeiVetIkke.JA) {
+    if (skalHaFerie === JaEllerNei.NEI) {
       setValue(`${FERIE}.${FERIETYPE}`, undefined);
     }
+    clearErrors();
   }, [skalHaFerie]);
-
-  console.log('allFields', allFields);
 
   useEffect(() => {
     if (ferieType !== søknadState?.søknad?.ferie?.ferieType) {
@@ -151,21 +150,29 @@ const StartDato = ({ onBackClick, onNext, defaultValues }: Props) => {
       </Heading>
       <LucaGuidePanel>
         <BodyShort spacing>{formatMessage('søknad.startDato.guide.text1')}</BodyShort>
-        <BodyShort spacing>{formatMessage('søknad.startDato.guide.text2')}</BodyShort>
       </LucaGuidePanel>
       <RadioGroupWrapper
-        legend={formatMessage('søknad.startDato.skalHaFerie.label')}
-        description={formatMessage('søknad.startDato.skalHaFerie.description')}
-        name={`${FERIE}.${SKALHAFERIE}`}
+        legend={formatMessage('søknad.startDato.sykepenger.legend')}
+        description={formatMessage('søknad.startDato.sykepenger.description')}
+        name={`${FERIE}.${SYKEPENGER}`}
         control={control}
-        error={errors?.[FERIE]?.[SKALHAFERIE]?.message}
+        error={errors?.[FERIE]?.[SYKEPENGER]?.message}
       >
-        <Radio value={JaNeiVetIkke.JA}>{JaNeiVetIkke.JA}</Radio>
-        <Radio value={JaNeiVetIkke.NEI}>{JaNeiVetIkke.NEI}</Radio>
-        <Radio value={JaNeiVetIkke.VET_IKKE}>{JaNeiVetIkke.VET_IKKE}</Radio>
+        <Radio value={JaEllerNei.JA}>{JaEllerNei.JA}</Radio>
+        <Radio value={JaEllerNei.NEI}>{JaEllerNei.NEI}</Radio>
       </RadioGroupWrapper>
-      {skalHaFerie === JaNeiVetIkke.JA && (
-        <ColorPanel color={'grey'}>
+      <ColorPanel color={'grey'}>
+        <RadioGroupWrapper
+          legend={formatMessage('søknad.startDato.skalHaFerie.label')}
+          description={formatMessage('søknad.startDato.skalHaFerie.description')}
+          name={`${FERIE}.${SKALHAFERIE}`}
+          control={control}
+          error={errors?.[FERIE]?.[SKALHAFERIE]?.message}
+        >
+          <Radio value={JaEllerNei.JA}>{JaEllerNei.JA}</Radio>
+          <Radio value={JaEllerNei.NEI}>{JaEllerNei.NEI}</Radio>
+        </RadioGroupWrapper>
+        {skalHaFerie === JaEllerNei.JA && (
           <RadioGroupWrapper
             legend={formatMessage('søknad.startDato.ferieType.label')}
             name={`${FERIE}.${FERIETYPE}`}
@@ -179,47 +186,45 @@ const StartDato = ({ onBackClick, onNext, defaultValues }: Props) => {
               <BodyShort>{FerieType.DAGER}</BodyShort>
             </Radio>
           </RadioGroupWrapper>
-          {ferieType === FerieType.PERIODE ? (
-            <Grid>
-              <Cell xs={12} lg={5}>
-                <DatePickerWrapper
-                  setValue={setValue}
-                  label={formatMessage('søknad.startDato.periode.fraDato.label')}
-                  selectedDate={allFields.ferie?.fraDato}
-                  name={`${FERIE}.fraDato`}
-                  fromDate={new Date()}
-                  error={errors?.[`${FERIE}`]?.fraDato?.message}
-                />
-              </Cell>
-              <Cell xs={12} lg={5}>
-                <DatePickerWrapper
-                  setValue={setValue}
-                  label={formatMessage('søknad.startDato.periode.tilDato.label')}
-                  selectedDate={allFields?.ferie.tilDato}
-                  name={`${FERIE}.tilDato`}
-                  fromDate={new Date()}
-                  error={errors?.[`${FERIE}`]?.tilDato?.message}
-                />
-              </Cell>
-            </Grid>
-          ) : (
-            <></>
-          )}
-          {ferieType === FerieType.DAGER ? (
+        )}
+        {ferieType === FerieType.PERIODE && (
+          <div className={classes?.periodeContainer}>
+            <Label>{formatMessage('søknad.startDato.periode.label')}</Label>
+            <div className={classes?.datoContainer}>
+              <DatePickerWrapper
+                setValue={setValue}
+                label={formatMessage('søknad.startDato.periode.fraDato.label')}
+                selectedDate={allFields.ferie?.fraDato}
+                name={`${FERIE}.fraDato`}
+                fromDate={new Date()}
+                error={errors?.[`${FERIE}`]?.fraDato?.message}
+              />
+              <DatePickerWrapper
+                setValue={setValue}
+                label={formatMessage('søknad.startDato.periode.tilDato.label')}
+                selectedDate={allFields?.ferie.tilDato}
+                name={`${FERIE}.tilDato`}
+                fromDate={new Date()}
+                error={errors?.[`${FERIE}`]?.tilDato?.message}
+              />
+            </div>
+          </div>
+        )}
+        {ferieType === FerieType.DAGER && (
+          <div className={classes?.antallDagerContainer}>
             <TextFieldWrapper
+              className={classes?.antallDagerTekst}
               name={`${FERIE}.antallDager`}
               label={formatMessage('søknad.startDato.antallDager.label')}
               control={control}
               error={errors?.[`${FERIE}`]?.antallDager?.message}
             />
-          ) : (
-            <></>
-          )}
-        </ColorPanel>
-      )}
-      {skalHaFerie === JaNeiVetIkke.VET_IKKE && (
-        <Alert variant={'info'}>{formatMessage('søknad.startDato.alert.text')}</Alert>
-      )}
+          </div>
+        )}
+        {skalHaFerie === JaEllerNei.NEI && (
+          <Alert variant={'info'}>{formatMessage('søknad.startDato.alert.text')}</Alert>
+        )}
+      </ColorPanel>
     </SoknadFormWrapper>
   );
 };

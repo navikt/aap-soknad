@@ -29,27 +29,31 @@
     "startDato": {
       "title": "Startdato",
       "guide": {
-        "text1": "Hovedregelen er at du tidligst kan få AAP fra den dagen du sender inn søknaden.",
-        "text2": "Hvis du mottar sykepenger, får du vanligvis AAP første dagen etter at sykepengene dine er ferdig."
+        "text1": "NAV vil berekna startdato for deg, slik at du får AAP så tidleg som mogleg. Hovudregelen er at du tidlegast kan få AAP frå den dagen du sender inn søknaden."
+      },
+      "sykepenger": {
+        "legend": "Har du sjukepengar no?",
+        "description": "Viss du mottar sjukepengar, får du AAP frå første dag etter at sjukepengane er ferdig."
       },
       "skalHaFerie": {
-        "label": "Planlegger du å ta ferie før startdato på AAP?",
-        "description": "Hvis du tar ut ferie, kan startdatoen forskyve seg.",
+        "label": "Har du planar om å ta ferie?",
+        "description": "Viss du tar ut ferie, kan startdatoen på AAP forskyva seg.",
         "validation": {
           "required": "Du må svare på om du planlegger å ta ferie."
         }
       },
       "ferieType": {
-        "label": "Vet du når du skal ta ut ferie?",
+        "label": "Veit du når du skal ta ut ferie?",
         "values": {
           "periode": "Ja",
-          "dager": "Nei, men jeg vet antall feriedager"
+          "dager": "Nei, men eg veit antall feriedagar"
         },
         "validation": {
           "required": "Du må svare på om du vet når du skal ta ut ferie."
         }
       },
       "periode": {
+        "label": "Fyll i kva periode du skal ta ut ferie.",
         "fraDato": {
           "label": "Fra dato (dd.mm.åååå)",
           "validation": {
@@ -65,6 +69,7 @@
         }
       },
       "antallDager": {
+        "dager": "dagar",
         "label": "Skriv inn antall dager du skal ha ferie",
         "validation": {
           "required": "Du må skrive inn antall dager du skal ha ferie."

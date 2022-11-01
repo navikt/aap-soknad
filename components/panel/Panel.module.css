@@ -1,5 +1,5 @@
 .panelGrey {
-  background-color: #e9e7e7;
+  background-color: var(--navds-semantic-color-canvas-background);
 }
 .panelWhite {
   background-color: #ffffff;

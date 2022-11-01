@@ -6,8 +6,8 @@
   gap: var(--navds-spacing-10);
 }
 .fourButtonWrapper > button {
-   min-width: 201px;
- }
+  min-width: 201px;
+}
 .fourButtonWrapper {
   display: grid;
   grid-template-columns: auto 3% auto 1fr;
@@ -55,6 +55,11 @@
 
 .buttonWrapper {
   composes: buttonWrapper from '../../styles/layout.module.css';
+}
+@media (max-width: 480px) {
+  .modalHeading {
+    margin-top: 30px;
+  }
 }
 .modalContent {
   composes: formContent;

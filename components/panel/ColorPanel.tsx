@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import * as classes from './Panel.module.css';
 interface Props {
-  children?: React.ReactChild | React.ReactChild[];
+  children?: React.ReactNode;
   className?: string;
   color?: 'grey';
   padding?: boolean;
