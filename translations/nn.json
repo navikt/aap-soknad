@@ -132,7 +132,7 @@
       "harBoddINorgeSiste5År": {
         "label": "Har du budd samanhengande i Noreg dei fem siste åra?",
         "readMore": {
-          "title": "Kva vil det seie å ha «budd samanhengande”»?",
+          "title": "Kva vil det seie å ha «budd samanhengande»?",
           "text": "Dette betyr at du har opphalde deg i Noreg mesteparten av kvart av desse åra."
         },
         "validation": {
@@ -387,10 +387,11 @@
     "tilleggsopplysninger": {
       "title": "Tilleggsopplysninger",
       "guide": {
-        "text": "Dette spørsmålet er valgfritt å svare på."
+        "text": "Viss det er fleire opplysningar du ønsker å gi oss, kan du skriva dei her. Dette er heilt valfritt."
       },
       "tilleggsopplysninger": {
-        "label": "Hvis du har flere opplysninger du mener er viktig for søknaden din, kan du skrive dem her (valgfritt)"
+        "label": "Viss du har fleire opplysningar du meiner er viktig for søknaden din, kan du skriva dei her (valfritt)",
+        "description": "Ikkje skriv personinformasjon om andre personar her."
       }
     },
     "oppsummering": {

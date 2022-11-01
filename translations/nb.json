@@ -364,10 +364,11 @@
     "tilleggsopplysninger": {
       "title": "Tilleggsopplysninger",
       "guide": {
-        "text": "Dette spørsmålet er valgfritt å svare på."
+        "text": "Hvis det er flere opplysninger du ønsker å gi oss, kan du skrive dem her. Dette er helt valgfritt."
       },
       "tilleggsopplysninger": {
-        "label": "Hvis du har flere opplysninger du mener er viktig for søknaden din, kan du skrive dem her (valgfritt)"
+        "label": "Hvis du har flere opplysninger du mener er viktig for søknaden din, kan du skrive dem her (valgfritt)",
+        "description": "Ikke skriv personinformasjon om andre personer her."
       }
     },
     "vedlegg": {
