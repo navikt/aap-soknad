@@ -8,7 +8,7 @@ import { isLabs, isMock } from 'utils/environments';
 import { getStringFromPossiblyArrayQuery } from 'utils/string';
 import { SØKNAD_CONTEXT_VERSION } from 'context/soknadContextCommon';
 import { logger } from '@navikt/aap-felles-innbygger-utils';
-import { defaultStepList } from 'pages/standard';
+import { defaultStepList } from 'pages';
 
 const handler = beskyttetApi(async (req: NextApiRequest, res: NextApiResponse) => {
   const type = getStringFromPossiblyArrayQuery(req.query.type);

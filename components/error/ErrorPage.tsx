@@ -13,7 +13,7 @@ const ErrorPage = ({ error, componentStack }: Props) => {
         Beklager, her har det skjedd noe galt. Vi har spart på svarene dine slik at du kan fortsette
         der du slapp senere.
       </p>
-      <Link href="/standard" shallow={false}>
+      <Link href="/" shallow={false}>
         Gå tilbake til søknad
       </Link>
     </div>

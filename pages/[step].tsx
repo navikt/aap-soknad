@@ -42,8 +42,8 @@ import Oppsummering from 'components/pageComponents/standard/Oppsummering/Oppsum
 import { beskyttetSide } from 'auth/beskyttetSide';
 import { GetServerSidePropsResult, NextPageContext } from 'next';
 import { getAccessToken } from 'auth/accessToken';
-import { getSøker } from '../api/oppslag/soeker';
-import { lesBucket } from '../api/buckets/les';
+import { getSøker } from './api/oppslag/soeker';
+import { lesBucket } from './api/buckets/les';
 import { logSkjemaFullførtEvent, logSkjemastegFullførtEvent } from 'utils/amplitude';
 import { Alert, Link } from '@navikt/ds-react';
 import metrics from 'utils/metrics';
@@ -139,7 +139,7 @@ const Steps = ({ søker, mellomlagretSøknad }: PageProps) => {
 
   const onPreviousStep = async () => {
     if (currentStep?.name === StepNames.STARTDATO) {
-      router.push('/standard');
+      router.push('/');
     } else {
       goToPreviousStep(stepWizardDispatch);
     }
@@ -272,7 +272,7 @@ const StepsWithContextProvider = ({ søker, mellomlagretSøknad }: PageProps) =>
 export const getServerSideProps = beskyttetSide(
   async (ctx: NextPageContext): Promise<GetServerSidePropsResult<{}>> => {
     const stopTimer = metrics.getServersidePropsDurationHistogram.startTimer({
-      path: '/standard/[steg]',
+      path: '/[steg]',
     });
     const { step } = ctx.query;
     const bearerToken = getAccessToken(ctx);
@@ -283,7 +283,7 @@ export const getServerSideProps = beskyttetSide(
     if (!mellomlagretSøknad?.lagretStepList) {
       return {
         redirect: {
-          destination: '/standard',
+          destination: '/',
           permanent: false,
         },
       };

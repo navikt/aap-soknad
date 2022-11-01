@@ -61,7 +61,7 @@ const KvitteringPage = ({ søker, søknader }: PageProps) => {
 export const getServerSideProps = beskyttetSide(
   async (ctx: NextPageContext): Promise<GetServerSidePropsResult<{}>> => {
     const stopTimer = metrics.getServersidePropsDurationHistogram.startTimer({
-      path: '/standard/kvittering',
+      path: '/kvittering',
     });
     const bearerToken = getAccessToken(ctx);
     const søknader = await getSøknader(bearerToken);
