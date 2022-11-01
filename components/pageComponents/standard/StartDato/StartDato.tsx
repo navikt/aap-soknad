@@ -112,7 +112,8 @@ const StartDato = ({ onBackClick, onNext, defaultValues }: Props) => {
 
   useEffect(() => {
     if (skalHaFerie === JaEllerNei.NEI) {
-      setValue(`${FERIE}.${FERIETYPE}`, undefined);
+      // @ts-ignore // TODO: Finne ut av hvorfor state blir riktig med '' og ikke undefined
+      setValue(`${FERIE}.${FERIETYPE}`, '');
     }
     clearErrors();
   }, [skalHaFerie]);
@@ -121,7 +122,7 @@ const StartDato = ({ onBackClick, onNext, defaultValues }: Props) => {
     if (ferieType !== søknadState?.søknad?.ferie?.ferieType) {
       setValue(`${FERIE}.fraDato`, undefined);
       setValue(`${FERIE}.tilDato`, undefined);
-      setValue(`${FERIE}.antallDager`, undefined);
+      setValue(`${FERIE}.antallDager`, '');
     }
   }, [ferieType, søknadState]);
   return (

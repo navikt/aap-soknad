@@ -200,6 +200,7 @@ export const Medlemskap = ({ onBackClick, onNext, defaultValues }: Props) => {
     () => utenlandsPeriodeArbeidEllerBodd(arbeidINorge, boddINorge),
     [boddINorge, arbeidINorge]
   );
+
   useEffect(() => {
     if (boddINorge !== søknadState.søknad?.medlemskap?.harBoddINorgeSiste5År) {
       setValue(`${MEDLEMSKAP}.${ARBEID_UTENFOR_NORGE_FØR_SYKDOM}`, undefined);
@@ -210,7 +211,10 @@ export const Medlemskap = ({ onBackClick, onNext, defaultValues }: Props) => {
     }
   }, [boddINorge, søknadState]);
   useEffect(() => {
-    setValue(`${MEDLEMSKAP}.${OGSÅ_ARBEID_UTENFOR_NORGE}`, undefined);
+    if (arbeidINorge === JaEllerNei.NEI) {
+      // @ts-ignore // TODO: Finne ut av hvorfor state blir riktig med '' og ikke undefined
+      setValue(`${MEDLEMSKAP}.${OGSÅ_ARBEID_UTENFOR_NORGE}`, '');
+    }
     if (arbeidINorge === JaEllerNei.JA) remove();
     clearErrors();
   }, [arbeidINorge]);
