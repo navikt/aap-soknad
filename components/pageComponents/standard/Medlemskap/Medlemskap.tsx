@@ -215,7 +215,7 @@ export const Medlemskap = ({ onBackClick, onNext, defaultValues }: Props) => {
       // @ts-ignore // TODO: Finne ut av hvorfor state blir riktig med '' og ikke undefined
       setValue(`${MEDLEMSKAP}.${OGSÅ_ARBEID_UTENFOR_NORGE}`, '');
     }
-    if (arbeidINorge === JaEllerNei.JA) remove();
+    //if (arbeidINorge === JaEllerNei.JA) remove();
     clearErrors();
   }, [arbeidINorge]);
   useEffect(() => {
@@ -231,6 +231,13 @@ export const Medlemskap = ({ onBackClick, onNext, defaultValues }: Props) => {
       clearErrors();
     }
   }, [fields]);
+
+  useEffect(() => {
+    console.log({ arbeidINorge, iTilleggArbeidUtenforNorge });
+    if (arbeidINorge === JaEllerNei.JA && iTilleggArbeidUtenforNorge === JaEllerNei.NEI) remove();
+    // @ts-ignore // TODO: Finne ut av hvorfor state blir riktig med '' og ikke undefined
+    if (arbeidINorge === JaEllerNei.JA && iTilleggArbeidUtenforNorge === '') remove();
+  }, [arbeidINorge, iTilleggArbeidUtenforNorge]);
 
   return (
     <>
@@ -365,7 +372,7 @@ export const Medlemskap = ({ onBackClick, onNext, defaultValues }: Props) => {
               <Table size="medium">
                 <Table.Header>
                   <Table.Row>
-                    <Table.HeaderCell>
+                    <Table.HeaderCell colSpan={2}>
                       <Heading size="xsmall" level="3">
                         {formatMessage(
                           `søknad.medlemskap.utenlandsperiode.perioder.title.${arbeidEllerBodd}`
