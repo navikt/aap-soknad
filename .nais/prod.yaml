@@ -1,6 +1,5 @@
 ingresses:
-- "https://aap-soknad.intern.nav.no/aap/soknad"
-#- "https://www.nav.no/aap/soknad"
+- "https://www.nav.no/aap/soknad"
 env:
 - name: DECORATOR_URL
   value: "https://dekoratoren.nav.no"
