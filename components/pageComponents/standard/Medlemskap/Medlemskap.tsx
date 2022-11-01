@@ -357,7 +357,7 @@ export const Medlemskap = ({ onBackClick, onNext, defaultValues }: Props) => {
           </>
         )}
         {showLeggTilUtenlandsPeriode && (
-          <ColorPanel padding={false}>
+          <ColorPanel color={'grey'}>
             <BodyShort spacing>
               {formatMessage(`søknad.medlemskap.utenlandsperiode.modal.ingress.${arbeidEllerBodd}`)}
             </BodyShort>
@@ -422,7 +422,7 @@ export const Medlemskap = ({ onBackClick, onNext, defaultValues }: Props) => {
                               tabIndex={0}
                             />
                           }
-                          iconPosition={'right'}
+                          iconPosition={'left'}
                         >
                           Fjern
                         </Button>

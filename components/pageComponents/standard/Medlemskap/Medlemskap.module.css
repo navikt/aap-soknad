@@ -1,11 +1,3 @@
-.deleteIcon {
-  color: var(--navds-semantic-color-interaction-danger);
-}
-
-.deleteIcon:hover {
-  color: var(--navds-semantic-color-interaction-danger-hover);
-}
-
 @media (max-width: 480px) {
   .dataCell {
     padding: 0px;
