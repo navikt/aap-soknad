@@ -24,6 +24,10 @@ export const MonthPickerWrapper = ({
     defaultSelected: selectedDate ? new Date(selectedDate) : undefined,
     fromDate: fromDate,
     toDate: toDate,
+    inputFormat: 'MM.yyyy',
+    onValidate: (validation) => {
+      console.log('validation', validation);
+    },
   });
 
   useEffect(() => {

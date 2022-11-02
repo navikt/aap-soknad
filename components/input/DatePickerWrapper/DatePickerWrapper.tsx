@@ -24,6 +24,7 @@ const DatePickerWrapper = ({
     defaultSelected: selectedDate ? new Date(selectedDate) : undefined,
     fromDate: fromDate,
     toDate: toDate,
+    inputFormat: 'dd.MM.yyyy',
   });
 
   useEffect(() => {
