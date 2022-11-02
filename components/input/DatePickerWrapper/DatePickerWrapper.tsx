@@ -22,8 +22,8 @@ const DatePickerWrapper = ({
 }: DatePickerProps) => {
   const { datepickerProps, inputProps, selectedDay } = UNSAFE_useDatepicker({
     defaultSelected: selectedDate ? new Date(selectedDate) : undefined,
-    fromDate: fromDate,
-    toDate: toDate,
+    //fromDate: fromDate,
+    //toDate: toDate,
     inputFormat: 'dd.MM.yyyy',
   });
 
@@ -32,7 +32,7 @@ const DatePickerWrapper = ({
   }, [selectedDay]);
 
   return (
-    <UNSAFE_DatePicker {...datepickerProps} dropdownCaption={fromDate && toDate ? true : false}>
+    <UNSAFE_DatePicker {...datepickerProps}>
       <UNSAFE_DatePicker.Input {...inputProps} id={name} label={label} error={error} />
     </UNSAFE_DatePicker>
   );
