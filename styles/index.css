@@ -1,3 +1,7 @@
+html {
+  scroll-padding-top: 4rem;
+}
+
 #app {
   display: flex;
   flex-direction: column;

@@ -10,7 +10,6 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import SoknadFormWrapper from 'components/SoknadFormWrapper/SoknadFormWrapper';
 import { useStepWizard } from 'context/stepWizardContextV2';
-import { setErrorSummaryFocus } from 'utils/dom';
 import { LucaGuidePanel } from '@navikt/aap-felles-innbygger-react';
 import { useFeatureToggleIntl } from 'hooks/useFeatureToggleIntl';
 import { deleteOpplastedeVedlegg, useSoknadContextStandard } from 'context/soknadContextStandard';
@@ -138,6 +137,7 @@ const StartDato = ({ onBackClick, onNext, defaultValues }: Props) => {
       setValue(`${FERIE}.tilDato`, undefined);
       setValue(`${FERIE}.antallDager`, '');
     }
+    clearErrors();
   }, [ferieType, søknadState]);
   return (
     <SoknadFormWrapper

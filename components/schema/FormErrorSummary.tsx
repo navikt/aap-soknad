@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useMemo, useRef } from 'react';
 import { FieldErrors } from 'react-hook-form';
 import { ErrorSummary } from '@navikt/ds-react';
 import * as classes from './FormErrorSummary.module.css';
@@ -10,13 +10,18 @@ const FormErrorSummary = (props: FieldErrors) => {
 
   const flatErrors = flatObj(props?.errors);
   const keyList = Object.keys(flatErrors).filter((e) => e);
+
+  const scrollToErrorSummary = useMemo(() => {
+    return keyList.length > 0;
+  }, [keyList]);
+
   const errorSummaryElement = useRef(null);
 
   useEffect(() => {
-    if (keyList?.length > 0) {
+    if (scrollToErrorSummary) {
       scrollRefIntoView(errorSummaryElement);
     }
-  }, [keyList]);
+  }, [scrollToErrorSummary]);
 
   if (keyList?.length < 1) {
     return (
