@@ -83,6 +83,8 @@ const FieldArrayFileInput = ({
         return formatMessage('fileInputErrors.passordbeskyttet');
       case 'VIRUS':
         return formatMessage('fileInputErrors.virus');
+      case 'SIZE':
+        return formatMessage('fileInputErrors.size');
       default:
         return '';
     }
@@ -97,7 +99,7 @@ const FieldArrayFileInput = ({
     }
     if (totalUploadedBytes + file?.size > 52428800) {
       setFilename(file?.name);
-      setError(inputId, { type: 'custom', message: errorText(413) });
+      setError(`${type}-${inputId}`, { type: 'custom', message: errorText(413) });
       setDragOver(false);
       return;
     }
@@ -112,7 +114,7 @@ const FieldArrayFileInput = ({
       if (!res.ok) {
         const message = errorText(res?.status, resData?.substatus);
         setFilename(file?.name);
-        setError(inputId, { type: 'custom', message });
+        setError(`${type}-${inputId}`, { type: 'custom', message });
       } else {
         append({ name: file?.name, size: file?.size, vedleggId: resData });
         setTotalUploadedBytes(totalUploadedBytes + file.size);
@@ -123,7 +125,7 @@ const FieldArrayFileInput = ({
       console.log('catch error', err);
       const message = errorText(err?.status || 500);
       setFilename(file?.name);
-      setError(inputId, { type: 'custom', message });
+      setError(`${type}-${inputId}`, { type: 'custom', message });
       setLoading(false);
     }
     setDragOver(false);
@@ -199,13 +201,13 @@ const FieldArrayFileInput = ({
               type={'button'}
               onClick={() => {
                 setFilename(undefined);
-                clearErrors(inputId);
+                clearErrors(`${type}-${inputId}`);
               }}
               tabIndex={0}
               onKeyPress={(event) => {
                 if (event.key === 'Enter') {
                   setFilename(undefined);
-                  clearErrors(inputId);
+                  clearErrors(`${type}-${inputId}`);
                 }
               }}
               className={classes?.deleteAttachment}
