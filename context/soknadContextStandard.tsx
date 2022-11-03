@@ -57,7 +57,6 @@ function soknadReducerStandard(
       };
     }
     case SoknadActionKeys.ADD_BEHANDLER_IF_MISSING: {
-      console.log('behandler', action.payload);
       const registrerteBehandlere: RegistrertBehandler[] = action.payload.filter(
         (behandler) => behandler.type === 'FASTLEGE'
       );
@@ -84,14 +83,11 @@ function soknadReducerStandard(
       };
     }
     case SoknadActionKeys.UPDATE_VEDLEGG: {
-      console.log('action', action);
-      console.log('requiredVedlegg', state?.requiredVedlegg);
       const vedleggList = state?.requiredVedlegg.map((requiredVedlegg) => {
         if (requiredVedlegg.type === action.payload.type)
           return { ...requiredVedlegg, completed: action.payload.completed };
         return requiredVedlegg;
       });
-      console.log('vedleggList', vedleggList);
       return { ...state, requiredVedlegg: [...vedleggList] };
     }
     case SoknadActionKeys.REMOVE_VEDLEGG: {
