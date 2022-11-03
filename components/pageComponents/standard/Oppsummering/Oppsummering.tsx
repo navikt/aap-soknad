@@ -126,6 +126,10 @@ const Oppsummering = ({
           onEdit={() => editStep(StepNames.STARTDATO)}
         >
           <SummaryRowIfExists
+            labelKey="søknad.startDato.sykepenger.legend"
+            value={søknadState.søknad?.sykepenger}
+          />
+          <SummaryRowIfExists
             labelKey={'søknad.startDato.skalHaFerie.label'}
             value={søknadState?.søknad?.ferie?.skalHaFerie}
           />

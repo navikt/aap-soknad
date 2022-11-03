@@ -119,11 +119,13 @@ const StartDato = ({ onBackClick, onNext, defaultValues }: Props) => {
   );
 
   useEffect(() => {
-    setValue(`${FERIE}.${SKALHAFERIE}`, '');
+    if (erPåSykepenger !== JaEllerNei.JA) {
+      setValue(`${FERIE}.${SKALHAFERIE}`, '');
+    }
     clearErrors();
   }, [erPåSykepenger]);
   useEffect(() => {
-    if (skalHaFerie === JaEllerNei.NEI) {
+    if (skalHaFerie !== JaEllerNei.JA) {
       // @ts-ignore // TODO: Finne ut av hvorfor state blir riktig med '' og ikke undefined
       setValue(`${FERIE}.${FERIETYPE}`, '');
     }
@@ -139,12 +141,9 @@ const StartDato = ({ onBackClick, onNext, defaultValues }: Props) => {
   }, [ferieType, søknadState]);
   return (
     <SoknadFormWrapper
-      onNext={handleSubmit(
-        (data) => {
-          onNext(data);
-        },
-        () => setErrorSummaryFocus()
-      )}
+      onNext={handleSubmit((data) => {
+        onNext(data);
+      })}
       onBack={() => {
         updateSøknadData<Soknad>(søknadDispatch, { ...søknadState.søknad });
         onBackClick();
