@@ -1,10 +1,11 @@
 import { StønadType } from 'components/pageComponents/standard/AndreUtbetalinger/AndreUtbetalinger';
 import { Adresse } from 'context/sokerOppslagContext';
+import { FerieType } from 'components/pageComponents/standard/StartDato/StartDato';
 
 export interface SøknadBackendState {
   sykepenger?: boolean;
-  ferie: {
-    ferieType?: 'PERIODE' | 'DAGER' | 'NEI' | 'VET_IKKE';
+  ferie?: {
+    ferieType?: FerieType | 'NEI';
     periode?: {
       fom?: string;
       tom?: string;

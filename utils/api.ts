@@ -23,7 +23,12 @@ import {
   BODD_I_NORGE,
   utenlandsPeriodeArbeidEllerBodd,
 } from 'components/pageComponents/standard/Medlemskap/Medlemskap';
-import { SYKEPENGER } from 'components/pageComponents/standard/StartDato/StartDato';
+import {
+  FerieType,
+  FerieTypeToMessageKey,
+  SYKEPENGER,
+} from 'components/pageComponents/standard/StartDato/StartDato';
+import { JaEllerNei } from 'types/Generic';
 
 export type SøknadsType = 'UTLAND' | 'STANDARD';
 
@@ -32,12 +37,12 @@ export const GYLDIGE_SØKNADS_TYPER = ['UTLAND', 'STANDARD'];
 export const erGyldigSøknadsType = (type?: string) =>
   typeof type === 'undefined' || !GYLDIGE_SØKNADS_TYPER.includes(type);
 
-const getFerieType = (skalHaFerie?: string, ferieType?: string) => {
-  if (skalHaFerie === 'Ja' && ferieType === 'Ja') return 'PERIODE';
-  if (skalHaFerie === 'Ja' && ferieType === 'Nei, men jeg vet antall dager') return 'DAGER';
-  if (skalHaFerie === 'Nei') return 'NEI';
-  if (skalHaFerie === 'Vet ikke') return 'VET_IKKE';
-  return undefined;
+const getFerieType = (skalHaFerie?: string, ferieType?: FerieType) => {
+  if (skalHaFerie === 'Nei') {
+    return 'NEI';
+  } else {
+    return ferieType;
+  }
 };
 
 const getJaNeiVetIkke = (value?: string) => {
@@ -98,16 +103,18 @@ export const mapSøknadToBackend = (søknad?: Soknad): SøknadBackendState => {
 
   return {
     sykepenger: jaNeiToBoolean(søknad?.sykepenger),
-    ferie: {
-      ferieType,
-      ...(ferieType === 'PERIODE' && {
-        periode: {
-          fom: formatDate(søknad?.ferie?.fraDato, 'yyyy-MM-dd'),
-          tom: formatDate(søknad?.ferie?.tilDato, 'yyyy-MM-dd'),
-        },
-      }),
-      dager: søknad?.ferie?.antallDager,
-    },
+    ...(søknad?.sykepenger === JaEllerNei.JA && {
+      ferie: {
+        ferieType,
+        ...(ferieType === FerieType.PERIODE && {
+          periode: {
+            fom: formatDate(søknad?.ferie?.fraDato, 'yyyy-MM-dd'),
+            tom: formatDate(søknad?.ferie?.tilDato, 'yyyy-MM-dd'),
+          },
+        }),
+        ...(ferieType === FerieType.DAGER && { dager: søknad?.ferie?.antallDager }),
+      },
+    }),
     medlemsskap: {
       boddINorgeSammenhengendeSiste5: jaNeiToBoolean(søknad?.medlemskap?.harBoddINorgeSiste5År),
       jobbetSammenhengendeINorgeSiste5: jaNeiToBoolean(
@@ -279,7 +286,9 @@ export const mapSøknadToPdf = (
       ),
       ...createField(
         formatMessage('søknad.startDato.ferieType.label'),
-        søknad?.ferie?.ferieType,
+        søknad?.ferie?.ferieType
+          ? formatMessage(FerieTypeToMessageKey(søknad.ferie.ferieType))
+          : '',
         true
       ),
       ...createField(

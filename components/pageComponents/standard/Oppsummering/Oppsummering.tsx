@@ -27,6 +27,7 @@ import { formatNavn, formatFullAdresse } from 'utils/StringFormatters';
 import OppsummeringPeriode from './OppsummeringPeriode/OppsummeringPeriode';
 import { isNonEmptyPeriode } from 'utils/periode';
 import { BARN } from 'components/pageComponents/standard/Barnetillegg/Barnetillegg';
+import { FerieTypeToMessageKey } from 'components/pageComponents/standard/StartDato/StartDato';
 const SØKNAD_BEKREFT = 'søknadBekreft';
 
 interface OppsummeringProps {
@@ -135,7 +136,11 @@ const Oppsummering = ({
           />
           <SummaryRowIfExists
             labelKey={'søknad.startDato.ferieType.label'}
-            value={søknadState?.søknad?.ferie?.ferieType}
+            value={
+              søknadState?.søknad?.ferie?.ferieType
+                ? formatMessage(FerieTypeToMessageKey(søknadState.søknad.ferie.ferieType))
+                : ''
+            }
           />
           <SummaryRowIfExists
             labelKey={'søknad.startDato.antallDager.label'}

@@ -7,7 +7,7 @@ import { JaEllerNei, JaNeiVetIkke } from './Generic';
 import { AVBRUTT_STUDIE_VEDLEGG } from 'components/pageComponents/standard/Student/Student';
 import { OppslagBehandler } from 'context/sokerOppslagContext';
 import { BARN } from 'components/pageComponents/standard/Barnetillegg/Barnetillegg';
-import { SYKEPENGER } from 'components/pageComponents/standard/StartDato/StartDato';
+import { FerieType, SYKEPENGER } from 'components/pageComponents/standard/StartDato/StartDato';
 
 export type FieldAndLabel<T> = {
   label?: string;
@@ -89,7 +89,7 @@ export type ManuelleBarn = {
 
 export type Ferie = {
   skalHaFerie?: string;
-  ferieType?: string;
+  ferieType?: FerieType;
   antallDager?: string;
   fraDato?: Date;
   tilDato?: Date;

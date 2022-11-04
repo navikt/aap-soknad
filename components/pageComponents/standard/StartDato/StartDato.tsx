@@ -19,11 +19,24 @@ import DatePickerWrapper from 'components/input/DatePickerWrapper/DatePickerWrap
 import { GenericSoknadContextState } from 'types/SoknadContext';
 import * as classes from './StartDato.module.css';
 import { formatDate } from 'utils/date';
+export enum FerieType {
+  DAGER = 'DAGER',
+  PERIODE = 'PERIODE',
+}
 
 const FERIE = 'ferie';
 export const SYKEPENGER = 'sykepenger';
 const FERIETYPE = 'ferieType';
 const SKALHAFERIE = 'skalHaFerie';
+
+export const FerieTypeToMessageKey = (ferieType: FerieType) => {
+  switch (ferieType) {
+    case FerieType.PERIODE:
+      return 'søknad.startDato.ferieType.values.periode';
+    case FerieType.DAGER:
+      return 'søknad.startDato.ferieType.values.dager';
+  }
+};
 
 interface Props {
   onBackClick: () => void;
@@ -109,10 +122,10 @@ const StartDato = ({ onBackClick, onNext, defaultValues }: Props) => {
   const erPåSykepenger = useWatch({ control, name: `${SYKEPENGER}` });
   const skalHaFerie = useWatch({ control, name: `${FERIE}.${SKALHAFERIE}` });
   const ferieType = useWatch({ control, name: `${FERIE}.${FERIETYPE}` });
-  const FerieType = useMemo(
+  const FerieTypeTekster = useMemo(
     () => ({
-      PERIODE: formatMessage('søknad.startDato.ferieType.values.periode'),
-      DAGER: formatMessage('søknad.startDato.ferieType.values.dager'),
+      [FerieType.PERIODE]: formatMessage(FerieTypeToMessageKey(FerieType.PERIODE)),
+      [FerieType.DAGER]: formatMessage(FerieTypeToMessageKey(FerieType.DAGER)),
     }),
     [formatMessage]
   );
@@ -193,10 +206,10 @@ const StartDato = ({ onBackClick, onNext, defaultValues }: Props) => {
               error={errors?.[`${FERIE}`]?.ferieType?.message}
             >
               <Radio value={FerieType.PERIODE}>
-                <BodyShort>{FerieType.PERIODE}</BodyShort>
+                <BodyShort>{FerieTypeTekster.PERIODE}</BodyShort>
               </Radio>
               <Radio value={FerieType.DAGER}>
-                <BodyShort>{FerieType.DAGER}</BodyShort>
+                <BodyShort>{FerieTypeTekster.DAGER}</BodyShort>
               </Radio>
             </RadioGroupWrapper>
           )}
