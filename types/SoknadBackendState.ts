@@ -4,7 +4,7 @@ import { Adresse } from 'context/sokerOppslagContext';
 export interface SøknadBackendState {
   sykepenger?: boolean;
   ferie: {
-    ferieType?: 'PERIODE' | 'DAGER';
+    ferieType?: 'PERIODE' | 'DAGER' | 'NEI' | 'VET_IKKE';
     periode?: {
       fom?: string;
       tom?: string;
