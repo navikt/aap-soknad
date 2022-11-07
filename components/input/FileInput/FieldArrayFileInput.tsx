@@ -140,7 +140,7 @@ const FieldArrayFileInput = ({
   return (
     <div className={classes?.fileInput}>
       {heading && (
-        <Heading size={'large'} level={'3'}>
+        <Heading size={'medium'} level={'3'}>
           {heading}
         </Heading>
       )}
