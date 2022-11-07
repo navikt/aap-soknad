@@ -282,7 +282,8 @@ export const mapSøknadToPdf = (
       ...createField(formatMessage('søknad.startDato.sykepenger.legend'), søknad?.[SYKEPENGER]),
       ...createField(
         formatMessage('søknad.startDato.skalHaFerie.label'),
-        søknad?.ferie?.skalHaFerie
+        søknad?.ferie?.skalHaFerie,
+        true
       ),
       ...createField(
         formatMessage('søknad.startDato.ferieType.label'),
@@ -319,7 +320,10 @@ export const mapSøknadToPdf = (
                   ...createField('Land', opphold?.land.split(':')[1]),
                   ...createField(
                     'Periode',
-                    `Fra ${formatDate(opphold?.fraDato)} til ${formatDate(opphold?.tilDato)}`
+                    `Fra ${formatDate(opphold?.fraDato, 'MMMM yyyy')} til ${formatDate(
+                      opphold?.tilDato,
+                      'MMMM yyyy'
+                    )}`
                   ),
                   ...createField(
                     formatMessage('søknad.medlemskap.utenlandsperiode.modal.iArbeid.label'),
@@ -366,21 +370,24 @@ export const mapSøknadToPdf = (
     ]);
   };
   const getRegistrerteBehandlere = (søknad?: Soknad) => {
-    const registrerteBehandlere =
-      søknad?.registrerteBehandlere?.map((behandler) =>
-        createFeltgruppe([
-          ...createField('Type', behandler?.type),
-          ...createField('Kategori', behandler?.kategori),
-          ...createField('Navn', formatNavn(behandler?.navn)),
-          ...createField('Kontor', behandler?.kontaktinformasjon?.kontor),
-          ...createField('Adresse', formatFullAdresse(behandler?.kontaktinformasjon?.adresse)),
-          ...createField('Telefon', behandler?.kontaktinformasjon?.telefon),
-          ...createField(
-            formatMessage(`søknad.helseopplysninger.erRegistrertFastlegeRiktig.label`),
-            behandler?.erRegistrertFastlegeRiktig
-          ),
-        ])
-      ) || [];
+    if (!søknad?.registrerteBehandlere?.length) {
+    }
+    const registrerteBehandlere = !søknad?.registrerteBehandlere?.length
+      ? createFritekst('Fant ingen registrert fastlege')
+      : søknad?.registrerteBehandlere?.map((behandler) =>
+          createFeltgruppe([
+            ...createField('Type', behandler?.type),
+            ...createField('Kategori', behandler?.kategori),
+            ...createField('Navn', formatNavn(behandler?.navn)),
+            ...createField('Kontor', behandler?.kontaktinformasjon?.kontor),
+            ...createField('Adresse', formatFullAdresse(behandler?.kontaktinformasjon?.adresse)),
+            ...createField('Telefon', behandler?.kontaktinformasjon?.telefon),
+            ...createField(
+              formatMessage(`søknad.helseopplysninger.erRegistrertFastlegeRiktig.label`),
+              behandler?.erRegistrertFastlegeRiktig
+            ),
+          ])
+        ) || [];
     return createTema('Registrerte behandlere', registrerteBehandlere);
   };
   const getAndreBehandlere = (søknad?: Soknad) => {
@@ -408,43 +415,48 @@ export const mapSøknadToPdf = (
     return andreBehandlere.length > 0 ? createTema('Andre behandlere', andreBehandlere) : undefined;
   };
   const getBarn = (søknad?: Soknad) => {
-    const registrerteBarn =
-      søknad?.[BARN]?.map((barn) =>
-        createFeltgruppe([
-          ...createField('Navn', formatNavn(barn?.navn)),
-          ...createField('Fødselsdato', barn?.fødseldato || ''),
-          ...createField(
-            formatMessage('søknad.barnetillegg.registrerteBarn.harInntekt.label', {
-              grunnbeløp: GRUNNBELØP,
-            }),
-            barn?.harInntekt,
-            true
-          ),
-        ])
-      ) || [];
-    const andreBarn =
-      søknad?.manuelleBarn?.map((barn) =>
-        createFeltgruppe([
-          ...createField('Navn', formatNavn(barn?.navn)),
-          ...createField('Fødselsdato', barn?.fødseldato ? formatDate(barn.fødseldato) : ''),
-          ...createField(
-            formatMessage('søknad.barnetillegg.leggTilBarn.modal.relasjon.label'),
-            barn?.relasjon
-          ),
-          ...createField(
-            formatMessage(
-              'søknad.barnetillegg.registrerteBarn.harInntekt.label',
-              {
+    const registrerteBarn = !søknad?.[BARN]?.length
+      ? createFritekst('Fant ingen registrerte barn')
+      : søknad?.[BARN]?.map((barn) =>
+          createFeltgruppe([
+            ...createField('Navn', formatNavn(barn?.navn)),
+            ...createField('Fødselsdato', barn?.fødseldato || ''),
+            ...createField(
+              formatMessage('søknad.barnetillegg.registrerteBarn.harInntekt.label', {
                 grunnbeløp: GRUNNBELØP,
-              },
+              }),
+              barn?.harInntekt,
               true
             ),
-            barn?.harInntekt,
-            true
-          ),
-        ])
-      ) || [];
-    return createTema('Barn', [...registrerteBarn, ...andreBarn]);
+          ])
+        ) || [];
+    return createTema('Barn fra folkeregisteret', [...registrerteBarn]);
+  };
+  const getAndreBarn = (søknad?: Soknad) => {
+    const andreBarn = !søknad?.manuelleBarn?.length
+      ? createFritekst('Ingen barn lagt til av søker')
+      : søknad?.manuelleBarn?.map((barn) =>
+          createFeltgruppe([
+            ...createField('Navn', formatNavn(barn?.navn)),
+            ...createField('Fødselsdato', barn?.fødseldato ? formatDate(barn.fødseldato) : ''),
+            ...createField(
+              formatMessage('søknad.barnetillegg.leggTilBarn.modal.relasjon.label'),
+              barn?.relasjon
+            ),
+            ...createField(
+              formatMessage(
+                'søknad.barnetillegg.registrerteBarn.harInntekt.label',
+                {
+                  grunnbeløp: GRUNNBELØP,
+                },
+                true
+              ),
+              barn?.harInntekt,
+              true
+            ),
+          ])
+        ) || [];
+    return createTema('Andre barn (lagt til av søker)', [...andreBarn]);
   };
   const getAndreYtelser = (søknad?: Soknad) => {
     const stønader =
@@ -529,13 +541,22 @@ export const mapSøknadToPdf = (
             ]),
           ]
         : [];
-    return createTema('Vedlegg', [...ordinæreVedlegg, ...manuelleBarnVedlegg, ...andreVedlegg]);
+    const vedleggListe = [...ordinæreVedlegg, ...manuelleBarnVedlegg, ...andreVedlegg];
+    return createTema(
+      'Vedlegg',
+      !!vedleggListe?.length ? vedleggListe : createFritekst('Ingen opplastede vedlegg')
+    );
   };
   const getManglendeVedlegg = (søknad?: Soknad, requiredVedlegg?: RequiredVedlegg[]) => {
     const manglendeVedlegg = requiredVedlegg
       ?.filter((vedlegg) => !vedlegg?.completed)
       ?.map((e) => e?.description);
-    return createTema('Manglende vedlegg', [createListe('', manglendeVedlegg)]);
+    return createTema(
+      'Manglende vedlegg',
+      !!manglendeVedlegg?.length
+        ? [createListe('', manglendeVedlegg)]
+        : createFritekst('Ingen påkrevde vedlegg')
+    );
   };
   return {
     temaer: [
@@ -545,6 +566,7 @@ export const mapSøknadToPdf = (
       getRegistrerteBehandlere(søknad),
       ...(getAndreBehandlere(søknad) ? [getAndreBehandlere(søknad)] : []),
       getBarn(søknad),
+      getAndreBarn(søknad),
       getStudent(søknad),
       getAndreYtelser(søknad),
       getTilleggsopplysninger(søknad),
