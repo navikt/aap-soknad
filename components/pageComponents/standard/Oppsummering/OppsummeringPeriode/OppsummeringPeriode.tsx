@@ -8,7 +8,6 @@ interface Props {
 }
 
 const OppsummeringPeriode = ({ periode }: Props) => {
-  console.log('periode', periode);
   return (
     <BodyShort>{`${formatDate(periode?.fraDato)} - ${formatDate(periode?.tilDato)}`}</BodyShort>
   );
