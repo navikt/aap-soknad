@@ -5,7 +5,7 @@
       "title": "Student",
       "erStudent": {
         "legend": "Er du student?",
-        "description": "Du regnes som student hvis du tar et studie som gir rett til lån fra Statens lånekasse for utdanning. Du trenger ikke å ha mottatt lån/stipend.",
+        "description": "Du regnes som student hvis du tar et studium som gir rett til lån fra Statens lånekasse for utdanning. Du trenger ikke å ha mottatt lån/stipend",
         "ja": "Ja, helt eller delvis",
         "avbrutt": "Ja, men har avbrutt studiet helt på grunn av sykdom",
         "nei": "Nei",
@@ -20,7 +20,7 @@
       },
       "vedlegg": {
         "title": "Du må legge ved:",
-        "name": "Bekreftelse på avbrutt studie",
+        "name": "Bekreftelse på avbrutt studium",
         "description": "Bekreftelse fra studiested på hvilken dato studiet ble avbrutt fra.",
         "lastOppSenere": "Dokumentene laster du opp senere i søknaden. Du kan også ettersende vedlegg."
       }
