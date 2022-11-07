@@ -294,7 +294,7 @@ export const mapSøknadToPdf = (
       ...createField(
         'Periode',
         søknad?.ferie?.fraDato
-          ? `Fra ${søknad?.ferie?.fraDato} til ${søknad?.ferie?.tilDato}`
+          ? `Fra ${formatDate(søknad?.ferie?.fraDato)} til ${formatDate(søknad?.ferie?.tilDato)}`
           : undefined,
         true
       ),
