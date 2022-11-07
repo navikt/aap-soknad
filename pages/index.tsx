@@ -17,6 +17,7 @@ import { scrollRefIntoView } from 'utils/dom';
 import { getSøkerUtenBarn } from 'pages/api/oppslag/soekerUtenBarn';
 import { Alert, Link } from '@navikt/ds-react';
 import { useFeatureToggleIntl } from 'hooks/useFeatureToggleIntl';
+import { TimeoutBox } from 'components/TimeoutBox/TimeoutBox';
 interface PageProps {
   søker: {
     navn: Navn;
@@ -115,6 +116,7 @@ const Introduksjon = ({ søker }: PageProps) => {
           await startSoknad();
         }}
       />
+      <TimeoutBox logoutTextKey="logoutModal.message" />
     </>
   );
 };

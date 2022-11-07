@@ -711,5 +711,11 @@
   },
   "errorSummary": {
     "title": "Du må rette opp i desse feila før du kan halde fram:"
+  },
+  "logoutModal": {
+    "title": "Du har blitt logga ut",
+    "message": "Trykk på knappen under for å logge inn på nytt.",
+    "soknadMessage": "Alt du har svart på i søknaden så langt er blitt lagra. Trykk på knappen under for å logge inn på nytt.",
+    "buttonText": "Logg inn på nytt"
   }
 }

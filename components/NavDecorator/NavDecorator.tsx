@@ -2,7 +2,7 @@ import { setAvailableLanguages, onLanguageSelect } from '@navikt/nav-dekoratoren
 import { useRouter } from 'next/router';
 import React, { useEffect } from 'react';
 
-export const NavDecorator = ({ children }: { children: React.ReactElement }) => {
+export const NavDecorator = ({ children }: { children: React.ReactNode }) => {
   const router = useRouter();
   const { pathname, asPath, query } = router;
 

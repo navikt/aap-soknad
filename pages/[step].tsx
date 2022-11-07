@@ -48,6 +48,7 @@ import { logSkjemaFullførtEvent, logSkjemastegFullførtEvent } from 'utils/ampl
 import { Alert, Link } from '@navikt/ds-react';
 import metrics from 'utils/metrics';
 import { scrollRefIntoView } from 'utils/dom';
+import { TimeoutBox } from 'components/TimeoutBox/TimeoutBox';
 
 interface PageProps {
   søker: SokerOppslagState;
@@ -259,6 +260,7 @@ const Steps = ({ søker, mellomlagretSøknad }: PageProps) => {
           )}
         </StepWizard>
       )}
+      <TimeoutBox logoutTextKey="logoutModal.soknadMessage" />
     </>
   );
 };
