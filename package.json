@@ -66,7 +66,6 @@
     "jest-environment-jsdom": "^29.0.3",
     "json-diff": "^0.9.1",
     "lint-staged": "13.0.3",
-    "msw": "0.47.4",
     "patch-package": "^6.4.7",
     "prettier": "^2.5.1",
     "process": "^0.11.10",
@@ -108,8 +107,5 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "msw": {
-    "workerDirectory": "dist"
   }
 }

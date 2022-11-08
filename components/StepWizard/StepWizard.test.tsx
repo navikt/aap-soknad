@@ -1,7 +1,5 @@
 import { render, screen } from '@testing-library/react';
 import { axe, toHaveNoViolations } from 'jest-axe';
-import { rest } from 'msw';
-import { setupServer } from 'msw/node';
 import { Step, StepWizard } from './index';
 import { StepWizardContext, StepWizardContextState } from 'context/stepWizardContextV2';
 import { BodyShort } from '@navikt/ds-react';
@@ -42,19 +40,6 @@ const MyWizard = () => (
     </Step>
   </StepWizard>
 );
-
-const server = setupServer(
-  rest.get('/aap/soknad-api/buckets/lagre/UTLAND', (req, res, ctx) => {
-    return res(ctx.json({}));
-  }),
-  rest.post('/aap/soknad-api/buckets/les/UTLAND', (req, res, ctx) => {
-    return res(ctx.json({}));
-  })
-);
-
-beforeAll(() => server.listen());
-afterEach(() => server.resetHandlers());
-afterAll(() => server.close());
 
 expect.extend(toHaveNoViolations);
 
