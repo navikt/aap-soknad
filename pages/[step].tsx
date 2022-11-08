@@ -157,16 +157,6 @@ const Steps = ({ søker, mellomlagretSøknad }: PageProps) => {
       <header>
         <PageHeader align="center">{formatMessage('søknad.pagetitle')}</PageHeader>
       </header>
-      <Alert variant={'error'}>
-        {formatMessage('midlertidigAlertMelding', {
-          // @ts-ignore
-          a: (chunks: string[]) => (
-            <Link target="_blank" href="https://tjenester.nav.no/soknadaap/app/start">
-              {chunks}
-            </Link>
-          ),
-        })}
-      </Alert>
       {søknadState?.søknad && (
         <StepWizard>
           {step === '1' && (
