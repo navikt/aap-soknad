@@ -164,7 +164,7 @@ export const Veiledning = ({
             <Label as={'span'}>{formatMessage('søknad.veiledning.veiledningConfirm.title')}</Label>
           </ConfirmationPanelWrapper>
 
-          <div className={classes?.buttonWrapper}>
+          <div>
             <Button variant="primary" type="submit" loading={isLoading}>
               {formatMessage(`søknad.veiledning.startSøknad`)}
             </Button>

@@ -14,6 +14,3 @@
   text-align: center;
   padding: var(--navds-spacing-10) 0;
 }
-.buttonWrapper {
-  composes: buttonWrapper from 'styles/layout.module.css';
-}
