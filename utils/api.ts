@@ -391,28 +391,29 @@ export const mapSøknadToPdf = (
     return createTema('Registrerte behandlere', registrerteBehandlere);
   };
   const getAndreBehandlere = (søknad?: Soknad) => {
-    const andreBehandlere =
-      søknad?.andreBehandlere?.map((behandler) =>
-        createFeltgruppe([
-          ...createField(
-            'Navn',
-            formatNavn({ fornavn: behandler?.firstname, etternavn: behandler?.lastname })
-          ),
-          ...createField('Kontor', behandler?.legekontor),
-          ...createField(
-            'Adresse',
-            formatFullAdresse({
-              adressenavn: behandler?.gateadresse,
-              postnummer: {
-                postnr: behandler?.postnummer,
-                poststed: behandler?.poststed,
-              },
-            })
-          ),
-          ...createField('Telefon', behandler?.telefon),
-        ])
-      ) || [];
-    return andreBehandlere.length > 0 ? createTema('Andre behandlere', andreBehandlere) : undefined;
+    const andreBehandlere = !søknad?.andreBehandlere?.length
+      ? createFritekst('Ingen behandlere lagt til av søker')
+      : søknad?.andreBehandlere?.map((behandler) =>
+          createFeltgruppe([
+            ...createField(
+              'Navn',
+              formatNavn({ fornavn: behandler?.firstname, etternavn: behandler?.lastname })
+            ),
+            ...createField('Kontor', behandler?.legekontor),
+            ...createField(
+              'Adresse',
+              formatFullAdresse({
+                adressenavn: behandler?.gateadresse,
+                postnummer: {
+                  postnr: behandler?.postnummer,
+                  poststed: behandler?.poststed,
+                },
+              })
+            ),
+            ...createField('Telefon', behandler?.telefon),
+          ])
+        ) || [];
+    return createTema('Andre behandlere', andreBehandlere);
   };
   const getBarn = (søknad?: Soknad) => {
     const registrerteBarn = !søknad?.[BARN]?.length
@@ -564,7 +565,7 @@ export const mapSøknadToPdf = (
       getMedlemskap(søknad),
       getYrkesskade(søknad),
       getRegistrerteBehandlere(søknad),
-      ...(getAndreBehandlere(søknad) ? [getAndreBehandlere(søknad)] : []),
+      getAndreBehandlere(søknad),
       getBarn(søknad),
       getAndreBarn(søknad),
       getStudent(søknad),
