@@ -66,13 +66,13 @@ export const getStartDatoSchema = (formatMessage: (id: string) => string) => {
             .nullable(),
         }),
         ['fraDato']: yup.date().when([FERIETYPE], {
-          is: 'Ja',
+          is: FerieType.PERIODE,
           then: yup
             .date()
             .required(formatMessage('søknad.startDato.periode.fraDato.validation.required')),
         }),
         ['tilDato']: yup.date().when([FERIETYPE], {
-          is: 'Ja',
+          is: FerieType.PERIODE,
           then: yup
             .date()
             .required(formatMessage('søknad.startDato.periode.tilDato.validation.required'))
@@ -82,7 +82,7 @@ export const getStartDatoSchema = (formatMessage: (id: string) => string) => {
             ),
         }),
         ['antallDager']: yup.string().when([FERIETYPE], {
-          is: 'Nei, men jeg vet antall feriedager',
+          is: FerieType.DAGER,
           then: yup
             .string()
             .required(formatMessage('søknad.startDato.antallDager.validation.required')),
