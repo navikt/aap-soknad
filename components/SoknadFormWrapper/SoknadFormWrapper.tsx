@@ -43,8 +43,8 @@ export const LagreModal = ({ isOpen, onClose }: LagreModalProps) => {
             onClick={() => {
               if (window?.location) {
                 window.location.href = clientSideIsProd()
-                  ? 'https://www.nav.no/person/dine-saker'
-                  : 'https://www.dev.nav.no/person/dine-saker';
+                  ? 'https://www.nav.no/minside/'
+                  : 'https://www.dev.nav.no/minside/';
               }
             }}
           >
