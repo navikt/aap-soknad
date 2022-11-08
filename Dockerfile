@@ -6,7 +6,6 @@ RUN addgroup --system --gid 1069 nodejs
 RUN adduser --system --uid 1069 nextjs
 
 WORKDIR /app
-COPY --chown=nextjs:nodejs .env.local ./
 COPY --chown=nextjs:nodejs .next/standalone ./
 COPY --chown=nextjs:nodejs .next/static ./.next/static
 

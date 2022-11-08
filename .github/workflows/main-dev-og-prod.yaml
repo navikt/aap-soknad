@@ -1,4 +1,4 @@
-name: "Bygg og deploy søknad til dev og prod"
+name: "Bygg og deploy til dev og prod"
 on:
   workflow_dispatch:
   push:
@@ -45,7 +45,7 @@ jobs:
         uses: "docker/build-push-action@v2"
         with:
           context: .
-          file: DockerfileV2
+          file: Dockerfile
           tags: "${{ env.IMAGE }}"
           push: "true"
           cache-from: "type=gha"
