@@ -53,7 +53,7 @@ const Kvittering = ({ søker, kontaktinformasjon, søknad }: StudentProps) => {
           <BodyShort spacing>
             Vi mangler dokumentasjon fra deg for å kunne behandle søknaden.{' '}
             <Link href={`${mineAapUrl}/${søknad?.søknadId}/ettersendelse/`}>
-              Her kan du ettersende dokumentasjon digitalt.
+              Her kan du ettersende dokumentasjon digitalt
             </Link>
             . Ettersend dette til oss så raskt du kan.
           </BodyShort>
@@ -62,7 +62,7 @@ const Kvittering = ({ søker, kontaktinformasjon, søknad }: StudentProps) => {
             <Link target={'_blank'} href={formatMessage('applinks.ettersending')}>
               ettersende per post (åpnes i ny fane)
             </Link>
-            , eller levere dokumetansjon på ditt lokale NAV-kontor.
+            , eller levere dokumetasjon på ditt lokale NAV-kontor.
           </BodyShort>
         </Alert>
       )}
