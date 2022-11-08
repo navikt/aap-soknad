@@ -378,6 +378,16 @@
       "harVedlegg": {
         "title": "Ut frå det du har svart i søknaden, må du leggje ved følgjande:"
       },
+      "andreBarn": {
+        "title": {
+          "FORELDER": "Fødselsattest eller adopsjonsbevis",
+          "FOSTERFORELDER": "Fosterforelder"
+        },
+        "description": {
+          "FORELDER": "Fødselsattest eller adopsjonsbevis for {navn}",
+          "FOSTERFORELDER": "Dokumentasjon på at du er fosterforelder for {navn}, og fra når"
+        }
+      },
       "vedleggPåPapir": {
         "text": "Dersom du har vedlegg på papir og ikkje har skannar, kan du til dømes ta bilete av dokumentet med mobiltelefon.",
         "readMore": {

@@ -393,6 +393,16 @@
         "readMore": {
           "title": "Slik tar du et godt bilde av dokumentet"
         }
+      },
+      "andreBarn": {
+        "title": {
+          "FORELDER": "Fødselsattest eller adopsjonsbevis",
+          "FOSTERFORELDER": "Fosterforelder"
+        },
+        "description": {
+          "FORELDER": "Fødselsattest eller adopsjonsbevis for {navn}",
+          "FOSTERFORELDER": "Dokumentasjon på at du er fosterforelder for {navn}, og fra når"
+        }
       }
     },
     "oppsummering": {

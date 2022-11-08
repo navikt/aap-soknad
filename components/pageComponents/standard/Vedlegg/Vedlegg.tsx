@@ -212,11 +212,12 @@ const Vedlegg = ({ onBackClick, onNext, defaultValues }: Props) => {
             errors={errors}
             setError={setError}
             clearErrors={clearErrors}
-            heading={
-              requiredVedlegg?.filterType === Relasjon.FORELDER
-                ? 'Fødselsattest eller adopsjonsbevis'
-                : 'Bostedsbevis'
-            }
+            heading={formatMessage(
+              `søknad.vedlegg.andreBarn.title.${requiredVedlegg?.filterType}`,
+              {
+                navn: `${barn?.navn?.fornavn} ${barn?.navn?.etternavn}`,
+              }
+            )}
             ingress={requiredVedlegg?.description}
           />
         );

@@ -145,10 +145,9 @@ export const Barnetillegg = ({ onBackClick, onNext, defaultValues }: Props) => {
           {
             filterType: barn.relasjon,
             type: `barn-${barn.internId}`,
-            description:
-              barn.relasjon === Relasjon.FORELDER
-                ? `Fødselsattest eller adopsjonsbevis for: ${barn?.navn?.fornavn} ${barn?.navn?.etternavn}`
-                : `Bostedbevis for: ${barn?.navn?.fornavn} ${barn?.navn?.etternavn}`,
+            description: formatMessage(`søknad.vedlegg.andreBarn.description.${barn.relasjon}`, {
+              navn: `${barn?.navn?.fornavn} ${barn?.navn?.etternavn}`,
+            }),
           },
         ],
         søknadDispatch
