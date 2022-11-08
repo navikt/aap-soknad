@@ -437,6 +437,7 @@ export const Medlemskap = ({ onBackClick, onNext, defaultValues }: Props) => {
             <Grid>
               <Cell xs={12}>
                 <Button
+                  id="medlemskap.utenlandsOpphold"
                   variant="secondary"
                   type="button"
                   icon={<Add title={'Legg til'} />}

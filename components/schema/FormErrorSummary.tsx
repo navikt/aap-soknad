@@ -8,6 +8,8 @@ import { scrollRefIntoView } from 'utils/dom';
 const FormErrorSummary = (props: FieldErrors) => {
   const { formatMessage } = useFeatureToggleIntl();
 
+  const errorListFromRef = props;
+
   const flatErrors = flatObj(props?.errors);
   const keyList = Object.keys(flatErrors).filter((e) => e);
 
@@ -63,8 +65,8 @@ const flatObj: any = (obj: any, prevKey = '') => {
     if (typeof value == 'object') {
       // @ts-ignore
       if (value?.message) {
-        // @ts-ignore
-        return { ...flatted, [`${prevKey ? prevKey + '.' : ''}${key}`]: value?.message };
+        // @ts-ignore TODO: Fikse skikkelige typer på fielderrors
+        return { ...flatted, [value?.ref?.name]: value?.message };
       } else {
         return { ...flatted, ...flatObj(value, key) };
       }
