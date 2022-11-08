@@ -22,6 +22,16 @@ const nextConfig = {
     defaultLocale: 'nb',
   },
 
+  async redirects() {
+    return [
+      {
+        source: '/standard',
+        destination: '/',
+        permanent: true,
+      },
+    ];
+  },
+
   async headers() {
     return [
       {
