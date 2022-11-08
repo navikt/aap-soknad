@@ -9,9 +9,15 @@ describe('FormErrorSummary', () => {
   const errorArray = {
     aarstall: {
       message: 'Årstall må bestå av fire siffer',
+      ref: {
+        name: 'aarstall',
+      },
     },
     fraDato: {
       message: 'Datoen kan ikke være tilbake i tid',
+      ref: {
+        name: 'fraDato',
+      },
     },
   };
 
