@@ -202,14 +202,12 @@ export const Medlemskap = ({ onBackClick, onNext, defaultValues }: Props) => {
   );
 
   useEffect(() => {
-    if (boddINorge !== søknadState.søknad?.medlemskap?.harBoddINorgeSiste5År) {
-      setValue(`${MEDLEMSKAP}.${ARBEID_UTENFOR_NORGE_FØR_SYKDOM}`, undefined);
-      setValue(`${MEDLEMSKAP}.${ARBEID_I_NORGE}`, undefined);
-      setValue(`${MEDLEMSKAP}.${OGSÅ_ARBEID_UTENFOR_NORGE}`, undefined);
-      clearErrors();
-      remove();
-    }
-  }, [boddINorge, søknadState]);
+    setValue(`${MEDLEMSKAP}.${ARBEID_UTENFOR_NORGE_FØR_SYKDOM}`, '');
+    setValue(`${MEDLEMSKAP}.${ARBEID_I_NORGE}`, '');
+    setValue(`${MEDLEMSKAP}.${OGSÅ_ARBEID_UTENFOR_NORGE}`, '');
+    clearErrors();
+    remove();
+  }, [boddINorge]);
   useEffect(() => {
     if (arbeidINorge === JaEllerNei.NEI) {
       // @ts-ignore // TODO: Finne ut av hvorfor state blir riktig med '' og ikke undefined
@@ -233,10 +231,10 @@ export const Medlemskap = ({ onBackClick, onNext, defaultValues }: Props) => {
   }, [fields]);
 
   useEffect(() => {
-    console.log({ arbeidINorge, iTilleggArbeidUtenforNorge });
     if (arbeidINorge === JaEllerNei.JA && iTilleggArbeidUtenforNorge === JaEllerNei.NEI) remove();
     // @ts-ignore // TODO: Finne ut av hvorfor state blir riktig med '' og ikke undefined
     if (arbeidINorge === JaEllerNei.JA && iTilleggArbeidUtenforNorge === '') remove();
+    clearErrors();
   }, [arbeidINorge, iTilleggArbeidUtenforNorge]);
 
   return (
