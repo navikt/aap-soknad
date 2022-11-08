@@ -67,14 +67,15 @@ export const OppsummeringVedlegg = ({ søknadState }: Props) => {
               </div>
             );
           })}
-          {søknadState?.søknad?.vedlegg?.annet && søknadState?.søknad?.vedlegg?.annet?.length > 0 && (
-            <>
-              <Label>{'Annet:'}</Label>
-              {søknadState?.søknad?.vedlegg?.annet?.map((vedleggFile) => (
-                <BodyShort key={vedleggFile.vedleggId}>{vedleggFile?.name}</BodyShort>
-              ))}
-            </>
-          )}
+        </>
+      )}
+
+      {søknadState?.søknad?.vedlegg?.annet && søknadState?.søknad?.vedlegg?.annet?.length > 0 && (
+        <>
+          <Label>{'Annet:'}</Label>
+          {søknadState?.søknad?.vedlegg?.annet?.map((vedleggFile) => (
+            <BodyShort key={vedleggFile.vedleggId}>{vedleggFile?.name}</BodyShort>
+          ))}
         </>
       )}
     </>
