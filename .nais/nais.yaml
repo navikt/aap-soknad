@@ -21,13 +21,13 @@ spec:
     timeout: 60
   replicas:
     min: 2
-    max: 2
+    max: 4
   resources:
     requests:
       cpu: 200m
-      memory: 256Mi
+      memory: 512Mi
     limits:
-      memory: 256Mi
+      memory: 512Mi
   prometheus:
     enabled: true
     path: /aap/soknad/api/internal/prometheus/
