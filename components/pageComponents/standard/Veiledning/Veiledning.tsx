@@ -168,9 +168,6 @@ export const Veiledning = ({
             <Button variant="primary" type="submit" loading={isLoading}>
               {formatMessage(`søknad.veiledning.startSøknad`)}
             </Button>
-            <Button variant="tertiary" type="button" onClick={() => console.log('TODO')}>
-              {formatMessage(`søknad.veiledning.avbrytSøknad`)}
-            </Button>
           </div>
         </form>
       </main>
