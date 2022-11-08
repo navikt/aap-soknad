@@ -714,8 +714,7 @@
   },
   "logoutModal": {
     "title": "Du har blitt logget ut",
-    "message": "Trykk på knappen under for å logge inn på nytt.",
-    "soknadMessage": "Alt du har svart på i søknaden så langt er blitt lagret. Trykk på knappen under for å logge inn på nytt.",
+    "soknadMessage": "Alt du har svart på i søknaden så langt er blitt lagret.",
     "buttonText": "Logg inn på nytt"
   }
 }

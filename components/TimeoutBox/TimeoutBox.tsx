@@ -1,8 +1,10 @@
-import { BodyShort, Button, Heading, Modal } from '@navikt/ds-react';
+import { BodyShort, Button, Heading, Link, Modal } from '@navikt/ds-react';
+import { ModalButtonWrapper } from 'components/ButtonWrapper/ModalButtonWrapper';
 import { useFeatureToggleIntl } from 'hooks/useFeatureToggleIntl';
 import { useInterval } from 'hooks/useInterval';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
+import * as styles from './TimeoutBox.module.css';
 
 const ONE_SECOND_IN_MS = 1000;
 const SECONDS_IN_MINUTE = 60;
@@ -18,7 +20,7 @@ const beregnUtloggingsTidspunkt = (sessionDurationInSeconds: number): number => 
 };
 
 interface Props {
-  logoutTextKey: string;
+  logoutTextKey?: string;
 }
 
 export const TimeoutBox = ({ logoutTextKey }: Props) => {
@@ -66,8 +68,13 @@ export const TimeoutBox = ({ logoutTextKey }: Props) => {
         <Heading level="1" size="large" spacing>
           {formatMessage('logoutModal.title')}
         </Heading>
-        <BodyShort spacing>{formatMessage(logoutTextKey)}</BodyShort>
-        <Button onClick={onLoginClick}>{formatMessage('logoutModal.buttonText')}</Button>
+        {logoutTextKey && <BodyShort spacing>{formatMessage(logoutTextKey)}</BodyShort>}
+        <ModalButtonWrapper>
+          <Button className={styles.item} onClick={onLoginClick}>
+            {formatMessage('logoutModal.buttonText')}
+          </Button>
+          <Link href="https://www.nav.no">Gå tilbake til nav.no</Link>
+        </ModalButtonWrapper>
       </Modal.Content>
     </Modal>
   );

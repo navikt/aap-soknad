@@ -116,7 +116,7 @@ const Introduksjon = ({ søker }: PageProps) => {
           await startSoknad();
         }}
       />
-      <TimeoutBox logoutTextKey="logoutModal.message" />
+      <TimeoutBox />
     </>
   );
 };
