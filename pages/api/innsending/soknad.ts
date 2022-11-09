@@ -6,11 +6,13 @@ import { tokenXProxy } from 'auth/tokenXProxy';
 import { isMock, isLabs } from 'utils/environments';
 import { slettBucket } from '../buckets/slett';
 import { ErrorMedStatus } from 'auth/ErrorMedStatus';
+import metrics from 'utils/metrics';
 
 const handler = beskyttetApi(async (req: NextApiRequest, res: NextApiResponse) => {
   const accessToken = getAccessTokenFromRequest(req);
   try {
     const soknadRes = await sendSoknad(req.body, accessToken);
+    metrics.sendSoknadCounter.inc({ type: 'STANDARD' });
     res.status(201).json(soknadRes);
   } catch (err) {
     if (err instanceof ErrorMedStatus) {

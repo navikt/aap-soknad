@@ -28,6 +28,12 @@ export class AppMetrics {
     help: 'Load time for getServerSideProps',
     labelNames: ['path'],
   });
+
+  public sendSoknadCounter = new Counter({
+    name: 'aap_soknad_send_soknad',
+    help: 'Counter for number of sent applications',
+    labelNames: ['type'],
+  });
 }
 
 global._metrics = global._metrics || new AppMetrics();
