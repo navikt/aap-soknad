@@ -21,6 +21,12 @@ import { slettLagretSoknadState, updateSøknadData } from 'context/soknadContext
 import { useDebounceLagreSoknad } from 'hooks/useDebounceLagreSoknad';
 import * as styles from './Medlemskap.module.css';
 import { GenericSoknadContextState } from 'types/SoknadContext';
+import {
+  shouldShowArbeidetSammenhengendeINorgeSiste5År,
+  shouldShowArbeidetUtenforNorgeSiste5År,
+  shouldShowITilleggArbeidetUtenforNorgeSiste5År,
+  shouldShowPeriodevelger,
+} from './medlemskapUtils';
 
 interface Props {
   onBackClick: () => void;
@@ -202,44 +208,20 @@ export const Medlemskap = ({ onBackClick, onNext, defaultValues }: Props) => {
   );
 
   useEffect(() => {
-    if (boddINorge === JaEllerNei.NEI) {
-      setValue(`${MEDLEMSKAP}.${ARBEID_UTENFOR_NORGE_FØR_SYKDOM}`, '');
-      setValue(`${MEDLEMSKAP}.${OGSÅ_ARBEID_UTENFOR_NORGE}`, '');
-    }
-    if (boddINorge === JaEllerNei.JA) {
+    if (shouldShowArbeidetUtenforNorgeSiste5År(boddINorge)) {
       setValue(`${MEDLEMSKAP}.${ARBEID_I_NORGE}`, '');
     }
-
-    clearErrors();
-  }, [boddINorge]);
-  useEffect(() => {
-    if (arbeidINorge === JaEllerNei.NEI) {
-      // @ts-ignore // TODO: Finne ut av hvorfor state blir riktig med '' og ikke undefined
+    if (shouldShowArbeidetSammenhengendeINorgeSiste5År(boddINorge)) {
+      setValue(`${MEDLEMSKAP}.${ARBEID_UTENFOR_NORGE_FØR_SYKDOM}`, '');
+    }
+    if (!shouldShowITilleggArbeidetUtenforNorgeSiste5År(arbeidINorge)) {
       setValue(`${MEDLEMSKAP}.${OGSÅ_ARBEID_UTENFOR_NORGE}`, '');
     }
-    //if (arbeidINorge === JaEllerNei.JA) remove();
-    clearErrors();
-  }, [arbeidINorge]);
-  useEffect(() => {
-    if (arbeidUtenforNorge === JaEllerNei.NEI) remove();
-    clearErrors();
-  }, [arbeidUtenforNorge]);
-  useEffect(() => {
-    if (iTilleggArbeidUtenforNorge === JaEllerNei.NEI) remove();
-    clearErrors();
-  }, [iTilleggArbeidUtenforNorge]);
-  useEffect(() => {
-    if (fields.length > 0) {
-      clearErrors();
+    if (!shouldShowPeriodevelger(arbeidUtenforNorge, arbeidINorge, iTilleggArbeidUtenforNorge)) {
+      remove();
     }
-  }, [fields]);
-
-  useEffect(() => {
-    if (arbeidINorge === JaEllerNei.JA && iTilleggArbeidUtenforNorge === JaEllerNei.NEI) remove();
-    // @ts-ignore // TODO: Finne ut av hvorfor state blir riktig med '' og ikke undefined
-    if (arbeidINorge === JaEllerNei.JA && iTilleggArbeidUtenforNorge === '') remove();
     clearErrors();
-  }, [arbeidINorge, iTilleggArbeidUtenforNorge]);
+  }, [boddINorge, arbeidINorge, arbeidUtenforNorge, iTilleggArbeidUtenforNorge]);
 
   return (
     <>

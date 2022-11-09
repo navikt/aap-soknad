@@ -66,7 +66,12 @@ const flatObj: any = (obj: any, prevKey = '') => {
       // @ts-ignore
       if (value?.message) {
         // @ts-ignore TODO: Fikse skikkelige typer på fielderrors
-        return { ...flatted, [value?.ref?.name]: value?.message };
+        if (value?.ref?.name) {
+          return { ...flatted, [value?.ref?.name]: value?.message };
+        } else {
+          const fullKey = prevKey ? `${prevKey}.${key}` : key;
+          return { ...flatted, [fullKey]: value?.message };
+        }
       } else {
         return { ...flatted, ...flatObj(value, key) };
       }
