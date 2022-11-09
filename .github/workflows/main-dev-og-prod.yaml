@@ -6,6 +6,7 @@ on:
       - "main"
 env:
   "IMAGE": "ghcr.io/${{ github.repository }}:${{ github.sha }}"
+  "ENABLE_SENTRY": "enabled"
 jobs:
   "build":
     name: "build"
