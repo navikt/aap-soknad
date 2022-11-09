@@ -97,16 +97,6 @@ const Introduksjon = ({ søker }: PageProps) => {
 
   return (
     <>
-      <Alert variant={'error'}>
-        {formatMessage('midlertidigAlertMelding', {
-          // @ts-ignore
-          a: (chunks: string[]) => (
-            <Link target="_blank" href="https://tjenester.nav.no/soknadaap/app/start">
-              {chunks}
-            </Link>
-          ),
-        })}
-      </Alert>
       <Veiledning
         søker={soker}
         isLoading={isLoading}
