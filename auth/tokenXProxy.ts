@@ -51,11 +51,21 @@ export const tokenXProxy = async (opts: Opts) => {
     } catch (err: any) {
       logger.error({ msg: `unable to parse data from ${opts.url}`, error: err.toString() });
     }
-    logger.error({
-      msg: `tokenXProxy: status for ${opts.url} er ${response.status}: ${response.statusText}.`,
-      navCallId: data?.['Nav-CallId'],
-      data,
-    });
+    if (response.status < 500) {
+      logger.warn({
+        msg: `tokenXProxy: status for ${opts.url} er ${response.status}: ${response.statusText}.`,
+        navCallId: data?.['Nav-CallId'],
+        data,
+      });
+    }
+    if (response.status >= 500) {
+      logger.error({
+        msg: `tokenXProxy: status for ${opts.url} er ${response.status}: ${response.statusText}.`,
+        navCallId: data?.['Nav-CallId'],
+        data,
+      });
+    }
+
     throw new ErrorMedStatus(
       `tokenXProxy: status for ${opts.url} er ${response.status}.`,
       response.status,
