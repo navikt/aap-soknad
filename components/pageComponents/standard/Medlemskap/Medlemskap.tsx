@@ -202,11 +202,15 @@ export const Medlemskap = ({ onBackClick, onNext, defaultValues }: Props) => {
   );
 
   useEffect(() => {
-    setValue(`${MEDLEMSKAP}.${ARBEID_UTENFOR_NORGE_FØR_SYKDOM}`, '');
-    setValue(`${MEDLEMSKAP}.${ARBEID_I_NORGE}`, '');
-    setValue(`${MEDLEMSKAP}.${OGSÅ_ARBEID_UTENFOR_NORGE}`, '');
+    if (boddINorge === JaEllerNei.NEI) {
+      setValue(`${MEDLEMSKAP}.${ARBEID_UTENFOR_NORGE_FØR_SYKDOM}`, '');
+      setValue(`${MEDLEMSKAP}.${OGSÅ_ARBEID_UTENFOR_NORGE}`, '');
+    }
+    if (boddINorge === JaEllerNei.JA) {
+      setValue(`${MEDLEMSKAP}.${ARBEID_I_NORGE}`, '');
+    }
+
     clearErrors();
-    remove();
   }, [boddINorge]);
   useEffect(() => {
     if (arbeidINorge === JaEllerNei.NEI) {
