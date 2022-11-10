@@ -17,7 +17,7 @@ import { useDebounceLagreSoknad } from 'hooks/useDebounceLagreSoknad';
 import { GenericSoknadContextState } from 'types/SoknadContext';
 import RadioGroupWrapper from 'components/input/RadioGroupWrapper/RadioGroupWrapper';
 import { JaEllerNei } from 'types/Generic';
-import { formatNavn, formatFullAdresse } from 'utils/StringFormatters';
+import { formatNavn, formatFullAdresse, formatTelefonnummer } from 'utils/StringFormatters';
 
 interface Props {
   onBackClick: () => void;
@@ -173,7 +173,7 @@ export const Behandlere = ({ onBackClick, onNext, defaultValues }: Props) => {
                     {formatMessage('søknad.helseopplysninger.registrertFastlege.telefon')}
                   </Label>
                 </dt>
-                <dl>{field.kontaktinformasjon.telefon}</dl>
+                <dl>{formatTelefonnummer(field.kontaktinformasjon.telefon)}</dl>
               </dl>
               <RadioGroupWrapper
                 name={`${REGISTRERTE_BEHANDLERE}.${index}.${RIKTIG_FASTLEGE}`}
@@ -239,7 +239,7 @@ export const Behandlere = ({ onBackClick, onNext, defaultValues }: Props) => {
                         <Label>
                           {formatMessage('søknad.helseopplysninger.dineBehandlere.telefon')}:{' '}
                         </Label>
-                        {field?.telefon}
+                        {formatTelefonnummer(field?.telefon)}
                       </BodyShort>
                     )}
                     <div className={classes?.cardButtonWrapper}>

@@ -2,6 +2,7 @@ import { BodyShort, Heading } from '@navikt/ds-react';
 import React from 'react';
 import { Behandler } from 'types/Soknad';
 import { useFeatureToggleIntl } from 'hooks/useFeatureToggleIntl';
+import { formatTelefonnummer } from 'utils/StringFormatters';
 
 type Props = {
   behandler: Behandler;
@@ -21,9 +22,9 @@ const OppsummeringBehandler = ({ behandler }: Props) => {
         <BodyShort>{`${behandler?.gateadresse}, ${behandler?.postnummer} ${behandler?.poststed}`}</BodyShort>
       )}
       {behandler?.telefon && (
-        <BodyShort>{`${formatMessage('søknad.helseopplysninger.dineBehandlere.telefon')}: ${
-          behandler?.telefon
-        }`}</BodyShort>
+        <BodyShort>{`${formatMessage(
+          'søknad.helseopplysninger.dineBehandlere.telefon'
+        )}: ${formatTelefonnummer(behandler?.telefon)}`}</BodyShort>
       )}
     </article>
   );

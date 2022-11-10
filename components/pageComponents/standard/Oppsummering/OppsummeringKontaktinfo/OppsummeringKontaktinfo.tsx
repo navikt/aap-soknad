@@ -2,6 +2,7 @@ import React from 'react';
 import { BodyShort, Label, Link, ReadMore } from '@navikt/ds-react';
 import { useSokerOppslag } from 'context/sokerOppslagContext';
 import { useFeatureToggleIntl } from 'hooks/useFeatureToggleIntl';
+import { formatTelefonnummer } from 'utils/StringFormatters';
 
 const OppsummeringKontaktinfo = () => {
   const { formatMessage, formatElement } = useFeatureToggleIntl();
@@ -37,7 +38,7 @@ const OppsummeringKontaktinfo = () => {
       )}
       <div>
         <Label>{formatMessage('søknad.oppsummering.contactInformation.telefonnummer.label')}</Label>
-        <BodyShort>{kontaktInfo?.mobil}</BodyShort>
+        <BodyShort>{formatTelefonnummer(kontaktInfo?.mobil)}</BodyShort>
         <ReadMore
           header={formatMessage(
             'søknad.oppsummering.contactInformation.telefonnummer.readMore.title'

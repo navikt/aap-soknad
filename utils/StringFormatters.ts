@@ -14,3 +14,19 @@ export const formatFullAdresse = (adresse?: Adresse) =>
   }${adresse?.husbokstav ? adresse.husbokstav : ''}${
     adresse?.postnummer?.postnr || adresse?.postnummer?.poststed ? ',' : ''
   } ${adresse?.postnummer?.postnr ?? ''} ${adresse?.postnummer?.poststed ?? ''}`;
+
+export const formatTelefonnummer = (telefonnummer?: string) => {
+  if (!telefonnummer) {
+    return '';
+  }
+  if (telefonnummer.startsWith('+47')) {
+    return telefonnummer.replace(/(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/, '$1 $2 $3 $4 $5');
+  }
+  if (telefonnummer.length === 8) {
+    if (telefonnummer.startsWith('800')) {
+      return telefonnummer.replace(/(\d{3})(\d{2})(\d{3})/, '$1 $2 $3');
+    }
+    return telefonnummer.replace(/(\d{2})(\d{2})(\d{2})(\d{2})/, '$1 $2 $3 $4');
+  }
+  return telefonnummer;
+};
