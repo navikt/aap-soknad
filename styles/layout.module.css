@@ -19,3 +19,10 @@
   min-width: 201px;
   flex-grow: 1;
 }
+
+.modalForm {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: var(--navds-spacing-5);
+}

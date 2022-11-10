@@ -218,7 +218,7 @@ export const Behandlere = ({ onBackClick, onNext, defaultValues }: Props) => {
                     {field?.legekontor && (
                       <BodyShort>
                         <Label>
-                          {formatMessage('søknad.helseopplysninger.dineBehandlere.telefon')}:{' '}
+                          {formatMessage('søknad.helseopplysninger.dineBehandlere.legekontor')}:{' '}
                         </Label>
                         {field?.legekontor}
                       </BodyShort>

@@ -6,10 +6,7 @@
 }
 
 .modalForm {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  gap: var(--navds-spacing-5);
+  composes: modalForm from '/styles/layout.module.css';
 }
 
 .countrySelector {

@@ -66,6 +66,7 @@ export const AddBehandlerModal = ({ showModal, onCloseClick, onSaveClick, behand
             const newData = { ...data };
             onSaveClick(newData);
           })}
+          className={classes?.modalForm}
         >
           <TextFieldWrapper
             control={control}
@@ -116,9 +117,6 @@ export const AddBehandlerModal = ({ showModal, onCloseClick, onSaveClick, behand
             error={errors?.telefon?.message}
           />
           <ModalButtonWrapper>
-            <Button type={'submit'}>
-              {formatMessage('søknad.helseopplysninger.modal.buttons.lagre')}
-            </Button>
             <Button
               type="button"
               variant={'secondary'}
@@ -128,6 +126,9 @@ export const AddBehandlerModal = ({ showModal, onCloseClick, onSaveClick, behand
               }}
             >
               {formatMessage('søknad.helseopplysninger.modal.buttons.avbryt')}
+            </Button>
+            <Button type={'submit'}>
+              {formatMessage('søknad.helseopplysninger.modal.buttons.lagre')}
             </Button>
           </ModalButtonWrapper>
         </form>
