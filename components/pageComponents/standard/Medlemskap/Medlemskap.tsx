@@ -1,5 +1,5 @@
 import { BodyShort, Radio, Button, Table, Heading, ReadMore, Cell, Grid } from '@navikt/ds-react';
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { useFieldArray, useForm, useWatch } from 'react-hook-form';
 import { JaEllerNei, JaNeiVetIkke } from 'types/Generic';
 import { Add, Delete } from '@navikt/ds-icons';
@@ -222,6 +222,19 @@ export const Medlemskap = ({ onBackClick, onNext, defaultValues }: Props) => {
     }
     clearErrors();
   }, [boddINorge, arbeidINorge, arbeidUtenforNorge, iTilleggArbeidUtenforNorge]);
+
+  const previousArbeidINorgeValue = useRef(defaultValues?.søknad?.medlemskap?.[ARBEID_I_NORGE]);
+
+  // Håndterer spesialcase hvor periodevelger ikke resettes ved endring av arbeidINorge
+  useEffect(() => {
+    if (arbeidINorge === JaEllerNei.NEI && arbeidINorge !== previousArbeidINorgeValue.current) {
+      remove();
+    }
+  }, [arbeidINorge, previousArbeidINorgeValue.current]);
+
+  useEffect(() => {
+    previousArbeidINorgeValue.current = arbeidINorge;
+  }, [arbeidINorge]);
 
   return (
     <>

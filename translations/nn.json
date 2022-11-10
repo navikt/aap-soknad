@@ -231,7 +231,10 @@
             }
           },
           "iArbeid": {
-            "label": "Jobba du i dette landet i denne perioden?"
+            "label": "Jobba du i dette landet i denne perioden?",
+            "validation": {
+              "required": "Du må svare på om du jobba i dette landet i denne perioden."
+            }
           },
           "utenlandsId": {
             "label": "ID-nummer/personnummer for landet du har jobba i (valfritt)"

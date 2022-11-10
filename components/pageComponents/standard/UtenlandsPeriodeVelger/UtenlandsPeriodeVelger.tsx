@@ -56,6 +56,7 @@ const UtenlandsPeriodeVelger = ({
   const { formatMessage } = useFeatureToggleIntl();
 
   const schema = yup.object().shape({
+    arbeidEllerBodd: yup.string().nullable(),
     land: yup
       .string()
       .required(formatMessage('søknad.medlemskap.utenlandsperiode.modal.land.validation.required'))
@@ -83,6 +84,16 @@ const UtenlandsPeriodeVelger = ({
           'søknad.medlemskap.utenlandsperiode.modal.periode.tilDato.validation.fraDatoEtterTilDato'
         )
       ),
+    iArbeid: yup.string().when('arbeidEllerBodd', {
+      is: ArbeidEllerBodd.BODD,
+      then: yup
+        .string()
+        .required(
+          formatMessage('søknad.medlemskap.utenlandsperiode.modal.iArbeid.validation.required')
+        )
+        .oneOf([JaEllerNei.JA, JaEllerNei.NEI])
+        .nullable(),
+    }),
   });
 
   const {
@@ -100,8 +111,9 @@ const UtenlandsPeriodeVelger = ({
             ...utenlandsPeriode,
             fraDato: formatDate(utenlandsPeriode.fraDato, 'yyyy-MM-dd'),
             tilDato: formatDate(utenlandsPeriode.tilDato, 'yyyy-MM-dd'),
+            arbeidEllerBodd: arbeidEllerBodd,
           }
-        : initFieldVals),
+        : { ...initFieldVals, arbeidEllerBodd: arbeidEllerBodd }),
     },
   });
 
@@ -110,8 +122,9 @@ const UtenlandsPeriodeVelger = ({
       ...utenlandsPeriode,
       fraDato: formatDate(utenlandsPeriode?.fraDato, 'yyyy-MM-dd'),
       tilDato: formatDate(utenlandsPeriode?.tilDato, 'yyyy-MM-dd'),
+      arbeidEllerBodd: arbeidEllerBodd,
     });
-  }, [utenlandsPeriode, open, reset]);
+  }, [utenlandsPeriode, arbeidEllerBodd, open, reset]);
 
   const antallÅrTilbake = arbeidEllerBodd === ArbeidEllerBodd.ARBEID ? 5 : 60;
 
@@ -130,9 +143,10 @@ const UtenlandsPeriodeVelger = ({
     setValue('land', '');
     setValue('fraDato', undefined);
     setValue('tilDato', undefined);
-    setValue('iArbeid', false);
+    setValue('iArbeid', undefined);
     setValue('utenlandsId', '');
   };
+
   return (
     <Modal open={open} onClose={onClose}>
       <Modal.Content className={classes.utenlandsPeriodeVelger}>
