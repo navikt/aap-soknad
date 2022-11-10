@@ -866,19 +866,19 @@
   integrity sha512-mY9zheDBTy/+ZFcyGClBCyn5GhxamklSnwKIpgIxZbrMDzGCpXkeYBXZQj/7FPstfGTWfyuY+PDoaaWTpDHkug==
 
 "@navikt/ds-css@^1.4.1":
-  version "1.4.4"
-  resolved "https://npm.pkg.github.com/download/@navikt/ds-css/1.4.4/dee612ab2dc0670c636dde9965fb5ca363b2e698#dee612ab2dc0670c636dde9965fb5ca363b2e698"
-  integrity sha512-bJvgXs/y5ooCCxt61HwafytS14tQzmv60K8+OEIr/2kD7IJ6WpX7etwTCPgtvThRJ/59sW85MVAerCAEBFkyBQ==
+  version "1.5.6"
+  resolved "https://npm.pkg.github.com/download/@navikt/ds-css/1.5.6/a4c7dcc0e8dab6ab00f620f2dcb07243580d014d#a4c7dcc0e8dab6ab00f620f2dcb07243580d014d"
+  integrity sha512-+4MN62Doi9j82gqpbA5lS+JPbFOPo3rSTaBINtRgNRZ/svA4IVDsl/ayH3qfKKjl7DMqNZe8HUeEmQrYHCXSqQ==
 
 "@navikt/ds-icons@^1.3.38":
   version "1.3.38"
   resolved "https://npm.pkg.github.com/download/@navikt/ds-icons/1.3.38/5212ee58cdd3b9de38edc39a34c656f2710ea254#5212ee58cdd3b9de38edc39a34c656f2710ea254"
   integrity sha512-Xo06OtsqeLBUgqJI66MXY1MZmZSD8xyAuwC3OdnXR01SXioAAl1QeOktmb6UOkbc80cBnylV5SrVLyVOYe3pvA==
 
-"@navikt/ds-icons@^1.4.1", "@navikt/ds-icons@^1.4.4":
-  version "1.4.4"
-  resolved "https://npm.pkg.github.com/download/@navikt/ds-icons/1.4.4/6d03862a64981c2397b46e12a79935e7a98874f4#6d03862a64981c2397b46e12a79935e7a98874f4"
-  integrity sha512-Vcwdr00nzOzpt+7L9EcdSBwd0djvt28/r32YpULffQT6g1WGQGQVAButChpkurUo+d5uc2hXirMv3yWcjOQLhg==
+"@navikt/ds-icons@^1.4.1", "@navikt/ds-icons@^1.5.6":
+  version "1.5.6"
+  resolved "https://npm.pkg.github.com/download/@navikt/ds-icons/1.5.6/5a02a5501bb30bd8798c060c4d6d67c7697e76cf#5a02a5501bb30bd8798c060c4d6d67c7697e76cf"
+  integrity sha512-Kp5gzstB0J99J+cDKFgRQlgR31egle5SrL9uA+otgqKoVCroV8QM0q9wFOjFaxOv8GMHKylI6VRFFwONXiDhlQ==
 
 "@navikt/ds-react@1.3.x":
   version "1.3.38"
@@ -895,12 +895,12 @@
     react-modal "3.15.1"
 
 "@navikt/ds-react@^1.4.1":
-  version "1.4.4"
-  resolved "https://npm.pkg.github.com/download/@navikt/ds-react/1.4.4/af106826eb156dbefb68d4572a52c49b48374639#af106826eb156dbefb68d4572a52c49b48374639"
-  integrity sha512-duQRMr4F9BO5B6bHM22PIqIfuoz88kimR86LiBU262W7mGJr0jMOhan+xbQC8kgBiWrpoaxWBhYA3Wh9pb9RqA==
+  version "1.5.6"
+  resolved "https://npm.pkg.github.com/download/@navikt/ds-react/1.5.6/32ec3f7eb7cc7b409980fcf0b86c939a35b7ded5#32ec3f7eb7cc7b409980fcf0b86c939a35b7ded5"
+  integrity sha512-Mt5ZaxYJegHz+9BJTOYKlXo7k0cSV96qDZgEl1txidETnloIWd69wAJpFFBm5eWT7BZRQgde2BLMdCUOZWsmRQ==
   dependencies:
     "@floating-ui/react-dom-interactions" "0.9.2"
-    "@navikt/ds-icons" "^1.4.4"
+    "@navikt/ds-icons" "^1.5.6"
     "@radix-ui/react-tabs" "1.0.0"
     "@radix-ui/react-toggle-group" "1.0.0"
     clsx "^1.2.1"
@@ -914,10 +914,11 @@
   integrity sha512-AxxPT0iN+R+8y/DDXu2Rfc8LoLj5oipAgtlm34umayb27Sz3h4fYBlV8Z3ouOo+iMXhrC2DX6H6yWLmcQ1dZJw==
 
 "@navikt/nav-dekoratoren-moduler@^1.6.9":
-  version "1.6.9"
-  resolved "https://registry.yarnpkg.com/@navikt/nav-dekoratoren-moduler/-/nav-dekoratoren-moduler-1.6.9.tgz#4f7f1151c94fe753af78c3b0c495d5ec3ce20534"
-  integrity sha512-SmDNC+yI7eef4lneaFAwZKYqkJ7k9Iu71DMlUIRL+duQ14P3vpsSfIMFsSzkxmN+6OXdTFYaOece6NZfkBT6fQ==
+  version "1.8.1"
+  resolved "https://npm.pkg.github.com/download/@navikt/nav-dekoratoren-moduler/1.8.1/27402c518cc145a1261a790793eee7408b8b8350#27402c518cc145a1261a790793eee7408b8b8350"
+  integrity sha512-0e9RgMxA/n47iJybXdW2m7bUC7SB1w6312sQw6Rlzlqg4ImCdz6mDtg+Qf94Erua1IRX/Yrey+pVGODXCkm/cA==
   dependencies:
+    csp-header "^5.1.0"
     html-react-parser "^1.2.7"
     jsdom "^16.6.0"
     node-cache "^5.1.2"
@@ -1767,10 +1768,15 @@ acorn@^7.1.1:
   resolved "https://registry.yarnpkg.com/acorn/-/acorn-7.4.1.tgz#feaed255973d2e77555b83dbc08851a6c63520fa"
   integrity sha512-nQyp0o1/mNdbTO1PO6kHkwSrmgZ0MT/jCCpNiwbUjGoRN4dlBhqJtoQuCnEOKzgTVwg0ZWiCoQy6SxMebQVh8A==
 
-acorn@^8.1.0, acorn@^8.2.4, acorn@^8.8.0:
+acorn@^8.1.0, acorn@^8.8.0:
   version "8.8.0"
   resolved "https://registry.yarnpkg.com/acorn/-/acorn-8.8.0.tgz#88c0187620435c7f6015803f5539dae05a9dbea8"
   integrity sha512-QOxyigPVrpZ2GXT+PFyZTl6TtOFc5egxHIP9IlQ+RbupQuX4RkT/Bee4/kQuC02Xkzg84JcT7oLYtDIQxp+v7w==
+
+acorn@^8.2.4:
+  version "8.8.1"
+  resolved "https://registry.yarnpkg.com/acorn/-/acorn-8.8.1.tgz#0a3f9cbecc4ec3bea6f0a80b66ae8dd2da250b73"
+  integrity sha512-7zFpHzhnqYKrkYdUjF1HI1bzd0VygEGX8lFk4k5zVMqHEoES+P+7TKI+EvLO9WVMJ8eekdO0aDEK044xTXwPPA==
 
 agent-base@6:
   version "6.0.2"
@@ -2555,6 +2561,11 @@ cross-spawn@^7.0.0, cross-spawn@^7.0.1, cross-spawn@^7.0.2, cross-spawn@^7.0.3:
     shebang-command "^2.0.0"
     which "^2.0.1"
 
+csp-header@^5.1.0:
+  version "5.1.0"
+  resolved "https://registry.yarnpkg.com/csp-header/-/csp-header-5.1.0.tgz#6aa7aecbc2b4118e808f8e50106dc918c4f16f62"
+  integrity sha512-HIKOtf0g4LrWSZKKZA/VSvjU7wLFknXW31NqvCfkkAU6g6RObEbR+E1TLThx4nfE1ozY4be9/5p+u6hmyVi7OQ==
+
 css.escape@^1.5.1:
   version "1.5.1"
   resolved "https://registry.yarnpkg.com/css.escape/-/css.escape-1.5.1.tgz#42e27d4fa04ae32f931a4b4d4191fa9cddee97cb"
@@ -2725,9 +2736,9 @@ debug@^3.1.0:
     ms "^2.1.1"
 
 decimal.js@^10.2.1:
-  version "10.4.0"
-  resolved "https://registry.yarnpkg.com/decimal.js/-/decimal.js-10.4.0.tgz#97a7448873b01e92e5ff9117d89a7bca8e63e0fe"
-  integrity sha512-Nv6ENEzyPQ6AItkGwLE2PGKinZZ9g59vSh2BeH6NqPu0OTKZ5ruJsVqh/orbAnqXc9pBbgXAIrc2EyaCj8NpGg==
+  version "10.4.2"
+  resolved "https://registry.yarnpkg.com/decimal.js/-/decimal.js-10.4.2.tgz#0341651d1d997d86065a2ce3a441fbd0d8e8b98e"
+  integrity sha512-ic1yEvwT6GuvaYwBLLY6/aFFgjZdySKTE8en/fkU3QICTmRtgtSlFn0u0BXN06InZwtfCelR7j8LRiDI/02iGA==
 
 decimal.js@^10.4.1:
   version "10.4.1"
