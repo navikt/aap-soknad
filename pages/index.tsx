@@ -18,6 +18,7 @@ import { getSøkerUtenBarn } from 'pages/api/oppslag/soekerUtenBarn';
 import { Alert, Link } from '@navikt/ds-react';
 import { useFeatureToggleIntl } from 'hooks/useFeatureToggleIntl';
 import { TimeoutBox } from 'components/TimeoutBox/TimeoutBox';
+import { logger } from '@navikt/aap-felles-innbygger-utils';
 interface PageProps {
   søker: {
     navn: Navn;
@@ -122,6 +123,7 @@ export const getServerSideProps = beskyttetSide(
 
     stopTimer();
     if (activeIndex && !isLabs()) {
+      logger.info('Starter påbegynt søknad');
       return {
         redirect: {
           destination: `/${activeIndex}`,
