@@ -32,7 +32,7 @@
       },
       "sykepenger": {
         "legend": "Har du sjukepengar no?",
-        "description": "Viss du mottar sjukepengar, får du AAP frå første dag etter at sjukepengane er ferdig.",
+        "description": "Viss du får sjukepengar og søkjer om AAP, kan du vanlegvis få AAP frå første dag etter at sjukepengane dine er ferdige.",
         "required": "Du må svare på om du mottar sykepenger"
       },
       "skalHaFerie": {

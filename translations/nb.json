@@ -77,7 +77,7 @@
       },
       "sykepenger": {
         "legend": "Har du sykepenger nå?",
-        "description": "Hvis du mottar sykepenger, får du AAP fra første dag etter at sykepengene er ferdig.",
+        "description": "Hvis du mottar sykepenger og søker om AAP, kan du vanligvis få AAP fra første dag etter at sykepengene dine er ferdige.",
         "required": "Du må svare på om du mottar sykepenger"
       },
       "skalHaFerie": {
