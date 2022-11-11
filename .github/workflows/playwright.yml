@@ -5,9 +5,9 @@ on:
   pull_request:
     branches: [ main ]
 jobs:
-  test:
-    timeout-minutes: 60
-    runs-on: ubuntu-latest
+  build:
+    name: "build"
+    runs-on: "ubuntu-latest"
     steps:
     - uses: actions/checkout@v3
     - uses: actions/setup-node@v3
@@ -21,8 +21,11 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
     - name: Build app
       run: yarn build
-      env:
-          RUNTIME_ENVIRONMENT: "localhost"
+  test:
+    timeout-minutes: 60
+    runs-on: ubuntu-latest
+    needs: "build"
+    steps:
     - name: Install Playwright Browsers
       run: npx playwright install --with-deps
     - name: Run Playwright tests
