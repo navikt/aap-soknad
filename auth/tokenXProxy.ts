@@ -1,3 +1,4 @@
+import { randomUUID } from 'crypto';
 import { NextApiRequest, NextApiResponse } from 'next/dist/shared/lib/utils';
 import axios from 'axios';
 import { getTokenX } from '@navikt/aap-felles-innbygger-auth';
@@ -30,12 +31,14 @@ export const tokenXProxy = async (opts: Opts) => {
   }
 
   const stopTimer = metrics.backendApiDurationHistogram.startTimer({ path: opts.prometheusPath });
+  const requestId = randomUUID();
   const response = await fetch(opts.url, {
     method: opts.method,
     body: opts.data,
     headers: {
       Authorization: `Bearer ${tokenxToken}`,
       'Content-Type': opts.contentType ?? 'application/json',
+      'X-Request-ID': requestId,
     },
   });
   stopTimer();
@@ -49,12 +52,17 @@ export const tokenXProxy = async (opts: Opts) => {
     try {
       data = isJson ? await response.json() : response.text();
     } catch (err: any) {
-      logger.error({ msg: `unable to parse data from ${opts.url}`, error: err.toString() });
+      logger.error({
+        msg: `unable to parse data from ${opts.url}`,
+        error: err.toString(),
+        requestId,
+      });
     }
     if (response.status < 500) {
       logger.warn({
         msg: `tokenXProxy: status for ${opts.url} er ${response.status}: ${response.statusText}.`,
         navCallId: data?.['Nav-CallId'],
+        requestId,
         data,
       });
     }
@@ -62,6 +70,7 @@ export const tokenXProxy = async (opts: Opts) => {
       logger.error({
         msg: `tokenXProxy: status for ${opts.url} er ${response.status}: ${response.statusText}.`,
         navCallId: data?.['Nav-CallId'],
+        requestId,
         data,
       });
     }
@@ -97,6 +106,7 @@ export const tokenXAxiosProxy = async (opts: AxiosOpts) => {
 
   logger.info('Starter opplasting av fil til ' + opts.url);
   logger.info('content-type fra klient' + opts.req?.headers['content-type']);
+  const requestId = randomUUID();
   try {
     const stopTimer = metrics.backendApiDurationHistogram.startTimer({ path: opts.prometheusPath });
     const { data } = await axios.post(opts.url, opts.req, {
@@ -104,6 +114,7 @@ export const tokenXAxiosProxy = async (opts: AxiosOpts) => {
       headers: {
         'Content-Type': opts.req?.headers['content-type'] ?? '', // which is multipart/form-data with boundary included
         Authorization: `Bearer ${tokenxToken}`,
+        'X-Request-ID': requestId,
       },
     });
     stopTimer();
@@ -119,7 +130,7 @@ export const tokenXAxiosProxy = async (opts: AxiosOpts) => {
       });
       return opts.res.status(e.response.status);
     }
-    logger.error(e);
+    logger.error({ error: e, requestId });
     return opts.res.status(500).json('tokenXAxiosProxy server error');
   }
 };
