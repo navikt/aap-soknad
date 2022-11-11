@@ -39,6 +39,7 @@
     "yup": "^0.32.11"
   },
   "devDependencies": {
+    "@playwright/test": "^1.27.1",
     "@testing-library/dom": "^8.18.1",
     "@testing-library/jest-dom": "^5.16.1",
     "@testing-library/react": "^13.0.0",
