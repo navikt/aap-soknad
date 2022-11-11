@@ -3,6 +3,8 @@ import { test, expect } from '@playwright/test';
 test('test', async ({ page }) => {
   await page.goto('http://localhost:3000/aap/soknad/');
 
+  await page.screenshot({ path: 'screenshot.png' });
+
   await page.getByRole('heading', { name: 'Søknad om arbeidsavklaringspenger (AAP)' }).click();
 
   await page.getByLabel('Jeg vil svare så godt jeg kan på spørsmålene i søknaden.').check();
