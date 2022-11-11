@@ -18,6 +18,7 @@ interface Opts {
   noResponse?: boolean;
   bearerToken?: string;
 }
+const NAV_CALLID = 'Nav-CallId';
 
 export const tokenXProxy = async (opts: Opts) => {
   logger.info('starter request mot ' + opts.url);
@@ -38,7 +39,7 @@ export const tokenXProxy = async (opts: Opts) => {
     headers: {
       Authorization: `Bearer ${tokenxToken}`,
       'Content-Type': opts.contentType ?? 'application/json',
-      'X-Request-ID': requestId,
+      [NAV_CALLID]: requestId,
     },
   });
   stopTimer();
@@ -55,22 +56,19 @@ export const tokenXProxy = async (opts: Opts) => {
       logger.error({
         msg: `unable to parse data from ${opts.url}`,
         error: err.toString(),
-        requestId,
       });
     }
     if (response.status < 500) {
       logger.warn({
         msg: `tokenXProxy: status for ${opts.url} er ${response.status}: ${response.statusText}.`,
-        navCallId: data?.['Nav-CallId'],
-        requestId,
+        navCallId: data?.[NAV_CALLID],
         data,
       });
     }
     if (response.status >= 500) {
       logger.error({
         msg: `tokenXProxy: status for ${opts.url} er ${response.status}: ${response.statusText}.`,
-        navCallId: data?.['Nav-CallId'],
-        requestId,
+        navCallId: data?.[NAV_CALLID],
         data,
       });
     }
@@ -78,7 +76,7 @@ export const tokenXProxy = async (opts: Opts) => {
     throw new ErrorMedStatus(
       `tokenXProxy: status for ${opts.url} er ${response.status}.`,
       response.status,
-      data?.['Nav-CallId'] || ''
+      data?.[NAV_CALLID] || ''
     );
   }
   logger.info(`Vellyket tokenXProxy-request mot ${opts.url}. Status: ${response.status}`);
@@ -114,7 +112,7 @@ export const tokenXAxiosProxy = async (opts: AxiosOpts) => {
       headers: {
         'Content-Type': opts.req?.headers['content-type'] ?? '', // which is multipart/form-data with boundary included
         Authorization: `Bearer ${tokenxToken}`,
-        'X-Request-ID': requestId,
+        [NAV_CALLID]: requestId,
       },
     });
     stopTimer();
@@ -130,7 +128,7 @@ export const tokenXAxiosProxy = async (opts: AxiosOpts) => {
       });
       return opts.res.status(e.response.status);
     }
-    logger.error({ error: e, requestId });
+    logger.error({ error: e, navCallId: e?.req?.headers?.[NAV_CALLID] });
     return opts.res.status(500).json('tokenXAxiosProxy server error');
   }
 };
