@@ -21,6 +21,8 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
     - name: Build app
       run: yarn build
+      env:
+          RUNTIME_ENVIRONMENT: "localhost"
     - name: Install Playwright Browsers
       run: npx playwright install --with-deps
     - name: Run Playwright tests
