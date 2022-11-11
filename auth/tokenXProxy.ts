@@ -128,7 +128,7 @@ export const tokenXAxiosProxy = async (opts: AxiosOpts) => {
       });
       return opts.res.status(e.response.status);
     }
-    logger.error({ error: e, navCallId: e?.req?.headers?.[NAV_CALLID] });
+    logger.error({ msg: 'tokenXAxioserror', error: e, navCallId: e?.req?.headers?.[NAV_CALLID] });
     return opts.res.status(500).json('tokenXAxiosProxy server error');
   }
 };
