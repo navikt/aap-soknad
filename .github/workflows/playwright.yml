@@ -22,8 +22,7 @@ jobs:
     - name: Build app
       run: yarn build
     - name: Upload build
-      id: cache-build
-      uses: actions/cache@v3
+      uses: actions/upload-artifact@v3
       with:
         name: next-build
         path: .next
