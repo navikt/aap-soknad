@@ -22,6 +22,7 @@ import {
 import { deleteOpplastedeVedlegg, useSoknadContextStandard } from 'context/soknadContextStandard';
 import { useDebounceLagreSoknad } from 'hooks/useDebounceLagreSoknad';
 import { GenericSoknadContextState } from 'types/SoknadContext';
+import { SYKEPENGER } from '../StartDato/StartDato';
 
 interface Props {
   onBackClick: () => void;
@@ -54,6 +55,8 @@ export enum StønadType {
 const ANDRE_UTBETALINGER = 'andreUtbetalinger';
 const LØNN = 'lønn';
 const STØNAD = 'stønad';
+const AFP = 'afp';
+const HVEMBETALER = 'hvemBetaler';
 
 export const stønadTypeToAlternativNøkkel = (stønadType: StønadType) => {
   switch (stønadType) {
@@ -92,6 +95,14 @@ export const AndreUtbetalinger = ({ onBackClick, onNext, defaultValues }: Props)
       [STØNAD]: yup
         .array()
         .min(1, formatMessage('søknad.andreUtbetalinger.stønad.validation.required')),
+      [AFP]: yup.object().when([STØNAD], {
+        is: (stønad: StønadType[]) => stønad.includes(StønadType.AFP),
+        then: yup.object({
+          [HVEMBETALER]: yup
+            .string()
+            .required(formatMessage('søknad.andreUtbetalinger.afp.validation.required')),
+        }),
+      }),
     }),
   });
   const { søknadState, søknadDispatch } = useSoknadContextStandard();
@@ -273,9 +284,10 @@ export const AndreUtbetalinger = ({ onBackClick, onNext, defaultValues }: Props)
             <Grid>
               <Cell xs={7}>
                 <TextFieldWrapper
-                  name={`${ANDRE_UTBETALINGER}.afp.hvemBetaler`}
+                  name={`${ANDRE_UTBETALINGER}.${AFP}.${HVEMBETALER}`}
                   label={formatMessage('søknad.andreUtbetalinger.hvemBetalerAfp.label')}
                   control={control}
+                  error={errors?.[ANDRE_UTBETALINGER]?.[AFP]?.message}
                 />
               </Cell>
             </Grid>
