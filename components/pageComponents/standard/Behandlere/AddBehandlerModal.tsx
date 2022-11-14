@@ -103,6 +103,7 @@ export const AddBehandlerModal = ({ showModal, onCloseClick, onSaveClick, behand
             </Cell>
             <Cell xs={6}>
               <TextFieldWrapper
+                className={classes?.poststedMobil}
                 control={control}
                 label={formatMessage('søknad.helseopplysninger.modal.poststed.label')}
                 name={'poststed'}

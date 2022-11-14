@@ -5,6 +5,20 @@
   gap: var(--navds-spacing-10);
   max-width: 600px;
 }
+
+@media (max-width: 575px) {
+  .addBehandlerModalContent {
+    margin-top: 50px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: var(--navds-spacing-10);
+    max-width: 600px;
+  }
+  .poststedMobil {
+    margin-top: 24px;
+  }
+}
 .modalForm {
   composes: modalForm from '/styles/layout.module.css';
 }
