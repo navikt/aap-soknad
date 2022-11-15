@@ -6,14 +6,26 @@
   max-width: 600px;
 }
 
-@media (max-width: 575px) {
+@media (min-width: 366px) and (max-width: 433px) {
   .addBehandlerModalContent {
     margin-top: 50px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    gap: var(--navds-spacing-10);
-    max-width: 600px;
+  }
+  .poststedMobil {
+    margin-top: 23px;
+  }
+}
+@media (max-width: 365px) {
+  .addBehandlerModalContent {
+    margin-top: 50px;
+  }
+  .poststedMobil {
+    margin-top: 0px;
+  }
+}
+
+@media (min-width: 365px) and (max-width: 400px) {
+  .addBehandlerModalContent {
+    margin-top: 50px;
   }
   .poststedMobil {
     margin-top: 24px;
