@@ -28,7 +28,7 @@ export const tokenXProxy = async (opts: Opts) => {
   try {
     tokenxToken = await getTokenX(idportenToken, opts.audience);
   } catch (err: any) {
-    logger.error({ msg: 'getTokenXError', error: err });
+    logger.error({ msg: 'getTokenXError', error: err?.toString() });
   }
 
   const stopTimer = metrics.backendApiDurationHistogram.startTimer({ path: opts.prometheusPath });
@@ -132,7 +132,7 @@ export const tokenXAxiosProxy = async (opts: AxiosOpts) => {
     }
     logger.error({
       msg: 'tokenXAxioserror',
-      error: e.toString(),
+      error: e?.toString(),
       navCallId: e?.request?.headers?.[NAV_CALLID],
     });
     return opts.res.status(500).json('tokenXAxiosProxy server error');
