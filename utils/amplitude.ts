@@ -48,3 +48,9 @@ export function logSkjemastegFullførtEvent(steg: number) {
     steg,
   });
 }
+
+export function logAccordionChangeEvent(accordionName: string, isOpen: boolean) {
+  logAmplitudeEvent(isOpen ? 'accordion lukket' : 'accordion åpnet', {
+    tekst: accordionName,
+  });
+}
