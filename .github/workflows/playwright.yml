@@ -35,12 +35,14 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - uses: actions/setup-node@v3
+    - name: Install dependencies
+      run: yarn install
+      env:
+          NODE_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
     - name: Install Playwright Browsers
       run: npx playwright install --with-deps
     - name: Run Playwright tests
       run: yarn playwright test
-      env:
-          RUNTIME_ENVIRONMENT: "localhost"
     - uses: actions/upload-artifact@v3
       if: always()
       with:
