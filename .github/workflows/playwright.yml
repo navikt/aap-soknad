@@ -21,11 +21,6 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
     - name: Build app
       run: yarn build
-    - name: Upload build
-      uses: actions/upload-artifact@v3
-      with:
-        name: next-build
-        path: .next/standalone
   test:
     timeout-minutes: 60
     runs-on: ubuntu-latest
@@ -33,15 +28,13 @@ jobs:
     services:
       soknad:
         image: ghcr.io/navikt/aap-soknad:3fd0bf2caef8dc7280149e5bf8d1667e90fb9e48
+        env:
+          RUNTIME_ENVIRONMENT: "localhost"
         ports:
           - 3000:3000
     steps:
     - uses: actions/checkout@v3
     - uses: actions/setup-node@v3
-    - name: Download next-build
-      uses: actions/download-artifact@v3
-      with:
-        name: next-build
     - name: Install Playwright Browsers
       run: npx playwright install --with-deps
     - name: Run Playwright tests
