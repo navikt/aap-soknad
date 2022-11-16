@@ -12,6 +12,8 @@ jobs:
   "build":
     name: "build"
     runs-on: "ubuntu-latest"
+    outputs:
+      image: ${{ env.IMAGE }}
     steps:
       - uses: "actions/checkout@v3"
       - uses: "actions/setup-node@v3"
@@ -58,7 +60,7 @@ jobs:
     needs: "build"
     services:
       soknad:
-        image: ${{ env.IMAGE }}
+        image: ${{needs.build.outputs.image}}
         env:
           RUNTIME_ENVIRONMENT: "labs"
         ports:
