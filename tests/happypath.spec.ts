@@ -3,9 +3,9 @@ import { test, expect } from '@playwright/test';
 test('test', async ({ page }) => {
   await page.goto('http://localhost:3000/aap/soknad/');
 
-  await page.screenshot({ path: 'screenshot.png' });
-
-  await page.getByRole('heading', { name: 'Søknad om arbeidsavklaringspenger (AAP)' }).click();
+  await expect(
+    page.getByRole('heading', { name: 'Søknad om arbeidsavklaringspenger (AAP)' })
+  ).toBeVisible();
 
   await page.getByLabel('Jeg vil svare så godt jeg kan på spørsmålene i søknaden.').check();
 
@@ -13,14 +13,14 @@ test('test', async ({ page }) => {
 
   await page.goto('http://localhost:3000/aap/soknad/1/');
 
-  await page.getByRole('heading', { name: 'Startdato' }).click();
+  await expect(page.getByRole('heading', { name: 'Startdato' })).toBeVisible();
 
   await page.getByLabel('Nei').check();
 
   await page.getByRole('button', { name: 'Neste steg' }).click();
   await expect(page).toHaveURL('http://localhost:3000/aap/soknad/2/');
 
-  await page.getByRole('heading', { name: 'Bosted og jobb' }).click();
+  await expect(page.getByRole('heading', { name: 'Bosted og jobb' })).toBeVisible();
 
   await page.getByLabel('Ja').check();
 
@@ -32,47 +32,39 @@ test('test', async ({ page }) => {
   await page.getByRole('button', { name: 'Neste steg' }).click();
   await expect(page).toHaveURL('http://localhost:3000/aap/soknad/3/');
 
-  await page.getByRole('heading', { name: 'Yrkesskade' }).click();
+  await expect(page.getByRole('heading', { name: 'Yrkesskade' })).toBeVisible();
 
   await page.getByLabel('Nei').check();
 
   await page.getByRole('button', { name: 'Neste steg' }).click();
   await expect(page).toHaveURL('http://localhost:3000/aap/soknad/4/');
 
-  await page.getByRole('heading', { name: 'Kontaktperson for helseopplysninger' }).click();
+  await expect(
+    page.getByRole('heading', { name: 'Kontaktperson for helseopplysninger' })
+  ).toBeVisible();
 
   await page.getByLabel('Ja').check();
 
   await page.getByRole('button', { name: 'Neste steg' }).click();
   await expect(page).toHaveURL('http://localhost:3000/aap/soknad/5/');
 
-  await page.getByRole('heading', { name: 'Barnetillegg' }).click();
+  await expect(page.getByRole('heading', { name: 'Barnetillegg' })).toBeVisible();
 
-  await page
-    .locator(
-      'article:has-text("Navn: Embla Bakke LiFødselsdato: 11.11.2021Har barnet årlig inntekt over 111 477")'
-    )
-    .getByLabel('Nei')
-    .check();
+  await page.locator('article:has-text("Navn: Embla Bakke Li")').getByLabel('Nei').check();
 
-  await page
-    .locator(
-      'article:has-text("Navn: Jonas Li Fødselsdato: 11.11.2020Har barnet årlig inntekt over 111 477kr?Hv")'
-    )
-    .getByLabel('Nei')
-    .check();
+  await page.locator('article:has-text("Navn: Jonas Li")').getByLabel('Nei').check();
 
   await page.getByRole('button', { name: 'Neste steg' }).click();
   await expect(page).toHaveURL('http://localhost:3000/aap/soknad/6/');
 
-  await page.getByRole('heading', { name: 'Student' }).click();
+  await expect(page.getByRole('heading', { name: 'Student' })).toBeVisible();
 
   await page.getByLabel('Nei').check();
 
   await page.getByRole('button', { name: 'Neste steg' }).click();
   await expect(page).toHaveURL('http://localhost:3000/aap/soknad/7/');
 
-  await page.getByRole('heading', { name: 'Utbetalinger' }).click();
+  await expect(page.getByRole('heading', { name: 'Utbetalinger' })).toBeVisible();
 
   await page.getByLabel('Nei').check();
 
@@ -81,12 +73,12 @@ test('test', async ({ page }) => {
   await page.getByRole('button', { name: 'Neste steg' }).click();
   await expect(page).toHaveURL('http://localhost:3000/aap/soknad/8/');
 
-  await page.getByRole('heading', { name: 'Tilleggsopplysninger' }).click();
+  await expect(page.getByRole('heading', { name: 'Tilleggsopplysninger' })).toBeVisible();
 
   await page.getByRole('button', { name: 'Neste steg' }).click();
   await expect(page).toHaveURL('http://localhost:3000/aap/soknad/9/');
 
-  await page.getByRole('heading', { name: 'Vedlegg' }).click();
+  await expect(page.getByRole('heading', { name: 'Vedlegg' })).toBeVisible();
 
   await page.getByRole('button', { name: 'Neste steg' }).click();
   await expect(page).toHaveURL('http://localhost:3000/aap/soknad/10/');
@@ -102,5 +94,5 @@ test('test', async ({ page }) => {
   await page.getByRole('button', { name: 'Send søknad' }).click();
   await expect(page).toHaveURL('http://localhost:3000/aap/soknad/kvittering/');
 
-  await page.getByRole('heading', { name: 'Takk for søknaden, Jackie Li' }).click();
+  await expect(page.getByRole('heading', { name: 'Takk for søknaden, Jackie Li' })).toBeVisible();
 });
