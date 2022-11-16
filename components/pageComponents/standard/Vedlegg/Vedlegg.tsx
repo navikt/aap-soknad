@@ -94,7 +94,7 @@ const Vedlegg = ({ onBackClick, onNext, defaultValues }: Props) => {
         <BodyShort spacing>{formatMessage('søknad.vedlegg.guide.text1')}</BodyShort>
         <BodyShort>{formatMessage('søknad.vedlegg.guide.text2')}</BodyShort>
       </LucaGuidePanel>
-      <BodyShort>
+      <div>
         {søknadState?.requiredVedlegg?.length > 0 ? (
           <>
             <Label>{formatMessage('søknad.vedlegg.harVedlegg.title')}</Label>
@@ -115,7 +115,7 @@ const Vedlegg = ({ onBackClick, onNext, defaultValues }: Props) => {
             </ReadMore>
           </>
         )}
-      </BodyShort>
+      </div>
       <BodyShort>{formatMessage('søknad.vedlegg.vedleggPåPapir.text')}</BodyShort>
       <ReadMore
         header={formatMessage('søknad.vedlegg.vedleggPåPapir.readMore.title')}
