@@ -58,7 +58,7 @@ jobs:
     needs: "build"
     services:
       soknad:
-        image: "${{ env.IMAGE }}"
+        image: ${{ env.IMAGE }}
         env:
           RUNTIME_ENVIRONMENT: "labs"
         ports:
