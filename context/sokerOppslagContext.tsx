@@ -79,7 +79,6 @@ type SokerOppslagContextState = {
 const SokerOppslagContext = createContext<SokerOppslagContextState | undefined>(undefined);
 
 function stateReducer(state: SokerOppslagState, action: DispatchSokerOppslagAction) {
-  console.log(action.type, action.payload);
   switch (action.type) {
     case 'SET_SOKER_OPPSLAG': {
       return { ...state, ...action.payload };
