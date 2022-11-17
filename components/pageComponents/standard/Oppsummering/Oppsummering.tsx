@@ -33,6 +33,7 @@ import {
   getStartDatoSchema,
 } from 'components/pageComponents/standard/StartDato/StartDato';
 import { getYrkesskadeSchema } from 'components/pageComponents/standard/Yrkesskade/Yrkesskade';
+import { getMedlemskapSchema } from 'components/pageComponents/standard/Medlemskap/Medlemskap';
 const SØKNAD_BEKREFT = 'søknadBekreft';
 
 interface OppsummeringProps {
@@ -174,6 +175,7 @@ const Oppsummering = ({
           editText={formatMessage('søknad.oppsummering.medlemskap.editText')}
           toggleAll={toggleAll}
           onEdit={() => editStep(StepNames.MEDLEMSKAP)}
+          hasError={!getMedlemskapSchema(formatMessage).isValidSync(søknadState?.søknad)}
         >
           <SummaryRowIfExists
             labelKey={'søknad.medlemskap.harBoddINorgeSiste5År.label'}
