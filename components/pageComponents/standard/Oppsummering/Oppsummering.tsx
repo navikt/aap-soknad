@@ -1,6 +1,6 @@
 import { FieldValues, useForm } from 'react-hook-form';
 import { Soknad } from 'types/Soknad';
-import { Accordion, Alert, BodyShort, Heading, Label, Switch } from '@navikt/ds-react';
+import { Accordion, Alert, BodyShort, Heading, Label, Link, Switch } from '@navikt/ds-react';
 import React, { useState } from 'react';
 import ConfirmationPanelWrapper from 'components/input/ConfirmationPanelWrapper';
 import AccordianItemOppsummering from './AccordianItemOppsummering/AccordianItemOppsummering';
@@ -96,8 +96,10 @@ const Oppsummering = ({
       <div aria-live="polite" ref={submitErrorMessageRef}>
         {hasSubmitError && (
           <Alert variant="error">
-            Det kan dessverre se ut til at vi har noen tekniske problemer akkurat nå. Prøv igjen
-            senere.
+            <BodyShort spacing>
+              Det kan dessverre se ut til at vi har noen tekniske problemer akkurat nå. Prøv igjen
+              senere.
+            </BodyShort>
           </Alert>
         )}
       </div>
@@ -202,6 +204,7 @@ const Oppsummering = ({
           editText={formatMessage('søknad.oppsummering.yrkesskade.editText')}
           toggleAll={toggleAll}
           onEdit={() => editStep(StepNames.YRKESSKADE)}
+          hasError={søknadState?.søknad?.yrkesskade === undefined}
         >
           <SummaryRowIfExists
             labelKey={`søknad.yrkesskade.harDuYrkesskade.label`}
