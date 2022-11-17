@@ -115,9 +115,9 @@ const Vedlegg = ({ onBackClick, onNext, defaultValues }: Props) => {
             </ReadMore>
           </>
         )}
-      </BodyShort>
-      <BodyShort>
-        {formatMessage('søknad.vedlegg.vedleggPåPapir.text')}
+      </div>
+      <div>
+        <BodyShort>{formatMessage('søknad.vedlegg.vedleggPåPapir.text')}</BodyShort>
         <ReadMore
           header={formatMessage('søknad.vedlegg.vedleggPåPapir.readMore.title')}
           type={'button'}
@@ -127,7 +127,7 @@ const Vedlegg = ({ onBackClick, onNext, defaultValues }: Props) => {
         >
           <ScanningGuide locale={locale} />
         </ReadMore>
-      </BodyShort>
+      </div>
       {søknadState?.requiredVedlegg?.find((e) => e.type === AVBRUTT_STUDIE_VEDLEGG) && (
         <FieldArrayFileInput
           control={control}
