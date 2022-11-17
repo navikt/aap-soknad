@@ -22,16 +22,18 @@ interface Props {
 }
 const YRKESSKADE = 'yrkesskade';
 
-export const Yrkesskade = ({ onBackClick, onNext, defaultValues }: Props) => {
-  const { formatMessage, formatElement } = useFeatureToggleIntl();
-
-  const schema = yup.object().shape({
+export const getYrkesskadeSchema = (formatMessage: (id: string) => string) =>
+  yup.object().shape({
     [YRKESSKADE]: yup
       .string()
       .required(formatMessage('søknad.yrkesskade.harDuYrkesskade.validation.required'))
       .oneOf([JaEllerNei.JA, JaEllerNei.NEI])
       .nullable(),
   });
+
+export const Yrkesskade = ({ onBackClick, onNext, defaultValues }: Props) => {
+  const { formatMessage, formatElement } = useFeatureToggleIntl();
+
   const { søknadState, søknadDispatch } = useSoknadContextStandard();
   const { stepList } = useStepWizard();
   const {
@@ -39,7 +41,7 @@ export const Yrkesskade = ({ onBackClick, onNext, defaultValues }: Props) => {
     handleSubmit,
     formState: { errors },
   } = useForm<FieldValues>({
-    resolver: yupResolver(schema),
+    resolver: yupResolver(getYrkesskadeSchema(formatMessage)),
     defaultValues: {
       [YRKESSKADE]: defaultValues?.søknad?.yrkesskade,
     },

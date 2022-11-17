@@ -20,6 +20,7 @@ import { useSoknadContextStandard } from 'context/soknadContextStandard';
 import { OppsummeringVedlegg } from './OppsummeringVedlegg/OppsummeringVedlegg';
 import { KOMME_TILBAKE, STUDENT } from 'components/pageComponents/standard/Student/Student';
 import {
+  getAndreUtbetalingerSchema,
   StønadType,
   stønadTypeToAlternativNøkkel,
 } from 'components/pageComponents/standard/AndreUtbetalinger/AndreUtbetalinger';
@@ -28,6 +29,7 @@ import OppsummeringPeriode from './OppsummeringPeriode/OppsummeringPeriode';
 import { isNonEmptyPeriode } from 'utils/periode';
 import { BARN } from 'components/pageComponents/standard/Barnetillegg/Barnetillegg';
 import { FerieTypeToMessageKey } from 'components/pageComponents/standard/StartDato/StartDato';
+import { getYrkesskadeSchema } from 'components/pageComponents/standard/Yrkesskade/Yrkesskade';
 const SØKNAD_BEKREFT = 'søknadBekreft';
 
 interface OppsummeringProps {
@@ -204,7 +206,7 @@ const Oppsummering = ({
           editText={formatMessage('søknad.oppsummering.yrkesskade.editText')}
           toggleAll={toggleAll}
           onEdit={() => editStep(StepNames.YRKESSKADE)}
-          hasError={søknadState?.søknad?.yrkesskade === undefined}
+          hasError={!getYrkesskadeSchema(formatMessage).isValidSync(søknadState?.søknad)}
         >
           <SummaryRowIfExists
             labelKey={`søknad.yrkesskade.harDuYrkesskade.label`}
@@ -275,6 +277,7 @@ const Oppsummering = ({
           editText={formatMessage('søknad.oppsummering.utbetalinger.editText')}
           toggleAll={toggleAll}
           onEdit={() => editStep(StepNames.ANDRE_UTBETALINGER)}
+          hasError={!getAndreUtbetalingerSchema(formatMessage).isValidSync(søknadState?.søknad)}
         >
           <SummaryRowIfExists
             labelKey={`søknad.andreUtbetalinger.lønn.label`}
