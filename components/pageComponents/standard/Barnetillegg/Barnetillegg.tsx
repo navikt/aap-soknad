@@ -34,6 +34,7 @@ import { deleteOpplastedeVedlegg, useSoknadContextStandard } from 'context/sokna
 import { useDebounceLagreSoknad } from 'hooks/useDebounceLagreSoknad';
 import { GenericSoknadContextState } from 'types/SoknadContext';
 import { formatDate } from 'utils/date';
+import { formatMessage } from '@formatjs/intl';
 
 interface Props {
   onBackClick: () => void;
@@ -51,10 +52,8 @@ export const getUniqueIshIdForBarn = (barn: ManuelleBarn) => {
   }`;
 };
 
-export const Barnetillegg = ({ onBackClick, onNext, defaultValues }: Props) => {
-  const { formatMessage } = useFeatureToggleIntl();
-
-  const schema = yup.object().shape({
+export const getBarnetillegSchema = (formatMessage: (id: string, options: unknown) => string) =>
+  yup.object().shape({
     [BARN]: yup.array().of(
       yup.object().shape({
         harInntekt: yup
@@ -70,6 +69,10 @@ export const Barnetillegg = ({ onBackClick, onNext, defaultValues }: Props) => {
       })
     ),
   });
+
+export const Barnetillegg = ({ onBackClick, onNext, defaultValues }: Props) => {
+  const { formatMessage } = useFeatureToggleIntl();
+
   const { søknadState, søknadDispatch } = useSoknadContextStandard();
   const { stepList } = useStepWizard();
   const {
@@ -80,7 +83,8 @@ export const Barnetillegg = ({ onBackClick, onNext, defaultValues }: Props) => {
     [BARN]: Array<Barn>;
     [MANUELLE_BARN]: Array<ManuelleBarn>;
   }>({
-    resolver: yupResolver(schema),
+    //@ts-ignore
+    resolver: yupResolver(getBarnetillegSchema(formatMessage)),
     defaultValues: {
       [BARN]: defaultValues?.søknad?.[BARN],
       [MANUELLE_BARN]: defaultValues?.søknad?.[MANUELLE_BARN],
