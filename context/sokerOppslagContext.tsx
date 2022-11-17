@@ -30,6 +30,7 @@ export interface OppslagBehandler {
   navn: Navn;
   kategori: 'LEGE' | 'FYSIOTERAPEUT' | 'KIROPRAKTOR' | 'MANUELLTERAPEUT' | 'TANNLEGE';
   kontaktinformasjon: {
+    behandlerRef: string;
     kontor: string;
     orgnummer: string;
     telefon: string;
