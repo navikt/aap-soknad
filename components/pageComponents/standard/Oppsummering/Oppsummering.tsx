@@ -34,6 +34,7 @@ import {
 } from 'components/pageComponents/standard/StartDato/StartDato';
 import { getYrkesskadeSchema } from 'components/pageComponents/standard/Yrkesskade/Yrkesskade';
 import { getMedlemskapSchema } from 'components/pageComponents/standard/Medlemskap/Medlemskap';
+import { getBehandlerSchema } from 'components/pageComponents/standard/Behandlere/Behandlere';
 const SØKNAD_BEKREFT = 'søknadBekreft';
 
 interface OppsummeringProps {
@@ -224,6 +225,7 @@ const Oppsummering = ({
           editText={formatMessage('søknad.oppsummering.helseopplysninger.editText')}
           toggleAll={toggleAll}
           onEdit={() => editStep(StepNames.FASTLEGE)}
+          hasError={!getBehandlerSchema(formatMessage).isValidSync(søknadState?.søknad)}
         >
           <>
             {søknadState?.søknad?.registrerteBehandlere?.map((behandler, index) => (

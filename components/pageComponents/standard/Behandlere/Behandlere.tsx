@@ -28,10 +28,8 @@ const REGISTRERTE_BEHANDLERE = 'registrerteBehandlere';
 const ANDRE_BEHANDLERE = 'andreBehandlere';
 const RIKTIG_FASTLEGE = 'erRegistrertFastlegeRiktig';
 
-export const Behandlere = ({ onBackClick, onNext, defaultValues }: Props) => {
-  const { formatMessage } = useFeatureToggleIntl();
-
-  const schema = yup.object().shape({
+export const getBehandlerSchema = (formatMessage: (id: string) => string) =>
+  yup.object().shape({
     [REGISTRERTE_BEHANDLERE]: yup.array().of(
       yup.object().shape({
         [RIKTIG_FASTLEGE]: yup
@@ -42,6 +40,9 @@ export const Behandlere = ({ onBackClick, onNext, defaultValues }: Props) => {
       })
     ),
   });
+export const Behandlere = ({ onBackClick, onNext, defaultValues }: Props) => {
+  const { formatMessage } = useFeatureToggleIntl();
+
   const { søknadState, søknadDispatch } = useSoknadContextStandard();
   const { stepList } = useStepWizard();
   const {
@@ -52,7 +53,7 @@ export const Behandlere = ({ onBackClick, onNext, defaultValues }: Props) => {
     [REGISTRERTE_BEHANDLERE]: Array<RegistrertBehandler>;
     [ANDRE_BEHANDLERE]: Array<Behandler>;
   }>({
-    resolver: yupResolver(schema),
+    resolver: yupResolver(getBehandlerSchema(formatMessage)),
     defaultValues: {
       [REGISTRERTE_BEHANDLERE]: defaultValues?.søknad?.registrerteBehandlere,
       [ANDRE_BEHANDLERE]: defaultValues?.søknad?.andreBehandlere,
