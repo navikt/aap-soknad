@@ -16,7 +16,7 @@ describe('medlemskapUtils', () => {
     expect(shouldShowArbeidetSammenhengendeINorgeSiste5År(JaEllerNei.NEI)).toBe(true);
   });
   it('skal ikke vise Har jobbet sammenhengende dersom boddINorge == Ja', () => {
-    expect(shouldShowArbeidetSammenhengendeINorgeSiste5År(JaEllerNei.Ja)).toBe(false);
+    expect(shouldShowArbeidetSammenhengendeINorgeSiste5År(JaEllerNei.JA)).toBe(false);
   });
   it('skal vise Har i tillegg jobbet utenfor Norge dersom harArbeidetINorgeSiste5år == Ja', () => {
     expect(shouldShowITilleggArbeidetUtenforNorgeSiste5År(JaEllerNei.JA)).toBe(true);
