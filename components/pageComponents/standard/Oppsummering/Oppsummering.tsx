@@ -28,7 +28,10 @@ import { formatNavn, formatFullAdresse, formatTelefonnummer } from 'utils/String
 import OppsummeringPeriode from './OppsummeringPeriode/OppsummeringPeriode';
 import { isNonEmptyPeriode } from 'utils/periode';
 import { BARN } from 'components/pageComponents/standard/Barnetillegg/Barnetillegg';
-import { FerieTypeToMessageKey } from 'components/pageComponents/standard/StartDato/StartDato';
+import {
+  FerieTypeToMessageKey,
+  getStartDatoSchema,
+} from 'components/pageComponents/standard/StartDato/StartDato';
 import { getYrkesskadeSchema } from 'components/pageComponents/standard/Yrkesskade/Yrkesskade';
 const SØKNAD_BEKREFT = 'søknadBekreft';
 
@@ -127,6 +130,7 @@ const Oppsummering = ({
           editText={formatMessage('søknad.oppsummering.startDato.editText')}
           toggleAll={toggleAll}
           onEdit={() => editStep(StepNames.STARTDATO)}
+          hasError={!getStartDatoSchema(formatMessage).isValidSync(søknadState?.søknad)}
         >
           <SummaryRowIfExists
             labelKey="søknad.startDato.sykepenger.legend"
