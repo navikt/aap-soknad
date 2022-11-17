@@ -28,7 +28,7 @@ export const tokenXProxy = async (opts: Opts) => {
   try {
     tokenxToken = await getTokenX(idportenToken, opts.audience);
   } catch (err: any) {
-    logger.error({ msg: 'getTokenXError', error: err });
+    logger.error({ msg: 'getTokenXError', error: err?.toString() });
   }
 
   const stopTimer = metrics.backendApiDurationHistogram.startTimer({ path: opts.prometheusPath });
@@ -109,6 +109,8 @@ export const tokenXAxiosProxy = async (opts: AxiosOpts) => {
     const stopTimer = metrics.backendApiDurationHistogram.startTimer({ path: opts.prometheusPath });
     const { data } = await axios.post(opts.url, opts.req, {
       responseType: 'stream',
+      maxBodyLength: 104857600, //100mb
+      maxContentLength: 104857600, //100mb
       headers: {
         'Content-Type': opts.req?.headers['content-type'] ?? '', // which is multipart/form-data with boundary included
         Authorization: `Bearer ${tokenxToken}`,
@@ -128,7 +130,11 @@ export const tokenXAxiosProxy = async (opts: AxiosOpts) => {
       });
       return opts.res.status(e.response.status);
     }
-    logger.error({ msg: 'tokenXAxioserror', error: e, navCallId: e?.req?.headers?.[NAV_CALLID] });
+    logger.error({
+      msg: 'tokenXAxioserror',
+      error: e?.toString(),
+      navCallId: e?.request?.headers?.[NAV_CALLID],
+    });
     return opts.res.status(500).json('tokenXAxiosProxy server error');
   }
 };

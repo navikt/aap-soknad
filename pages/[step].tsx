@@ -121,7 +121,11 @@ const Steps = ({ søker, mellomlagretSøknad }: PageProps) => {
 
       const postResponse = await postSøknad({ søknad, kvittering: søknadPdf });
       if (postResponse?.ok) {
-        logSkjemaFullførtEvent();
+        const harVedlegg = søknadState?.requiredVedlegg?.length > 0;
+        const erIkkeKomplett = !!søknadState?.requiredVedlegg?.find(
+          (vedlegg) => !vedlegg.completed
+        );
+        logSkjemaFullførtEvent({ harVedlegg, erIkkeKomplett });
         const url = postResponse?.data?.uri;
         søknadDispatch({ type: SoknadActionKeys.ADD_SØKNAD_URL, payload: url });
         router.push('kvittering');

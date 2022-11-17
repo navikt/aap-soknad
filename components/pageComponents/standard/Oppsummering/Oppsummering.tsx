@@ -67,10 +67,10 @@ const Oppsummering = ({
 
   const SummaryRowIfExists = ({ labelKey, value }: { labelKey: string; value?: any }) => {
     return value ? (
-      <BodyShort>
+      <div>
         <Label>{formatMessage(labelKey)}</Label>
         <BodyShort>{value}</BodyShort>
-      </BodyShort>
+      </div>
     ) : (
       <></>
     );
@@ -101,9 +101,7 @@ const Oppsummering = ({
           </Alert>
         )}
       </div>
-      <LucaGuidePanel>
-        <BodyShort>{formatMessage('søknad.oppsummering.guide.text')}</BodyShort>
-      </LucaGuidePanel>
+      <LucaGuidePanel>{formatMessage('søknad.oppsummering.guide.text')}</LucaGuidePanel>
       <div style={{ display: 'flex', flexDirection: 'row-reverse' }}>
         <Switch position="right" size="medium" onChange={() => setToggleAll(!toggleAll)}>
           {!toggleAll
@@ -280,7 +278,7 @@ const Oppsummering = ({
             value={søknadState?.søknad?.andreUtbetalinger?.lønn}
           />
           {søknadState?.søknad?.andreUtbetalinger ? (
-            <BodyShort>
+            <div>
               <Label>{formatMessage(`søknad.andreUtbetalinger.stønad.label`)}</Label>
               {søknadState?.søknad?.andreUtbetalinger?.stønad?.map(
                 (stønadType: StønadType, index) => {
@@ -294,7 +292,7 @@ const Oppsummering = ({
                   );
                 }
               )}
-            </BodyShort>
+            </div>
           ) : (
             <></>
           )}

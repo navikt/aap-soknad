@@ -3,7 +3,8 @@ kind: "Application"
 metadata:
   annotations:
     nginx.ingress.kubernetes.io/proxy-body-size: "250M"
-    nginx.ingress.kubernetes.io/proxy-read-timeout: "90"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "120"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "120"
   name: "soknad"
   namespace: "aap"
   labels:
