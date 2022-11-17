@@ -1,4 +1,4 @@
-import { Accordion, Cell, Grid, Link } from '@navikt/ds-react';
+import { Accordion, Alert, BodyShort, Cell, Grid, Link, Tag } from '@navikt/ds-react';
 import React, { useState } from 'react';
 import * as classes from './AccordianItemOppsummering.module.css';
 import { Back } from '@navikt/ds-icons';
@@ -12,6 +12,7 @@ type SummaryAccordianItemProps = {
   showEdit?: boolean;
   editText?: string;
   children?: React.ReactChild | React.ReactChild[];
+  hasError?: boolean;
 };
 const AccordianItemOppsummering = ({
   title,
@@ -21,8 +22,9 @@ const AccordianItemOppsummering = ({
   onEdit,
   showEdit = true,
   editText,
+  hasError,
 }: SummaryAccordianItemProps) => {
-  const [open, setOpen] = useState<boolean>(defaultOpen ?? false);
+  const [open, setOpen] = useState<boolean>((defaultOpen || hasError) ?? false);
 
   useEffect(() => {
     if (toggleAll !== undefined) setOpen(toggleAll);
@@ -40,6 +42,14 @@ const AccordianItemOppsummering = ({
       </Accordion.Header>
       <Accordion.Content className={classes?.oppsummeringContent}>
         {children}
+        {hasError && (
+          <Alert variant="error">
+            <BodyShort>
+              Alle de obligatoriske spørsmålene er ikke besvart. Du må gå tilbake til steget for å
+              fylle i svarene før du kan sende inn søknaden
+            </BodyShort>
+          </Alert>
+        )}
         {showEdit && (
           <Grid>
             <Cell xs={12}>

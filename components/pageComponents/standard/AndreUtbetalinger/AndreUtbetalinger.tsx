@@ -82,10 +82,8 @@ export const stønadTypeToAlternativNøkkel = (stønadType: StønadType) => {
       return `søknad.${ANDRE_UTBETALINGER}.${STØNAD}.values.nei`;
   }
 };
-export const AndreUtbetalinger = ({ onBackClick, onNext, defaultValues }: Props) => {
-  const { formatMessage } = useFeatureToggleIntl();
-
-  const schema = yup.object().shape({
+export const getAndreUtbetalingerSchema = (formatMessage: (id: string) => string) =>
+  yup.object().shape({
     [ANDRE_UTBETALINGER]: yup.object().shape({
       [LØNN]: yup
         .string()
@@ -105,6 +103,8 @@ export const AndreUtbetalinger = ({ onBackClick, onNext, defaultValues }: Props)
       }),
     }),
   });
+export const AndreUtbetalinger = ({ onBackClick, onNext, defaultValues }: Props) => {
+  const { formatMessage } = useFeatureToggleIntl();
   const { søknadState, søknadDispatch } = useSoknadContextStandard();
   const { stepList } = useStepWizard();
   const {
@@ -113,7 +113,7 @@ export const AndreUtbetalinger = ({ onBackClick, onNext, defaultValues }: Props)
     setValue,
     formState: { errors },
   } = useForm<FieldValues>({
-    resolver: yupResolver(schema),
+    resolver: yupResolver(getAndreUtbetalingerSchema(formatMessage)),
     defaultValues: {
       [ANDRE_UTBETALINGER]: defaultValues?.søknad?.andreUtbetalinger,
     },

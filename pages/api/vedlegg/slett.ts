@@ -6,7 +6,7 @@ import { isMock } from 'utils/environments';
 import { getCommaSeparatedStringFromStringOrArray } from 'utils/string';
 
 const handler = beskyttetApi(async (req: NextApiRequest, res: NextApiResponse) => {
-  const uuids = req.query.uuid ?? [];
+  const uuids = req.query.uuids ?? [];
   if (!uuids) {
     res.status(400).json({ error: 'uuid må være en string' });
   }
