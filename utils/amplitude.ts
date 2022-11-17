@@ -33,10 +33,11 @@ export function logSkjemaStartetEvent() {
   });
 }
 
-export function logSkjemaFullførtEvent() {
+export function logSkjemaFullførtEvent(eventData?: Record<string, unknown>) {
   logAmplitudeEvent('skjema fullført', {
     skjemanavn: 'aap-søknad-standard',
     skjemaId: 'aap-søknad-standard',
+    ...eventData,
   });
 }
 
@@ -45,5 +46,11 @@ export function logSkjemastegFullførtEvent(steg: number) {
     skjemanavn: 'aap-søknad-standard',
     skjemaId: 'aap-søknad-standard',
     steg,
+  });
+}
+
+export function logAccordionChangeEvent(accordionName: string, isOpen: boolean) {
+  logAmplitudeEvent(isOpen ? 'accordion lukket' : 'accordion åpnet', {
+    tekst: accordionName,
   });
 }

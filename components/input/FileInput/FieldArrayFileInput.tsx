@@ -1,12 +1,14 @@
 import { Control, FieldError, FieldErrors, useFieldArray } from 'react-hook-form';
 import { useFeatureToggleIntl } from 'hooks/useFeatureToggleIntl';
-import React, { DragEventHandler, useEffect, useRef, useState } from 'react';
+import React, { DragEventHandler, useEffect, useMemo, useRef, useState } from 'react';
 import * as classes from './FileInput.module.css';
 import { BodyShort, Detail, Heading, Label, Link, Loader, Panel } from '@navikt/ds-react';
 import { Cancel, Delete, FileError, FileSuccess } from '@navikt/ds-icons';
 import { Upload as SvgUpload } from '@navikt/ds-icons';
 import { useSoknadContextStandard } from 'context/soknadContextStandard';
 import { updateRequiredVedlegg } from 'context/soknadContextCommon';
+
+const MAX_TOTAL_FILE_SIZE = 52428800; // 50mb
 type Props = {
   setError: (name: string, error: FieldError) => void;
   clearErrors: (name?: string | string[]) => void;
@@ -45,7 +47,10 @@ const FieldArrayFileInput = ({
   const [filename, setFilename] = useState<string | undefined>();
   const [inputId] = useState<string>(`file-upload-input-${Math.floor(Math.random() * 100000)}`);
   const fileUploadInputElement = useRef(null);
-  const [totalUploadedBytes, setTotalUploadedBytes] = useState(0);
+  const totalUploadedBytes = useMemo(
+    () => fields.reduce((acc, curr) => acc + curr.size, 0),
+    [fields]
+  );
   const handleDragLeave: DragEventHandler<HTMLDivElement> = (e) => {
     setDragOver(false);
     return e;
@@ -60,6 +65,13 @@ const FieldArrayFileInput = ({
   const handleDrop: DragEventHandler<HTMLDivElement> = (e) => {
     e.preventDefault();
     const files = e.dataTransfer.files;
+    const totalFileSize = Array.from(files).reduce((acc, curr) => acc + curr.size, 0);
+    if (totalUploadedBytes + totalFileSize > MAX_TOTAL_FILE_SIZE) {
+      setFilename(files[0]?.name);
+      setError(`${type}-${inputId}`, { type: 'custom', message: errorText(413) });
+      setDragOver(false);
+      return;
+    }
     handleFiles(files);
   };
   const handleFiles = (fileList: FileList) => {
@@ -97,7 +109,7 @@ const FieldArrayFileInput = ({
       setDragOver(false);
       return;
     }
-    if (totalUploadedBytes + file?.size > 52428800) {
+    if (totalUploadedBytes + file?.size > MAX_TOTAL_FILE_SIZE) {
       setFilename(file?.name);
       setError(`${type}-${inputId}`, { type: 'custom', message: errorText(413) });
       setDragOver(false);
@@ -109,20 +121,15 @@ const FieldArrayFileInput = ({
     try {
       const res = await fetch('/aap/soknad/api/vedlegg/lagre/', { method: 'POST', body: data });
       const resData = await res.json();
-      console.log('lagre ok', res.ok, res.status);
-      console.log('resData', resData);
       if (!res.ok) {
         const message = errorText(res?.status, resData?.substatus);
         setFilename(file?.name);
         setError(`${type}-${inputId}`, { type: 'custom', message });
       } else {
         append({ name: file?.name, size: file?.size, vedleggId: resData });
-        setTotalUploadedBytes(totalUploadedBytes + file.size);
-        updateRequiredVedlegg({ type: 'OMSORGSSTØNAD', completed: true }, søknadDispatch);
       }
       setLoading(false);
     } catch (err: any) {
-      console.log('catch error', err);
       const message = errorText(err?.status || 500);
       setFilename(file?.name);
       setError(`${type}-${inputId}`, { type: 'custom', message });

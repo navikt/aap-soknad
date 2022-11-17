@@ -22,18 +22,18 @@ export const OppsummeringVedlegg = ({ søknadState }: Props) => {
   return (
     <>
       {manglendeVedlegg.length > 0 && (
-        <>
+        <div>
           <Label>Dokumenter du må legge ved søknaden eller ettersende</Label>
           <ul>
-            {manglendeVedlegg.map((manglendeVedlegg) => (
-              <li key={manglendeVedlegg.type}>{manglendeVedlegg.description}</li>
+            {manglendeVedlegg.map((manglendeVedlegg, index) => (
+              <li key={`${manglendeVedlegg.type}-${index}`}>{manglendeVedlegg.description}</li>
             ))}
           </ul>
           <Alert variant="info">
             Du kan ettersende dette innen 14 dager per post eller digitalt. Du kan også levere dette
             på ditt lokale NAV kontor
           </Alert>
-        </>
+        </div>
       )}
 
       {opplastedeVedlegg.length > 0 && (
@@ -46,24 +46,28 @@ export const OppsummeringVedlegg = ({ søknadState }: Props) => {
             )
               return <></>;
             return (
-              <>
+              <div key={`opplastedevedlegg-${vedlegg.type}`}>
                 <Label>{vedlegg?.description}</Label>
-                {søknadState?.søknad?.vedlegg?.[vedlegg.type]?.map((vedleggFile) => (
-                  <BodyShort key={vedleggFile.name}>{vedleggFile?.name}</BodyShort>
-                ))}
-              </>
+                <ul>
+                  {søknadState?.søknad?.vedlegg?.[vedlegg.type]?.map((vedleggFile, index) => (
+                    <li key={vedleggFile.vedleggId}>{vedleggFile?.name}</li>
+                  ))}
+                </ul>
+              </div>
             );
           })}
-          {søknadState?.søknad?.manuelleBarn?.map((barn, i) => {
+          {søknadState?.søknad?.manuelleBarn?.map((barn) => {
             const label = søknadState?.requiredVedlegg?.find(
               (e) => e.type === `barn-${barn.internId}` && e.completed
             )?.description;
             return (
-              <div key={i}>
+              <div key={`barn-${barn.internId}`}>
                 <Label>{label}</Label>
-                {barn?.vedlegg?.map((vedlegg, j) => (
-                  <BodyShort key={j}>{vedlegg?.name}</BodyShort>
-                ))}
+                <ul>
+                  {barn?.vedlegg?.map((vedlegg) => (
+                    <li key={vedlegg?.vedleggId}>{vedlegg?.name}</li>
+                  ))}
+                </ul>
               </div>
             );
           })}
@@ -71,12 +75,14 @@ export const OppsummeringVedlegg = ({ søknadState }: Props) => {
       )}
 
       {søknadState?.søknad?.vedlegg?.annet && søknadState?.søknad?.vedlegg?.annet?.length > 0 && (
-        <>
+        <div>
           <Label>{'Annet:'}</Label>
-          {søknadState?.søknad?.vedlegg?.annet?.map((vedleggFile) => (
-            <BodyShort key={vedleggFile.vedleggId}>{vedleggFile?.name}</BodyShort>
-          ))}
-        </>
+          <ul>
+            {søknadState?.søknad?.vedlegg?.annet?.map((vedleggFile) => (
+              <li key={vedleggFile.vedleggId}>{vedleggFile?.name}</li>
+            ))}
+          </ul>
+        </div>
       )}
     </>
   );
