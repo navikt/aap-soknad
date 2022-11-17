@@ -47,9 +47,8 @@ interface Props {
   defaultValues?: GenericSoknadContextState<Soknad>;
 }
 
-const Student = ({ onBackClick, onNext, defaultValues }: Props) => {
-  const { formatMessage } = useFeatureToggleIntl();
-  const schema = yup.object().shape({
+export const getStudentSchema = (formatMessage: (id: string) => string) =>
+  yup.object().shape({
     [STUDENT]: yup.object().shape({
       [ER_STUDENT]: yup
         .string()
@@ -72,6 +71,9 @@ const Student = ({ onBackClick, onNext, defaultValues }: Props) => {
       }),
     }),
   });
+
+const Student = ({ onBackClick, onNext, defaultValues }: Props) => {
+  const { formatMessage } = useFeatureToggleIntl();
   const { søknadState, søknadDispatch } = useSoknadContextStandard();
   const { stepList } = useStepWizard();
   const {
@@ -81,7 +83,7 @@ const Student = ({ onBackClick, onNext, defaultValues }: Props) => {
     clearErrors,
     formState: { errors },
   } = useForm<FieldValues>({
-    resolver: yupResolver(schema),
+    resolver: yupResolver(getStudentSchema(formatMessage)),
     defaultValues: {
       [STUDENT]: defaultValues?.søknad?.student,
     },

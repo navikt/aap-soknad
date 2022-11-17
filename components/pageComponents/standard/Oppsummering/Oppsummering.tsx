@@ -18,7 +18,11 @@ import { useFeatureToggleIntl } from 'hooks/useFeatureToggleIntl';
 import { slettLagretSoknadState } from 'context/soknadContextCommon';
 import { useSoknadContextStandard } from 'context/soknadContextStandard';
 import { OppsummeringVedlegg } from './OppsummeringVedlegg/OppsummeringVedlegg';
-import { KOMME_TILBAKE, STUDENT } from 'components/pageComponents/standard/Student/Student';
+import {
+  getStudentSchema,
+  KOMME_TILBAKE,
+  STUDENT,
+} from 'components/pageComponents/standard/Student/Student';
 import {
   getAndreUtbetalingerSchema,
   StønadType,
@@ -267,6 +271,7 @@ const Oppsummering = ({
           editText={formatMessage('søknad.oppsummering.student.editText')}
           toggleAll={toggleAll}
           onEdit={() => editStep(StepNames.STUDENT)}
+          hasError={!getStudentSchema(formatMessage).isValidSync(søknadState?.søknad)}
         >
           <SummaryRowIfExists
             labelKey={`søknad.student.erStudent.legend`}
