@@ -22,7 +22,6 @@ import {
 import { deleteOpplastedeVedlegg, useSoknadContextStandard } from 'context/soknadContextStandard';
 import { useDebounceLagreSoknad } from 'hooks/useDebounceLagreSoknad';
 import { GenericSoknadContextState } from 'types/SoknadContext';
-import { SYKEPENGER } from '../StartDato/StartDato';
 
 interface Props {
   onBackClick: () => void;
