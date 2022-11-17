@@ -6,29 +6,27 @@
   max-width: 600px;
 }
 
-@media (min-width: 366px) and (max-width: 433px) {
-  .addBehandlerModalContent {
-    margin-top: 50px;
+@media (max-width: 365px) {
+  .poststedMobil {
+    margin-top: 0;
   }
+}
+
+@media (min-width: 366px) and (max-width: 433px) {
   .poststedMobil {
     margin-top: 23px;
   }
 }
-@media (max-width: 365px) {
-  .addBehandlerModalContent {
-    margin-top: 50px;
-  }
+
+@media (min-width: 365px) and (max-width: 400px) {
   .poststedMobil {
-    margin-top: 0px;
+    margin-top: 24px;
   }
 }
 
-@media (min-width: 365px) and (max-width: 400px) {
+@media (max-width: 400px) {
   .addBehandlerModalContent {
     margin-top: 50px;
-  }
-  .poststedMobil {
-    margin-top: 24px;
   }
 }
 .modalForm {
