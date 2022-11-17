@@ -100,7 +100,7 @@ export const AndreUtbetalinger = ({ onBackClick, onNext, defaultValues }: Props)
         then: yup.object({
           [HVEMBETALER]: yup
             .string()
-            .required(formatMessage('søknad.andreUtbetalinger.afp.validation.required')),
+            .required(formatMessage('søknad.andreUtbetalinger.hvemBetalerAfp.validation.required')),
         }),
       }),
     }),

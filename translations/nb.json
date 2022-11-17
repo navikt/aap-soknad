@@ -350,7 +350,10 @@
         }
       },
       "hvemBetalerAfp": {
-        "label": "Hvem utbetaler avtalefestet pensjon (AFP)?"
+        "label": "Hvem utbetaler avtalefestet pensjon (AFP)?",
+        "validation": {
+          "required": "Du må svare på hvem som utbetaler avtalefestet pensjon (AFP)."
+        }
       },
       "vedlegg": {
         "omsorgsstønad": "Kopi av avtalen om omsorgsstønad fra kommunen din",
