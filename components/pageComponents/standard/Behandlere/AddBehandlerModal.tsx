@@ -58,7 +58,7 @@ export const AddBehandlerModal = ({ showModal, onCloseClick, onSaveClick, behand
       }}
     >
       <Modal.Content className={classes?.addBehandlerModalContent}>
-        <Heading size={'small'} level={'3'}>
+        <Heading className={classes?.modalHeading} size={'small'} level={'3'}>
           {formatMessage('søknad.helseopplysninger.modal.title')}
         </Heading>
         <form
@@ -92,24 +92,22 @@ export const AddBehandlerModal = ({ showModal, onCloseClick, onSaveClick, behand
             name={'gateadresse'}
             error={errors?.gateadresse?.message}
           />
-          <Grid>
-            <Cell xs={6}>
-              <TextFieldWrapper
-                control={control}
-                label={formatMessage('søknad.helseopplysninger.modal.postnummer.label')}
-                name={'postnummer'}
-                error={errors?.postnummer?.message}
-              />
-            </Cell>
-            <Cell xs={6}>
-              <TextFieldWrapper
-                control={control}
-                label={formatMessage('søknad.helseopplysninger.modal.poststed.label')}
-                name={'poststed'}
-                error={errors?.poststed?.message}
-              />
-            </Cell>
-          </Grid>
+          <div className={classes?.addresseFlexContainer}>
+            <TextFieldWrapper
+              className={classes?.addresseFlexItem}
+              control={control}
+              label={formatMessage('søknad.helseopplysninger.modal.postnummer.label')}
+              name={'postnummer'}
+              error={errors?.postnummer?.message}
+            />
+            <TextFieldWrapper
+              className={classes?.addresseFlexItem}
+              control={control}
+              label={formatMessage('søknad.helseopplysninger.modal.poststed.label')}
+              name={'poststed'}
+              error={errors?.poststed?.message}
+            />
+          </div>
           <TextFieldWrapper
             control={control}
             label={formatMessage('søknad.helseopplysninger.modal.telefonnummer.label')}

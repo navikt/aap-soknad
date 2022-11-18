@@ -5,6 +5,21 @@
   gap: var(--navds-spacing-10);
   max-width: 600px;
 }
+
+.addresseFlexContainer {
+  display: flex;
+  gap: var(--navds-spacing-4);
+  align-items: flex-end;
+}
+
+.addresseFlexItem {
+  flex-grow: 1;
+}
+
+.modalHeading {
+  width: calc(100% - var(--navds-spacing-10));
+}
+
 .modalForm {
   composes: modalForm from '/styles/layout.module.css';
 }

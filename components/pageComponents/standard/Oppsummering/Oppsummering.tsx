@@ -18,7 +18,11 @@ import { useFeatureToggleIntl } from 'hooks/useFeatureToggleIntl';
 import { slettLagretSoknadState } from 'context/soknadContextCommon';
 import { useSoknadContextStandard } from 'context/soknadContextStandard';
 import { OppsummeringVedlegg } from './OppsummeringVedlegg/OppsummeringVedlegg';
-import { KOMME_TILBAKE, STUDENT } from 'components/pageComponents/standard/Student/Student';
+import {
+  getStudentSchema,
+  KOMME_TILBAKE,
+  STUDENT,
+} from 'components/pageComponents/standard/Student/Student';
 import {
   getAndreUtbetalingerSchema,
   StønadType,
@@ -27,8 +31,11 @@ import {
 import { formatNavn, formatFullAdresse, formatTelefonnummer } from 'utils/StringFormatters';
 import OppsummeringPeriode from './OppsummeringPeriode/OppsummeringPeriode';
 import { isNonEmptyPeriode } from 'utils/periode';
-import { BARN } from 'components/pageComponents/standard/Barnetillegg/Barnetillegg';
 import {
+  BARN,
+  getBarnetillegSchema,
+} from 'components/pageComponents/standard/Barnetillegg/Barnetillegg';
+import { 
   FerieTypeToMessageKey,
   getStartDatoSchema,
 } from 'components/pageComponents/standard/StartDato/StartDato';
@@ -255,6 +262,8 @@ const Oppsummering = ({
           editText={formatMessage('søknad.oppsummering.barnetillegg.editText')}
           toggleAll={toggleAll}
           onEdit={() => editStep(StepNames.BARNETILLEGG)}
+          //@ts-ignore
+          hasError={!getBarnetillegSchema(formatMessage).isValidSync(søknadState?.søknad)}
         >
           <>
             {søknadState?.søknad?.[BARN]?.map((barn, index) => (
@@ -270,6 +279,7 @@ const Oppsummering = ({
           editText={formatMessage('søknad.oppsummering.student.editText')}
           toggleAll={toggleAll}
           onEdit={() => editStep(StepNames.STUDENT)}
+          hasError={!getStudentSchema(formatMessage).isValidSync(søknadState?.søknad)}
         >
           <SummaryRowIfExists
             labelKey={`søknad.student.erStudent.legend`}

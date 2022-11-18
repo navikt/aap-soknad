@@ -350,7 +350,10 @@
         }
       },
       "hvemBetalerAfp": {
-        "label": "Kven betaler ut avtalefesta pensjon (AFP)?"
+        "label": "Kven betaler ut avtalefesta pensjon (AFP)?",
+        "validation": {
+          "required": "Du må svara på kven som betaler ut avtalefesta pensjon (AFP)."
+        }
       },
       "vedlegg": {
         "omsorgsstønad": "Kopi av avtalen om omsorgsstønad frå kommunen din",
@@ -497,7 +500,7 @@
     "barnetillegg": {
       "title": "Barnetillegg",
       "guide": {
-        "text1": "Dersom du forsørgjer barn under 18 år, får du utbetalt litt meir AAP. Dette blir kalla barnetillegg.",
+        "text1": "Dersom du forsørgjer barn under 18 år, får du utbetalt litt meir i AAP. Dette blir kalla barnetillegg.",
         "text2": "Du kan få barnetillegg sjølv om barnet ikkje bur saman med deg. Barnetillegg får du også for adoptivbarn, fosterbarn og andre barn du har forsørgjaransvar for."
       },
       "registrerteBarn": {

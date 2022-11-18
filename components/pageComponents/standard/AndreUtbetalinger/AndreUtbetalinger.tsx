@@ -51,9 +51,11 @@ export enum StønadType {
   NEI = 'NEI',
 }
 
-export const ANDRE_UTBETALINGER = 'andreUtbetalinger';
-export const LØNN = 'lønn';
-export const STØNAD = 'stønad';
+const ANDRE_UTBETALINGER = 'andreUtbetalinger';
+const LØNN = 'lønn';
+const STØNAD = 'stønad';
+const AFP = 'afp';
+const HVEMBETALER = 'hvemBetaler';
 
 export const stønadTypeToAlternativNøkkel = (stønadType: StønadType) => {
   switch (stønadType) {
@@ -90,6 +92,14 @@ export const getAndreUtbetalingerSchema = (formatMessage: (id: string) => string
       [STØNAD]: yup
         .array()
         .min(1, formatMessage('søknad.andreUtbetalinger.stønad.validation.required')),
+      [AFP]: yup.object().when([STØNAD], {
+        is: (stønad: StønadType[]) => stønad.includes(StønadType.AFP),
+        then: yup.object({
+          [HVEMBETALER]: yup
+            .string()
+            .required(formatMessage('søknad.andreUtbetalinger.hvemBetalerAfp.validation.required')),
+        }),
+      }),
     }),
   });
 export const AndreUtbetalinger = ({ onBackClick, onNext, defaultValues }: Props) => {
@@ -273,9 +283,10 @@ export const AndreUtbetalinger = ({ onBackClick, onNext, defaultValues }: Props)
             <Grid>
               <Cell xs={7}>
                 <TextFieldWrapper
-                  name={`${ANDRE_UTBETALINGER}.afp.hvemBetaler`}
+                  name={`${ANDRE_UTBETALINGER}.${AFP}.${HVEMBETALER}`}
                   label={formatMessage('søknad.andreUtbetalinger.hvemBetalerAfp.label')}
                   control={control}
+                  error={errors?.[ANDRE_UTBETALINGER]?.[AFP]?.message}
                 />
               </Cell>
             </Grid>
