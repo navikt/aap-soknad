@@ -57,10 +57,18 @@ function soknadReducerStandard(
       };
     }
     case SoknadActionKeys.ADD_BEHANDLER_IF_MISSING: {
-      const registrerteBehandlere: RegistrertBehandler[] = action.payload.filter(
-        (behandler) => behandler.type === 'FASTLEGE'
-      );
-
+      const oldRegistrerteBehandlere = state?.søknad?.registrerteBehandlere || [];
+      const registrerteBehandlere: RegistrertBehandler[] = action.payload
+        .filter((behandler) => behandler.type === 'FASTLEGE')
+        .map((behandler) => {
+          const eksisterende = oldRegistrerteBehandlere.find(
+            (e) =>
+              e?.kontaktinformasjon?.behandlerRef === behandler?.kontaktinformasjon?.behandlerRef
+          );
+          return eksisterende?.erRegistrertFastlegeRiktig
+            ? { ...behandler, erRegistrertFastlegeRiktig: eksisterende.erRegistrertFastlegeRiktig }
+            : behandler;
+        });
       return {
         ...state,
         søknad: {
