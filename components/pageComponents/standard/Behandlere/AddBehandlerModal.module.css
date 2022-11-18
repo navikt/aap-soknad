@@ -6,29 +6,20 @@
   max-width: 600px;
 }
 
-@media (max-width: 365px) {
-  .poststedMobil {
-    margin-top: 0;
-  }
+.addresseFlexContainer {
+  display: flex;
+  gap: var(--navds-spacing-4);
+  align-items: flex-end;
 }
 
-@media (min-width: 366px) and (max-width: 433px) {
-  .poststedMobil {
-    margin-top: 23px;
-  }
+.addresseFlexItem {
+  flex-grow: 1;
 }
 
-@media (min-width: 365px) and (max-width: 400px) {
-  .poststedMobil {
-    margin-top: 24px;
-  }
+.modalHeading {
+  width: calc(100% - var(--navds-spacing-10));
 }
 
-@media (max-width: 400px) {
-  .addBehandlerModalContent {
-    margin-top: 50px;
-  }
-}
 .modalForm {
   composes: modalForm from '/styles/layout.module.css';
 }
