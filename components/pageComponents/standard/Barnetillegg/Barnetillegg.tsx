@@ -34,7 +34,6 @@ import { deleteOpplastedeVedlegg, useSoknadContextStandard } from 'context/sokna
 import { useDebounceLagreSoknad } from 'hooks/useDebounceLagreSoknad';
 import { GenericSoknadContextState } from 'types/SoknadContext';
 import { formatDate } from 'utils/date';
-import { formatMessage } from '@formatjs/intl';
 
 interface Props {
   onBackClick: () => void;
