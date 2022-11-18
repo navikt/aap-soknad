@@ -36,8 +36,7 @@
       "søknadsdato": {
         "title": "Søknadsdato er viktig for utbetaling av AAP",
         "text1": "Vanligvis kan du tidligst få AAP fra den dagen du søker.",
-        "text2": "Hvis du mottar sykepenger og søker om AAP, kan du vanligvis få AAP fra første dag etter at sykepengene dine er ferdige.",
-        "text3": "Du kan søke om AAP selv om du ikke har mottatt sykepenger."
+        "text2": "Du kan søke om AAP selv om du ikke har mottatt sykepenger."
       },
       "accordionHvis": {
         "title": "Hvis du får AAP, gjelder dette",

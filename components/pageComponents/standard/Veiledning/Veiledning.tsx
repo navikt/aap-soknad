@@ -79,7 +79,6 @@ export const Veiledning = ({
           </Heading>
           <BodyShort spacing>{formatMessage('søknad.veiledning.søknadsdato.text1')}</BodyShort>
           <BodyShort spacing>{formatMessage('søknad.veiledning.søknadsdato.text2')}</BodyShort>
-          <BodyShort spacing>{formatMessage('søknad.veiledning.søknadsdato.text3')}</BodyShort>
         </article>
         <article>
           <AmplitudeAwareAccordion title={formatMessage('søknad.veiledning.accordionHvis.title')}>
