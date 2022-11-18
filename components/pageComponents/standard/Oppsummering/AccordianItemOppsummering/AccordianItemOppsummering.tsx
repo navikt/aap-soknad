@@ -45,8 +45,8 @@ const AccordianItemOppsummering = ({
         {hasError && (
           <Alert variant="error">
             <BodyShort>
-              Alle de obligatoriske spørsmålene er ikke besvart. Du må gå tilbake til steget for å
-              fylle i svarene før du kan sende inn søknaden
+              Alle de obligatoriske spørsmålene i søknaden er ikke besvart enda. Du må tilbake til
+              steget for å fylle inn svarene før du kan sende inn søknaden.
             </BodyShort>
           </Alert>
         )}
