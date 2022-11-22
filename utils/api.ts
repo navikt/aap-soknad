@@ -500,7 +500,7 @@ export const mapSøknadToPdf = (
     ]);
   };
   const getTilleggsopplysninger = (søknad?: Soknad) => {
-    return createTema('Tillegsopplysninger', [
+    return createTema('Tilleggsopplysninger', [
       createGruppe(
         formatMessage(`søknad.tilleggsopplysninger.tilleggsopplysninger.label`),
         createFritekst(søknad?.tilleggsopplysninger || 'Ingen tilleggsopplysninger')
