@@ -2,16 +2,15 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import { getAccessTokenFromRequest } from 'auth/accessToken';
 import { beskyttetApi } from 'auth/beskyttetApi';
 import { tokenXApiProxy } from '@navikt/aap-felles-innbygger-auth';
+import { logger } from '@navikt/aap-felles-innbygger-utils';
 import { mockSøker } from 'mock/søker';
 import { isMock } from 'utils/environments';
-import { logger } from '@navikt/aap-felles-innbygger-utils';
 import metrics from 'utils/metrics';
 
 const handler = beskyttetApi(async (req: NextApiRequest, res: NextApiResponse) => {
   const accessToken = getAccessTokenFromRequest(req);
   res.status(200).json(await getSøker(accessToken));
 });
-
 export const getSøker = async (accessToken?: string) => {
   if (isMock()) return mockSøker;
   const søker = await tokenXApiProxy({
@@ -22,7 +21,6 @@ export const getSøker = async (accessToken?: string) => {
     bearerToken: accessToken,
     metricsStatusCodeCounter: metrics.backendApiStatusCodeCounter,
     metricsTimer: metrics.backendApiDurationHistogram,
-    // @ts-ignore TODO:
     logger: logger,
   });
   return søker;
