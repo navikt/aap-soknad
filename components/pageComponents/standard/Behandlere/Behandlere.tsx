@@ -156,25 +156,25 @@ export const Behandlere = ({ onBackClick, onNext, defaultValues }: Props) => {
                 <dt>
                   <Label>{formatMessage('søknad.helseopplysninger.registrertFastlege.navn')}</Label>
                 </dt>
-                <dl>{formatNavn(field.navn)}</dl>
+                <dd>{formatNavn(field.navn)}</dd>
                 <dt>
                   <Label>
                     {formatMessage('søknad.helseopplysninger.registrertFastlege.legekontor')}
                   </Label>
                 </dt>
-                <dl>{field.kontaktinformasjon.kontor}</dl>
+                <dd>{field.kontaktinformasjon.kontor}</dd>
                 <dt>
                   <Label>
                     {formatMessage('søknad.helseopplysninger.registrertFastlege.adresse')}
                   </Label>
                 </dt>
-                <dl>{formatFullAdresse(field.kontaktinformasjon.adresse)}</dl>
+                <dd>{formatFullAdresse(field.kontaktinformasjon.adresse)}</dd>
                 <dt>
                   <Label>
                     {formatMessage('søknad.helseopplysninger.registrertFastlege.telefon')}
                   </Label>
                 </dt>
-                <dl>{formatTelefonnummer(field.kontaktinformasjon.telefon)}</dl>
+                <dd>{formatTelefonnummer(field.kontaktinformasjon.telefon)}</dd>
               </dl>
               <RadioGroupWrapper
                 name={`${REGISTRERTE_BEHANDLERE}.${index}.${RIKTIG_FASTLEGE}`}

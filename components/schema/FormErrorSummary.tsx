@@ -32,6 +32,7 @@ const FormErrorSummary = (props: FieldErrors) => {
         heading={formatMessage('errorSummary.title')}
         role={'alert'}
         aria-hidden={keyList?.length === 0}
+        tabIndex={-1}
         className={keyList?.length === 0 ? classes?.visuallyHidden : ''}
         {...props}
       >

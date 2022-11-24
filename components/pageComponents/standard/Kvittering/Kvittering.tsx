@@ -41,6 +41,8 @@ const Kvittering = ({ søker, kontaktinformasjon, søknad }: StudentProps) => {
         height="5rem"
         color="var(--navds-semantic-color-feedback-success-icon)"
         style={{ margin: '0px auto' }}
+        title="suksess"
+        aria-hidden={true}
       />
       <Heading size={'large'} level={'2'}>
         {formatMessage('søknad.kvittering.title', { navn: søker?.fulltNavn })}
@@ -95,7 +97,7 @@ const Kvittering = ({ søker, kontaktinformasjon, søknad }: StudentProps) => {
         href={getDownloadUrl(søknad?.journalpostId)}
         className={classes?.linkButton}
       >
-        <Download />
+        <Download title="Last ned søknad" />
         {formatMessage('søknad.kvittering.lastNedSøknad')}
       </Link>
       <form action={dittNavUrl}>

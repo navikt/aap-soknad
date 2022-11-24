@@ -19,7 +19,7 @@ export const AmplitudeAwareAccordion = ({ title, children }: Props) => {
     <Accordion>
       <Accordion.Item open={isOpen}>
         <Accordion.Header onClick={onClick}>{title}</Accordion.Header>
-        <Accordion.Content>{children}</Accordion.Content>
+        <Accordion.Content tabIndex={!isOpen ? -1 : undefined}>{children}</Accordion.Content>
       </Accordion.Item>
     </Accordion>
   );
