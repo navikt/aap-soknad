@@ -824,17 +824,10 @@
     prop-types "^15.8.1"
     react "^18.2.0"
 
-<<<<<<< HEAD
 "@navikt/aap-felles-innbygger-utils@0.0.27":
   version "0.0.27"
   resolved "https://npm.pkg.github.com/download/@navikt/aap-felles-innbygger-utils/0.0.27/190c3109f5f60669a019c66f92bfa925e1411ff8#190c3109f5f60669a019c66f92bfa925e1411ff8"
   integrity sha512-qnjLVJ+nsIWtPGQbzifvx6LsFpp5niQA24Y36dUg0mklcivBRrVwo8u6B2fhBMAg+0Z1PS3NrMXIQTxyWu5Wgw==
-=======
-"@navikt/aap-felles-innbygger-utils@0.0.30":
-  version "0.0.30"
-  resolved "https://npm.pkg.github.com/download/@navikt/aap-felles-innbygger-utils/0.0.30/d8e6a10d67132998a6117b268f4b0794837be3be#d8e6a10d67132998a6117b268f4b0794837be3be"
-  integrity sha512-/GO6r+B2/bl8CQ4/EhKtFcDqT1aDJq8czXSBf01576HHLaWgcDpangz8j4LNZVkntiiojALNSl/XsApM/1fcgQ==
->>>>>>> :arrow_up: felles-auth med type-fiks!
   dependencies:
     "@elastic/ecs-pino-format" "1.3.0"
     pino "8.6.1"

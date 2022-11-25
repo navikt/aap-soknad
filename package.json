@@ -4,17 +4,10 @@
   "private": true,
   "dependencies": {
     "@hookform/resolvers": "^2.8.4",
-<<<<<<< HEAD
-    "@navikt/aap-felles-innbygger-auth": "0.0.28",
+    "@navikt/aap-felles-innbygger-auth": "0.0.30",
     "@navikt/aap-felles-innbygger-css": "0.0.27",
     "@navikt/aap-felles-innbygger-react": "0.0.27",
     "@navikt/aap-felles-innbygger-utils": "0.0.27",
-=======
-    "@navikt/aap-felles-innbygger-auth": "0.0.30",
-    "@navikt/aap-felles-innbygger-css": "0.0.25",
-    "@navikt/aap-felles-innbygger-react": "0.0.25",
-    "@navikt/aap-felles-innbygger-utils": "0.0.30",
->>>>>>> :arrow_up: felles-auth med type-fiks!
     "@navikt/ds-css": "^1.4.1",
     "@navikt/ds-icons": "^1.4.1",
     "@navikt/ds-react": "^1.4.1",
