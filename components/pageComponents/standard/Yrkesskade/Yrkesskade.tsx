@@ -3,7 +3,7 @@ import React, { useEffect } from 'react';
 import { ReadMore, BodyLong, BodyShort, Heading, Radio, Alert, Link } from '@navikt/ds-react';
 import RadioGroupWrapper from 'components/input/RadioGroupWrapper/RadioGroupWrapper';
 import { Soknad } from 'types/Soknad';
-import { JaEllerNei, JaNeiVetIkke } from 'types/Generic';
+import { JaEllerNei } from 'types/Generic';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useStepWizard } from 'context/stepWizardContextV2';
@@ -101,14 +101,14 @@ export const Yrkesskade = ({ onBackClick, onNext, defaultValues }: Props) => {
             </BodyShort>
           </div>
         </ReadMore>
-        <Radio value={JaNeiVetIkke.JA}>
-          <BodyShort>{JaNeiVetIkke.JA}</BodyShort>
+        <Radio value={JaEllerNei.JA}>
+          <BodyShort>{JaEllerNei.JA}</BodyShort>
         </Radio>
-        <Radio value={JaNeiVetIkke.NEI}>
-          <BodyShort>{JaNeiVetIkke.NEI}</BodyShort>
+        <Radio value={JaEllerNei.NEI}>
+          <BodyShort>{JaEllerNei.NEI}</BodyShort>
         </Radio>
       </RadioGroupWrapper>
-      {harSkadeEllerSykdom && harSkadeEllerSykdom !== JaNeiVetIkke.NEI && (
+      {harSkadeEllerSykdom && harSkadeEllerSykdom !== JaEllerNei.NEI && (
         <Alert variant={'info'}>
           {formatMessage('søknad.yrkesskade.alert.navVilSjekke')}
           <ul>
