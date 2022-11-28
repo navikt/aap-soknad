@@ -1,7 +1,9 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { getAccessTokenFromRequest } from 'auth/accessToken';
 import { beskyttetApi } from 'auth/beskyttetApi';
-import { tokenXProxy } from 'auth/tokenXProxy';
+import { tokenXApiProxy } from '@navikt/aap-felles-innbygger-auth';
+import { logger } from '@navikt/aap-felles-innbygger-utils';
+import metrics from 'utils/metrics';
 import { isMock } from 'utils/environments';
 import { mockSøkerUtenBarn } from 'mock/søkerUtenBarn';
 
@@ -12,12 +14,15 @@ const handler = beskyttetApi(async (req: NextApiRequest, res: NextApiResponse) =
 
 export const getSøkerUtenBarn = async (accessToken?: string) => {
   if (isMock()) return mockSøkerUtenBarn;
-  const søker = await tokenXProxy({
+  const søker = await tokenXApiProxy({
     url: `${process.env.SOKNAD_API_URL}/oppslag/soekerutenbarn`,
     prometheusPath: 'oppslag/soekerutenbarn',
     method: 'GET',
     audience: process.env.SOKNAD_API_AUDIENCE!,
     bearerToken: accessToken,
+    metricsStatusCodeCounter: metrics.backendApiStatusCodeCounter,
+    metricsTimer: metrics.backendApiDurationHistogram,
+    logger: logger,
   });
   return søker;
 };

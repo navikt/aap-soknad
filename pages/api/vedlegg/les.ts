@@ -1,7 +1,9 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { getAccessTokenFromRequest } from 'auth/accessToken';
 import { beskyttetApi } from 'auth/beskyttetApi';
-import { tokenXProxy } from 'auth/tokenXProxy';
+import { tokenXApiProxy } from '@navikt/aap-felles-innbygger-auth';
+import { logger } from '@navikt/aap-felles-innbygger-utils';
+import metrics from 'utils/metrics';
 import { isMock } from 'utils/environments';
 import { getStringFromPossiblyArrayQuery } from 'utils/string';
 
@@ -18,13 +20,16 @@ const handler = beskyttetApi(async (req: NextApiRequest, res: NextApiResponse) =
 
 export const lesVedlegg = async (uuid: string, accessToken?: string) => {
   if (isMock()) return await fetch('http://localhost:3000/aap/soknad/Rød.png');
-  return await tokenXProxy({
+  return await tokenXApiProxy({
     url: `${process.env.SOKNAD_API_URL}/vedlegg/les/${uuid}`,
     prometheusPath: 'vedlegg/les/{uuid}',
     method: 'GET',
     audience: process.env.SOKNAD_API_AUDIENCE!,
     bearerToken: accessToken,
     rawResonse: true,
+    metricsStatusCodeCounter: metrics.backendApiStatusCodeCounter,
+    metricsTimer: metrics.backendApiDurationHistogram,
+    logger: logger,
   });
 };
 
