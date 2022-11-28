@@ -1,11 +1,13 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { getAccessTokenFromRequest } from 'auth/accessToken';
 import { beskyttetApi } from 'auth/beskyttetApi';
-import { tokenXProxy } from 'auth/tokenXProxy';
+import { tokenXApiProxy } from '@navikt/aap-felles-innbygger-auth';
 import { lagreCache } from 'mock/mellomlagringsCache';
 import { erGyldigSøknadsType, GYLDIGE_SØKNADS_TYPER, SøknadsType } from 'utils/api';
 import { isLabs, isMock } from 'utils/environments';
 import { getStringFromPossiblyArrayQuery } from 'utils/string';
+import { logger } from '@navikt/aap-felles-innbygger-utils';
+import metrics from 'utils/metrics';
 
 const handler = beskyttetApi(async (req: NextApiRequest, res: NextApiResponse) => {
   const type = getStringFromPossiblyArrayQuery(req.query.type);
@@ -20,7 +22,7 @@ const handler = beskyttetApi(async (req: NextApiRequest, res: NextApiResponse) =
 export const lagreBucket = async (type: SøknadsType, data: string, accessToken?: string) => {
   if (isLabs()) return;
   if (isMock()) return await lagreCache(JSON.stringify(data));
-  await tokenXProxy({
+  await tokenXApiProxy({
     url: `${process.env.SOKNAD_API_URL}/buckets/lagre/${type}`,
     prometheusPath: `buckets/lagre/${type}`,
     method: 'POST',
@@ -28,6 +30,9 @@ export const lagreBucket = async (type: SøknadsType, data: string, accessToken?
     audience: process.env.SOKNAD_API_AUDIENCE!,
     noResponse: true,
     bearerToken: accessToken,
+    metricsStatusCodeCounter: metrics.backendApiStatusCodeCounter,
+    metricsTimer: metrics.backendApiDurationHistogram,
+    logger: logger,
   });
   return;
 };
