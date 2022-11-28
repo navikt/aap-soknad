@@ -493,7 +493,7 @@
       "confirmation": {
         "title": "Vi stolar på deg",
         "text": "Eg har lest all informasjonen eg har fått i søknaden, og stadfestar at eg har gitt korrekte opplysningar.",
-        "required": "Venligst bekreft at du har lese all informasjon i søknaden og at opplysningane du har gitt er korrekte"
+        "required": "Venligst bekreft at du har lese all informasjon i søknaden og at opplysningane du har gitt er korrekte."
       }
     },
     "barnetillegg": {
