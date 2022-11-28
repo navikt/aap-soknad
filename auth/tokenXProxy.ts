@@ -58,7 +58,7 @@ export const tokenXProxy = async (opts: Opts) => {
         error: err.toString(),
       });
     }
-    if (response.status < 500) {
+    if (response.status < 500 && response.status != 404) {
       logger.warn({
         msg: `tokenXProxy: status for ${opts.url} er ${response.status}: ${response.statusText}.`,
         navCallId: data?.[NAV_CALLID],
