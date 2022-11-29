@@ -1,10 +1,10 @@
 .visuallyHidden {
   composes: visuallyHidden from '../../../styles/visibility.module.css';
 }
-.dropZone{
+.dropZone {
   padding: 30px;
-  border: 2px dashed var(--navds-semantic-color-interaction-primary);
-  background-color: var(--navds-semantic-color-interaction-primary-hover-subtle);
+  border: 2px dashed var(--a-surface-action);
+  background-color: var(--a-surface-action-subtle);
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -20,7 +20,7 @@
   align-items: center;
 }
 .fileCard.error {
-  border: 2px solid var(--navds-semantic-color-interaction-danger-hover);
+  border: 2px solid var(--a-surface-danger-hover);
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -34,21 +34,21 @@
   column-gap: 10px;
 }
 .deleteAttachment {
-  border:none;
-  background-color:transparent;
-  outline:none;
+  border: none;
+  background-color: transparent;
+  outline: none;
   cursor: pointer;
-  color: var(--navds-link-color-icon);
+  color: var(--a-icon-action);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
 }
 .deleteAttachment:hover {
-  border: 2px solid var(--navds-link-color-icon);
+  border: 2px solid var(--a-icon-action);
 }
 .deleteAttachment:focus {
-  border: 2px solid var(--navds-link-color-icon);
+  border: 2px solid var(--a-icon-action);
 }
 .fileSuccess {
   display: flex;
@@ -58,7 +58,7 @@
   width: 3rem;
   height: 3rem;
   font-size: 1.5rem;
-  background-color: var(--navds-semantic-color-feedback-success-background);
+  background-color: var(--a-surface-success-subtle);
 }
 .fileError {
   display: flex;
@@ -68,19 +68,19 @@
   width: 3rem;
   height: 3rem;
   font-size: 1.5rem;
-  background-color: var(--navds-semantic-color-feedback-danger-background);
+  background-color: var(--a-surface-danger-subtle);
 }
 .fileInput {
   padding: 2rem;
-  background-color: var(--navds-semantic-color-component-background-alternate);
+  background-color: var(--a-surface-subtle);
   display: flex;
   flex-direction: column;
   row-gap: 1rem;
 }
 .fileInputButton:focus {
   outline: none;
-  color: var(--navds-link-color-text-focus);
+  color: var(--a-text-on-action);
   text-decoration: none;
-  background-color: var(--navds-link-color-background-focus);
-  box-shadow: 0 0 0 2px var(--navds-semantic-color-focus);
+  background-color: var(--a-border-focus);
+  box-shadow: 0 0 0 2px var(--a-border-focus);
 }

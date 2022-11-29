@@ -157,7 +157,7 @@ const FieldArrayFileInput = ({
           <Panel className={classes?.fileCard} key={attachment.id}>
             <div className={classes?.fileCardLeftContent}>
               <div className={classes?.fileSuccess}>
-                <FileSuccess color={'var(--navds-semantic-color-feedback-success-icon)'} />
+                <FileSuccess color={'var(--a-icon-success)'} />
               </div>
               <div>
                 <Link target={'_blank'} href={`/aap/soknad/vedlegg/${attachment?.vedleggId}`}>
@@ -198,7 +198,7 @@ const FieldArrayFileInput = ({
           >
             <div className={classes?.fileCardLeftContent}>
               <div className={classes?.fileError}>
-                <FileError color={'var(--navds-semantic-color-interaction-danger-hover)'} />
+                <FileError color={'var(--a-surface-danger-hover)'} />
               </div>
               <div>
                 <Label>{filename}</Label>
