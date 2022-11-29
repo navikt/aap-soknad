@@ -1,27 +1,4 @@
 ingresses:
 - "https://aap-soknad.dev.nav.no/aap/soknad"
-env:
-- name: DECORATOR_URL
-  value: "https://dekoratoren.dev.nav.no"
-- name: DECORATOR_ENV
-  value: "dev"
-- name: APP_URL
-  value: "https://aap-soknad.dev.nav.no"
-- name: SOKNAD_API_URL
-  value: "https://aap-soknad-api.dev.intern.nav.no"
-- name: SOKNAD_API_AUDIENCE
-  value: "dev-gcp:aap:soknad-api"
-- name: RUNTIME_ENVIRONMENT
-  value: "dev"
-- name:  DECORATOR_ENV
-  value: "dev"
-- name: SOKNAD_API_URL
-  value: "http://soknad-api"
-- name: SOKNAD_API_AUDIENCE
-  value: "dev-gcp:aap:soknad-api"
-- name: ENABLE_SENTRY
-  value: "enabled"
-- name: ASSET_PREFIX
-  value: "https://cdn.dev.nav.no/aap/aap-soknad"
 externals:
   - "dekoratoren.dev.nav.no"
