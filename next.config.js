@@ -12,6 +12,7 @@ const nextConfig = {
   reactStrictMode: true,
   swcMinify: true, // Blir default på i Next 12.2
   output: 'standalone',
+  assetPrefix: process.env.ASSET_PREFIX ?? undefined,
 
   typescript: {
     ignoreBuildErrors: true, // Ignorerer feil frem til vi har løst TS-feil i parcel-app

@@ -21,5 +21,7 @@ env:
   value: "dev-gcp:aap:soknad-api"
 - name: ENABLE_SENTRY
   value: "enabled"
+- name: ASSET_PREFIX
+  value: "https://cdn.dev.nav.no/aap/aap-soknad"
 externals:
   - "dekoratoren.dev.nav.no"
