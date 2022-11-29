@@ -1,7 +1,9 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { getAccessTokenFromRequest } from 'auth/accessToken';
 import { beskyttetApi } from 'auth/beskyttetApi';
-import { tokenXProxy } from 'auth/tokenXProxy';
+import { tokenXApiProxy } from '@navikt/aap-felles-innbygger-auth';
+import { logger } from '@navikt/aap-felles-innbygger-utils';
+import metrics from 'utils/metrics';
 import { deleteCache } from 'mock/mellomlagringsCache';
 import { erGyldigSøknadsType, GYLDIGE_SØKNADS_TYPER, SøknadsType } from 'utils/api';
 import { isMock } from 'utils/environments';
@@ -23,13 +25,16 @@ export const slettBucket = async (type: SøknadsType, accessToken?: string) => {
     await deleteCache(type);
     return;
   }
-  await tokenXProxy({
+  await tokenXApiProxy({
     url: `${process.env.SOKNAD_API_URL}/buckets/slett/${type}`,
     prometheusPath: `buckets/slett/${type}`,
     method: 'DELETE',
     noResponse: true,
     audience: process.env.SOKNAD_API_AUDIENCE!,
     bearerToken: accessToken,
+    metricsStatusCodeCounter: metrics.backendApiStatusCodeCounter,
+    metricsTimer: metrics.backendApiDurationHistogram,
+    logger: logger,
   });
 };
 

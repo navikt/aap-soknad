@@ -1,13 +1,14 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { getAccessTokenFromRequest } from 'auth/accessToken';
 import { beskyttetApi } from 'auth/beskyttetApi';
-import { tokenXProxy } from 'auth/tokenXProxy';
+import { tokenXApiProxy } from '@navikt/aap-felles-innbygger-auth';
+import { logger } from '@navikt/aap-felles-innbygger-utils';
+import metrics from 'utils/metrics';
 import { lesCache } from 'mock/mellomlagringsCache';
 import { erGyldigSøknadsType, GYLDIGE_SØKNADS_TYPER, SøknadsType } from 'utils/api';
 import { isLabs, isMock } from 'utils/environments';
 import { getStringFromPossiblyArrayQuery } from 'utils/string';
 import { SØKNAD_CONTEXT_VERSION } from 'context/soknadContextCommon';
-import { logger } from '@navikt/aap-felles-innbygger-utils';
 import { defaultStepList } from 'pages';
 
 const handler = beskyttetApi(async (req: NextApiRequest, res: NextApiResponse) => {
@@ -36,12 +37,15 @@ export const lesBucket = async (type: SøknadsType, accessToken?: string) => {
     return result ? JSON.parse(result) : {};
   }
   try {
-    const mellomlagretSøknad = await tokenXProxy({
+    const mellomlagretSøknad = await tokenXApiProxy({
       url: `${process.env.SOKNAD_API_URL}/buckets/les/${type}`,
       prometheusPath: `buckets/les/${type}`,
       method: 'GET',
       audience: process.env.SOKNAD_API_AUDIENCE!,
       bearerToken: accessToken,
+      metricsStatusCodeCounter: metrics.backendApiStatusCodeCounter,
+      metricsTimer: metrics.backendApiDurationHistogram,
+      logger: logger,
     });
     if (mellomlagretSøknad?.version?.toString() !== SØKNAD_CONTEXT_VERSION?.toString()) {
       logger.info(

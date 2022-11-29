@@ -1,7 +1,9 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { getAccessTokenFromRequest } from 'auth/accessToken';
 import { beskyttetApi } from 'auth/beskyttetApi';
-import { tokenXProxy } from 'auth/tokenXProxy';
+import { tokenXApiProxy } from '@navikt/aap-felles-innbygger-auth';
+import { logger } from '@navikt/aap-felles-innbygger-utils';
+import metrics from 'utils/metrics';
 import { isMock } from 'utils/environments';
 import { getCommaSeparatedStringFromStringOrArray } from 'utils/string';
 
@@ -18,13 +20,16 @@ const handler = beskyttetApi(async (req: NextApiRequest, res: NextApiResponse) =
 export const slettVedlegg = async (uuids: string | string[], accessToken?: string) => {
   if (isMock()) return;
   const commaSeparatedUuids = getCommaSeparatedStringFromStringOrArray(uuids);
-  await tokenXProxy({
+  await tokenXApiProxy({
     url: `${process.env.SOKNAD_API_URL}/vedlegg/slett?uuids=${commaSeparatedUuids}`,
     prometheusPath: 'vedlegg/slett',
     method: 'DELETE',
     noResponse: true,
     audience: process.env.SOKNAD_API_AUDIENCE!,
     bearerToken: accessToken,
+    metricsStatusCodeCounter: metrics.backendApiStatusCodeCounter,
+    metricsTimer: metrics.backendApiDurationHistogram,
+    logger: logger,
   });
 };
 
