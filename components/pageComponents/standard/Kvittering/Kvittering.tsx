@@ -39,7 +39,7 @@ const Kvittering = ({ søker, kontaktinformasjon, søknad }: StudentProps) => {
       <SuccessStroke
         width="5rem"
         height="5rem"
-        color="var(--navds-semantic-color-feedback-success-icon)"
+        color="var(--a-icon-success)"
         style={{ margin: '0px auto' }}
         title="suksess"
         aria-hidden={true}

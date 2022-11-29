@@ -1,7 +1,7 @@
 .navdsPageHeader {
   display: flex;
   justify-content: center;
-  background-color: var(--navds-semantic-color-component-background-light);
+  background-color: var(--a-surface-default);
   padding: 1.5rem calc((100vw - 100%) / 2);
   margin-left: calc((100vw - 100%) / -2);
   margin-right: calc((100vw - 100%) / -2);
@@ -40,15 +40,15 @@
 }
 
 .navdsPageHeaderSituation {
-  box-shadow: 0 -4px 0 var(--navds-global-color-orange-400) inset;
+  box-shadow: 0 -4px 0 var(--a-orange-400) inset;
 }
 
 .navdsPageHeaderProduct {
-  box-shadow: 0 -4px 0 var(--navds-global-color-green-400) inset;
+  box-shadow: 0 -4px 0 var(--a-green-400) inset;
 }
 
 .navdsPageHeaderGuide {
-  box-shadow: 0 -4px 0 var(--navds-global-color-deepblue-400) inset;
+  box-shadow: 0 -4px 0 var(--a-deepblue-400) inset;
 }
 
 @media (max-width: 649px) {
@@ -58,6 +58,6 @@
   }
 
   .navdsPageHeaderTitle {
-    font-size: var(--navds-font-size-heading-xlarge);
+    font-size: var(--a-font-size-heading-xlarge);
   }
 }

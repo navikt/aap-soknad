@@ -3,7 +3,7 @@
   max-width: 600px;
   flex-direction: column;
   justify-content: space-between;
-  gap: var(--navds-spacing-10);
+  gap: var(--a-spacing-10);
 }
 .fourButtonWrapper > button {
   min-width: 201px;
@@ -11,9 +11,9 @@
 .fourButtonWrapper {
   display: grid;
   grid-template-columns: auto 3% auto 1fr;
-  /*grid-column-gap: var(--navds-spacing-2);*/
+  /*grid-column-gap: var(--a-spacing-2);*/
   grid-template-rows: auto 1px auto auto;
-  grid-row-gap: var(--navds-spacing-5);
+  grid-row-gap: var(--a-spacing-5);
   grid-template-areas:
     'buttonBack . buttonNext .'
     'sep sep sep sep'
@@ -21,7 +21,7 @@
     'buttonSave . buttonCancel .';
 }
 .separatorLine {
-  border-top: 1px solid var(--navds-semantic-color-border-muted);
+  border-top: 1px solid var(--a-border-default);
   grid-area: sep;
 }
 .buttonBack {
@@ -43,7 +43,7 @@
   .fourButtonWrapper {
     grid-template-columns: 1fr;
     grid-template-rows: auto auto 1px auto auto auto;
-    grid-row-gap: var(--navds-spacing-5);
+    grid-row-gap: var(--a-spacing-5);
     grid-template-areas:
       'buttonBack'
       'buttonNext'

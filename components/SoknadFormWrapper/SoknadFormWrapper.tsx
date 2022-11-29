@@ -105,10 +105,7 @@ export const SlettModal = ({
         )}
         {slettSøknadSuccess && (
           <>
-            <SuccessStroke
-              className={classes?.successStroke}
-              color={'var(--navds-semantic-color-feedback-success-border)'}
-            />
+            <SuccessStroke className={classes?.successStroke} color={'var(--a-border-success)'} />
             <Alert variant={'success'}>Søknaden er slettet</Alert>
             <div className={classes?.buttonWrapper}>
               <Button

@@ -1,19 +1,19 @@
 .panelGrey {
-  background-color: var(--navds-semantic-color-canvas-background);
+  background-color: var(--a-bg-subtle);
 }
 .panelWhite {
   background-color: #ffffff;
 }
 .panelPadding {
-  padding: var(--navds-spacing-10);
+  padding: var(--a-spacing-10);
 }
 .colorPanel {
   display: flex;
   flex-direction: column;
-  gap: var(--navds-spacing-10);
+  gap: var(--a-spacing-10);
 }
 @media (max-width: 480px) {
   .panelPadding {
-    padding: var(--navds-spacing-4);
+    padding: var(--a-spacing-4);
   }
 }

@@ -5,15 +5,15 @@
 }
 
 .barnList li {
-  margin-bottom: var(--navds-spacing-8);
+  margin-bottom: var(--a-spacing-8);
 }
 
 .barneKort {
   padding: 20px;
   display: flex;
   flex-direction: column;
-  gap: var(--navds-spacing-5);
-  background-color: var(--navds-semantic-color-component-background-alternate);
+  gap: var(--a-spacing-5);
+  background-color: var(--a-surface-subtle);
 }
 .barneKort h2 {
   text-align: left !important;
@@ -22,7 +22,7 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  gap: var(--navds-spacing-10);
+  gap: var(--a-spacing-10);
   max-width: 600px;
 }
 
@@ -34,7 +34,7 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  gap: var(--navds-spacing-5);
+  gap: var(--a-spacing-5);
 }
 .cardButtonWrapper {
   composes: buttonWrapper from '/styles/layout.module.css';
