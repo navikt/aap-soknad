@@ -5,12 +5,12 @@
   width: 100%;
   flex-direction: column;
   justify-content: space-between;
-  gap: var(--navds-spacing-10);
+  gap: var(--a-spacing-10);
 }
 .veiledningContent h1 {
   text-align: center;
 }
 .veiledningHeader {
   text-align: center;
-  padding: var(--navds-spacing-10) 0;
+  padding: var(--a-spacing-10) 0;
 }

@@ -2,13 +2,13 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  gap: var(--navds-spacing-10);
+  gap: var(--a-spacing-10);
   max-width: 600px;
 }
 
 .addresseFlexContainer {
   display: flex;
-  gap: var(--navds-spacing-4);
+  gap: var(--a-spacing-4);
   align-items: flex-end;
 }
 
@@ -17,7 +17,7 @@
 }
 
 .modalHeading {
-  width: calc(100% - var(--navds-spacing-10));
+  width: calc(100% - var(--a-spacing-10));
 }
 
 .modalForm {
