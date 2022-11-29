@@ -74,7 +74,7 @@ jobs:
       soknad:
         image: ${{needs.build.outputs.image}}
         env:
-          RUNTIME_ENVIRONMENT: "labs"
+          FUNCTIONAL_TESTS: "enabled"
         ports:
           - 3000:3000
     steps:
