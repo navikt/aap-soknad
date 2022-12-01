@@ -54,3 +54,11 @@ export function logAccordionChangeEvent(accordionName: string, isOpen: boolean) 
     tekst: accordionName,
   });
 }
+
+export function logSkjemaValideringFeiletEvent(stegnavn: string) {
+  logAmplitudeEvent('skjema validering feilet', {
+    skjemanavn: 'aap-søknad-standard',
+    skjemaId: 'aap-søknad-standard',
+    stegnavn,
+  });
+}

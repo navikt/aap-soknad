@@ -1,7 +1,7 @@
 import { FieldValues, useForm } from 'react-hook-form';
 import { Soknad } from 'types/Soknad';
 import { Accordion, Alert, BodyShort, Heading, Label, Link, Switch } from '@navikt/ds-react';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import ConfirmationPanelWrapper from 'components/input/ConfirmationPanelWrapper';
 import AccordianItemOppsummering from './AccordianItemOppsummering/AccordianItemOppsummering';
 import OppsummeringBarn from './OppsummeringBarn/OppsummeringBarn';
@@ -35,13 +35,14 @@ import {
   BARN,
   getBarnetillegSchema,
 } from 'components/pageComponents/standard/Barnetillegg/Barnetillegg';
-import { 
+import {
   FerieTypeToMessageKey,
   getStartDatoSchema,
 } from 'components/pageComponents/standard/StartDato/StartDato';
 import { getYrkesskadeSchema } from 'components/pageComponents/standard/Yrkesskade/Yrkesskade';
 import { getMedlemskapSchema } from 'components/pageComponents/standard/Medlemskap/Medlemskap';
 import { getBehandlerSchema } from 'components/pageComponents/standard/Behandlere/Behandlere';
+import { logSkjemaValideringFeiletEvent } from 'utils/amplitude';
 const SØKNAD_BEKREFT = 'søknadBekreft';
 
 interface OppsummeringProps {
@@ -78,6 +79,42 @@ const Oppsummering = ({
   });
 
   const [toggleAll, setToggleAll] = useState<boolean | undefined>(undefined);
+  const [startDatoHasErrors] = useState<boolean>(
+    !getStartDatoSchema(formatMessage).isValidSync(søknadState?.søknad)
+  );
+  const [medlemskapHasErrors] = useState<boolean>(
+    !getMedlemskapSchema(formatMessage).isValidSync(søknadState?.søknad)
+  );
+  const [yrkesskadeHasErrors] = useState<boolean>(
+    !getYrkesskadeSchema(formatMessage).isValidSync(søknadState?.søknad)
+  );
+  const [behandlereHasErrors] = useState<boolean>(
+    !getBehandlerSchema(formatMessage).isValidSync(søknadState?.søknad)
+  );
+  const [barnetilleggHasErrors] = useState<boolean>(
+    //@ts-ignore
+    !getBarnetillegSchema(formatMessage).isValidSync(søknadState?.søknad)
+  );
+  const [studentHasErrors] = useState<boolean>(
+    !getStudentSchema(formatMessage).isValidSync(søknadState?.søknad)
+  );
+  const [utbetalingerHasErrors] = useState<boolean>(
+    !getAndreUtbetalingerSchema(formatMessage).isValidSync(søknadState?.søknad)
+  );
+  useEffect(() => {
+    const errorSteps = [
+      ...(startDatoHasErrors ? ['STARTDATO'] : []),
+      ...(medlemskapHasErrors ? ['MEDLEMSKAP'] : []),
+      ...(yrkesskadeHasErrors ? ['YRKESSKADE'] : []),
+      ...(behandlereHasErrors ? ['BEHANDLERE'] : []),
+      ...(barnetilleggHasErrors ? ['BARNETILLEGG'] : []),
+      ...(studentHasErrors ? ['STUDENT'] : []),
+      ...(utbetalingerHasErrors ? ['UTBETALINGER'] : []),
+    ];
+    errorSteps.forEach((stegnavn) => {
+      logSkjemaValideringFeiletEvent(stegnavn);
+    });
+  }, []);
 
   const SummaryRowIfExists = ({ labelKey, value }: { labelKey: string; value?: any }) => {
     return value ? (
