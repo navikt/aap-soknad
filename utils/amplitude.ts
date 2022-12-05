@@ -1,30 +1,19 @@
-import amplitude from 'amplitude-js';
-
-const isBrowser = () => typeof window !== 'undefined';
+import { init, track } from '@amplitude/analytics-browser';
 
 export const initAmplitude = () => {
-  if (isBrowser()) {
-    amplitude.getInstance().init('default', '', {
-      apiEndpoint: 'amplitude.nav.no/collect-auto',
-      saveEvents: false,
-      includeUtm: true,
-      includeReferrer: true,
-      platform: window.location.toString(),
-    });
-  }
+  init('default', undefined, {
+    useBatch: true,
+    serverUrl: 'https://amplitude.nav.no/collect-auto',
+    ingestionMetadata: {
+      sourceName: window.location.toString(),
+    },
+  });
 };
 
-export function logAmplitudeEvent(eventName: string, eventData?: Record<string, unknown>): void {
-  setTimeout(() => {
-    try {
-      if (isBrowser()) {
-        amplitude.getInstance().logEvent(eventName, eventData);
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  });
-}
+export const logAmplitudeEvent = (event: string, properties?: Record<string, any>) => {
+  console.log('tracking amplitude event');
+  track(event, properties);
+};
 
 export function logSkjemaStartetEvent() {
   logAmplitudeEvent('skjema startet', {
