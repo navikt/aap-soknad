@@ -154,23 +154,25 @@ export const Behandlere = ({ onBackClick, onNext, defaultValues }: Props) => {
             <div key={field.id}>
               <dl className={classes?.fastLege}>
                 <dt>
-                  <Label>{formatMessage('søknad.helseopplysninger.registrertFastlege.navn')}</Label>
+                  <Label as={'span'}>
+                    {formatMessage('søknad.helseopplysninger.registrertFastlege.navn')}
+                  </Label>
                 </dt>
                 <dd>{formatNavn(field.navn)}</dd>
                 <dt>
-                  <Label>
+                  <Label as={'span'}>
                     {formatMessage('søknad.helseopplysninger.registrertFastlege.legekontor')}
                   </Label>
                 </dt>
                 <dd>{field.kontaktinformasjon.kontor}</dd>
                 <dt>
-                  <Label>
+                  <Label as={'span'}>
                     {formatMessage('søknad.helseopplysninger.registrertFastlege.adresse')}
                   </Label>
                 </dt>
                 <dd>{formatFullAdresse(field.kontaktinformasjon.adresse)}</dd>
                 <dt>
-                  <Label>
+                  <Label as={'span'}>
                     {formatMessage('søknad.helseopplysninger.registrertFastlege.telefon')}
                   </Label>
                 </dt>
@@ -210,39 +212,51 @@ export const Behandlere = ({ onBackClick, onNext, defaultValues }: Props) => {
               {fields.map((field, index) => (
                 <li key={field.id}>
                   <article className={classes?.legeKort}>
-                    <BodyShort>
-                      <Label>
-                        {formatMessage('søknad.helseopplysninger.dineBehandlere.navn')}:{' '}
-                      </Label>
-                      {field?.firstname} {field?.lastname}
-                    </BodyShort>
-                    {field?.legekontor && (
-                      <BodyShort>
-                        <Label>
-                          {formatMessage('søknad.helseopplysninger.dineBehandlere.legekontor')}:{' '}
-                        </Label>
-                        {field?.legekontor}
-                      </BodyShort>
-                    )}
-                    {field?.gateadresse && (
-                      <BodyShort>
-                        <Label>
-                          {formatMessage('søknad.helseopplysninger.dineBehandlere.adresse')}:{' '}
-                        </Label>
-                        {formatFullAdresse({
-                          adressenavn: field.gateadresse,
-                          postnummer: { postnr: field.postnummer, poststed: field.poststed },
-                        })}
-                      </BodyShort>
-                    )}
-                    {field?.telefon && (
-                      <BodyShort>
-                        <Label>
-                          {formatMessage('søknad.helseopplysninger.dineBehandlere.telefon')}:{' '}
-                        </Label>
-                        {formatTelefonnummer(field?.telefon)}
-                      </BodyShort>
-                    )}
+                    <dl>
+                      <div className={classes?.oneLineDetail}>
+                        <dt>
+                          <Label as={'span'}>
+                            {formatMessage('søknad.helseopplysninger.dineBehandlere.navn')}:
+                          </Label>
+                        </dt>
+                        <dd>{`${field?.firstname} ${field?.lastname}`}</dd>
+                      </div>
+                      {field?.legekontor && (
+                        <div className={classes?.oneLineDetail}>
+                          <dt>
+                            <Label as={'span'}>
+                              {formatMessage('søknad.helseopplysninger.dineBehandlere.legekontor')}:
+                            </Label>
+                          </dt>
+                          <dd>{field?.legekontor}</dd>
+                        </div>
+                      )}
+                      {field?.gateadresse && (
+                        <div className={classes?.oneLineDetail}>
+                          <dt>
+                            <Label as={'span'}>
+                              {formatMessage('søknad.helseopplysninger.dineBehandlere.adresse')}:
+                            </Label>
+                          </dt>
+                          <dd>
+                            {formatFullAdresse({
+                              adressenavn: field.gateadresse,
+                              postnummer: { postnr: field.postnummer, poststed: field.poststed },
+                            })}
+                          </dd>
+                        </div>
+                      )}
+                      {field?.telefon && (
+                        <div className={classes?.oneLineDetail}>
+                          <dt>
+                            <Label as={'span'}>
+                              {formatMessage('søknad.helseopplysninger.dineBehandlere.telefon')}:
+                            </Label>
+                          </dt>
+                          <dd>{formatTelefonnummer(field?.telefon)}</dd>
+                        </div>
+                      )}
+                    </dl>
                     <div className={classes?.cardButtonWrapper}>
                       <Button
                         type="button"

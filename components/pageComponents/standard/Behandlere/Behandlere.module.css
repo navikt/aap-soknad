@@ -24,3 +24,11 @@
   min-width: 195px;
   max-width: 195px;
 }
+.oneLineDetail {
+  display: flex;
+  flex-direction: row;
+  margin-bottom: var(--a-spacing-3);
+}
+.oneLineDetail > dd {
+  margin-left: var(--a-spacing-1);
+}

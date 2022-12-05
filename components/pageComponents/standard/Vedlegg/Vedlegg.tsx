@@ -97,7 +97,7 @@ const Vedlegg = ({ onBackClick, onNext, defaultValues }: Props) => {
       <div>
         {søknadState?.requiredVedlegg?.length > 0 ? (
           <>
-            <Label>{formatMessage('søknad.vedlegg.harVedlegg.title')}</Label>
+            <Label as={'p'}>{formatMessage('søknad.vedlegg.harVedlegg.title')}</Label>
             <ul>
               {søknadState?.requiredVedlegg?.map((vedlegg, index) => (
                 <li key={index}>{vedlegg?.description}</li>
@@ -106,7 +106,7 @@ const Vedlegg = ({ onBackClick, onNext, defaultValues }: Props) => {
           </>
         ) : (
           <>
-            <Label spacing>{formatMessage('søknad.vedlegg.ingenVedlegg.title')}</Label>
+            <Label as={'p'}>{formatMessage('søknad.vedlegg.ingenVedlegg.title')}</Label>
             <ReadMore
               header={formatMessage('søknad.vedlegg.ingenVedlegg.readMore.title')}
               type={'button'}
