@@ -201,7 +201,7 @@ const FieldArrayFileInput = ({
                 <FileError color={'var(--a-surface-danger-hover)'} />
               </div>
               <div>
-                <Label>{filename}</Label>
+                <Label as={'span'}>{filename}</Label>
               </div>
             </div>
             <button
