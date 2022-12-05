@@ -11,6 +11,8 @@ jobs:
   "build":
     name: "build"
     runs-on: "ubuntu-latest"
+    outputs:
+      image: ${{ env.IMAGE }}
     permissions:
       contents: 'read'
       id-token: 'write'
