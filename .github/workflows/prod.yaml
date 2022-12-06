@@ -44,9 +44,8 @@ jobs:
       - name: "Bygg klient(yarn run build)"
         run: "yarn run build"
       - name: Upload static files to NAV CDN prod
-        uses: nais/frontend-plattform-cdn-upload-action@main
+        uses: navikt/frontend/actions/cdn-upload/v1@main
         with:
-          cdn-environment: cdn.nav.no
           cdn-team-name: aap
           source: ./.next/static
           destination: '/aap-soknad/_next'
