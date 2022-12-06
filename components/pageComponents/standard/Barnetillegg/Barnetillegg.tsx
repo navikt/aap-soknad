@@ -198,7 +198,7 @@ export const Barnetillegg = ({ onBackClick, onNext, defaultValues }: Props) => {
           <BodyShort>{formatMessage('søknad.barnetillegg.guide.text2')}</BodyShort>
         </LucaGuidePanel>
         {fields.length > 0 && (
-          <Heading size="xsmall" level="2">
+          <Heading size="small" level="3">
             {formatMessage('søknad.barnetillegg.registrerteBarn.title')}
           </Heading>
         )}
@@ -260,7 +260,7 @@ export const Barnetillegg = ({ onBackClick, onNext, defaultValues }: Props) => {
           </ul>
         )}
         {manuelleBarnFields.length > 0 && (
-          <Heading size="xsmall" level="2">
+          <Heading size="small" level="3">
             {formatMessage('søknad.barnetillegg.manuelleBarn.title')}
           </Heading>
         )}

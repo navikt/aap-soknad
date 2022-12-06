@@ -222,9 +222,6 @@ export const AddBarnModal = ({ showModal, onCloseClick, onSaveClick, barn }: Pro
             </Alert>
           )}
           <ModalButtonWrapper>
-            <Button type={'submit'}>
-              {formatMessage('søknad.barnetillegg.leggTilBarn.modal.buttons.lagre')}
-            </Button>
             <Button
               type="button"
               variant={'secondary'}
@@ -233,6 +230,9 @@ export const AddBarnModal = ({ showModal, onCloseClick, onSaveClick, barn }: Pro
               }}
             >
               {formatMessage('søknad.barnetillegg.leggTilBarn.modal.buttons.avbryt')}
+            </Button>
+            <Button type={'submit'}>
+              {formatMessage('søknad.barnetillegg.leggTilBarn.modal.buttons.lagre')}
             </Button>
           </ModalButtonWrapper>
         </form>
