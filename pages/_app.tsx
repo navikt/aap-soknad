@@ -15,6 +15,7 @@ import Head from 'next/head';
 import { SUPPORTED_LOCALE } from 'lib/translations/locale';
 import { useRouter } from 'next/router';
 import { NavDecorator } from 'components/NavDecorator/NavDecorator';
+import { Locale } from '@navikt/nav-dekoratoren-moduler';
 
 const getLocaleOrFallback = (locale?: string) => {
   if (locale && SUPPORTED_LOCALE.includes(locale)) {
@@ -29,7 +30,7 @@ const CustomApp = ({ Component, pageProps }: AppProps) => {
   const locale = getLocaleOrFallback(router.locale);
 
   const currentMessages = useMemo(
-    () => ({ ...messages[locale], ...flattenMessages({ applinks: links }) }),
+    () => ({ ...messages[locale as Locale], ...flattenMessages({ applinks: links }) }),
     [locale]
   );
 

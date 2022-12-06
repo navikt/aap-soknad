@@ -1,7 +1,6 @@
 import messagesNb from '../translations/nb.json';
 import messagesNn from '../translations/nn.json';
-
-export type Locale = 'nb' | 'nn';
+import { Locale } from '@navikt/nav-dekoratoren-moduler';
 
 export type Messages = {
   [K in Locale]?: { [name: string]: string };
