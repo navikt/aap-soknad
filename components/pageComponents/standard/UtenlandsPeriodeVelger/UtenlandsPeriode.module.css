@@ -4,6 +4,9 @@
   justify-content: space-between;
   max-width: 600px;
 }
+.utenlandsPeriodeVelger > h2 {
+  padding-right: 36px;
+}
 
 .modalForm {
   composes: modalForm from '/styles/layout.module.css';

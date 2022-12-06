@@ -25,16 +25,16 @@
   gap: var(--a-spacing-10);
   max-width: 600px;
 }
+.leggTilBarnModalContent > h2 {
+  padding-right: 36px;
+}
 
 .leggTilBarnFnrInput {
   max-width: 14rem;
 }
 
 .modalForm {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  gap: var(--a-spacing-5);
+  composes: modalForm from '/styles/layout.module.css';
 }
 .cardButtonWrapper {
   composes: buttonWrapper from '/styles/layout.module.css';
