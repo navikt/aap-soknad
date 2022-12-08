@@ -59,7 +59,7 @@ const Steps = ({ søker, mellomlagretSøknad }: PageProps) => {
   const router = useRouter();
   const { step } = router.query;
 
-  const { formatMessage } = useFeatureToggleIntl();
+  const { formatMessage, formatElement } = useFeatureToggleIntl();
 
   const { søknadState, søknadDispatch } = useSoknadContextStandard();
   const { oppslagDispatch } = useSokerOppslag();
@@ -159,7 +159,11 @@ const Steps = ({ søker, mellomlagretSøknad }: PageProps) => {
   return (
     <>
       <header>
-        <PageHeader align="center">{formatMessage('søknad.pagetitle')}</PageHeader>
+        <PageHeader align="center">
+          {formatElement(`søknad.pagetitle`, {
+            wbr: () => <>&shy;</>,
+          })}
+        </PageHeader>
       </header>
       {søknadState?.søknad && (
         <StepWizard>

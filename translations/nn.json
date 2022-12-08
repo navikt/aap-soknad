@@ -24,7 +24,7 @@
         "lastOppSenere": "Dokumenta lastar du opp seinare i søknaden. Du kan også ettersende vedlegg."
       }
     },
-    "pagetitle": "Søknad om arbeidsavklaringspengar (AAP)",
+    "pagetitle": "Søknad om arbeidsavklarings<wbr></wbr>pengar (AAP)",
     "startDato": {
       "title": "Startdato",
       "guide": {
@@ -80,7 +80,7 @@
       }
     },
     "veiledning": {
-      "title": "Søknad om arbeidsavklaringspengar (AAP)",
+      "title": "Søknad om arbeidsavklarings<wbr></wbr>pengar (AAP)",
       "guide": {
         "title": "Hei, {name}!",
         "text1": "Eg er her for å rettleie deg gjennom søknaden. Svara dine blir lagra undervegs, slik at du trygt kan gå tilbake og endre dei.",

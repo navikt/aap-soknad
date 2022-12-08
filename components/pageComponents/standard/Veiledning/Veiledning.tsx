@@ -30,7 +30,7 @@ export const Veiledning = ({
   errorMessageRef,
   onSubmit,
 }: VeiledningProps) => {
-  const { formatMessage } = useFeatureToggleIntl();
+  const { formatMessage, formatElement } = useFeatureToggleIntl();
 
   const schema = yup.object().shape({
     veiledningConfirm: yup
@@ -52,7 +52,9 @@ export const Veiledning = ({
     <>
       <header className={classes?.veiledningHeader}>
         <Heading size="large" level="1">
-          {formatMessage(`søknad.veiledning.title`)}
+          {formatElement(`søknad.veiledning.title`, {
+            wbr: () => <>&shy;</>,
+          })}
         </Heading>
       </header>
       <main className={classes?.veiledningContent}>

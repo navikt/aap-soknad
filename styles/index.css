@@ -15,6 +15,9 @@ html {
 }
 
 @media (max-width: 480px) {
+  .app {
+    padding: var(--a-spacing-2);
+  }
   .navds-page-header__title {
     font-size: var(--a-font-size-heading-medium);
   }

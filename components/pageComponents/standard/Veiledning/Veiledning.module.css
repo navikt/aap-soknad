@@ -7,8 +7,9 @@
   justify-content: space-between;
   gap: var(--a-spacing-10);
 }
-.veiledningContent h1 {
+.veiledningHeader h1 {
   text-align: center;
+  hyphens: manual;
 }
 .veiledningHeader {
   text-align: center;
