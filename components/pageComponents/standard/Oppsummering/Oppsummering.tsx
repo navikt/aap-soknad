@@ -47,7 +47,7 @@ const SØKNAD_BEKREFT = 'søknadBekreft';
 
 interface OppsummeringProps {
   onBackClick: () => void;
-  onSubmitSoknad: (data: Soknad) => void;
+  onSubmitSoknad: (data: Soknad) => boolean;
   submitErrorMessageRef: React.MutableRefObject<string | null>;
   hasSubmitError: boolean;
 }
@@ -131,7 +131,10 @@ const Oppsummering = ({
     <SoknadFormWrapper
       onNext={handleSubmit(async (data) => {
         setNextIsLoading(true);
-        await onSubmitSoknad(data);
+        const submitSuccess = await onSubmitSoknad(data);
+        if (!submitSuccess) {
+          setNextIsLoading(false);
+        }
       })}
       nextIsLoading={nextIsLoading}
       onBack={() => onBackClick()}

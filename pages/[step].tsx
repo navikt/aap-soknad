@@ -129,6 +129,7 @@ const Steps = ({ søker, mellomlagretSøknad }: PageProps) => {
         const url = postResponse?.data?.uri;
         søknadDispatch({ type: SoknadActionKeys.ADD_SØKNAD_URL, payload: url });
         router.push('kvittering');
+        return true;
       } else {
         const navCallid = postResponse?.data?.navCallId;
         setShowFetchErrorMessage(true);
@@ -136,6 +137,7 @@ const Steps = ({ søker, mellomlagretSøknad }: PageProps) => {
     } else {
       completeAndGoToNextStep(stepWizardDispatch);
     }
+    return false;
   };
   const postSøknad = async (data?: any) =>
     fetchPOST('/aap/soknad/api/innsending/soknad', {
