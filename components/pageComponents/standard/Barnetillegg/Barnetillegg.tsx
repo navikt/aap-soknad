@@ -327,23 +327,23 @@ export const Barnetillegg = ({ onBackClick, onNext, defaultValues }: Props) => {
             })}
           </ul>
         )}
-        <BodyShort>{formatMessage('søknad.barnetillegg.leggTilBarn.description')}</BodyShort>
-        <Grid>
-          <Cell xs={12} md={6}>
-            <Button
-              variant="tertiary"
-              type="button"
-              icon={<Add title={'Legg til'} />}
-              iconPosition={'left'}
-              onClick={() => {
-                setSelectedBarnIndex(undefined);
-                setShowModal(true);
-              }}
-            >
-              {formatMessage('søknad.barnetillegg.leggTilBarn.buttonText')}
-            </Button>
-          </Cell>
-        </Grid>
+        <div>
+          <BodyShort spacing>
+            {formatMessage('søknad.barnetillegg.leggTilBarn.description')}
+          </BodyShort>
+          <Button
+            variant="tertiary"
+            type="button"
+            icon={<Add title={'Legg til'} />}
+            iconPosition={'left'}
+            onClick={() => {
+              setSelectedBarnIndex(undefined);
+              setShowModal(true);
+            }}
+          >
+            {formatMessage('søknad.barnetillegg.leggTilBarn.buttonText')}
+          </Button>
+        </div>
         {(erForelderTilManueltBarn || erFosterforelderTilManueltBarn) && (
           <Alert variant="info">
             {formatMessage('søknad.barnetillegg.alert.leggeVedTekst')}
