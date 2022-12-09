@@ -32,24 +32,24 @@
       },
       "sykepenger": {
         "legend": "Har du sjukepengar no?",
-        "description": "Viss du får sjukepengar og søkjer om AAP, kan du vanlegvis få AAP frå første dag etter at sjukepengane dine er ferdige.",
-        "required": "Du må svare på om du mottar sykepenger"
+        "description": "Viss du får sjukepengar, får du AAP frå første dag etter at sjukepengane dine er ferdige.",
+        "required": "Du må svare på om du har sjukepengar no."
       },
       "skalHaFerie": {
-        "label": "Har du planar om å ta ferie?",
+        "label": "Har du planar om å ta ferie før du er ferdig med sjukepengar?",
         "description": "Viss du tar ut ferie, kan startdatoen på AAP forskyva seg.",
         "validation": {
-          "required": "Du må svare på om du planlegger å ta ferie."
+          "required": "Du må svare på om du planlegger å ta ferie før du er ferdig med sjukepengar."
         }
       },
       "ferieType": {
         "label": "Veit du når du skal ta ut ferie?",
         "values": {
-          "periode": "Ja",
-          "dager": "Nei, men eg veit antall feriedagar"
+          "periode": "Ja, eg veit fra-dato og til-dato",
+          "dager": "Nei, men eg veit antall arbeidsdagar eg skal ta ut ferie"
         },
         "validation": {
-          "required": "Du må svare på om du vet når du skal ta ut ferie."
+          "required": "Du må svare på om du veit når du skal ta ut ferie."
         }
       },
       "periode": {
@@ -70,13 +70,14 @@
       },
       "antallDager": {
         "dager": "dagar",
-        "label": "Skriv inn antall dager du skal ha ferie",
+        "label": "Skriv inn antall arbeidsdagar du skal ta ferie",
+        "description": "Lørdagar, søndagar og hellidagdagar skal ikkje føres inn som ferie.",
         "validation": {
-          "required": "Du må skrive inn antall dager du skal ha ferie."
+          "required": "Du må skrive inn antall arbeidsdagar du skal ta ferie."
         }
       },
       "alert": {
-        "text": "Det er viktig at du gir oss beskjed hvis du bestemmer deg for å ta ferie, fordi det kan påvirke startdatoen din. Dette påvirker spesielt deg som får sykepenger."
+        "text": "Det er viktig at du gir oss beskjed hvis du bestemmer deg for å ta ferie, fordi det kan påvirke startdatoen din."
       }
     },
     "veiledning": {
