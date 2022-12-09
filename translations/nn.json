@@ -630,7 +630,7 @@
       }
     },
     "kvittering": {
-      "title": "Takk for søknaden, {namn}",
+      "title": "Takk for søknaden, {navn}",
       "alert": {
         "text": "Vi har nå fått søknaden din om AAP. Saka din ligg inne til behandling hos NAV."
       },

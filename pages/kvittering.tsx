@@ -19,7 +19,7 @@ interface PageProps {
 }
 
 const KvitteringPage = ({ søker, søknader }: PageProps) => {
-  const { formatMessage } = useFeatureToggleIntl();
+  const { formatMessage, formatElement } = useFeatureToggleIntl();
 
   const [soker, setSoker] = useState({});
 
@@ -37,7 +37,9 @@ const KvitteringPage = ({ søker, søknader }: PageProps) => {
   return (
     <SoknadContextProviderStandard>
       <PageHeader align="center" className={classes?.pageHeader}>
-        {formatMessage('søknad.pagetitle')}
+        {formatElement(`søknad.pagetitle`, {
+          wbr: () => <>&shy;</>,
+        })}
       </PageHeader>
       <Kvittering
         søker={soker}
