@@ -76,7 +76,7 @@ const Kvittering = ({ søker, kontaktinformasjon, søknad }: StudentProps) => {
         })}
       </BodyLong>
       {(kontaktinformasjon?.mobil || kontaktinformasjon?.epost) && (
-        <BodyLong>
+        <>
           {formatMessage('søknad.kvittering.bekreftelse.title')}
           <ul>
             {kontaktinformasjon?.mobil && (
@@ -90,7 +90,7 @@ const Kvittering = ({ søker, kontaktinformasjon, søknad }: StudentProps) => {
               </li>
             )}
           </ul>
-        </BodyLong>
+        </>
       )}
       <Link
         target={'_blank'}
