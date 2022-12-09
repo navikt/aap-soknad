@@ -199,92 +199,97 @@ export const Behandlere = ({ onBackClick, onNext, defaultValues }: Props) => {
             </div>
           ))}
         </div>
-        <Heading size={'small'} level={'3'}>
-          {formatMessage('søknad.helseopplysninger.annenBehandler.title')}
-        </Heading>
-        <BodyLong>{formatMessage('søknad.helseopplysninger.annenBehandler.description')}</BodyLong>
-        {fields.length > 0 && (
-          <>
-            <Heading size={'xsmall'} level={'4'}>
-              {formatMessage('søknad.helseopplysninger.dineBehandlere.title')}
-            </Heading>
-            <ul className={classes?.legeList}>
-              {fields.map((field, index) => (
-                <li key={field.id}>
-                  <article className={classes?.legeKort}>
-                    <dl>
-                      <div className={classes?.oneLineDetail}>
-                        <dt>
-                          <Label as={'span'}>
-                            {formatMessage('søknad.helseopplysninger.dineBehandlere.navn')}:
-                          </Label>
-                        </dt>
-                        <dd>{`${field?.firstname} ${field?.lastname}`}</dd>
-                      </div>
-                      {field?.legekontor && (
-                        <div className={classes?.oneLineDetail}>
-                          <dt>
-                            <Label as={'span'}>
-                              {formatMessage('søknad.helseopplysninger.dineBehandlere.legekontor')}:
-                            </Label>
-                          </dt>
-                          <dd>{field?.legekontor}</dd>
-                        </div>
-                      )}
-                      {field?.gateadresse && (
-                        <div className={classes?.oneLineDetail}>
-                          <dt>
-                            <Label as={'span'}>
-                              {formatMessage('søknad.helseopplysninger.dineBehandlere.adresse')}:
-                            </Label>
-                          </dt>
-                          <dd>
-                            {formatFullAdresse({
-                              adressenavn: field.gateadresse,
-                              postnummer: { postnr: field.postnummer, poststed: field.poststed },
-                            })}
-                          </dd>
-                        </div>
-                      )}
-                      {field?.telefon && (
-                        <div className={classes?.oneLineDetail}>
-                          <dt>
-                            <Label as={'span'}>
-                              {formatMessage('søknad.helseopplysninger.dineBehandlere.telefon')}:
-                            </Label>
-                          </dt>
-                          <dd>{formatTelefonnummer(field?.telefon)}</dd>
-                        </div>
-                      )}
-                    </dl>
-                    <div className={classes?.cardButtonWrapper}>
-                      <Button
-                        type="button"
-                        variant="tertiary"
-                        onClick={() => editNyBehandler(index)}
-                      >
-                        {formatMessage('søknad.helseopplysninger.dineBehandlere.editButton')}
-                      </Button>
-                      <Button
-                        variant="tertiary"
-                        type="button"
-                        icon={<Delete title={'Slett'} />}
-                        iconPosition={'left'}
-                        onClick={() => {
-                          slettBehandler(index);
-                        }}
-                      >
-                        {formatMessage('søknad.helseopplysninger.dineBehandlere.slettButton')}
-                      </Button>
-                    </div>
-                  </article>
-                </li>
-              ))}
-            </ul>
-          </>
-        )}
-
         <div>
+          <Heading size={'small'} level={'3'} spacing>
+            {formatMessage('søknad.helseopplysninger.annenBehandler.title')}
+          </Heading>
+          <BodyShort spacing>
+            {formatMessage('søknad.helseopplysninger.annenBehandler.description')}
+          </BodyShort>
+          {fields.length > 0 && (
+            <>
+              <Heading size={'xsmall'} level={'4'} spacing>
+                {formatMessage('søknad.helseopplysninger.dineBehandlere.title')}
+              </Heading>
+              <ul className={classes?.legeList}>
+                {fields.map((field, index) => (
+                  <li key={field.id}>
+                    <article className={classes?.legeKort}>
+                      <dl>
+                        <div className={classes?.oneLineDetail}>
+                          <dt>
+                            <Label as={'span'}>
+                              {formatMessage('søknad.helseopplysninger.dineBehandlere.navn')}:
+                            </Label>
+                          </dt>
+                          <dd>{`${field?.firstname} ${field?.lastname}`}</dd>
+                        </div>
+                        {field?.legekontor && (
+                          <div className={classes?.oneLineDetail}>
+                            <dt>
+                              <Label as={'span'}>
+                                {formatMessage(
+                                  'søknad.helseopplysninger.dineBehandlere.legekontor'
+                                )}
+                                :
+                              </Label>
+                            </dt>
+                            <dd>{field?.legekontor}</dd>
+                          </div>
+                        )}
+                        {field?.gateadresse && (
+                          <div className={classes?.oneLineDetail}>
+                            <dt>
+                              <Label as={'span'}>
+                                {formatMessage('søknad.helseopplysninger.dineBehandlere.adresse')}:
+                              </Label>
+                            </dt>
+                            <dd>
+                              {formatFullAdresse({
+                                adressenavn: field.gateadresse,
+                                postnummer: { postnr: field.postnummer, poststed: field.poststed },
+                              })}
+                            </dd>
+                          </div>
+                        )}
+                        {field?.telefon && (
+                          <div className={classes?.oneLineDetail}>
+                            <dt>
+                              <Label as={'span'}>
+                                {formatMessage('søknad.helseopplysninger.dineBehandlere.telefon')}:
+                              </Label>
+                            </dt>
+                            <dd>{formatTelefonnummer(field?.telefon)}</dd>
+                          </div>
+                        )}
+                      </dl>
+                      <div className={classes?.cardButtonWrapper}>
+                        <Button
+                          type="button"
+                          variant="tertiary"
+                          onClick={() => editNyBehandler(index)}
+                        >
+                          {formatMessage('søknad.helseopplysninger.dineBehandlere.editButton')}
+                        </Button>
+                        <Button
+                          variant="tertiary"
+                          type="button"
+                          icon={<Delete title={'Slett'} />}
+                          iconPosition={'left'}
+                          onClick={() => {
+                            slettBehandler(index);
+                          }}
+                        >
+                          {formatMessage('søknad.helseopplysninger.dineBehandlere.slettButton')}
+                        </Button>
+                      </div>
+                    </article>
+                  </li>
+                ))}
+              </ul>
+            </>
+          )}
+
           <Button
             variant="tertiary"
             type="button"
