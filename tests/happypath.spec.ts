@@ -8,7 +8,7 @@ test('test', async ({ page }) => {
   await expect(wcagRes.violations).toEqual([]);
 
   await expect(
-    page.getByRole('heading', { name: 'Søknad om arbeidsavklaringspenger (AAP)' })
+    page.getByRole('heading', { name: 'Søknad om arbeidsavklarings­penger (AAP)' })
   ).toBeVisible();
 
   await page.getByLabel('Jeg vil svare så godt jeg kan på spørsmålene i søknaden.').check();
