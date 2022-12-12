@@ -8,11 +8,11 @@
         "ja": "Ja, heilt eller delvis",
         "avbrutt": "Ja, men eg avbraut studiet heilt grunna sjukdom",
         "nei": "Nei",
-        "required": "Du må svare på om du er student."
+        "required": "Du må svara på om du er student."
       },
       "kommeTilbake": {
         "legend": "Har du planar om å halde fram studiet?",
-        "required": "Du må svare på om du har planar om å halde fram studiet."
+        "required": "Du må svara på om du har planar om å halde fram studiet."
       },
       "guide": {
         "guide1": "Dersom du er student, gjeld det ulike reglar avhengig av om du held fram på studiet eller avbryt det heilt."
@@ -33,13 +33,13 @@
       "sykepenger": {
         "legend": "Har du sjukepengar no?",
         "description": "Viss du får sjukepengar, får du AAP frå første dag etter at sjukepengane dine er ferdige.",
-        "required": "Du må svare på om du har sjukepengar no."
+        "required": "Du må svara på om du har sjukepengar no."
       },
       "skalHaFerie": {
         "label": "Har du planar om å ta ferie før du er ferdig med sjukepengar?",
         "description": "Viss du tar ut ferie, kan startdatoen på AAP forskyva seg.",
         "validation": {
-          "required": "Du må svare på om du planlegger å ta ferie før du er ferdig med sjukepengar."
+          "required": "Du må svara på om du planlegger å ta ferie før du er ferdig med sjukepengar."
         }
       },
       "ferieType": {
@@ -49,7 +49,7 @@
           "dager": "Nei, men eg veit antall arbeidsdagar eg skal ta ut ferie"
         },
         "validation": {
-          "required": "Du må svare på om du veit når du skal ta ut ferie."
+          "required": "Du må svara på om du veit når du skal ta ut ferie."
         }
       },
       "periode": {
@@ -71,13 +71,13 @@
       "antallDager": {
         "dager": "dagar",
         "label": "Skriv inn antall arbeidsdagar du skal ta ferie",
-        "description": "Lørdagar, søndagar og hellidagdagar skal ikkje føres inn som ferie.",
+        "description": "Laurdagar, søndagar og heillidagdagar skal ikkje førast inn som ferie.",
         "validation": {
-          "required": "Du må skrive inn antall arbeidsdagar du skal ta ferie."
+          "required": "Du må skriva inn antall arbeidsdagar du skal ta ferie."
         }
       },
       "alert": {
-        "text": "Det er viktig at du gir oss beskjed hvis du bestemmer deg for å ta ferie, fordi det kan påvirke startdatoen din."
+        "text": "Det er viktig at du gir oss beskjed viss du bestemmer deg for å ta ferie, fordi det kan påverka startdatoen din."
       }
     },
     "veiledning": {
@@ -116,7 +116,7 @@
       },
       "veiledningConfirm": {
         "title": "Vi stolar på deg",
-        "label": "Eg vil svare så godt eg kan på spørsmåla i søknaden.",
+        "label": "Eg vil svara så godt eg kan på spørsmåla i søknaden.",
         "validation": {
           "required": "Du må stadfeste at du vil gi så rette opplysningar som mogleg."
         }
@@ -136,7 +136,7 @@
           "text": "Dette betyr at du har opphalde deg i Noreg mesteparten av kvart av desse åra."
         },
         "validation": {
-          "required": "Du må svare på om du har budd samanhengande i Noreg dei fem siste åra."
+          "required": "Du må svara på om du har budd samanhengande i Noreg dei fem siste åra."
         }
       },
       "arbeidUtenforNorge": {
@@ -146,7 +146,7 @@
           "text": "Dersom du har fått ytingar (t.d. dagpengar, sjukepengar og foreldrepengar) frå utanlandske styresmakter, blir dette rekna som jobb utanfor Noreg. Pensjon blir ikkje rekna som erstatning for jobb."
         },
         "validation": {
-          "required": "Du må svare på om du har jobba utanfor Noreg dei fem siste åra."
+          "required": "Du må svara på om du har jobba utanfor Noreg dei fem siste åra."
         }
       },
       "harArbeidetINorgeSiste5År": {
@@ -156,7 +156,7 @@
           "text": "Som «jobb» reknar ein også offentlege ytingar du har fått som erstatning for arbeid (t.d. dagpengar, sjukepengar og foreldrepengar). Pensjon blir ikkje rekna som erstatning for jobb."
         },
         "validation": {
-          "required": "Du må svare på om du har jobba samanhengande i Noreg dei fem siste åra."
+          "required": "Du må svara på om du har jobba samanhengande i Noreg dei fem siste åra."
         }
       },
       "iTilleggArbeidUtenforNorge": {
@@ -167,7 +167,7 @@
           "text": "Dersom du har fått ytingar (t.d. dagpengar, sjukepengar og foreldrepengar) frå utanlandske styresmakter, blir dette rekna som jobb utanfor Noreg. Pensjon blir ikkje rekna som erstatning for jobb."
         },
         "validation": {
-          "required": "Du må svare på om du i tillegg til jobb i Noreg, har jobba i eit anna land dei fem siste åra."
+          "required": "Du må svara på om du i tillegg til jobb i Noreg, har jobba i eit anna land dei fem siste åra."
         }
       },
       "utenlandsperiode": {
@@ -233,7 +233,7 @@
           "iArbeid": {
             "label": "Jobba du i dette landet i denne perioden?",
             "validation": {
-              "required": "Du må svare på om du jobba i dette landet i denne perioden."
+              "required": "Du må svara på om du jobba i dette landet i denne perioden."
             }
           },
           "utenlandsId": {
@@ -255,7 +255,7 @@
       "erRegistrertFastlegeRiktig": {
         "label": "Er informasjonen om fastlegen din rett?",
         "alertInfo": "Takk for at du seier frå om at informasjonen er feil. Fyll ut under «Legg til lege/behandlar» kva lege vi kan kontakte for å få helseopplysningar om deg. Du kan byte fastlege på helsenorge.no. Du kan gjere dette etter at du har sendt inn AAP-søknaden.",
-        "required": "Du må svare på om informasjonen din om registrert behandlar er rett."
+        "required": "Du må svara på om informasjonen din om registrert behandlar er rett."
       },
       "registrertFastlege": {
         "title": "Din registrerte fastlege",
@@ -574,7 +574,7 @@
           "relasjon": {
             "label": "Kva relasjon har du til barnet?",
             "validation": {
-              "required": "Du må svare på kva relasjon du har til barnet."
+              "required": "Du må svara på kva relasjon du har til barnet."
             }
           },
           "harInntekt": {
@@ -584,7 +584,7 @@
               "text": "Dersom barnet har ei årleg inntekt over {grunnbeløp}kr ({grunnbeløp}kr = 1G), har du vanlegvis ikkje rett på barnetillegg for barnet."
             },
             "validation": {
-              "required": "Du må svare på om barnet har ei årleg inntekt over {grunnbeløp}kr"
+              "required": "Du må svara på om barnet har ei årleg inntekt over {grunnbeløp}kr"
             }
           },
           "buttons": {
@@ -621,7 +621,7 @@
           "text2": "Yrkessjukdom vil seie sjukdom du har fått grunna skadeleg påverknad frå arbeidsmiljøet. Sjukdommen må i tillegg vere nemnd i <a>forskrift om yrkessjukdomar (blir opna i ny fane)</a>."
         },
         "validation": {
-          "required": "Du må svare på om du har ein yrkesskade eller yrkessjukdom."
+          "required": "Du må svara på om du har ein yrkesskade eller yrkessjukdom."
         }
       },
       "alert": {
