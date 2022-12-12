@@ -828,15 +828,15 @@
     openid-client "5.1.10"
     prom-client "^14.1.0"
 
-"@navikt/aap-felles-innbygger-css@^0.0.37":
-  version "0.0.37"
-  resolved "https://npm.pkg.github.com/download/@navikt/aap-felles-innbygger-css/0.0.37/84b8cc80abba564af24246425bc8ea4b5f7ea1b1#84b8cc80abba564af24246425bc8ea4b5f7ea1b1"
-  integrity sha512-7msUa7gdPaxKun1n7/U2qDvJnvYn4VgvzBz35U4Pmyd1vCPz7aYNZND4tcPG5joctK98b9xQFVZzzlshdb1LQQ==
+"@navikt/aap-felles-innbygger-css@^0.0.38":
+  version "0.0.38"
+  resolved "https://npm.pkg.github.com/download/@navikt/aap-felles-innbygger-css/0.0.38/4c029d5f02b8d18b7b3f6c6504a96330e228e431#4c029d5f02b8d18b7b3f6c6504a96330e228e431"
+  integrity sha512-qN3+78yUA7ITBUbb07XtVAD3knkqvO0EOF5bzfg/wDr3Hk1J9dRO0g9lC0KYnR5Y5GrEka6/rwbcsZ6OCFxS0Q==
 
-"@navikt/aap-felles-innbygger-react@^0.0.37":
-  version "0.0.37"
-  resolved "https://npm.pkg.github.com/download/@navikt/aap-felles-innbygger-react/0.0.37/76b46f8f20450e25462390d04009d6f8349e49e1#76b46f8f20450e25462390d04009d6f8349e49e1"
-  integrity sha512-Upiz4QKGnEeYhzSBS92cr96A6h/3uJKL+3Tegw0d5bx19n7DcnO2kspisOK8iazRhdGeVvY2hZlA9e3gARmgMQ==
+"@navikt/aap-felles-innbygger-react@^0.0.38":
+  version "0.0.38"
+  resolved "https://npm.pkg.github.com/download/@navikt/aap-felles-innbygger-react/0.0.38/fc6aff4091e704fa9d3852dbbbbccd0145c61b22#fc6aff4091e704fa9d3852dbbbbccd0145c61b22"
+  integrity sha512-HwaqZ1sh+oPK7xJlEM0NwoOU/4ST3obIL+6Ha/ch6T0pbdsxWTDvE3LpPCSP+lY7LNJ1vRsHw4k9vM5yogxQ5Q==
   dependencies:
     "@navikt/ds-css" "^2.0.5"
     "@navikt/ds-icons" "^2.0.5"
