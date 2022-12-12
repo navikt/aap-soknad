@@ -20,6 +20,7 @@ import { useSoknadContextStandard } from 'context/soknadContextStandard';
 import { OppsummeringVedlegg } from './OppsummeringVedlegg/OppsummeringVedlegg';
 import {
   getStudentSchema,
+  jaNeiAvbruttToTekstnøkkel,
   KOMME_TILBAKE,
   STUDENT,
 } from 'components/pageComponents/standard/Student/Student';
@@ -323,7 +324,9 @@ const Oppsummering = ({
         >
           <SummaryRowIfExists
             labelKey={`søknad.student.erStudent.legend`}
-            value={søknadState?.søknad?.student?.erStudent}
+            value={formatMessage(
+              jaNeiAvbruttToTekstnøkkel(søknadState?.søknad?.student?.erStudent)
+            )}
           />
           <SummaryRowIfExists
             labelKey={`søknad.${STUDENT}.${KOMME_TILBAKE}.legend`}
