@@ -68,17 +68,15 @@ const Kvittering = ({ søker, kontaktinformasjon, søknad }: StudentProps) => {
           </BodyShort>
         </Alert>
       )}
-      <BodyLong spacing>
-        {formatElement('søknad.kvittering.saksbehandlingstid', {
-          a: (chunks: string[]) => (
-            <Link href={formatMessage('applinks.saksbehandlingstid')}>{chunks}</Link>
-          ),
-        })}
-      </BodyLong>
+      {formatElement('søknad.kvittering.saksbehandlingstid', {
+        a: (chunks: string[]) => (
+          <Link href={formatMessage('applinks.saksbehandlingstid')}>{chunks}</Link>
+        ),
+      })}
       {(kontaktinformasjon?.mobil || kontaktinformasjon?.epost) && (
-        <>
+        <div>
           {formatMessage('søknad.kvittering.bekreftelse.title')}
-          <ul>
+          <ul className={classes?.kvitteringList}>
             {kontaktinformasjon?.mobil && (
               <li>
                 {formatMessage('søknad.kvittering.bekreftelse.sms')}: {kontaktinformasjon?.mobil}
@@ -90,7 +88,7 @@ const Kvittering = ({ søker, kontaktinformasjon, søknad }: StudentProps) => {
               </li>
             )}
           </ul>
-        </>
+        </div>
       )}
       <Link
         target={'_blank'}

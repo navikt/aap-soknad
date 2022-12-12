@@ -6,6 +6,9 @@
   justify-content: space-between;
   gap: var(--a-spacing-10);
 }
+.kvitteringList {
+  margin-bottom: 0;
+}
 .kvitteringContent h2 {
   text-align: center;
 }
