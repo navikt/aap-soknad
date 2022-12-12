@@ -505,7 +505,7 @@
       },
       "registrerteBarn": {
         "navn": "Namn",
-        "title": "Barn du er registrert med:",
+        "title": "Barn du er registrert med",
         "fødselsnummer": "Fødselsnummer/D-nummer",
         "fødselsdato": "Fødselsdato",
         "barnepensjon": {
@@ -515,6 +515,7 @@
             "text": "Dersom barnet får barnepensjon, har du ikkje rett på barnetillegg for barnet."
           }
         },
+        "notfound": "Fant ingen registrerte barn. Viss dette ikkje stemmer kan du leggja til barna dine under.",
         "harInntekt": {
           "label": "Har barnet ei årleg inntekt over {grunnbeløp}kr?",
           "readMore": {
@@ -524,7 +525,7 @@
         }
       },
       "manuelleBarn": {
-        "title": "Barn du har lagt til:",
+        "title": "Andre barn",
         "fødselsnummer": "Fødselsnummer/D-nummer",
         "fødselsdato": "Fødselsdato",
         "erForelder": "Du er forelder til barnet",

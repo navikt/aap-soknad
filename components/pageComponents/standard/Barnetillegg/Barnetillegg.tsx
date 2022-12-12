@@ -197,137 +197,144 @@ export const Barnetillegg = ({ onBackClick, onNext, defaultValues }: Props) => {
           <BodyShort spacing>{formatMessage('søknad.barnetillegg.guide.text1')}</BodyShort>
           <BodyShort>{formatMessage('søknad.barnetillegg.guide.text2')}</BodyShort>
         </LucaGuidePanel>
-        {fields.length > 0 && (
-          <Heading size="small" level="3">
+        <div>
+          <Heading size="small" level="3" spacing>
             {formatMessage('søknad.barnetillegg.registrerteBarn.title')}
           </Heading>
-        )}
-        {fields.length > 0 && (
-          <ul className={classes.barnList}>
-            {fields.map((barn, index) => {
-              return (
-                <li key={barn?.id}>
-                  <article className={classes.barneKort}>
-                    <BodyShort>
-                      <Label>{formatMessage('søknad.barnetillegg.registrerteBarn.navn')}: </Label>
-                      {formatNavn(barn?.navn)}
-                    </BodyShort>
-                    <BodyShort>
-                      <Label>
-                        {formatMessage('søknad.barnetillegg.registrerteBarn.fødselsdato')}:{' '}
-                      </Label>
-                      {formatDate(barn?.fødseldato)}
-                    </BodyShort>
-                    <RadioGroupWrapper
-                      legend={formatMessage(
-                        'søknad.barnetillegg.registrerteBarn.harInntekt.label',
-                        {
-                          grunnbeløp: GRUNNBELØP,
-                        }
-                      )}
-                      name={`${BARN}.${index}.harInntekt`}
-                      control={control}
-                      error={errors?.[BARN]?.[index]?.harInntekt?.message}
-                    >
-                      <ReadMore
-                        header={formatMessage(
-                          'søknad.barnetillegg.registrerteBarn.harInntekt.readMore.title'
-                        )}
-                      >
-                        {formatMessage(
-                          'søknad.barnetillegg.registrerteBarn.harInntekt.readMore.text',
+          {fields.length === 0 && (
+            <BodyShort spacing>
+              {formatMessage('søknad.barnetillegg.registrerteBarn.notfound')}
+            </BodyShort>
+          )}
+          {fields.length > 0 && (
+            <ul className={classes.barnList}>
+              {fields.map((barn, index) => {
+                return (
+                  <li key={barn?.id}>
+                    <article className={classes.barneKort}>
+                      <BodyShort>
+                        <Label>{formatMessage('søknad.barnetillegg.registrerteBarn.navn')}: </Label>
+                        {formatNavn(barn?.navn)}
+                      </BodyShort>
+                      <BodyShort>
+                        <Label>
+                          {formatMessage('søknad.barnetillegg.registrerteBarn.fødselsdato')}:{' '}
+                        </Label>
+                        {formatDate(barn?.fødseldato)}
+                      </BodyShort>
+                      <RadioGroupWrapper
+                        legend={formatMessage(
+                          'søknad.barnetillegg.registrerteBarn.harInntekt.label',
                           {
                             grunnbeløp: GRUNNBELØP,
                           }
                         )}
-                      </ReadMore>
-                      <Radio value={JaEllerNei.JA}>
-                        <BodyShort>
-                          {formatMessage(`answerOptions.jaEllerNei.${JaEllerNei.JA}`)}
-                        </BodyShort>
-                      </Radio>
-                      <Radio value={JaEllerNei.NEI}>
-                        <BodyShort>
-                          {formatMessage(`answerOptions.jaEllerNei.${JaEllerNei.NEI}`)}
-                        </BodyShort>
-                      </Radio>
-                    </RadioGroupWrapper>
-                    {/*)}*/}
-                  </article>
-                </li>
-              );
-            })}
-          </ul>
-        )}
-        {manuelleBarnFields.length > 0 && (
-          <Heading size="small" level="3">
+                        name={`${BARN}.${index}.harInntekt`}
+                        control={control}
+                        error={errors?.[BARN]?.[index]?.harInntekt?.message}
+                      >
+                        <ReadMore
+                          header={formatMessage(
+                            'søknad.barnetillegg.registrerteBarn.harInntekt.readMore.title'
+                          )}
+                        >
+                          {formatMessage(
+                            'søknad.barnetillegg.registrerteBarn.harInntekt.readMore.text',
+                            {
+                              grunnbeløp: GRUNNBELØP,
+                            }
+                          )}
+                        </ReadMore>
+                        <Radio value={JaEllerNei.JA}>
+                          <BodyShort>
+                            {formatMessage(`answerOptions.jaEllerNei.${JaEllerNei.JA}`)}
+                          </BodyShort>
+                        </Radio>
+                        <Radio value={JaEllerNei.NEI}>
+                          <BodyShort>
+                            {formatMessage(`answerOptions.jaEllerNei.${JaEllerNei.NEI}`)}
+                          </BodyShort>
+                        </Radio>
+                      </RadioGroupWrapper>
+                      {/*)}*/}
+                    </article>
+                  </li>
+                );
+              })}
+            </ul>
+          )}
+        </div>
+        <div>
+          <Heading size="small" level="3" spacing>
             {formatMessage('søknad.barnetillegg.manuelleBarn.title')}
           </Heading>
-        )}
-        {manuelleBarnFields.length > 0 && (
-          <ul className={classes.barnList}>
-            {manuelleBarnFields.map((barn, index) => {
-              return (
-                <li key={barn?.id}>
-                  <article className={classes.barneKort}>
-                    <BodyShort>
-                      <Label>{formatMessage('søknad.barnetillegg.registrerteBarn.navn')}: </Label>
-                      {formatNavn(barn?.navn)}
-                    </BodyShort>
-                    <BodyShort>
-                      <Label>
-                        {formatMessage('søknad.barnetillegg.manuelleBarn.fødselsdato')}:{' '}
-                      </Label>
+          {manuelleBarnFields.length > 0 && (
+            <ul className={classes.barnList}>
+              {manuelleBarnFields.map((barn, index) => {
+                return (
+                  <li key={barn?.id}>
+                    <article className={classes.barneKort}>
+                      <BodyShort>
+                        <Label>{formatMessage('søknad.barnetillegg.registrerteBarn.navn')}: </Label>
+                        {formatNavn(barn?.navn)}
+                      </BodyShort>
+                      <BodyShort>
+                        <Label>
+                          {formatMessage('søknad.barnetillegg.manuelleBarn.fødselsdato')}:{' '}
+                        </Label>
 
-                      {formatDate(barn?.fødseldato)}
-                    </BodyShort>
-                    {barn?.relasjon === Relasjon.FORELDER && (
-                      <BodyShort>
-                        {formatMessage('søknad.barnetillegg.manuelleBarn.erForelder')}
+                        {formatDate(barn?.fødseldato)}
                       </BodyShort>
-                    )}
-                    {barn?.relasjon === Relasjon.FOSTERFORELDER && (
-                      <BodyShort>
-                        {formatMessage('søknad.barnetillegg.manuelleBarn.erFosterforelder')}
-                      </BodyShort>
-                    )}
-                    {barn?.harInntekt === JaEllerNei.JA && (
-                      <BodyShort>
-                        {formatMessage('søknad.barnetillegg.manuelleBarn.inntektOver1G', {
-                          grunnbeløp: GRUNNBELØP,
-                        })}
-                      </BodyShort>
-                    )}
-                    {barn?.harInntekt === JaEllerNei.NEI && (
-                      <BodyShort>
-                        {formatMessage('søknad.barnetillegg.manuelleBarn.inntektIkkeOver1G', {
-                          grunnbeløp: GRUNNBELØP,
-                        })}
-                      </BodyShort>
-                    )}
-                    <div className={classes?.cardButtonWrapper}>
-                      <Button variant="tertiary" type="button" onClick={() => editNyttBarn(index)}>
-                        {formatMessage('søknad.barnetillegg.manuelleBarn.redigerBarn')}
-                      </Button>
-                      <Button
-                        variant="tertiary"
-                        type="button"
-                        icon={<Delete title={'Slett'} />}
-                        iconPosition={'left'}
-                        onClick={() => {
-                          slettBarn(index);
-                        }}
-                      >
-                        {formatMessage('søknad.barnetillegg.manuelleBarn.slettBarn')}
-                      </Button>
-                    </div>
-                  </article>
-                </li>
-              );
-            })}
-          </ul>
-        )}
-        <div>
+                      {barn?.relasjon === Relasjon.FORELDER && (
+                        <BodyShort>
+                          {formatMessage('søknad.barnetillegg.manuelleBarn.erForelder')}
+                        </BodyShort>
+                      )}
+                      {barn?.relasjon === Relasjon.FOSTERFORELDER && (
+                        <BodyShort>
+                          {formatMessage('søknad.barnetillegg.manuelleBarn.erFosterforelder')}
+                        </BodyShort>
+                      )}
+                      {barn?.harInntekt === JaEllerNei.JA && (
+                        <BodyShort>
+                          {formatMessage('søknad.barnetillegg.manuelleBarn.inntektOver1G', {
+                            grunnbeløp: GRUNNBELØP,
+                          })}
+                        </BodyShort>
+                      )}
+                      {barn?.harInntekt === JaEllerNei.NEI && (
+                        <BodyShort>
+                          {formatMessage('søknad.barnetillegg.manuelleBarn.inntektIkkeOver1G', {
+                            grunnbeløp: GRUNNBELØP,
+                          })}
+                        </BodyShort>
+                      )}
+                      <div className={classes?.cardButtonWrapper}>
+                        <Button
+                          variant="tertiary"
+                          type="button"
+                          onClick={() => editNyttBarn(index)}
+                        >
+                          {formatMessage('søknad.barnetillegg.manuelleBarn.redigerBarn')}
+                        </Button>
+                        <Button
+                          variant="tertiary"
+                          type="button"
+                          icon={<Delete title={'Slett'} />}
+                          iconPosition={'left'}
+                          onClick={() => {
+                            slettBarn(index);
+                          }}
+                        >
+                          {formatMessage('søknad.barnetillegg.manuelleBarn.slettBarn')}
+                        </Button>
+                      </div>
+                    </article>
+                  </li>
+                );
+              })}
+            </ul>
+          )}
           <BodyShort spacing>
             {formatMessage('søknad.barnetillegg.leggTilBarn.description')}
           </BodyShort>
