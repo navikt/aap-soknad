@@ -5,12 +5,20 @@ import { Control, Controller, FieldValues } from 'react-hook-form';
 export interface TextFieldProps {
   name: string;
   label: string;
+  description?: string;
   error?: string;
   className?: string;
   control: Control<FieldValues>;
 }
 
-const TextFieldWrapper = ({ name, label, control, error, className }: TextFieldProps) => (
+const TextFieldWrapper = ({
+  name,
+  label,
+  description,
+  control,
+  error,
+  className,
+}: TextFieldProps) => (
   <div className={className}>
     <Controller
       name={name}
@@ -21,6 +29,7 @@ const TextFieldWrapper = ({ name, label, control, error, className }: TextFieldP
           id={name}
           name={name}
           label={label}
+          description={description}
           error={error}
           value={value}
           onChange={onChange}
