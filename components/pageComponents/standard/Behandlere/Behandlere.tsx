@@ -108,7 +108,6 @@ export const Behandlere = ({ onBackClick, onNext, defaultValues }: Props) => {
           ...behandler,
         });
     }
-    setShowModal(false);
   };
   const slettBehandler = (index: number) => {
     remove(index);
