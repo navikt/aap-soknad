@@ -65,6 +65,8 @@ export const AddBehandlerModal = ({ showModal, onCloseClick, onSaveClick, behand
           onSubmit={handleSubmit((data) => {
             const newData = { ...data };
             onSaveClick(newData);
+            clearModal();
+            onCloseClick();
           })}
           className={classes?.modalForm}
         >
