@@ -3,7 +3,7 @@ on:
   workflow_dispatch:
   push:
     branches:
-      - "labs-historisk/**"
+      - "labs-historisk-**"
 env:
   "IMAGE": "ghcr.io/${{ github.repository }}-labs-historisk:${{ github.sha }}"
 jobs:
