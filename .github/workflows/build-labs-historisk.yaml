@@ -61,4 +61,4 @@ jobs:
           "APIKEY": "${{ secrets.NAIS_DEPLOY_APIKEY }}"
           "CLUSTER": "labs-gcp"
           "RESOURCE": ".nais/historisk-labs.yaml"
-          "VAR": image=${{ env.DOCKER_IMAGE }},ingress=https://${{ steps.slug.outputs.slug }}.labs.nais.io,appname=${{ steps.slug.outputs.slug }},replicas=1,branchState=alive
+          "VAR": image=${{ env.IMAGE }},ingress=https://${{ steps.slug.outputs.slug }}.labs.nais.io,appname=${{ steps.slug.outputs.slug }},replicas=1,branchState=alive
