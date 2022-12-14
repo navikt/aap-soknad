@@ -1,4 +1,4 @@
-name: "Build and deploy aap-soknad to labs"
+name: "Labs: historisk snapshot"
 on:
   workflow_dispatch:
   push:
