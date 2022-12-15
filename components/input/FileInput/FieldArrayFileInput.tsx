@@ -260,6 +260,7 @@ const FieldArrayFileInput = ({
                 className={`${classes?.fileInputButton} navds-button navds-button__inner navds-body-short navds-button--secondary`}
                 role={'button'}
                 aria-controls={inputId}
+                aria-label={`Velg dine filer for ${heading}`}
                 tabIndex={0}
                 onKeyPress={(event) => {
                   if (event.key === 'Enter') {
@@ -267,8 +268,8 @@ const FieldArrayFileInput = ({
                   }
                 }}
               >
-                <SvgUpload title={'Last opp fil'} />
-                {'Velg dine filer'}
+                <SvgUpload title="" aria-hidden />
+                Velg dine filer
               </span>
             </label>
           </>
