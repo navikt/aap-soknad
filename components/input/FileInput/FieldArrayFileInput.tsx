@@ -267,8 +267,8 @@ const FieldArrayFileInput = ({
                   }
                 }}
               >
-                <SvgUpload title={'Last opp fil'} />
-                {'Velg dine filer'}
+                <SvgUpload title="" aria-hidden />
+                Velg dine filer for {heading.toLowerCase()}
               </span>
             </label>
           </>
