@@ -20,6 +20,7 @@ import {
 import { deleteOpplastedeVedlegg, useSoknadContextStandard } from 'context/soknadContextStandard';
 import { useDebounceLagreSoknad } from 'hooks/useDebounceLagreSoknad';
 import { GenericSoknadContextState } from 'types/SoknadContext';
+import { setFocusOnErrorSummary } from 'components/schema/FormErrorSummary';
 
 export const AVBRUTT_STUDIE_VEDLEGG = 'avbruttStudie';
 export const STUDENT = 'student';
@@ -132,7 +133,7 @@ const Student = ({ onBackClick, onNext, defaultValues }: Props) => {
     <SoknadFormWrapper
       onNext={handleSubmit((data) => {
         onNext(data);
-      })}
+      }, setFocusOnErrorSummary)}
       onBack={() => {
         updateSøknadData<Soknad>(søknadDispatch, { ...søknadState.søknad });
         onBackClick();

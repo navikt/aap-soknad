@@ -22,6 +22,7 @@ import {
 import { deleteOpplastedeVedlegg, useSoknadContextStandard } from 'context/soknadContextStandard';
 import { useDebounceLagreSoknad } from 'hooks/useDebounceLagreSoknad';
 import { GenericSoknadContextState } from 'types/SoknadContext';
+import { setFocusOnErrorSummary } from 'components/schema/FormErrorSummary';
 
 interface Props {
   onBackClick: () => void;
@@ -221,7 +222,7 @@ export const AndreUtbetalinger = ({ onBackClick, onNext, defaultValues }: Props)
     <SoknadFormWrapper
       onNext={handleSubmit((data) => {
         onNext(data);
-      })}
+      }, setFocusOnErrorSummary)}
       onBack={() => {
         updateSøknadData<Soknad>(søknadDispatch, { ...søknadState.søknad });
         onBackClick();

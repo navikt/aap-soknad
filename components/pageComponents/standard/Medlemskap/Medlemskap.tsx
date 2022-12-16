@@ -27,6 +27,7 @@ import {
   shouldShowITilleggArbeidetUtenforNorgeSiste5År,
   shouldShowPeriodevelger,
 } from './medlemskapUtils';
+import { setFocusOnErrorSummary } from 'components/schema/FormErrorSummary';
 
 interface Props {
   onBackClick: () => void;
@@ -241,7 +242,7 @@ export const Medlemskap = ({ onBackClick, onNext, defaultValues }: Props) => {
       <SoknadFormWrapper
         onNext={handleSubmit((data) => {
           onNext(data);
-        })}
+        }, setFocusOnErrorSummary)}
         onBack={() => {
           updateSøknadData<Soknad>(søknadDispatch, { ...søknadState.søknad });
           onBackClick();

@@ -19,6 +19,7 @@ import DatePickerWrapper from 'components/input/DatePickerWrapper/DatePickerWrap
 import { GenericSoknadContextState } from 'types/SoknadContext';
 import * as classes from './StartDato.module.css';
 import { formatDate } from 'utils/date';
+import { setFocusOnErrorSummary } from 'components/schema/FormErrorSummary';
 export enum FerieType {
   DAGER = 'DAGER',
   PERIODE = 'PERIODE',
@@ -156,7 +157,7 @@ const StartDato = ({ onBackClick, onNext, defaultValues }: Props) => {
     <SoknadFormWrapper
       onNext={handleSubmit((data) => {
         onNext(data);
-      })}
+      }, setFocusOnErrorSummary)}
       onBack={() => {
         updateSøknadData<Soknad>(søknadDispatch, { ...søknadState.søknad });
         onBackClick();

@@ -3,7 +3,12 @@ import { FieldErrors } from 'react-hook-form';
 import { ErrorSummary } from '@navikt/ds-react';
 import * as classes from './FormErrorSummary.module.css';
 import { useFeatureToggleIntl } from 'hooks/useFeatureToggleIntl';
-import { scrollRefIntoView, setFocusHtmlRef } from 'utils/dom';
+import { setFocusHtmlRef } from 'utils/dom';
+
+export const setFocusOnErrorSummary = () => {
+  const errorSummary = document?.getElementById('aap-error-summary');
+  errorSummary?.focus();
+};
 
 const FormErrorSummary = (props: FieldErrors) => {
   const { formatMessage } = useFeatureToggleIntl();
@@ -42,6 +47,7 @@ const FormErrorSummary = (props: FieldErrors) => {
   }
   return (
     <ErrorSummary
+      id="aap-error-summary"
       ref={errorSummaryElement}
       heading={formatMessage('errorSummary.title')}
       role={'alert'}
