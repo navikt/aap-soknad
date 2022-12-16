@@ -3,7 +3,7 @@ import { FieldErrors } from 'react-hook-form';
 import { ErrorSummary } from '@navikt/ds-react';
 import * as classes from './FormErrorSummary.module.css';
 import { useFeatureToggleIntl } from 'hooks/useFeatureToggleIntl';
-import { scrollRefIntoView } from 'utils/dom';
+import { scrollRefIntoView, setFocusHtmlRef } from 'utils/dom';
 
 const FormErrorSummary = (props: FieldErrors) => {
   const { formatMessage } = useFeatureToggleIntl();
@@ -21,7 +21,7 @@ const FormErrorSummary = (props: FieldErrors) => {
 
   useEffect(() => {
     if (scrollToErrorSummary) {
-      scrollRefIntoView(errorSummaryElement);
+      setFocusHtmlRef(errorSummaryElement);
     }
   }, [scrollToErrorSummary]);
 
