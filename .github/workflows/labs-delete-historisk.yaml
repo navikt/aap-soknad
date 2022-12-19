@@ -4,19 +4,15 @@ env:
   "IMAGE": "ghcr.io/${{ github.repository }}-labs-historisk:${{ github.sha }}"
 jobs:
   deploy-branch-to-labs-gcp:
-    if: startsWith(github.event.ref, 'labs')
+    if: startsWith(github.event.ref, 'labs-historisk')
     name: Delete branch labs-gcp
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - uses: gacts/github-slug@v1
-        id: slug
-        with:
-          to-slug: aap-soknad-${{ github.ref_name }}
       - name: Scale down labs-gcp
         uses: nais/deploy/actions/deploy@v1
         env:
           APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
           CLUSTER: labs-gcp
           RESOURCE: ".nais/historisk-labs.yaml"
-          VAR: image=${{ env.IMAGE }},appname=${{ steps.slug.outputs.slug }},replicas=0,branchState=deleted
+          VAR: image=${{ env.IMAGE }},appname=${{ github.event.ref }},replicas=0,branchState=deleted
