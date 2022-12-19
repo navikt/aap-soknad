@@ -15,4 +15,4 @@ jobs:
           APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
           CLUSTER: labs-gcp
           RESOURCE: ".nais/historisk-labs.yaml"
-          VAR: image=${{ env.IMAGE }},appname=${{ github.event.ref }},replicas=0,branchState=deleted
+          VAR: image=${{ env.IMAGE }},appname=aap-soknad-${{ github.event.ref }},replicas=0,branchState=deleted
