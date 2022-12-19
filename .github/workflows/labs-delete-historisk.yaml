@@ -1,0 +1,22 @@
+name: "Labs:  delete historisk snapshot"
+on: delete
+env:
+  "IMAGE": "ghcr.io/${{ github.repository }}-labs-historisk:${{ github.sha }}"
+jobs:
+  deploy-branch-to-labs-gcp:
+    if: startsWith(github.event.ref, 'labs')
+    name: Delete branch labs-gcp
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: gacts/github-slug@v1
+        id: slug
+        with:
+          to-slug: aap-soknad-${{ github.ref_name }}
+      - name: Scale down labs-gcp
+        uses: nais/deploy/actions/deploy@v1
+        env:
+          APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
+          CLUSTER: labs-gcp
+          RESOURCE: nais-labs-branch.yaml
+          VAR: image=${{ env.IMAGE }},appname=${{ steps.slug.outputs.slug }},replicas=0,branchState=deleted
