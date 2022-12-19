@@ -18,5 +18,5 @@ jobs:
         env:
           APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
           CLUSTER: labs-gcp
-          RESOURCE: nais-labs-branch.yaml
+          RESOURCE: ".nais/historisk-labs.yaml"
           VAR: image=${{ env.IMAGE }},appname=${{ steps.slug.outputs.slug }},replicas=0,branchState=deleted
