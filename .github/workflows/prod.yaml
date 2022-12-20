@@ -4,6 +4,8 @@ on:
   push:
     branches:
       - "main"
+    paths-ignore:
+      - '**.md'
 env:
   "IMAGE": "ghcr.io/${{ github.repository }}:${{ github.sha }}-prod"
   SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
