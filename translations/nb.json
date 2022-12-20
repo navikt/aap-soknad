@@ -634,7 +634,13 @@
     "kvittering": {
       "title": "Takk for søknaden, {navn}",
       "alert": {
-        "text": "Vi har nå mottatt søknaden din om AAP. Saken din ligger nå til behandling hos NAV."
+        "text": "Vi har nå mottatt søknaden din om AAP. Saken din er nå til behandling hos NAV."
+      },
+      "ingenManglendeVedlegg": "Vi vil ta kontakt med deg hvis vi trenger mer informasjon eller dokumentasjon fra deg.",
+      "manglendeVedlegg": {
+        "tekst1": "Vi mangler dokumentasjon fra deg for å kunne behandle søknaden. Ettersend dette til oss så raskt du kan.",
+        "tekst2": "Du kan også <a>ettersende per post (åpnes i ny fane)</a>, eller levere dokumentasjon på ditt lokale NAV-kontor.",
+        "ettersendelseLink": "Her kan du ettersende dokumentasjon digitalt (åpnes i ny fane)"
       },
       "saksbehandlingstid": "<a>Du kan se forventet saksbehandlingstid på nav.no/saksbehandlingstid.</a>",
       "bekreftelse": {
