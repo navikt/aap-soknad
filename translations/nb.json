@@ -53,7 +53,7 @@
         "bulletPontSkatt": "Inntektsinformasjon fra Skatteetaten.",
         "bulletpointHelse": "Helseinformasjon fra lege/behandler for å kartlegge arbeidsevnen din.",
         "bulletPointArbeid": "Opplysninger om arbeidsforholdet ditt fra Arbeidsgiver- og arbeidstakerregisteret.",
-        "bulletPointAndreOpplysninger": "opplysninger om deg vi har fra før.",
+        "bulletPointAndreOpplysninger": "Opplysninger om deg vi har fra før.",
         "folketrygdloven": "Dette gjør vi for å vurdere om du har rett til AAP etter folketrygdloven kapittel 11.",
         "bulletPointDeler": "Vi deler opplysninger om hva du får utbetalt i AAP med Skatteetaten og Statistisk sentralbyrå.",
         "bulletPointForbedre": "Vi kan bruke opplysninger om deg til å forbedre våre tjenester.",
@@ -634,7 +634,13 @@
     "kvittering": {
       "title": "Takk for søknaden, {navn}",
       "alert": {
-        "text": "Vi har nå mottatt søknaden din om AAP. Saken din ligger nå til behandling hos NAV."
+        "text": "Vi har nå mottatt søknaden din om AAP. Saken din er nå til behandling hos NAV."
+      },
+      "ingenManglendeVedlegg": "Vi vil ta kontakt med deg hvis vi trenger mer informasjon eller dokumentasjon fra deg.",
+      "manglendeVedlegg": {
+        "tekst1": "Vi mangler dokumentasjon fra deg for å kunne behandle søknaden. Ettersend dette til oss så raskt du kan.",
+        "tekst2": "Du kan også <a>ettersende per post (åpnes i ny fane)</a>, eller levere dokumentasjon på ditt lokale NAV-kontor.",
+        "ettersendelseLink": "Her kan du ettersende dokumentasjon digitalt (åpnes i ny fane)"
       },
       "saksbehandlingstid": "<a>Du kan se forventet saksbehandlingstid på nav.no/saksbehandlingstid.</a>",
       "bekreftelse": {

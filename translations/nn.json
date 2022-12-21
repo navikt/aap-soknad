@@ -636,6 +636,12 @@
       "alert": {
         "text": "Vi har nå fått søknaden din om AAP. Saka din ligg inne til behandling hos NAV."
       },
+      "ingenManglendeVedlegg": "Me vil ta kontakt med deg viss me treng meir informasjon eller dokumentasjon frå deg.",
+      "manglendeVedlegg": {
+        "tekst1": "Me manglar dokumentasjon frå deg for å kunna behandla søknaden. Ettersend dette til oss så raskt du kan.",
+        "tekst2": "Du kan også <a>ettersenda per post (blir opna i ny fane)</a>, eller levera dokumentasjon på det lokale Nav-kontoret ditt.",
+        "ettersendelseLink": "Her kan du ettersenda dokumentasjon digitalt (blir opna i ny fane)"
+      },
       "saksbehandlingstid": "<a>Du kan sjekke forventa saksbehandlingstid på nav.no/saksbehandlingstid.</a>",
       "bekreftelse": {
         "title": "Vi sender deg i tillegg ei stadfesting på",

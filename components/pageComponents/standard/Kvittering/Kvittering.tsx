@@ -48,23 +48,29 @@ const Kvittering = ({ søker, kontaktinformasjon, søknad }: StudentProps) => {
         {formatMessage('søknad.kvittering.title', { navn: søker?.fulltNavn })}
       </Heading>
       <Alert variant={'success'}>
-        <BodyLong>{formatMessage('søknad.kvittering.alert.text')}</BodyLong>
+        <BodyLong>
+          {formatMessage('søknad.kvittering.alert.text')}
+          {(søknad?.manglendeVedlegg?.length ?? 0) === 0 && (
+            <> {formatMessage('søknad.kvittering.ingenManglendeVedlegg')}</>
+          )}
+        </BodyLong>
       </Alert>
       {(søknad?.manglendeVedlegg?.length ?? 0) > 0 && (
         <Alert variant="warning">
           <BodyShort spacing>
-            Vi mangler dokumentasjon fra deg for å kunne behandle søknaden.{' '}
-            <Link href={`${mineAapUrl}/${søknad?.søknadId}/ettersendelse/`}>
-              Her kan du ettersende dokumentasjon digitalt
+            {formatMessage('søknad.kvittering.manglendeVedlegg.tekst1')}
+            <Link target="_blank" href={`${mineAapUrl}/${søknad?.søknadId}/ettersendelse/`}>
+              {formatMessage('søknad.kvittering.manglendeVedlegg.ettersendelseLink')}
             </Link>
-            . Ettersend dette til oss så raskt du kan.
           </BodyShort>
           <BodyShort spacing>
-            Du kan også{' '}
-            <Link target={'_blank'} href={formatMessage('applinks.ettersending')}>
-              ettersende per post (åpnes i ny fane)
-            </Link>
-            , eller levere dokumetasjon på ditt lokale NAV-kontor.
+            {formatElement('søknad.kvittering.manglendeVedlegg.tekst2', {
+              a: (chunks: string[]) => (
+                <Link target="_blank" href={formatMessage('applinks.ettersending')}>
+                  {chunks}
+                </Link>
+              ),
+            })}
           </BodyShort>
         </Alert>
       )}
