@@ -103,6 +103,7 @@ export type Vedlegg = {
 
 export interface Soknad {
   [SYKEPENGER]: JaEllerNei;
+  ferie?: Ferie;
   yrkesskade?: Yrkesskade;
   medlemskap?: Medlemskap;
   registrerteBehandlere?: RegistrertBehandler[];
@@ -112,7 +113,6 @@ export interface Soknad {
   [BARN]?: Barn[];
   manuelleBarn?: ManuelleBarn[];
   tilleggsopplysninger?: string;
-  ferie?: Ferie;
   vedlegg?: {
     [AttachmentType.LØNN_OG_ANDRE_GODER]: Vedlegg[];
     [AttachmentType.OMSORGSSTØNAD]: Vedlegg[];
