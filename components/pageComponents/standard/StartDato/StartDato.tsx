@@ -139,27 +139,6 @@ const StartDato = ({ onBackClick, onNext, defaultValues }: Props) => {
     [formatMessage]
   );
 
-  // useEffect(() => {
-  //   if (erPåSykepenger !== JaEllerNei.JA) {
-  //     setValue(`${FERIE}.${SKALHAFERIE}`, '');
-  //   }
-  //   clearErrors();
-  // }, [erPåSykepenger]);
-  // useEffect(() => {
-  //   if (skalHaFerie !== JaEllerNei.JA) {
-  //     setValue(`${FERIE}.${FERIETYPE}`, undefined);
-  //   }
-  //   clearErrors();
-  // }, [skalHaFerie]);
-  //
-  // useEffect(() => {
-  //   if (ferieType !== søknadState?.søknad?.ferie?.ferieType) {
-  //     setValue(`${FERIE}.fraDato`, undefined);
-  //     setValue(`${FERIE}.tilDato`, undefined);
-  //     setValue(`${FERIE}.antallDager`, '');
-  //   }
-  //   clearErrors();
-  // }, [ferieType, søknadState]);
   console.log(watch());
 
   return (
