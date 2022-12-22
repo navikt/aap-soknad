@@ -167,7 +167,6 @@ const StartDato = ({ onBackClick, onNext, defaultValues }: Props) => {
         description={formatMessage('søknad.startDato.sykepenger.description')}
         name={`${SYKEPENGER}`}
         control={control}
-        error={errors?.[SYKEPENGER]?.message}
       >
         <Radio value={JaEllerNei.JA}>{JaEllerNei.JA}</Radio>
         <Radio value={JaEllerNei.NEI}>{JaEllerNei.NEI}</Radio>
@@ -179,7 +178,6 @@ const StartDato = ({ onBackClick, onNext, defaultValues }: Props) => {
             description={formatMessage('søknad.startDato.skalHaFerie.description')}
             name={`${FERIE}.${SKALHAFERIE}`}
             control={control}
-            error={errors?.[FERIE]?.[SKALHAFERIE]?.message}
           >
             <Radio value={JaEllerNei.JA}>{JaEllerNei.JA}</Radio>
             <Radio value={JaEllerNei.NEI}>{JaEllerNei.NEI}</Radio>
@@ -189,7 +187,6 @@ const StartDato = ({ onBackClick, onNext, defaultValues }: Props) => {
               legend={formatMessage('søknad.startDato.ferieType.label')}
               name={`${FERIE}.${FERIETYPE}`}
               control={control}
-              error={errors?.[`${FERIE}`]?.ferieType?.message}
             >
               <Radio value={FerieType.PERIODE}>
                 <BodyShort>{FerieTypeTekster.PERIODE}</BodyShort>

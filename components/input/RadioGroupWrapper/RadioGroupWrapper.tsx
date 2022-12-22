@@ -8,7 +8,6 @@ export interface RadioProps<FormFieldValues extends FieldValues> {
   legend?: string;
   control: Control<FormFieldValues>;
   description?: string;
-  error?: string;
   children?: ReactNode;
 }
 const RadioGroupWrapper = <FormFieldValues extends FieldValues>({
@@ -17,19 +16,18 @@ const RadioGroupWrapper = <FormFieldValues extends FieldValues>({
   legend,
   description,
   control,
-  error,
 }: RadioProps<FormFieldValues>) => (
   <Controller
     name={name}
     control={control}
-    render={({ field: { value, onChange } }) => (
+    render={({ field: { value, onChange }, fieldState: { error } }) => (
       <RadioGroup
         id={name}
         value={value || ''}
         name={name}
         legend={legend}
         description={description}
-        error={error}
+        error={error?.message}
         onChange={onChange}
         className={classes?.fieldsetFocus}
         tabIndex={-1}

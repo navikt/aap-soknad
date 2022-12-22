@@ -21,6 +21,11 @@ interface Props {
   onNext: (data: any) => void;
   defaultValues?: GenericSoknadContextState<Soknad>;
 }
+
+interface FormFields {
+  yrkesskade: JaEllerNei;
+}
+
 const YRKESSKADE = 'yrkesskade';
 
 export const getYrkesskadeSchema = (formatMessage: (id: string) => string) =>
@@ -41,7 +46,7 @@ export const Yrkesskade = ({ onBackClick, onNext, defaultValues }: Props) => {
     control,
     handleSubmit,
     formState: { errors },
-  } = useForm<FieldValues>({
+  } = useForm<FormFields>({
     resolver: yupResolver(getYrkesskadeSchema(formatMessage)),
     defaultValues: {
       [YRKESSKADE]: defaultValues?.søknad?.yrkesskade,
@@ -81,7 +86,6 @@ export const Yrkesskade = ({ onBackClick, onNext, defaultValues }: Props) => {
         name={`${YRKESSKADE}`}
         legend={formatMessage(`søknad.yrkesskade.harDuYrkesskade.label`)}
         control={control}
-        error={errors?.[YRKESSKADE]?.message}
       >
         <ReadMore
           header={formatMessage('søknad.yrkesskade.harDuYrkesskade.readMore.title')}

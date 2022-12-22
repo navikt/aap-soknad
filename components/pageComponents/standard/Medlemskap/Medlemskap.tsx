@@ -250,7 +250,6 @@ export const Medlemskap = ({ onBackClick, onNext, defaultValues }: Props) => {
           name={`${MEDLEMSKAP}.${BODD_I_NORGE}`}
           legend={formatMessage('søknad.medlemskap.harBoddINorgeSiste5År.label')}
           control={control}
-          error={errors?.[MEDLEMSKAP]?.[BODD_I_NORGE]?.message}
         >
           <ReadMore
             header={formatMessage('søknad.medlemskap.harBoddINorgeSiste5År.readMore.title')}
@@ -271,7 +270,6 @@ export const Medlemskap = ({ onBackClick, onNext, defaultValues }: Props) => {
               name={`${MEDLEMSKAP}.${ARBEID_I_NORGE}`}
               legend={formatMessage('søknad.medlemskap.harArbeidetINorgeSiste5År.label')}
               control={control}
-              error={errors?.[MEDLEMSKAP]?.[ARBEID_I_NORGE]?.message}
             >
               <ReadMore
                 header={formatMessage('søknad.medlemskap.harArbeidetINorgeSiste5År.readMore.title')}
@@ -295,7 +293,6 @@ export const Medlemskap = ({ onBackClick, onNext, defaultValues }: Props) => {
               name={`${MEDLEMSKAP}.${ARBEID_UTENFOR_NORGE_FØR_SYKDOM}`}
               legend={formatMessage('søknad.medlemskap.arbeidUtenforNorge.label')}
               control={control}
-              error={errors?.[MEDLEMSKAP]?.[ARBEID_UTENFOR_NORGE_FØR_SYKDOM]?.message}
             >
               <ReadMore
                 header={formatMessage('søknad.medlemskap.arbeidUtenforNorge.readMore.title')}
@@ -321,7 +318,6 @@ export const Medlemskap = ({ onBackClick, onNext, defaultValues }: Props) => {
                 'søknad.medlemskap.iTilleggArbeidUtenforNorge.description'
               )}
               control={control}
-              error={errors?.[MEDLEMSKAP]?.[OGSÅ_ARBEID_UTENFOR_NORGE]?.message}
             >
               <ReadMore
                 header={formatMessage(
