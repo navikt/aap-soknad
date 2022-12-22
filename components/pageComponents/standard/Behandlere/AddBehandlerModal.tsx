@@ -1,10 +1,10 @@
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useForm, FieldValues } from 'react-hook-form';
+import { FieldValues, useForm } from 'react-hook-form';
 import { Soknad } from 'types/Soknad';
 import * as yup from 'yup';
 import * as classes from './AddBehandlerModal.module.css';
 import { useEffect } from 'react';
-import { Button, Cell, Grid, Heading, Modal } from '@navikt/ds-react';
+import { Button, Heading, Modal } from '@navikt/ds-react';
 import TextFieldWrapper from 'components/input/TextFieldWrapper';
 import { ModalButtonWrapper } from 'components/ButtonWrapper/ModalButtonWrapper';
 import { useFeatureToggleIntl } from 'hooks/useFeatureToggleIntl';
@@ -15,6 +15,16 @@ interface Props {
   onSaveClick: (data: any) => void;
   showModal: boolean;
   behandler?: any;
+}
+
+interface FormFields {
+  firstname: string;
+  lastname: string;
+  legekontor: string;
+  gateadresse: string;
+  postnummer: string;
+  poststed: string;
+  telefon: string;
 }
 
 export const AddBehandlerModal = ({ showModal, onCloseClick, onSaveClick, behandler }: Props) => {
@@ -34,7 +44,7 @@ export const AddBehandlerModal = ({ showModal, onCloseClick, onSaveClick, behand
     formState: { errors },
     handleSubmit,
     reset,
-  } = useForm<FieldValues>({
+  } = useForm<FormFields>({
     resolver: yupResolver(schema),
     defaultValues: {
       ...(behandler ? behandler : {}),
@@ -45,15 +55,11 @@ export const AddBehandlerModal = ({ showModal, onCloseClick, onSaveClick, behand
     reset({ ...behandler });
   }, [behandler, reset]);
 
-  const clearModal = () => {
-    reset({});
-  };
-
   return (
     <Modal
       open={showModal}
       onClose={() => {
-        clearModal();
+        reset();
         onCloseClick();
       }}
     >
@@ -65,7 +71,7 @@ export const AddBehandlerModal = ({ showModal, onCloseClick, onSaveClick, behand
           onSubmit={handleSubmit((data) => {
             const newData = { ...data };
             onSaveClick(newData);
-            clearModal();
+            reset();
             onCloseClick();
           })}
           className={classes?.modalForm}
@@ -74,25 +80,21 @@ export const AddBehandlerModal = ({ showModal, onCloseClick, onSaveClick, behand
             control={control}
             label={formatMessage('søknad.helseopplysninger.modal.fornavn.label')}
             name={'firstname'}
-            error={errors?.firstname?.message}
           />
           <TextFieldWrapper
             control={control}
             label={formatMessage('søknad.helseopplysninger.modal.etternavn.label')}
             name={'lastname'}
-            error={errors?.lastname?.message}
           />
           <TextFieldWrapper
             control={control}
             label={formatMessage('søknad.helseopplysninger.modal.legekontor.label')}
             name={'legekontor'}
-            error={errors?.legekontor?.message}
           />
           <TextFieldWrapper
             control={control}
             label={formatMessage('søknad.helseopplysninger.modal.gateadresse.label')}
             name={'gateadresse'}
-            error={errors?.gateadresse?.message}
           />
           <div className={classes?.addresseFlexContainer}>
             <TextFieldWrapper
@@ -100,28 +102,25 @@ export const AddBehandlerModal = ({ showModal, onCloseClick, onSaveClick, behand
               control={control}
               label={formatMessage('søknad.helseopplysninger.modal.postnummer.label')}
               name={'postnummer'}
-              error={errors?.postnummer?.message}
             />
             <TextFieldWrapper
               className={classes?.addresseFlexItem}
               control={control}
               label={formatMessage('søknad.helseopplysninger.modal.poststed.label')}
               name={'poststed'}
-              error={errors?.poststed?.message}
             />
           </div>
           <TextFieldWrapper
             control={control}
             label={formatMessage('søknad.helseopplysninger.modal.telefonnummer.label')}
             name={'telefon'}
-            error={errors?.telefon?.message}
           />
           <ModalButtonWrapper>
             <Button
               type="button"
               variant={'secondary'}
               onClick={() => {
-                clearModal();
+                reset();
                 onCloseClick();
               }}
             >

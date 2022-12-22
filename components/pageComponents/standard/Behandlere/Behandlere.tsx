@@ -1,8 +1,8 @@
-import { Alert, Label, BodyLong, BodyShort, Button, Heading, Radio } from '@navikt/ds-react';
+import { Alert, BodyLong, BodyShort, Button, Heading, Label, Radio } from '@navikt/ds-react';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useFieldArray, useForm, useWatch } from 'react-hook-form';
 import { Add, Delete } from '@navikt/ds-icons';
-import { Soknad, Behandler, RegistrertBehandler } from 'types/Soknad';
+import { Behandler, RegistrertBehandler, Soknad } from 'types/Soknad';
 import * as yup from 'yup';
 import { useStepWizard } from 'context/stepWizardContextV2';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -17,7 +17,7 @@ import { useDebounceLagreSoknad } from 'hooks/useDebounceLagreSoknad';
 import { GenericSoknadContextState } from 'types/SoknadContext';
 import RadioGroupWrapper from 'components/input/RadioGroupWrapper/RadioGroupWrapper';
 import { JaEllerNei } from 'types/Generic';
-import { formatNavn, formatFullAdresse, formatTelefonnummer } from 'utils/StringFormatters';
+import { formatFullAdresse, formatNavn, formatTelefonnummer } from 'utils/StringFormatters';
 
 interface Props {
   onBackClick: () => void;
@@ -40,6 +40,12 @@ export const getBehandlerSchema = (formatMessage: (id: string) => string) =>
       })
     ),
   });
+
+interface FormFields {
+  registrerteBehandlere: Array<RegistrertBehandler>;
+  andreBehandlere: Array<Behandler>;
+}
+
 export const Behandlere = ({ onBackClick, onNext, defaultValues }: Props) => {
   const { formatMessage } = useFeatureToggleIntl();
 
@@ -49,10 +55,7 @@ export const Behandlere = ({ onBackClick, onNext, defaultValues }: Props) => {
     control,
     handleSubmit,
     formState: { errors },
-  } = useForm<{
-    [REGISTRERTE_BEHANDLERE]: Array<RegistrertBehandler>;
-    [ANDRE_BEHANDLERE]: Array<Behandler>;
-  }>({
+  } = useForm<FormFields>({
     resolver: yupResolver(getBehandlerSchema(formatMessage)),
     defaultValues: {
       [REGISTRERTE_BEHANDLERE]: defaultValues?.søknad?.registrerteBehandlere,
@@ -181,7 +184,6 @@ export const Behandlere = ({ onBackClick, onNext, defaultValues }: Props) => {
                 name={`${REGISTRERTE_BEHANDLERE}.${index}.${RIKTIG_FASTLEGE}`}
                 legend={formatMessage(`søknad.helseopplysninger.erRegistrertFastlegeRiktig.label`)}
                 control={control}
-                error={errors?.[REGISTRERTE_BEHANDLERE]?.[index]?.[RIKTIG_FASTLEGE]?.message}
               >
                 <Radio value={JaEllerNei.JA}>
                   <BodyShort>{JaEllerNei.JA}</BodyShort>

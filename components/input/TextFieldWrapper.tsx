@@ -6,7 +6,6 @@ export interface TextFieldProps<FormFieldValues extends FieldValues> {
   name: FieldPath<FormFieldValues>;
   label: string;
   description?: string;
-  error?: string;
   className?: string;
   control: Control<FormFieldValues>;
 }
@@ -16,20 +15,19 @@ const TextFieldWrapper = <FormFieldIds extends FieldValues>({
   label,
   description,
   control,
-  error,
   className,
 }: TextFieldProps<FormFieldIds>) => (
   <div className={className}>
     <Controller
       name={name}
       control={control}
-      render={({ field: { name, value, onChange } }) => (
+      render={({ field: { name, value, onChange }, fieldState: { error } }) => (
         <TextField
           id={name}
           name={name}
           label={label}
           description={description}
-          error={error}
+          error={error?.message}
           value={value || ''}
           onChange={onChange}
           //style={{ maxWidth: '255px' }}
