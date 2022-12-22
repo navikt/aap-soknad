@@ -264,7 +264,6 @@ export const AndreUtbetalinger = ({ onBackClick, onNext, defaultValues }: Props)
         control={control}
         size="medium"
         legend={formatMessage('søknad.andreUtbetalinger.stønad.label')}
-        error={errors?.[ANDRE_UTBETALINGER]?.[STØNAD]?.message}
       >
         <Checkbox value={StønadType.VERV}>{StønadAlternativer.VERV}</Checkbox>
         <Checkbox value={StønadType.ØKONOMISK_SOSIALHJELP}>
@@ -287,7 +286,6 @@ export const AndreUtbetalinger = ({ onBackClick, onNext, defaultValues }: Props)
                   name={`${ANDRE_UTBETALINGER}.${AFP}.${HVEMBETALER}`}
                   label={formatMessage('søknad.andreUtbetalinger.hvemBetalerAfp.label')}
                   control={control}
-                  error={errors?.[ANDRE_UTBETALINGER]?.[AFP]?.message}
                 />
               </Cell>
             </Grid>
