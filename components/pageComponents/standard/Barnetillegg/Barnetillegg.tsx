@@ -52,7 +52,9 @@ export const getUniqueIshIdForBarn = (barn: ManuelleBarn) => {
   }`;
 };
 
-export const getBarnetillegSchema = (formatMessage: (id: string, options: unknown) => string) =>
+export const getBarnetillegSchema = (
+  formatMessage: (id: string, values?: Record<string, string | undefined>) => string
+) =>
   yup.object().shape({
     [BARN]: yup.array().of(
       yup.object().shape({
@@ -70,6 +72,11 @@ export const getBarnetillegSchema = (formatMessage: (id: string, options: unknow
     ),
   });
 
+interface FormFields {
+  barn: Array<Barn>;
+  manuelleBarn: Array<ManuelleBarn>;
+}
+
 export const Barnetillegg = ({ onBackClick, onNext, defaultValues }: Props) => {
   const { formatMessage } = useFeatureToggleIntl();
 
@@ -79,11 +86,7 @@ export const Barnetillegg = ({ onBackClick, onNext, defaultValues }: Props) => {
     control,
     handleSubmit,
     formState: { errors },
-  } = useForm<{
-    [BARN]: Array<Barn>;
-    [MANUELLE_BARN]: Array<ManuelleBarn>;
-  }>({
-    //@ts-ignore
+  } = useForm<FormFields>({
     resolver: yupResolver(getBarnetillegSchema(formatMessage)),
     defaultValues: {
       [BARN]: defaultValues?.søknad?.[BARN],
@@ -232,7 +235,6 @@ export const Barnetillegg = ({ onBackClick, onNext, defaultValues }: Props) => {
                         )}
                         name={`${BARN}.${index}.harInntekt`}
                         control={control}
-                        error={errors?.[BARN]?.[index]?.harInntekt?.message}
                       >
                         <ReadMore
                           header={formatMessage(

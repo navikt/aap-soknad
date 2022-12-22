@@ -10,7 +10,7 @@ import {
 } from '@navikt/ds-react';
 import { JaEllerNei } from 'types/Generic';
 import React, { useEffect } from 'react';
-import { Soknad, ManuelleBarn } from 'types/Soknad';
+import { ManuelleBarn, Soknad } from 'types/Soknad';
 import TextFieldWrapper from 'components/input/TextFieldWrapper';
 import RadioGroupWrapper from 'components/input/RadioGroupWrapper/RadioGroupWrapper';
 import { FieldValues, useForm } from 'react-hook-form';
@@ -20,9 +20,9 @@ import * as classes from './Barnetillegg.module.css';
 import { ModalButtonWrapper } from 'components/ButtonWrapper/ModalButtonWrapper';
 import { useFeatureToggleIntl } from 'hooks/useFeatureToggleIntl';
 import { GRUNNBELØP } from './Barnetillegg';
-import DatePickerWrapper from 'components/input/DatePickerWrapper/DatePickerWrapper';
 import { add, sub, subYears } from 'date-fns';
 import { formatDate } from 'utils/date';
+import { DatePickerWrapper } from '../../../input/DatePickerWrapper/DatePickerWrapper';
 
 interface Props {
   søknad?: Soknad;
@@ -43,18 +43,16 @@ const ALDER_BARN_ÅR = 18;
 
 export const getAddBarnSchema = (formatMessage: (id: string, options?: {}) => string) => {
   return yup.object().shape({
-    [NAVN]: yup.object().shape({
-      fornavn: yup
-        .string()
-        .required(
-          formatMessage('søknad.barnetillegg.leggTilBarn.modal.navn.fornavn.validation.required')
-        ),
-      etternavn: yup
-        .string()
-        .required(
-          formatMessage('søknad.barnetillegg.leggTilBarn.modal.navn.etternavn.validation.required')
-        ),
-    }),
+    fornavn: yup
+      .string()
+      .required(
+        formatMessage('søknad.barnetillegg.leggTilBarn.modal.navn.fornavn.validation.required')
+      ),
+    etternavn: yup
+      .string()
+      .required(
+        formatMessage('søknad.barnetillegg.leggTilBarn.modal.navn.etternavn.validation.required')
+      ),
     fødseldato: yup
       .date()
       .required(
@@ -140,32 +138,28 @@ export const AddBarnModal = ({ showModal, onCloseClick, onSaveClick, barn }: Pro
           <TextFieldWrapper
             control={control}
             label={formatMessage('søknad.barnetillegg.leggTilBarn.modal.navn.fornavn.label')}
-            name={'navn.fornavn'}
-            error={errors?.[NAVN]?.fornavn?.message}
+            name={'fornavn'}
           />
 
           <TextFieldWrapper
             control={control}
             label={formatMessage('søknad.barnetillegg.leggTilBarn.modal.navn.etternavn.label')}
-            name={'navn.etternavn'}
-            error={errors?.[NAVN]?.etternavn?.message}
+            name={'etternavn'}
           />
 
           <DatePickerWrapper
-            setValue={setValue}
+            control={control}
             label={formatMessage('søknad.barnetillegg.leggTilBarn.modal.fødselsdato.label')}
             selectedDate={barn?.fødseldato}
             name="fødseldato"
             fromDate={subYears(new Date(), ALDER_BARN_ÅR)}
             toDate={new Date()}
-            error={errors?.fødseldato?.message}
           />
 
           <RadioGroupWrapper
             control={control}
             legend={formatMessage('søknad.barnetillegg.leggTilBarn.modal.relasjon.label')}
             name={'relasjon'}
-            error={errors?.relasjon?.message}
           >
             <Radio value={Relasjon.FORELDER}>
               <BodyShort>{formatMessage(`answerOptions.relasjon.${Relasjon.FORELDER}`)}</BodyShort>
@@ -182,7 +176,6 @@ export const AddBarnModal = ({ showModal, onCloseClick, onSaveClick, barn }: Pro
               grunnbeløp: GRUNNBELØP,
             })}
             name={'harInntekt'}
-            error={errors?.harInntekt?.message}
           >
             <ReadMore
               header={formatMessage(
