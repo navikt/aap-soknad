@@ -1,5 +1,5 @@
-import { BodyShort, Radio, Button, Table, Heading, ReadMore, Cell, Grid } from '@navikt/ds-react';
-import React, { useState, useEffect, useMemo, useRef } from 'react';
+import { BodyShort, Button, Cell, Grid, Heading, Radio, ReadMore, Table } from '@navikt/ds-react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useFieldArray, useForm, useWatch } from 'react-hook-form';
 import { JaEllerNei, JaNeiVetIkke } from 'types/Generic';
 import { Add, Delete } from '@navikt/ds-icons';
@@ -8,7 +8,7 @@ import UtenlandsPeriodeVelger, {
 } from '..//UtenlandsPeriodeVelger/UtenlandsPeriodeVelger';
 import { formatDate } from 'utils/date';
 import RadioGroupWrapper from 'components/input/RadioGroupWrapper/RadioGroupWrapper';
-import { Soknad, Medlemskap as MedlemskapType } from 'types/Soknad';
+import { Medlemskap as MedlemskapType, Soknad } from 'types/Soknad';
 import { useStepWizard } from 'context/stepWizardContextV2';
 import SoknadFormWrapper from 'components/SoknadFormWrapper/SoknadFormWrapper';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -21,12 +21,7 @@ import { slettLagretSoknadState, updateSøknadData } from 'context/soknadContext
 import { useDebounceLagreSoknad } from 'hooks/useDebounceLagreSoknad';
 import * as styles from './Medlemskap.module.css';
 import { GenericSoknadContextState } from 'types/SoknadContext';
-import {
-  shouldShowArbeidetSammenhengendeINorgeSiste5År,
-  shouldShowArbeidetUtenforNorgeSiste5År,
-  shouldShowITilleggArbeidetUtenforNorgeSiste5År,
-  shouldShowPeriodevelger,
-} from './medlemskapUtils';
+import { shouldShowPeriodevelger } from './medlemskapUtils';
 import { setFocusOnErrorSummary } from 'components/schema/FormErrorSummary';
 
 interface Props {
@@ -157,6 +152,7 @@ export const Medlemskap = ({ onBackClick, onNext, defaultValues }: Props) => {
     defaultValues: {
       [MEDLEMSKAP]: defaultValues?.søknad?.medlemskap,
     },
+    shouldUnregister: true,
   });
   const [showUtenlandsPeriodeModal, setShowUtenlandsPeriodeModal] = useState<boolean>(false);
   const [selectedUtenlandsPeriodeIndex, setSelectedUtenlandsPeriodeIndex] = useState<
@@ -209,20 +205,10 @@ export const Medlemskap = ({ onBackClick, onNext, defaultValues }: Props) => {
   );
 
   useEffect(() => {
-    if (shouldShowArbeidetUtenforNorgeSiste5År(boddINorge)) {
-      setValue(`${MEDLEMSKAP}.${ARBEID_I_NORGE}`, '');
-    }
-    if (shouldShowArbeidetSammenhengendeINorgeSiste5År(boddINorge)) {
-      setValue(`${MEDLEMSKAP}.${ARBEID_UTENFOR_NORGE_FØR_SYKDOM}`, '');
-    }
-    if (!shouldShowITilleggArbeidetUtenforNorgeSiste5År(arbeidINorge)) {
-      setValue(`${MEDLEMSKAP}.${OGSÅ_ARBEID_UTENFOR_NORGE}`, '');
-    }
     if (!shouldShowPeriodevelger(arbeidUtenforNorge, arbeidINorge, iTilleggArbeidUtenforNorge)) {
       remove();
     }
-    clearErrors();
-  }, [boddINorge, arbeidINorge, arbeidUtenforNorge, iTilleggArbeidUtenforNorge]);
+  }, [arbeidINorge, arbeidUtenforNorge, iTilleggArbeidUtenforNorge]);
 
   const previousArbeidINorgeValue = useRef(defaultValues?.søknad?.medlemskap?.[ARBEID_I_NORGE]);
 
@@ -452,15 +438,10 @@ export const Medlemskap = ({ onBackClick, onNext, defaultValues }: Props) => {
               </Cell>
             </Grid>
 
-            {/* TODO: react-hook-form antar at vi kun har validering på hvert enkelt field i FieldArrays */}
-            {/* @ts-ignore-line */}
-            {errors?.[MEDLEMSKAP]?.[UTENLANDSOPPHOLD]?.message ? (
+            {errors?.[MEDLEMSKAP]?.[UTENLANDSOPPHOLD]?.message && (
               <div className={'navds-error-message navds-error-message--medium navds-label'}>
-                {/* @ts-ignore-line*/}
                 {errors?.[MEDLEMSKAP]?.[UTENLANDSOPPHOLD]?.message}
               </div>
-            ) : (
-              <></>
             )}
           </ColorPanel>
         )}

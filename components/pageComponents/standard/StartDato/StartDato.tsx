@@ -104,7 +104,6 @@ const StartDato = ({ onBackClick, onNext, defaultValues }: Props) => {
   const { søknadState, søknadDispatch } = useSoknadContextStandard();
   const { stepList } = useStepWizard();
   const {
-    watch,
     control,
     handleSubmit,
     setValue,
@@ -138,8 +137,6 @@ const StartDato = ({ onBackClick, onNext, defaultValues }: Props) => {
     }),
     [formatMessage]
   );
-
-  console.log(watch());
 
   return (
     <SoknadFormWrapper

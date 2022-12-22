@@ -1,31 +1,31 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 import { RadioGroup } from '@navikt/ds-react';
-import { Controller, FieldValues, UseControllerProps } from 'react-hook-form';
+import { Control, Controller, FieldPath, FieldValues } from 'react-hook-form';
 import * as classes from './RadioGroupWrapper.module.css';
 
-export interface RadioProps<T> extends UseControllerProps<T> {
+export interface RadioProps<FormFieldValues extends FieldValues> {
+  name: FieldPath<FormFieldValues>;
   legend?: string;
+  control: Control<FormFieldValues>;
   description?: string;
   error?: string;
-  children?: React.ReactChild | React.ReactChild[];
+  children?: ReactNode;
 }
-const RadioGroupWrapper = <T extends FieldValues>({
+const RadioGroupWrapper = <FormFieldValues extends FieldValues>({
   children,
   name,
   legend,
   description,
   control,
   error,
-}: RadioProps<T>) => (
+}: RadioProps<FormFieldValues>) => (
   <Controller
     name={name}
     control={control}
-    // @ts-ignore
-    defaultValue={null}
     render={({ field: { value, onChange } }) => (
       <RadioGroup
         id={name}
-        value={value}
+        value={value || ''}
         name={name}
         legend={legend}
         description={description}
