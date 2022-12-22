@@ -1,20 +1,18 @@
 import React, { useEffect, useMemo } from 'react';
-const { eeaMember } = require('is-european');
 import { FieldValues, useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as classes from './UtenlandsPeriode.module.css';
 import {
-  Label,
-  BodyShort,
   BodyLong,
+  BodyShort,
   Button,
-  Heading,
-  Ingress,
-  Modal,
-  Radio,
   Cell,
   Grid,
+  Heading,
+  Label,
+  Modal,
+  Radio,
 } from '@navikt/ds-react';
 import { JaEllerNei } from 'types/Generic';
 import RadioGroupWrapper from 'components/input/RadioGroupWrapper/RadioGroupWrapper';
@@ -23,9 +21,10 @@ import TextFieldWrapper from 'components/input/TextFieldWrapper';
 import { useFeatureToggleIntl } from 'hooks/useFeatureToggleIntl';
 import { ModalButtonWrapper } from 'components/ButtonWrapper/ModalButtonWrapper';
 import { UtenlandsPeriode } from 'types/Soknad';
-import { formatDate } from 'utils/date';
 import { MonthPickerWrapper } from 'components/input/MonthPickerWrapper/MonthPickerWrapper';
 import { subYears } from 'date-fns';
+
+const { eeaMember } = require('is-european');
 
 export enum ArbeidEllerBodd {
   ARBEID = 'ARBEID',
@@ -45,6 +44,15 @@ const initFieldVals: FieldValues = {
   tilDato: undefined,
   iArbeid: false,
 };
+
+interface FormFields {
+  land: string;
+  fraDato: Date;
+  tilDato: Date;
+  iArbeid: string;
+  utenlandsId: string;
+  arbeidEllerBodd: ArbeidEllerBodd;
+}
 const UtenlandsPeriodeVelger = ({
   utenlandsPeriode,
   onSave,
@@ -96,6 +104,15 @@ const UtenlandsPeriodeVelger = ({
     }),
   });
 
+  const defaultValues = {
+    ...(utenlandsPeriode
+      ? {
+          ...utenlandsPeriode,
+          arbeidEllerBodd: arbeidEllerBodd,
+        }
+      : { ...initFieldVals, arbeidEllerBodd: arbeidEllerBodd }),
+  };
+
   const {
     control,
     watch,
@@ -103,28 +120,11 @@ const UtenlandsPeriodeVelger = ({
     reset,
     handleSubmit,
     setValue,
-  } = useForm({
+  } = useForm<FormFields>({
     resolver: yupResolver(schema),
-    defaultValues: {
-      ...(utenlandsPeriode
-        ? {
-            ...utenlandsPeriode,
-            fraDato: formatDate(utenlandsPeriode.fraDato, 'yyyy-MM-dd'),
-            tilDato: formatDate(utenlandsPeriode.tilDato, 'yyyy-MM-dd'),
-            arbeidEllerBodd: arbeidEllerBodd,
-          }
-        : { ...initFieldVals, arbeidEllerBodd: arbeidEllerBodd }),
-    },
+    defaultValues: defaultValues,
+    shouldUnregister: true,
   });
-
-  useEffect(() => {
-    reset({
-      ...utenlandsPeriode,
-      fraDato: formatDate(utenlandsPeriode?.fraDato, 'yyyy-MM-dd'),
-      tilDato: formatDate(utenlandsPeriode?.tilDato, 'yyyy-MM-dd'),
-      arbeidEllerBodd: arbeidEllerBodd,
-    });
-  }, [utenlandsPeriode, arbeidEllerBodd, open, reset]);
 
   const antallÅrTilbake = arbeidEllerBodd === ArbeidEllerBodd.ARBEID ? 5 : 60;
 
@@ -139,16 +139,24 @@ const UtenlandsPeriodeVelger = ({
       eeaMember(landKode)
     );
   }, [valgtLand]);
-  const clearModal = () => {
-    setValue('land', '');
-    setValue('fraDato', undefined);
-    setValue('tilDato', undefined);
-    setValue('iArbeid', undefined);
-    setValue('utenlandsId', '');
-  };
+
+  useEffect(() => {
+    reset({
+      ...utenlandsPeriode,
+      fraDato: utenlandsPeriode?.fraDato,
+      tilDato: utenlandsPeriode?.tilDato,
+      arbeidEllerBodd: arbeidEllerBodd,
+    });
+  }, [utenlandsPeriode, arbeidEllerBodd, open, reset]);
 
   return (
-    <Modal open={open} onClose={onClose}>
+    <Modal
+      open={open}
+      onClose={() => {
+        reset();
+        onClose();
+      }}
+    >
       <Modal.Content className={classes.utenlandsPeriodeVelger}>
         <Heading size={'medium'} level={'2'} spacing>
           {formatMessage(`søknad.medlemskap.utenlandsperiode.modal.title.${arbeidEllerBodd}`)}
@@ -165,7 +173,7 @@ const UtenlandsPeriodeVelger = ({
           className={classes.modalForm}
           onSubmit={handleSubmit((data) => {
             onSave(data);
-            clearModal();
+            reset();
           })}
         >
           <CountrySelector
@@ -240,7 +248,7 @@ const UtenlandsPeriodeVelger = ({
               type="button"
               variant={'secondary'}
               onClick={() => {
-                clearModal();
+                reset();
                 onCancel();
               }}
             >
