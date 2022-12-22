@@ -32,6 +32,14 @@ enum JaNeiAvbrutt {
   NEI = 'Nei',
   AVBRUTT = 'Avbrutt',
 }
+
+interface FormFields {
+  student?: {
+    erStudent?: JaNeiAvbrutt;
+    kommeTilbake?: JaNeiVetIkke;
+  };
+}
+
 export const jaNeiAvbruttToTekstnøkkel = (jaNeiAvbrutt: JaNeiAvbrutt) => {
   switch (jaNeiAvbrutt) {
     case JaNeiAvbrutt.JA:
@@ -88,6 +96,7 @@ const Student = ({ onBackClick, onNext, defaultValues }: Props) => {
     defaultValues: {
       [STUDENT]: defaultValues?.søknad?.student,
     },
+    shouldUnregister: true,
   });
 
   const erStudent = useWatch({ control, name: `${STUDENT}.${ER_STUDENT}` });
@@ -105,13 +114,6 @@ const Student = ({ onBackClick, onNext, defaultValues }: Props) => {
     }),
     [formatMessage]
   );
-
-  useEffect(() => {
-    clearErrors();
-    if (erStudent !== JaNeiAvbrutt.AVBRUTT) {
-      setValue(`${STUDENT}.${KOMME_TILBAKE}`, undefined);
-    }
-  }, [erStudent]);
 
   useEffect(() => {
     if (kommeTilbake === JaNeiVetIkke.JA) {
@@ -157,7 +159,6 @@ const Student = ({ onBackClick, onNext, defaultValues }: Props) => {
         name={`${STUDENT}.${ER_STUDENT}`}
         legend={formatMessage(`søknad.${STUDENT}.${ER_STUDENT}.legend`)}
         control={control}
-        error={errors?.[STUDENT]?.[ER_STUDENT]?.message}
       >
         <Radio value={JaNeiAvbrutt.JA}>
           <BodyShort>{ErStudentAlternativer?.[JaNeiAvbrutt.JA]}</BodyShort>
@@ -175,7 +176,6 @@ const Student = ({ onBackClick, onNext, defaultValues }: Props) => {
             name={`${STUDENT}.${KOMME_TILBAKE}`}
             legend={formatMessage(`søknad.${STUDENT}.${KOMME_TILBAKE}.legend`)}
             control={control}
-            error={errors?.[STUDENT]?.[KOMME_TILBAKE]?.message}
           >
             <Radio value={JaNeiVetIkke.JA}>
               <BodyShort>{JaNeiVetIkke.JA}</BodyShort>
