@@ -1,10 +1,14 @@
 import {
+  AndreUtbetalingerFormFields,
   AttachmentType,
   StønadType,
 } from 'components/pageComponents/standard/AndreUtbetalinger/AndreUtbetalinger';
 import { Relasjon } from 'components/pageComponents/standard/Barnetillegg/AddBarnModal';
 import { JaEllerNei, JaNeiVetIkke } from './Generic';
-import { AVBRUTT_STUDIE_VEDLEGG } from 'components/pageComponents/standard/Student/Student';
+import {
+  AVBRUTT_STUDIE_VEDLEGG,
+  StudentFormFields,
+} from 'components/pageComponents/standard/Student/Student';
 import { OppslagBehandler } from 'context/sokerOppslagContext';
 import { BARN } from 'components/pageComponents/standard/Barnetillegg/Barnetillegg';
 import { FerieType, SYKEPENGER } from 'components/pageComponents/standard/StartDato/StartDato';
@@ -50,25 +54,6 @@ export type Behandler = {
 export interface RegistrertBehandler extends OppslagBehandler {
   erRegistrertFastlegeRiktig?: JaEllerNei;
 }
-type Student = {
-  erStudent?: JaEllerNei;
-  kommeTilbake?: JaNeiVetIkke;
-};
-type AndreUtbetalinger = {
-  lønn?: string;
-  stønad?: Array<StønadType>;
-  afp?: {
-    hvemBetaler?: string;
-  };
-  utbetaling?: {
-    utbetalingsType?: string;
-    ferie?: {
-      skalHaFerie?: string;
-      type?: string;
-      periode?: Periode;
-    };
-  };
-};
 export type Barn = {
   navn: Navn;
   fødseldato?: string;
@@ -108,8 +93,8 @@ export interface Soknad {
   medlemskap?: Medlemskap;
   registrerteBehandlere?: RegistrertBehandler[];
   andreBehandlere?: Behandler[];
-  student?: Student;
-  andreUtbetalinger?: AndreUtbetalinger;
+  student?: StudentFormFields;
+  andreUtbetalinger?: AndreUtbetalingerFormFields;
   [BARN]?: Barn[];
   manuelleBarn?: ManuelleBarn[];
   tilleggsopplysninger?: string;

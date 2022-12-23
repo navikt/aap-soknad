@@ -33,11 +33,9 @@ enum JaNeiAvbrutt {
   AVBRUTT = 'Avbrutt',
 }
 
-interface FormFields {
-  student?: {
-    erStudent?: JaNeiAvbrutt;
-    kommeTilbake?: JaNeiVetIkke;
-  };
+export interface StudentFormFields {
+  erStudent?: JaNeiAvbrutt;
+  kommeTilbake?: JaNeiVetIkke;
 }
 
 export const jaNeiAvbruttToTekstnøkkel = (jaNeiAvbrutt: JaNeiAvbrutt) => {
@@ -58,8 +56,8 @@ interface Props {
 
 export const getStudentSchema = (formatMessage: (id: string) => string) =>
   yup.object().shape({
-    [STUDENT]: yup.object().shape({
-      [ER_STUDENT]: yup
+    student: yup.object().shape({
+      erStudent: yup
         .string()
         .required(formatMessage('søknad.student.erStudent.required'))
         .oneOf(
@@ -67,7 +65,7 @@ export const getStudentSchema = (formatMessage: (id: string) => string) =>
           formatMessage('søknad.student.erStudent.required')
         )
         .typeError(formatMessage('søknad.student.erStudent.required')),
-      [KOMME_TILBAKE]: yup.string().when([ER_STUDENT], {
+      kommeTilbake: yup.string().when(['erStudent'], {
         is: JaNeiAvbrutt.AVBRUTT,
         then: yup
           .string()
@@ -88,10 +86,8 @@ const Student = ({ onBackClick, onNext, defaultValues }: Props) => {
   const {
     control,
     handleSubmit,
-    setValue,
-    clearErrors,
     formState: { errors },
-  } = useForm<FieldValues>({
+  } = useForm<{ [STUDENT]: StudentFormFields }>({
     resolver: yupResolver(getStudentSchema(formatMessage)),
     defaultValues: {
       [STUDENT]: defaultValues?.søknad?.student,
