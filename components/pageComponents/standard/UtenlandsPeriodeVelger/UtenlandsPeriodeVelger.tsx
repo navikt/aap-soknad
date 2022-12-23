@@ -183,7 +183,6 @@ const UtenlandsPeriodeVelger = ({
               `søknad.medlemskap.utenlandsperiode.modal.land.label.${arbeidEllerBodd}`
             )}
             control={control}
-            error={errors?.land?.message}
           />
           <div>
             <Label>
@@ -225,7 +224,6 @@ const UtenlandsPeriodeVelger = ({
               name={'iArbeid'}
               legend={formatMessage('søknad.medlemskap.utenlandsperiode.modal.iArbeid.label')}
               control={control}
-              error={errors?.iArbeid?.message}
             >
               <Radio value={JaEllerNei.JA}>
                 <BodyShort>Ja</BodyShort>

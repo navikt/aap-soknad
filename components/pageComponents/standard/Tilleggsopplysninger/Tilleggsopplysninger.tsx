@@ -68,7 +68,6 @@ const Tilleggsopplysninger = ({ onBackClick, onNext, defaultValues }: Props) => 
         label={formatMessage(`søknad.tilleggsopplysninger.tilleggsopplysninger.label`)}
         description={formatMessage(`søknad.tilleggsopplysninger.tilleggsopplysninger.description`)}
         control={control}
-        error={errors?.[TILLEGGSOPPLYSNINGER]?.message}
         maxLength={4000}
       />
     </SoknadFormWrapper>

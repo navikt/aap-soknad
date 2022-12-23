@@ -1,14 +1,4 @@
-import {
-  Alert,
-  BodyShort,
-  Button,
-  Cell,
-  Grid,
-  Heading,
-  Label,
-  Radio,
-  ReadMore,
-} from '@navikt/ds-react';
+import { Alert, BodyShort, Button, Heading, Label, Radio, ReadMore } from '@navikt/ds-react';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useFieldArray, useForm, useWatch } from 'react-hook-form';
 import RadioGroupWrapper from 'components/input/RadioGroupWrapper/RadioGroupWrapper';
