@@ -20,7 +20,9 @@ interface Props {
   onNext: (data: any) => void;
   defaultValues?: GenericSoknadContextState<Soknad>;
 }
-
+interface TilleggsopplysningerFormFields {
+  tilleggsopplysninger: string;
+}
 const Tilleggsopplysninger = ({ onBackClick, onNext, defaultValues }: Props) => {
   const { formatMessage } = useFeatureToggleIntl();
 
@@ -31,7 +33,7 @@ const Tilleggsopplysninger = ({ onBackClick, onNext, defaultValues }: Props) => 
     control,
     handleSubmit,
     formState: { errors },
-  } = useForm<FieldValues>({
+  } = useForm<TilleggsopplysningerFormFields>({
     resolver: yupResolver(schema),
     defaultValues: {
       [TILLEGGSOPPLYSNINGER]: defaultValues?.søknad?.tilleggsopplysninger,
