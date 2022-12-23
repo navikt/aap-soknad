@@ -1,26 +1,23 @@
-import { Controller } from 'react-hook-form';
+import { Control, Controller, FieldPath, FieldValues } from 'react-hook-form';
 import { ConfirmationPanel } from '@navikt/ds-react';
-import React from 'react';
+import React, { ReactNode } from 'react';
 
-export interface ConfirmationPanelProps {
-  name: string;
+export interface ConfirmationPanelProps<FormFieldValues extends FieldValues> {
+  name: FieldPath<FormFieldValues>;
   label: string;
-  control: any;
-  error?: string;
-  children?: React.ReactChild | React.ReactChild[];
+  control: Control<FormFieldValues>;
+  children?: ReactNode;
 }
-const ConfirmationPanelWrapper = ({
+const ConfirmationPanelWrapper = <FormFieldValues extends FieldValues>({
   children,
   label,
   control,
-  error,
   name,
-}: ConfirmationPanelProps) => (
+}: ConfirmationPanelProps<FormFieldValues>) => (
   <Controller
     name={name}
     control={control}
-    defaultValue={false}
-    render={({ field: { name, value, onChange } }) => (
+    render={({ field: { name, value, onChange }, fieldState: { error } }) => (
       <ConfirmationPanel
         id={name}
         name={name}

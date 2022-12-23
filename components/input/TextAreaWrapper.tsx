@@ -1,28 +1,26 @@
 import React from 'react';
 import { Textarea } from '@navikt/ds-react';
-import { Control, Controller, FieldValues } from 'react-hook-form';
+import { Control, Controller, FieldPath, FieldValues } from 'react-hook-form';
 
-export interface TextAreaProps {
-  name: string;
+export interface TextAreaProps<FormFieldValues extends FieldValues> {
+  name: FieldPath<FormFieldValues>;
   description?: string;
   label: string;
-  error?: string;
-  control: Control<FieldValues>;
+  control: Control<FormFieldValues>;
   maxLength?: number;
 }
 
-const TextAreaWrapper = ({
+const TextAreaWrapper = <FormFieldValues extends FieldValues>({
   name,
   description,
   label,
   control,
-  error,
   maxLength,
-}: TextAreaProps) => (
+}: TextAreaProps<FormFieldValues>) => (
   <Controller
     name={name}
     control={control}
-    render={({ field: { name, value, onChange } }) => (
+    render={({ field: { name, value, onChange }, fieldState: { error } }) => (
       <Textarea
         label={label}
         description={description}

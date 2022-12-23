@@ -11,14 +11,12 @@ countries.registerLocale(require('i18n-iso-countries/langs/nb.json'));
 interface Props<FormFieldValues extends FieldValues> {
   name: FieldPath<FormFieldValues>;
   label: string;
-  error?: string;
   className?: string;
   control: Control<FormFieldValues>;
 }
 const CountrySelector = <FormFieldValues extends FieldValues>({
   name,
   label,
-  error,
   className,
   control,
 }: Props<FormFieldValues>) => {
@@ -32,7 +30,7 @@ const CountrySelector = <FormFieldValues extends FieldValues>({
 
   return (
     <div className={className}>
-      <SelectWrapper name={name} label={label} control={control} error={error}>
+      <SelectWrapper name={name} label={label} control={control}>
         {[
           <option key="none" value="none">
             Velg land
