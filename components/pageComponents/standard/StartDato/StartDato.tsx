@@ -106,8 +106,6 @@ const StartDato = ({ onBackClick, onNext, defaultValues }: Props) => {
   const {
     control,
     handleSubmit,
-    setValue,
-    clearErrors,
     formState: { errors },
   } = useForm<StartDatoFormFields>({
     resolver: yupResolver(getStartDatoSchema(formatMessage)),
@@ -225,7 +223,6 @@ const StartDato = ({ onBackClick, onNext, defaultValues }: Props) => {
                 label={formatMessage('søknad.startDato.antallDager.label')}
                 description={formatMessage('søknad.startDato.antallDager.description')}
                 control={control}
-                error={errors?.[`${FERIE}`]?.antallDager?.message}
               />
             </div>
           )}

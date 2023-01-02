@@ -139,7 +139,6 @@ export const Veiledning = ({
             label={formatMessage('søknad.veiledning.veiledningConfirm.label')}
             control={control}
             name={VEILEDNING_CONFIRM}
-            error={errors?.[VEILEDNING_CONFIRM]?.message}
           >
             <Label as={'span'}>{formatMessage('søknad.veiledning.veiledningConfirm.title')}</Label>
           </ConfirmationPanelWrapper>
