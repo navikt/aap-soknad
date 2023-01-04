@@ -100,6 +100,7 @@ export const getAndreUtbetalingerSchema = (formatMessage: (id: string) => string
         .nullable(),
       stønad: yup
         .array()
+        .ensure()
         .min(1, formatMessage('søknad.andreUtbetalinger.stønad.validation.required')),
       afp: yup.object().when(['stønad'], {
         is: (stønad: StønadType[] | undefined) => stønad?.includes(StønadType.AFP),
@@ -119,6 +120,7 @@ export const AndreUtbetalinger = ({ onBackClick, onNext, defaultValues }: Props)
     control,
     handleSubmit,
     setValue,
+    watch,
     formState: { errors },
   } = useForm<{
     [ANDRE_UTBETALINGER]: AndreUtbetalingerFormFields;
@@ -129,6 +131,7 @@ export const AndreUtbetalinger = ({ onBackClick, onNext, defaultValues }: Props)
     },
   });
 
+  console.log('hehe', watch());
   const debouncedLagre = useDebounceLagreSoknad<Soknad>();
   const allFields = useWatch({ control });
   useEffect(() => {
