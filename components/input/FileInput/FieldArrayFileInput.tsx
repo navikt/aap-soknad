@@ -1,12 +1,4 @@
-import {
-  Control,
-  FieldArrayPath,
-  FieldErrors,
-  FieldValues,
-  useFieldArray,
-  UseFormClearErrors,
-  UseFormSetError,
-} from 'react-hook-form';
+import { Control, FieldError, FieldErrors, useFieldArray } from 'react-hook-form';
 import { useFeatureToggleIntl } from 'hooks/useFeatureToggleIntl';
 import React, { DragEventHandler, useEffect, useMemo, useRef, useState } from 'react';
 import * as classes from './FileInput.module.css';
@@ -15,23 +7,18 @@ import { Cancel, Delete, FileError, FileSuccess } from '@navikt/ds-icons';
 import { Upload as SvgUpload } from '@navikt/ds-icons';
 import { useSoknadContextStandard } from 'context/soknadContextStandard';
 import { updateRequiredVedlegg } from 'context/soknadContextCommon';
-import { SoknadVedlegg, Vedlegg } from 'types/Soknad';
-import { VedleggFormFields } from 'components/pageComponents/standard/Vedlegg/Vedlegg';
 
-export interface VedleggFormField {
-  vedlegg: SoknadVedlegg;
-}
 const MAX_TOTAL_FILE_SIZE = 52428800; // 50mb
-interface Props {
-  setError: UseFormSetError<VedleggFormFields>;
-  clearErrors: UseFormClearErrors<VedleggFormFields>;
-  name: FieldArrayPath<VedleggFormFields>;
+type Props = {
+  setError: (name: string, error: FieldError) => void;
+  clearErrors: (name?: string | string[]) => void;
+  name: string;
   type: string;
   heading: string;
   ingress?: string;
   errors?: FieldErrors;
-  control: Control<VedleggFormFields>;
-}
+  control: Control;
+};
 const FieldArrayFileInput = ({
   heading,
   ingress,
@@ -42,7 +29,7 @@ const FieldArrayFileInput = ({
   control,
   errors,
 }: Props) => {
-  const { append, remove, fields } = useFieldArray<VedleggFormField>({
+  const { append, remove, fields } = useFieldArray({
     name: name,
     control,
   });

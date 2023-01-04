@@ -1,5 +1,5 @@
-import { useForm, useWatch } from 'react-hook-form';
-import { ManuelleBarn, Soknad, SoknadVedlegg } from 'types/Soknad';
+import { FieldValues, useForm, useWatch } from 'react-hook-form';
+import { Soknad } from 'types/Soknad';
 import React, { useEffect, useRef, useState } from 'react';
 import { BodyShort, Heading, Label, ReadMore } from '@navikt/ds-react';
 import * as yup from 'yup';
@@ -12,6 +12,8 @@ import { useFeatureToggleIntl } from 'hooks/useFeatureToggleIntl';
 import { slettLagretSoknadState, updateSøknadData } from 'context/soknadContextCommon';
 import { deleteOpplastedeVedlegg, useSoknadContextStandard } from 'context/soknadContextStandard';
 import { useDebounceLagreSoknad } from 'hooks/useDebounceLagreSoknad';
+import { Relasjon } from '../Barnetillegg/AddBarnModal';
+import { MANUELLE_BARN } from '../Barnetillegg/Barnetillegg';
 import FieldArrayFileInput from 'components/input/FileInput/FieldArrayFileInput';
 import { GenericSoknadContextState } from 'types/SoknadContext';
 import { scrollRefIntoView } from 'utils/dom';
@@ -23,10 +25,14 @@ interface Props {
   onNext: (data: any) => void;
   defaultValues?: GenericSoknadContextState<Soknad>;
 }
-export interface VedleggFormFields {
-  vedlegg: SoknadVedlegg;
-  manuelleBarn: ManuelleBarn[];
-}
+const VEDLEGG = 'vedlegg';
+const VEDLEGG_LØNN = `${VEDLEGG}.${AttachmentType.LØNN_OG_ANDRE_GODER}`;
+const VEDLEGG_OMSORGSSTØNAD = `${VEDLEGG}.${AttachmentType.OMSORGSSTØNAD}`;
+const VEDLEGG_UTLANDSSTØNAD = `${VEDLEGG}.${AttachmentType.UTLANDSSTØNAD}`;
+const VEDLEGG_SYKESTIPEND = `${VEDLEGG}.${AttachmentType.SYKESTIPEND}`;
+const VEDLEGG_LÅN = `${VEDLEGG}.${AttachmentType.LÅN}`;
+const VEDLEGG_ANNET = `${VEDLEGG}.annet`;
+
 const Vedlegg = ({ onBackClick, onNext, defaultValues }: Props) => {
   const { formatMessage } = useFeatureToggleIntl();
   const [scanningGuideOpen, setScanningGuideOpen] = useState(false);
@@ -41,11 +47,11 @@ const Vedlegg = ({ onBackClick, onNext, defaultValues }: Props) => {
     control,
     handleSubmit,
     formState: { errors },
-  } = useForm<VedleggFormFields>({
+  } = useForm<FieldValues>({
     resolver: yupResolver(schema),
     defaultValues: {
-      vedlegg: defaultValues?.søknad?.vedlegg,
-      manuelleBarn: defaultValues?.søknad?.manuelleBarn,
+      [VEDLEGG]: defaultValues?.søknad?.vedlegg,
+      [MANUELLE_BARN]: defaultValues?.søknad?.manuelleBarn,
     },
   });
 
@@ -125,7 +131,7 @@ const Vedlegg = ({ onBackClick, onNext, defaultValues }: Props) => {
       {søknadState?.requiredVedlegg?.find((e) => e.type === AVBRUTT_STUDIE_VEDLEGG) && (
         <FieldArrayFileInput
           control={control}
-          name={'vedlegg.avbruttStudie'}
+          name={`${VEDLEGG}.${AVBRUTT_STUDIE_VEDLEGG}`}
           type={AttachmentType.AVBRUTT_STUDIE}
           errors={errors}
           setError={setError}
@@ -137,7 +143,7 @@ const Vedlegg = ({ onBackClick, onNext, defaultValues }: Props) => {
       {søknadState?.requiredVedlegg?.find((e) => e.type === AttachmentType.LØNN_OG_ANDRE_GODER) && (
         <FieldArrayFileInput
           control={control}
-          name={'vedlegg.LØNN_OG_ANDRE_GODER'}
+          name={VEDLEGG_LØNN}
           type={AttachmentType.LØNN_OG_ANDRE_GODER}
           errors={errors}
           setError={setError}
@@ -149,7 +155,7 @@ const Vedlegg = ({ onBackClick, onNext, defaultValues }: Props) => {
       {søknadState?.requiredVedlegg?.find((e) => e.type === AttachmentType.OMSORGSSTØNAD) && (
         <FieldArrayFileInput
           control={control}
-          name={'vedlegg.OMSORGSSTØNAD'}
+          name={VEDLEGG_OMSORGSSTØNAD}
           type={AttachmentType.OMSORGSSTØNAD}
           errors={errors}
           setError={setError}
@@ -161,7 +167,7 @@ const Vedlegg = ({ onBackClick, onNext, defaultValues }: Props) => {
       {søknadState?.requiredVedlegg?.find((e) => e.type === AttachmentType.UTLANDSSTØNAD) && (
         <FieldArrayFileInput
           control={control}
-          name={'vedlegg.UTLANDSSTØNAD'}
+          name={VEDLEGG_UTLANDSSTØNAD}
           type={AttachmentType.UTLANDSSTØNAD}
           errors={errors}
           setError={setError}
@@ -173,7 +179,7 @@ const Vedlegg = ({ onBackClick, onNext, defaultValues }: Props) => {
       {søknadState?.requiredVedlegg?.find((e) => e.type === AttachmentType.LÅN) && (
         <FieldArrayFileInput
           control={control}
-          name={'vedlegg.LÅN'}
+          name={VEDLEGG_LÅN}
           type={AttachmentType.LÅN}
           errors={errors}
           setError={setError}
@@ -185,7 +191,7 @@ const Vedlegg = ({ onBackClick, onNext, defaultValues }: Props) => {
       {søknadState?.requiredVedlegg?.find((e) => e.type === AttachmentType.SYKESTIPEND) && (
         <FieldArrayFileInput
           control={control}
-          name={'vedlegg.SYKESTIPEND'}
+          name={VEDLEGG_SYKESTIPEND}
           type={AttachmentType.SYKESTIPEND}
           errors={errors}
           setError={setError}
@@ -202,7 +208,7 @@ const Vedlegg = ({ onBackClick, onNext, defaultValues }: Props) => {
           <FieldArrayFileInput
             key={barn.internId}
             control={control}
-            name={`manuelleBarn.${index}.vedlegg`}
+            name={`${MANUELLE_BARN}.${index}.vedlegg`}
             type={`barn-${barn.internId}`}
             errors={errors}
             setError={setError}
@@ -218,7 +224,7 @@ const Vedlegg = ({ onBackClick, onNext, defaultValues }: Props) => {
         );
       })}
       <FieldArrayFileInput
-        name={'vedlegg.annet'}
+        name={VEDLEGG_ANNET}
         type={AttachmentType.ANNET}
         control={control}
         errors={errors}
