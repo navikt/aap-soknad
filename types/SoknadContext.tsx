@@ -18,4 +18,5 @@ export interface GenericSoknadContextState<SoknadStateType> {
   lagretStepList?: Array<StepType>;
   requiredVedlegg: RequiredVedlegg[];
   søknadUrl?: string;
+  sistLagret?: string;
 }

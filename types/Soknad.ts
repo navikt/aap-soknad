@@ -96,7 +96,7 @@ export type SoknadVedlegg = {
 };
 
 export interface Soknad {
-  [SYKEPENGER]: JaEllerNei;
+  [SYKEPENGER]?: JaEllerNei;
   ferie?: Ferie;
   yrkesskade?: Yrkesskade;
   medlemskap?: Medlemskap;
