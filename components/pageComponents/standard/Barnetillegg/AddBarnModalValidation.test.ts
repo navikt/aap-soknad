@@ -11,29 +11,25 @@ describe('AddBarnModal validation', () => {
 
   it('should validate barnetillegg correctly', async () => {
     const barn = {
-      navn: {
-        fornavn: 'Fornavn',
-        etternavn: 'Etternavn',
-      },
+      fornavn: 'Fornavn',
+      etternavn: 'Etternavn',
       fødseldato: sub(new Date(), { years: 1 }),
       relasjon: Relasjon.FORELDER,
       harInntekt: JaEllerNei.JA,
     };
-    const result = await schema.validate({ barn }, { abortEarly: false }).catch((err) => err);
+    const result = await schema.validate(barn, { abortEarly: false }).catch((err) => err);
     expect(result).toStrictEqual(barn);
   });
 
   it("should not be valid if 'fødselsdato' is in the future", async () => {
     const barn = {
-      navn: {
-        fornavn: 'Fornavn',
-        etternavn: 'Etternavn',
-      },
+      fornavn: 'Fornavn',
+      etternavn: 'Etternavn',
       fødseldato: add(new Date(), { years: 1 }),
       relasjon: Relasjon.FORELDER,
       harInntekt: JaEllerNei.JA,
     };
-    const result = await schema.validate({ barn }, { abortEarly: false }).catch((err) => err);
+    const result = await schema.validate(barn, { abortEarly: false }).catch((err) => err);
     expect(result.errors.length).toBe(1);
   });
 });
