@@ -1,6 +1,7 @@
 import { FormErrorSummary } from './FormErrorSummary';
 import { render, screen, within } from 'setupTests';
 import { axe, toHaveNoViolations } from 'jest-axe';
+import { FieldErrors } from 'react-hook-form';
 
 expect.extend(toHaveNoViolations);
 
@@ -22,7 +23,7 @@ describe('FormErrorSummary', () => {
   };
 
   it('skjuler ErrorSummary når vi ikke har feil', () => {
-    const { container } = render(<FormErrorSummary errors={[]} />);
+    const { container } = render(<FormErrorSummary errors={{}} />);
     console.log('container', container.innerHTML);
     expect(within(container).getByRole('alert', { hidden: true })).toHaveAttribute(
       'aria-hidden',

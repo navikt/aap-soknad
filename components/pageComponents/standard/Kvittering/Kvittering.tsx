@@ -1,5 +1,5 @@
 import { Alert, BodyLong, BodyShort, Button, Heading, Link } from '@navikt/ds-react';
-import React from 'react';
+import React, { ReactNode } from 'react';
 import * as classes from './Kvittering.module.css';
 import { SøkerView } from 'context/sokerOppslagContext';
 import { Download } from '@navikt/ds-icons';
@@ -8,7 +8,7 @@ import { useFeatureToggleIntl } from 'hooks/useFeatureToggleIntl';
 import { SøknadApiType } from 'pages/api/oppslag/soeknader';
 import { clientSideIsLabs, clientSideIsProd } from 'utils/environments';
 
-interface StudentProps {
+interface KvitteringProps {
   søker: SøkerView;
   kontaktinformasjon?: { epost?: string; mobil?: string };
   søknad?: SøknadApiType;
@@ -22,7 +22,7 @@ const getDownloadUrl = (journalpostId?: string) => {
   return journalpostId;
 };
 
-const Kvittering = ({ søker, kontaktinformasjon, søknad }: StudentProps) => {
+const Kvittering = ({ søker, kontaktinformasjon, søknad }: KvitteringProps) => {
   const { formatMessage, formatElement } = useFeatureToggleIntl();
 
   const mineAapUrl = clientSideIsLabs()

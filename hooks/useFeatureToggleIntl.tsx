@@ -14,6 +14,6 @@ export const useFeatureToggleIntl = () => {
           string | number | boolean | {} | Date | React.ReactElement<any, any> | undefined
         >
       | undefined
-  ) => intl.formatMessage({ id: id }, values);
+  ) => <>{intl.formatMessage({ id: id }, values)}</>;
   return { formatMessage, formatElement };
 };

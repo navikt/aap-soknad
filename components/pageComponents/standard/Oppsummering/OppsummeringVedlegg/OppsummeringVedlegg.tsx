@@ -1,6 +1,6 @@
 import { Label, BodyShort, Alert } from '@navikt/ds-react';
 import { useMemo } from 'react';
-import { Soknad } from 'types/Soknad';
+import { Soknad, SoknadVedlegg } from 'types/Soknad';
 import { GenericSoknadContextState } from 'types/SoknadContext';
 import { Relasjon } from '../../Barnetillegg/AddBarnModal';
 
@@ -49,7 +49,7 @@ export const OppsummeringVedlegg = ({ søknadState }: Props) => {
               <div key={`opplastedevedlegg-${vedlegg.type}`}>
                 <Label>{vedlegg?.description}</Label>
                 <ul>
-                  {søknadState?.søknad?.vedlegg?.[vedlegg.type]?.map((vedleggFile, index) => (
+                  {søknadState?.søknad?.vedlegg?.[vedlegg.type]?.map((vedleggFile) => (
                     <li key={vedleggFile.vedleggId}>{vedleggFile?.name}</li>
                   ))}
                 </ul>

@@ -99,7 +99,7 @@ const Steps = ({ søker, mellomlagretSøknad }: PageProps) => {
     }
   }, [showFetchErrorMessage]);
 
-  const submitSoknad: SubmitHandler<Soknad> = async (data) => {
+  const submitSoknad = async () => {
     if (currentStep?.name === StepNames.OPPSUMMERING) {
       setShowFetchErrorMessage(false);
       console.log('post søknad', søknadState);

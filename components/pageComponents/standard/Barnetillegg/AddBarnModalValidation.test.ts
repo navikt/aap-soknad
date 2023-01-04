@@ -19,7 +19,7 @@ describe('AddBarnModal validation', () => {
       relasjon: Relasjon.FORELDER,
       harInntekt: JaEllerNei.JA,
     };
-    const result = await schema.validate(barn, { abortEarly: false }).catch((err) => err);
+    const result = await schema.validate({ barn }, { abortEarly: false }).catch((err) => err);
     expect(result).toStrictEqual(barn);
   });
 
@@ -33,7 +33,7 @@ describe('AddBarnModal validation', () => {
       relasjon: Relasjon.FORELDER,
       harInntekt: JaEllerNei.JA,
     };
-    const result = await schema.validate(barn, { abortEarly: false }).catch((err) => err);
+    const result = await schema.validate({ barn }, { abortEarly: false }).catch((err) => err);
     expect(result.errors.length).toBe(1);
   });
 });

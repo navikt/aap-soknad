@@ -5,7 +5,7 @@ import { JaNeiVetIkke } from 'types/Generic';
 import React from 'react';
 import { axe, toHaveNoViolations } from 'jest-axe';
 import { SoknadContextData } from 'context/soknadContextCommon';
-import Soknad from 'types/Soknad';
+import { Soknad } from 'types/Soknad';
 import { SøknadType } from 'types/SoknadContext';
 import { SoknadContextStandard } from 'context/soknadContextStandard';
 import { Yrkesskade } from './Yrkesskade';
@@ -51,7 +51,7 @@ describe('Yrkesskade', () => {
     return (
       <StepWizard>
         <Step name={YRKESSKADE}>
-          <Yrkesskade onBackClick={jest.fn()} onCancelClick={jest.fn()} />
+          <Yrkesskade onBackClick={jest.fn()} onNext={jest.fn()} />
         </Step>
       </StepWizard>
     );

@@ -9,11 +9,12 @@ export const setFocusOnErrorSummary = () => {
   const errorSummary = document?.getElementById('aap-error-summary');
   errorSummary?.focus();
 };
-
-const FormErrorSummary = (props: FieldErrors) => {
+interface FormErrorSummaryProps {
+  errors: FieldErrors;
+  ['data-testid']?: string;
+}
+const FormErrorSummary = (props: FormErrorSummaryProps) => {
   const { formatMessage } = useFeatureToggleIntl();
-
-  const errorListFromRef = props;
 
   const flatErrors = flatObj(props?.errors);
   const keyList = Object.keys(flatErrors).filter((e) => e);

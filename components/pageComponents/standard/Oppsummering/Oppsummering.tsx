@@ -1,4 +1,4 @@
-import { FieldValues, useForm } from 'react-hook-form';
+import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
 import { Soknad } from 'types/Soknad';
 import { Accordion, Alert, BodyShort, Heading, Label, Link, Switch } from '@navikt/ds-react';
 import React, { useState, useEffect } from 'react';
@@ -48,9 +48,12 @@ const SØKNAD_BEKREFT = 'søknadBekreft';
 
 interface OppsummeringProps {
   onBackClick: () => void;
-  onSubmitSoknad: (data: Soknad) => boolean;
-  submitErrorMessageRef: React.MutableRefObject<string | null>;
+  onSubmitSoknad: () => Promise<boolean>;
+  submitErrorMessageRef: React.MutableRefObject<HTMLDivElement | null>;
   hasSubmitError: boolean;
+}
+interface OppsummeringFormFields {
+  søknadBekreft: boolean;
 }
 
 const Oppsummering = ({
@@ -74,9 +77,8 @@ const Oppsummering = ({
     control,
     handleSubmit,
     formState: { errors },
-  } = useForm<FieldValues>({
+  } = useForm<OppsummeringFormFields>({
     resolver: yupResolver(schema),
-    defaultValues: {},
   });
 
   const [toggleAll, setToggleAll] = useState<boolean | undefined>(undefined);
@@ -132,7 +134,7 @@ const Oppsummering = ({
     <SoknadFormWrapper
       onNext={handleSubmit(async (data) => {
         setNextIsLoading(true);
-        const submitSuccess = await onSubmitSoknad(data);
+        const submitSuccess = await onSubmitSoknad();
         if (!submitSuccess) {
           setNextIsLoading(false);
         }
@@ -324,9 +326,10 @@ const Oppsummering = ({
         >
           <SummaryRowIfExists
             labelKey={`søknad.student.erStudent.legend`}
-            value={formatMessage(
-              jaNeiAvbruttToTekstnøkkel(søknadState?.søknad?.student?.erStudent)
-            )}
+            value={
+              søknadState?.søknad?.student?.erStudent &&
+              formatMessage(jaNeiAvbruttToTekstnøkkel(søknadState?.søknad?.student?.erStudent))
+            }
           />
           <SummaryRowIfExists
             labelKey={`søknad.${STUDENT}.${KOMME_TILBAKE}.legend`}
@@ -388,7 +391,6 @@ const Oppsummering = ({
         label={formatMessage('søknad.oppsummering.confirmation.text')}
         control={control}
         name={SØKNAD_BEKREFT}
-        error={errors?.[SØKNAD_BEKREFT]?.message}
       >
         <Label>{formatMessage('søknad.oppsummering.confirmation.title')}</Label>
       </ConfirmationPanelWrapper>

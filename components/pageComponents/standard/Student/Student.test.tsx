@@ -5,8 +5,8 @@ import { JaNeiVetIkke } from 'types/Generic';
 import React from 'react';
 import Student from './Student';
 import { axe, toHaveNoViolations } from 'jest-axe';
-import Soknad from 'types/Soknad';
 import { SoknadContextData } from 'context/soknadContextCommon';
+import { Soknad } from 'types/Soknad';
 import { SøknadType } from 'types/SoknadContext';
 import { SoknadContextStandard } from 'context/soknadContextStandard';
 import { AppStateContext, AppStateContextState } from 'context/appStateContext';
@@ -18,6 +18,7 @@ const soknadContext: SoknadContextData<Soknad> = {
   søknadState: {
     version: 1,
     type: SøknadType.STANDARD,
+    requiredVedlegg: [],
   },
   søknadDispatch: () => console.log('dispatch'),
 };
@@ -50,7 +51,7 @@ describe('Student', () => {
     return (
       <StepWizard>
         <Step name={STUDENT}>
-          <Student onBackClick={jest.fn()} onCancelClick={jest.fn()} />
+          <Student onBackClick={jest.fn()} onNext={jest.fn()} />
         </Step>
       </StepWizard>
     );

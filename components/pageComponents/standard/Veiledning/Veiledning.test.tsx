@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { render, screen, fireEvent } from 'setupTests';
 import { Veiledning } from './Veiledning';
 import { toHaveNoViolations } from 'jest-axe';
@@ -6,9 +6,16 @@ expect.extend(toHaveNoViolations);
 
 describe('Veiledning', () => {
   const Component = () => {
+    const dummyRef = useRef(null);
     return (
       <>
-        <Veiledning onSubmit={jest.fn()} søker={{}} loading={false} />
+        <Veiledning
+          onSubmit={jest.fn()}
+          søker={{}}
+          isLoading={false}
+          hasError={false}
+          errorMessageRef={dummyRef}
+        />
       </>
     );
   };
