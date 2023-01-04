@@ -102,7 +102,7 @@ export const getAndreUtbetalingerSchema = (formatMessage: (id: string) => string
         .array()
         .min(1, formatMessage('søknad.andreUtbetalinger.stønad.validation.required')),
       afp: yup.object().when(['stønad'], {
-        is: (stønad: StønadType[]) => stønad.includes(StønadType.AFP),
+        is: (stønad: StønadType[] | undefined) => stønad?.includes(StønadType.AFP),
         then: yup.object({
           hvemBetaler: yup
             .string()
