@@ -131,7 +131,6 @@ export const AndreUtbetalinger = ({ onBackClick, onNext, defaultValues }: Props)
     },
   });
 
-  console.log('hehe', watch());
   const debouncedLagre = useDebounceLagreSoknad<Soknad>();
   const allFields = useWatch({ control });
   useEffect(() => {
