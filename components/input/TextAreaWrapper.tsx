@@ -26,7 +26,7 @@ const TextAreaWrapper = <FormFieldValues extends FieldValues>({
         description={description}
         value={value}
         onChange={onChange}
-        error={error}
+        error={error?.message}
         name={name}
         maxLength={maxLength}
       />
