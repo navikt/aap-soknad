@@ -43,16 +43,18 @@ const ALDER_BARN_ÅR = 18;
 
 export const getAddBarnSchema = (formatMessage: (id: string, options?: {}) => string) => {
   return yup.object().shape({
-    fornavn: yup
-      .string()
-      .required(
-        formatMessage('søknad.barnetillegg.leggTilBarn.modal.navn.fornavn.validation.required')
-      ),
-    etternavn: yup
-      .string()
-      .required(
-        formatMessage('søknad.barnetillegg.leggTilBarn.modal.navn.etternavn.validation.required')
-      ),
+    navn: yup.object().shape({
+      fornavn: yup
+        .string()
+        .required(
+          formatMessage('søknad.barnetillegg.leggTilBarn.modal.navn.fornavn.validation.required')
+        ),
+      etternavn: yup
+        .string()
+        .required(
+          formatMessage('søknad.barnetillegg.leggTilBarn.modal.navn.etternavn.validation.required')
+        ),
+    }),
     fødseldato: yup
       .date()
       .required(
@@ -138,13 +140,13 @@ export const AddBarnModal = ({ showModal, onCloseClick, onSaveClick, barn }: Pro
           <TextFieldWrapper
             control={control}
             label={formatMessage('søknad.barnetillegg.leggTilBarn.modal.navn.fornavn.label')}
-            name={'fornavn'}
+            name={'navn.fornavn'}
           />
 
           <TextFieldWrapper
             control={control}
             label={formatMessage('søknad.barnetillegg.leggTilBarn.modal.navn.etternavn.label')}
-            name={'etternavn'}
+            name={'navn.etternavn'}
           />
 
           <DatePickerWrapper
