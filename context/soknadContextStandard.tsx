@@ -1,4 +1,5 @@
 import React, { createContext, Dispatch, useContext, useMemo, useReducer } from 'react';
+import structuredClone from '@ungap/structured-clone';
 import { GenericSoknadContextState, SøknadType } from 'types/SoknadContext';
 import {
   soknadContextInititalState,
@@ -24,30 +25,32 @@ function soknadReducerStandard(
     case SoknadActionKeys.SET_STATE_FROM_CACHE:
       return {
         ...state,
-        ...action.payload,
+        ...structuredClone(action.payload),
       };
     case SoknadActionKeys.SET_SOKNAD_TYPE:
       return {
         ...state,
-        type: action.payload,
+        type: structuredClone(action.payload),
       };
     case SoknadActionKeys.SET_SOKNAD:
       return {
         ...state,
-        søknad: action.payload,
+        søknad: structuredClone(action.payload),
       };
     case SoknadActionKeys.UPDATE_SOKNAD: {
       return {
         ...state,
         søknad: {
           ...state?.søknad,
-          ...action.payload,
+          ...structuredClone(action.payload),
         },
       };
     }
     case SoknadActionKeys.ADD_BARN_IF_MISSING: {
       const barn = state?.søknad?.[BARN] || [];
-      const newBarn = action.payload?.filter((e: any) => !barn.find((a: any) => a?.fnr === e?.fnr));
+      const newBarn = structuredClone(action.payload)?.filter(
+        (e: any) => !barn.find((a: any) => a?.fnr === e?.fnr)
+      );
       return {
         ...state,
         søknad: {
@@ -58,7 +61,7 @@ function soknadReducerStandard(
     }
     case SoknadActionKeys.ADD_BEHANDLER_IF_MISSING: {
       const oldRegistrerteBehandlere = state?.søknad?.registrerteBehandlere || [];
-      const registrerteBehandlere: RegistrertBehandler[] = action.payload
+      const registrerteBehandlere: RegistrertBehandler[] = structuredClone(action.payload)
         .filter((behandler) => behandler.type === 'FASTLEGE')
         .map((behandler) => {
           const eksisterende = oldRegistrerteBehandlere.find(
@@ -91,9 +94,10 @@ function soknadReducerStandard(
       };
     }
     case SoknadActionKeys.UPDATE_VEDLEGG: {
+      const vedleggCopy = structuredClone(action.payload);
       const vedleggList = state?.requiredVedlegg.map((requiredVedlegg) => {
-        if (requiredVedlegg.type === action.payload.type)
-          return { ...requiredVedlegg, completed: action.payload.completed };
+        if (requiredVedlegg.type === vedleggCopy.type)
+          return { ...requiredVedlegg, completed: vedleggCopy.completed };
         return requiredVedlegg;
       });
       return { ...state, requiredVedlegg: [...vedleggList] };
