@@ -11,8 +11,10 @@ describe('AddBarnModal validation', () => {
 
   it('should validate barnetillegg correctly', async () => {
     const barn = {
-      fornavn: 'Fornavn',
-      etternavn: 'Etternavn',
+      navn: {
+        fornavn: 'Fornavn',
+        etternavn: 'Etternavn',
+      },
       fødseldato: sub(new Date(), { years: 1 }),
       relasjon: Relasjon.FORELDER,
       harInntekt: JaEllerNei.JA,
@@ -23,8 +25,10 @@ describe('AddBarnModal validation', () => {
 
   it("should not be valid if 'fødselsdato' is in the future", async () => {
     const barn = {
-      fornavn: 'Fornavn',
-      etternavn: 'Etternavn',
+      navn: {
+        fornavn: 'Fornavn',
+        etternavn: 'Etternavn',
+      },
       fødseldato: add(new Date(), { years: 1 }),
       relasjon: Relasjon.FORELDER,
       harInntekt: JaEllerNei.JA,
