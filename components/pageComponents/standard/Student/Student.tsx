@@ -27,7 +27,7 @@ export const STUDENT = 'student';
 export const ER_STUDENT = 'erStudent';
 export const KOMME_TILBAKE = 'kommeTilbake';
 
-enum JaNeiAvbrutt {
+export enum JaNeiAvbrutt {
   JA = 'Ja',
   NEI = 'Nei',
   AVBRUTT = 'Avbrutt',
