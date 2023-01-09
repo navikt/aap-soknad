@@ -1,4 +1,4 @@
-import { Accordion, Alert, BodyShort, Button, Heading, Label, Link } from '@navikt/ds-react';
+import { Alert, BodyShort, Button, Heading, Label, Link } from '@navikt/ds-react';
 import { useForm } from 'react-hook-form';
 import ConfirmationPanelWrapper from 'components/input/ConfirmationPanelWrapper';
 import { SøkerView } from 'context/sokerOppslagContext';
@@ -35,8 +35,7 @@ export const Veiledning = ({
   const schema = yup.object().shape({
     veiledningConfirm: yup
       .boolean()
-      .required(formatMessage('søknad.veiledning.veiledningConfirm.validation.required'))
-      .oneOf([true])
+      .oneOf([true], formatMessage('søknad.veiledning.veiledningConfirm.validation.required'))
       .nullable(),
   });
 

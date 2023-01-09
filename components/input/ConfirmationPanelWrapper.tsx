@@ -24,7 +24,7 @@ const ConfirmationPanelWrapper = <FormFieldValues extends FieldValues>({
         label={label}
         checked={value}
         onChange={onChange}
-        error={!!error}
+        error={!!error && error.message}
       >
         {children}
       </ConfirmationPanel>
