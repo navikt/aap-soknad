@@ -8,7 +8,7 @@ export interface SelectProps<FormFieldValues extends FieldValues> {
   control: Control<FormFieldValues>;
   required?: string;
   validate?: (value: any) => any;
-  children?: ReactNode;
+  children: ReactNode;
 }
 
 const SelectWrapper = <FormFieldValues extends FieldValues>({
@@ -21,7 +21,7 @@ const SelectWrapper = <FormFieldValues extends FieldValues>({
     name={name}
     control={control}
     render={({ field: { name, value, onChange }, fieldState: { error } }) => (
-      <Select name={name} label={label} value={value} onChange={onChange} error={error}>
+      <Select name={name} label={label} value={value} onChange={onChange} error={error?.message}>
         {children}
       </Select>
     )}
