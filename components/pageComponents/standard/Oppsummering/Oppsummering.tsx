@@ -1,6 +1,6 @@
-import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { Soknad } from 'types/Soknad';
-import { Accordion, Alert, BodyShort, Heading, Label, Link, Switch } from '@navikt/ds-react';
+import { Accordion, Alert, BodyShort, Heading, Label, Switch } from '@navikt/ds-react';
 import React, { useState, useEffect } from 'react';
 import ConfirmationPanelWrapper from 'components/input/ConfirmationPanelWrapper';
 import AccordianItemOppsummering from './AccordianItemOppsummering/AccordianItemOppsummering';
