@@ -70,7 +70,7 @@ const Oppsummering = ({
   const schema = yup.object().shape({
     [SØKNAD_BEKREFT]: yup
       .boolean()
-      .required()
+      .required(formatMessage('søknad.oppsummering.confirmation.required'))
       .oneOf([true], formatMessage('søknad.oppsummering.confirmation.required')),
   });
   const {
