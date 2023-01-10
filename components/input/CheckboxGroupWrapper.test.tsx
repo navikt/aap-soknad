@@ -77,8 +77,6 @@ describe('ChecboxGroupWrapper', () => {
       await waitFor(() => user.click(mandag));
     });
 
-    // const mandagErValgt = screen.getByRole('checkbox', { name: /mandag/ });
-
     await waitFor(() => expect(mandag).toBeChecked());
   });
 });
