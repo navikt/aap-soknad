@@ -1,20 +1,18 @@
 import React, { useEffect, useMemo } from 'react';
-const { eeaMember } = require('is-european');
 import { FieldValues, useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as classes from './UtenlandsPeriode.module.css';
 import {
-  Label,
-  BodyShort,
   BodyLong,
+  BodyShort,
   Button,
-  Heading,
-  Ingress,
-  Modal,
-  Radio,
   Cell,
   Grid,
+  Heading,
+  Label,
+  Modal,
+  Radio,
 } from '@navikt/ds-react';
 import { JaEllerNei } from 'types/Generic';
 import RadioGroupWrapper from 'components/input/RadioGroupWrapper/RadioGroupWrapper';
@@ -26,6 +24,8 @@ import { UtenlandsPeriode } from 'types/Soknad';
 import { formatDate } from 'utils/date';
 import { MonthPickerWrapper } from 'components/input/MonthPickerWrapper/MonthPickerWrapper';
 import { subYears } from 'date-fns';
+
+const { eeaMember } = require('is-european');
 
 export enum ArbeidEllerBodd {
   ARBEID = 'ARBEID',
@@ -175,7 +175,6 @@ const UtenlandsPeriodeVelger = ({
               `søknad.medlemskap.utenlandsperiode.modal.land.label.${arbeidEllerBodd}`
             )}
             control={control}
-            error={errors?.land?.message}
           />
           <div>
             <Label>
