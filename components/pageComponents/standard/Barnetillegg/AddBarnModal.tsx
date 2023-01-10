@@ -20,9 +20,10 @@ import * as classes from './Barnetillegg.module.css';
 import { ModalButtonWrapper } from 'components/ButtonWrapper/ModalButtonWrapper';
 import { useFeatureToggleIntl } from 'hooks/useFeatureToggleIntl';
 import { GRUNNBELØP } from './Barnetillegg';
-import DatePickerWrapper from 'components/input/DatePickerWrapper/DatePickerWrapper';
+
 import { add, sub, subYears } from 'date-fns';
 import { formatDate } from 'utils/date';
+import { DatePickerWrapper } from '../../../input/DatePickerWrapper/DatePickerWrapper';
 
 interface Props {
   søknad?: Soknad;
@@ -89,14 +90,7 @@ export const getAddBarnSchema = (formatMessage: (id: string, options?: {}) => st
 export const AddBarnModal = ({ showModal, onCloseClick, onSaveClick, barn }: Props) => {
   const { formatMessage } = useFeatureToggleIntl();
 
-  const {
-    control,
-    handleSubmit,
-    setValue,
-    reset,
-    watch,
-    formState: { errors },
-  } = useForm<FieldValues>({
+  const { control, handleSubmit, setValue, reset, watch } = useForm<FieldValues>({
     resolver: yupResolver(getAddBarnSchema(formatMessage)),
     defaultValues: {
       ...(barn
@@ -150,13 +144,12 @@ export const AddBarnModal = ({ showModal, onCloseClick, onSaveClick, barn }: Pro
           />
 
           <DatePickerWrapper
-            setValue={setValue}
+            control={control}
             label={formatMessage('søknad.barnetillegg.leggTilBarn.modal.fødselsdato.label')}
             selectedDate={barn?.fødseldato}
             name="fødseldato"
             fromDate={subYears(new Date(), ALDER_BARN_ÅR)}
             toDate={new Date()}
-            error={errors?.fødseldato?.message}
           />
 
           <RadioGroupWrapper

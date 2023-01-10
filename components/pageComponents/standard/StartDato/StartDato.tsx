@@ -15,11 +15,12 @@ import { useFeatureToggleIntl } from 'hooks/useFeatureToggleIntl';
 import { deleteOpplastedeVedlegg, useSoknadContextStandard } from 'context/soknadContextStandard';
 import { slettLagretSoknadState, updateSøknadData } from 'context/soknadContextCommon';
 import { useDebounceLagreSoknad } from 'hooks/useDebounceLagreSoknad';
-import DatePickerWrapper from 'components/input/DatePickerWrapper/DatePickerWrapper';
+
 import { GenericSoknadContextState } from 'types/SoknadContext';
 import * as classes from './StartDato.module.css';
 import { formatDate } from 'utils/date';
 import { setFocusOnErrorSummary } from 'components/schema/FormErrorSummary';
+import { DatePickerWrapper } from '../../../input/DatePickerWrapper/DatePickerWrapper';
 export enum FerieType {
   DAGER = 'DAGER',
   PERIODE = 'PERIODE',
@@ -216,14 +217,14 @@ const StartDato = ({ onBackClick, onNext, defaultValues }: Props) => {
               <Label>{formatMessage('søknad.startDato.periode.label')}</Label>
               <div className={classes?.datoContainer}>
                 <DatePickerWrapper
-                  setValue={setValue}
+                  control={control}
                   label={formatMessage('søknad.startDato.periode.fraDato.label')}
                   selectedDate={allFields.ferie?.fraDato}
                   name={`${FERIE}.fraDato`}
                   fromDate={new Date()}
                 />
                 <DatePickerWrapper
-                  setValue={setValue}
+                  control={control}
                   label={formatMessage('søknad.startDato.periode.tilDato.label')}
                   selectedDate={allFields?.ferie.tilDato}
                   name={`${FERIE}.tilDato`}
