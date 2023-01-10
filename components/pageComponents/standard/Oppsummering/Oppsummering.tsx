@@ -1,7 +1,7 @@
-import { FieldValues, useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { Soknad } from 'types/Soknad';
-import { Accordion, Alert, BodyShort, Heading, Label, Link, Switch } from '@navikt/ds-react';
-import React, { useState, useEffect } from 'react';
+import { Accordion, Alert, BodyShort, Heading, Label, Switch } from '@navikt/ds-react';
+import React, { useEffect, useState } from 'react';
 import ConfirmationPanelWrapper from 'components/input/ConfirmationPanelWrapper';
 import AccordianItemOppsummering from './AccordianItemOppsummering/AccordianItemOppsummering';
 import OppsummeringBarn from './OppsummeringBarn/OppsummeringBarn';
@@ -29,7 +29,7 @@ import {
   StønadType,
   stønadTypeToAlternativNøkkel,
 } from 'components/pageComponents/standard/AndreUtbetalinger/AndreUtbetalinger';
-import { formatNavn, formatFullAdresse, formatTelefonnummer } from 'utils/StringFormatters';
+import { formatFullAdresse, formatNavn, formatTelefonnummer } from 'utils/StringFormatters';
 import OppsummeringPeriode from './OppsummeringPeriode/OppsummeringPeriode';
 import { isNonEmptyPeriode } from 'utils/periode';
 import {
@@ -44,13 +44,16 @@ import { getYrkesskadeSchema } from 'components/pageComponents/standard/Yrkesska
 import { getMedlemskapSchema } from 'components/pageComponents/standard/Medlemskap/Medlemskap';
 import { getBehandlerSchema } from 'components/pageComponents/standard/Behandlere/Behandlere';
 import { logSkjemaValideringFeiletEvent } from 'utils/amplitude';
-const SØKNAD_BEKREFT = 'søknadBekreft';
 
 interface OppsummeringProps {
   onBackClick: () => void;
   onSubmitSoknad: (data: Soknad) => boolean;
   submitErrorMessageRef: React.MutableRefObject<string | null>;
   hasSubmitError: boolean;
+}
+
+interface FormFields {
+  søknadBekreft: boolean;
 }
 
 const Oppsummering = ({
@@ -65,18 +68,17 @@ const Oppsummering = ({
   const { søknadState, søknadDispatch } = useSoknadContextStandard();
   const { stepWizardDispatch } = useStepWizard();
   const schema = yup.object().shape({
-    [SØKNAD_BEKREFT]: yup
+    søknadBekreft: yup
       .boolean()
-      .required()
+      .required(formatMessage('søknad.oppsummering.confirmation.required'))
       .oneOf([true], formatMessage('søknad.oppsummering.confirmation.required')),
   });
   const {
     control,
     handleSubmit,
     formState: { errors },
-  } = useForm<FieldValues>({
+  } = useForm<FormFields>({
     resolver: yupResolver(schema),
-    defaultValues: {},
   });
 
   const [toggleAll, setToggleAll] = useState<boolean | undefined>(undefined);
@@ -387,8 +389,7 @@ const Oppsummering = ({
       <ConfirmationPanelWrapper
         label={formatMessage('søknad.oppsummering.confirmation.text')}
         control={control}
-        name={SØKNAD_BEKREFT}
-        error={errors?.[SØKNAD_BEKREFT]?.message}
+        name={'søknadBekreft'}
       >
         <Label>{formatMessage('søknad.oppsummering.confirmation.title')}</Label>
       </ConfirmationPanelWrapper>
