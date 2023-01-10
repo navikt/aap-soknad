@@ -1,19 +1,9 @@
-import {
-  Alert,
-  BodyShort,
-  Button,
-  Cell,
-  Grid,
-  Heading,
-  Label,
-  Radio,
-  ReadMore,
-} from '@navikt/ds-react';
+import { Alert, BodyShort, Button, Heading, Label, Radio, ReadMore } from '@navikt/ds-react';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useFieldArray, useForm, useWatch } from 'react-hook-form';
 import RadioGroupWrapper from 'components/input/RadioGroupWrapper/RadioGroupWrapper';
 import { JaEllerNei } from 'types/Generic';
-import { Soknad, Barn, ManuelleBarn } from 'types/Soknad';
+import { Barn, ManuelleBarn, Soknad } from 'types/Soknad';
 import * as classes from './Barnetillegg.module.css';
 import { Add, Delete } from '@navikt/ds-icons';
 import * as yup from 'yup';
@@ -25,10 +15,10 @@ import { formatNavn } from 'utils/StringFormatters';
 import { LucaGuidePanel } from '@navikt/aap-felles-innbygger-react';
 import { useFeatureToggleIntl } from 'hooks/useFeatureToggleIntl';
 import {
-  slettLagretSoknadState,
-  updateSøknadData,
   addRequiredVedlegg,
   removeRequiredVedlegg,
+  slettLagretSoknadState,
+  updateSøknadData,
 } from 'context/soknadContextCommon';
 import { deleteOpplastedeVedlegg, useSoknadContextStandard } from 'context/soknadContextStandard';
 import { useDebounceLagreSoknad } from 'hooks/useDebounceLagreSoknad';
@@ -232,7 +222,6 @@ export const Barnetillegg = ({ onBackClick, onNext, defaultValues }: Props) => {
                         )}
                         name={`${BARN}.${index}.harInntekt`}
                         control={control}
-                        error={errors?.[BARN]?.[index]?.harInntekt?.message}
                       >
                         <ReadMore
                           header={formatMessage(
