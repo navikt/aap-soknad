@@ -163,7 +163,6 @@ export const AddBarnModal = ({ showModal, onCloseClick, onSaveClick, barn }: Pro
             control={control}
             legend={formatMessage('søknad.barnetillegg.leggTilBarn.modal.relasjon.label')}
             name={'relasjon'}
-            error={errors?.relasjon?.message}
           >
             <Radio value={Relasjon.FORELDER}>
               <BodyShort>{formatMessage(`answerOptions.relasjon.${Relasjon.FORELDER}`)}</BodyShort>
@@ -180,7 +179,6 @@ export const AddBarnModal = ({ showModal, onCloseClick, onSaveClick, barn }: Pro
               grunnbeløp: GRUNNBELØP,
             })}
             name={'harInntekt'}
-            error={errors?.harInntekt?.message}
           >
             <ReadMore
               header={formatMessage(

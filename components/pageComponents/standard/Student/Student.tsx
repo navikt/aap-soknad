@@ -157,7 +157,6 @@ const Student = ({ onBackClick, onNext, defaultValues }: Props) => {
         name={`${STUDENT}.${ER_STUDENT}`}
         legend={formatMessage(`søknad.${STUDENT}.${ER_STUDENT}.legend`)}
         control={control}
-        error={errors?.[STUDENT]?.[ER_STUDENT]?.message}
       >
         <Radio value={JaNeiAvbrutt.JA}>
           <BodyShort>{ErStudentAlternativer?.[JaNeiAvbrutt.JA]}</BodyShort>
@@ -175,7 +174,6 @@ const Student = ({ onBackClick, onNext, defaultValues }: Props) => {
             name={`${STUDENT}.${KOMME_TILBAKE}`}
             legend={formatMessage(`søknad.${STUDENT}.${KOMME_TILBAKE}.legend`)}
             control={control}
-            error={errors?.[STUDENT]?.[KOMME_TILBAKE]?.message}
           >
             <Radio value={JaNeiVetIkke.JA}>
               <BodyShort>{JaNeiVetIkke.JA}</BodyShort>

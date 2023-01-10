@@ -182,7 +182,6 @@ const StartDato = ({ onBackClick, onNext, defaultValues }: Props) => {
         description={formatMessage('søknad.startDato.sykepenger.description')}
         name={`${SYKEPENGER}`}
         control={control}
-        error={errors?.[FERIE]?.[SYKEPENGER]?.message}
       >
         <Radio value={JaEllerNei.JA}>{JaEllerNei.JA}</Radio>
         <Radio value={JaEllerNei.NEI}>{JaEllerNei.NEI}</Radio>
@@ -194,7 +193,6 @@ const StartDato = ({ onBackClick, onNext, defaultValues }: Props) => {
             description={formatMessage('søknad.startDato.skalHaFerie.description')}
             name={`${FERIE}.${SKALHAFERIE}`}
             control={control}
-            error={errors?.[FERIE]?.[SKALHAFERIE]?.message}
           >
             <Radio value={JaEllerNei.JA}>{JaEllerNei.JA}</Radio>
             <Radio value={JaEllerNei.NEI}>{JaEllerNei.NEI}</Radio>
@@ -204,7 +202,6 @@ const StartDato = ({ onBackClick, onNext, defaultValues }: Props) => {
               legend={formatMessage('søknad.startDato.ferieType.label')}
               name={`${FERIE}.${FERIETYPE}`}
               control={control}
-              error={errors?.[`${FERIE}`]?.ferieType?.message}
             >
               <Radio value={FerieType.PERIODE}>
                 <BodyShort>{FerieTypeTekster.PERIODE}</BodyShort>
@@ -224,7 +221,6 @@ const StartDato = ({ onBackClick, onNext, defaultValues }: Props) => {
                   selectedDate={allFields.ferie?.fraDato}
                   name={`${FERIE}.fraDato`}
                   fromDate={new Date()}
-                  error={errors?.[`${FERIE}`]?.fraDato?.message}
                 />
                 <DatePickerWrapper
                   setValue={setValue}
@@ -232,7 +228,6 @@ const StartDato = ({ onBackClick, onNext, defaultValues }: Props) => {
                   selectedDate={allFields?.ferie.tilDato}
                   name={`${FERIE}.tilDato`}
                   fromDate={new Date()}
-                  error={errors?.[`${FERIE}`]?.tilDato?.message}
                 />
               </div>
             </div>
