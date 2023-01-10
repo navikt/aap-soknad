@@ -1,28 +1,32 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 import { CheckboxGroup } from '@navikt/ds-react';
-import { Control, Controller, FieldValues } from 'react-hook-form';
+import { Control, Controller, FieldPath, FieldValues } from 'react-hook-form';
 
-export interface CheckboxProps {
-  name: string;
+export interface CheckboxProps<FormFieldValues extends FieldValues> {
+  name: FieldPath<FormFieldValues>;
   legend?: string;
   size?: 'small' | 'medium';
-  error?: string;
-  control: Control<FieldValues>;
-  children?: React.ReactChild | React.ReactChild[];
+  control: Control<FormFieldValues>;
+  children?: ReactNode;
 }
-const CheckboxGroupWrapper = ({ children, name, legend, size, control, error }: CheckboxProps) => (
+const CheckboxGroupWrapper = <FormFieldValues extends FieldValues>({
+  children,
+  name,
+  legend,
+  size,
+  control,
+}: CheckboxProps<FormFieldValues>) => (
   <Controller
     name={name}
     control={control}
-    defaultValue={[]}
-    render={({ field: { name, value, onChange } }) => (
+    render={({ field: { name, value, onChange }, fieldState: { error } }) => (
       <CheckboxGroup
         size={size}
         id={name}
         name={name}
         legend={legend}
-        error={error}
-        value={value}
+        error={error?.message}
+        value={value || []}
         onChange={onChange}
       >
         {children}

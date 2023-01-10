@@ -4,7 +4,7 @@ import { FieldValues, useForm, useWatch } from 'react-hook-form';
 import CheckboxGroupWrapper from 'components/input/CheckboxGroupWrapper';
 import RadioGroupWrapper from 'components/input/RadioGroupWrapper/RadioGroupWrapper';
 import { JaEllerNei } from 'types/Generic';
-import { Soknad } from 'types/Soknad';
+import { Periode, Soknad } from 'types/Soknad';
 import * as yup from 'yup';
 import { useStepWizard } from 'context/stepWizardContextV2';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -52,6 +52,14 @@ export enum StønadType {
   NEI = 'NEI',
 }
 
+export interface AndreUtbetalingerFormFields {
+  lønn?: string;
+  stønad?: Array<StønadType>;
+  afp?: {
+    hvemBetaler?: string;
+  };
+}
+
 const ANDRE_UTBETALINGER = 'andreUtbetalinger';
 const LØNN = 'lønn';
 const STØNAD = 'stønad';
@@ -84,19 +92,20 @@ export const stønadTypeToAlternativNøkkel = (stønadType: StønadType) => {
 };
 export const getAndreUtbetalingerSchema = (formatMessage: (id: string) => string) =>
   yup.object().shape({
-    [ANDRE_UTBETALINGER]: yup.object().shape({
-      [LØNN]: yup
+    andreUtbetalinger: yup.object().shape({
+      lønn: yup
         .string()
         .required(formatMessage('søknad.andreUtbetalinger.lønn.validation.required'))
         .oneOf([JaEllerNei.JA, JaEllerNei.NEI])
         .nullable(),
-      [STØNAD]: yup
+      stønad: yup
         .array()
+        .ensure()
         .min(1, formatMessage('søknad.andreUtbetalinger.stønad.validation.required')),
-      [AFP]: yup.object().when([STØNAD], {
-        is: (stønad: StønadType[]) => stønad.includes(StønadType.AFP),
+      afp: yup.object().when(['stønad'], {
+        is: (stønad: StønadType[] | undefined) => stønad?.includes(StønadType.AFP),
         then: yup.object({
-          [HVEMBETALER]: yup
+          hvemBetaler: yup
             .string()
             .required(formatMessage('søknad.andreUtbetalinger.hvemBetalerAfp.validation.required')),
         }),
@@ -111,8 +120,11 @@ export const AndreUtbetalinger = ({ onBackClick, onNext, defaultValues }: Props)
     control,
     handleSubmit,
     setValue,
+    watch,
     formState: { errors },
-  } = useForm<FieldValues>({
+  } = useForm<{
+    [ANDRE_UTBETALINGER]: AndreUtbetalingerFormFields;
+  }>({
     resolver: yupResolver(getAndreUtbetalingerSchema(formatMessage)),
     defaultValues: {
       [ANDRE_UTBETALINGER]: defaultValues?.søknad?.andreUtbetalinger,
@@ -202,7 +214,7 @@ export const AndreUtbetalinger = ({ onBackClick, onNext, defaultValues }: Props)
   useEffect(() => {
     const lastChecked = stønadEllerVerv?.slice(-1)?.[0];
     if (lastChecked === StønadType.NEI) {
-      if (stønadEllerVerv?.length > 1)
+      if ((stønadEllerVerv?.length ?? 0) > 1)
         setValue(`${ANDRE_UTBETALINGER}.${STØNAD}`, [StønadType.NEI]);
     } else if (stønadEllerVerv?.includes(StønadType.NEI)) {
       const newList = [...stønadEllerVerv].filter((e) => e !== StønadType.NEI);
@@ -244,7 +256,6 @@ export const AndreUtbetalinger = ({ onBackClick, onNext, defaultValues }: Props)
         legend={formatMessage('søknad.andreUtbetalinger.lønn.label')}
         name={`${ANDRE_UTBETALINGER}.${LØNN}`}
         control={control}
-        error={errors?.[ANDRE_UTBETALINGER]?.[LØNN]?.message}
       >
         <ReadMore
           header={formatMessage('søknad.andreUtbetalinger.lønn.readMore.title')}
@@ -264,7 +275,6 @@ export const AndreUtbetalinger = ({ onBackClick, onNext, defaultValues }: Props)
         control={control}
         size="medium"
         legend={formatMessage('søknad.andreUtbetalinger.stønad.label')}
-        error={errors?.[ANDRE_UTBETALINGER]?.[STØNAD]?.message}
       >
         <Checkbox value={StønadType.VERV}>{StønadAlternativer.VERV}</Checkbox>
         <Checkbox value={StønadType.ØKONOMISK_SOSIALHJELP}>
@@ -287,7 +297,6 @@ export const AndreUtbetalinger = ({ onBackClick, onNext, defaultValues }: Props)
                   name={`${ANDRE_UTBETALINGER}.${AFP}.${HVEMBETALER}`}
                   label={formatMessage('søknad.andreUtbetalinger.hvemBetalerAfp.label')}
                   control={control}
-                  error={errors?.[ANDRE_UTBETALINGER]?.[AFP]?.message}
                 />
               </Cell>
             </Grid>
