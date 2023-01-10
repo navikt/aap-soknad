@@ -1,43 +1,38 @@
 import React from 'react';
 import { TextField } from '@navikt/ds-react';
-import { Control, Controller, FieldValues } from 'react-hook-form';
+import { Control, Controller, FieldPath, FieldValues } from 'react-hook-form';
 
-export interface TextFieldProps {
-  name: string;
+export interface TextFieldProps<FormFieldValues extends FieldValues> {
+  name: FieldPath<FormFieldValues>;
   label: string;
   description?: string;
-  error?: string;
   className?: string;
-  control: Control<FieldValues>;
+  control: Control<FormFieldValues>;
 }
 
-const TextFieldWrapper = ({
+const TextFieldWrapper = <FormFieldIds extends FieldValues>({
   name,
   label,
   description,
   control,
-  error,
   className,
-}: TextFieldProps) => (
+}: TextFieldProps<FormFieldIds>) => (
   <div className={className}>
     <Controller
       name={name}
       control={control}
-      defaultValue={''}
-      render={({ field: { name, value, onChange } }) => (
+      render={({ field: { name, value, onChange }, fieldState: { error } }) => (
         <TextField
           id={name}
           name={name}
           label={label}
           description={description}
-          error={error}
-          value={value}
+          error={error?.message}
+          value={value || ''}
           onChange={onChange}
-          //style={{ maxWidth: '255px' }}
         />
       )}
     />
   </div>
 );
-
 export default TextFieldWrapper;

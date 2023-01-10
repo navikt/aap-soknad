@@ -245,7 +245,6 @@ const StartDato = ({ onBackClick, onNext, defaultValues }: Props) => {
                 label={formatMessage('søknad.startDato.antallDager.label')}
                 description={formatMessage('søknad.startDato.antallDager.description')}
                 control={control}
-                error={errors?.[`${FERIE}`]?.antallDager?.message}
               />
             </div>
           )}

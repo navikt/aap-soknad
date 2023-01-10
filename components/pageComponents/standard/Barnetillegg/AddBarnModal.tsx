@@ -141,14 +141,12 @@ export const AddBarnModal = ({ showModal, onCloseClick, onSaveClick, barn }: Pro
             control={control}
             label={formatMessage('søknad.barnetillegg.leggTilBarn.modal.navn.fornavn.label')}
             name={'navn.fornavn'}
-            error={errors?.[NAVN]?.fornavn?.message}
           />
 
           <TextFieldWrapper
             control={control}
             label={formatMessage('søknad.barnetillegg.leggTilBarn.modal.navn.etternavn.label')}
             name={'navn.etternavn'}
-            error={errors?.[NAVN]?.etternavn?.message}
           />
 
           <DatePickerWrapper
