@@ -1,27 +1,30 @@
 import { Select } from '@navikt/ds-react';
-import { Controller } from 'react-hook-form';
-import React from 'react';
+import { Control, Controller, FieldPath, FieldValues } from 'react-hook-form';
+import React, { ReactNode } from 'react';
 
-export interface SelectProps {
-  name: string;
+export interface SelectProps<FormFieldValues extends FieldValues> {
+  name: FieldPath<FormFieldValues>;
   label: string;
-  control: any;
-  error?: string;
+  control: Control<FormFieldValues>;
   required?: string;
   validate?: (value: any) => any;
-  children?: React.ReactChild | React.ReactChild[];
+  children: ReactNode;
 }
 
-const SelectWrapper = ({ name, label, control, error, children }: SelectProps) => (
+const SelectWrapper = <FormFieldValues extends FieldValues>({
+  name,
+  label,
+  control,
+  children,
+}: SelectProps<FormFieldValues>) => (
   <Controller
     name={name}
     control={control}
-    render={({ field: { name, value, onChange } }) => (
-      <Select name={name} label={label} value={value} onChange={onChange} error={error}>
+    render={({ field: { name, value, onChange }, fieldState: { error } }) => (
+      <Select name={name} label={label} value={value} onChange={onChange} error={error?.message}>
         {children}
       </Select>
     )}
   />
 );
-
 export default SelectWrapper;
