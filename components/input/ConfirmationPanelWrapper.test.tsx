@@ -8,7 +8,6 @@ import { waitFor } from '@testing-library/dom';
 import { act } from '@testing-library/react';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
-import exp from 'constants';
 
 interface FormFields {
   tillatelse: string;
@@ -64,9 +63,6 @@ describe('ConfirmationPanelWrapper', () => {
       await waitFor(() => user.click(checkbox));
     });
 
-    const checkboxAfterClick = await screen.findByRole('checkbox', {
-      name: /ja, jeg samtykker\./i,
-    });
     expect(checkbox).toBeChecked();
   });
 
