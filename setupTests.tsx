@@ -18,5 +18,14 @@ function render(ui: ReactElement, { locale = 'nb', ...options } = {}) {
   }
   return rtlRender(ui, { wrapper: Wrapper, ...options });
 }
+
+// Mocker resize observer da jsdom ikke implementerer denne
+class ResizeObserver {
+  observe() {}
+  unobserve() {}
+  disconnect() {}
+}
+window.ResizeObserver = ResizeObserver;
+
 export * from '@testing-library/react';
 export { render };

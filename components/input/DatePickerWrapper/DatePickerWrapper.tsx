@@ -1,5 +1,5 @@
 import { UNSAFE_DatePicker, UNSAFE_useDatepicker } from '@navikt/ds-react';
-import { addYears, subYears } from 'date-fns';
+import { addYears, isValid, parse, subYears } from 'date-fns';
 import React from 'react';
 import { Matcher } from 'react-day-picker';
 import { Control, Controller, FieldValues, RegisterOptions } from 'react-hook-form';
@@ -16,6 +16,7 @@ export interface DateProps<FormFieldValues extends FieldValues> {
   toDate?: Date;
   disabled?: Matcher[];
 }
+
 const FRA_DATO = subYears(new Date(), 80);
 const TIL_DATO = addYears(new Date(), 80);
 export const DatePickerWrapper = <FormFieldValues extends FieldValues>({
@@ -52,8 +53,22 @@ export const DatePickerWrapper = <FormFieldValues extends FieldValues>({
             disabled={disabled}
           >
             <UNSAFE_DatePicker.Input
-              onChange={onChange}
-              onInput={onChange}
+              onChange={(datoInput) => {
+                if (datoInput.currentTarget.value.match(/^\d{1,2}\.\d{1,2}\.\d{4}$/)) {
+                  console.log('ser ut som en dato');
+                  const parsedDate = parse(datoInput.currentTarget.value, 'dd.MM.yyyy', new Date());
+                  console.log(parsedDate);
+                  return parsedDate;
+                }
+              }}
+              onInput={(datoInput) => {
+                if (datoInput.currentTarget.value.match(/^\d{1,2}\.\d{1,2}\.\d{4}$/)) {
+                  console.log('ser ut som en dato');
+                  const parsedDate = parse(datoInput.currentTarget.value, 'dd.MM.yyyy', new Date());
+                  console.log(parsedDate);
+                  return parsedDate;
+                }
+              }}
               value={value}
               name={name}
               description={description}
