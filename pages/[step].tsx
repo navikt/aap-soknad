@@ -21,6 +21,7 @@ import {
   addBehandlerIfMissing,
   SoknadContextProviderStandard,
   useSoknadContextStandard,
+  updateSøknadDataStartDato,
 } from 'context/soknadContextStandard';
 import {
   setSokerOppslagFraProps,
@@ -158,6 +159,11 @@ const Steps = ({ søker, mellomlagretSøknad }: PageProps) => {
     updateSøknadData<Soknad>(søknadDispatch, data);
     completeAndGoToNextStep(stepWizardDispatch);
   };
+  const onNextStepStartDato = async (data: any) => {
+    logSkjemastegFullførtEvent(currentStep.stepIndex ?? 0);
+    updateSøknadDataStartDato<Soknad>(søknadDispatch, data);
+    completeAndGoToNextStep(stepWizardDispatch);
+  };
 
   return (
     <>
@@ -175,7 +181,7 @@ const Steps = ({ søker, mellomlagretSøknad }: PageProps) => {
               onBackClick={onPreviousStep}
               defaultValues={søknadState}
               onNext={(data) => {
-                onNextStep(data);
+                onNextStepStartDato(data);
               }}
             />
           )}

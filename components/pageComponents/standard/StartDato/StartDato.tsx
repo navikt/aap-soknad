@@ -9,10 +9,14 @@ import ColorPanel from 'components/panel/ColorPanel';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import SoknadFormWrapper from 'components/SoknadFormWrapper/SoknadFormWrapper';
-import { useStepWizard } from 'context/stepWizardContextV2';
+import { completeAndGoToNextStep, useStepWizard } from 'context/stepWizardContextV2';
 import { LucaGuidePanel } from '@navikt/aap-felles-innbygger-react';
 import { useFeatureToggleIntl } from 'hooks/useFeatureToggleIntl';
-import { deleteOpplastedeVedlegg, useSoknadContextStandard } from 'context/soknadContextStandard';
+import {
+  deleteOpplastedeVedlegg,
+  updateSøknadDataStartDato,
+  useSoknadContextStandard,
+} from 'context/soknadContextStandard';
 import { slettLagretSoknadState, updateSøknadData } from 'context/soknadContextCommon';
 import { useDebounceLagreSoknad } from 'hooks/useDebounceLagreSoknad';
 
@@ -20,6 +24,7 @@ import { GenericSoknadContextState } from 'types/SoknadContext';
 import * as classes from './StartDato.module.css';
 import { setFocusOnErrorSummary } from 'components/schema/FormErrorSummary';
 import { DatePickerWrapper } from '../../../input/DatePickerWrapper/DatePickerWrapper';
+import { logSkjemastegFullførtEvent } from 'utils/amplitude';
 
 export enum FerieType {
   DAGER = 'DAGER',
@@ -42,7 +47,6 @@ export const FerieTypeToMessageKey = (ferieType: FerieType) => {
 
 interface Props {
   onBackClick: () => void;
-  onNext: (data: any) => void;
   defaultValues?: GenericSoknadContextState<Soknad>;
 }
 
@@ -94,15 +98,15 @@ export const getStartDatoSchema = (formatMessage: (id: string) => string) => {
   });
 };
 
-interface StartDatoFormFields {
+export interface StartDatoFormFields {
   [SYKEPENGER]: JaEllerNei;
   ferie?: Ferie;
 }
 
-const StartDato = ({ onBackClick, onNext, defaultValues }: Props) => {
+const StartDato = ({ onBackClick, defaultValues }: Props) => {
   const { formatMessage } = useFeatureToggleIntl();
   const { søknadState, søknadDispatch } = useSoknadContextStandard();
-  const { stepList } = useStepWizard();
+  const { currentStep, stepList, stepWizardDispatch } = useStepWizard();
   const {
     control,
     handleSubmit,
@@ -119,8 +123,10 @@ const StartDato = ({ onBackClick, onNext, defaultValues }: Props) => {
     },
     shouldUnregister: true,
   });
+  console.log('ferie', defaultValues?.søknad?.ferie);
   const debouncedLagre = useDebounceLagreSoknad<Soknad>();
   const allFields = useWatch({ control });
+  console.log('allFieldsl', allFields);
   const memoFields = useMemo(() => allFields, [allFields]);
   useEffect(() => {
     debouncedLagre(søknadState, stepList, memoFields);
@@ -139,7 +145,9 @@ const StartDato = ({ onBackClick, onNext, defaultValues }: Props) => {
   return (
     <SoknadFormWrapper
       onNext={handleSubmit((data) => {
-        onNext(data);
+        logSkjemastegFullførtEvent(currentStep.stepIndex ?? 0);
+        updateSøknadDataStartDato<StartDatoFormFields>(søknadDispatch, data);
+        completeAndGoToNextStep(stepWizardDispatch);
       }, setFocusOnErrorSummary)}
       onBack={() => {
         updateSøknadData<Soknad>(søknadDispatch, { ...søknadState.søknad });

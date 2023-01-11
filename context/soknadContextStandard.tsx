@@ -11,6 +11,7 @@ import {
 import { RegistrertBehandler, Soknad, Vedlegg } from 'types/Soknad';
 import { OppslagBarn, OppslagBehandler } from './sokerOppslagContext';
 import { BARN } from 'components/pageComponents/standard/Barnetillegg/Barnetillegg';
+import { StartDatoFormFields } from 'components/pageComponents/standard/StartDato/StartDato';
 
 const soknadContextInititalStateStandard = {
   ...soknadContextInititalState,
@@ -37,6 +38,18 @@ function soknadReducerStandard(
         ...state,
         søknad: structuredClone(action.payload),
       };
+    case SoknadActionKeys.UPDATE_SOKNAD_STARTDATO: {
+      const cloned = structuredClone(action.payload);
+      const newState = {
+        ...state,
+        søknad: {
+          sykepenger: cloned?.sykepenger,
+          ferie: cloned?.ferie,
+        },
+      };
+      console.log('newState startdato', newState);
+      return newState;
+    }
     case SoknadActionKeys.UPDATE_SOKNAD: {
       return {
         ...state,
@@ -177,3 +190,10 @@ export const deleteOpplastedeVedlegg = async (søknad?: Soknad) => {
     });
   }
 };
+
+export function updateSøknadDataStartDato<SoknadStateType>(
+  dispatch: Dispatch<SoknadAction<StartDatoFormFields>>,
+  data: StartDatoFormFields
+) {
+  dispatch({ type: SoknadActionKeys.UPDATE_SOKNAD_STARTDATO, payload: data });
+}
