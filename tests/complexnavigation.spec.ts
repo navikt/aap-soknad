@@ -1,7 +1,6 @@
 import { expect, test } from '@playwright/test';
-import { addDays, addMonths, format, getMonth } from 'date-fns';
+import { addDays, addMonths, format } from 'date-fns';
 import { formatDate } from '../utils/date';
-import exp from 'constants';
 
 test('test', async ({ page }) => {
   await page.goto('http://localhost:3000/aap/soknad/');
