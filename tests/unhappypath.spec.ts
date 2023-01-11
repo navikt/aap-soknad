@@ -1,4 +1,6 @@
-import { test, expect } from '@playwright/test';
+import { expect, test } from '@playwright/test';
+import { addDays, addMonths, format, subYears } from 'date-fns';
+import { formatDate } from '../utils/date';
 
 test('test', async ({ page }) => {
   await page.goto('http://localhost:3000/aap/soknad/');
@@ -57,11 +59,14 @@ test('test', async ({ page }) => {
   await page
     .getByText('Søknad om arbeidsavklarings­penger (AAP)Steg 1 av 10Du må fikse disse feilene fø')
     .click();
-  await page.getByRole('button', { name: 'Åpne datovelger' }).first().click();
-  await page.getByRole('button', { name: 'torsdag 12' }).click();
-  await page.getByRole('button', { name: 'Åpne datovelger' }).nth(1).click();
-  await page.getByRole('button', { name: 'tirsdag 10' }).click();
+
+  const today = format(new Date(), 'dd.MM.yyyy');
+  const tomorrow = format(addDays(new Date(), 1), 'dd.MM.yyyy');
+  await page.getByRole('textbox', { name: /fra dato \(dd\.mm\.åååå\)/i }).fill(tomorrow);
+  await page.getByRole('textbox', { name: /til dato \(dd\.mm\.åååå\)/i }).fill(today);
+
   await page.getByRole('button', { name: 'Neste steg' }).click();
+
   await page
     .locator('p:has-text("Fra-dato må være eldre enn til-dato. Fyll inn slik: dd.mm.åååå.")')
     .click();
@@ -69,7 +74,8 @@ test('test', async ({ page }) => {
     .getByRole('link', { name: 'Fra-dato må være eldre enn til-dato. Fyll inn slik: dd.mm.åååå.' })
     .click();
   await expect(page).toHaveURL('http://localhost:3000/aap/soknad/1/#ferie.tilDato');
-  await page.getByRole('button', { name: 'fredag 13' }).click();
+  await page.getByRole('textbox', { name: /fra dato \(dd\.mm\.åååå\)/i }).fill(today);
+  await page.getByRole('textbox', { name: /til dato \(dd\.mm\.åååå\)/i }).fill(tomorrow);
   await page.getByLabel('Nei, men jeg vet antall arbeidsdager jeg skal ta ferie').check();
   await page.getByRole('button', { name: 'Neste steg' }).click();
   await page
@@ -86,7 +92,7 @@ test('test', async ({ page }) => {
 
   // Steg 2
   await expect(page).toHaveURL('http://localhost:3000/aap/soknad/2/');
-  await page.getByRole('heading', { name: 'Bosted og jobb' }).click();
+  await expect(await page.getByRole('heading', { name: 'Bosted og jobb' })).toBeVisible();
   await page.getByRole('button', { name: 'Neste steg' }).click();
   await page
     .locator(
@@ -119,10 +125,12 @@ test('test', async ({ page }) => {
     .getByLabel('Ja')
     .check();
   await page.getByRole('button', { name: 'Neste steg' }).click();
-  await page
-    .getByText('Du har svart at du har jobbet utenfor Norge de fem siste årene. Du må derfor leg')
-    .nth(1)
-    .click();
+  await expect(
+    await page
+      .getByText('Du har svart at du har jobbet utenfor Norge de fem siste årene. Du må derfor leg')
+      .nth(1)
+  ).toBeVisible();
+
   await page
     .getByRole('link', {
       // eslint-disable-next-line max-len
@@ -134,31 +142,48 @@ test('test', async ({ page }) => {
     .getByRole('button', { name: 'Legg til Registrer periode med jobb utenfor Norge' })
     .click();
   await page.getByRole('button', { name: 'Lagre' }).click();
-  await page.getByText('Vennligst oppgi land').click();
-  await page.getByText('Vennligst oppgi fra dato').click();
-  await page.getByText('Vennligst oppgi til dato').click();
+  await expect(page.getByText('Vennligst oppgi land')).toBeVisible();
+  await expect(page.getByText('Vennligst oppgi fra dato')).toBeVisible();
+  await expect(page.getByText('Vennligst oppgi til dato')).toBeVisible();
   await page
     .getByRole('combobox', { name: 'Hvilket land jobbet du i?' })
     .selectOption('AL:Albania');
-  await page.getByRole('button', { name: 'Åpne månedsvelger' }).first().click();
-  await page.getByRole('button', { name: 'februar' }).click();
-  await page.getByRole('button', { name: 'Åpne månedsvelger' }).nth(1).click();
-  await page.getByRole('button', { name: 'januar' }).click();
+
+  const thisMonth = new Date();
+  const nextMonth = addMonths(new Date(), 1);
+
+  await page
+    .getByRole('textbox', { name: /fra og med måned \(mm\.åååå\)/i })
+    .fill(formatDate(nextMonth) ?? '');
+  await page
+    .getByRole('textbox', { name: /til og med måned \(mm\.åååå\)/i })
+    .fill(formatDate(thisMonth) ?? '');
+
   await page.getByRole('button', { name: 'Lagre' }).click();
-  await page.getByText('Fra-dato må være eldre enn til-dato. Fyll inn slik: mm.åååå.').click();
-  await page.getByRole('button', { name: 'Åpne månedsvelger' }).nth(1).click();
-  await page.getByRole('button', { name: 'mars' }).click();
+  await expect(
+    await page.getByText('Fra-dato må være eldre enn til-dato. Fyll inn slik: mm.åååå.')
+  ).toBeVisible();
+  await page
+    .getByRole('textbox', { name: /fra og med måned \(mm\.åååå\)/i })
+    .fill(formatDate(thisMonth) ?? '');
+  await page
+    .getByRole('textbox', { name: /til og med måned \(mm\.åååå\)/i })
+    .fill(formatDate(nextMonth) ?? '');
+
   await page.getByRole('button', { name: 'Lagre' }).click();
+
   await page
     .getByRole('group', { name: 'Har du bodd sammenhengende i Norge de fem siste årene?' })
     .getByLabel('Nei')
     .check();
+
   await page.getByRole('button', { name: 'Neste steg' }).click();
-  await page
-    .locator(
+  await expect(
+    await page.locator(
       'p:has-text("Du må svare på om du har jobbet sammenhengende i Norge de fem siste årene.")'
     )
-    .click();
+  ).toBeVisible();
+
   await page
     .getByRole('link', {
       name: 'Du må svare på om du har jobbet sammenhengende i Norge de fem siste årene.',
@@ -172,11 +197,12 @@ test('test', async ({ page }) => {
     .getByLabel('Ja')
     .check();
   await page.getByRole('button', { name: 'Neste steg' }).click();
-  await page
-    .locator(
+  await expect(
+    await page.locator(
       'p:has-text("Du må svare på om du i tillegg til jobb i Norge, også har jobbet i et annet land")'
     )
-    .click();
+  ).toBeVisible();
+
   await page
     .getByRole('link', {
       name: 'Du må svare på om du i tillegg til jobb i Norge, også har jobbet i et annet land de fem siste årene.',
@@ -192,10 +218,12 @@ test('test', async ({ page }) => {
     .getByLabel('Ja')
     .check();
   await page.getByRole('button', { name: 'Neste steg' }).click();
-  await page
-    .getByText('Du har svart at du også har jobbet utenfor Norge de fem siste årene. Du må derfo')
-    .nth(1)
-    .click();
+  await expect(
+    await page
+      .getByText('Du har svart at du også har jobbet utenfor Norge de fem siste årene. Du må derfo')
+      .nth(1)
+  ).toBeVisible();
+
   await page
     .getByRole('link', {
       // eslint-disable-next-line max-len
@@ -232,11 +260,11 @@ test('test', async ({ page }) => {
 
   // Steg 3
   await expect(page).toHaveURL('http://localhost:3000/aap/soknad/3/');
-  await page.getByRole('heading', { name: 'Yrkesskade' }).click();
+  await expect(await page.getByRole('heading', { name: 'Yrkesskade' })).toBeVisible();
   await page.getByRole('button', { name: 'Neste steg' }).click();
-  await page
-    .locator('p:has-text("Du må svare på om du har en yrkesskade eller yrkessykdom.")')
-    .click();
+  await expect(
+    await page.locator('p:has-text("Du må svare på om du har en yrkesskade eller yrkessykdom.")')
+  ).toBeVisible();
   await page
     .getByRole('link', { name: 'Du må svare på om du har en yrkesskade eller yrkessykdom.' })
     .click();
@@ -257,13 +285,15 @@ test('test', async ({ page }) => {
 
   // Steg 4
   await expect(page).toHaveURL('http://localhost:3000/aap/soknad/4/');
-  await page.getByRole('heading', { name: 'Kontaktperson for helseopplysninger' }).click();
+  await expect(
+    await page.getByRole('heading', { name: 'Kontaktperson for helseopplysninger' })
+  ).toBeVisible();
   await page.getByRole('button', { name: 'Neste steg' }).click();
-  await page
-    .locator(
+  await expect(
+    await page.locator(
       'p:has-text("Du må svare på om informasjonen om din registrerte behandler er riktig.")'
     )
-    .click();
+  ).toBeVisible();
   await page
     .getByRole('link', {
       name: 'Du må svare på om informasjonen om din registrerte behandler er riktig.',
@@ -289,12 +319,12 @@ test('test', async ({ page }) => {
   await page.getByLabel('Fornavn').fill('Iren');
   await page.getByLabel('Etternavn').fill('Panikk');
   await page.getByRole('button', { name: 'Lagre' }).click();
-  await page.getByText('Navn:Iren Panikk').click();
+  await expect(await page.getByText('Navn:Iren Panikk')).toBeVisible();
   await page.getByRole('button', { name: 'Neste steg' }).click();
 
   // Steg 5
   await expect(page).toHaveURL('http://localhost:3000/aap/soknad/5/');
-  await page.getByRole('heading', { name: 'Barnetillegg' }).click();
+  await expect(await page.getByRole('heading', { name: 'Barnetillegg' })).toBeVisible();
   await page.getByRole('button', { name: 'Neste steg' }).click();
   await expect(
     page.getByText('Du må svare på om barnet har en årlig inntekt over 111 477kr')
@@ -328,16 +358,25 @@ test('test', async ({ page }) => {
   ).toBeVisible();
   await page.getByRole('button', { name: 'Legg til Legg til barn' }).click();
   await page.getByRole('button', { name: 'Lagre' }).click();
-  await page.getByText('Du må fylle inn barnets fornavn og mellomnavn.').click();
-  await page.getByText('Du må fylle inn barnets etternavn.').click();
-  await page.getByText('Du må fylle inn barnets fødselsdato. Fyll inn slik: dd.mm.åååå.').click();
-  await page.getByText('Du må svare på hvilken relasjon du har til barnet.').click();
-  await page.getByText('Du må svare på om barnet har en årlig inntekt over 111 477kr').click();
-  await page.getByLabel('Fornavn og mellomnavn').click();
+  await expect(
+    await page.getByText('Du må fylle inn barnets fornavn og mellomnavn.')
+  ).toBeVisible();
+  await expect(await page.getByText('Du må fylle inn barnets etternavn.')).toBeVisible();
+  await expect(
+    await page.getByText('Du må fylle inn barnets fødselsdato. Fyll inn slik: dd.mm.åååå.')
+  ).toBeVisible();
+  await expect(
+    await page.getByText('Du må svare på hvilken relasjon du har til barnet.')
+  ).toBeVisible();
+  await expect(
+    await page.getByText('Du må svare på om barnet har en årlig inntekt over 111 477kr')
+  ).toBeVisible();
   await page.getByLabel('Fornavn og mellomnavn').fill('Kjell T.');
   await page.getByLabel('Etternavn').fill('Ringen');
-  await page.getByRole('button', { name: 'Åpne datovelger' }).click();
-  await page.getByLabel('Fødselsdato (dd.mm.åååå)').fill('10.01.2000');
+
+  const over18years = subYears(new Date(), 19);
+
+  await page.getByLabel('Fødselsdato (dd.mm.åååå)').fill(format(over18years, 'dd.MM.yyyy'));
   await page.getByRole('radio', { name: 'Forelder' }).check();
   await page.getByRole('radio', { name: 'Nei' }).check();
   await page.getByRole('button', { name: 'Lagre' }).click();
@@ -347,7 +386,7 @@ test('test', async ({ page }) => {
     )
   ).toBeVisible();
   await page.getByLabel('Fødselsdato (dd.mm.åååå)').click();
-  await page.getByLabel('Fødselsdato (dd.mm.åååå)').fill('10.01.2023');
+  await page.getByLabel('Fødselsdato (dd.mm.åååå)').fill(format(new Date(), 'dd.MM.yyyy'));
   await page.getByRole('button', { name: 'Lagre' }).click();
   await expect(
     page.getByText(
@@ -361,7 +400,7 @@ test('test', async ({ page }) => {
   await expect(page).toHaveURL('http://localhost:3000/aap/soknad/6/');
   await expect(page.getByRole('heading', { name: 'Student' })).toBeVisible();
   await page.getByRole('button', { name: 'Neste steg' }).click();
-  await page.locator('p:has-text("Du må svare på om du er student.")').click();
+  await expect(await page.locator('p:has-text("Du må svare på om du er student.")')).toBeVisible();
   await page.getByRole('link', { name: 'Du må svare på om du er student.' }).click();
   await expect(page).toHaveURL('http://localhost:3000/aap/soknad/6/#student.erStudent');
   await page.getByLabel('Ja, men har avbrutt studiet helt på grunn av sykdom').check();
