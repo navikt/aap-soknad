@@ -296,10 +296,9 @@ test('test', async ({ page }) => {
   await expect(page).toHaveURL('http://localhost:3000/aap/soknad/5/');
   await page.getByRole('heading', { name: 'Barnetillegg' }).click();
   await page.getByRole('button', { name: 'Neste steg' }).click();
-  // TODO Finne en bedre løsning for denne
-  // await expect(
-  //   page.getByText('Du må svare på om barnet har en årlig inntekt over 111 477kr')
-  // ).toHaveLength(4);
+  await expect(
+    page.getByText('Du må svare på om barnet har en årlig inntekt over 111 477kr')
+  ).toHaveCount(4);
   await page
     .getByRole('link', { name: 'Du må svare på om barnet har en årlig inntekt over 111 477kr' })
     .first()
