@@ -71,7 +71,8 @@ export const getStartDatoSchema = (formatMessage: (id: string) => string) => {
           is: FerieType.PERIODE,
           then: yup
             .date()
-            .required(formatMessage('søknad.startDato.periode.fraDato.validation.required')),
+            .required(formatMessage('søknad.startDato.periode.fraDato.validation.required'))
+            .typeError(formatMessage('søknad.startDato.periode.fraDato.validation.typeError')),
         }),
         ['tilDato']: yup.date().when([FERIETYPE], {
           is: FerieType.PERIODE,
@@ -81,7 +82,8 @@ export const getStartDatoSchema = (formatMessage: (id: string) => string) => {
             .min(
               yup.ref('fraDato'),
               formatMessage('søknad.startDato.periode.tilDato.validation.fraDatoEtterTilDato')
-            ),
+            )
+            .typeError(formatMessage('søknad.startDato.periode.tilDato.validation.typeError')),
         }),
         ['antallDager']: yup.string().when([FERIETYPE], {
           is: FerieType.DAGER,
