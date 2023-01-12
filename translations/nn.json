@@ -57,12 +57,14 @@
         "fraDato": {
           "label": "Fra dato (dd.mm.åååå)",
           "validation": {
+            "typeError": "Fra-dato må vera ein gyldig dato på format dd.mm.yyyy",
             "required": "Du må fylle ut feriens fra-dato. Fyll inn slik: dd.mm.åååå."
           }
         },
         "tilDato": {
           "label": "Til dato (dd.mm.åååå)",
           "validation": {
+            "typeError": "Til-dato må vera ein gyldig dato på format dd.mm.yyyy",
             "required": "Du må fylle ut feriens til-dato. Fyll inn slik: dd.mm.åååå.",
             "fraDatoEtterTilDato": "Fra-dato må være eldre enn til-dato. Fyll inn slik: dd.mm.åååå."
           }
