@@ -1,11 +1,4 @@
-import {
-  findAllByRole,
-  findByRole,
-  fireEvent,
-  getByRole,
-  renderStepSoknadStandard,
-  screen,
-} from 'setupTests';
+import { findByRole, fireEvent, getByRole, renderStepSoknadStandard, screen } from 'setupTests';
 import { Step, StepWizard } from 'components/StepWizard';
 import React from 'react';
 import { axe, toHaveNoViolations } from 'jest-axe';
