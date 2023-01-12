@@ -68,6 +68,9 @@ export const getAddBarnSchema = (formatMessage: (id: string, options?: {}) => st
       .max(
         add(new Date(), { days: 1 }),
         formatMessage('søknad.barnetillegg.leggTilBarn.modal.fødselsdato.validation.max')
+      )
+      .typeError(
+        formatMessage('søknad.barnetillegg.leggTilBarn.modal.fødselsdato.validation.typeError')
       ),
     relasjon: yup
       .string()
