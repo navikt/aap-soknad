@@ -1,14 +1,21 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { render, screen, fireEvent } from 'setupTests';
 import { Veiledning } from './Veiledning';
-import { toHaveNoViolations } from 'jest-axe';
+import { axe, toHaveNoViolations } from 'jest-axe';
 expect.extend(toHaveNoViolations);
 
 describe('Veiledning', () => {
   const Component = () => {
+    const dummyRef = useRef(null);
     return (
       <>
-        <Veiledning onSubmit={jest.fn()} søker={{}} loading={false} />
+        <Veiledning
+          onSubmit={jest.fn()}
+          søker={{}}
+          errorMessageRef={dummyRef}
+          hasError={false}
+          isLoading={false}
+        />
       </>
     );
   };
@@ -25,11 +32,8 @@ describe('Veiledning', () => {
       screen.queryByText('Du må bekrefte at du vil gi så riktige opplysninger som mulig.')
     ).toBeNull();
   });
-  /*
-  // TODO: se om denne testen vil passere med oppgradering av ds-react
   it('UU', async () => {
     const { container } = render(<Component />, {});
     expect(await axe(container)).toHaveNoViolations();
   });
-  */
 });
