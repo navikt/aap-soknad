@@ -16,7 +16,6 @@ export const fetchPOST = async (url: string, payload: object, opts: RequestOptio
     const data = contentType.includes('application/json') ? await res.json() : {};
     return { ok: res.ok, status: res.status, data };
   } catch (e) {
-    console.error(e);
     return { ok: false, error: e };
   }
 };

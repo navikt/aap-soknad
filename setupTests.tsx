@@ -12,12 +12,14 @@ import { ReactElement } from 'react';
 import { IntlProvider } from 'react-intl';
 import { Soknad } from 'types/Soknad';
 import { SøknadType } from 'types/SoknadContext';
-import { messages } from 'utils/message';
+import { messages, flattenMessages } from 'utils/message';
+import links from 'translations/links.json';
 
+const tekster = { ...messages['nb'], ...flattenMessages({ applinks: links }) };
 function render(ui: ReactElement, { locale = 'nb', ...options } = {}) {
   function Wrapper({ children }: { children: ReactElement }): ReactElement {
     return (
-      <IntlProvider locale={locale} messages={messages['nb']}>
+      <IntlProvider locale={locale} messages={tekster}>
         {children}
       </IntlProvider>
     );
@@ -52,7 +54,7 @@ function renderStepSoknadStandard(
       appStateDispatch: () => {},
     };
     return (
-      <IntlProvider locale={locale} messages={messages['nb']}>
+      <IntlProvider locale={locale} messages={tekster}>
         <AppStateContext.Provider value={{ ...appContext }}>
           <SoknadContextStandard.Provider value={{ ...soknadContext }}>
             <StepWizardContext.Provider value={{ ...wizardContext }}>

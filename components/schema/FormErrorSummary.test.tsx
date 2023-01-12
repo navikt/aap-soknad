@@ -23,7 +23,6 @@ describe('FormErrorSummary', () => {
 
   it('skjuler ErrorSummary når vi ikke har feil', () => {
     const { container } = render(<FormErrorSummary errors={[]} />);
-    console.log('container', container.innerHTML);
     expect(within(container).getByRole('alert', { hidden: true })).toHaveAttribute(
       'aria-hidden',
       'true'
