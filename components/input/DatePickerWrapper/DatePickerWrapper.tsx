@@ -1,8 +1,8 @@
 import { UNSAFE_DatePicker, UNSAFE_useDatepicker } from '@navikt/ds-react';
-import { addYears, isValid, parse, subYears } from 'date-fns';
-import React, { useRef } from 'react';
+import { addYears, parse, subYears } from 'date-fns';
+import React from 'react';
 import { Matcher } from 'react-day-picker';
-import { Control, Controller, FieldPath, FieldValues, useController } from 'react-hook-form';
+import { Control, Controller, FieldPath, FieldValues } from 'react-hook-form';
 
 export interface DateProps<FormFieldValues extends FieldValues> {
   name: FieldPath<FormFieldValues>;
@@ -45,7 +45,6 @@ export const DatePickerWrapper = <FormFieldValues extends FieldValues>({
             onChange={onChange}
             onSelect={onChange}
             disableWeekends={disableWeekend}
-            dropdownCaption
             fromDate={fromDate}
             toDate={toDate}
             disabled={disabled}
