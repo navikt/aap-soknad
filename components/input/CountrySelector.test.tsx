@@ -8,6 +8,7 @@ import { Button } from '@navikt/ds-react';
 import userEvent from '@testing-library/user-event';
 import { waitFor } from '@testing-library/dom';
 import { act } from '@testing-library/react';
+import resetAllMocks = jest.resetAllMocks;
 
 interface Props {
   defaultValue?: string;
@@ -47,14 +48,14 @@ describe('CountrySelector', () => {
     expect(label).toBeVisible();
   });
 
-  it('skal vise valgene i nedtrekkslisten', () => {
+  it('skal vise valgene i nedtrekkslisten', async () => {
     render(<TestComponent />);
 
     const selectComponent = screen.getByRole('combobox', {
       name: /hvilket land liker du\?/i,
     });
 
-    waitFor(() => user.click(selectComponent));
+    await waitFor(() => user.click(selectComponent));
 
     const sverigValg = screen.getByRole('option', { name: /sverige/i });
     const danmarkValg = screen.getByRole('option', { name: /danmark/i });
