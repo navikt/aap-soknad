@@ -5,8 +5,10 @@ import { formatDate } from '../utils/date';
 test('test', async ({ page }) => {
   await page.goto('http://localhost:3000/aap/soknad/');
   await page.getByRole('button', { name: 'Start søknad' }).click();
+  await expect(
+    await page.getByText('Du må bekrefte at du vil gi så riktige opplysninger som mulig.')
+  ).toBeVisible();
   await page.getByLabel('Jeg vil svare så godt jeg kan på spørsmålene i søknaden.').check();
-  // TODO Her forventer vi en feilmelding
   await page.getByRole('button', { name: 'Start søknad' }).click();
   await expect(page).toHaveURL('http://localhost:3000/aap/soknad/1/');
 
@@ -456,7 +458,10 @@ test('test', async ({ page }) => {
   await page.getByLabel('Ja').check();
   await page.getByLabel('Avtalefestet pensjon (AFP)').check();
   await page.getByRole('button', { name: 'Neste steg' }).click();
-  //TODO Mangler feilmelding på textfield AFP
+
+  await expect(
+    await page.getByText('Du må svare på hvem som utbetaler avtalefestet pensjon (AFP).')
+  ).toHaveCount(2);
   await page
     .getByRole('link', { name: 'Du må svare på hvem som utbetaler avtalefestet pensjon (AFP).' })
     .click();
@@ -485,7 +490,12 @@ test('test', async ({ page }) => {
   await expect(page).toHaveURL('http://localhost:3000/aap/soknad/10/');
   await expect(page.getByRole('heading', { name: 'Oppsummering' })).toBeVisible();
   await page.getByRole('button', { name: 'Send søknad' }).click();
-  //TODO Feilmelding på confirmationPanel
+  await expect(
+    page.getByText(
+      'Vennligst bekreft at du har lest all informasjon i søknaden og at opplysningene du har gitt er korrekte.'
+    )
+  ).toHaveCount(2);
+
   await page
     .getByRole('link', {
       name: 'Vennligst bekreft at du har lest all informasjon i søknaden og at opplysningene du har gitt er korrekte.',
