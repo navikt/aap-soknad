@@ -9,7 +9,6 @@ expect.extend(toHaveNoViolations);
 const YRKESSKADE = 'yrkesskade';
 
 describe('Startdato', () => {
-  window.HTMLElement.prototype.scrollIntoView = function () {};
   const Component = () => {
     return (
       <StepWizard>

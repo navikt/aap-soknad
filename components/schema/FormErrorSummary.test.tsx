@@ -5,7 +5,6 @@ import { axe, toHaveNoViolations } from 'jest-axe';
 expect.extend(toHaveNoViolations);
 
 describe('FormErrorSummary', () => {
-  window.HTMLElement.prototype.scrollIntoView = function () {};
   const errorArray = {
     aarstall: {
       message: 'Årstall må bestå av fire siffer',
