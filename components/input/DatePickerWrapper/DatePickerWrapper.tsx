@@ -14,6 +14,7 @@ export interface DateProps<FormFieldValues extends FieldValues> {
   fromDate?: Date;
   toDate?: Date;
   disabled?: Matcher[];
+  dropdownCaption?: boolean;
 }
 
 const FRA_DATO = subYears(new Date(), 80);
@@ -28,6 +29,7 @@ export const DatePickerWrapper = <FormFieldValues extends FieldValues>({
   fromDate = FRA_DATO,
   toDate = TIL_DATO,
   disabled,
+  dropdownCaption = false,
 }: DateProps<FormFieldValues>) => {
   const { datepickerProps, inputProps } = UNSAFE_useDatepicker({
     defaultSelected: selectedDate ? new Date(selectedDate) : undefined,
@@ -46,7 +48,7 @@ export const DatePickerWrapper = <FormFieldValues extends FieldValues>({
             onChange={onChange}
             onSelect={onChange}
             disableWeekends={disableWeekend}
-            dropdownCaption
+            dropdownCaption={dropdownCaption}
             fromDate={fromDate}
             toDate={toDate}
             disabled={disabled}
