@@ -66,5 +66,14 @@ function renderStepSoknadStandard(
   }
   return rtlRender(ui, { wrapper: ProvidersWrapper, ...options });
 }
+
+// Mocker resize observer da jsdom ikke implementerer denne
+class ResizeObserver {
+  observe() {}
+  unobserve() {}
+  disconnect() {}
+}
+window.ResizeObserver = ResizeObserver;
+
 export * from '@testing-library/react';
 export { render, renderStepSoknadStandard };
