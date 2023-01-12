@@ -79,5 +79,8 @@ class ResizeObserver {
 }
 window.ResizeObserver = ResizeObserver;
 
+// Mocker scrollIntoView da jsdom ikke implementerer denne
+window.HTMLElement.prototype.scrollIntoView = function () {};
+
 export * from '@testing-library/react';
 export { render, renderStepSoknadStandard };
