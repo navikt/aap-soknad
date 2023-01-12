@@ -1,9 +1,8 @@
 import { UNSAFE_DatePicker, UNSAFE_useDatepicker } from '@navikt/ds-react';
-import { addYears, subYears } from 'date-fns';
-import React from 'react';
+import { addYears, isValid, parse, subYears } from 'date-fns';
+import React, { useRef } from 'react';
 import { Matcher } from 'react-day-picker';
-import { Control, Controller, FieldValues } from 'react-hook-form';
-import { FieldPath } from 'react-hook-form/dist/types';
+import { Control, Controller, FieldPath, FieldValues, useController } from 'react-hook-form';
 
 export interface DateProps<FormFieldValues extends FieldValues> {
   name: FieldPath<FormFieldValues>;
@@ -16,6 +15,7 @@ export interface DateProps<FormFieldValues extends FieldValues> {
   toDate?: Date;
   disabled?: Matcher[];
 }
+
 const FRA_DATO = subYears(new Date(), 80);
 const TIL_DATO = addYears(new Date(), 80);
 export const DatePickerWrapper = <FormFieldValues extends FieldValues>({
@@ -44,17 +44,21 @@ export const DatePickerWrapper = <FormFieldValues extends FieldValues>({
             id={name}
             onChange={onChange}
             onSelect={onChange}
-            {...datepickerProps}
             disableWeekends={disableWeekend}
             dropdownCaption
             fromDate={fromDate}
             toDate={toDate}
             disabled={disabled}
+            {...datepickerProps}
           >
             <UNSAFE_DatePicker.Input
-              onChange={onChange}
-              onInput={onChange}
-              value={value}
+              onChange={(datoInput) =>
+                onChange(parse(datoInput.currentTarget.value, 'dd.MM.yyyy', new Date()))
+              }
+              onInput={(datoInput) =>
+                onChange(parse(datoInput.currentTarget.value, 'dd.MM.yyyy', new Date()))
+              }
+              value={value ? value.toString() : ''}
               name={name}
               description={description}
               error={error && error.message}
