@@ -1,16 +1,24 @@
-import { findAllByRole, findByRole, fireEvent, renderStepSoknadStandard, screen } from 'setupTests';
+import {
+  findAllByRole,
+  findByRole,
+  fireEvent,
+  renderStepSoknadStandard,
+  screen,
+  waitFor,
+} from 'setupTests';
 import { Step, StepWizard } from 'components/StepWizard';
 import React from 'react';
 import Student, { JaNeiAvbrutt } from './Student';
 import { axe, toHaveNoViolations } from 'jest-axe';
 import messagesNb from 'translations/nb.json';
-import { act } from 'react-dom/test-utils';
+import userEvent from '@testing-library/user-event';
 expect.extend(toHaveNoViolations);
 
 const STUDENT = 'student';
 
 describe('Student', () => {
-  window.HTMLElement.prototype.scrollIntoView = function () {};
+  const user = userEvent.setup();
+
   const Component = () => {
     return (
       <StepWizard>
@@ -43,18 +51,19 @@ describe('Student', () => {
   });
   it('Avbrutt studie - oppfølgingsspørsmål påkrevd', async () => {
     renderStepSoknadStandard(STUDENT, <Component />, {});
-    act(() => {
-      const avbruttLabel = messagesNb?.søknad?.student?.erStudent?.avbrutt;
-      fireEvent.click(screen.getByRole('radio', { name: avbruttLabel }), {});
-    });
-    act(() => {
-      fireEvent.submit(screen.getByRole('button', { name: 'Neste steg' }));
-    });
+
+    const avbruttLabel = messagesNb?.søknad?.student?.erStudent?.avbrutt;
+    const avbruttStudie = screen.getByRole('radio', { name: avbruttLabel });
+    await waitFor(() => user.click(avbruttStudie));
+
+    const nesteStegKnapp = screen.getByRole('button', { name: 'Neste steg' });
+    await waitFor(() => user.click(nesteStegKnapp));
 
     const errorSummary = await screen.findByRole('alert');
     const påkrevdTekst = messagesNb?.søknad?.student?.kommeTilbake?.required;
     expect(await findByRole(errorSummary, 'link', { name: påkrevdTekst })).not.toBeNull();
   });
+
   it('UU', async () => {
     const { container } = renderStepSoknadStandard(STUDENT, <Component />, {});
     expect(await axe(container)).toHaveNoViolations();
