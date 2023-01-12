@@ -340,15 +340,13 @@ test('test', async ({ page }) => {
     .click();
   await expect(page).toHaveURL('http://localhost:3000/aap/soknad/5/#barn.1.harInntekt');
   await page
-    .locator(
-      'article:has-text("Navn: Embla Bakke LiFødselsdato: 11.01.2022Har barnet årlig inntekt over 111 477")'
-    )
+    .getByRole('group', { name: 'Har barnet årlig inntekt over 111 477kr?' })
+    .first()
     .getByLabel('Ja')
     .check();
   await page
-    .locator(
-      'article:has-text("Navn: Jonas Li Fødselsdato: 11.01.2021Har barnet årlig inntekt over 111 477kr?Hv")'
-    )
+    .getByRole('group', { name: 'Har barnet årlig inntekt over 111 477kr?' })
+    .nth(1)
     .getByLabel('Nei')
     .check();
   await expect(
@@ -385,7 +383,7 @@ test('test', async ({ page }) => {
       'Du kan ikke få barnetillegg for barn over 18 år. Hvis barnet er under 18 år, må'
     )
   ).toBeVisible();
-  await page.getByLabel('Fødselsdato (dd.mm.åååå)').click();
+
   await page.getByLabel('Fødselsdato (dd.mm.åååå)').fill(format(new Date(), 'dd.MM.yyyy'));
   await page.getByRole('button', { name: 'Lagre' }).click();
   await expect(
