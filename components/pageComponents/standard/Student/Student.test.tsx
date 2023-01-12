@@ -1,6 +1,5 @@
 import { findAllByRole, findByRole, fireEvent, renderStepSoknadStandard, screen } from 'setupTests';
 import { Step, StepWizard } from 'components/StepWizard';
-import { JaNeiVetIkke } from 'types/Generic';
 import React from 'react';
 import Student, { JaNeiAvbrutt } from './Student';
 import { axe, toHaveNoViolations } from 'jest-axe';
