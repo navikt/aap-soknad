@@ -5,7 +5,6 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Button, Checkbox } from '@navikt/ds-react';
 import CheckboxGroupWrapper from './CheckboxGroupWrapper';
-import { act } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 interface FormFields {
@@ -59,9 +58,7 @@ describe('ChecboxGroupWrapper', () => {
 
     const knapp = screen.getByRole('button', { name: /fullfør/i });
 
-    await act(async () => {
-      await user.click(knapp);
-    });
+    await waitFor(() => user.click(knapp));
 
     const feilmelding = await screen.findByText('Du må velge minst èn dag');
     expect(feilmelding).toBeVisible();
@@ -73,9 +70,7 @@ describe('ChecboxGroupWrapper', () => {
 
     expect(mandag).not.toBeChecked();
 
-    await act(async () => {
-      await waitFor(() => user.click(mandag));
-    });
+    await waitFor(() => user.click(mandag));
 
     await waitFor(() => expect(mandag).toBeChecked());
   });

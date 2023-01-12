@@ -1,11 +1,9 @@
 import React from 'react';
-import { render, screen } from 'setupTests';
+import { waitFor, render, screen } from 'setupTests';
 import ConfirmationPanelWrapper from './ConfirmationPanelWrapper';
 import { useForm } from 'react-hook-form';
 import { Button } from '@navikt/ds-react';
 import userEvent from '@testing-library/user-event';
-import { waitFor } from '@testing-library/dom';
-import { act } from '@testing-library/react';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 
@@ -59,9 +57,7 @@ describe('ConfirmationPanelWrapper', () => {
 
     expect(checkbox).not.toBeChecked();
 
-    await act(async () => {
-      await waitFor(() => user.click(checkbox));
-    });
+    await waitFor(() => user.click(checkbox));
 
     expect(checkbox).toBeChecked();
   });
@@ -77,9 +73,7 @@ describe('ConfirmationPanelWrapper', () => {
 
     expect(checkbox).not.toBeChecked();
 
-    await act(async () => {
-      await waitFor(() => user.click(knapp));
-    });
+    await waitFor(() => user.click(knapp));
 
     const feilmelding = await screen.findByText(/du må godkjenne for å gå videre/i);
 

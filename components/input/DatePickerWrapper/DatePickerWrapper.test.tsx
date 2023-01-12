@@ -1,5 +1,5 @@
 import * as yup from 'yup';
-import { act, render, screen, waitFor } from 'setupTests';
+import { render, screen, waitFor } from 'setupTests';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Button } from '@navikt/ds-react';
@@ -39,32 +39,29 @@ describe('DatePickerWrapper', () => {
 
   test('viser feilmelding når man ikke fyller inn dato', async () => {
     render(<Datovelger />);
-    await act(async () => {
-      await user.click(screen.getByRole('button', { name: /^Fullfør$/ }));
-    });
+    await waitFor(() => user.click(screen.getByRole('button', { name: /^Fullfør$/ })));
     await waitFor(() => expect(screen.getByText('Du må velge en dato!')).toBeVisible());
   });
 
   test('kan taste inn dato', async () => {
     render(<Datovelger />);
     const input = screen.getByRole('textbox', { name: /^Velg dag$/ });
-    await act(async () => {
-      await waitFor(() => user.type(input, '12.01.2023'));
-    });
+
+    await waitFor(() => user.type(input, '12.01.2023'));
+
     expect(input).toHaveValue('12.01.2023');
   });
 
   test('kan taste inn dato og sende skjema', async () => {
     render(<Datovelger />);
     const input = screen.getByRole('textbox', { name: /^Velg dag$/ });
-    await act(async () => {
-      await waitFor(() => user.type(input, '12.01.2023'));
-    });
+
+    await waitFor(() => user.type(input, '12.01.2023'));
+
     expect(input).toHaveValue('12.01.2023');
 
-    await act(async () => {
-      await user.click(screen.getByRole('button', { name: /^Fullfør$/ }));
-    });
+    await waitFor(() => user.click(screen.getByRole('button', { name: /^Fullfør$/ })));
+
     expect(onSubmitMock).toHaveBeenCalledTimes(1);
   });
 
@@ -73,20 +70,19 @@ describe('DatePickerWrapper', () => {
     const iDag = new Date();
     const iMorgen = addDays(iDag, 1);
     const knappetekst = format(iMorgen, 'cccc d', { locale: nb });
-    await act(async () => {
-      await user.click(screen.getByRole('button', { name: /^Åpne datovelger$/ }));
-    });
+
+    await waitFor(() => user.click(screen.getByRole('button', { name: /^Åpne datovelger$/ })));
+
     expect(screen.getByRole('button', { name: knappetekst })).toBeVisible();
-    await act(async () => {
-      await user.click(screen.getByRole('button', { name: knappetekst }));
-    });
+
+    await waitFor(() => user.click(screen.getByRole('button', { name: knappetekst })));
 
     expect(screen.getByRole('textbox', { name: /^Velg dag$/ })).toHaveValue(
       formatDate(iMorgen, 'dd.MM.yyyy')
     );
-    await act(async () => {
-      await user.click(screen.getByRole('button', { name: /^Fullfør$/ }));
-    });
+
+    await waitFor(() => user.click(screen.getByRole('button', { name: /^Fullfør$/ })));
+
     expect(onSubmitMock).toHaveBeenCalledTimes(1);
   });
 });

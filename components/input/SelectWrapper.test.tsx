@@ -1,13 +1,11 @@
 import React from 'react';
-import { render, screen } from 'setupTests';
+import { render, screen, waitFor } from 'setupTests';
 import * as yup from 'yup';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Button } from '@navikt/ds-react';
 import SelectWrapper from './SelectWrapper';
 import userEvent from '@testing-library/user-event';
-import { waitFor } from '@testing-library/dom';
-import { act } from '@testing-library/react';
 
 interface Props {
   defaultValue?: string;
@@ -78,9 +76,7 @@ describe('SelectWrapper', () => {
 
     const norgeValg = await screen.findByRole('option', { name: /norge/i });
 
-    await act(async () => {
-      await user.selectOptions(selectComponent, norgeValg);
-    });
+    await waitFor(() => user.selectOptions(selectComponent, norgeValg));
 
     const selectComponentWithValue = await screen.findByRole('combobox', {
       name: /hvilket land jobbet du i\?/i,
@@ -96,9 +92,7 @@ describe('SelectWrapper', () => {
       name: /fullfør/i,
     });
 
-    await act(() => {
-      waitFor(() => user.click(fullførKnapp));
-    });
+    await waitFor(() => user.click(fullførKnapp));
 
     const feilmelding = await screen.findByText('Dette er et påkrevd felt.');
 

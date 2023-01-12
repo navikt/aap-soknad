@@ -1,12 +1,11 @@
 import React from 'react';
-import { render, screen } from 'setupTests';
+import { render, screen, waitFor } from 'setupTests';
 import * as yup from 'yup';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup/dist/yup';
 import { Button, Radio } from '@navikt/ds-react';
 import RadioGroupWrapper from './RadioGroupWrapper';
 import userEvent from '@testing-library/user-event';
-import { act } from '@testing-library/react';
 
 interface FormFields {
   ukedag: string;
@@ -85,9 +84,7 @@ describe('RadioGroupWrapper', () => {
     render(<TestComponent />);
     const fullførKnapp = screen.getByRole('button', { name: /fullfør/i });
 
-    await act(async () => {
-      await user.click(fullførKnapp);
-    });
+    await waitFor(() => user.click(fullførKnapp));
 
     const feilmelding = await screen.findByText(/du må velge minst èn dag/i);
     expect(feilmelding).toBeVisible();
@@ -99,9 +96,7 @@ describe('RadioGroupWrapper', () => {
 
     expect(tirsdagValg).not.toBeChecked();
 
-    await act(async () => {
-      await user.click(tirsdagValg);
-    });
+    await waitFor(() => user.click(tirsdagValg));
 
     expect(tirsdagValg).toBeChecked();
   });

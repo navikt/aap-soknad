@@ -1,14 +1,11 @@
 import React from 'react';
-import { render, screen } from 'setupTests';
+import { render, screen, waitFor } from 'setupTests';
 import CountrySelector from './CountrySelector';
 import * as yup from 'yup';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup/dist/yup';
 import { Button } from '@navikt/ds-react';
 import userEvent from '@testing-library/user-event';
-import { waitFor } from '@testing-library/dom';
-import { act } from '@testing-library/react';
-import resetAllMocks = jest.resetAllMocks;
 
 interface Props {
   defaultValue?: string;
@@ -72,9 +69,7 @@ describe('CountrySelector', () => {
 
     const sverigeValg = await screen.findByRole('option', { name: /sverige/i });
 
-    await act(async () => {
-      await user.selectOptions(selectComponent, sverigeValg);
-    });
+    await waitFor(() => user.selectOptions(selectComponent, sverigeValg));
 
     const selectComponentWithValue = await screen.findByRole('combobox', {
       name: /hvilket land liker du\?/i,
@@ -90,9 +85,7 @@ describe('CountrySelector', () => {
       name: /fullfør/i,
     });
 
-    await act(() => {
-      waitFor(() => user.click(fullførKnapp));
-    });
+    await waitFor(() => user.click(fullførKnapp));
 
     const feilmelding = await screen.findByText('Dette er et påkrevd felt.');
 
