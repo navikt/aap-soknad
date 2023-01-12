@@ -41,14 +41,15 @@ export const DatePickerWrapper = <FormFieldValues extends FieldValues>({
       render={({ field: { name, value, onChange }, fieldState: { error } }) => {
         return (
           <UNSAFE_DatePicker
+            {...datepickerProps}
             id={name}
             onChange={onChange}
             onSelect={onChange}
             disableWeekends={disableWeekend}
+            dropdownCaption
             fromDate={fromDate}
             toDate={toDate}
             disabled={disabled}
-            {...datepickerProps}
           >
             <UNSAFE_DatePicker.Input
               onChange={(datoInput) =>
