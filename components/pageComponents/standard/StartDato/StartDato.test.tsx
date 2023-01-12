@@ -71,10 +71,70 @@ describe('Startdato', () => {
     const påkrevdTekst = messagesNb?.søknad?.startDato?.ferieType?.validation?.required;
     expect(await findByRole(errorSummary, 'link', { name: påkrevdTekst })).not.toBeNull();
   });
-  // it('Skal ha ferie, ferietype: PERIODE - fraDato/tilDato: visning og påkrevd', async () => {
-  // });
-  // it('Skal ha ferie, ferietype: DAGER - antallDager: visning og påkrevd', async () => {
-  // });
+  it('Skal ha ferie, ferietype: PERIODE - fraDato/tilDato: visning og påkrevd', async () => {
+    renderStepSoknadStandard(STARTDATO, <Component />, {});
+    // Sykepenger
+    const sykepengerLabel = messagesNb?.søknad?.startDato?.sykepenger?.legend;
+    const sykepenger = screen.getByRole('group', { name: sykepengerLabel });
+    fireEvent.click(getByRole(sykepenger, 'radio', { name: JaEllerNei.JA }), {});
+    // Skal ha ferie
+    const skalHaFerieLabel = messagesNb?.søknad?.startDato?.skalHaFerie?.label;
+    const skalHaFerie = screen.getByRole('group', { name: skalHaFerieLabel });
+    fireEvent.click(getByRole(skalHaFerie, 'radio', { name: JaEllerNei.JA }), {});
+    // Ferietype PERIODE
+    const periodeLabel = messagesNb?.søknad?.startDato?.ferieType?.values?.periode;
+    fireEvent.click(screen.getByRole('radio', { name: periodeLabel }), {});
+    // Fra-dato
+    const fraLabel = messagesNb?.søknad?.startDato?.periode?.fraDato?.label;
+    const fraDato = screen.getByLabelText(fraLabel);
+    expect(fraDato).not.toBeNull();
+    // Til-dato
+    const tilLabel = messagesNb?.søknad?.startDato?.periode?.tilDato?.label;
+    const tilDato = screen.getByLabelText(tilLabel);
+    expect(tilDato).not.toBeNull();
+    // Fra og til-dato er påkrevd
+    fireEvent.submit(screen.getByRole('button', { name: 'Neste steg' }));
+    const errorSummary = await screen.findByRole('alert');
+    const påkrevdTekstFra = messagesNb?.søknad?.startDato?.periode?.fraDato?.validation?.required;
+    const påkrevdTekstTil = messagesNb?.søknad?.startDato?.periode?.tilDato?.validation?.required;
+    expect(await findByRole(errorSummary, 'link', { name: påkrevdTekstFra })).not.toBeNull();
+    expect(await findByRole(errorSummary, 'link', { name: påkrevdTekstTil })).not.toBeNull();
+  });
+  it('Skal ha ferie, ferietype: DAGER - antallDager: visning og påkrevd', async () => {
+    renderStepSoknadStandard(STARTDATO, <Component />, {});
+    // Sykepenger
+    const sykepengerLabel = messagesNb?.søknad?.startDato?.sykepenger?.legend;
+    const sykepenger = screen.getByRole('group', { name: sykepengerLabel });
+    act(() => {
+      fireEvent.click(getByRole(sykepenger, 'radio', { name: JaEllerNei.JA }), {});
+    });
+    // Skal ha ferie
+    const skalHaFerieLabel = messagesNb?.søknad?.startDato?.skalHaFerie?.label;
+    const skalHaFerie = screen.getByRole('group', { name: skalHaFerieLabel });
+    act(() => {
+      fireEvent.click(getByRole(skalHaFerie, 'radio', { name: JaEllerNei.JA }), {});
+    });
+    // Ferietype DAGER
+    const dagerLabel = messagesNb?.søknad?.startDato?.ferieType?.values?.dager;
+    act(() => {
+      fireEvent.click(screen.getByRole('radio', { name: dagerLabel }), {});
+    });
+    // Ferietype DAGER
+    // Antall dager
+    const antallDagerLabel = messagesNb?.søknad?.startDato?.antallDager?.label;
+    const antallDager = screen.getByLabelText(antallDagerLabel);
+    expect(antallDager).not.toBeNull();
+    // Antall dager er påkrevd
+    act(() => {
+      fireEvent.submit(screen.getByRole('button', { name: 'Neste steg' }));
+    });
+    const errorSummary = await screen.findByRole('alert');
+    const påkrevdTekstAntallDager =
+      messagesNb?.søknad?.startDato?.antallDager?.validation?.required;
+    expect(
+      await findByRole(errorSummary, 'link', { name: påkrevdTekstAntallDager })
+    ).not.toBeNull();
+  });
   it('UU', async () => {
     const { container } = renderStepSoknadStandard(STARTDATO, <Component />, {});
     expect(await axe(container)).toHaveNoViolations();
