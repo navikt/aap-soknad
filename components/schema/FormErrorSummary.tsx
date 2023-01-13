@@ -1,39 +1,43 @@
-import React, { useEffect, useMemo, useRef } from 'react';
-import { FieldErrors } from 'react-hook-form';
+import React, { Ref, useEffect, useMemo, useRef } from 'react';
+import { FieldError, FieldErrors, FieldValues } from 'react-hook-form';
 import { ErrorSummary } from '@navikt/ds-react';
 import * as classes from './FormErrorSummary.module.css';
 import { useFeatureToggleIntl } from 'hooks/useFeatureToggleIntl';
-import { setFocusHtmlRef } from 'utils/dom';
+import { setFocusHtmlRef } from '../../utils/dom';
 
 export const setFocusOnErrorSummary = () => {
   const errorSummary = document?.getElementById('aap-error-summary');
   errorSummary?.focus();
 };
 
-const FormErrorSummary = (props: FieldErrors) => {
+interface Props<FormFieldValues extends FieldValues> {
+  errors: FieldErrors<FormFieldValues>;
+}
+
+const FormErrorSummary = <FormFieldValues extends FieldValues>(props: Props<FormFieldValues>) => {
+  const { errors } = props;
   const { formatMessage } = useFeatureToggleIntl();
 
-  const errorListFromRef = props;
+  const errorSummaryRef: Ref<HTMLDivElement> = useRef(null);
 
-  const flatErrors = flatObj(props?.errors);
+  const flatErrors = flatObj(errors);
   const keyList = Object.keys(flatErrors).filter((e) => e);
 
   const scrollToErrorSummary = useMemo(() => {
     return keyList.length > 0;
   }, [keyList]);
 
-  const errorSummaryElement = useRef(null);
-
   useEffect(() => {
     if (scrollToErrorSummary) {
-      setFocusHtmlRef(errorSummaryElement);
+      setFocusHtmlRef(errorSummaryRef);
     }
   }, [scrollToErrorSummary]);
 
+  // Må rendre ErrorSummary selv om det ikke er feil pga UU
   if (keyList?.length < 1) {
     return (
       <ErrorSummary
-        ref={errorSummaryElement}
+        ref={errorSummaryRef}
         heading={formatMessage('errorSummary.title')}
         role={'alert'}
         aria-hidden={keyList?.length === 0}
@@ -45,10 +49,11 @@ const FormErrorSummary = (props: FieldErrors) => {
       </ErrorSummary>
     );
   }
+
   return (
     <ErrorSummary
       id="aap-error-summary"
-      ref={errorSummaryElement}
+      ref={errorSummaryRef}
       heading={formatMessage('errorSummary.title')}
       role={'alert'}
       aria-hidden={keyList?.length === 0}
@@ -57,33 +62,26 @@ const FormErrorSummary = (props: FieldErrors) => {
     >
       {keyList.map((key) => (
         <ErrorSummary.Item key={key} href={`#${key}`}>
-          {
-            // @ts-ignore
-            flatErrors[key]
-          }
+          {flatErrors[key]}
         </ErrorSummary.Item>
       ))}
     </ErrorSummary>
   );
 };
 
-const flatObj: any = (obj: any, prevKey = '') => {
-  return Object.entries(obj).reduce((flatted, [key, value]) => {
-    if (typeof value == 'object') {
-      // @ts-ignore
-      if (value?.message) {
-        // @ts-ignore TODO: Fikse skikkelige typer på fielderrors
-        if (value?.ref?.name) {
-          return { ...flatted, [value?.ref?.name]: value?.message };
-        } else {
-          const fullKey = prevKey ? `${prevKey}.${key}` : key;
-          return { ...flatted, [fullKey]: value?.message };
-        }
+function flatObj(errors: FieldErrors | FieldError, prevKey = ''): Record<string, string> {
+  return Object.entries(errors).reduce((flatted, [key, value]) => {
+    if (value?.message) {
+      if (value?.ref?.name) {
+        return { ...flatted, [value?.ref?.name]: value?.message };
       } else {
-        return { ...flatted, ...flatObj(value, key) };
+        const fullKey = prevKey ? `${prevKey}.${key}` : key;
+        return { ...flatted, [fullKey]: value?.message };
       }
+    } else {
+      return { ...flatted, ...flatObj(value, key) };
     }
-    return flatted;
   }, {});
-};
+}
+
 export { FormErrorSummary };
