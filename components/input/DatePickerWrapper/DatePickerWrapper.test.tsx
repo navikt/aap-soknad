@@ -16,7 +16,7 @@ interface FormFields {
 const onSubmitMock = jest.fn();
 const Datovelger = () => {
   const schema = yup.object().shape({
-    dato: yup.date().required('Du må velge en dato!'),
+    dato: yup.date().required('Du må velge en dato!').typeError('Ugyldig format på dato.'),
   });
   const { control, handleSubmit } = useForm<FormFields>({ resolver: yupResolver(schema) });
 
@@ -50,6 +50,19 @@ describe('DatePickerWrapper', () => {
     await waitFor(() => user.type(input, '12.01.2023'));
 
     expect(input).toHaveValue('12.01.2023');
+  });
+
+  test('viser feilmelding når det er tastet inn en ugyldig dato', async () => {
+    render(<Datovelger />);
+    const input = screen.getByRole('textbox', { name: /^Velg dag$/ });
+
+    await waitFor(() => user.type(input, '12.13.2023'));
+
+    expect(input).toHaveValue('12.13.2023');
+
+    await waitFor(() => user.click(screen.getByRole('button', { name: /^Fullfør$/ })));
+    expect(screen.getByText('Ugyldig format på dato.')).toBeVisible();
+    expect(onSubmitMock).toHaveBeenCalledTimes(0);
   });
 
   test('kan taste inn dato og sende skjema', async () => {
