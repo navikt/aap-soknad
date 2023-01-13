@@ -54,6 +54,7 @@ export const DatePickerWrapper = <FormFieldValues extends FieldValues>({
             disabled={disabled}
           >
             <UNSAFE_DatePicker.Input
+              id={name}
               onChange={(datoInput) =>
                 onChange(parse(datoInput.currentTarget.value, 'dd.MM.yyyy', new Date()))
               }
