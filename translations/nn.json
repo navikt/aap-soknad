@@ -57,12 +57,14 @@
         "fraDato": {
           "label": "Fra dato (dd.mm.åååå)",
           "validation": {
+            "typeError": "Fra-dato må vera ein gyldig dato på format dd.mm.yyyy",
             "required": "Du må fylle ut feriens fra-dato. Fyll inn slik: dd.mm.åååå."
           }
         },
         "tilDato": {
           "label": "Til dato (dd.mm.åååå)",
           "validation": {
+            "typeError": "Til-dato må vera ein gyldig dato på format dd.mm.yyyy",
             "required": "Du må fylle ut feriens til-dato. Fyll inn slik: dd.mm.åååå.",
             "fraDatoEtterTilDato": "Fra-dato må være eldre enn til-dato. Fyll inn slik: dd.mm.åååå."
           }
@@ -569,7 +571,8 @@
             "validation": {
               "required": "Du må fylle inn fødselsdatoen til barnet. Fyll inn slik: dd.mm.åååå.",
               "min": "Du kan ikkje få barnetillegg for barn over 18 år. Dersom barnet er under 18 år, må du rette opp fødselsdatoen.",
-              "max": "Fødselsdatoen til barnet kan ikkje vere etter dags dato. Vel ein fødselsdato før eller lik dags dato"
+              "max": "Fødselsdatoen til barnet kan ikkje vere etter dags dato. Vel ein fødselsdato før eller lik dags dato",
+              "typeError": "Fødselsdatoen må vera ein gyldig dato på format dd.mm.yyyy"
             }
           },
           "relasjon": {

@@ -1,4 +1,4 @@
-import { Accordion, Alert, BodyShort, Button, Heading, Label, Link } from '@navikt/ds-react';
+import { Alert, BodyShort, Button, Heading, Label, Link } from '@navikt/ds-react';
 import { useForm } from 'react-hook-form';
 import ConfirmationPanelWrapper from 'components/input/ConfirmationPanelWrapper';
 import { SøkerView } from 'context/sokerOppslagContext';
@@ -12,9 +12,6 @@ import { AmplitudeAwareAccordion } from 'components/AmplitudeAwareAccordion/Ampl
 const VEILEDNING_CONFIRM = 'veiledningConfirm';
 type VeiledningType = {
   veiledningConfirm?: boolean;
-};
-const initVeiledning: VeiledningType = {
-  veiledningConfirm: false,
 };
 interface VeiledningProps {
   søker: SøkerView;
@@ -36,18 +33,13 @@ export const Veiledning = ({
     veiledningConfirm: yup
       .boolean()
       .required(formatMessage('søknad.veiledning.veiledningConfirm.validation.required'))
-      .oneOf([true])
-      .nullable(),
+      .oneOf([true], formatMessage('søknad.veiledning.veiledningConfirm.validation.required')),
   });
 
-  const {
-    control,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<VeiledningType>({
+  const { control, handleSubmit, watch } = useForm<VeiledningType>({
     resolver: yupResolver(schema),
-    defaultValues: { ...initVeiledning },
   });
+
   return (
     <>
       <header className={classes?.veiledningHeader}>
@@ -139,7 +131,6 @@ export const Veiledning = ({
             label={formatMessage('søknad.veiledning.veiledningConfirm.label')}
             control={control}
             name={VEILEDNING_CONFIRM}
-            error={errors?.[VEILEDNING_CONFIRM]?.message}
           >
             <Label as={'span'}>{formatMessage('søknad.veiledning.veiledningConfirm.title')}</Label>
           </ConfirmationPanelWrapper>

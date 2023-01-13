@@ -15,11 +15,12 @@ import { useFeatureToggleIntl } from 'hooks/useFeatureToggleIntl';
 import { deleteOpplastedeVedlegg, useSoknadContextStandard } from 'context/soknadContextStandard';
 import { slettLagretSoknadState, updateSøknadData } from 'context/soknadContextCommon';
 import { useDebounceLagreSoknad } from 'hooks/useDebounceLagreSoknad';
-import DatePickerWrapper from 'components/input/DatePickerWrapper/DatePickerWrapper';
+
 import { GenericSoknadContextState } from 'types/SoknadContext';
 import * as classes from './StartDato.module.css';
 import { formatDate } from 'utils/date';
 import { setFocusOnErrorSummary } from 'components/schema/FormErrorSummary';
+import { DatePickerWrapper } from '../../../input/DatePickerWrapper/DatePickerWrapper';
 export enum FerieType {
   DAGER = 'DAGER',
   PERIODE = 'PERIODE',
@@ -70,7 +71,8 @@ export const getStartDatoSchema = (formatMessage: (id: string) => string) => {
           is: FerieType.PERIODE,
           then: yup
             .date()
-            .required(formatMessage('søknad.startDato.periode.fraDato.validation.required')),
+            .required(formatMessage('søknad.startDato.periode.fraDato.validation.required'))
+            .typeError(formatMessage('søknad.startDato.periode.fraDato.validation.typeError')),
         }),
         ['tilDato']: yup.date().when([FERIETYPE], {
           is: FerieType.PERIODE,
@@ -80,7 +82,8 @@ export const getStartDatoSchema = (formatMessage: (id: string) => string) => {
             .min(
               yup.ref('fraDato'),
               formatMessage('søknad.startDato.periode.tilDato.validation.fraDatoEtterTilDato')
-            ),
+            )
+            .typeError(formatMessage('søknad.startDato.periode.tilDato.validation.typeError')),
         }),
         ['antallDager']: yup.string().when([FERIETYPE], {
           is: FerieType.DAGER,
@@ -182,7 +185,6 @@ const StartDato = ({ onBackClick, onNext, defaultValues }: Props) => {
         description={formatMessage('søknad.startDato.sykepenger.description')}
         name={`${SYKEPENGER}`}
         control={control}
-        error={errors?.[FERIE]?.[SYKEPENGER]?.message}
       >
         <Radio value={JaEllerNei.JA}>{JaEllerNei.JA}</Radio>
         <Radio value={JaEllerNei.NEI}>{JaEllerNei.NEI}</Radio>
@@ -194,7 +196,6 @@ const StartDato = ({ onBackClick, onNext, defaultValues }: Props) => {
             description={formatMessage('søknad.startDato.skalHaFerie.description')}
             name={`${FERIE}.${SKALHAFERIE}`}
             control={control}
-            error={errors?.[FERIE]?.[SKALHAFERIE]?.message}
           >
             <Radio value={JaEllerNei.JA}>{JaEllerNei.JA}</Radio>
             <Radio value={JaEllerNei.NEI}>{JaEllerNei.NEI}</Radio>
@@ -204,7 +205,6 @@ const StartDato = ({ onBackClick, onNext, defaultValues }: Props) => {
               legend={formatMessage('søknad.startDato.ferieType.label')}
               name={`${FERIE}.${FERIETYPE}`}
               control={control}
-              error={errors?.[`${FERIE}`]?.ferieType?.message}
             >
               <Radio value={FerieType.PERIODE}>
                 <BodyShort>{FerieTypeTekster.PERIODE}</BodyShort>
@@ -219,20 +219,18 @@ const StartDato = ({ onBackClick, onNext, defaultValues }: Props) => {
               <Label>{formatMessage('søknad.startDato.periode.label')}</Label>
               <div className={classes?.datoContainer}>
                 <DatePickerWrapper
-                  setValue={setValue}
+                  control={control}
                   label={formatMessage('søknad.startDato.periode.fraDato.label')}
                   selectedDate={allFields.ferie?.fraDato}
                   name={`${FERIE}.fraDato`}
                   fromDate={new Date()}
-                  error={errors?.[`${FERIE}`]?.fraDato?.message}
                 />
                 <DatePickerWrapper
-                  setValue={setValue}
+                  control={control}
                   label={formatMessage('søknad.startDato.periode.tilDato.label')}
                   selectedDate={allFields?.ferie.tilDato}
                   name={`${FERIE}.tilDato`}
                   fromDate={new Date()}
-                  error={errors?.[`${FERIE}`]?.tilDato?.message}
                 />
               </div>
             </div>
@@ -245,7 +243,6 @@ const StartDato = ({ onBackClick, onNext, defaultValues }: Props) => {
                 label={formatMessage('søknad.startDato.antallDager.label')}
                 description={formatMessage('søknad.startDato.antallDager.description')}
                 control={control}
-                error={errors?.[`${FERIE}`]?.antallDager?.message}
               />
             </div>
           )}

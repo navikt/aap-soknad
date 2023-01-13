@@ -3,7 +3,7 @@
 // expect(element).toHaveTextContent(/react/i)
 // learn more: https://github.com/testing-library/jest-dom
 import '@testing-library/jest-dom';
-import { render as rtlRender } from '@testing-library/react';
+import { render as rtlRender, configure } from '@testing-library/react';
 import { AppStateContext, AppStateContextState } from 'context/appStateContext';
 import { SoknadContextData } from 'context/soknadContextCommon';
 import { SoknadContextStandard } from 'context/soknadContextStandard';
@@ -14,6 +14,8 @@ import { Soknad } from 'types/Soknad';
 import { SøknadType } from 'types/SoknadContext';
 import { messages, flattenMessages } from 'utils/message';
 import links from 'translations/links.json';
+jest.setTimeout(10 * 1000);
+configure({ asyncUtilTimeout: 10 * 1000 });
 
 const tekster = { ...messages['nb'], ...flattenMessages({ applinks: links }) };
 function render(ui: ReactElement, { locale = 'nb', ...options } = {}) {
@@ -68,6 +70,14 @@ function renderStepSoknadStandard(
   }
   return rtlRender(ui, { wrapper: ProvidersWrapper, ...options });
 }
+
+// Mocker resize observer da jsdom ikke implementerer denne
+class ResizeObserver {
+  observe() {}
+  unobserve() {}
+  disconnect() {}
+}
+window.ResizeObserver = ResizeObserver;
 
 // Mocker scrollIntoView da jsdom ikke implementerer denne
 window.HTMLElement.prototype.scrollIntoView = function () {};

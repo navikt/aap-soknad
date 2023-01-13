@@ -181,7 +181,6 @@ export const Behandlere = ({ onBackClick, onNext, defaultValues }: Props) => {
                 name={`${REGISTRERTE_BEHANDLERE}.${index}.${RIKTIG_FASTLEGE}`}
                 legend={formatMessage(`søknad.helseopplysninger.erRegistrertFastlegeRiktig.label`)}
                 control={control}
-                error={errors?.[REGISTRERTE_BEHANDLERE]?.[index]?.[RIKTIG_FASTLEGE]?.message}
               >
                 <Radio value={JaEllerNei.JA}>
                   <BodyShort>{JaEllerNei.JA}</BodyShort>

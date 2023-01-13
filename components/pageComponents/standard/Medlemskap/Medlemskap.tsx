@@ -1,5 +1,5 @@
-import { BodyShort, Radio, Button, Table, Heading, ReadMore, Cell, Grid } from '@navikt/ds-react';
-import React, { useState, useEffect, useMemo, useRef } from 'react';
+import { BodyShort, Button, Cell, Grid, Heading, Radio, ReadMore, Table } from '@navikt/ds-react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useFieldArray, useForm, useWatch } from 'react-hook-form';
 import { JaEllerNei, JaNeiVetIkke } from 'types/Generic';
 import { Add, Delete } from '@navikt/ds-icons';
@@ -8,7 +8,7 @@ import UtenlandsPeriodeVelger, {
 } from '..//UtenlandsPeriodeVelger/UtenlandsPeriodeVelger';
 import { formatDate } from 'utils/date';
 import RadioGroupWrapper from 'components/input/RadioGroupWrapper/RadioGroupWrapper';
-import { Soknad, Medlemskap as MedlemskapType } from 'types/Soknad';
+import { Medlemskap as MedlemskapType, Soknad } from 'types/Soknad';
 import { useStepWizard } from 'context/stepWizardContextV2';
 import SoknadFormWrapper from 'components/SoknadFormWrapper/SoknadFormWrapper';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -264,7 +264,6 @@ export const Medlemskap = ({ onBackClick, onNext, defaultValues }: Props) => {
           name={`${MEDLEMSKAP}.${BODD_I_NORGE}`}
           legend={formatMessage('søknad.medlemskap.harBoddINorgeSiste5År.label')}
           control={control}
-          error={errors?.[MEDLEMSKAP]?.[BODD_I_NORGE]?.message}
         >
           <ReadMore
             header={formatMessage('søknad.medlemskap.harBoddINorgeSiste5År.readMore.title')}
@@ -285,7 +284,6 @@ export const Medlemskap = ({ onBackClick, onNext, defaultValues }: Props) => {
               name={`${MEDLEMSKAP}.${ARBEID_I_NORGE}`}
               legend={formatMessage('søknad.medlemskap.harArbeidetINorgeSiste5År.label')}
               control={control}
-              error={errors?.[MEDLEMSKAP]?.[ARBEID_I_NORGE]?.message}
             >
               <ReadMore
                 header={formatMessage('søknad.medlemskap.harArbeidetINorgeSiste5År.readMore.title')}
@@ -309,7 +307,6 @@ export const Medlemskap = ({ onBackClick, onNext, defaultValues }: Props) => {
               name={`${MEDLEMSKAP}.${ARBEID_UTENFOR_NORGE_FØR_SYKDOM}`}
               legend={formatMessage('søknad.medlemskap.arbeidUtenforNorge.label')}
               control={control}
-              error={errors?.[MEDLEMSKAP]?.[ARBEID_UTENFOR_NORGE_FØR_SYKDOM]?.message}
             >
               <ReadMore
                 header={formatMessage('søknad.medlemskap.arbeidUtenforNorge.readMore.title')}
@@ -335,7 +332,6 @@ export const Medlemskap = ({ onBackClick, onNext, defaultValues }: Props) => {
                 'søknad.medlemskap.iTilleggArbeidUtenforNorge.description'
               )}
               control={control}
-              error={errors?.[MEDLEMSKAP]?.[OGSÅ_ARBEID_UTENFOR_NORGE]?.message}
             >
               <ReadMore
                 header={formatMessage(

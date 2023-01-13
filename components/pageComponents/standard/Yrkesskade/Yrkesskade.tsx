@@ -81,7 +81,6 @@ export const Yrkesskade = ({ onBackClick, onNext, defaultValues }: Props) => {
         name={`${YRKESSKADE}`}
         legend={formatMessage(`søknad.yrkesskade.harDuYrkesskade.label`)}
         control={control}
-        error={errors?.[YRKESSKADE]?.message}
       >
         <ReadMore
           header={formatMessage('søknad.yrkesskade.harDuYrkesskade.readMore.title')}
