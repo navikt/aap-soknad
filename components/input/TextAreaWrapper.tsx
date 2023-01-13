@@ -22,6 +22,7 @@ const TextAreaWrapper = <FormFieldValues extends FieldValues>({
     control={control}
     render={({ field: { name, value, onChange }, fieldState: { error } }) => (
       <Textarea
+        id={name}
         label={label}
         description={description}
         value={value}

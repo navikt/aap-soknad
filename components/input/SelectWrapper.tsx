@@ -21,7 +21,14 @@ const SelectWrapper = <FormFieldValues extends FieldValues>({
     name={name}
     control={control}
     render={({ field: { name, value, onChange }, fieldState: { error } }) => (
-      <Select name={name} label={label} value={value} onChange={onChange} error={error?.message}>
+      <Select
+        id={name}
+        name={name}
+        label={label}
+        value={value}
+        onChange={onChange}
+        error={error?.message}
+      >
         {children}
       </Select>
     )}
