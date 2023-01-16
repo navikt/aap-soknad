@@ -66,7 +66,7 @@ const Steps = ({ søker, mellomlagretSøknad }: PageProps) => {
   const { søknadState, søknadDispatch } = useSoknadContextStandard();
   const { oppslagDispatch } = useSokerOppslag();
   const { currentStep, stepList, stepWizardDispatch } = useStepWizard();
-  const debouncedLagre = useDebounceLagreSoknad<Soknad>(søknadDispatch);
+  const debouncedLagre = useDebounceLagreSoknad<Soknad>();
 
   const [showFetchErrorMessage, setShowFetchErrorMessage] = useState(false);
   const submitErrorMessageRef = useRef(null);
