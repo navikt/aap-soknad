@@ -2,8 +2,7 @@ import { Alert, BodyLong, BodyShort, Button, Heading, Link } from '@navikt/ds-re
 import React from 'react';
 import * as classes from './Kvittering.module.css';
 import { SøkerView } from 'context/sokerOppslagContext';
-import { Download } from '@navikt/ds-icons';
-import { SuccessStroke } from '@navikt/ds-icons';
+import { Download, SuccessStroke } from '@navikt/ds-icons';
 import { useFeatureToggleIntl } from 'hooks/useFeatureToggleIntl';
 import { SøknadApiType } from 'pages/api/oppslag/soeknader';
 import { clientSideIsLabs, clientSideIsProd } from 'utils/environments';
@@ -23,7 +22,7 @@ const getDownloadUrl = (journalpostId?: string) => {
 };
 
 const Kvittering = ({ søker, kontaktinformasjon, søknad }: StudentProps) => {
-  const { formatMessage, formatElement } = useFeatureToggleIntl();
+  const { formatMessage, FormatElement } = useFeatureToggleIntl();
 
   const mineAapUrl = clientSideIsLabs()
     ? process.env.NEXT_PUBLIC_MINE_AAP_URL
@@ -45,7 +44,7 @@ const Kvittering = ({ søker, kontaktinformasjon, søknad }: StudentProps) => {
         aria-hidden={true}
       />
       <Heading size={'large'} level={'2'}>
-        {formatMessage('søknad.kvittering.title', { navn: søker?.fulltNavn })}
+        <FormatElement id={'søknad.kvittering.title'} values={{ navn: søker?.fulltNavn }} />
       </Heading>
       <Alert variant={'success'}>
         <BodyLong>
@@ -64,21 +63,28 @@ const Kvittering = ({ søker, kontaktinformasjon, søknad }: StudentProps) => {
             </Link>
           </BodyShort>
           <BodyShort spacing>
-            {formatElement('søknad.kvittering.manglendeVedlegg.tekst2', {
-              a: (chunks: string[]) => (
-                <Link target="_blank" href={formatMessage('applinks.ettersending')}>
-                  {chunks}
-                </Link>
-              ),
-            })}
+            <FormatElement
+              id={'søknad.kvittering.manglendeVedlegg.tekst2'}
+              values={{
+                a: (chunks: string[]) => (
+                  <Link target="_blank" href={formatMessage('applinks.ettersending')}>
+                    {chunks}
+                  </Link>
+                ),
+              }}
+            />
           </BodyShort>
         </Alert>
       )}
-      {formatElement('søknad.kvittering.saksbehandlingstid', {
-        a: (chunks: string[]) => (
-          <Link href={formatMessage('applinks.saksbehandlingstid')}>{chunks}</Link>
-        ),
-      })}
+
+      <FormatElement
+        id={'søknad.kvittering.saksbehandlingstid'}
+        values={{
+          a: (chunks: string[]) => (
+            <Link href={formatMessage('applinks.saksbehandlingstid')}>{chunks}</Link>
+          ),
+        }}
+      />
       {(kontaktinformasjon?.mobil || kontaktinformasjon?.epost) && (
         <div>
           {formatMessage('søknad.kvittering.bekreftelse.title')}

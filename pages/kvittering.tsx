@@ -12,14 +12,14 @@ import { getSøknader, SøknadApiType } from 'pages/api/oppslag/soeknader';
 import { getSøker } from 'pages/api/oppslag/soeker';
 import { logger } from '@navikt/aap-felles-innbygger-utils';
 import metrics from 'utils/metrics';
-import { Alert, Link } from '@navikt/ds-react';
+
 interface PageProps {
   søker: SokerOppslagState;
   søknader: SøknadApiType[];
 }
 
 const KvitteringPage = ({ søker, søknader }: PageProps) => {
-  const { formatMessage, formatElement } = useFeatureToggleIntl();
+  const { FormatElement } = useFeatureToggleIntl();
 
   const [soker, setSoker] = useState({});
 
@@ -37,9 +37,7 @@ const KvitteringPage = ({ søker, søknader }: PageProps) => {
   return (
     <SoknadContextProviderStandard>
       <PageHeader align="center" className={classes?.pageHeader}>
-        {formatElement(`søknad.pagetitle`, {
-          wbr: () => <>&shy;</>,
-        })}
+        <FormatElement id={'søknad.pagetitle'} values={{ wbr: () => <>&shy;</> }} />
       </PageHeader>
       <Kvittering
         søker={soker}

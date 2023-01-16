@@ -33,7 +33,7 @@ export const getYrkesskadeSchema = (formatMessage: (id: string) => string) =>
   });
 
 export const Yrkesskade = ({ onBackClick, onNext, defaultValues }: Props) => {
-  const { formatMessage, formatElement } = useFeatureToggleIntl();
+  const { formatMessage, FormatElement } = useFeatureToggleIntl();
 
   const { søknadState, søknadDispatch } = useSoknadContextStandard();
   const { stepList } = useStepWizard();
@@ -91,13 +91,19 @@ export const Yrkesskade = ({ onBackClick, onNext, defaultValues }: Props) => {
               {formatMessage('søknad.yrkesskade.harDuYrkesskade.readMore.text1')}
             </BodyShort>
             <BodyShort spacing>
-              {formatElement('søknad.yrkesskade.harDuYrkesskade.readMore.text2', {
-                a: (chunks: string[]) => (
-                  <Link target="_blank" href={formatMessage('applinks.forskriftOmYrkessykdommer')}>
-                    {chunks}
-                  </Link>
-                ),
-              })}
+              <FormatElement
+                id={'søknad.yrkesskade.harDuYrkesskade.readMore.text2'}
+                values={{
+                  a: (chunks: string[]) => (
+                    <Link
+                      target="_blank"
+                      href={formatMessage('applinks.forskriftOmYrkessykdommer')}
+                    >
+                      {chunks}
+                    </Link>
+                  ),
+                }}
+              />
             </BodyShort>
           </div>
         </ReadMore>

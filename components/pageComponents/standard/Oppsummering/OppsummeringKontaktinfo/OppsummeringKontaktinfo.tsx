@@ -5,7 +5,7 @@ import { useFeatureToggleIntl } from 'hooks/useFeatureToggleIntl';
 import { formatTelefonnummer } from 'utils/StringFormatters';
 
 const OppsummeringKontaktinfo = () => {
-  const { formatMessage, formatElement } = useFeatureToggleIntl();
+  const { formatMessage, FormatElement } = useFeatureToggleIntl();
 
   const { søker, kontaktInfo } = useSokerOppslag();
   return (
@@ -26,13 +26,16 @@ const OppsummeringKontaktinfo = () => {
             header={formatMessage('søknad.oppsummering.contactInformation.adresse.readMore.title')}
             type={'button'}
           >
-            {formatElement('søknad.oppsummering.contactInformation.adresse.readMore.text', {
-              a: (chunks: string[]) => (
-                <Link target="_blank" href={formatMessage('applinks.folkeregisteret')}>
-                  {chunks}
-                </Link>
-              ),
-            })}
+            <FormatElement
+              id={'søknad.oppsummering.contactInformation.adresse.readMore.text'}
+              values={{
+                a: (chunks: string[]) => (
+                  <Link target="_blank" href={formatMessage('applinks.folkeregisteret')}>
+                    {chunks}
+                  </Link>
+                ),
+              }}
+            />
           </ReadMore>
         </div>
       )}
@@ -45,16 +48,19 @@ const OppsummeringKontaktinfo = () => {
           )}
           type={'button'}
         >
-          {formatElement('søknad.oppsummering.contactInformation.telefonnummer.readMore.text', {
-            a: (chunks: string[]) => (
-              <Link
-                target="_blank"
-                href={formatMessage('applinks.kontaktOgReservasjonsregisteret')}
-              >
-                {chunks}
-              </Link>
-            ),
-          })}
+          <FormatElement
+            id={'søknad.oppsummering.contactInformation.telefonnummer.readMore.text'}
+            values={{
+              a: (chunks: string[]) => (
+                <Link
+                  target="_blank"
+                  href={formatMessage('applinks.kontaktOgReservasjonsregisteret')}
+                >
+                  {chunks}
+                </Link>
+              ),
+            }}
+          />
         </ReadMore>
       </div>
       <div>
@@ -64,16 +70,19 @@ const OppsummeringKontaktinfo = () => {
           header={formatMessage('søknad.oppsummering.contactInformation.epost.readMore.title')}
           type={'button'}
         >
-          {formatElement('søknad.oppsummering.contactInformation.epost.readMore.text', {
-            a: (chunks: string[]) => (
-              <Link
-                target="_blank"
-                href={formatMessage('applinks.kontaktOgReservasjonsregisteret')}
-              >
-                {chunks}
-              </Link>
-            ),
-          })}
+          <FormatElement
+            id={'søknad.oppsummering.contactInformation.epost.readMore.text'}
+            values={{
+              a: (chunks: string[]) => (
+                <Link
+                  target="_blank"
+                  href={formatMessage('applinks.kontaktOgReservasjonsregisteret')}
+                >
+                  {chunks}
+                </Link>
+              ),
+            }}
+          />
         </ReadMore>
       </div>
     </>

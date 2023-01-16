@@ -1,29 +1,32 @@
 import PageHeader from 'components/PageHeader';
 import { useRouter } from 'next/router';
 import React, { useEffect, useRef, useState } from 'react';
-import { setSoknadStateFraProps, SoknadActionKeys } from 'context/soknadContextCommon';
 import {
-  useStepWizard,
-  setStepList,
+  setSoknadStateFraProps,
+  SoknadActionKeys,
+  updateSøknadData,
+} from 'context/soknadContextCommon';
+import {
   completeAndGoToNextStep,
   goToPreviousStep,
+  setStepList,
+  useStepWizard,
 } from 'context/stepWizardContextV2';
 import { useFeatureToggleIntl } from 'hooks/useFeatureToggleIntl';
 import { GenericSoknadContextState } from 'types/SoknadContext';
 import { useDebounceLagreSoknad } from 'hooks/useDebounceLagreSoknad';
 import { StepWizard } from 'components/StepWizard';
 import {
-  SoknadContextProviderStandard,
-  useSoknadContextStandard,
   addBarnIfMissing,
   addBehandlerIfMissing,
+  SoknadContextProviderStandard,
+  useSoknadContextStandard,
 } from 'context/soknadContextStandard';
 import {
   setSokerOppslagFraProps,
   SokerOppslagState,
   useSokerOppslag,
 } from 'context/sokerOppslagContext';
-import { updateSøknadData } from 'context/soknadContextCommon';
 import { Soknad } from 'types/Soknad';
 import { SubmitHandler } from 'react-hook-form';
 import { fetchPOST } from 'api/fetch';
@@ -45,7 +48,6 @@ import { getAccessToken } from 'auth/accessToken';
 import { getSøker } from './api/oppslag/soeker';
 import { lesBucket } from './api/buckets/les';
 import { logSkjemaFullførtEvent, logSkjemastegFullførtEvent } from 'utils/amplitude';
-import { Alert, Link } from '@navikt/ds-react';
 import metrics from 'utils/metrics';
 import { scrollRefIntoView } from 'utils/dom';
 import { TimeoutBox } from 'components/TimeoutBox/TimeoutBox';
@@ -59,7 +61,7 @@ const Steps = ({ søker, mellomlagretSøknad }: PageProps) => {
   const router = useRouter();
   const { step } = router.query;
 
-  const { formatMessage, formatElement } = useFeatureToggleIntl();
+  const { formatMessage, FormatElement } = useFeatureToggleIntl();
 
   const { søknadState, søknadDispatch } = useSoknadContextStandard();
   const { oppslagDispatch } = useSokerOppslag();
@@ -162,9 +164,12 @@ const Steps = ({ søker, mellomlagretSøknad }: PageProps) => {
     <>
       <header>
         <PageHeader align="center">
-          {formatElement(`søknad.pagetitle`, {
-            wbr: () => <>&shy;</>,
-          })}
+          <FormatElement
+            id={'søknad.pagetitle'}
+            values={{
+              wbr: () => <>&shy;</>,
+            }}
+          />
         </PageHeader>
       </header>
       {søknadState?.søknad && (

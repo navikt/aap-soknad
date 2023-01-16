@@ -1,4 +1,4 @@
-import React, { forwardRef, HTMLAttributes, useMemo } from 'react';
+import React, { forwardRef, HTMLAttributes, ReactNode, useMemo } from 'react';
 import { BodyShort, Heading } from '@navikt/ds-react';
 import * as classes from './PageHeader.module.css';
 
@@ -6,7 +6,7 @@ export interface PageHeaderProps extends HTMLAttributes<HTMLDivElement> {
   /**
    * PageHeader title
    */
-  children: string;
+  children: ReactNode;
   /**
    * Pictogram placed in PageHeader
    */

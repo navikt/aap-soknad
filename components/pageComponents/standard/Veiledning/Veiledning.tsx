@@ -8,6 +8,7 @@ import * as classes from './Veiledning.module.css';
 import { LucaGuidePanel } from '@navikt/aap-felles-innbygger-react';
 import { useFeatureToggleIntl } from 'hooks/useFeatureToggleIntl';
 import { AmplitudeAwareAccordion } from 'components/AmplitudeAwareAccordion/AmplitudeAwareAccordion';
+import { FormattedMessage } from 'react-intl';
 
 const VEILEDNING_CONFIRM = 'veiledningConfirm';
 type VeiledningType = {
@@ -27,7 +28,7 @@ export const Veiledning = ({
   errorMessageRef,
   onSubmit,
 }: VeiledningProps) => {
-  const { formatMessage, formatElement } = useFeatureToggleIntl();
+  const { formatMessage, FormatElement } = useFeatureToggleIntl();
 
   const schema = yup.object().shape({
     veiledningConfirm: yup
@@ -36,7 +37,7 @@ export const Veiledning = ({
       .oneOf([true], formatMessage('søknad.veiledning.veiledningConfirm.validation.required')),
   });
 
-  const { control, handleSubmit, watch } = useForm<VeiledningType>({
+  const { control, handleSubmit } = useForm<VeiledningType>({
     resolver: yupResolver(schema),
   });
 
@@ -44,9 +45,12 @@ export const Veiledning = ({
     <>
       <header className={classes?.veiledningHeader}>
         <Heading size="large" level="1">
-          {formatElement(`søknad.veiledning.title`, {
-            wbr: () => <>&shy;</>,
-          })}
+          <FormatElement
+            id={`søknad.veiledning.title`}
+            values={{
+              wbr: () => <>&shy;</>,
+            }}
+          />
         </Heading>
       </header>
       <main className={classes?.veiledningContent}>
@@ -61,7 +65,10 @@ export const Veiledning = ({
 
         <LucaGuidePanel>
           <Heading size="medium" level="2" spacing>
-            {formatMessage('søknad.veiledning.guide.title', { name: søker.fulltNavn })}
+            <FormattedMessage
+              id={'søknad.veiledning.guide.title'}
+              values={{ name: søker.fulltNavn }}
+            />
           </Heading>
           <BodyShort spacing>{formatMessage('søknad.veiledning.guide.text1')}</BodyShort>
           <BodyShort spacing>{formatMessage('søknad.veiledning.guide.text2')}</BodyShort>
