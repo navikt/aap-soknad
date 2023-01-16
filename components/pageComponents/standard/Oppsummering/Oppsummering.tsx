@@ -48,7 +48,7 @@ import { logSkjemaValideringFeiletEvent } from 'utils/amplitude';
 interface OppsummeringProps {
   onBackClick: () => void;
   onSubmitSoknad: (data: Soknad) => boolean;
-  submitErrorMessageRef: React.MutableRefObject<string | null>;
+  submitErrorMessageRef: React.MutableRefObject<null>;
   hasSubmitError: boolean;
 }
 
@@ -326,9 +326,10 @@ const Oppsummering = ({
         >
           <SummaryRowIfExists
             labelKey={`søknad.student.erStudent.legend`}
-            value={formatMessage(
-              jaNeiAvbruttToTekstnøkkel(søknadState?.søknad?.student?.erStudent)
-            )}
+            value={
+              søknadState?.søknad?.student?.erStudent &&
+              formatMessage(jaNeiAvbruttToTekstnøkkel(søknadState?.søknad?.student?.erStudent))
+            }
           />
           <SummaryRowIfExists
             labelKey={`søknad.${STUDENT}.${KOMME_TILBAKE}.legend`}

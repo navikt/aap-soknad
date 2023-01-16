@@ -4,7 +4,10 @@ import {
 } from 'components/pageComponents/standard/AndreUtbetalinger/AndreUtbetalinger';
 import { Relasjon } from 'components/pageComponents/standard/Barnetillegg/AddBarnModal';
 import { JaEllerNei, JaNeiVetIkke } from './Generic';
-import { AVBRUTT_STUDIE_VEDLEGG } from 'components/pageComponents/standard/Student/Student';
+import {
+  AVBRUTT_STUDIE_VEDLEGG,
+  JaNeiAvbrutt,
+} from 'components/pageComponents/standard/Student/Student';
 import { OppslagBehandler } from 'context/sokerOppslagContext';
 import { BARN } from 'components/pageComponents/standard/Barnetillegg/Barnetillegg';
 import { FerieType, SYKEPENGER } from 'components/pageComponents/standard/StartDato/StartDato';
@@ -51,7 +54,7 @@ export interface RegistrertBehandler extends OppslagBehandler {
   erRegistrertFastlegeRiktig?: JaEllerNei;
 }
 type Student = {
-  erStudent?: JaEllerNei;
+  erStudent?: JaNeiAvbrutt;
   kommeTilbake?: JaNeiVetIkke;
 };
 type AndreUtbetalinger = {
