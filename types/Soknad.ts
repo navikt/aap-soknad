@@ -103,6 +103,15 @@ export type Vedlegg = {
   size: string;
   vedleggId: string;
 };
+export type SoknadVedlegg = {
+  [AttachmentType.LØNN_OG_ANDRE_GODER]: Vedlegg[];
+  [AttachmentType.OMSORGSSTØNAD]: Vedlegg[];
+  [AttachmentType.UTLANDSSTØNAD]: Vedlegg[];
+  [AttachmentType.SYKESTIPEND]: Vedlegg[];
+  [AttachmentType.LÅN]: Vedlegg[];
+  [AVBRUTT_STUDIE_VEDLEGG]: Vedlegg[];
+  annet: Vedlegg[];
+};
 
 export interface Soknad {
   [SYKEPENGER]?: JaEllerNei;
@@ -116,14 +125,6 @@ export interface Soknad {
   manuelleBarn?: ManuelleBarn[];
   tilleggsopplysninger?: string;
   ferie?: Ferie;
-  vedlegg?: {
-    [AttachmentType.LØNN_OG_ANDRE_GODER]: Vedlegg[];
-    [AttachmentType.OMSORGSSTØNAD]: Vedlegg[];
-    [AttachmentType.UTLANDSSTØNAD]: Vedlegg[];
-    [AttachmentType.SYKESTIPEND]: Vedlegg[];
-    [AttachmentType.LÅN]: Vedlegg[];
-    [AVBRUTT_STUDIE_VEDLEGG]: Vedlegg[];
-    annet: Vedlegg[];
-  };
+  vedlegg?: SoknadVedlegg;
   søknadBekreft?: boolean;
 }
