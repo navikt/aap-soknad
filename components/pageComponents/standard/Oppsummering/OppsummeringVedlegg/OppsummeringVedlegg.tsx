@@ -76,11 +76,11 @@ export const OppsummeringVedlegg = ({ søknadState }: Props) => {
         </>
       )}
 
-      {søknadState?.søknad?.vedlegg?.annet && søknadState?.søknad?.vedlegg?.annet?.length > 0 && (
+      {søknadState?.søknad?.vedlegg?.ANNET && søknadState?.søknad?.vedlegg?.ANNET?.length > 0 && (
         <div>
           <Label>{'Annet:'}</Label>
           <ul>
-            {søknadState?.søknad?.vedlegg?.annet?.map((vedleggFile) => (
+            {søknadState?.søknad?.vedlegg?.ANNET?.map((vedleggFile) => (
               <li key={vedleggFile.vedleggId}>{vedleggFile?.name}</li>
             ))}
           </ul>
