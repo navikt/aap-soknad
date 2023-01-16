@@ -102,7 +102,7 @@ export type Vedlegg = {
 };
 
 export interface Soknad {
-  [SYKEPENGER]: JaEllerNei;
+  [SYKEPENGER]?: JaEllerNei;
   yrkesskade?: Yrkesskade;
   medlemskap?: Medlemskap;
   registrerteBehandlere?: RegistrertBehandler[];
