@@ -31,7 +31,7 @@ const VEDLEGG_OMSORGSSTØNAD = `${VEDLEGG}.${AttachmentType.OMSORGSSTØNAD}`;
 const VEDLEGG_UTLANDSSTØNAD = `${VEDLEGG}.${AttachmentType.UTLANDSSTØNAD}`;
 const VEDLEGG_SYKESTIPEND = `${VEDLEGG}.${AttachmentType.SYKESTIPEND}`;
 const VEDLEGG_LÅN = `${VEDLEGG}.${AttachmentType.LÅN}`;
-const VEDLEGG_ANNET = `${VEDLEGG}.annet`;
+const VEDLEGG_ANNET = `${VEDLEGG}.ANNET`;
 
 const Vedlegg = ({ onBackClick, onNext, defaultValues }: Props) => {
   const { formatMessage } = useFeatureToggleIntl();

@@ -110,7 +110,7 @@ export type SoknadVedlegg = {
   [AttachmentType.SYKESTIPEND]: Vedlegg[];
   [AttachmentType.LÅN]: Vedlegg[];
   [AVBRUTT_STUDIE_VEDLEGG]: Vedlegg[];
-  annet: Vedlegg[];
+  ANNET: Vedlegg[];
 };
 
 export interface Soknad {
