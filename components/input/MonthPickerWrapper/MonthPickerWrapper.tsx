@@ -1,39 +1,55 @@
-import { MonthValidationT, UNSAFE_MonthPicker, UNSAFE_useMonthpicker } from '@navikt/ds-react';
-import { useEffect } from 'react';
+import { UNSAFE_MonthPicker, UNSAFE_useMonthpicker } from '@navikt/ds-react';
+import { Control, Controller, FieldPath, FieldValues } from 'react-hook-form';
 
-export interface MonthPickerProps {
-  name: string;
+export interface MonthPickerProps<FormFieldValues extends FieldValues> {
+  name: FieldPath<FormFieldValues>;
   label: string;
   selectedDate?: string | Date;
-  setValue: any;
   fromDate?: Date;
   toDate?: Date;
-  error?: string;
+  control: Control<FormFieldValues>;
 }
 
-export const MonthPickerWrapper = ({
+export const MonthPickerWrapper = <FormFieldValues extends FieldValues>({
   name,
   label,
   selectedDate,
-  setValue,
   fromDate,
   toDate,
-  error,
-}: MonthPickerProps) => {
-  const { monthpickerProps, inputProps, selectedMonth } = UNSAFE_useMonthpicker({
-    defaultSelected: selectedDate ? new Date(selectedDate) : undefined,
-    //fromDate: fromDate,
-    //toDate: toDate,
-    inputFormat: 'MM.yyyy',
-  });
-
-  useEffect(() => {
-    setValue(name, selectedMonth);
-  }, [selectedMonth]);
-
+  control,
+}: MonthPickerProps<FormFieldValues>) => {
   return (
-    <UNSAFE_MonthPicker {...monthpickerProps}>
-      <UNSAFE_MonthPicker.Input {...inputProps} id={name} label={label} error={error} />
-    </UNSAFE_MonthPicker>
+    <Controller
+      name={name}
+      control={control}
+      render={({ field: { name, value, onChange }, fieldState: { error } }) => {
+        const { monthpickerProps, inputProps } = UNSAFE_useMonthpicker({
+          defaultSelected: selectedDate ? new Date(selectedDate) : undefined,
+          inputFormat: 'MM.yyyy',
+          onMonthChange: (date) => {
+            onChange(date);
+          },
+        });
+
+        return (
+          <UNSAFE_MonthPicker
+            {...monthpickerProps}
+            id={name}
+            fromDate={fromDate}
+            toDate={toDate}
+            selected={value}
+          >
+            <UNSAFE_MonthPicker.Input
+              id={name}
+              name={name}
+              error={error && error.message}
+              label={label}
+              value={value ? value.toString() : ''}
+              {...inputProps}
+            />
+          </UNSAFE_MonthPicker>
+        );
+      }}
+    />
   );
 };

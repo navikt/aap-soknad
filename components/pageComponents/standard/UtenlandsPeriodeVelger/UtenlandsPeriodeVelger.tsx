@@ -98,14 +98,7 @@ const UtenlandsPeriodeVelger = ({
     }),
   });
 
-  const {
-    control,
-    watch,
-    formState: { errors },
-    reset,
-    handleSubmit,
-    setValue,
-  } = useForm<FormFields>({
+  const { control, watch, reset, handleSubmit } = useForm<FormFields>({
     resolver: yupResolver(schema),
     defaultValues: {
       ...(utenlandsPeriode
@@ -118,6 +111,7 @@ const UtenlandsPeriodeVelger = ({
           }
         : {}),
     },
+    shouldUnregister: true,
   });
 
   useEffect(() => {
@@ -142,14 +136,6 @@ const UtenlandsPeriodeVelger = ({
     );
   }, [valgtLand]);
 
-  const clearModal = () => {
-    setValue('land', '');
-    setValue('fraDato', '');
-    setValue('tilDato', '');
-    setValue('iArbeid', '');
-    setValue('utenlandsId', '');
-  };
-
   return (
     <Modal open={open} onClose={onClose}>
       <Modal.Content className={classes.utenlandsPeriodeVelger}>
@@ -168,7 +154,6 @@ const UtenlandsPeriodeVelger = ({
           className={classes.modalForm}
           onSubmit={handleSubmit((data) => {
             onSave(data);
-            clearModal();
           })}
         >
           <CountrySelector
@@ -188,28 +173,26 @@ const UtenlandsPeriodeVelger = ({
             <Grid>
               <Cell xs={12} lg={5}>
                 <MonthPickerWrapper
+                  control={control}
                   name="fraDato"
                   selectedDate={utenlandsPeriode?.fraDato}
-                  setValue={setValue}
                   label={formatMessage(
                     'søknad.medlemskap.utenlandsperiode.modal.periode.fraDato.label'
                   )}
                   fromDate={subYears(new Date(), antallÅrTilbake)}
                   toDate={new Date()}
-                  error={errors?.fraDato?.message}
                 />
               </Cell>
               <Cell xs={12} lg={5}>
                 <MonthPickerWrapper
+                  control={control}
                   name="tilDato"
                   selectedDate={utenlandsPeriode?.tilDato}
-                  setValue={setValue}
                   label={formatMessage(
                     'søknad.medlemskap.utenlandsperiode.modal.periode.tilDato.label'
                   )}
                   fromDate={subYears(new Date(), antallÅrTilbake)}
                   toDate={new Date()}
-                  error={errors?.tilDato?.message}
                 />
               </Cell>
             </Grid>
@@ -241,7 +224,6 @@ const UtenlandsPeriodeVelger = ({
               type="button"
               variant={'secondary'}
               onClick={() => {
-                clearModal();
                 onCancel();
               }}
             >
