@@ -1,6 +1,7 @@
 .visuallyHidden {
   composes: visuallyHidden from '../../../styles/visibility.module.css';
 }
+
 .dropZone {
   padding: 30px;
   border: 2px dashed var(--a-surface-action);
@@ -74,7 +75,7 @@
   padding: 2rem;
   background-color: var(--a-surface-subtle);
   display: flex;
-  flex-direction: column;
+  justify-content: center;
   row-gap: 1rem;
 }
 .fileInputButton:focus {
