@@ -210,13 +210,13 @@ export const Medlemskap = ({ onBackClick, onNext, defaultValues }: Props) => {
 
   useEffect(() => {
     if (shouldShowArbeidetUtenforNorgeSiste5År(boddINorge)) {
-      setValue(`${MEDLEMSKAP}.${ARBEID_I_NORGE}`, '');
+      setValue(`${MEDLEMSKAP}.${ARBEID_I_NORGE}`, undefined);
     }
     if (shouldShowArbeidetSammenhengendeINorgeSiste5År(boddINorge)) {
-      setValue(`${MEDLEMSKAP}.${ARBEID_UTENFOR_NORGE_FØR_SYKDOM}`, '');
+      setValue(`${MEDLEMSKAP}.${ARBEID_UTENFOR_NORGE_FØR_SYKDOM}`, undefined);
     }
     if (!shouldShowITilleggArbeidetUtenforNorgeSiste5År(arbeidINorge)) {
-      setValue(`${MEDLEMSKAP}.${OGSÅ_ARBEID_UTENFOR_NORGE}`, '');
+      setValue(`${MEDLEMSKAP}.${OGSÅ_ARBEID_UTENFOR_NORGE}`, undefined);
     }
     if (!shouldShowPeriodevelger(arbeidUtenforNorge, arbeidINorge, iTilleggArbeidUtenforNorge)) {
       remove();
