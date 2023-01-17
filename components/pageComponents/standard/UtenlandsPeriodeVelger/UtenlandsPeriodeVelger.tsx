@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo } from 'react';
-import { FieldValues, useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as classes from './UtenlandsPeriode.module.css';
@@ -31,6 +31,7 @@ export enum ArbeidEllerBodd {
   ARBEID = 'ARBEID',
   BODD = 'BODD',
 }
+
 interface UtenlandsPeriodeProps {
   utenlandsPeriode?: UtenlandsPeriode;
   onSave: (data: any) => void;
@@ -39,12 +40,14 @@ interface UtenlandsPeriodeProps {
   open: boolean;
   arbeidEllerBodd: ArbeidEllerBodd;
 }
-const initFieldVals: FieldValues = {
-  land: '',
-  fraDato: undefined,
-  tilDato: undefined,
-  iArbeid: false,
-};
+
+interface FormFields {
+  land: string;
+  fraDato: string;
+  tilDato: string;
+  iArbeid: string;
+  utenlandsId?: string;
+}
 const UtenlandsPeriodeVelger = ({
   utenlandsPeriode,
   onSave,
@@ -56,7 +59,6 @@ const UtenlandsPeriodeVelger = ({
   const { formatMessage } = useFeatureToggleIntl();
 
   const schema = yup.object().shape({
-    arbeidEllerBodd: yup.string().nullable(),
     land: yup
       .string()
       .required(formatMessage('søknad.medlemskap.utenlandsperiode.modal.land.validation.required'))
@@ -84,8 +86,8 @@ const UtenlandsPeriodeVelger = ({
           'søknad.medlemskap.utenlandsperiode.modal.periode.tilDato.validation.fraDatoEtterTilDato'
         )
       ),
-    iArbeid: yup.string().when('arbeidEllerBodd', {
-      is: ArbeidEllerBodd.BODD,
+    iArbeid: yup.string().when([], {
+      is: () => arbeidEllerBodd === ArbeidEllerBodd.BODD,
       then: yup
         .string()
         .required(
@@ -103,17 +105,18 @@ const UtenlandsPeriodeVelger = ({
     reset,
     handleSubmit,
     setValue,
-  } = useForm({
+  } = useForm<FormFields>({
     resolver: yupResolver(schema),
     defaultValues: {
       ...(utenlandsPeriode
         ? {
             ...utenlandsPeriode,
+            land: utenlandsPeriode.land,
             fraDato: formatDate(utenlandsPeriode.fraDato, 'yyyy-MM-dd'),
             tilDato: formatDate(utenlandsPeriode.tilDato, 'yyyy-MM-dd'),
             arbeidEllerBodd: arbeidEllerBodd,
           }
-        : { ...initFieldVals, arbeidEllerBodd: arbeidEllerBodd }),
+        : {}),
     },
   });
 
@@ -122,7 +125,6 @@ const UtenlandsPeriodeVelger = ({
       ...utenlandsPeriode,
       fraDato: formatDate(utenlandsPeriode?.fraDato, 'yyyy-MM-dd'),
       tilDato: formatDate(utenlandsPeriode?.tilDato, 'yyyy-MM-dd'),
-      arbeidEllerBodd: arbeidEllerBodd,
     });
   }, [utenlandsPeriode, arbeidEllerBodd, open, reset]);
 
@@ -139,11 +141,12 @@ const UtenlandsPeriodeVelger = ({
       eeaMember(landKode)
     );
   }, [valgtLand]);
+
   const clearModal = () => {
     setValue('land', '');
-    setValue('fraDato', undefined);
-    setValue('tilDato', undefined);
-    setValue('iArbeid', undefined);
+    setValue('fraDato', '');
+    setValue('tilDato', '');
+    setValue('iArbeid', '');
     setValue('utenlandsId', '');
   };
 
