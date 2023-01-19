@@ -42,21 +42,21 @@ export const mockSøker = {
   behandlere: [
     {
       type: 'FASTLEGE',
-      navn: { fornavn: 'Nina Unni', etternavn: 'Borge' },
+      navn: { fornavn: 'Sonja', etternavn: 'Plastersen' },
       kategori: 'LEGE',
       kontaktinformasjon: {
         behandlerRef: 'd182f24b-ebca-4f44-bf86-65901ec6141b',
-        kontor: 'ASKØY KOMMUNE SAMFUNNSMEDISINSK AVD ALMENNLEGETJENESTEN',
-        orgnummer: '976673867',
+        kontor: 'Andeby legekontor',
+        orgnummer: '999999',
         adresse: {
-          adressenavn: 'Kleppeveien',
+          adressenavn: 'Skogveien',
           husnummer: '17',
           postnummer: {
-            postnr: '5300',
-            poststed: 'KLEPPESTØ',
+            postnr: '1234',
+            poststed: 'Andeby',
           },
         },
-        telefon: '56 15 83 10',
+        telefon: '99 99 99 99',
       },
     },
   ],
