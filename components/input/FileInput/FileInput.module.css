@@ -75,7 +75,7 @@
   padding: 2rem;
   background-color: var(--a-surface-subtle);
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   row-gap: 1rem;
 }
 .fileInputButton:focus {
