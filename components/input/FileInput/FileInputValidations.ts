@@ -12,6 +12,6 @@ export function isValidFileType(fields: any[] | undefined) {
 }
 
 const MAX_TOTAL_FILE_SIZE = 52428800; // 50m
-export function isUnderTotalAmountOfUpload(fields: any[] | undefined) {
+export function isOUnderTotalFileSize(fields: any[] | undefined) {
   return !fields || fields.reduce((acc, curr) => acc + curr.size, 0) < MAX_TOTAL_FILE_SIZE;
 }
