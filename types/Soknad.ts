@@ -100,8 +100,9 @@ export type Ferie = {
 
 export type Vedlegg = {
   name: string;
-  size: string;
-  vedleggId: string;
+  size: number;
+  vedleggId?: string;
+  barnId?: string; // Ny
 };
 export type SoknadVedlegg = {
   [AttachmentType.LØNN_OG_ANDRE_GODER]: Vedlegg[];
