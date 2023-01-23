@@ -8,7 +8,7 @@ import {
   UseFormTrigger,
 } from 'react-hook-form';
 import { FormFields } from '../../pageComponents/standard/StartDato/MyComponent';
-import { ErrorMessage, Loader } from '@navikt/ds-react';
+import { BodyShort, ErrorMessage, Heading, Loader } from '@navikt/ds-react';
 
 import * as styles from './FileInput.module.css';
 import * as classes from './FileInput.module.css';
@@ -23,10 +23,11 @@ interface Props {
   triggerValidation: UseFormTrigger<FormFields>;
   clearErrors: UseFormClearErrors<FormFields>;
   heading: string;
+  ingress?: string;
 }
 
-export const MyNewFileInput = (props: Props) => {
-  const { name, control, heading, triggerValidation, clearErrors } = props;
+export const FileInput = (props: Props) => {
+  const { name, control, heading, ingress, triggerValidation, clearErrors } = props;
   const { formatMessage } = useFeatureToggleIntl();
   const [loading, setLoading] = useState<boolean>(false);
   const [fetchError, setFetchError] = useState('');
@@ -83,6 +84,12 @@ export const MyNewFileInput = (props: Props) => {
 
   return (
     <div className={styles.fileInput}>
+      {heading && (
+        <Heading size={'medium'} level={'3'}>
+          {heading}
+        </Heading>
+      )}
+      {ingress && <BodyShort>{ingress}</BodyShort>}
       {fields.map((vedlegg, index) => {
         return vedlegg.isValid ? (
           <FileCard key={vedlegg.id} vedlegg={vedlegg} remove={() => remove(index)} />
@@ -122,7 +129,7 @@ export const MyNewFileInput = (props: Props) => {
                 }}
               >
                 <SvgUpload title="" aria-hidden />
-                Velg dine filer for {heading.toLowerCase()}
+                Velg dine filer for {heading}
               </button>
             </label>
           </>
