@@ -1,4 +1,4 @@
-import { isOUnderTotalFileSize, isValidAttachment, isValidFileType } from './FileInputValidations';
+import { isUnderTotalFileSize, isValidAttachment, isValidFileType } from './FileInputValidations';
 import { FormFieldVedlegg } from '../../pageComponents/standard/StartDato/MyComponent';
 
 describe('isValidFileType', () => {
@@ -70,7 +70,7 @@ describe('isValidAttachment', () => {
 
 describe('isUnderTotalFileSize', () => {
   it('skal returnere true dersom man ikke sender inn noen felt', () => {
-    expect(isOUnderTotalFileSize([])).toBeTruthy();
+    expect(isUnderTotalFileSize([])).toBeTruthy();
   });
 
   it('skal returnere true dersom totale filstørrelsen ikke er over 50mb', () => {
@@ -83,7 +83,7 @@ describe('isUnderTotalFileSize', () => {
     };
     const fields = [vedlegg];
 
-    expect(isOUnderTotalFileSize(fields)).toBeTruthy();
+    expect(isUnderTotalFileSize(fields)).toBeTruthy();
   });
 
   it('skal returnere true dersom totale filstørrelsen er over 50mb', () => {
