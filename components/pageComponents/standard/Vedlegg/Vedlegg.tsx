@@ -1,5 +1,5 @@
-import { FieldValues, useForm, useWatch } from 'react-hook-form';
-import { Soknad } from 'types/Soknad';
+import { useForm, useWatch } from 'react-hook-form';
+import { Soknad, Vedlegg } from 'types/Soknad';
 import React, { useEffect, useRef, useState } from 'react';
 import { BodyShort, Heading, Label, ReadMore } from '@navikt/ds-react';
 import * as yup from 'yup';
@@ -12,47 +12,101 @@ import { useFeatureToggleIntl } from 'hooks/useFeatureToggleIntl';
 import { slettLagretSoknadState, updateSøknadData } from 'context/soknadContextCommon';
 import { deleteOpplastedeVedlegg, useSoknadContextStandard } from 'context/soknadContextStandard';
 import { useDebounceLagreSoknad } from 'hooks/useDebounceLagreSoknad';
-import { Relasjon } from '../Barnetillegg/AddBarnModal';
-import { MANUELLE_BARN } from '../Barnetillegg/Barnetillegg';
-import FieldArrayFileInput from 'components/input/FileInput/FieldArrayFileInput';
 import { GenericSoknadContextState } from 'types/SoknadContext';
 import { scrollRefIntoView } from 'utils/dom';
-import { ScanningGuide, LucaGuidePanel } from '@navikt/aap-felles-innbygger-react';
+import { LucaGuidePanel, ScanningGuide } from '@navikt/aap-felles-innbygger-react';
 import { useIntl } from 'react-intl';
+import { FileInput } from '../../../input/FileInput/FileInput';
+import {
+  isUnderTotalFileSize,
+  isValidAttachment,
+  isValidFileType,
+} from '../../../input/FileInput/FileInputValidations';
 
 interface Props {
   onBackClick: () => void;
   onNext: (data: any) => void;
   defaultValues?: GenericSoknadContextState<Soknad>;
 }
-const VEDLEGG = 'vedlegg';
-const VEDLEGG_LØNN = `${VEDLEGG}.${AttachmentType.LØNN_OG_ANDRE_GODER}`;
-const VEDLEGG_OMSORGSSTØNAD = `${VEDLEGG}.${AttachmentType.OMSORGSSTØNAD}`;
-const VEDLEGG_UTLANDSSTØNAD = `${VEDLEGG}.${AttachmentType.UTLANDSSTØNAD}`;
-const VEDLEGG_SYKESTIPEND = `${VEDLEGG}.${AttachmentType.SYKESTIPEND}`;
-const VEDLEGG_LÅN = `${VEDLEGG}.${AttachmentType.LÅN}`;
-const VEDLEGG_ANNET = `${VEDLEGG}.ANNET`;
+
+export interface FormFieldVedlegg {
+  name: string;
+  size: number;
+  vedleggId?: string;
+  barnId?: string; // Ny
+  isValid: boolean; // Ny
+  file: File; // Ny
+  substatus?: string;
+}
+
+export interface FormFields {
+  lønnOgAndreGoder: FormFieldVedlegg[];
+  omsorgstønad: FormFieldVedlegg[];
+  utlandsstønad: FormFieldVedlegg[];
+  avbruttStudie: FormFieldVedlegg[];
+  sykestipend: FormFieldVedlegg[];
+  lån: FormFieldVedlegg[];
+  annet: FormFieldVedlegg[];
+  manuelleBarn: FormFieldVedlegg[]; //TODO Se nærmere på denne med Tor
+}
 
 const Vedlegg = ({ onBackClick, onNext, defaultValues }: Props) => {
   const { formatMessage } = useFeatureToggleIntl();
   const [scanningGuideOpen, setScanningGuideOpen] = useState(false);
   const scanningGuideElement = useRef(null);
-  const schema = yup.object().shape({});
   const { søknadState, søknadDispatch } = useSoknadContextStandard();
   const { stepList } = useStepWizard();
   const { locale } = useIntl();
+
+  const errorText = (statusCode: number) => {
+    switch (statusCode) {
+      case 413:
+        return formatMessage('fileInputErrors.fileTooLarge');
+      case 415:
+        return formatMessage('fileInputErrors.unsupportedMediaType');
+      default:
+        return formatMessage('fileInputErrors.other');
+    }
+  };
+
+  const getSchemaValidation = () => {
+    return yup
+      .array()
+      .test('unvalidFileType', errorText(415), (value) => {
+        return isValidFileType(value);
+      })
+      .test('filesToLarge', errorText(413), (value) => {
+        return isUnderTotalFileSize(value);
+      })
+      .test('unvalidAttachment', errorText(1), (value) => {
+        return isValidAttachment(value);
+      });
+  };
+
+  const schema = yup.object().shape({
+    lønnOgAndreGoder: getSchemaValidation(),
+    omsorgstønad: getSchemaValidation(),
+    utlandsstønad: getSchemaValidation(),
+    avbruttStudie: getSchemaValidation(),
+    avbruttStipend: getSchemaValidation(),
+    sykestipend: getSchemaValidation(),
+    lån: getSchemaValidation(),
+    annet: getSchemaValidation(),
+    manuelleBarn: getSchemaValidation(),
+  });
+
   const {
     clearErrors,
-    setError,
+    trigger,
     control,
     handleSubmit,
     formState: { errors },
-  } = useForm<FieldValues>({
+  } = useForm<FormFields>({
     resolver: yupResolver(schema),
-    defaultValues: {
-      [VEDLEGG]: defaultValues?.søknad?.vedlegg,
-      [MANUELLE_BARN]: defaultValues?.søknad?.manuelleBarn,
-    },
+    // defaultValues: {
+    //   [VEDLEGG]: defaultValues?.søknad?.vedlegg,
+    //   [MANUELLE_BARN]: defaultValues?.søknad?.manuelleBarn,
+    // },
   });
 
   useEffect(() => {
@@ -69,9 +123,28 @@ const Vedlegg = ({ onBackClick, onNext, defaultValues }: Props) => {
   useEffect(() => {
     debouncedLagre(søknadState, stepList, allFields);
   }, [allFields]);
+
+  function mapToVedlegg(field: FormFieldVedlegg): Vedlegg {
+    return {
+      name: field.name,
+      size: field.size,
+      vedleggId: field.vedleggId,
+    };
+  }
   return (
     <SoknadFormWrapper
       onNext={handleSubmit((data) => {
+        const newData = {
+          vedlegg: Object.keys(data)
+            .filter((key) => key !== 'manuelleBarn')
+            .map((field) => data[field as unknown as keyof FormFields])
+            .flat()
+            .map(mapToVedlegg),
+          manuelleBarn: Object.keys(data)
+            .filter((key) => key === 'manuelleBarn')
+            .map((field) => data[field as unknown as keyof FormFields])
+            .flat(),
+        };
         onNext(data);
       })}
       onBack={() => {
@@ -129,107 +202,95 @@ const Vedlegg = ({ onBackClick, onNext, defaultValues }: Props) => {
         </ReadMore>
       </div>
       {søknadState?.requiredVedlegg?.find((e) => e.type === AVBRUTT_STUDIE_VEDLEGG) && (
-        <FieldArrayFileInput
-          control={control}
-          name={`${VEDLEGG}.${AVBRUTT_STUDIE_VEDLEGG}`}
-          type={AttachmentType.AVBRUTT_STUDIE}
-          errors={errors}
-          setError={setError}
+        <FileInput
           clearErrors={clearErrors}
+          triggerValidation={trigger}
+          control={control}
+          name={'avbruttStudie'}
           heading={formatMessage('søknad.student.vedlegg.name')}
           ingress={formatMessage('søknad.student.vedlegg.description')}
         />
       )}
       {søknadState?.requiredVedlegg?.find((e) => e.type === AttachmentType.LØNN_OG_ANDRE_GODER) && (
-        <FieldArrayFileInput
-          control={control}
-          name={VEDLEGG_LØNN}
-          type={AttachmentType.LØNN_OG_ANDRE_GODER}
-          errors={errors}
-          setError={setError}
+        <FileInput
           clearErrors={clearErrors}
+          triggerValidation={trigger}
+          control={control}
+          name={'lønnOgAndreGoder'}
           heading={'Lønn og andre goder'}
           ingress={formatMessage('søknad.andreUtbetalinger.vedlegg.andreGoder')}
         />
       )}
       {søknadState?.requiredVedlegg?.find((e) => e.type === AttachmentType.OMSORGSSTØNAD) && (
-        <FieldArrayFileInput
-          control={control}
-          name={VEDLEGG_OMSORGSSTØNAD}
-          type={AttachmentType.OMSORGSSTØNAD}
-          errors={errors}
-          setError={setError}
+        <FileInput
           clearErrors={clearErrors}
+          triggerValidation={trigger}
+          control={control}
+          name={'omsorgstønad'}
           heading={formatMessage('søknad.andreUtbetalinger.stønad.values.omsorgsstønad')}
           ingress={formatMessage('søknad.andreUtbetalinger.vedlegg.omsorgsstønad')}
         />
       )}
       {søknadState?.requiredVedlegg?.find((e) => e.type === AttachmentType.UTLANDSSTØNAD) && (
-        <FieldArrayFileInput
-          control={control}
-          name={VEDLEGG_UTLANDSSTØNAD}
-          type={AttachmentType.UTLANDSSTØNAD}
-          errors={errors}
-          setError={setError}
+        <FileInput
           clearErrors={clearErrors}
+          triggerValidation={trigger}
+          control={control}
+          name={'utlandsstønad'}
           heading={formatMessage('søknad.andreUtbetalinger.stønad.values.utland')}
           ingress={formatMessage('søknad.andreUtbetalinger.vedlegg.utlandsStønad')}
         />
       )}
       {søknadState?.requiredVedlegg?.find((e) => e.type === AttachmentType.LÅN) && (
-        <FieldArrayFileInput
-          control={control}
-          name={VEDLEGG_LÅN}
-          type={AttachmentType.LÅN}
-          errors={errors}
-          setError={setError}
+        <FileInput
           clearErrors={clearErrors}
+          triggerValidation={trigger}
+          control={control}
+          name={'lån'}
           heading={formatMessage('søknad.andreUtbetalinger.stønad.values.lån')}
           ingress={formatMessage('søknad.andreUtbetalinger.vedlegg.lån')}
         />
       )}
       {søknadState?.requiredVedlegg?.find((e) => e.type === AttachmentType.SYKESTIPEND) && (
-        <FieldArrayFileInput
-          control={control}
-          name={VEDLEGG_SYKESTIPEND}
-          type={AttachmentType.SYKESTIPEND}
-          errors={errors}
-          setError={setError}
+        <FileInput
           clearErrors={clearErrors}
+          triggerValidation={trigger}
+          control={control}
+          name={'sykestipend'}
           heading={formatMessage('søknad.andreUtbetalinger.stønad.values.stipend')}
           ingress={formatMessage('søknad.andreUtbetalinger.vedlegg.sykeStipend')}
         />
       )}
-      {søknadState?.søknad?.manuelleBarn?.map((barn, index) => {
-        const requiredVedlegg = søknadState?.requiredVedlegg.find(
-          (e) => e?.type === `barn-${barn.internId}`
-        );
-        return (
-          <FieldArrayFileInput
-            key={barn.internId}
-            control={control}
-            name={`${MANUELLE_BARN}.${index}.vedlegg`}
-            type={`barn-${barn.internId}`}
-            errors={errors}
-            setError={setError}
-            clearErrors={clearErrors}
-            heading={formatMessage(
-              `søknad.vedlegg.andreBarn.title.${requiredVedlegg?.filterType}`,
-              {
-                navn: `${barn?.navn?.fornavn} ${barn?.navn?.etternavn}`,
-              }
-            )}
-            ingress={requiredVedlegg?.description}
-          />
-        );
-      })}
-      <FieldArrayFileInput
-        name={VEDLEGG_ANNET}
-        type={AttachmentType.ANNET}
-        control={control}
-        errors={errors}
-        setError={setError}
+      {/*{søknadState?.søknad?.manuelleBarn?.map((barn, index) => {*/}
+      {/*  const requiredVedlegg = søknadState?.requiredVedlegg.find(*/}
+      {/*    (e) => e?.type === `barn-${barn.internId}`*/}
+      {/*  );*/}
+      {/*  return (*/}
+      {/*    <FileInput
+      clearErrors={clearErrors}
+       triggerValidation={trigger} */}
+      {/*      key={barn.internId}*/}
+      {/*      control={control}*/}
+      {/*      name={`${MANUELLE_BARN}.${index}.vedlegg`}*/}
+      {/*      type={`barn-${barn.internId}`}*/}
+      {/*      errors={errors}*/}
+      {/*      setError={setError}*/}
+      {/*      clearErrors={clearErrors}*/}
+      {/*      heading={formatMessage(*/}
+      {/*        `søknad.vedlegg.andreBarn.title.${requiredVedlegg?.filterType}`,*/}
+      {/*        {*/}
+      {/*          navn: `${barn?.navn?.fornavn} ${barn?.navn?.etternavn}`,*/}
+      {/*        }*/}
+      {/*      )}*/}
+      {/*      ingress={requiredVedlegg?.description}*/}
+      {/*    />*/}
+      {/*  );*/}
+      {/*})}*/}
+      <FileInput
         clearErrors={clearErrors}
+        triggerValidation={trigger}
+        name={'annet'}
+        control={control}
         heading={'Annen dokumentasjon'}
         ingress={'Hvis du har noe annet du ønsker å legge ved kan du laste det opp her'}
       />
