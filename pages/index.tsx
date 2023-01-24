@@ -37,8 +37,9 @@ export enum StepNames {
   VEDLEGG = 'VEDLEGG',
   OPPSUMMERING = 'OPPSUMMERING',
 }
+export const veiledningSteg = { stepIndex: 0, name: 'VEILEDNING' };
 export const defaultStepList = [
-  { stepIndex: 0, name: 'VEILEDNING' },
+  veiledningSteg,
   { stepIndex: 1, name: StepNames.STARTDATO, active: true },
   { stepIndex: 2, name: StepNames.MEDLEMSKAP },
   { stepIndex: 3, name: StepNames.YRKESSKADE },

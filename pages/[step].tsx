@@ -7,9 +7,9 @@ import {
   updateSøknadData,
 } from 'context/soknadContextCommon';
 import {
+  addVeiledningSteg,
   completeAndGoToNextStep,
   goToPreviousStep,
-  setAlleStegTilIkkeFerdig,
   setStepList,
   useStepWizard,
 } from 'context/stepWizardContextV2';
@@ -149,6 +149,12 @@ const Steps = ({ søker, mellomlagretSøknad }: PageProps) => {
     });
 
   const onPreviousStep = async () => {
+    if (currentStep.name === StepNames.STARTDATO) {
+      const veiledningStep = stepList.find((step) => step.stepIndex === 0);
+      if (!veiledningStep) {
+        addVeiledningSteg(stepWizardDispatch);
+      }
+    }
     goToPreviousStep(stepWizardDispatch);
   };
 
