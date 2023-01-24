@@ -38,6 +38,7 @@ export enum StepNames {
   OPPSUMMERING = 'OPPSUMMERING',
 }
 export const defaultStepList = [
+  { stepIndex: 0, name: 'VEILEDNING' },
   { stepIndex: 1, name: StepNames.STARTDATO, active: true },
   { stepIndex: 2, name: StepNames.MEDLEMSKAP },
   { stepIndex: 3, name: StepNames.YRKESSKADE },

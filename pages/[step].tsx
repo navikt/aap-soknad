@@ -9,6 +9,7 @@ import {
 import {
   completeAndGoToNextStep,
   goToPreviousStep,
+  setAlleStegTilIkkeFerdig,
   setStepList,
   useStepWizard,
 } from 'context/stepWizardContextV2';
@@ -51,6 +52,7 @@ import { logSkjemaFullførtEvent, logSkjemastegFullførtEvent } from 'utils/ampl
 import metrics from 'utils/metrics';
 import { scrollRefIntoView } from 'utils/dom';
 import { TimeoutBox } from 'components/TimeoutBox/TimeoutBox';
+import { Veiledning } from 'components/pageComponents/standard/Veiledning/Veiledning';
 
 interface PageProps {
   søker: SokerOppslagState;
@@ -147,11 +149,7 @@ const Steps = ({ søker, mellomlagretSøknad }: PageProps) => {
     });
 
   const onPreviousStep = async () => {
-    if (currentStep?.name === StepNames.STARTDATO) {
-      router.push('/');
-    } else {
-      goToPreviousStep(stepWizardDispatch);
-    }
+    goToPreviousStep(stepWizardDispatch);
   };
 
   const onNextStep = async (data: any) => {
@@ -159,6 +157,7 @@ const Steps = ({ søker, mellomlagretSøknad }: PageProps) => {
     updateSøknadData<Soknad>(søknadDispatch, data);
     completeAndGoToNextStep(stepWizardDispatch);
   };
+  const veiledningErrorMessageRef = useRef(null);
 
   return (
     <>
@@ -174,6 +173,17 @@ const Steps = ({ søker, mellomlagretSøknad }: PageProps) => {
       </header>
       {søknadState?.søknad && (
         <StepWizard>
+          {step === '0' && (
+            <Veiledning
+              søker={{}}
+              isLoading={false}
+              hasError={false}
+              errorMessageRef={veiledningErrorMessageRef}
+              onSubmit={() => {
+                onNextStep({});
+              }}
+            />
+          )}
           {step === '1' && (
             <StartDato
               onBackClick={onPreviousStep}
