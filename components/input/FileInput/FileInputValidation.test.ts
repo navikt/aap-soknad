@@ -1,5 +1,5 @@
 import { isUnderTotalFileSize, isValidAttachment, isValidFileType } from './FileInputValidations';
-import { FormFieldVedlegg } from '../../pageComponents/standard/StartDato/MyComponent';
+import { Vedlegg } from '../../../types/Soknad';
 
 describe('isValidFileType', () => {
   it('skal returnere true dersom man ikke sender inn noen felt', () => {
@@ -8,7 +8,7 @@ describe('isValidFileType', () => {
 
   it('skal returnere true dersom man ikke sender inn felter som er gyldig', () => {
     const file = new File(['(⌐□_□)'], 'hellopello.pdf', { type: 'application/pdf' });
-    const vedlegg: FormFieldVedlegg = {
+    const vedlegg: Vedlegg = {
       file: file,
       isValid: false,
       name: 'hellopello.pdf',
@@ -21,7 +21,7 @@ describe('isValidFileType', () => {
 
   it('skal returnere true dersom man ikke sender inn felter som er gyldig', () => {
     const file = new File(['(⌐□_□)'], 'hellopello.pdf', { type: 'audio/*' });
-    const vedlegg: FormFieldVedlegg = {
+    const vedlegg: Vedlegg = {
       file: file,
       isValid: false,
       name: 'hellopello.pdf',
@@ -40,7 +40,7 @@ describe('isValidAttachment', () => {
 
   it('skal returnere true dersom alle feltene er gyldige ', () => {
     const file = new File(['(⌐□_□)'], 'hellopello.pdf', { type: 'application/pdf' });
-    const vedlegg: FormFieldVedlegg = {
+    const vedlegg: Vedlegg = {
       file: file,
       isValid: true,
       name: 'hellopello.pdf',
@@ -53,7 +53,7 @@ describe('isValidAttachment', () => {
 
   it('skal returnere false dersom et av feltene ikke er gyldig', () => {
     const file = new File(['(⌐□_□)'], 'hellopello.pdf', { type: 'audio/*' });
-    const vedlegg: FormFieldVedlegg = {
+    const vedlegg: Vedlegg = {
       file: file,
       isValid: true,
       name: 'hellopello.pdf',
@@ -75,7 +75,7 @@ describe('isUnderTotalFileSize', () => {
 
   it('skal returnere true dersom totale filstørrelsen ikke er over 50mb', () => {
     const file = new File(['(⌐□_□)'], 'hellopello.pdf', { type: 'application/pdf' });
-    const vedlegg: FormFieldVedlegg = {
+    const vedlegg: Vedlegg = {
       file: file,
       isValid: true,
       name: 'hellopello.pdf',
@@ -88,7 +88,7 @@ describe('isUnderTotalFileSize', () => {
 
   it('skal returnere true dersom totale filstørrelsen er over 50mb', () => {
     const file = new File(['(⌐□_□)'], 'hellopello.pdf', { type: 'audio/*' });
-    const vedlegg: FormFieldVedlegg = {
+    const vedlegg: Vedlegg = {
       file: file,
       isValid: true,
       name: 'hellopello.pdf',
