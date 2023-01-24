@@ -60,6 +60,19 @@ const Vedlegg = ({ onBackClick, onNext, defaultValues }: Props) => {
     }
   };
 
+  const error422Text = (subType: string) => {
+    switch (subType) {
+      case 'PASSWORD_PROTECTED':
+        return formatMessage('fileInputErrors.passordbeskyttet');
+      case 'VIRUS':
+        return formatMessage('fileInputErrors.virus');
+      case 'SIZE':
+        return formatMessage('fileInputErrors.size');
+      default:
+        return '';
+    }
+  };
+
   const getSchemaValidation = () => {
     return yup
       .array()
@@ -69,27 +82,16 @@ const Vedlegg = ({ onBackClick, onNext, defaultValues }: Props) => {
       .test('filesToLarge', errorText(413), (value) => {
         return isUnderTotalFileSize(value);
       })
+      .test('422', error422Text('VIRUS'), (value) => {
+        return !value || !value.find((v) => v.substatus === 'VIRUS');
+      })
+      .test('422', error422Text('PASSWORD_PROTECTED'), (value) => {
+        return !value || !value.find((v) => v.substatus === 'PASSWORD_PROTECTED');
+      })
       .test('unvalidAttachment', errorText(1), (value) => {
         return isValidAttachment(value);
       });
   };
-
-  const formSchema = yup.object().shape({
-    manuelleBarn: yup.array().of(
-      yup.object().shape({
-        vedlegg: yup.array().of(
-          yup.object().shape({
-            name: yup.string().required(),
-            size: yup.number().required(),
-            vedleggId: yup.string(),
-            isValid: yup.boolean().required(),
-            file: yup.mixed().required(),
-            substatus: yup.string(),
-          })
-        ),
-      })
-    ),
-  });
 
   const schema = yup.object().shape({
     lønnOgAndreGoder: getSchemaValidation(),
@@ -100,7 +102,7 @@ const Vedlegg = ({ onBackClick, onNext, defaultValues }: Props) => {
     sykestipend: getSchemaValidation(),
     lån: getSchemaValidation(),
     annet: getSchemaValidation(),
-    manuelleBarn: formSchema,
+    manuelleBarn: yup.array().of(yup.object({ vedlegg: getSchemaValidation() })),
   });
 
   const {
