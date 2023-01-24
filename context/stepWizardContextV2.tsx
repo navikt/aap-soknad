@@ -1,6 +1,5 @@
 import React, { createContext, Dispatch, ReactNode, useContext, useMemo, useReducer } from 'react';
 import { StepType } from 'components/StepWizard/Step';
-import { veiledningSteg } from 'pages';
 
 interface DispatchStepWizardAction {
   payload?: any;
@@ -11,7 +10,6 @@ interface DispatchStepWizardAction {
     | 'COMPLETE_AND_GOTO_NEXT_STEP'
     | 'RESET_STEP_WIZARD'
     | 'GOTO_NAMED_STEP'
-    | 'ADD_VEILEDNING_STEP'
     | 'GOTO_PREVIOUS_STEP';
 }
 type StepWizardState = {
@@ -88,13 +86,6 @@ function stateReducer(state: StepWizardState, action: DispatchStepWizardAction) 
         stepList: newStepList,
       };
     }
-    case 'ADD_VEILEDNING_STEP': {
-      const newStepList = [veiledningSteg, ...state.stepList];
-      return {
-        ...state,
-        stepList: newStepList,
-      };
-    }
     default: {
       throw new Error(`Unhandled action type: ${action.type}`);
     }
@@ -149,7 +140,4 @@ export const goToNamedStep = async (dispatch: Dispatch<DispatchStepWizardAction>
 };
 export const resetStepWizard = async (dispatch: Dispatch<DispatchStepWizardAction>) => {
   dispatch({ type: 'RESET_STEP_WIZARD' });
-};
-export const addVeiledningSteg = async (dispatch: Dispatch<DispatchStepWizardAction>) => {
-  dispatch({ type: 'ADD_VEILEDNING_STEP' });
 };

@@ -12,14 +12,14 @@ import { useRouter } from 'next/router';
 interface Props {
   children?: React.ReactNode;
   nextButtonText: string;
-  backButtonText: string;
+  backButtonText?: string;
   cancelButtonText: string;
   onNext: (data: any) => void;
-  onBack: () => void;
+  onBack?: () => void;
   onDelete: () => Promise<any>;
   nextIsLoading?: boolean;
   focusOnErrors?: boolean;
-  errors: FieldErrors;
+  errors?: FieldErrors;
 }
 
 interface LagreModalProps {
@@ -170,17 +170,19 @@ const SøknadFormWrapper = ({
   return (
     <>
       <form onSubmit={onNext} className={classes?.formContent}>
-        <FormErrorSummary errors={errors} data-testid={'error-summary'} />
+        {errors && <FormErrorSummary errors={errors} data-testid={'error-summary'} />}
         {children}
         <div className={classes?.fourButtonWrapper}>
-          <Button
-            className={classes?.buttonBack}
-            variant="secondary"
-            type="button"
-            onClick={onBack}
-          >
-            {backButtonText}
-          </Button>
+          {onBack && (
+            <Button
+              className={classes?.buttonBack}
+              variant="secondary"
+              type="button"
+              onClick={onBack}
+            >
+              {backButtonText}
+            </Button>
+          )}
           <Button
             className={classes?.buttonNext}
             variant="primary"

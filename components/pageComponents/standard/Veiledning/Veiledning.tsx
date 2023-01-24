@@ -9,6 +9,7 @@ import { LucaGuidePanel } from '@navikt/aap-felles-innbygger-react';
 import { useFeatureToggleIntl } from 'hooks/useFeatureToggleIntl';
 import { AmplitudeAwareAccordion } from 'components/AmplitudeAwareAccordion/AmplitudeAwareAccordion';
 import { FormattedMessage } from 'react-intl';
+import { IntroduksjonTekst } from '../../../IntroduksjonTekst/IntroduksjonTekst';
 
 const VEILEDNING_CONFIRM = 'veiledningConfirm';
 type VeiledningType = {
@@ -20,6 +21,7 @@ interface VeiledningProps {
   hasError: boolean;
   errorMessageRef: React.MutableRefObject<HTMLDivElement | null>;
   onSubmit: () => void;
+  harPåbegyntSøknad?: boolean;
 }
 export const Veiledning = ({
   søker,
@@ -27,6 +29,7 @@ export const Veiledning = ({
   hasError,
   errorMessageRef,
   onSubmit,
+  harPåbegyntSøknad,
 }: VeiledningProps) => {
   const { formatMessage, FormatElement } = useFeatureToggleIntl();
 
@@ -63,91 +66,40 @@ export const Veiledning = ({
           )}
         </div>
 
-        <LucaGuidePanel>
-          <Heading size="medium" level="2" spacing>
-            <FormattedMessage
-              id={'søknad.veiledning.guide.title'}
-              values={{ name: søker.fulltNavn }}
-            />
-          </Heading>
-          <BodyShort spacing>{formatMessage('søknad.veiledning.guide.text1')}</BodyShort>
-          <BodyShort spacing>{formatMessage('søknad.veiledning.guide.text2')}</BodyShort>
-          <BodyShort spacing>{formatMessage('søknad.veiledning.guide.text3')}</BodyShort>
-        </LucaGuidePanel>
-        <article>
-          <Heading size={'small'} level={'2'} spacing>
-            {formatMessage('søknad.veiledning.søknadsdato.title')}
-          </Heading>
-          <BodyShort spacing>{formatMessage('søknad.veiledning.søknadsdato.text1')}</BodyShort>
-          <BodyShort spacing>{formatMessage('søknad.veiledning.søknadsdato.text2')}</BodyShort>
-        </article>
-        <article>
-          <AmplitudeAwareAccordion title={formatMessage('søknad.veiledning.accordionHvis.title')}>
-            <ul>
-              <li>{formatMessage('søknad.veiledning.accordionHvis.bulletPointOppfølging')}</li>
-              <li>{formatMessage('søknad.veiledning.accordionHvis.bulletPointPlikt')}</li>
-              <li>{formatMessage('søknad.veiledning.accordionHvis.bulletPointMeldekort')}</li>
-              <li>{formatMessage('søknad.veiledning.accordionHvis.bulletPointTilbakebetaling')}</li>
-              <li>{formatMessage('søknad.veiledning.accordionHvis.bulletPointBeskjed')}</li>
-            </ul>
-          </AmplitudeAwareAccordion>
-          <AmplitudeAwareAccordion
-            title={formatMessage('søknad.veiledning.accordionInformasjon.title')}
+        <IntroduksjonTekst navn={søker.fulltNavn} />
+
+        {!harPåbegyntSøknad && (
+          <form
+            onSubmit={handleSubmit(async () => {
+              await onSubmit();
+            })}
+            className={classes?.veiledningContent}
+            autoComplete="off"
           >
-            <BodyShort spacing>
-              {formatMessage('søknad.veiledning.accordionInformasjon.informasjonDuOppgir')}
-            </BodyShort>
-            <ul>
-              <li>
-                {formatMessage(
-                  'søknad.veiledning.accordionInformasjon.bulletPointPersoninformasjon'
-                )}
-              </li>
-              <li>{formatMessage('søknad.veiledning.accordionInformasjon.bulletPontSkatt')}</li>
-              <li>{formatMessage('søknad.veiledning.accordionInformasjon.bulletpointHelse')}</li>
-              <li>{formatMessage('søknad.veiledning.accordionInformasjon.bulletPointArbeid')}</li>
-              <li>
-                {formatMessage(
-                  'søknad.veiledning.accordionInformasjon.bulletPointAndreOpplysninger'
-                )}
-              </li>
-            </ul>
+            <ConfirmationPanelWrapper
+              label={formatMessage('søknad.veiledning.veiledningConfirm.label')}
+              control={control}
+              name={VEILEDNING_CONFIRM}
+            >
+              <Label as={'span'}>
+                {formatMessage('søknad.veiledning.veiledningConfirm.title')}
+              </Label>
+            </ConfirmationPanelWrapper>
 
-            <BodyShort spacing>
-              {formatMessage('søknad.veiledning.accordionInformasjon.folketrygdloven')}
-            </BodyShort>
-            <ul>
-              <li>{formatMessage('søknad.veiledning.accordionInformasjon.bulletPointDeler')}</li>
-              <li>{formatMessage('søknad.veiledning.accordionInformasjon.bulletPointForbedre')}</li>
-            </ul>
-
-            <Link href={formatMessage('applinks.personOpplysninger')} target={'_blank'}>
-              {formatMessage('søknad.veiledning.accordionInformasjon.personopplysningerNavNo')}
-            </Link>
-          </AmplitudeAwareAccordion>
-        </article>
-
-        <form
-          onSubmit={handleSubmit(async () => {
-            await onSubmit();
-          })}
-          className={classes?.veiledningContent}
-          autoComplete="off"
-        >
-          <ConfirmationPanelWrapper
-            label={formatMessage('søknad.veiledning.veiledningConfirm.label')}
-            control={control}
-            name={VEILEDNING_CONFIRM}
-          >
-            <Label as={'span'}>{formatMessage('søknad.veiledning.veiledningConfirm.title')}</Label>
-          </ConfirmationPanelWrapper>
-
+            <div>
+              <Button variant="primary" type="submit" loading={isLoading}>
+                {formatMessage(`søknad.veiledning.startSøknad`)}
+              </Button>
+            </div>
+          </form>
+        )}
+        {harPåbegyntSøknad && (
           <div>
-            <Button variant="primary" type="submit" loading={isLoading}>
+            <Button variant="primary" onClick={onSubmit} loading={isLoading}>
               {formatMessage(`søknad.veiledning.startSøknad`)}
             </Button>
           </div>
-        </form>
+        )}
       </main>
     </>
   );

@@ -7,7 +7,6 @@ import {
   updateSøknadData,
 } from 'context/soknadContextCommon';
 import {
-  addVeiledningSteg,
   completeAndGoToNextStep,
   goToPreviousStep,
   setStepList,
@@ -52,7 +51,8 @@ import { logSkjemaFullførtEvent, logSkjemastegFullførtEvent } from 'utils/ampl
 import metrics from 'utils/metrics';
 import { scrollRefIntoView } from 'utils/dom';
 import { TimeoutBox } from 'components/TimeoutBox/TimeoutBox';
-import { Veiledning } from 'components/pageComponents/standard/Veiledning/Veiledning';
+import { Steg0 } from 'components/pageComponents/standard/Steg0/Steg0';
+import { StepType } from '../components/StepWizard/Step';
 
 interface PageProps {
   søker: SokerOppslagState;
@@ -149,12 +149,6 @@ const Steps = ({ søker, mellomlagretSøknad }: PageProps) => {
     });
 
   const onPreviousStep = async () => {
-    if (currentStep.name === StepNames.STARTDATO) {
-      const veiledningStep = stepList.find((step) => step.stepIndex === 0);
-      if (!veiledningStep) {
-        addVeiledningSteg(stepWizardDispatch);
-      }
-    }
     goToPreviousStep(stepWizardDispatch);
   };
 
@@ -180,13 +174,9 @@ const Steps = ({ søker, mellomlagretSøknad }: PageProps) => {
       {søknadState?.søknad && (
         <StepWizard>
           {step === '0' && (
-            <Veiledning
-              søker={{}}
-              isLoading={false}
-              hasError={false}
-              errorMessageRef={veiledningErrorMessageRef}
-              onSubmit={() => {
-                onNextStep({});
+            <Steg0
+              onNext={() => {
+                completeAndGoToNextStep(stepWizardDispatch);
               }}
             />
           )}
@@ -303,6 +293,17 @@ export const getServerSideProps = beskyttetSide(
     const mellomlagretSøknad = await lesBucket('STANDARD', bearerToken);
 
     stopTimer();
+    if (mellomlagretSøknad && mellomlagretSøknad.lagretStepList) {
+      const veiledningStep = mellomlagretSøknad.lagretStepList.find(
+        (step: StepType) => step.stepIndex === 0
+      );
+      if (!veiledningStep) {
+        mellomlagretSøknad.lagretStepList = [
+          { stepIndex: 0, name: 'VEILEDNING' },
+          ...mellomlagretSøknad.lagretStepList,
+        ];
+      }
+    }
     if (!mellomlagretSøknad?.lagretStepList) {
       return {
         redirect: {
