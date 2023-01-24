@@ -1,9 +1,11 @@
 import React, { useRef } from 'react';
 import * as classes from './FileInput.module.css';
 import { Upload as SvgUpload } from '@navikt/ds-icons';
+import { ArrayPath } from 'react-hook-form';
+import { FormFields } from '../../pageComponents/standard/Vedlegg/Vedlegg';
 
 interface Props {
-  name: string;
+  name: ArrayPath<FormFields>;
   handleUpload: (e: File) => void;
   title: string;
 }
