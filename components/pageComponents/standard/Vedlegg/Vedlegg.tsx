@@ -1,5 +1,5 @@
 import { useForm, useWatch } from 'react-hook-form';
-import { Soknad, Vedlegg } from 'types/Soknad';
+import { ManuelleBarn, Soknad, Vedlegg } from 'types/Soknad';
 import React, { useEffect, useRef, useState } from 'react';
 import { BodyShort, Heading, Label, ReadMore } from '@navikt/ds-react';
 import * as yup from 'yup';
@@ -22,6 +22,7 @@ import {
   isValidAttachment,
   isValidFileType,
 } from '../../../input/FileInput/FileInputValidations';
+import { ManuelleBarnFileInput } from '../../../input/FileInput/ManuelleBarnFileInput';
 
 interface Props {
   onBackClick: () => void;
@@ -29,25 +30,15 @@ interface Props {
   defaultValues?: GenericSoknadContextState<Soknad>;
 }
 
-export interface FormFieldVedlegg {
-  name: string;
-  size: number;
-  vedleggId?: string;
-  barnId?: string; // Ny
-  isValid: boolean; // Ny
-  file: File; // Ny
-  substatus?: string;
-}
-
 export interface FormFields {
-  lønnOgAndreGoder: FormFieldVedlegg[];
-  omsorgstønad: FormFieldVedlegg[];
-  utlandsstønad: FormFieldVedlegg[];
-  avbruttStudie: FormFieldVedlegg[];
-  sykestipend: FormFieldVedlegg[];
-  lån: FormFieldVedlegg[];
-  annet: FormFieldVedlegg[];
-  manuelleBarn: FormFieldVedlegg[]; //TODO Se nærmere på denne med Tor
+  lønnOgAndreGoder: Vedlegg[];
+  omsorgstønad: Vedlegg[];
+  utlandsstønad: Vedlegg[];
+  avbruttStudie: Vedlegg[];
+  sykestipend: Vedlegg[];
+  lån: Vedlegg[];
+  annet: Vedlegg[];
+  manuelleBarn: ManuelleBarn[];
 }
 
 const Vedlegg = ({ onBackClick, onNext, defaultValues }: Props) => {
@@ -83,6 +74,23 @@ const Vedlegg = ({ onBackClick, onNext, defaultValues }: Props) => {
       });
   };
 
+  const formSchema = yup.object().shape({
+    manuelleBarn: yup.array().of(
+      yup.object().shape({
+        vedlegg: yup.array().of(
+          yup.object().shape({
+            name: yup.string().required(),
+            size: yup.number().required(),
+            vedleggId: yup.string(),
+            isValid: yup.boolean().required(),
+            file: yup.mixed().required(),
+            substatus: yup.string(),
+          })
+        ),
+      })
+    ),
+  });
+
   const schema = yup.object().shape({
     lønnOgAndreGoder: getSchemaValidation(),
     omsorgstønad: getSchemaValidation(),
@@ -92,7 +100,7 @@ const Vedlegg = ({ onBackClick, onNext, defaultValues }: Props) => {
     sykestipend: getSchemaValidation(),
     lån: getSchemaValidation(),
     annet: getSchemaValidation(),
-    manuelleBarn: getSchemaValidation(),
+    manuelleBarn: formSchema,
   });
 
   const {
@@ -103,12 +111,19 @@ const Vedlegg = ({ onBackClick, onNext, defaultValues }: Props) => {
     formState: { errors },
   } = useForm<FormFields>({
     resolver: yupResolver(schema),
-    // defaultValues: {
-    //   [VEDLEGG]: defaultValues?.søknad?.vedlegg,
-    //   [MANUELLE_BARN]: defaultValues?.søknad?.manuelleBarn,
-    // },
+    defaultValues: {
+      annet: defaultValues?.søknad?.vedlegg?.ANNET,
+      lån: defaultValues?.søknad?.vedlegg?.LÅN,
+      lønnOgAndreGoder: defaultValues?.søknad?.vedlegg?.LØNN_OG_ANDRE_GODER,
+      omsorgstønad: defaultValues?.søknad?.vedlegg?.OMSORGSSTØNAD,
+      avbruttStudie: defaultValues?.søknad?.vedlegg?.AVBRUTT_STUDIE,
+      sykestipend: defaultValues?.søknad?.vedlegg?.SYKESTIPEND,
+      utlandsstønad: defaultValues?.søknad?.vedlegg?.UTLANDSSTØNAD,
+      manuelleBarn: defaultValues?.søknad?.manuelleBarn,
+    },
   });
 
+  console.log('errors', errors);
   useEffect(() => {
     if (scanningGuideOpen) {
       if (scanningGuideElement?.current != null) scrollRefIntoView(scanningGuideElement);
@@ -124,13 +139,6 @@ const Vedlegg = ({ onBackClick, onNext, defaultValues }: Props) => {
     debouncedLagre(søknadState, stepList, allFields);
   }, [allFields]);
 
-  function mapToVedlegg(field: FormFieldVedlegg): Vedlegg {
-    return {
-      name: field.name,
-      size: field.size,
-      vedleggId: field.vedleggId,
-    };
-  }
   return (
     <SoknadFormWrapper
       onNext={handleSubmit((data) => {
@@ -138,14 +146,10 @@ const Vedlegg = ({ onBackClick, onNext, defaultValues }: Props) => {
           vedlegg: Object.keys(data)
             .filter((key) => key !== 'manuelleBarn')
             .map((field) => data[field as unknown as keyof FormFields])
-            .flat()
-            .map(mapToVedlegg),
-          manuelleBarn: Object.keys(data)
-            .filter((key) => key === 'manuelleBarn')
-            .map((field) => data[field as unknown as keyof FormFields])
             .flat(),
+          manuelleBarn: data.manuelleBarn,
         };
-        onNext(data);
+        onNext(newData);
       })}
       onBack={() => {
         updateSøknadData<Soknad>(søknadDispatch, { ...søknadState.søknad });
@@ -261,31 +265,13 @@ const Vedlegg = ({ onBackClick, onNext, defaultValues }: Props) => {
           ingress={formatMessage('søknad.andreUtbetalinger.vedlegg.sykeStipend')}
         />
       )}
-      {/*{søknadState?.søknad?.manuelleBarn?.map((barn, index) => {*/}
-      {/*  const requiredVedlegg = søknadState?.requiredVedlegg.find(*/}
-      {/*    (e) => e?.type === `barn-${barn.internId}`*/}
-      {/*  );*/}
-      {/*  return (*/}
-      {/*    <FileInput
-      clearErrors={clearErrors}
-       triggerValidation={trigger} */}
-      {/*      key={barn.internId}*/}
-      {/*      control={control}*/}
-      {/*      name={`${MANUELLE_BARN}.${index}.vedlegg`}*/}
-      {/*      type={`barn-${barn.internId}`}*/}
-      {/*      errors={errors}*/}
-      {/*      setError={setError}*/}
-      {/*      clearErrors={clearErrors}*/}
-      {/*      heading={formatMessage(*/}
-      {/*        `søknad.vedlegg.andreBarn.title.${requiredVedlegg?.filterType}`,*/}
-      {/*        {*/}
-      {/*          navn: `${barn?.navn?.fornavn} ${barn?.navn?.etternavn}`,*/}
-      {/*        }*/}
-      {/*      )}*/}
-      {/*      ingress={requiredVedlegg?.description}*/}
-      {/*    />*/}
-      {/*  );*/}
-      {/*})}*/}
+      <ManuelleBarnFileInput
+        name={'manuelleBarn'}
+        clearErrors={clearErrors}
+        triggerValidation={trigger}
+        control={control}
+      />
+
       <FileInput
         clearErrors={clearErrors}
         triggerValidation={trigger}
