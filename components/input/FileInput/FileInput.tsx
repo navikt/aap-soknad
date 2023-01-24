@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
 import {
   ArrayPath,
   Control,
@@ -11,14 +11,14 @@ import { FormFields } from '../../pageComponents/standard/StartDato/MyComponent'
 import { BodyShort, ErrorMessage, Heading, Loader } from '@navikt/ds-react';
 
 import * as styles from './FileInput.module.css';
-import * as classes from './FileInput.module.css';
-import { Upload as SvgUpload } from '@navikt/ds-icons';
 import { FileCard } from './FileCard';
 import { FileCardError } from './FileCardError';
-import { useFeatureToggleIntl } from '../../../hooks/useFeatureToggleIntl';
+import { OpplastingKnapp } from './OpplastingKnapp';
+
+type FormFieldsWithoutManuelleBarn = Omit<FormFields, 'manuelleBarn'>;
 
 interface Props {
-  name: ArrayPath<FormFields>;
+  name: ArrayPath<FormFieldsWithoutManuelleBarn>;
   control: Control<FormFields>;
   triggerValidation: UseFormTrigger<FormFields>;
   clearErrors: UseFormClearErrors<FormFields>;
@@ -28,29 +28,12 @@ interface Props {
 
 export const FileInput = (props: Props) => {
   const { name, control, heading, ingress, triggerValidation, clearErrors } = props;
-  const { formatMessage } = useFeatureToggleIntl();
   const [loading, setLoading] = useState<boolean>(false);
-  const [fetchError, setFetchError] = useState('');
   const { formState } = useController({ control, name });
-  const fileUploadInputElement = useRef<HTMLInputElement>(null);
   const { fields, append, remove } = useFieldArray({
     name,
     control,
   });
-
-  const error422Text = (subType: string) => {
-    console.log('im here with subtype!', subType);
-    switch (subType) {
-      case 'PASSWORD_PROTECTED':
-        return formatMessage('fileInputErrors.passordbeskyttet');
-      case 'VIRUS':
-        return formatMessage('fileInputErrors.virus');
-      case 'SIZE':
-        return formatMessage('fileInputErrors.size');
-      default:
-        return '';
-    }
-  };
 
   async function handleUpload(file: File) {
     clearErrors(name);
@@ -58,7 +41,10 @@ export const FileInput = (props: Props) => {
     const data = new FormData();
     data.append('vedlegg', file);
     try {
-      const res = await fetch('/aap/soknad/api/vedlegg/lagre/', { method: 'POST', body: data });
+      const res = await fetch('/aap/soknad/api/vedlegg/lagre/', {
+        method: 'POST',
+        body: data,
+      });
       const resData = await res.json();
       if (res.ok) {
         append({
@@ -69,76 +55,66 @@ export const FileInput = (props: Props) => {
           isValid: true,
         });
       } else {
-        const message = error422Text(resData?.substatus);
-        setFetchError(message);
-        append({ name: file?.name, size: file?.size, isValid: false, file: file });
+        append({
+          name: file?.name,
+          size: file?.size,
+          isValid: false,
+          file: file,
+          substatus: resData?.substatus,
+        });
       }
     } catch (err: any) {
-      setFetchError('Feilmelding i catch');
+      //TODO what todo here?
     }
     setLoading(false);
-
     // Only run validation for this field
     await triggerValidation(name);
   }
 
+  async function removeField(index: number, vedleggId?: string) {
+    const res = await fetch(`/aap/soknad/api/vedlegg/slett/?uuids=${vedleggId}`, {
+      method: 'DELETE',
+    });
+
+    if (res.ok) {
+      remove(index);
+      triggerValidation(name);
+    }
+  }
+
   return (
     <div className={styles.fileInput}>
-      {heading && (
-        <Heading size={'medium'} level={'3'}>
-          {heading}
-        </Heading>
-      )}
+      <Heading size={'medium'} level={'3'}>
+        {heading}
+      </Heading>
       {ingress && <BodyShort>{ingress}</BodyShort>}
       {fields.map((vedlegg, index) => {
         return vedlegg.isValid ? (
-          <FileCard key={vedlegg.id} vedlegg={vedlegg} remove={() => remove(index)} />
+          <FileCard
+            key={vedlegg.id}
+            vedlegg={vedlegg}
+            remove={() => removeField(index, vedlegg.vedleggId)}
+          />
         ) : (
-          <FileCardError key={vedlegg.id} vedlegg={vedlegg} remove={() => remove(index)} />
+          <FileCardError
+            key={vedlegg.id}
+            vedlegg={vedlegg}
+            remove={() => removeField(index, vedlegg.vedleggId)}
+          />
         );
       })}
       <div>
         {loading ? (
           <Loader />
         ) : (
-          <>
-            <input
-              id={name}
-              type="file"
-              value={''}
-              onChange={(e) => {
-                const file = e?.target?.files?.[0];
-                if (file) {
-                  handleUpload(file);
-                }
-              }}
-              className={classes?.visuallyHidden}
-              tabIndex={-1}
-              ref={fileUploadInputElement}
-              accept="image/*,.pdf"
-            />
-            <label htmlFor={name}>
-              <button
-                /* eslint-disable-next-line max-len */
-                className={`${classes?.fileInputButton} navds-button navds-button__inner navds-body-short navds-button--secondary`}
-                aria-controls={name}
-                tabIndex={0}
-                onClick={(e) => {
-                  e.preventDefault();
-                  fileUploadInputElement.current && fileUploadInputElement.current.click();
-                }}
-              >
-                <SvgUpload title="" aria-hidden />
-                Velg dine filer for {heading}
-              </button>
-            </label>
-          </>
+          <OpplastingKnapp
+            name={name}
+            handleUpload={(file) => handleUpload(file)}
+            title={heading}
+          />
         )}
       </div>
-      {fetchError && <ErrorMessage>{fetchError}</ErrorMessage>}
-      {!fetchError && formState.errors[name] && (
-        <ErrorMessage>{formState.errors[name]?.message}</ErrorMessage>
-      )}
+      {formState.errors[name] && <ErrorMessage>{formState.errors[name]?.message}</ErrorMessage>}
     </div>
   );
 };

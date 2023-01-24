@@ -1,13 +1,7 @@
-import {
-  AttachmentType,
-  StønadType,
-} from 'components/pageComponents/standard/AndreUtbetalinger/AndreUtbetalinger';
+import { StønadType } from 'components/pageComponents/standard/AndreUtbetalinger/AndreUtbetalinger';
 import { Relasjon } from 'components/pageComponents/standard/Barnetillegg/AddBarnModal';
 import { JaEllerNei, JaNeiVetIkke } from './Generic';
-import {
-  AVBRUTT_STUDIE_VEDLEGG,
-  JaNeiAvbrutt,
-} from 'components/pageComponents/standard/Student/Student';
+import { JaNeiAvbrutt } from 'components/pageComponents/standard/Student/Student';
 import { OppslagBehandler } from 'context/sokerOppslagContext';
 import { BARN } from 'components/pageComponents/standard/Barnetillegg/Barnetillegg';
 import { FerieType, SYKEPENGER } from 'components/pageComponents/standard/StartDato/StartDato';
@@ -102,15 +96,18 @@ export type Vedlegg = {
   name: string;
   size: number;
   vedleggId?: string;
-  barnId?: string; // Ny
+  isValid: boolean;
+  file: File;
+  substatus?: string;
 };
+
 export type SoknadVedlegg = {
-  [AttachmentType.LØNN_OG_ANDRE_GODER]: Vedlegg[];
-  [AttachmentType.OMSORGSSTØNAD]: Vedlegg[];
-  [AttachmentType.UTLANDSSTØNAD]: Vedlegg[];
-  [AttachmentType.SYKESTIPEND]: Vedlegg[];
-  [AttachmentType.LÅN]: Vedlegg[];
-  [AVBRUTT_STUDIE_VEDLEGG]: Vedlegg[];
+  LØNN_OG_ANDRE_GODER: Vedlegg[];
+  OMSORGSSTØNAD: Vedlegg[];
+  UTLANDSSTØNAD: Vedlegg[];
+  SYKESTIPEND: Vedlegg[];
+  LÅN: Vedlegg[];
+  AVBRUTT_STUDIE: Vedlegg[];
   ANNET: Vedlegg[];
 };
 
