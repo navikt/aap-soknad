@@ -6,7 +6,7 @@ import { Vedlegg } from '../../../types/Soknad';
 
 interface Props {
   vedlegg: Vedlegg;
-  remove: () => void;
+  remove: () => Promise<void>;
 }
 
 export const FileCardError = (props: Props) => {
@@ -25,9 +25,7 @@ export const FileCardError = (props: Props) => {
         </div>
         <button
           type={'button'}
-          onClick={() => {
-            remove();
-          }}
+          onClick={() => remove()}
           tabIndex={0}
           onKeyPress={(event) => {
             if (event.key === 'Enter') {

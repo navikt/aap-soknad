@@ -6,7 +6,7 @@ import { Vedlegg } from '../../../types/Soknad';
 
 interface Props {
   vedlegg: Vedlegg;
-  remove: () => void;
+  remove: () => Promise<void>;
 }
 
 export const FileCard = (props: Props) => {
@@ -27,13 +27,7 @@ export const FileCard = (props: Props) => {
       </div>
       <button
         type={'button'}
-        onClick={() =>
-          fetch(`/aap/soknad/api/vedlegg/slett/?uuids=${vedlegg?.vedleggId}`, {
-            method: 'DELETE',
-          }).then(() => {
-            remove();
-          })
-        }
+        onClick={() => remove()}
         tabIndex={0}
         onKeyPress={(event) => {
           if (event.key === 'Enter') {
