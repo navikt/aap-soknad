@@ -39,9 +39,9 @@ export const ManuelleBarnFileInput = (props: Props) => {
   });
 
   async function removeField(
-    fieldIndex: number,
+    manuelleBarnIndex: number,
     vedleggIndex: number,
-    field: ManuelleBarn,
+    manuelleBarn: ManuelleBarn,
     vedleggId?: string
   ) {
     const res = await fetch(`/aap/soknad/api/vedlegg/slett/?uuids=${vedleggId}`, {
@@ -49,16 +49,16 @@ export const ManuelleBarnFileInput = (props: Props) => {
     });
 
     if (res.ok) {
-      if (field.vedlegg) {
-        const vedlegg = [...field.vedlegg];
+      if (manuelleBarn.vedlegg) {
+        const vedlegg = [...manuelleBarn.vedlegg];
         vedlegg.splice(vedleggIndex, 1);
-        update(fieldIndex, {
-          ...field,
+        update(manuelleBarnIndex, {
+          ...manuelleBarn,
           vedlegg: vedlegg,
         });
       }
     }
-    triggerValidation(name);
+    await triggerValidation(name);
   }
 
   async function handleUpload(manuelleBarnIndex: number, manuelleBarn: ManuelleBarn, file: File) {
@@ -104,15 +104,13 @@ export const ManuelleBarnFileInput = (props: Props) => {
         });
       }
     } catch (err: any) {
-      // setFetchError('Feilmelding i catch');
+      // TODO What to do here?
     }
     setLoading(false);
 
     // Only run validation for this field
     await triggerValidation(name);
   }
-
-  console.log(fields);
 
   return (
     <>
@@ -132,6 +130,7 @@ export const ManuelleBarnFileInput = (props: Props) => {
             {manuelleBarn.vedlegg?.map((vedlegg, vedleggIndex) => {
               return vedlegg.isValid ? (
                 <FileCard
+                  key={vedlegg.vedleggId} //TODO fiks key
                   vedlegg={vedlegg}
                   remove={() =>
                     removeField(manuelleBarnIndex, vedleggIndex, manuelleBarn, vedlegg.vedleggId)
@@ -139,6 +138,7 @@ export const ManuelleBarnFileInput = (props: Props) => {
                 />
               ) : (
                 <FileCardError
+                  key={vedlegg.vedleggId} //TODO fiks key
                   vedlegg={vedlegg}
                   remove={() =>
                     removeField(manuelleBarnIndex, vedleggIndex, manuelleBarn, vedlegg.vedleggId)
@@ -146,20 +146,18 @@ export const ManuelleBarnFileInput = (props: Props) => {
                 />
               );
             })}
-            <div>
-              {loading ? (
-                <Loader />
-              ) : (
-                <OpplastingKnapp
-                  name={`name_${manuelleBarnIndex}`}
-                  handleUpload={(file) => handleUpload(manuelleBarnIndex, manuelleBarn, file)}
-                  title={`${manuelleBarn.navn.fornavn} ${manuelleBarn.navn.etternavn}`}
-                />
-              )}
-            </div>
-            {formState.errors[`manuelleBarn.${manuelleBarnIndex}`] && (
+            {loading ? (
+              <Loader />
+            ) : (
+              <OpplastingKnapp
+                name={`manuelleBarn.${manuelleBarnIndex}.vedlegg`}
+                handleUpload={(file) => handleUpload(manuelleBarnIndex, manuelleBarn, file)}
+                title={`${manuelleBarn.navn.fornavn} ${manuelleBarn.navn.etternavn}`}
+              />
+            )}
+            {formState.errors.manuelleBarn !== undefined && (
               <ErrorMessage>
-                {formState.errors[`manuelleBarn.${manuelleBarnIndex}`]?.message}
+                {formState.errors.manuelleBarn[manuelleBarnIndex]?.vedlegg?.message}
               </ErrorMessage>
             )}
           </div>
