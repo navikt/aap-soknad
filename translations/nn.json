@@ -100,7 +100,7 @@
         "bulletPointOppfølging": "Du har rett til oppfølging frå NAV",
         "bulletPointPlikt": "Du har plikt til å bidra til å avklare om du kan behalde eller kome i jobb",
         "bulletPointMeldekort": "Du må sende inn meldekort kvar 14. dag",
-        "bulletPointTilbakebetaling": "Dersom du får pengar du ikkje har rett på, er du førebudd på å betale dei tilbake.",
+        "bulletPointTilbakebetaling": "Dersom du får pengar du ikkje har rett til, er du førebudd på å betale dei tilbake.",
         "bulletPointBeskjed": "Du pliktar å gi beskjed dersom situasjonen din endrar seg"
       },
       "accordionInformasjon": {
@@ -514,7 +514,7 @@
           "label": "Får barnet barnepensjon?",
           "readMore": {
             "title": "Kvifor spør vi om dette?",
-            "text": "Dersom barnet får barnepensjon, har du ikkje rett på barnetillegg for barnet."
+            "text": "Dersom barnet får barnepensjon, har du ikkje rett til barnetillegg for barnet."
           }
         },
         "notfound": "Fant ingen registrerte barn. Viss dette ikkje stemmer kan du leggja til barna dine under.",
@@ -522,7 +522,7 @@
           "label": "Har barnet ei årleg inntekt over {grunnbeløp}kr?",
           "readMore": {
             "title": "Kvifor spør vi om dette?",
-            "text": "Dersom barnet har ei årleg inntekt over {grunnbeløp}kr ({grunnbeløp}kr = 1G), har du vanlegvis ikkje rett på barnetillegg for barnet."
+            "text": "Dersom barnet har ei årleg inntekt over {grunnbeløp}kr ({grunnbeløp}kr = 1G), har du vanlegvis ikkje rett til barnetillegg for barnet."
           }
         }
       },
@@ -585,7 +585,7 @@
             "label": "Har barnet ei årleg inntekt over {grunnbeløp}kr?",
             "readMore": {
               "title": "Kvifor spør vi om dette?",
-              "text": "Dersom barnet har ei årleg inntekt over {grunnbeløp}kr ({grunnbeløp}kr = 1G), har du vanlegvis ikkje rett på barnetillegg for barnet."
+              "text": "Dersom barnet har ei årleg inntekt over {grunnbeløp}kr ({grunnbeløp}kr = 1G), har du vanlegvis ikkje rett til barnetillegg for barnet."
             },
             "validation": {
               "required": "Du må svara på om barnet har ei årleg inntekt over {grunnbeløp}kr"
@@ -604,7 +604,7 @@
         "bulletPointVedleggFosterforelder": "Dokumentasjon på at du er fosterforelder til barnet, og frå når. Dette kan til dømes vere ei stadfesting frå barneverntenesta.",
         "lasteOppVedleggTekst": "Dette lastar du opp seinare i søknaden. Du kan også ettersende vedlegg.",
         "barneTillegg": {
-          "title": "I følgjande tilfelle har du ikkje rett på barnetillegg:",
+          "title": "I følgjande tilfelle har du ikkje rett til barnetillegg:",
           "bulletpoint1": "Barnet får barnepensjon.",
           "bulletpoint2": "Barnet har ei årleg inntekt som er høgare enn grunnbeløpet i folketrygda.",
           "bulletpoint3": "Barnet oppheld seg utanfor EØS i over 90 dagar i løpet av ein periode på 12 månader.",
