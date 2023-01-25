@@ -130,6 +130,7 @@ describe('hasVirus', () => {
       name: 'hellopello.pdf',
       size: 52428801,
       substatus: 'VIRUS',
+      status: 422,
     };
 
     const fields = [vedlegg];
@@ -165,6 +166,7 @@ describe('isPasswordProtected', () => {
       name: 'hellopello.pdf',
       size: 52428801,
       substatus: 'PASSWORD_PROTECTED',
+      status: 422,
     };
 
     const fields = [vedlegg];
