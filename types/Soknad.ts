@@ -99,6 +99,7 @@ export type Vedlegg = {
   isValid: boolean;
   file: File;
   substatus?: string;
+  status?: number;
 };
 
 export type SoknadVedlegg = {

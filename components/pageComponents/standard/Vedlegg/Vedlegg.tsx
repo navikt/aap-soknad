@@ -16,7 +16,7 @@ import { GenericSoknadContextState } from 'types/SoknadContext';
 import { scrollRefIntoView } from 'utils/dom';
 import { LucaGuidePanel, ScanningGuide } from '@navikt/aap-felles-innbygger-react';
 import { useIntl } from 'react-intl';
-import { FileInput } from '../../../input/FileInput/FileInput';
+import { VedleggFileInput } from '../../../input/FileInput/VedleggFileInput';
 import {
   hasVirus,
   isPasswordProtected,
@@ -211,7 +211,7 @@ const Vedlegg = ({ onBackClick, onNext, defaultValues }: Props) => {
         </ReadMore>
       </div>
       {søknadState?.requiredVedlegg?.find((e) => e.type === AVBRUTT_STUDIE_VEDLEGG) && (
-        <FileInput
+        <VedleggFileInput
           clearErrors={clearErrors}
           triggerValidation={trigger}
           control={control}
@@ -221,7 +221,7 @@ const Vedlegg = ({ onBackClick, onNext, defaultValues }: Props) => {
         />
       )}
       {søknadState?.requiredVedlegg?.find((e) => e.type === AttachmentType.LØNN_OG_ANDRE_GODER) && (
-        <FileInput
+        <VedleggFileInput
           clearErrors={clearErrors}
           triggerValidation={trigger}
           control={control}
@@ -231,7 +231,7 @@ const Vedlegg = ({ onBackClick, onNext, defaultValues }: Props) => {
         />
       )}
       {søknadState?.requiredVedlegg?.find((e) => e.type === AttachmentType.OMSORGSSTØNAD) && (
-        <FileInput
+        <VedleggFileInput
           clearErrors={clearErrors}
           triggerValidation={trigger}
           control={control}
@@ -241,7 +241,7 @@ const Vedlegg = ({ onBackClick, onNext, defaultValues }: Props) => {
         />
       )}
       {søknadState?.requiredVedlegg?.find((e) => e.type === AttachmentType.UTLANDSSTØNAD) && (
-        <FileInput
+        <VedleggFileInput
           clearErrors={clearErrors}
           triggerValidation={trigger}
           control={control}
@@ -251,7 +251,7 @@ const Vedlegg = ({ onBackClick, onNext, defaultValues }: Props) => {
         />
       )}
       {søknadState?.requiredVedlegg?.find((e) => e.type === AttachmentType.LÅN) && (
-        <FileInput
+        <VedleggFileInput
           clearErrors={clearErrors}
           triggerValidation={trigger}
           control={control}
@@ -261,7 +261,7 @@ const Vedlegg = ({ onBackClick, onNext, defaultValues }: Props) => {
         />
       )}
       {søknadState?.requiredVedlegg?.find((e) => e.type === AttachmentType.SYKESTIPEND) && (
-        <FileInput
+        <VedleggFileInput
           clearErrors={clearErrors}
           triggerValidation={trigger}
           control={control}
@@ -278,7 +278,7 @@ const Vedlegg = ({ onBackClick, onNext, defaultValues }: Props) => {
         control={control}
       />
 
-      <FileInput
+      <VedleggFileInput
         clearErrors={clearErrors}
         triggerValidation={trigger}
         name={'annet'}

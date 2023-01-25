@@ -14,7 +14,7 @@ import { useFeatureToggleIntl } from '../../../hooks/useFeatureToggleIntl';
 import { FileCard } from './FileCard';
 import { FileCardError } from './FileCardError';
 import { ManuelleBarn } from '../../../types/Soknad';
-import { OpplastingKnapp } from './OpplastingKnapp';
+import { FileInput } from './FileInput';
 import { useSoknadContextStandard } from '../../../context/soknadContextStandard';
 import { FormFields } from '../../pageComponents/standard/Vedlegg/Vedlegg';
 
@@ -149,7 +149,7 @@ export const ManuelleBarnFileInput = (props: Props) => {
             {loading ? (
               <Loader />
             ) : (
-              <OpplastingKnapp
+              <FileInput
                 name={`manuelleBarn.${manuelleBarnIndex}.vedlegg`}
                 handleUpload={(file) => handleUpload(manuelleBarnIndex, manuelleBarn, file)}
                 title={`${manuelleBarn.navn.fornavn} ${manuelleBarn.navn.etternavn}`}
