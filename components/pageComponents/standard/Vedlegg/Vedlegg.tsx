@@ -51,8 +51,10 @@ const Vedlegg = ({ onBackClick, onNext, defaultValues }: Props) => {
   const { stepList } = useStepWizard();
   const { locale } = useIntl();
 
-  const errorText = (statusCode: number) => {
+  const errorText = (statusCode: number, substatus?: string) => {
     switch (statusCode) {
+      case 422:
+        return error422Text(substatus);
       case 413:
         return formatMessage('fileInputErrors.fileTooLarge');
       case 415:
@@ -62,7 +64,7 @@ const Vedlegg = ({ onBackClick, onNext, defaultValues }: Props) => {
     }
   };
 
-  const error422Text = (subType: string) => {
+  const error422Text = (subType?: string) => {
     switch (subType) {
       case 'PASSWORD_PROTECTED':
         return formatMessage('fileInputErrors.passordbeskyttet');
@@ -127,7 +129,6 @@ const Vedlegg = ({ onBackClick, onNext, defaultValues }: Props) => {
     },
   });
 
-  console.log('errors', errors);
   useEffect(() => {
     if (scanningGuideOpen) {
       if (scanningGuideElement?.current != null) scrollRefIntoView(scanningGuideElement);
@@ -269,6 +270,7 @@ const Vedlegg = ({ onBackClick, onNext, defaultValues }: Props) => {
           ingress={formatMessage('søknad.andreUtbetalinger.vedlegg.sykeStipend')}
         />
       )}
+
       <ManuelleBarnFileInput
         name={'manuelleBarn'}
         clearErrors={clearErrors}
