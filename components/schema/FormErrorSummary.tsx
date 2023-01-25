@@ -71,15 +71,15 @@ const FormErrorSummary = <FormFieldValues extends FieldValues>(props: Props<Form
 
 function flatObj(errors: FieldErrors | FieldError, prevKey = ''): Record<string, string> {
   return Object.entries(errors).reduce((flatted, [key, value]) => {
+    const fullKey = prevKey ? `${prevKey}.${key}` : key;
     if (value?.message) {
       if (value?.ref?.name) {
         return { ...flatted, [value?.ref?.name]: value?.message };
       } else {
-        const fullKey = prevKey ? `${prevKey}.${key}` : key;
         return { ...flatted, [fullKey]: value?.message };
       }
     } else {
-      return { ...flatted, ...flatObj(value, key) };
+      return { ...flatted, ...flatObj(value, fullKey) };
     }
   }, {});
 }
