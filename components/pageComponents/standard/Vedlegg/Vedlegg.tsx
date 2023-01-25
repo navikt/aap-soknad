@@ -33,14 +33,14 @@ interface Props {
 }
 
 export interface FormFields {
-  lønnOgAndreGoder: Vedlegg[];
-  omsorgstønad: Vedlegg[];
-  utlandsstønad: Vedlegg[];
-  avbruttStudie: Vedlegg[];
-  sykestipend: Vedlegg[];
-  lån: Vedlegg[];
+  lønnOgAndreGoder?: Vedlegg[];
+  omsorgstønad?: Vedlegg[];
+  utlandsstønad?: Vedlegg[];
+  avbruttStudie?: Vedlegg[];
+  sykestipend?: Vedlegg[];
+  lån?: Vedlegg[];
+  manuelleBarn?: ManuelleBarn[];
   annet: Vedlegg[];
-  manuelleBarn: ManuelleBarn[];
 }
 
 const Vedlegg = ({ onBackClick, onNext, defaultValues }: Props) => {
@@ -118,13 +118,13 @@ const Vedlegg = ({ onBackClick, onNext, defaultValues }: Props) => {
   } = useForm<FormFields>({
     resolver: yupResolver(schema),
     defaultValues: {
-      annet: defaultValues?.søknad?.vedlegg?.ANNET,
-      lån: defaultValues?.søknad?.vedlegg?.LÅN,
-      lønnOgAndreGoder: defaultValues?.søknad?.vedlegg?.LØNN_OG_ANDRE_GODER,
-      omsorgstønad: defaultValues?.søknad?.vedlegg?.OMSORGSSTØNAD,
-      avbruttStudie: defaultValues?.søknad?.vedlegg?.AVBRUTT_STUDIE,
-      sykestipend: defaultValues?.søknad?.vedlegg?.SYKESTIPEND,
-      utlandsstønad: defaultValues?.søknad?.vedlegg?.UTLANDSSTØNAD,
+      annet: defaultValues?.søknad?.vedlegg?.annet,
+      lån: defaultValues?.søknad?.vedlegg?.lån,
+      lønnOgAndreGoder: defaultValues?.søknad?.vedlegg?.lønnOgAndreGoder,
+      omsorgstønad: defaultValues?.søknad?.vedlegg?.omsorgstønad,
+      avbruttStudie: defaultValues?.søknad?.vedlegg?.avbruttStudie,
+      sykestipend: defaultValues?.søknad?.vedlegg?.sykestipend,
+      utlandsstønad: defaultValues?.søknad?.vedlegg?.utlandsstønad,
       manuelleBarn: defaultValues?.søknad?.manuelleBarn,
     },
   });
@@ -147,14 +147,12 @@ const Vedlegg = ({ onBackClick, onNext, defaultValues }: Props) => {
   return (
     <SoknadFormWrapper
       onNext={handleSubmit((data) => {
-        const newData = {
-          vedlegg: Object.keys(data)
-            .filter((key) => key !== 'manuelleBarn')
-            .map((field) => data[field as unknown as keyof FormFields])
-            .flat(),
+        const vedlegg = { ...data };
+        delete vedlegg['manuelleBarn'];
+        onNext({
+          vedlegg: vedlegg,
           manuelleBarn: data.manuelleBarn,
-        };
-        onNext(newData);
+        });
       })}
       onBack={() => {
         updateSøknadData<Soknad>(søknadDispatch, { ...søknadState.søknad });
@@ -215,6 +213,7 @@ const Vedlegg = ({ onBackClick, onNext, defaultValues }: Props) => {
           clearErrors={clearErrors}
           triggerValidation={trigger}
           control={control}
+          type={AttachmentType.AVBRUTT_STUDIE}
           name={'avbruttStudie'}
           heading={formatMessage('søknad.student.vedlegg.name')}
           ingress={formatMessage('søknad.student.vedlegg.description')}
@@ -225,6 +224,7 @@ const Vedlegg = ({ onBackClick, onNext, defaultValues }: Props) => {
           clearErrors={clearErrors}
           triggerValidation={trigger}
           control={control}
+          type={AttachmentType.LØNN_OG_ANDRE_GODER}
           name={'lønnOgAndreGoder'}
           heading={'Lønn og andre goder'}
           ingress={formatMessage('søknad.andreUtbetalinger.vedlegg.andreGoder')}
@@ -235,6 +235,7 @@ const Vedlegg = ({ onBackClick, onNext, defaultValues }: Props) => {
           clearErrors={clearErrors}
           triggerValidation={trigger}
           control={control}
+          type={AttachmentType.OMSORGSSTØNAD}
           name={'omsorgstønad'}
           heading={formatMessage('søknad.andreUtbetalinger.stønad.values.omsorgsstønad')}
           ingress={formatMessage('søknad.andreUtbetalinger.vedlegg.omsorgsstønad')}
@@ -245,6 +246,7 @@ const Vedlegg = ({ onBackClick, onNext, defaultValues }: Props) => {
           clearErrors={clearErrors}
           triggerValidation={trigger}
           control={control}
+          type={AttachmentType.UTLANDSSTØNAD}
           name={'utlandsstønad'}
           heading={formatMessage('søknad.andreUtbetalinger.stønad.values.utland')}
           ingress={formatMessage('søknad.andreUtbetalinger.vedlegg.utlandsStønad')}
@@ -255,6 +257,7 @@ const Vedlegg = ({ onBackClick, onNext, defaultValues }: Props) => {
           clearErrors={clearErrors}
           triggerValidation={trigger}
           control={control}
+          type={AttachmentType.LÅN}
           name={'lån'}
           heading={formatMessage('søknad.andreUtbetalinger.stønad.values.lån')}
           ingress={formatMessage('søknad.andreUtbetalinger.vedlegg.lån')}
@@ -265,6 +268,7 @@ const Vedlegg = ({ onBackClick, onNext, defaultValues }: Props) => {
           clearErrors={clearErrors}
           triggerValidation={trigger}
           control={control}
+          type={AttachmentType.SYKESTIPEND}
           name={'sykestipend'}
           heading={formatMessage('søknad.andreUtbetalinger.stønad.values.stipend')}
           ingress={formatMessage('søknad.andreUtbetalinger.vedlegg.sykeStipend')}
@@ -281,6 +285,7 @@ const Vedlegg = ({ onBackClick, onNext, defaultValues }: Props) => {
       <VedleggFileInput
         clearErrors={clearErrors}
         triggerValidation={trigger}
+        type={AttachmentType.ANNET}
         name={'annet'}
         control={control}
         heading={'Annen dokumentasjon'}

@@ -14,6 +14,8 @@ import { FileCard } from './FileCard';
 import { FileCardError } from './FileCardError';
 import { FileInput } from './FileInput';
 import { FormFields } from '../../pageComponents/standard/Vedlegg/Vedlegg';
+import { updateRequiredVedlegg } from '../../../context/soknadContextCommon';
+import { useSoknadContextStandard } from '../../../context/soknadContextStandard';
 
 type FormFieldsWithoutManuelleBarn = Omit<FormFields, 'manuelleBarn'>;
 
@@ -22,13 +24,15 @@ interface Props {
   control: Control<FormFields>;
   triggerValidation: UseFormTrigger<FormFields>;
   clearErrors: UseFormClearErrors<FormFields>;
+  type: string;
   heading: string;
   ingress?: string;
 }
 
 export const VedleggFileInput = (props: Props) => {
-  const { name, control, heading, ingress, triggerValidation, clearErrors } = props;
+  const { name, control, heading, ingress, triggerValidation, clearErrors, type } = props;
   const [loading, setLoading] = useState<boolean>(false);
+  const { søknadDispatch } = useSoknadContextStandard();
   const { formState } = useController({ control, name });
   const { fields, append, remove } = useFieldArray({
     name,
@@ -66,6 +70,7 @@ export const VedleggFileInput = (props: Props) => {
     } catch (err: any) {
       //TODO what todo here?
     }
+    await updateRequiredVedlegg({ type: type, completed: fields.length > 0 }, søknadDispatch);
     setLoading(false);
 
     // Only run validation for this field
@@ -79,6 +84,7 @@ export const VedleggFileInput = (props: Props) => {
 
     if (res.ok) {
       remove(index);
+      await updateRequiredVedlegg({ type: type, completed: fields.length > 0 }, søknadDispatch);
       triggerValidation(name);
     }
   }

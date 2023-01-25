@@ -210,8 +210,8 @@ export const mapSøknadToBackend = (søknad?: Soknad): SøknadBackendState => {
         vedlegg: barn?.vedlegg?.map((e) => e?.vedleggId),
       })) ?? [],
     tilleggsopplysninger: søknad?.tilleggsopplysninger,
-    ...(søknad?.vedlegg?.ANNET
-      ? { vedlegg: søknad?.vedlegg?.ANNET?.map((e) => e?.vedleggId) }
+    ...(søknad?.vedlegg?.annet
+      ? { vedlegg: søknad?.vedlegg?.annet?.map((e) => e?.vedleggId) }
       : {}),
   };
 };
@@ -532,12 +532,12 @@ export const mapSøknadToPdf = (
         ]);
       }) || [];
     const andreVedlegg =
-      søknad?.vedlegg?.ANNET && søknad?.vedlegg?.ANNET?.length > 0
+      søknad?.vedlegg?.annet && søknad?.vedlegg?.annet?.length > 0
         ? [
             createGruppe('Annet', [
               createListe(
                 '',
-                søknad?.vedlegg?.ANNET?.map((vedleggFile) => vedleggFile?.name)
+                søknad?.vedlegg?.annet?.map((vedleggFile) => vedleggFile?.name)
               ),
             ]),
           ]

@@ -103,13 +103,13 @@ export type Vedlegg = {
 };
 
 export type SoknadVedlegg = {
-  LØNN_OG_ANDRE_GODER: Vedlegg[];
-  OMSORGSSTØNAD: Vedlegg[];
-  UTLANDSSTØNAD: Vedlegg[];
-  SYKESTIPEND: Vedlegg[];
-  LÅN: Vedlegg[];
-  AVBRUTT_STUDIE: Vedlegg[];
-  ANNET: Vedlegg[];
+  lønnOgAndreGoder: Vedlegg[];
+  omsorgstønad: Vedlegg[];
+  utlandsstønad: Vedlegg[];
+  sykestipend: Vedlegg[];
+  lån: Vedlegg[];
+  avbruttStudie: Vedlegg[];
+  annet: Vedlegg[];
 };
 
 export interface Soknad {

@@ -1,10 +1,10 @@
 import { Alert, BodyShort, Cell, Checkbox, Grid, Heading, Radio, ReadMore } from '@navikt/ds-react';
 import React, { useEffect, useMemo } from 'react';
-import { FieldValues, useForm, useWatch } from 'react-hook-form';
+import { useForm, useWatch } from 'react-hook-form';
 import CheckboxGroupWrapper from 'components/input/CheckboxGroupWrapper';
 import RadioGroupWrapper from 'components/input/RadioGroupWrapper/RadioGroupWrapper';
 import { JaEllerNei } from 'types/Generic';
-import { Periode, Soknad } from 'types/Soknad';
+import { Soknad } from 'types/Soknad';
 import * as yup from 'yup';
 import { useStepWizard } from 'context/stepWizardContextV2';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -30,13 +30,13 @@ interface Props {
   defaultValues?: GenericSoknadContextState<Soknad>;
 }
 export enum AttachmentType {
-  LØNN_OG_ANDRE_GODER = 'LØNN_OG_ANDRE_GODER',
-  OMSORGSSTØNAD = 'OMSORGSSTØNAD',
-  UTLANDSSTØNAD = 'UTLANDSSTØNAD',
+  LØNN_OG_ANDRE_GODER = 'lønnOgAndreGoder',
+  OMSORGSSTØNAD = 'omsorgstønad',
+  UTLANDSSTØNAD = 'utlandsstønad',
   AVBRUTT_STUDIE = 'avbruttStudie',
-  SYKESTIPEND = 'SYKESTIPEND',
-  LÅN = 'LÅN',
-  ANNET = 'ANNET',
+  SYKESTIPEND = 'sykestipend',
+  LÅN = 'lån',
+  ANNET = 'annet',
 }
 
 export enum StønadType {
@@ -120,7 +120,6 @@ export const AndreUtbetalinger = ({ onBackClick, onNext, defaultValues }: Props)
     control,
     handleSubmit,
     setValue,
-    watch,
     formState: { errors },
   } = useForm<{
     [ANDRE_UTBETALINGER]: AndreUtbetalingerFormFields;

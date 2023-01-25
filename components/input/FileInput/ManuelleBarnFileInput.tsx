@@ -17,6 +17,7 @@ import { ManuelleBarn } from '../../../types/Soknad';
 import { FileInput } from './FileInput';
 import { useSoknadContextStandard } from '../../../context/soknadContextStandard';
 import { FormFields } from '../../pageComponents/standard/Vedlegg/Vedlegg';
+import { updateRequiredVedlegg } from '../../../context/soknadContextCommon';
 
 type FormFieldsWithManuelleBarn = Pick<FormFields, 'manuelleBarn'>;
 
@@ -30,7 +31,7 @@ interface Props {
 export const ManuelleBarnFileInput = (props: Props) => {
   const { name, control, triggerValidation, clearErrors } = props;
   const { formatMessage } = useFeatureToggleIntl();
-  const { søknadState } = useSoknadContextStandard();
+  const { søknadState, søknadDispatch } = useSoknadContextStandard();
   const [loading, setLoading] = useState<boolean>(false);
   const { formState } = useController({ control, name });
   const { fields, update } = useFieldArray({
@@ -58,6 +59,10 @@ export const ManuelleBarnFileInput = (props: Props) => {
         });
       }
     }
+    await updateRequiredVedlegg(
+      { type: `barn-${manuelleBarn.internId}`, completed: fields.length > 0 },
+      søknadDispatch
+    );
     await triggerValidation(name);
   }
 
@@ -107,6 +112,10 @@ export const ManuelleBarnFileInput = (props: Props) => {
     } catch (err: any) {
       // TODO What to do here?
     }
+    await updateRequiredVedlegg(
+      { type: `barn-${manuelleBarn.internId}`, completed: fields.length > 0 },
+      søknadDispatch
+    );
     setLoading(false);
 
     await triggerValidation(name);
