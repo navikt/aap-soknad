@@ -18,6 +18,8 @@ import { LucaGuidePanel, ScanningGuide } from '@navikt/aap-felles-innbygger-reac
 import { useIntl } from 'react-intl';
 import { FileInput } from '../../../input/FileInput/FileInput';
 import {
+  hasVirus,
+  isPasswordProtected,
   isUnderTotalFileSize,
   isValidAttachment,
   isValidFileType,
@@ -83,10 +85,10 @@ const Vedlegg = ({ onBackClick, onNext, defaultValues }: Props) => {
         return isUnderTotalFileSize(value);
       })
       .test('422', error422Text('VIRUS'), (value) => {
-        return !value || !value.find((v) => v.substatus === 'VIRUS');
+        return !hasVirus(value);
       })
       .test('422', error422Text('PASSWORD_PROTECTED'), (value) => {
-        return !value || !value.find((v) => v.substatus === 'PASSWORD_PROTECTED');
+        return !isPasswordProtected(value);
       })
       .test('unvalidAttachment', errorText(1), (value) => {
         return isValidAttachment(value);

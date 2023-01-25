@@ -1,4 +1,10 @@
-import { isUnderTotalFileSize, isValidAttachment, isValidFileType } from './FileInputValidations';
+import {
+  hasVirus,
+  isPasswordProtected,
+  isUnderTotalFileSize,
+  isValidAttachment,
+  isValidFileType,
+} from './FileInputValidations';
 import { Vedlegg } from '../../../types/Soknad';
 
 describe('isValidFileType', () => {
@@ -98,5 +104,75 @@ describe('isUnderTotalFileSize', () => {
     const fields = [vedlegg];
 
     expect(isValidAttachment(fields)).toBeTruthy();
+  });
+});
+
+describe('hasVirus', () => {
+  it('skal returnere false dersom den ikke inneholder virus', function () {
+    const file = new File(['(⌐□_□)'], 'hellopello.pdf', { type: 'audio/*' });
+    const vedlegg: Vedlegg = {
+      file: file,
+      isValid: true,
+      name: 'hellopello.pdf',
+      size: 52428801,
+    };
+
+    const fields = [vedlegg];
+
+    expect(hasVirus(fields)).toBeFalsy();
+  });
+
+  it('skal returnere true dersom den inneholder virus', function () {
+    const file = new File(['(⌐□_□)'], 'hellopello.pdf', { type: 'audio/*' });
+    const vedlegg: Vedlegg = {
+      file: file,
+      isValid: true,
+      name: 'hellopello.pdf',
+      size: 52428801,
+      substatus: 'VIRUS',
+    };
+
+    const fields = [vedlegg];
+
+    expect(hasVirus(fields)).toBeTruthy();
+  });
+
+  it('skal returnere false dersom det ikke blir sendt inn noen felt', function () {
+    expect(hasVirus([])).toBeFalsy();
+  });
+});
+
+describe('isPasswordProtected', () => {
+  it('skal returnere false dersom den ikke inneholder substatus passordbeskyttet', function () {
+    const file = new File(['(⌐□_□)'], 'hellopello.pdf', { type: 'audio/*' });
+    const vedlegg: Vedlegg = {
+      file: file,
+      isValid: true,
+      name: 'hellopello.pdf',
+      size: 52428801,
+    };
+
+    const fields = [vedlegg];
+
+    expect(isPasswordProtected(fields)).toBeFalsy();
+  });
+
+  it('skal returnere true dersom den inneholder substatus passordbeskyttet', function () {
+    const file = new File(['(⌐□_□)'], 'hellopello.pdf', { type: 'audio/*' });
+    const vedlegg: Vedlegg = {
+      file: file,
+      isValid: true,
+      name: 'hellopello.pdf',
+      size: 52428801,
+      substatus: 'PASSWORD_PROTECTED',
+    };
+
+    const fields = [vedlegg];
+
+    expect(isPasswordProtected(fields)).toBeTruthy();
+  });
+
+  it('skal returnere false dersom det ikke blir sendt inn noen felt', function () {
+    expect(isPasswordProtected([])).toBeFalsy();
   });
 });
