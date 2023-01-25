@@ -7,7 +7,6 @@ import {
   UseFormClearErrors,
   UseFormTrigger,
 } from 'react-hook-form';
-import { FormFields } from '../../pageComponents/standard/StartDato/MyComponent';
 import { BodyShort, ErrorMessage, Heading, Loader } from '@navikt/ds-react';
 
 import * as styles from './FileInput.module.css';
@@ -17,6 +16,7 @@ import { FileCardError } from './FileCardError';
 import { ManuelleBarn } from '../../../types/Soknad';
 import { OpplastingKnapp } from './OpplastingKnapp';
 import { useSoknadContextStandard } from '../../../context/soknadContextStandard';
+import { FormFields } from '../../pageComponents/standard/Vedlegg/Vedlegg';
 
 type FormFieldsWithManuelleBarn = Pick<FormFields, 'manuelleBarn'>;
 
@@ -99,6 +99,7 @@ export const ManuelleBarnFileInput = (props: Props) => {
               isValid: false,
               file: file,
               substatus: resData?.substatus,
+              status: res.status,
             },
           ],
         });
@@ -108,7 +109,6 @@ export const ManuelleBarnFileInput = (props: Props) => {
     }
     setLoading(false);
 
-    // Only run validation for this field
     await triggerValidation(name);
   }
 
@@ -116,11 +116,11 @@ export const ManuelleBarnFileInput = (props: Props) => {
     <>
       {fields.map((manuelleBarn, manuelleBarnIndex) => {
         const requiredVedlegg = søknadState?.requiredVedlegg.find(
-          (e) => e?.type === `barn-${manuelleBarn.internId}`
+          (vedlegg) => vedlegg?.type === `barn-${manuelleBarn.internId}`
         );
 
         return (
-          <div className={styles.fileInput} key={manuelleBarnIndex}>
+          <div className={styles.fileInput} key={manuelleBarn.id}>
             <Heading size={'medium'} level={'3'}>
               {formatMessage(`søknad.vedlegg.andreBarn.title.${requiredVedlegg?.filterType}`, {
                 navn: `${manuelleBarn?.navn?.fornavn} ${manuelleBarn?.navn?.etternavn}`,
@@ -130,7 +130,7 @@ export const ManuelleBarnFileInput = (props: Props) => {
             {manuelleBarn.vedlegg?.map((vedlegg, vedleggIndex) => {
               return vedlegg.isValid ? (
                 <FileCard
-                  key={vedlegg.vedleggId} //TODO fiks key
+                  key={vedleggIndex}
                   vedlegg={vedlegg}
                   remove={() =>
                     removeField(manuelleBarnIndex, vedleggIndex, manuelleBarn, vedlegg.vedleggId)
@@ -138,7 +138,7 @@ export const ManuelleBarnFileInput = (props: Props) => {
                 />
               ) : (
                 <FileCardError
-                  key={vedlegg.vedleggId} //TODO fiks key
+                  key={vedleggIndex}
                   vedlegg={vedlegg}
                   remove={() =>
                     removeField(manuelleBarnIndex, vedleggIndex, manuelleBarn, vedlegg.vedleggId)

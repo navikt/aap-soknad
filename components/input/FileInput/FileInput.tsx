@@ -7,13 +7,13 @@ import {
   UseFormClearErrors,
   UseFormTrigger,
 } from 'react-hook-form';
-import { FormFields } from '../../pageComponents/standard/StartDato/MyComponent';
 import { BodyShort, ErrorMessage, Heading, Loader } from '@navikt/ds-react';
 
 import * as styles from './FileInput.module.css';
 import { FileCard } from './FileCard';
 import { FileCardError } from './FileCardError';
 import { OpplastingKnapp } from './OpplastingKnapp';
+import { FormFields } from '../../pageComponents/standard/Vedlegg/Vedlegg';
 
 type FormFieldsWithoutManuelleBarn = Omit<FormFields, 'manuelleBarn'>;
 
@@ -67,6 +67,7 @@ export const FileInput = (props: Props) => {
       //TODO what todo here?
     }
     setLoading(false);
+
     // Only run validation for this field
     await triggerValidation(name);
   }
