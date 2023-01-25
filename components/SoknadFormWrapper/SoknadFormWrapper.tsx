@@ -184,7 +184,7 @@ const SøknadFormWrapper = ({
             </Button>
           )}
           <Button
-            className={classes?.buttonNext}
+            className={onBack ? classes?.buttonNext : classes?.buttonBack}
             variant="primary"
             type="submit"
             disabled={nextIsLoading}
