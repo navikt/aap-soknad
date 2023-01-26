@@ -52,7 +52,7 @@ import metrics from 'utils/metrics';
 import { scrollRefIntoView } from 'utils/dom';
 import { TimeoutBox } from 'components/TimeoutBox/TimeoutBox';
 import { Steg0 } from 'components/pageComponents/standard/Steg0/Steg0';
-import { StepType } from '../components/StepWizard/Step';
+import * as classes from './step.module.css';
 
 interface PageProps {
   søker: SokerOppslagState;
@@ -93,7 +93,11 @@ const Steps = ({ søker, mellomlagretSøknad }: PageProps) => {
 
   useEffect(() => {
     if (currentStep && currentStep.stepIndex !== undefined) {
-      router.push(currentStep.stepIndex.toString(), undefined, { scroll: true, shallow: true });
+      console.log('query to step:', router.query);
+      router.push(currentStep.stepIndex.toString(), currentStep.stepIndex.toString(), {
+        scroll: true,
+        shallow: true,
+      });
     }
   }, [currentStep]);
 
@@ -157,7 +161,6 @@ const Steps = ({ søker, mellomlagretSøknad }: PageProps) => {
     updateSøknadData<Soknad>(søknadDispatch, data);
     completeAndGoToNextStep(stepWizardDispatch);
   };
-  const veiledningErrorMessageRef = useRef(null);
 
   return (
     <>
@@ -172,104 +175,110 @@ const Steps = ({ søker, mellomlagretSøknad }: PageProps) => {
         </PageHeader>
       </header>
       {søknadState?.søknad && (
-        <StepWizard>
-          {step === '0' && (
+        <main className={classes?.main}>
+          {step === '0' ? (
             <Steg0
+              søker={søker}
               onNext={() => {
-                completeAndGoToNextStep(stepWizardDispatch);
+                router.push('1', undefined, { scroll: true });
               }}
             />
+          ) : (
+            <StepWizard>
+              {step === '1' && (
+                <StartDato
+                  onBackClick={() => {
+                    router.push('0');
+                  }}
+                  defaultValues={søknadState}
+                  onNext={(data) => {
+                    onNextStep(data);
+                  }}
+                />
+              )}
+              {step === '2' && (
+                <Medlemskap
+                  onBackClick={onPreviousStep}
+                  defaultValues={søknadState}
+                  onNext={(data) => {
+                    onNextStep(data);
+                  }}
+                />
+              )}
+              {step === '3' && (
+                <Yrkesskade
+                  onBackClick={onPreviousStep}
+                  defaultValues={søknadState}
+                  onNext={(data) => {
+                    onNextStep(data);
+                  }}
+                />
+              )}
+              {step === '4' && (
+                <Behandlere
+                  onBackClick={onPreviousStep}
+                  defaultValues={søknadState}
+                  onNext={(data) => {
+                    onNextStep(data);
+                  }}
+                />
+              )}
+              {step === '5' && (
+                <Barnetillegg
+                  onBackClick={onPreviousStep}
+                  defaultValues={søknadState}
+                  onNext={(data) => {
+                    onNextStep(data);
+                  }}
+                />
+              )}
+              {step === '6' && (
+                <Student
+                  onBackClick={onPreviousStep}
+                  defaultValues={søknadState}
+                  onNext={(data) => {
+                    onNextStep(data);
+                  }}
+                />
+              )}
+              {step === '7' && (
+                <AndreUtbetalinger
+                  onBackClick={onPreviousStep}
+                  defaultValues={søknadState}
+                  onNext={(data) => {
+                    onNextStep(data);
+                  }}
+                />
+              )}
+              {step === '8' && (
+                <Tilleggsopplysninger
+                  onBackClick={onPreviousStep}
+                  defaultValues={søknadState}
+                  onNext={(data) => {
+                    onNextStep(data);
+                  }}
+                />
+              )}
+              {step === '9' && (
+                <Vedlegg
+                  onBackClick={onPreviousStep}
+                  defaultValues={søknadState}
+                  onNext={(data) => {
+                    onNextStep(data);
+                  }}
+                />
+              )}
+              {step === '10' && (
+                <Oppsummering
+                  onBackClick={onPreviousStep}
+                  onSubmitSoknad={submitSoknad}
+                  submitErrorMessageRef={submitErrorMessageRef}
+                  hasSubmitError={showFetchErrorMessage}
+                />
+              )}
+            </StepWizard>
           )}
-          {step === '1' && (
-            <StartDato
-              onBackClick={onPreviousStep}
-              defaultValues={søknadState}
-              onNext={(data) => {
-                onNextStep(data);
-              }}
-            />
-          )}
-          {step === '2' && (
-            <Medlemskap
-              onBackClick={onPreviousStep}
-              defaultValues={søknadState}
-              onNext={(data) => {
-                onNextStep(data);
-              }}
-            />
-          )}
-          {step === '3' && (
-            <Yrkesskade
-              onBackClick={onPreviousStep}
-              defaultValues={søknadState}
-              onNext={(data) => {
-                onNextStep(data);
-              }}
-            />
-          )}
-          {step === '4' && (
-            <Behandlere
-              onBackClick={onPreviousStep}
-              defaultValues={søknadState}
-              onNext={(data) => {
-                onNextStep(data);
-              }}
-            />
-          )}
-          {step === '5' && (
-            <Barnetillegg
-              onBackClick={onPreviousStep}
-              defaultValues={søknadState}
-              onNext={(data) => {
-                onNextStep(data);
-              }}
-            />
-          )}
-          {step === '6' && (
-            <Student
-              onBackClick={onPreviousStep}
-              defaultValues={søknadState}
-              onNext={(data) => {
-                onNextStep(data);
-              }}
-            />
-          )}
-          {step === '7' && (
-            <AndreUtbetalinger
-              onBackClick={onPreviousStep}
-              defaultValues={søknadState}
-              onNext={(data) => {
-                onNextStep(data);
-              }}
-            />
-          )}
-          {step === '8' && (
-            <Tilleggsopplysninger
-              onBackClick={onPreviousStep}
-              defaultValues={søknadState}
-              onNext={(data) => {
-                onNextStep(data);
-              }}
-            />
-          )}
-          {step === '9' && (
-            <Vedlegg
-              onBackClick={onPreviousStep}
-              defaultValues={søknadState}
-              onNext={(data) => {
-                onNextStep(data);
-              }}
-            />
-          )}
-          {step === '10' && (
-            <Oppsummering
-              onBackClick={onPreviousStep}
-              onSubmitSoknad={submitSoknad}
-              submitErrorMessageRef={submitErrorMessageRef}
-              hasSubmitError={showFetchErrorMessage}
-            />
-          )}
-        </StepWizard>
+        </main>
       )}
       <TimeoutBox logoutTextKey="logoutModal.soknadMessage" />
     </>
@@ -287,23 +296,13 @@ export const getServerSideProps = beskyttetSide(
     const stopTimer = metrics.getServersidePropsDurationHistogram.startTimer({
       path: '/[steg]',
     });
-    const { step } = ctx.query;
     const bearerToken = getAccessToken(ctx);
     const søker = await getSøker(bearerToken);
     const mellomlagretSøknad = await lesBucket('STANDARD', bearerToken);
 
     stopTimer();
-    if (mellomlagretSøknad && mellomlagretSøknad.lagretStepList) {
-      const veiledningStep = mellomlagretSøknad.lagretStepList.find(
-        (step: StepType) => step.stepIndex === 0
-      );
-      if (!veiledningStep) {
-        mellomlagretSøknad.lagretStepList = [
-          { stepIndex: 0, name: 'VEILEDNING' },
-          ...mellomlagretSøknad.lagretStepList,
-        ];
-      }
-    }
+
+    console.log('serversideProps kjører');
     if (!mellomlagretSøknad?.lagretStepList) {
       return {
         redirect: {

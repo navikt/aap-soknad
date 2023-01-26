@@ -8,12 +8,16 @@ import {
   useSoknadContextStandard,
 } from '../../../../context/soknadContextStandard';
 import { IntroduksjonTekst } from '../../../IntroduksjonTekst/IntroduksjonTekst';
+import { SokerOppslagState } from '../../../../context/sokerOppslagContext';
+import { getFulltNavn } from '../../../../lib/søker';
+import * as classes from './Steg0.module.css';
 
 interface Props {
   onNext: () => void;
+  søker: SokerOppslagState;
 }
 
-export const Steg0 = ({ onNext }: Props) => {
+export const Steg0 = ({ onNext, søker }: Props) => {
   const { formatMessage } = useFeatureToggleIntl();
   const { søknadState, søknadDispatch } = useSoknadContextStandard();
 
@@ -28,7 +32,9 @@ export const Steg0 = ({ onNext }: Props) => {
       backButtonText={formatMessage('navigation.back')}
       cancelButtonText={formatMessage('navigation.cancel')}
     >
-      <IntroduksjonTekst navn={''} />
+      <div className={classes?.veiledning}>
+        <IntroduksjonTekst navn={getFulltNavn(søker.søker)} />
+      </div>
     </SøknadFormWrapper>
   );
 };
