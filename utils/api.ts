@@ -117,6 +117,7 @@ export const mapSøknadToBackend = (søknad?: Soknad): SøknadBackendState => {
     }),
     medlemsskap: {
       boddINorgeSammenhengendeSiste5: jaNeiToBoolean(søknad?.medlemskap?.harBoddINorgeSiste5År),
+      jobbetUtenforNorgeFørSyk: jaNeiToBoolean(søknad?.medlemskap?.arbeidetUtenforNorgeFørSykdom),
       jobbetSammenhengendeINorgeSiste5: jaNeiToBoolean(
         søknad?.medlemskap?.harArbeidetINorgeSiste5År
       ),
