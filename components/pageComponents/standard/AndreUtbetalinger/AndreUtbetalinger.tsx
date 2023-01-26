@@ -290,7 +290,7 @@ export const AndreUtbetalinger = ({ onBackClick, onNext, defaultValues }: Props)
         <Checkbox value={StønadType.UTLAND}>{StønadAlternativer.UTLAND}</Checkbox>
         <Checkbox value={StønadType.AFP}>{StønadAlternativer.AFP}</Checkbox>
         {stønadEllerVerv?.includes(StønadType.AFP) && (
-          <ColorPanel>
+          <ColorPanel color="grey">
             <Grid>
               <Cell xs={7}>
                 <TextFieldWrapper
