@@ -13,7 +13,7 @@ interface Props {
 export const FileInput = (props: Props) => {
   const { name, handleUpload, title } = props;
   const [dragOver, setDragOver] = useState(false);
-  const fileUploadInputElement = useRef<HTMLInputElement>(null);
+  const fileUploadInputRef = useRef<HTMLInputElement>(null);
 
   const handleDragLeave: DragEventHandler<HTMLDivElement> = (e) => {
     setDragOver(false);
@@ -27,10 +27,11 @@ export const FileInput = (props: Props) => {
     e.preventDefault();
   };
 
-  const handleDrop: DragEventHandler<HTMLDivElement> = (e) => {
+  const handleDrop: DragEventHandler<HTMLDivElement> = async (e) => {
     e.preventDefault();
-    const files = e.dataTransfer.files[0];
-    handleUpload(files);
+    const files = e.dataTransfer.files;
+    Array.from(files).forEach(handleUpload);
+    setDragOver(false);
   };
 
   return (
@@ -53,7 +54,7 @@ export const FileInput = (props: Props) => {
         }}
         className={classes?.visuallyHidden}
         tabIndex={-1}
-        ref={fileUploadInputElement}
+        ref={fileUploadInputRef}
         accept="image/*,.pdf"
       />
       <label htmlFor={name}>
@@ -63,9 +64,11 @@ export const FileInput = (props: Props) => {
           aria-controls={name}
           role={'button'}
           tabIndex={0}
-          onKeyPress={(e) => {
-            e.preventDefault();
-            fileUploadInputElement.current && fileUploadInputElement.current.click();
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') {
+              e.preventDefault();
+              fileUploadInputRef.current?.click();
+            }
           }}
         >
           <SvgUpload title="" aria-hidden />

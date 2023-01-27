@@ -112,10 +112,14 @@ export const ManuelleBarnFileInput = (props: Props) => {
     } catch (err: any) {
       // TODO What to do here?
     }
-    await updateRequiredVedlegg(
-      { type: `barn-${manuelleBarn.internId}`, completed: fields.length > 0 },
-      søknadDispatch
-    );
+
+    const manuelleBarnField = fields.find((field) => field.internId === manuelleBarn.internId);
+    if (manuelleBarnField?.vedlegg) {
+      await updateRequiredVedlegg(
+        { type: `barn-${manuelleBarn.internId}`, completed: manuelleBarnField.vedlegg.length > 0 },
+        søknadDispatch
+      );
+    }
     setLoading(false);
 
     await triggerValidation(name);
