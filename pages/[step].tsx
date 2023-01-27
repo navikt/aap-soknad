@@ -47,7 +47,11 @@ import { GetServerSidePropsResult, NextPageContext } from 'next';
 import { getAccessToken } from 'auth/accessToken';
 import { getSøker } from './api/oppslag/soeker';
 import { lesBucket } from './api/buckets/les';
-import { logSkjemaFullførtEvent, logSkjemastegFullførtEvent } from 'utils/amplitude';
+import {
+  logSkjemaFullførtEvent,
+  logSkjemastegFullførtEvent,
+  logVeiledningVistEvent,
+} from 'utils/amplitude';
 import metrics from 'utils/metrics';
 import { scrollRefIntoView } from 'utils/dom';
 import { TimeoutBox } from 'components/TimeoutBox/TimeoutBox';
@@ -188,6 +192,7 @@ const Steps = ({ søker, mellomlagretSøknad }: PageProps) => {
               {step === '1' && (
                 <StartDato
                   onBackClick={() => {
+                    logVeiledningVistEvent();
                     router.push('0');
                   }}
                   defaultValues={søknadState}

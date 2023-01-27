@@ -51,3 +51,10 @@ export function logSkjemaValideringFeiletEvent(stegnavn: string) {
     stegnavn,
   });
 }
+
+export function logVeiledningVistEvent() {
+  logAmplitudeEvent('veiledning vist', {
+    skjemanavn: 'aap-søknad-standard',
+    skjemaId: 'aap-søknad-standard',
+  });
+}
