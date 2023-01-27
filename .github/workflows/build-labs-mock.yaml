@@ -66,16 +66,17 @@ jobs:
           "APIKEY": "${{ secrets.NAIS_DEPLOY_APIKEY }}"
           "CLUSTER": "labs-gcp"
           "RESOURCE": ".nais/labs-gcp.yaml"
-  "deployAppToLabsFrozen":
-    name: "Deploy app to labs"
-    needs: "build"
-    runs-on: "ubuntu-latest"
-    steps:
-      - uses: "actions/checkout@v3"
-      - name: "Deploy to LABS"
-        uses: "nais/deploy/actions/deploy@v1"
-        env:
-          "APIKEY": "${{ secrets.NAIS_DEPLOY_APIKEY }}"
-          "CLUSTER": "labs-gcp"
-          "RESOURCE": ".nais/frozen-labs.yaml"
           "DEPLOY_SERVER": deploy.nais.io:443
+  # "deployAppToLabsFrozen":
+  #   name: "Deploy app to labs"
+  #   needs: "build"
+  #   runs-on: "ubuntu-latest"
+  #   steps:
+  #     - uses: "actions/checkout@v3"
+  #     - name: "Deploy to LABS"
+  #       uses: "nais/deploy/actions/deploy@v1"
+  #       env:
+  #         "APIKEY": "${{ secrets.NAIS_DEPLOY_APIKEY }}"
+  #         "CLUSTER": "labs-gcp"
+  #         "RESOURCE": ".nais/frozen-labs.yaml"
+  #         "DEPLOY_SERVER": deploy.nais.io:443
