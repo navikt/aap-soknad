@@ -1,9 +1,5 @@
 .formContent {
-  display: flex;
-  max-width: 600px;
-  flex-direction: column;
-  justify-content: space-between;
-  gap: var(--a-spacing-10);
+  composes: formContent from '/styles/layout.module.css';
 }
 .fourButtonWrapper > button {
   min-width: 201px;

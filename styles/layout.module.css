@@ -1,3 +1,11 @@
+.formContent {
+  display: flex;
+  max-width: 600px;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: var(--a-spacing-10);
+}
+
 .buttonWrapper {
   display: flex;
   flex-direction: row;

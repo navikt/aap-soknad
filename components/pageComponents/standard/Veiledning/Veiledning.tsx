@@ -21,7 +21,6 @@ interface VeiledningProps {
   hasError: boolean;
   errorMessageRef: React.MutableRefObject<HTMLDivElement | null>;
   onSubmit: () => void;
-  harPåbegyntSøknad?: boolean;
 }
 export const Veiledning = ({
   søker,
@@ -29,7 +28,6 @@ export const Veiledning = ({
   hasError,
   errorMessageRef,
   onSubmit,
-  harPåbegyntSøknad,
 }: VeiledningProps) => {
   const { formatMessage, FormatElement } = useFeatureToggleIntl();
 
@@ -68,38 +66,26 @@ export const Veiledning = ({
 
         <IntroduksjonTekst navn={søker.fulltNavn} />
 
-        {!harPåbegyntSøknad && (
-          <form
-            onSubmit={handleSubmit(async () => {
-              await onSubmit();
-            })}
-            className={classes?.veiledningContent}
-            autoComplete="off"
+        <form
+          onSubmit={handleSubmit(async () => {
+            await onSubmit();
+          })}
+          autoComplete="off"
+        >
+          <ConfirmationPanelWrapper
+            label={formatMessage('søknad.veiledning.veiledningConfirm.label')}
+            control={control}
+            name={VEILEDNING_CONFIRM}
           >
-            <ConfirmationPanelWrapper
-              label={formatMessage('søknad.veiledning.veiledningConfirm.label')}
-              control={control}
-              name={VEILEDNING_CONFIRM}
-            >
-              <Label as={'span'}>
-                {formatMessage('søknad.veiledning.veiledningConfirm.title')}
-              </Label>
-            </ConfirmationPanelWrapper>
+            <Label as={'span'}>{formatMessage('søknad.veiledning.veiledningConfirm.title')}</Label>
+          </ConfirmationPanelWrapper>
 
-            <div>
-              <Button variant="primary" type="submit" loading={isLoading}>
-                {formatMessage(`søknad.veiledning.startSøknad`)}
-              </Button>
-            </div>
-          </form>
-        )}
-        {harPåbegyntSøknad && (
-          <div>
-            <Button variant="primary" onClick={onSubmit} loading={isLoading}>
+          <div className={classes?.startButton}>
+            <Button variant="primary" type="submit" loading={isLoading}>
               {formatMessage(`søknad.veiledning.startSøknad`)}
             </Button>
           </div>
-        )}
+        </form>
       </main>
     </>
   );

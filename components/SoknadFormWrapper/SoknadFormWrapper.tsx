@@ -20,6 +20,7 @@ interface Props {
   nextIsLoading?: boolean;
   focusOnErrors?: boolean;
   errors?: FieldErrors;
+  className?: string;
 }
 
 interface LagreModalProps {
@@ -149,6 +150,7 @@ const SøknadFormWrapper = ({
   onDelete,
   errors,
   nextIsLoading = false,
+  className = '',
 }: Props) => {
   const { formatMessage } = useFeatureToggleIntl();
   const { appState } = useAppStateContext();
@@ -169,7 +171,7 @@ const SøknadFormWrapper = ({
   };
   return (
     <>
-      <form onSubmit={onNext} className={classes?.formContent}>
+      <form onSubmit={onNext} className={`${classes?.formContent} ${className}`}>
         {errors && <FormErrorSummary errors={errors} data-testid={'error-summary'} />}
         {children}
         <div className={classes?.fourButtonWrapper}>

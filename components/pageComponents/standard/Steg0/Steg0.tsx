@@ -23,6 +23,7 @@ export const Steg0 = ({ onNext, søker }: Props) => {
 
   return (
     <SøknadFormWrapper
+      className={classes?.paddingTop}
       onNext={onNext}
       onDelete={async () => {
         await deleteOpplastedeVedlegg(søknadState.søknad);
@@ -32,9 +33,7 @@ export const Steg0 = ({ onNext, søker }: Props) => {
       backButtonText={formatMessage('navigation.back')}
       cancelButtonText={formatMessage('navigation.cancel')}
     >
-      <div className={classes?.veiledning}>
-        <IntroduksjonTekst navn={getFulltNavn(søker.søker)} />
-      </div>
+      <IntroduksjonTekst navn={getFulltNavn(søker.søker)} />
     </SøknadFormWrapper>
   );
 };
