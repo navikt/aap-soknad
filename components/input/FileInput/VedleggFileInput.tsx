@@ -16,6 +16,7 @@ import { FileInput } from './FileInput';
 import { FormFields } from '../../pageComponents/standard/Vedlegg/Vedlegg';
 import { updateRequiredVedlegg } from '../../../context/soknadContextCommon';
 import { useSoknadContextStandard } from '../../../context/soknadContextStandard';
+import { validateFileType } from './FileInputValidations';
 
 type FormFieldsWithoutManuelleBarn = Omit<FormFields, 'manuelleBarn'>;
 
@@ -44,13 +45,15 @@ export const VedleggFileInput = (props: Props) => {
     setLoading(true);
     const data = new FormData();
     data.append('vedlegg', file);
+    const isValidFileType = validateFileType(file);
+
     try {
       const res = await fetch('/aap/soknad/api/vedlegg/lagre/', {
         method: 'POST',
         body: data,
       });
       const resData = await res.json();
-      if (res.ok) {
+      if (res.ok && isValidFileType) {
         append({
           name: file?.name,
           size: file?.size,
@@ -65,6 +68,7 @@ export const VedleggFileInput = (props: Props) => {
           isValid: false,
           file: file,
           substatus: resData?.substatus,
+          status: res.status,
         });
       }
     } catch (err: any) {

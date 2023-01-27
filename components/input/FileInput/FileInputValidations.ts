@@ -23,3 +23,7 @@ export function isPasswordProtected(fields: any[] = []): boolean {
     undefined
   );
 }
+
+export function validateFileType(file: File): boolean {
+  return ['image/png', 'image/jpg', 'image/jpeg', 'application/pdf'].includes(file.type);
+}
