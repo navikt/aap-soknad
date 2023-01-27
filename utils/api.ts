@@ -11,7 +11,7 @@ import {
   stønadTypeToAlternativNøkkel,
 } from 'components/pageComponents/standard/AndreUtbetalinger/AndreUtbetalinger';
 import { Soker } from 'context/sokerOppslagContext';
-import { Soknad, Vedlegg } from 'types/Soknad';
+import { Soknad, SoknadVedlegg, Vedlegg } from 'types/Soknad';
 import { BehandlerBackendState, SøknadBackendState } from 'types/SoknadBackendState';
 import { formatDate } from './date';
 import { formatNavn, formatFullAdresse } from 'utils/StringFormatters';
@@ -208,7 +208,7 @@ export const mapSøknadToBackend = (søknad?: Soknad): SøknadBackendState => {
         },
         relasjon: barn.relasjon,
         merEnnIG: jaNeiToBoolean(barn.harInntekt),
-        vedlegg: barn?.vedlegg?.map((e) => e?.vedleggId),
+        vedlegg: getVedleggForManueltBarn(barn.internId, søknad?.vedlegg).map((e) => e?.vedleggId),
       })) ?? [],
     tilleggsopplysninger: søknad?.tilleggsopplysninger,
     ...(søknad?.vedlegg?.ANNET
@@ -216,6 +216,17 @@ export const mapSøknadToBackend = (søknad?: Soknad): SøknadBackendState => {
       : {}),
   };
 };
+
+export function getVedleggForManueltBarn(internId: string, vedlegg?: SoknadVedlegg) {
+  const keys = vedlegg ? Object.keys(vedlegg) : [];
+  const vedleggKey = keys.find((key) => key === internId);
+
+  if (vedlegg && vedleggKey) {
+    return vedlegg[vedleggKey];
+  } else {
+    return [];
+  }
+}
 
 enum Types {
   FRITEKST = 'FRITEKST',

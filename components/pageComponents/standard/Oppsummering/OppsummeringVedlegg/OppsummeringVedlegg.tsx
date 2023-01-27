@@ -3,6 +3,7 @@ import { useMemo } from 'react';
 import { Soknad, SoknadVedlegg } from 'types/Soknad';
 import { GenericSoknadContextState } from 'types/SoknadContext';
 import { Relasjon } from '../../Barnetillegg/AddBarnModal';
+import { getVedleggForManueltBarn } from '../../../../../utils/api';
 
 interface Props {
   søknadState: GenericSoknadContextState<Soknad>;
@@ -66,9 +67,11 @@ export const OppsummeringVedlegg = ({ søknadState }: Props) => {
               <div key={`barn-${barn.internId}`}>
                 <Label>{label}</Label>
                 <ul>
-                  {barn?.vedlegg?.map((vedlegg) => (
-                    <li key={vedlegg?.vedleggId}>{vedlegg?.name}</li>
-                  ))}
+                  {getVedleggForManueltBarn(barn.internId, søknadState.søknad?.vedlegg).map(
+                    (vedlegg) => (
+                      <li key={vedlegg?.vedleggId}>{vedlegg?.name}</li>
+                    )
+                  )}
                 </ul>
               </div>
             );
