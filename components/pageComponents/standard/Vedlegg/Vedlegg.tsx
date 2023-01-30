@@ -60,8 +60,7 @@ const Vedlegg = ({ onBackClick, onNext, defaultValues }: Props) => {
   return (
     <SoknadFormWrapper
       onNext={handleSubmit((data) => {
-        console.log(data);
-        // onNext({ vedlegg: data });
+        onNext({ vedlegg: data });
       })}
       onBack={() => {
         updateSøknadData<Soknad>(søknadDispatch, { ...søknadState.søknad });
