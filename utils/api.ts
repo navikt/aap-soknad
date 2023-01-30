@@ -208,7 +208,9 @@ export const mapSøknadToBackend = (søknad?: Soknad): SøknadBackendState => {
         },
         relasjon: barn.relasjon,
         merEnnIG: jaNeiToBoolean(barn.harInntekt),
-        vedlegg: getVedleggForManueltBarn(barn.internId, søknad?.vedlegg).map((e) => e?.vedleggId),
+        vedlegg: getVedleggForManueltBarn(barn.internId, søknad?.vedlegg).map(
+          (vedlegg) => vedlegg?.vedleggId
+        ),
       })) ?? [],
     tilleggsopplysninger: søknad?.tilleggsopplysninger,
     ...(søknad?.vedlegg?.ANNET
@@ -539,7 +541,7 @@ export const mapSøknadToPdf = (
         return createGruppe(label || '', [
           createListe(
             '',
-            barn?.vedlegg?.map((vedlegg) => vedlegg?.name)
+            getVedleggForManueltBarn(barn.internId, søknad?.vedlegg).map((vedlegg) => vedlegg?.name)
           ),
         ]);
       }) || [];

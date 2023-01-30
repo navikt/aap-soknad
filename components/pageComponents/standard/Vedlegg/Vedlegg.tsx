@@ -1,5 +1,5 @@
 import { useForm, useWatch } from 'react-hook-form';
-import { Soknad, SoknadVedlegg } from 'types/Soknad';
+import { ManuelleBarn, Soknad, SoknadVedlegg } from 'types/Soknad';
 import React, { useEffect, useRef, useState } from 'react';
 import { BodyShort, Heading, Label, ReadMore } from '@navikt/ds-react';
 import * as yup from 'yup';
@@ -60,7 +60,8 @@ const Vedlegg = ({ onBackClick, onNext, defaultValues }: Props) => {
   return (
     <SoknadFormWrapper
       onNext={handleSubmit((data) => {
-        onNext({ vedlegg: data });
+        console.log(data);
+        // onNext({ vedlegg: data });
       })}
       onBack={() => {
         updateSøknadData<Soknad>(søknadDispatch, { ...søknadState.søknad });
