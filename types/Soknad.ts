@@ -100,16 +100,19 @@ export type Ferie = {
 
 export type Vedlegg = {
   name: string;
-  size: string;
+  size: number;
   vedleggId: string;
 };
+
+// [key: string] brukes for å legge til dynamiske felter for manuelle barn
 export type SoknadVedlegg = {
-  [AttachmentType.LØNN_OG_ANDRE_GODER]: Vedlegg[];
-  [AttachmentType.OMSORGSSTØNAD]: Vedlegg[];
-  [AttachmentType.UTLANDSSTØNAD]: Vedlegg[];
-  [AttachmentType.SYKESTIPEND]: Vedlegg[];
-  [AttachmentType.LÅN]: Vedlegg[];
-  [AVBRUTT_STUDIE_VEDLEGG]: Vedlegg[];
+  [key: string]: Vedlegg[];
+  LØNN_OG_ANDRE_GODER: Vedlegg[];
+  OMSORGSSTØNAD: Vedlegg[];
+  UTLANDSSTØNAD: Vedlegg[];
+  SYKESTIPEND: Vedlegg[];
+  LÅN: Vedlegg[];
+  AVBRUTT_STUDIE: Vedlegg[];
   ANNET: Vedlegg[];
 };
 

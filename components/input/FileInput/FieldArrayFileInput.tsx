@@ -1,4 +1,4 @@
-import { Control, FieldError, FieldErrors, useFieldArray } from 'react-hook-form';
+import { ArrayPath, Control, FieldError, FieldErrors, useFieldArray } from 'react-hook-form';
 import { useFeatureToggleIntl } from 'hooks/useFeatureToggleIntl';
 import React, { DragEventHandler, useEffect, useMemo, useRef, useState } from 'react';
 import * as classes from './FileInput.module.css';
@@ -7,17 +7,18 @@ import { Cancel, Delete, FileError, FileSuccess } from '@navikt/ds-icons';
 import { Upload as SvgUpload } from '@navikt/ds-icons';
 import { useSoknadContextStandard } from 'context/soknadContextStandard';
 import { updateRequiredVedlegg } from 'context/soknadContextCommon';
+import { SoknadVedlegg } from '../../../types/Soknad';
 
 const MAX_TOTAL_FILE_SIZE = 52428800; // 50mb
 type Props = {
   setError: (name: string, error: FieldError) => void;
   clearErrors: (name?: string | string[]) => void;
-  name: string;
+  name: ArrayPath<SoknadVedlegg>;
   type: string;
   heading: string;
   ingress?: string;
-  errors?: FieldErrors;
-  control: Control;
+  errors?: FieldErrors<SoknadVedlegg>;
+  control: Control<SoknadVedlegg>;
 };
 const FieldArrayFileInput = ({
   heading,
@@ -46,7 +47,7 @@ const FieldArrayFileInput = ({
   const [loading, setLoading] = useState<boolean>(false);
   const [filename, setFilename] = useState<string | undefined>();
   const [inputId] = useState<string>(`file-upload-input-${Math.floor(Math.random() * 100000)}`);
-  const fileUploadInputElement = useRef(null);
+  const fileUploadInputElement = useRef<HTMLInputElement>(null);
   const totalUploadedBytes = useMemo(
     () => fields.reduce((acc, curr) => acc + curr.size, 0),
     [fields]
