@@ -87,28 +87,20 @@ const Vedlegg = ({ onBackClick, onNext, defaultValues }: Props) => {
           </>
         ) : (
           <>
-            <BodyShort spacing>
-              Hvis du ønsker å legge til dokumenter du mener har betydning for din søknad, kan du
-              laste opp dette her (valgfritt)
-            </BodyShort>
             <BodyShort>{formatMessage('søknad.vedlegg.ingenVedlegg.title')}</BodyShort>
           </>
         )}
       </LucaGuidePanel>
-      <div>
-        {søknadState?.requiredVedlegg?.length > 0 ? (
-          <>
-            <Label as={'p'}>{formatMessage('søknad.vedlegg.harVedlegg.title')}</Label>
-            <ul>
-              {søknadState?.requiredVedlegg?.map((vedlegg, index) => (
-                <li key={index}>{vedlegg?.description}</li>
-              ))}
-            </ul>
-          </>
-        ) : (
-          <BodyShort>{formatMessage('søknad.vedlegg.ingenVedlegg.readMore.text')}</BodyShort>
-        )}
-      </div>
+      {søknadState?.requiredVedlegg?.length > 0 && (
+        <div>
+          <Label as={'p'}>{formatMessage('søknad.vedlegg.harVedlegg.title')}</Label>
+          <ul>
+            {søknadState?.requiredVedlegg?.map((vedlegg, index) => (
+              <li key={index}>{vedlegg?.description}</li>
+            ))}
+          </ul>
+        </div>
+      )}
       <div>
         <BodyShort>{formatMessage('søknad.vedlegg.vedleggPåPapir.text')}</BodyShort>
         <ReadMore
