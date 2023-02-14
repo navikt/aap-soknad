@@ -387,6 +387,11 @@
       },
       "ingenVedlegg": {
         "title": "Ut fra dine svar trenger du ikke laste opp noen vedlegg til søknaden. Hvis du likevel har  dokumenter du mener har betydning for din søknad, kan du laste opp disse her. Dette er helt valgfritt.",
+        "alert": {
+          "text1": "Du trenger ikke å laste opp noen vedlegg. Vi har fått all informasjonen vi trenger for å behandle søknaden din. Hvis vi trenger mer informasjon eller dokumentasjon, kontakter vi deg.",
+          "text2": "Hvis du skal ettersende dokumentasjon på et seinere tidspunkt, kan du gjøre dette via Mine Arbeidsavklaringspenger på nav.no etter at du har sendt inn søknaden.",
+          "text3": "Hvis du ønsker å legge til dokumenter du mener har betydning for din søknad, kan du laste opp dette her (valgfritt)."
+        },
         "readMore": {
           "title": "Kan jeg laste opp andre vedlegg?",
           "text": "Hvis du har noe annet du også ønsker å legge ved, kan du også laste opp dette her."
@@ -396,7 +401,7 @@
         "title": "Ut fra det du har svart i søknaden, må du legge ved dette:"
       },
       "vedleggPåPapir": {
-        "text": "Hvis du har vedlegg på papir og ikke har skanner, kan du for eksempel ta bilde av dokumentet med mobiltelefonen din.",
+        "text": "Har du vedlegg på papir, kan du skanne det inn og laste det opp. Hvis du ikke har skanner, kan du i stedet ta bilde av dokumentet med for eksempel mobiltelefonen din.",
         "readMore": {
           "title": "Slik tar du et godt bilde av dokumentet"
         }

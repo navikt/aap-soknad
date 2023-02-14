@@ -1,7 +1,7 @@
 import { useForm, useWatch } from 'react-hook-form';
 import { ManuelleBarn, Soknad, SoknadVedlegg } from 'types/Soknad';
 import React, { useEffect, useRef, useState } from 'react';
-import { Alert, BodyShort, Heading, Label, ReadMore } from '@navikt/ds-react';
+import { Alert, BodyLong, BodyShort, Heading, Label, ReadMore } from '@navikt/ds-react';
 import * as yup from 'yup';
 import { useStepWizard } from 'context/stepWizardContextV2';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -101,24 +101,14 @@ const Vedlegg = ({ onBackClick, onNext, defaultValues }: Props) => {
         </div>
       ) : (
         <Alert variant={'info'}>
-          <BodyShort spacing>
-            Du trenger du ikke å laste opp noen vedlegg. Vi har fått all informasjonen vi trenger
-            for å behandle søknaden din. Hvis vi trenger mer informasjon eller dokumentasjon,
-            kontakter vi deg.
-          </BodyShort>
-          <BodyShort spacing>
-            Hvis du skal ettersende dokumentasjon på et seinere tidspunkt, kan du gjøre dette via
-            Mine Arbeidsavklaringspenger på nav.no etter at du har sendt inn søknaden.
-          </BodyShort>
-          <BodyShort>
-            Hvis du ønsker å legge til dokumenter du mener har betydning for din søknad, kan du
-            laste opp dette her (valgfritt).
-          </BodyShort>
+          <BodyLong spacing>{formatMessage('søknad.vedlegg.ingenVedlegg.alert.text1')}</BodyLong>
+          <BodyLong spacing>{formatMessage('søknad.vedlegg.ingenVedlegg.alert.text2')}</BodyLong>
+          <BodyLong>{formatMessage('søknad.vedlegg.ingenVedlegg.alert.text3')}</BodyLong>
         </Alert>
       )}
       <>
         <div>
-          <BodyShort>{formatMessage('søknad.vedlegg.vedleggPåPapir.text')}</BodyShort>
+          <BodyLong>{formatMessage('søknad.vedlegg.vedleggPåPapir.text')}</BodyLong>
           <ReadMore
             header={formatMessage('søknad.vedlegg.vedleggPåPapir.readMore.title')}
             type={'button'}
