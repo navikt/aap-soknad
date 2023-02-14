@@ -238,15 +238,6 @@ const Steps = ({ søker, mellomlagretSøknad }: PageProps) => {
             />
           )}
           {step === '8' && (
-            <Tilleggsopplysninger
-              onBackClick={onPreviousStep}
-              defaultValues={søknadState}
-              onNext={(data) => {
-                onNextStep(data);
-              }}
-            />
-          )}
-          {step === '9' && (
             <Vedlegg
               onBackClick={onPreviousStep}
               defaultValues={søknadState}
@@ -255,7 +246,7 @@ const Steps = ({ søker, mellomlagretSøknad }: PageProps) => {
               }}
             />
           )}
-          {step === '10' && (
+          {step === '9' && (
             <Oppsummering
               onBackClick={onPreviousStep}
               onSubmitSoknad={submitSoknad}

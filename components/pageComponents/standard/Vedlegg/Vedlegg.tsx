@@ -17,6 +17,7 @@ import { GenericSoknadContextState } from 'types/SoknadContext';
 import { scrollRefIntoView } from 'utils/dom';
 import { LucaGuidePanel, ScanningGuide } from '@navikt/aap-felles-innbygger-react';
 import { useIntl } from 'react-intl';
+import TextAreaWrapper from '../../../input/TextAreaWrapper';
 
 interface Props {
   onBackClick: () => void;
@@ -79,8 +80,20 @@ const Vedlegg = ({ onBackClick, onNext, defaultValues }: Props) => {
         {formatMessage('søknad.vedlegg.title')}
       </Heading>
       <LucaGuidePanel>
-        <BodyShort spacing>{formatMessage('søknad.vedlegg.guide.text1')}</BodyShort>
-        <BodyShort>{formatMessage('søknad.vedlegg.guide.text2')}</BodyShort>
+        {søknadState?.requiredVedlegg?.length > 0 ? (
+          <>
+            <BodyShort spacing>{formatMessage('søknad.vedlegg.guide.text1')}</BodyShort>
+            <BodyShort>{formatMessage('søknad.vedlegg.guide.text2')}</BodyShort>
+          </>
+        ) : (
+          <>
+            <BodyShort spacing>
+              Hvis du ønsker å legge til dokumenter du mener har betydning for din søknad, kan du
+              laste opp dette her (valgfritt)
+            </BodyShort>
+            <BodyShort>{formatMessage('søknad.vedlegg.ingenVedlegg.title')}</BodyShort>
+          </>
+        )}
       </LucaGuidePanel>
       <div>
         {søknadState?.requiredVedlegg?.length > 0 ? (
@@ -93,15 +106,7 @@ const Vedlegg = ({ onBackClick, onNext, defaultValues }: Props) => {
             </ul>
           </>
         ) : (
-          <>
-            <Label as={'p'}>{formatMessage('søknad.vedlegg.ingenVedlegg.title')}</Label>
-            <ReadMore
-              header={formatMessage('søknad.vedlegg.ingenVedlegg.readMore.title')}
-              type={'button'}
-            >
-              {formatMessage('søknad.vedlegg.ingenVedlegg.readMore.text')}
-            </ReadMore>
-          </>
+          <BodyShort>{formatMessage('søknad.vedlegg.ingenVedlegg.readMore.text')}</BodyShort>
         )}
       </div>
       <div>
@@ -220,6 +225,13 @@ const Vedlegg = ({ onBackClick, onNext, defaultValues }: Props) => {
         clearErrors={clearErrors}
         heading={'Annen dokumentasjon'}
         ingress={'Hvis du har noe annet du ønsker å legge ved kan du laste det opp her'}
+      />
+      <TextAreaWrapper
+        name={`tilleggsopplysninger`}
+        label={formatMessage(`søknad.tilleggsopplysninger.tilleggsopplysninger.label`)}
+        description={formatMessage(`søknad.tilleggsopplysninger.tilleggsopplysninger.description`)}
+        control={control}
+        maxLength={4000}
       />
     </SoknadFormWrapper>
   );
