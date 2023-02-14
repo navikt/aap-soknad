@@ -1,7 +1,7 @@
 import { useForm, useWatch } from 'react-hook-form';
 import { ManuelleBarn, Soknad, SoknadVedlegg } from 'types/Soknad';
 import React, { useEffect, useRef, useState } from 'react';
-import { BodyShort, Heading, Label, ReadMore } from '@navikt/ds-react';
+import { Alert, BodyShort, Heading, Label, ReadMore } from '@navikt/ds-react';
 import * as yup from 'yup';
 import { useStepWizard } from 'context/stepWizardContextV2';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -29,6 +29,8 @@ const Vedlegg = ({ onBackClick, onNext, defaultValues }: Props) => {
   const { formatMessage } = useFeatureToggleIntl();
   const [scanningGuideOpen, setScanningGuideOpen] = useState(false);
   const scanningGuideElement = useRef(null);
+  const [papirGuideOpen, setPapirGuideOpen] = useState(false);
+  const papirGuideElement = useRef(null);
   const schema = yup.object().shape({});
   const { søknadState, søknadDispatch } = useSoknadContextStandard();
   const { stepList } = useStepWizard();
@@ -52,6 +54,9 @@ const Vedlegg = ({ onBackClick, onNext, defaultValues }: Props) => {
 
   const scanningGuideOnClick = () => {
     setScanningGuideOpen(!scanningGuideOpen);
+  };
+  const papirGuideOnClick = () => {
+    setPapirGuideOpen(!papirGuideOpen);
   };
   const debouncedLagre = useDebounceLagreSoknad<Soknad>();
   const allFields = useWatch({ control });
@@ -79,19 +84,13 @@ const Vedlegg = ({ onBackClick, onNext, defaultValues }: Props) => {
       <Heading size="large" level="2">
         {formatMessage('søknad.vedlegg.title')}
       </Heading>
-      <LucaGuidePanel>
-        {søknadState?.requiredVedlegg?.length > 0 ? (
-          <>
-            <BodyShort spacing>{formatMessage('søknad.vedlegg.guide.text1')}</BodyShort>
-            <BodyShort>{formatMessage('søknad.vedlegg.guide.text2')}</BodyShort>
-          </>
-        ) : (
-          <>
-            <BodyShort>{formatMessage('søknad.vedlegg.ingenVedlegg.title')}</BodyShort>
-          </>
-        )}
-      </LucaGuidePanel>
-      {søknadState?.requiredVedlegg?.length > 0 && (
+      {søknadState.requiredVedlegg.length > 0 && (
+        <LucaGuidePanel>
+          <BodyShort spacing>{formatMessage('søknad.vedlegg.guide.text1')}</BodyShort>
+          <BodyShort>{formatMessage('søknad.vedlegg.guide.text2')}</BodyShort>
+        </LucaGuidePanel>
+      )}
+      {søknadState.requiredVedlegg.length > 0 ? (
         <div>
           <Label as={'p'}>{formatMessage('søknad.vedlegg.harVedlegg.title')}</Label>
           <ul>
@@ -100,19 +99,38 @@ const Vedlegg = ({ onBackClick, onNext, defaultValues }: Props) => {
             ))}
           </ul>
         </div>
+      ) : (
+        <Alert variant={'info'}>
+          <BodyShort spacing>
+            Du trenger du ikke å laste opp noen vedlegg. Vi har fått all informasjonen vi trenger
+            for å behandle søknaden din. Hvis vi trenger mer informasjon eller dokumentasjon,
+            kontakter vi deg.
+          </BodyShort>
+          <BodyShort spacing>
+            Hvis du skal ettersende dokumentasjon på et seinere tidspunkt, kan du gjøre dette via
+            Mine Arbeidsavklaringspenger på nav.no etter at du har sendt inn søknaden.
+          </BodyShort>
+          <BodyShort>
+            Hvis du ønsker å legge til dokumenter du mener har betydning for din søknad, kan du
+            laste opp dette her (valgfritt).
+          </BodyShort>
+        </Alert>
       )}
-      <div>
-        <BodyShort>{formatMessage('søknad.vedlegg.vedleggPåPapir.text')}</BodyShort>
-        <ReadMore
-          header={formatMessage('søknad.vedlegg.vedleggPåPapir.readMore.title')}
-          type={'button'}
-          open={scanningGuideOpen}
-          onClick={scanningGuideOnClick}
-          ref={scanningGuideElement}
-        >
-          <ScanningGuide locale={locale} />
-        </ReadMore>
-      </div>
+      <>
+        <div>
+          <BodyShort>{formatMessage('søknad.vedlegg.vedleggPåPapir.text')}</BodyShort>
+          <ReadMore
+            header={formatMessage('søknad.vedlegg.vedleggPåPapir.readMore.title')}
+            type={'button'}
+            open={scanningGuideOpen}
+            onClick={scanningGuideOnClick}
+            ref={scanningGuideElement}
+          >
+            <ScanningGuide locale={locale} />
+          </ReadMore>
+        </div>
+      </>
+
       {søknadState?.requiredVedlegg?.find((e) => e.type === AVBRUTT_STUDIE_VEDLEGG) && (
         <FieldArrayFileInput
           control={control}
