@@ -51,6 +51,7 @@ import { logSkjemaFullførtEvent, logSkjemastegFullførtEvent } from 'utils/ampl
 import metrics from 'utils/metrics';
 import { scrollRefIntoView } from 'utils/dom';
 import { TimeoutBox } from 'components/TimeoutBox/TimeoutBox';
+import { migrateStepList } from '../lib/utils/migrateStepList';
 
 interface PageProps {
   søker: SokerOppslagState;
@@ -277,8 +278,13 @@ export const getServerSideProps = beskyttetSide(
     const søker = await getSøker(bearerToken);
     const mellomlagretSøknad = await lesBucket('STANDARD', bearerToken);
 
+    const nyMellomlagrtSøknad = {
+      ...mellomlagretSøknad,
+      lagretStepList: migrateStepList(mellomlagretSøknad?.lagretStepList),
+    };
+
     stopTimer();
-    if (!mellomlagretSøknad?.lagretStepList) {
+    if (!nyMellomlagrtSøknad?.lagretStepList) {
       return {
         redirect: {
           destination: '/',
@@ -288,7 +294,7 @@ export const getServerSideProps = beskyttetSide(
     }
 
     return {
-      props: { søker, mellomlagretSøknad },
+      props: { søker, mellomlagretSøknad: nyMellomlagrtSøknad },
     };
   }
 );
