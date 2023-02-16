@@ -224,7 +224,9 @@ const Vedlegg = ({ onBackClick, onNext, defaultValues }: Props) => {
         setError={setError}
         clearErrors={clearErrors}
         heading={'Annen dokumentasjon'}
-        ingress={'Hvis du har noe annet du ønsker å legge ved kan du laste det opp her'}
+        ingress={
+          'Hvis du har noe annet du ønsker å legge ved kan du laste det opp her (valgfritt).'
+        }
       />
       <TextAreaWrapper
         name={`tilleggsopplysninger`}

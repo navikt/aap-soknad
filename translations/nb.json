@@ -453,12 +453,12 @@
         }
       },
       "startDato": {
-        "title": "Ønsket startdato",
+        "title": "Startdato",
         "editText": "Endre opplysninger om startdato",
         "planlagtFerie": "Planlagt ferie"
       },
       "medlemskap": {
-        "title": "Medlem i folketrygden",
+        "title": "Bosted og jobb",
         "editText": "Endre opplysninger om hvor du har bodd og jobbet",
         "utenlandsopphold": {
           "title": "Utenlandsopphold",
@@ -495,7 +495,7 @@
         "editText": "Endre tilleggsopplysninger"
       },
       "vedlegg": {
-        "title": "Vedlegg",
+        "title": "Vedlegg og tilleggsopplysninger",
         "editText": "Endre vedlegg"
       },
       "confirmation": {
