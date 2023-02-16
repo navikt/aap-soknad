@@ -1,5 +1,5 @@
 import { useForm, useWatch } from 'react-hook-form';
-import { ManuelleBarn, Soknad, SoknadVedlegg } from 'types/Soknad';
+import { Soknad, SoknadVedlegg } from 'types/Soknad';
 import React, { useEffect, useRef, useState } from 'react';
 import { Alert, BodyLong, BodyShort, Heading, Label, ReadMore } from '@navikt/ds-react';
 import * as yup from 'yup';

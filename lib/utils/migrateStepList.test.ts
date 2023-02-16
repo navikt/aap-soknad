@@ -3,10 +3,6 @@ import { StepType } from '../../components/StepWizard/Step';
 import { StepNames } from '../../pages';
 
 describe('migrateStepList', () => {
-  //Tester at Steplist ikke blir endret
-  //Tester at vi har et steg eksisterer men er ikke aktivt
-  //Tester at vi har et steg og er aktivt
-  //Vedlegg s
   it('steg for tillegsopplysninger finnes ikke i steplist', () => {
     const stepList = [{ stepIndex: 1, name: 'STARTDATO', active: true }];
 
