@@ -59,7 +59,7 @@ test('test', async ({ page }) => {
     .click();
   await expect(page).toHaveURL('http://localhost:3000/aap/soknad/1/#ferie.tilDato');
   await page
-    .getByText('Søknad om arbeidsavklarings­penger (AAP)Steg 1 av 10Du må fikse disse feilene fø')
+    .getByText('Søknad om arbeidsavklarings­penger (AAP)Steg 1 av 9Du må fikse disse feilene fø')
     .click();
 
   const today = format(new Date(), 'dd.MM.yyyy');
@@ -473,7 +473,9 @@ test('test', async ({ page }) => {
 
   // Steg 8
   await expect(page).toHaveURL('http://localhost:3000/aap/soknad/8/');
-  await expect(page.getByRole('heading', { name: 'Vedlegg' })).toBeVisible();
+  await expect(
+    page.getByRole('heading', { name: 'Vedlegg og tilleggsopplysninger' })
+  ).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Lønn og andre goder' })).toBeVisible();
   await expect(
     page.getByRole('heading', { name: 'Fødselsattest eller adopsjonsbevis' })
@@ -496,7 +498,7 @@ test('test', async ({ page }) => {
       name: 'Vennligst bekreft at du har lest all informasjon i søknaden og at opplysningene du har gitt er korrekte.',
     })
     .click();
-  await expect(page).toHaveURL('http://localhost:3000/aap/soknad/10/#s%C3%B8knadBekreft');
+  await expect(page).toHaveURL('http://localhost:3000/aap/soknad/9/#s%C3%B8knadBekreft');
   await page
     .getByLabel(
       'Jeg har lest all informasjonen jeg har fått i søknaden og bekrefter at opplysningene jeg har gitt er korrekte.'
