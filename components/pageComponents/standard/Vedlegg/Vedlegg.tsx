@@ -1,7 +1,7 @@
 import { useForm, useWatch } from 'react-hook-form';
 import { Soknad, SoknadVedlegg } from 'types/Soknad';
 import React, { useEffect, useRef, useState } from 'react';
-import { Alert, BodyLong, BodyShort, Heading, Label, ReadMore } from '@navikt/ds-react';
+import { Alert, BodyLong, BodyShort, Heading, Label, ReadMore, Textarea } from '@navikt/ds-react';
 import * as yup from 'yup';
 import { useStepWizard } from 'context/stepWizardContextV2';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -35,6 +35,7 @@ const Vedlegg = ({ onBackClick, onNext, defaultValues }: Props) => {
   const { søknadState, søknadDispatch } = useSoknadContextStandard();
   const { stepList } = useStepWizard();
   const { locale } = useIntl();
+
   const {
     clearErrors,
     setError,
@@ -45,6 +46,11 @@ const Vedlegg = ({ onBackClick, onNext, defaultValues }: Props) => {
     resolver: yupResolver(schema),
     defaultValues: { ...defaultValues?.søknad?.vedlegg },
   });
+
+  const onTilleggsopplysningerChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    e.preventDefault();
+    updateSøknadData<Soknad>(søknadDispatch, { tilleggsopplysninger: e.target.value });
+  };
 
   useEffect(() => {
     if (scanningGuideOpen) {
@@ -228,11 +234,12 @@ const Vedlegg = ({ onBackClick, onNext, defaultValues }: Props) => {
           'Hvis du har noe annet du ønsker å legge ved kan du laste det opp her (valgfritt).'
         }
       />
-      <TextAreaWrapper
+      <Textarea
+        value={søknadState.søknad?.tilleggsopplysninger}
         name={`tilleggsopplysninger`}
+        onChange={onTilleggsopplysningerChange}
         label={formatMessage(`søknad.tilleggsopplysninger.tilleggsopplysninger.label`)}
         description={formatMessage(`søknad.tilleggsopplysninger.tilleggsopplysninger.description`)}
-        control={control}
         maxLength={4000}
       />
     </SoknadFormWrapper>

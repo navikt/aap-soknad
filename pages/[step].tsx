@@ -277,13 +277,9 @@ export const getServerSideProps = beskyttetSide(
     const søker = await getSøker(bearerToken);
     const mellomlagretSøknad = await lesBucket('STANDARD', bearerToken);
 
-    const nyMellomlagrtSøknad = {
-      ...mellomlagretSøknad,
-      lagretStepList: migrateStepList(mellomlagretSøknad?.lagretStepList),
-    };
-
     stopTimer();
-    if (!nyMellomlagrtSøknad?.lagretStepList) {
+
+    if (!mellomlagretSøknad?.lagretStepList) {
       return {
         redirect: {
           destination: '/',
@@ -291,6 +287,10 @@ export const getServerSideProps = beskyttetSide(
         },
       };
     }
+    const nyMellomlagrtSøknad = {
+      ...mellomlagretSøknad,
+      lagretStepList: migrateStepList(mellomlagretSøknad?.lagretStepList),
+    };
 
     return {
       props: { søker, mellomlagretSøknad: nyMellomlagrtSøknad },

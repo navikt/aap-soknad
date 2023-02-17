@@ -374,6 +374,10 @@ const Oppsummering = ({
           onEdit={() => editStep(StepNames.VEDLEGG)}
         >
           <OppsummeringVedlegg søknadState={søknadState} />
+          <SummaryRowIfExists
+            labelKey={`søknad.tilleggsopplysninger.tilleggsopplysninger.label`}
+            value={søknadState?.søknad?.tilleggsopplysninger}
+          />
         </AccordianItemOppsummering>
       </Accordion>
       <ConfirmationPanelWrapper
