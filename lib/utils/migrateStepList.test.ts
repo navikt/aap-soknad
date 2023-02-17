@@ -39,4 +39,12 @@ describe('migrateStepList', () => {
       migrateStepList(stepList).find((steg: StepType) => steg.name === 'STARTDATO')?.active
     ).toBe(true);
   });
+  it('ingen endringer dersom det ikke er nødvendig', () => {
+    const stepList = [
+      { stepIndex: 1, name: 'STARTDATO', active: true },
+      { stepIndex: 2, name: 'YRKESSKADE' },
+    ];
+
+    expect(migrateStepList(stepList)).toEqual(stepList);
+  });
 });
