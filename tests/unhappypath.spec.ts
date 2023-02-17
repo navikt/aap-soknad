@@ -473,11 +473,6 @@ test('test', async ({ page }) => {
 
   // Steg 8
   await expect(page).toHaveURL('http://localhost:3000/aap/soknad/8/');
-  await page.getByRole('heading', { name: 'Tilleggsopplysninger' }).click();
-  await page.getByRole('button', { name: 'Neste steg' }).click();
-
-  // Steg 9
-  await expect(page).toHaveURL('http://localhost:3000/aap/soknad/9/');
   await expect(page.getByRole('heading', { name: 'Vedlegg' })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Lønn og andre goder' })).toBeVisible();
   await expect(
@@ -486,8 +481,8 @@ test('test', async ({ page }) => {
   await expect(page.getByRole('heading', { name: 'Annen dokumentasjon' })).toBeVisible();
   await page.getByRole('button', { name: 'Neste steg' }).click();
 
-  // Steg 10
-  await expect(page).toHaveURL('http://localhost:3000/aap/soknad/10/');
+  // Steg 9
+  await expect(page).toHaveURL('http://localhost:3000/aap/soknad/9/');
   await expect(page.getByRole('heading', { name: 'Oppsummering' })).toBeVisible();
   await page.getByRole('button', { name: 'Send søknad' }).click();
   await expect(
