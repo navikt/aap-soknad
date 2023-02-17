@@ -458,7 +458,7 @@
         "planlagtFerie": "Planlagt ferie"
       },
       "medlemskap": {
-        "title": "Bostad og jobb",
+        "title": "Bustad og jobb",
         "editText": "Endre opplysningar om kor du har budd og jobba",
         "utenlandsopphold": {
           "title": "Utanlandsopphald",
@@ -496,7 +496,7 @@
       },
       "vedlegg": {
         "title": "Vedlegg og tilleggsopplysningar",
-        "editText": "Endra vedlegg"
+        "editText": "Endra vedlegg og tilleggsopplysningar"
       },
       "confirmation": {
         "title": "Vi stolar på deg",

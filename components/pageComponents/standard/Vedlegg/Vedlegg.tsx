@@ -17,7 +17,6 @@ import { GenericSoknadContextState } from 'types/SoknadContext';
 import { scrollRefIntoView } from 'utils/dom';
 import { LucaGuidePanel, ScanningGuide } from '@navikt/aap-felles-innbygger-react';
 import { useIntl } from 'react-intl';
-import TextAreaWrapper from '../../../input/TextAreaWrapper';
 
 interface Props {
   onBackClick: () => void;
@@ -29,8 +28,6 @@ const Vedlegg = ({ onBackClick, onNext, defaultValues }: Props) => {
   const { formatMessage } = useFeatureToggleIntl();
   const [scanningGuideOpen, setScanningGuideOpen] = useState(false);
   const scanningGuideElement = useRef(null);
-  const [papirGuideOpen, setPapirGuideOpen] = useState(false);
-  const papirGuideElement = useRef(null);
   const schema = yup.object().shape({});
   const { søknadState, søknadDispatch } = useSoknadContextStandard();
   const { stepList } = useStepWizard();
@@ -61,9 +58,7 @@ const Vedlegg = ({ onBackClick, onNext, defaultValues }: Props) => {
   const scanningGuideOnClick = () => {
     setScanningGuideOpen(!scanningGuideOpen);
   };
-  const papirGuideOnClick = () => {
-    setPapirGuideOpen(!papirGuideOpen);
-  };
+
   const debouncedLagre = useDebounceLagreSoknad<Soknad>();
   const allFields = useWatch({ control });
   useEffect(() => {
