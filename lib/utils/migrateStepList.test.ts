@@ -1,6 +1,5 @@
 import { migrateStepList } from './migrateStepList';
 import { StepType } from '../../components/StepWizard/Step';
-import { StepNames } from '../../pages';
 
 describe('migrateStepList', () => {
   it('steg for tillegsopplysninger finnes ikke i steplist', () => {
