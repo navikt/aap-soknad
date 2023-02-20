@@ -370,13 +370,18 @@
       }
     },
     "vedlegg": {
-      "title": "Vedlegg",
+      "title": "Vedlegg og tilleggsopplysninger",
       "guide": {
         "text1": "Du kan tidlegast få AAP frå og med den dagen vi får søknaden din. Det kan difor vere lurt å sende søknaden sjølv om du på noverande tidspunkt ikkje har alle vedlegga vi ber om.",
         "text2": "Dersom du skal ettersende vedlegg, må du sende desse innan 14 dagar. Du kan ettersende anten digitalt eller per post. Treng du meir tid, kan du be om å få forlenga fristen. Dette kan du gjere via nav.no eller ved å ringje oss etter at søknaden er send inn."
       },
       "ingenVedlegg": {
-        "title": "Ut frå svara dine har vi ikkje registrert vedlegg som må lastast opp.",
+        "title": "Ut frå svara dine har vi ikkje registrert vedlegg som må lastast opp. Viss du likevel har  dokument du meiner har noko å seia for søknaden din, kan du lasta opp desse her. Dette er heilt valfritt.",
+        "alert": {
+          "text1": "Du treng du ikkje å lasta opp nokon vedlegg. Me har fått all informasjonen me treng for å behandla søknaden din. Viss me treng meir informasjon eller dokumentasjon, kontaktar me deg.",
+          "text2": "Viss du skal ettersenda dokumentasjon på eit seinare tidspunkt, kan du gjera dette via Mine Arbeidsavklaringspenger på nav.no etter at du har sendt inn søknaden.",
+          "text3": "Viss du ønskjer å leggja til dokument du meiner har noko å seia for søknaden din, kan du lasta opp dette her (valfritt)."
+        },
         "readMore": {
           "title": "Kan eg laste opp andre vedlegg?",
           "text": "Dersom du har meir du ønskjer å leggje ved, kan du laste det opp her."
@@ -453,7 +458,7 @@
         "planlagtFerie": "Planlagt ferie"
       },
       "medlemskap": {
-        "title": "Medlem av folketrygda",
+        "title": "Bustad og jobb",
         "editText": "Endre opplysningar om kor du har budd og jobba",
         "utenlandsopphold": {
           "title": "Utanlandsopphald",
@@ -486,12 +491,12 @@
         "editText": "Endre opplysningar om utbetalingar"
       },
       "tilleggsopplysninger": {
-        "title": "Tilleggsopplysninger",
-        "editText": "Endre tilleggsopplysninger"
+        "title": "Tilleggsopplysningar",
+        "editText": "Endra Tilleggsopplysningar"
       },
       "vedlegg": {
-        "title": "Vedlegg",
-        "editText": "Endre vedlegg"
+        "title": "Vedlegg og tilleggsopplysningar",
+        "editText": "Endra vedlegg og tilleggsopplysningar"
       },
       "confirmation": {
         "title": "Vi stolar på deg",

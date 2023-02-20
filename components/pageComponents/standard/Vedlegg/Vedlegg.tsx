@@ -1,7 +1,7 @@
 import { useForm, useWatch } from 'react-hook-form';
-import { ManuelleBarn, Soknad, SoknadVedlegg } from 'types/Soknad';
+import { Soknad, SoknadVedlegg } from 'types/Soknad';
 import React, { useEffect, useRef, useState } from 'react';
-import { BodyShort, Heading, Label, ReadMore } from '@navikt/ds-react';
+import { Alert, BodyLong, BodyShort, Heading, Label, ReadMore, Textarea } from '@navikt/ds-react';
 import * as yup from 'yup';
 import { useStepWizard } from 'context/stepWizardContextV2';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -32,6 +32,7 @@ const Vedlegg = ({ onBackClick, onNext, defaultValues }: Props) => {
   const { søknadState, søknadDispatch } = useSoknadContextStandard();
   const { stepList } = useStepWizard();
   const { locale } = useIntl();
+
   const {
     clearErrors,
     setError,
@@ -43,6 +44,11 @@ const Vedlegg = ({ onBackClick, onNext, defaultValues }: Props) => {
     defaultValues: { ...defaultValues?.søknad?.vedlegg },
   });
 
+  const onTilleggsopplysningerChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    e.preventDefault();
+    updateSøknadData<Soknad>(søknadDispatch, { tilleggsopplysninger: e.target.value });
+  };
+
   useEffect(() => {
     if (scanningGuideOpen) {
       if (scanningGuideElement?.current != null) scrollRefIntoView(scanningGuideElement);
@@ -52,6 +58,7 @@ const Vedlegg = ({ onBackClick, onNext, defaultValues }: Props) => {
   const scanningGuideOnClick = () => {
     setScanningGuideOpen(!scanningGuideOpen);
   };
+
   const debouncedLagre = useDebounceLagreSoknad<Soknad>();
   const allFields = useWatch({ control });
   useEffect(() => {
@@ -78,44 +85,43 @@ const Vedlegg = ({ onBackClick, onNext, defaultValues }: Props) => {
       <Heading size="large" level="2">
         {formatMessage('søknad.vedlegg.title')}
       </Heading>
-      <LucaGuidePanel>
-        <BodyShort spacing>{formatMessage('søknad.vedlegg.guide.text1')}</BodyShort>
-        <BodyShort>{formatMessage('søknad.vedlegg.guide.text2')}</BodyShort>
-      </LucaGuidePanel>
-      <div>
-        {søknadState?.requiredVedlegg?.length > 0 ? (
-          <>
-            <Label as={'p'}>{formatMessage('søknad.vedlegg.harVedlegg.title')}</Label>
-            <ul>
-              {søknadState?.requiredVedlegg?.map((vedlegg, index) => (
-                <li key={index}>{vedlegg?.description}</li>
-              ))}
-            </ul>
-          </>
-        ) : (
-          <>
-            <Label as={'p'}>{formatMessage('søknad.vedlegg.ingenVedlegg.title')}</Label>
-            <ReadMore
-              header={formatMessage('søknad.vedlegg.ingenVedlegg.readMore.title')}
-              type={'button'}
-            >
-              {formatMessage('søknad.vedlegg.ingenVedlegg.readMore.text')}
-            </ReadMore>
-          </>
-        )}
-      </div>
-      <div>
-        <BodyShort>{formatMessage('søknad.vedlegg.vedleggPåPapir.text')}</BodyShort>
-        <ReadMore
-          header={formatMessage('søknad.vedlegg.vedleggPåPapir.readMore.title')}
-          type={'button'}
-          open={scanningGuideOpen}
-          onClick={scanningGuideOnClick}
-          ref={scanningGuideElement}
-        >
-          <ScanningGuide locale={locale} />
-        </ReadMore>
-      </div>
+      {søknadState.requiredVedlegg.length > 0 && (
+        <LucaGuidePanel>
+          <BodyShort spacing>{formatMessage('søknad.vedlegg.guide.text1')}</BodyShort>
+          <BodyShort>{formatMessage('søknad.vedlegg.guide.text2')}</BodyShort>
+        </LucaGuidePanel>
+      )}
+      {søknadState.requiredVedlegg.length > 0 ? (
+        <div>
+          <Label as={'p'}>{formatMessage('søknad.vedlegg.harVedlegg.title')}</Label>
+          <ul>
+            {søknadState?.requiredVedlegg?.map((vedlegg, index) => (
+              <li key={index}>{vedlegg?.description}</li>
+            ))}
+          </ul>
+        </div>
+      ) : (
+        <Alert variant={'info'}>
+          <BodyLong spacing>{formatMessage('søknad.vedlegg.ingenVedlegg.alert.text1')}</BodyLong>
+          <BodyLong spacing>{formatMessage('søknad.vedlegg.ingenVedlegg.alert.text2')}</BodyLong>
+          <BodyLong>{formatMessage('søknad.vedlegg.ingenVedlegg.alert.text3')}</BodyLong>
+        </Alert>
+      )}
+      <>
+        <div>
+          <BodyLong>{formatMessage('søknad.vedlegg.vedleggPåPapir.text')}</BodyLong>
+          <ReadMore
+            header={formatMessage('søknad.vedlegg.vedleggPåPapir.readMore.title')}
+            type={'button'}
+            open={scanningGuideOpen}
+            onClick={scanningGuideOnClick}
+            ref={scanningGuideElement}
+          >
+            <ScanningGuide locale={locale} />
+          </ReadMore>
+        </div>
+      </>
+
       {søknadState?.requiredVedlegg?.find((e) => e.type === AVBRUTT_STUDIE_VEDLEGG) && (
         <FieldArrayFileInput
           control={control}
@@ -219,7 +225,17 @@ const Vedlegg = ({ onBackClick, onNext, defaultValues }: Props) => {
         setError={setError}
         clearErrors={clearErrors}
         heading={'Annen dokumentasjon'}
-        ingress={'Hvis du har noe annet du ønsker å legge ved kan du laste det opp her'}
+        ingress={
+          'Hvis du har noe annet du ønsker å legge ved kan du laste det opp her (valgfritt).'
+        }
+      />
+      <Textarea
+        value={søknadState.søknad?.tilleggsopplysninger}
+        name={`tilleggsopplysninger`}
+        onChange={onTilleggsopplysningerChange}
+        label={formatMessage(`søknad.tilleggsopplysninger.tilleggsopplysninger.label`)}
+        description={formatMessage(`søknad.tilleggsopplysninger.tilleggsopplysninger.description`)}
+        maxLength={4000}
       />
     </SoknadFormWrapper>
   );
