@@ -13,7 +13,6 @@ export const migrateStepList = (stepList: Array<StepType>) => {
     .filter((steg: StepType) => steg.name != 'TILLEGGSOPPLYSNINGER')
     .map((steg: StepType, index) => {
       const stepIndex = tillegsopplysningerSteg?.stepIndex ?? 0;
-      console.log(tillegsopplysningerSteg);
       if (index == stepIndex - 2) {
         return {
           ...steg,
