@@ -38,7 +38,6 @@ import { Yrkesskade } from 'components/pageComponents/standard/Yrkesskade/Yrkess
 import { Behandlere } from 'components/pageComponents/standard/Behandlere/Behandlere';
 import { Barnetillegg } from 'components/pageComponents/standard/Barnetillegg/Barnetillegg';
 import Student from 'components/pageComponents/standard/Student/Student';
-import Tilleggsopplysninger from 'components/pageComponents/standard/Tilleggsopplysninger/Tilleggsopplysninger';
 import { AndreUtbetalinger } from 'components/pageComponents/standard/AndreUtbetalinger/AndreUtbetalinger';
 import Vedlegg from 'components/pageComponents/standard/Vedlegg/Vedlegg';
 import Oppsummering from 'components/pageComponents/standard/Oppsummering/Oppsummering';
@@ -57,6 +56,7 @@ import { scrollRefIntoView } from 'utils/dom';
 import { TimeoutBox } from 'components/TimeoutBox/TimeoutBox';
 import { Steg0 } from 'components/pageComponents/standard/Steg0/Steg0';
 import * as classes from './step.module.css';
+import { migrateStepList } from '../lib/utils/migrateStepList';
 
 interface PageProps {
   søker: SokerOppslagState;
@@ -256,15 +256,6 @@ const Steps = ({ søker, mellomlagretSøknad }: PageProps) => {
                 />
               )}
               {step === '8' && (
-                <Tilleggsopplysninger
-                  onBackClick={onPreviousStep}
-                  defaultValues={søknadState}
-                  onNext={(data) => {
-                    onNextStep(data);
-                  }}
-                />
-              )}
-              {step === '9' && (
                 <Vedlegg
                   onBackClick={onPreviousStep}
                   defaultValues={søknadState}
@@ -273,7 +264,7 @@ const Steps = ({ søker, mellomlagretSøknad }: PageProps) => {
                   }}
                 />
               )}
-              {step === '10' && (
+              {step === '9' && (
                 <Oppsummering
                   onBackClick={onPreviousStep}
                   onSubmitSoknad={submitSoknad}
@@ -307,7 +298,6 @@ export const getServerSideProps = beskyttetSide(
 
     stopTimer();
 
-    console.log('serversideProps kjører');
     if (!mellomlagretSøknad?.lagretStepList) {
       return {
         redirect: {
@@ -316,9 +306,13 @@ export const getServerSideProps = beskyttetSide(
         },
       };
     }
+    const nyMellomlagrtSøknad = {
+      ...mellomlagretSøknad,
+      lagretStepList: migrateStepList(mellomlagretSøknad?.lagretStepList),
+    };
 
     return {
-      props: { søker, mellomlagretSøknad },
+      props: { søker, mellomlagretSøknad: nyMellomlagrtSøknad },
     };
   }
 );

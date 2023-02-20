@@ -92,19 +92,14 @@ test('test', async ({ page }) => {
   await page.getByRole('button', { name: 'Neste steg' }).click();
   await expect(page).toHaveURL('http://localhost:3000/aap/soknad/8/');
 
-  await expect(page.getByRole('heading', { name: 'Tilleggsopplysninger' })).toBeVisible();
+  await expect(
+    page.getByRole('heading', { name: 'Vedlegg og tilleggsopplysninger' })
+  ).toBeVisible();
   wcagRes = await checkWcag(page);
   await expect(wcagRes.violations).toEqual([]);
 
   await page.getByRole('button', { name: 'Neste steg' }).click();
   await expect(page).toHaveURL('http://localhost:3000/aap/soknad/9/');
-
-  await expect(page.getByRole('heading', { name: 'Vedlegg' })).toBeVisible();
-  wcagRes = await checkWcag(page);
-  await expect(wcagRes.violations).toEqual([]);
-
-  await page.getByRole('button', { name: 'Neste steg' }).click();
-  await expect(page).toHaveURL('http://localhost:3000/aap/soknad/10/');
   await expect(page.getByRole('heading', { name: 'Oppsummering' })).toBeVisible();
   wcagRes = await checkWcag(page);
   await expect(wcagRes.violations).toEqual([]);

@@ -14,10 +14,6 @@ const nextConfig = {
   output: 'standalone',
   assetPrefix: process.env.ASSET_PREFIX ?? undefined,
 
-  typescript: {
-    ignoreBuildErrors: true, // Ignorerer feil frem til vi har løst TS-feil i parcel-app
-  },
-
   i18n: {
     locales: ['nb', 'nn'],
     defaultLocale: 'nb',

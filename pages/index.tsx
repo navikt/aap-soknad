@@ -44,9 +44,8 @@ export const defaultStepList = [
   { stepIndex: 5, name: StepNames.BARNETILLEGG },
   { stepIndex: 6, name: StepNames.STUDENT },
   { stepIndex: 7, name: StepNames.ANDRE_UTBETALINGER },
-  { stepIndex: 8, name: StepNames.TILLEGGSOPPLYSNINGER },
-  { stepIndex: 9, name: StepNames.VEDLEGG },
-  { stepIndex: 10, name: StepNames.OPPSUMMERING },
+  { stepIndex: 8, name: StepNames.VEDLEGG },
+  { stepIndex: 9, name: StepNames.OPPSUMMERING },
 ];
 
 const Introduksjon = ({ søker }: PageProps) => {

@@ -11,7 +11,7 @@ import {
   stønadTypeToAlternativNøkkel,
 } from 'components/pageComponents/standard/AndreUtbetalinger/AndreUtbetalinger';
 import { Soker } from 'context/sokerOppslagContext';
-import { Soknad, Vedlegg } from 'types/Soknad';
+import { Soknad, SoknadVedlegg, Vedlegg } from 'types/Soknad';
 import { BehandlerBackendState, SøknadBackendState } from 'types/SoknadBackendState';
 import { formatDate } from './date';
 import { formatNavn, formatFullAdresse } from 'utils/StringFormatters';
@@ -117,6 +117,7 @@ export const mapSøknadToBackend = (søknad?: Soknad): SøknadBackendState => {
     }),
     medlemsskap: {
       boddINorgeSammenhengendeSiste5: jaNeiToBoolean(søknad?.medlemskap?.harBoddINorgeSiste5År),
+      jobbetUtenforNorgeFørSyk: jaNeiToBoolean(søknad?.medlemskap?.arbeidetUtenforNorgeFørSykdom),
       jobbetSammenhengendeINorgeSiste5: jaNeiToBoolean(
         søknad?.medlemskap?.harArbeidetINorgeSiste5År
       ),
@@ -207,7 +208,9 @@ export const mapSøknadToBackend = (søknad?: Soknad): SøknadBackendState => {
         },
         relasjon: barn.relasjon,
         merEnnIG: jaNeiToBoolean(barn.harInntekt),
-        vedlegg: barn?.vedlegg?.map((e) => e?.vedleggId),
+        vedlegg: getVedleggForManueltBarn(barn.internId, søknad?.vedlegg).map(
+          (vedlegg) => vedlegg?.vedleggId
+        ),
       })) ?? [],
     tilleggsopplysninger: søknad?.tilleggsopplysninger,
     ...(søknad?.vedlegg?.ANNET
@@ -215,6 +218,17 @@ export const mapSøknadToBackend = (søknad?: Soknad): SøknadBackendState => {
       : {}),
   };
 };
+
+export function getVedleggForManueltBarn(internId: string, vedlegg?: SoknadVedlegg) {
+  const keys = vedlegg ? Object.keys(vedlegg) : [];
+  const vedleggKey = keys.find((key) => key === internId);
+
+  if (vedlegg && vedleggKey) {
+    return vedlegg[vedleggKey];
+  } else {
+    return [];
+  }
+}
 
 enum Types {
   FRITEKST = 'FRITEKST',
@@ -527,7 +541,7 @@ export const mapSøknadToPdf = (
         return createGruppe(label || '', [
           createListe(
             '',
-            barn?.vedlegg?.map((vedlegg) => vedlegg?.name)
+            getVedleggForManueltBarn(barn.internId, søknad?.vedlegg).map((vedlegg) => vedlegg?.name)
           ),
         ]);
       }) || [];
