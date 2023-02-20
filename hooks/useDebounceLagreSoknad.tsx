@@ -12,16 +12,14 @@ export function useDebounceLagreSoknad<SoknadStateType>() {
     stepList: StepType[],
     partialSøknad: any
   ) {
-    if (state?.type && partialSøknad && Object.keys(partialSøknad)?.length > 0) {
-      const payload: GenericSoknadContextState<SoknadStateType> = {
-        ...state,
-        søknad: { ...state.søknad, ...partialSøknad },
-        lagretStepList: stepList,
-        sistLagret: formatDateTime(new Date()),
-      };
-      const res = await fetchPOST(`/aap/soknad/api/buckets/lagre/?type=${payload.type}`, payload);
-      if (res.ok) setSistLagret(formatDateTime(new Date()), appStateDispatch);
-    }
+    const payload: GenericSoknadContextState<SoknadStateType> = {
+      ...state,
+      søknad: { ...state.søknad, ...partialSøknad },
+      lagretStepList: stepList,
+      sistLagret: formatDateTime(new Date()),
+    };
+    const res = await fetchPOST(`/aap/soknad/api/buckets/lagre/?type=${payload.type}`, payload);
+    if (res.ok) setSistLagret(formatDateTime(new Date()), appStateDispatch);
   }
   const debouncedLagre = () => {
     let timerId: ReturnType<typeof setTimeout> | undefined;
