@@ -23,7 +23,7 @@ export function beskyttetApi(handler: ApiHandler): ApiHandler {
 
       const bearerToken: string | null | undefined = req.headers['authorization'];
       if (!bearerToken) {
-        logger.error({ message: 'ingen bearer token', path: req?.url });
+        logger.warn({ message: 'ingen bearer token', path: req?.url });
         return send401();
       }
       try {
