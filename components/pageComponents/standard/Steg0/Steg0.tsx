@@ -1,7 +1,6 @@
 import { useFeatureToggleIntl } from '../../../../hooks/useFeatureToggleIntl';
 import SøknadFormWrapper from '../../../SoknadFormWrapper/SoknadFormWrapper';
-import { setFocusOnErrorSummary } from '../../../schema/FormErrorSummary';
-import { slettLagretSoknadState, updateSøknadData } from '../../../../context/soknadContextCommon';
+import { slettLagretSoknadState } from '../../../../context/soknadContextCommon';
 import { Soknad } from '../../../../types/Soknad';
 import {
   deleteOpplastedeVedlegg,

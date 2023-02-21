@@ -5,10 +5,7 @@ import { SøkerView } from 'context/sokerOppslagContext';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as classes from './Veiledning.module.css';
-import { LucaGuidePanel } from '@navikt/aap-felles-innbygger-react';
 import { useFeatureToggleIntl } from 'hooks/useFeatureToggleIntl';
-import { AmplitudeAwareAccordion } from 'components/AmplitudeAwareAccordion/AmplitudeAwareAccordion';
-import { FormattedMessage } from 'react-intl';
 import { IntroduksjonTekst } from '../../../IntroduksjonTekst/IntroduksjonTekst';
 
 const VEILEDNING_CONFIRM = 'veiledningConfirm';
