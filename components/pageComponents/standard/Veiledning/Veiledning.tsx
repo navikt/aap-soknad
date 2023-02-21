@@ -1,4 +1,4 @@
-import { Alert, BodyShort, Button, Heading, Label, Link } from '@navikt/ds-react';
+import { Alert, Button, Heading, Label } from '@navikt/ds-react';
 import { useForm } from 'react-hook-form';
 import ConfirmationPanelWrapper from 'components/input/ConfirmationPanelWrapper';
 import { SøkerView } from 'context/sokerOppslagContext';
