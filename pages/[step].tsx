@@ -113,7 +113,6 @@ const Steps = ({ søker, mellomlagretSøknad }: PageProps) => {
   const submitSoknad: SubmitHandler<Soknad> = async (data) => {
     if (currentStep?.name === StepNames.OPPSUMMERING) {
       setShowFetchErrorMessage(false);
-      console.log('post søknad', søknadState);
       const sendtTimestamp = new Date();
 
       // Må massere dataene litt før vi sender de inn
@@ -126,9 +125,6 @@ const Steps = ({ søker, mellomlagretSøknad }: PageProps) => {
         søknadState?.requiredVedlegg,
         søker?.søker
       );
-
-      console.log('søknad', søknad);
-      console.log('søknadPDF', søknadPdf);
 
       const postResponse = await postSøknad({ søknad, kvittering: søknadPdf });
       if (postResponse?.ok) {
