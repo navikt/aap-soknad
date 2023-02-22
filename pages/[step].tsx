@@ -97,7 +97,6 @@ const Steps = ({ søker, mellomlagretSøknad }: PageProps) => {
 
   useEffect(() => {
     if (currentStep && currentStep.stepIndex !== undefined) {
-      console.log('query to step:', router.query);
       router.push(currentStep.stepIndex.toString(), currentStep.stepIndex.toString(), {
         scroll: true,
         shallow: true,
