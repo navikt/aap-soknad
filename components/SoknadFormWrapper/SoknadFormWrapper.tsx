@@ -12,14 +12,15 @@ import { useRouter } from 'next/router';
 interface Props {
   children?: React.ReactNode;
   nextButtonText: string;
-  backButtonText: string;
+  backButtonText?: string;
   cancelButtonText: string;
   onNext: (data: any) => void;
-  onBack: () => void;
+  onBack?: () => void;
   onDelete: () => Promise<any>;
   nextIsLoading?: boolean;
   focusOnErrors?: boolean;
-  errors: FieldErrors;
+  errors?: FieldErrors;
+  className?: string;
 }
 
 interface LagreModalProps {
@@ -149,6 +150,7 @@ const SøknadFormWrapper = ({
   onDelete,
   errors,
   nextIsLoading = false,
+  className = '',
 }: Props) => {
   const { formatMessage } = useFeatureToggleIntl();
   const { appState } = useAppStateContext();
@@ -169,20 +171,22 @@ const SøknadFormWrapper = ({
   };
   return (
     <>
-      <form onSubmit={onNext} className={classes?.formContent}>
-        <FormErrorSummary errors={errors} data-testid={'error-summary'} />
+      <form onSubmit={onNext} className={`${classes?.formContent} ${className}`}>
+        {errors && <FormErrorSummary errors={errors} data-testid={'error-summary'} />}
         {children}
         <div className={classes?.fourButtonWrapper}>
+          {onBack && (
+            <Button
+              className={classes?.buttonBack}
+              variant="secondary"
+              type="button"
+              onClick={onBack}
+            >
+              {backButtonText}
+            </Button>
+          )}
           <Button
-            className={classes?.buttonBack}
-            variant="secondary"
-            type="button"
-            onClick={onBack}
-          >
-            {backButtonText}
-          </Button>
-          <Button
-            className={classes?.buttonNext}
+            className={onBack ? classes?.buttonNext : classes?.buttonBack}
             variant="primary"
             type="submit"
             disabled={nextIsLoading}

@@ -1,12 +1,12 @@
 .veiledningContent {
   margin: 0 auto;
-  display: flex;
-  max-width: 600px;
-  width: 100%;
-  flex-direction: column;
-  justify-content: space-between;
-  gap: var(--a-spacing-10);
+  composes: formContent from '/styles/layout.module.css';
 }
+
+.startButton {
+  margin-top: var(--a-spacing-10);
+}
+
 .veiledningHeader h1 {
   text-align: center;
   hyphens: manual;

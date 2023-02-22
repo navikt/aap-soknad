@@ -11,7 +11,6 @@ export const initAmplitude = () => {
 };
 
 export const logAmplitudeEvent = (event: string, properties?: Record<string, any>) => {
-  console.log('tracking amplitude event');
   track(event, properties);
 };
 
@@ -49,5 +48,12 @@ export function logSkjemaValideringFeiletEvent(stegnavn: string) {
     skjemanavn: 'aap-søknad-standard',
     skjemaId: 'aap-søknad-standard',
     stegnavn,
+  });
+}
+
+export function logVeiledningVistEvent() {
+  logAmplitudeEvent('veiledning vist', {
+    skjemanavn: 'aap-søknad-standard',
+    skjemaId: 'aap-søknad-standard',
   });
 }

@@ -11,14 +11,14 @@ type StepWizardProps = {
 const StepWizard = ({ children }: StepWizardProps) => {
   const { stepList, currentStepIndex } = useStepWizard();
   return (
-    <main className={classes?.stepWizardMain}>
+    <>
       <div className={classes?.stepIndicatorWrapper}>
         <Label as={'p'}>{`Steg ${
           Number.isInteger(currentStepIndex) ? currentStepIndex + 1 : 0
         } av ${stepList?.length}`}</Label>
       </div>
       {children}
-    </main>
+    </>
   );
 };
 

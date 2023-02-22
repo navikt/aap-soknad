@@ -1,6 +1,6 @@
 import { Veiledning } from 'components/pageComponents/standard/Veiledning/Veiledning';
 import { useEffect, useRef, useState } from 'react';
-import { Navn, SøkerView } from 'context/sokerOppslagContext';
+import { Soker, SøkerView } from 'context/sokerOppslagContext';
 import React from 'react';
 import { useRouter } from 'next/router';
 import { GetServerSidePropsResult, NextPageContext } from 'next/types';
@@ -15,14 +15,12 @@ import { logSkjemaStartetEvent } from 'utils/amplitude';
 import metrics from 'utils/metrics';
 import { scrollRefIntoView } from 'utils/dom';
 import { getSøkerUtenBarn } from 'pages/api/oppslag/soekerUtenBarn';
-import { Alert, Link } from '@navikt/ds-react';
 import { useFeatureToggleIntl } from 'hooks/useFeatureToggleIntl';
 import { TimeoutBox } from 'components/TimeoutBox/TimeoutBox';
 import { logger } from '@navikt/aap-felles-innbygger-utils';
+import { getFulltNavn } from '../lib/søker';
 interface PageProps {
-  søker: {
-    navn: Navn;
-  };
+  søker: Soker;
 }
 
 export enum StepNames {
@@ -37,6 +35,7 @@ export enum StepNames {
   VEDLEGG = 'VEDLEGG',
   OPPSUMMERING = 'OPPSUMMERING',
 }
+
 export const defaultStepList = [
   { stepIndex: 1, name: StepNames.STARTDATO, active: true },
   { stepIndex: 2, name: StepNames.MEDLEMSKAP },
@@ -63,9 +62,7 @@ const Introduksjon = ({ søker }: PageProps) => {
   useEffect(() => {
     if (søker?.navn) {
       const _søker: SøkerView = {
-        fulltNavn: `${søker.navn.fornavn ?? ''} ${søker.navn.mellomnavn ?? ''} ${
-          søker.navn.etternavn ?? ''
-        }`,
+        fulltNavn: getFulltNavn(søker),
       };
       setSoker(_søker);
     }

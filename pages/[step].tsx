@@ -46,10 +46,16 @@ import { GetServerSidePropsResult, NextPageContext } from 'next';
 import { getAccessToken } from 'auth/accessToken';
 import { getSøker } from './api/oppslag/soeker';
 import { lesBucket } from './api/buckets/les';
-import { logSkjemaFullførtEvent, logSkjemastegFullførtEvent } from 'utils/amplitude';
+import {
+  logSkjemaFullførtEvent,
+  logSkjemastegFullførtEvent,
+  logVeiledningVistEvent,
+} from 'utils/amplitude';
 import metrics from 'utils/metrics';
 import { scrollRefIntoView } from 'utils/dom';
 import { TimeoutBox } from 'components/TimeoutBox/TimeoutBox';
+import { Steg0 } from 'components/pageComponents/standard/Steg0/Steg0';
+import * as classes from './step.module.css';
 import { migrateStepList } from '../lib/utils/migrateStepList';
 
 interface PageProps {
@@ -91,7 +97,10 @@ const Steps = ({ søker, mellomlagretSøknad }: PageProps) => {
 
   useEffect(() => {
     if (currentStep && currentStep.stepIndex !== undefined) {
-      router.push(currentStep.stepIndex.toString(), undefined, { scroll: true, shallow: true });
+      router.push(currentStep.stepIndex.toString(), currentStep.stepIndex.toString(), {
+        scroll: true,
+        shallow: true,
+      });
     }
   }, [currentStep]);
 
@@ -104,7 +113,6 @@ const Steps = ({ søker, mellomlagretSøknad }: PageProps) => {
   const submitSoknad: SubmitHandler<Soknad> = async (data) => {
     if (currentStep?.name === StepNames.OPPSUMMERING) {
       setShowFetchErrorMessage(false);
-      console.log('post søknad', søknadState);
       const sendtTimestamp = new Date();
 
       // Må massere dataene litt før vi sender de inn
@@ -117,9 +125,6 @@ const Steps = ({ søker, mellomlagretSøknad }: PageProps) => {
         søknadState?.requiredVedlegg,
         søker?.søker
       );
-
-      console.log('søknad', søknad);
-      console.log('søknadPDF', søknadPdf);
 
       const postResponse = await postSøknad({ søknad, kvittering: søknadPdf });
       if (postResponse?.ok) {
@@ -147,11 +152,7 @@ const Steps = ({ søker, mellomlagretSøknad }: PageProps) => {
     });
 
   const onPreviousStep = async () => {
-    if (currentStep?.name === StepNames.STARTDATO) {
-      router.push('/');
-    } else {
-      goToPreviousStep(stepWizardDispatch);
-    }
+    goToPreviousStep(stepWizardDispatch);
   };
 
   const onNextStep = async (data: any) => {
@@ -173,88 +174,102 @@ const Steps = ({ søker, mellomlagretSøknad }: PageProps) => {
         </PageHeader>
       </header>
       {søknadState?.søknad && (
-        <StepWizard>
-          {step === '1' && (
-            <StartDato
-              onBackClick={onPreviousStep}
-              defaultValues={søknadState}
-              onNext={(data) => {
-                onNextStep(data);
+        <main className={classes?.main}>
+          {step === '0' ? (
+            <Steg0
+              søker={søker}
+              onNext={() => {
+                router.push('1', undefined, { scroll: true });
               }}
             />
+          ) : (
+            <StepWizard>
+              {step === '1' && (
+                <StartDato
+                  onBackClick={() => {
+                    logVeiledningVistEvent();
+                    router.push('0');
+                  }}
+                  defaultValues={søknadState}
+                  onNext={(data) => {
+                    onNextStep(data);
+                  }}
+                />
+              )}
+              {step === '2' && (
+                <Medlemskap
+                  onBackClick={onPreviousStep}
+                  defaultValues={søknadState}
+                  onNext={(data) => {
+                    onNextStep(data);
+                  }}
+                />
+              )}
+              {step === '3' && (
+                <Yrkesskade
+                  onBackClick={onPreviousStep}
+                  defaultValues={søknadState}
+                  onNext={(data) => {
+                    onNextStep(data);
+                  }}
+                />
+              )}
+              {step === '4' && (
+                <Behandlere
+                  onBackClick={onPreviousStep}
+                  defaultValues={søknadState}
+                  onNext={(data) => {
+                    onNextStep(data);
+                  }}
+                />
+              )}
+              {step === '5' && (
+                <Barnetillegg
+                  onBackClick={onPreviousStep}
+                  defaultValues={søknadState}
+                  onNext={(data) => {
+                    onNextStep(data);
+                  }}
+                />
+              )}
+              {step === '6' && (
+                <Student
+                  onBackClick={onPreviousStep}
+                  defaultValues={søknadState}
+                  onNext={(data) => {
+                    onNextStep(data);
+                  }}
+                />
+              )}
+              {step === '7' && (
+                <AndreUtbetalinger
+                  onBackClick={onPreviousStep}
+                  defaultValues={søknadState}
+                  onNext={(data) => {
+                    onNextStep(data);
+                  }}
+                />
+              )}
+              {step === '8' && (
+                <Vedlegg
+                  onBackClick={onPreviousStep}
+                  defaultValues={søknadState}
+                  onNext={(data) => {
+                    onNextStep(data);
+                  }}
+                />
+              )}
+              {step === '9' && (
+                <Oppsummering
+                  onBackClick={onPreviousStep}
+                  onSubmitSoknad={submitSoknad}
+                  submitErrorMessageRef={submitErrorMessageRef}
+                  hasSubmitError={showFetchErrorMessage}
+                />
+              )}
+            </StepWizard>
           )}
-          {step === '2' && (
-            <Medlemskap
-              onBackClick={onPreviousStep}
-              defaultValues={søknadState}
-              onNext={(data) => {
-                onNextStep(data);
-              }}
-            />
-          )}
-          {step === '3' && (
-            <Yrkesskade
-              onBackClick={onPreviousStep}
-              defaultValues={søknadState}
-              onNext={(data) => {
-                onNextStep(data);
-              }}
-            />
-          )}
-          {step === '4' && (
-            <Behandlere
-              onBackClick={onPreviousStep}
-              defaultValues={søknadState}
-              onNext={(data) => {
-                onNextStep(data);
-              }}
-            />
-          )}
-          {step === '5' && (
-            <Barnetillegg
-              onBackClick={onPreviousStep}
-              defaultValues={søknadState}
-              onNext={(data) => {
-                onNextStep(data);
-              }}
-            />
-          )}
-          {step === '6' && (
-            <Student
-              onBackClick={onPreviousStep}
-              defaultValues={søknadState}
-              onNext={(data) => {
-                onNextStep(data);
-              }}
-            />
-          )}
-          {step === '7' && (
-            <AndreUtbetalinger
-              onBackClick={onPreviousStep}
-              defaultValues={søknadState}
-              onNext={(data) => {
-                onNextStep(data);
-              }}
-            />
-          )}
-          {step === '8' && (
-            <Vedlegg
-              onBackClick={onPreviousStep}
-              defaultValues={søknadState}
-              onNext={(data) => {
-                onNextStep(data);
-              }}
-            />
-          )}
-          {step === '9' && (
-            <Oppsummering
-              onBackClick={onPreviousStep}
-              onSubmitSoknad={submitSoknad}
-              submitErrorMessageRef={submitErrorMessageRef}
-              hasSubmitError={showFetchErrorMessage}
-            />
-          )}
-        </StepWizard>
+        </main>
       )}
       <TimeoutBox logoutTextKey="logoutModal.soknadMessage" />
     </>
@@ -272,7 +287,6 @@ export const getServerSideProps = beskyttetSide(
     const stopTimer = metrics.getServersidePropsDurationHistogram.startTimer({
       path: '/[steg]',
     });
-    const { step } = ctx.query;
     const bearerToken = getAccessToken(ctx);
     const søker = await getSøker(bearerToken);
     const mellomlagretSøknad = await lesBucket('STANDARD', bearerToken);
