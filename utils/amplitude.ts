@@ -11,7 +11,6 @@ export const initAmplitude = () => {
 };
 
 export const logAmplitudeEvent = (event: string, properties?: Record<string, any>) => {
-  console.log('tracking amplitude event');
   track(event, properties);
 };
 
