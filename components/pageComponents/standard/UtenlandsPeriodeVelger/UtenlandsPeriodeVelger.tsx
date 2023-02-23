@@ -48,17 +48,12 @@ interface FormFields {
   iArbeid: string;
   utenlandsId?: string;
 }
-const UtenlandsPeriodeVelger = ({
-  utenlandsPeriode,
-  onSave,
-  onCancel,
-  onClose,
-  open,
-  arbeidEllerBodd,
-}: UtenlandsPeriodeProps) => {
-  const { formatMessage } = useFeatureToggleIntl();
 
-  const schema = yup.object().shape({
+export const getUtenlandsPeriodeSchema = (
+  formatMessage: (id: string) => string,
+  arbeidEllerBodd = ArbeidEllerBodd.BODD
+) => {
+  return yup.object().shape({
     land: yup
       .string()
       .required(formatMessage('søknad.medlemskap.utenlandsperiode.modal.land.validation.required'))
@@ -97,6 +92,19 @@ const UtenlandsPeriodeVelger = ({
         .nullable(),
     }),
   });
+};
+
+const UtenlandsPeriodeVelger = ({
+  utenlandsPeriode,
+  onSave,
+  onCancel,
+  onClose,
+  open,
+  arbeidEllerBodd,
+}: UtenlandsPeriodeProps) => {
+  const { formatMessage } = useFeatureToggleIntl();
+
+  const schema = getUtenlandsPeriodeSchema(formatMessage, arbeidEllerBodd);
 
   const {
     control,
