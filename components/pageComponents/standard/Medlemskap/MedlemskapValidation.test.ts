@@ -39,4 +39,34 @@ describe('Medlemskap validation', () => {
     const result = await schema.validate(form, { abortEarly: false }).catch((err) => err);
     expect(result.errors.length).not.toBe(0);
   });
+  it(
+    "should be invalid when 'harBoddINorgeSiste5År' is 'Ja' " +
+      "and 'harArbeidetINorgeSiste5År' is 'Ja' and empty utenlandsPeriode",
+    async () => {
+      const form = {
+        medlemskap: {
+          harBoddINorgeSiste5År: JaEllerNei.JA,
+          arbeidetUtenforNorgeFørSykdom: JaEllerNei.JA,
+          utenlandsOpphold: [],
+        },
+      };
+      const result = await schema.validate(form, { abortEarly: false }).catch((err) => err);
+      expect(result.errors.length).not.toBe(0);
+    }
+  );
+  it(
+    "should be valid when 'harBoddINorgeSiste5År' is 'Ja' " +
+      "and 'harArbeidetINorgeSiste5År' is 'Ja' and not empty utenlandsPeriode",
+    async () => {
+      const form = {
+        medlemskap: {
+          harBoddINorgeSiste5År: JaEllerNei.JA,
+          arbeidetUtenforNorgeFørSykdom: JaEllerNei.JA,
+          utenlandsOpphold: [{}],
+        },
+      };
+      const result = await schema.validate(form, { abortEarly: false }).catch((err) => err);
+      expect(result).toStrictEqual(form);
+    }
+  );
 });
