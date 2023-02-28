@@ -1,9 +1,9 @@
 import { JaEllerNei } from 'types/Generic';
 import { getBehandlerSchema } from './AddBehandlerModal';
 
-describe('should be invalid with empty object', () => {
+describe('AddBehandlerModal validering test', () => {
   const schema = getBehandlerSchema(jest.fn());
-  it('ingenting utfylt', async () => {
+  it('should be invalid with empty object', async () => {
     const result = await schema.validate({}, { abortEarly: false }).catch((err) => err);
     expect(result.errors.length).not.toBe(0);
   });
