@@ -27,9 +27,8 @@ interface FormFields {
   telefon: string;
 }
 
-export const AddBehandlerModal = ({ showModal, onCloseClick, onSaveClick, behandler }: Props) => {
-  const { formatMessage } = useFeatureToggleIntl();
-  const schema = yup.object().shape({
+export const getBehandlerSchema = (formatMessage: (id: string, options?: {}) => string) => {
+  return yup.object().shape({
     firstname: yup
       .string()
       .required(formatMessage('søknad.helseopplysninger.modal.fornavn.validation.required'))
@@ -39,6 +38,12 @@ export const AddBehandlerModal = ({ showModal, onCloseClick, onSaveClick, behand
       .required(formatMessage('søknad.helseopplysninger.modal.etternavn.validation.required'))
       .nullable(),
   });
+};
+
+export const AddBehandlerModal = ({ showModal, onCloseClick, onSaveClick, behandler }: Props) => {
+  const { formatMessage } = useFeatureToggleIntl();
+  const schema = getBehandlerSchema(formatMessage);
+
   const { control, handleSubmit, reset } = useForm<FormFields>({
     resolver: yupResolver(schema),
     defaultValues: {
