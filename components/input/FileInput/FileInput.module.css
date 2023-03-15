@@ -84,3 +84,6 @@
   background-color: var(--a-border-focus);
   box-shadow: 0 0 0 2px var(--a-border-focus);
 }
+.fileInputText {
+  word-break: break-all;
+}

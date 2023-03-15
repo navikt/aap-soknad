@@ -160,7 +160,7 @@ const FieldArrayFileInput = ({
               <div className={classes?.fileSuccess}>
                 <FileSuccess color={'var(--a-icon-success)'} />
               </div>
-              <div>
+              <div className={classes?.fileInputText}>
                 <Link target={'_blank'} href={`/aap/soknad/vedlegg/${attachment?.vedleggId}`}>
                   {attachment?.name}
                 </Link>
