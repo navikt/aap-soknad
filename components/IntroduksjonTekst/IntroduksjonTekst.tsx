@@ -25,7 +25,10 @@ export const IntroduksjonTekst = ({ navn }: { navn?: string }) => {
         <BodyShort spacing>{formatMessage('søknad.veiledning.søknadsdato.text2')}</BodyShort>
       </article>
       <article>
-        <AmplitudeAwareAccordion title={formatMessage('søknad.veiledning.accordionHvis.title')}>
+        <AmplitudeAwareAccordion
+          open={true}
+          title={formatMessage('søknad.veiledning.accordionHvis.title')}
+        >
           <ul>
             <li>{formatMessage('søknad.veiledning.accordionHvis.bulletPointOppfølging')}</li>
             <li>{formatMessage('søknad.veiledning.accordionHvis.bulletPointPlikt')}</li>

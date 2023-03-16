@@ -4,11 +4,12 @@ import { logAccordionChangeEvent } from 'utils/amplitude';
 
 interface Props {
   title: string;
+  open?: boolean;
   children: React.ReactNode;
 }
 
-export const AmplitudeAwareAccordion = ({ title, children }: Props) => {
-  const [isOpen, setIsOpen] = useState(false);
+export const AmplitudeAwareAccordion = ({ title, open = false, children }: Props) => {
+  const [isOpen, setIsOpen] = useState(open);
 
   const onClick = () => {
     logAccordionChangeEvent(title, isOpen);
