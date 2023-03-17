@@ -1,6 +1,6 @@
 import { useForm } from 'react-hook-form';
 import { Soknad } from 'types/Soknad';
-import { Accordion, Alert, BodyShort, Heading, Label, Switch } from '@navikt/ds-react';
+import { Accordion, Alert, BodyShort, Heading, Label, Link, Switch } from '@navikt/ds-react';
 import React, { useEffect, useState } from 'react';
 import ConfirmationPanelWrapper from 'components/input/ConfirmationPanelWrapper';
 import AccordianItemOppsummering from './AccordianItemOppsummering/AccordianItemOppsummering';
@@ -176,6 +176,51 @@ const Oppsummering = ({
           toggleAll={toggleAll}
         >
           <OppsummeringKontaktinfo />
+        </AccordianItemOppsummering>
+        <AccordianItemOppsummering
+          title="Dine rettigheter og plikter"
+          showEdit={false}
+          toggleAll={toggleAll}
+        >
+          <Heading level="3" size="xsmall" spacing>
+            {formatMessage('søknad.veiledning.accordionHvis.title')}
+          </Heading>
+          <ul>
+            <li>{formatMessage('søknad.veiledning.accordionHvis.bulletPointOppfølging')}</li>
+            <li>{formatMessage('søknad.veiledning.accordionHvis.bulletPointPlikt')}</li>
+            <li>{formatMessage('søknad.veiledning.accordionHvis.bulletPointMeldekort')}</li>
+            <li>{formatMessage('søknad.veiledning.accordionHvis.bulletPointTilbakebetaling')}</li>
+            <li>{formatMessage('søknad.veiledning.accordionHvis.bulletPointBeskjed')}</li>
+          </ul>
+          <Heading level="3" size="xsmall" spacing>
+            {formatMessage('søknad.veiledning.accordionInformasjon.title')}
+          </Heading>
+          <BodyShort spacing>
+            {formatMessage('søknad.veiledning.accordionInformasjon.informasjonDuOppgir')}
+          </BodyShort>
+          <ul>
+            <li>
+              {formatMessage('søknad.veiledning.accordionInformasjon.bulletPointPersoninformasjon')}
+            </li>
+            <li>{formatMessage('søknad.veiledning.accordionInformasjon.bulletPontSkatt')}</li>
+            <li>{formatMessage('søknad.veiledning.accordionInformasjon.bulletpointHelse')}</li>
+            <li>{formatMessage('søknad.veiledning.accordionInformasjon.bulletPointArbeid')}</li>
+            <li>
+              {formatMessage('søknad.veiledning.accordionInformasjon.bulletPointAndreOpplysninger')}
+            </li>
+          </ul>
+
+          <BodyShort spacing>
+            {formatMessage('søknad.veiledning.accordionInformasjon.folketrygdloven')}
+          </BodyShort>
+          <ul>
+            <li>{formatMessage('søknad.veiledning.accordionInformasjon.bulletPointDeler')}</li>
+            <li>{formatMessage('søknad.veiledning.accordionInformasjon.bulletPointForbedre')}</li>
+          </ul>
+
+          <Link href={formatMessage('applinks.personOpplysninger')} target={'_blank'}>
+            {formatMessage('søknad.veiledning.accordionInformasjon.personopplysningerNavNo')}
+          </Link>
         </AccordianItemOppsummering>
         <AccordianItemOppsummering
           title={formatMessage('søknad.oppsummering.startDato.title')}
