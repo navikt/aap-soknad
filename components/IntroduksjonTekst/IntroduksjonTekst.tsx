@@ -25,18 +25,16 @@ export const IntroduksjonTekst = ({ navn }: { navn?: string }) => {
         <BodyShort spacing>{formatMessage('søknad.veiledning.søknadsdato.text2')}</BodyShort>
       </article>
       <article>
-        <AmplitudeAwareAccordion
-          open={true}
-          title={formatMessage('søknad.veiledning.accordionHvis.title')}
-        >
-          <ul>
-            <li>{formatMessage('søknad.veiledning.accordionHvis.bulletPointOppfølging')}</li>
-            <li>{formatMessage('søknad.veiledning.accordionHvis.bulletPointPlikt')}</li>
-            <li>{formatMessage('søknad.veiledning.accordionHvis.bulletPointMeldekort')}</li>
-            <li>{formatMessage('søknad.veiledning.accordionHvis.bulletPointTilbakebetaling')}</li>
-            <li>{formatMessage('søknad.veiledning.accordionHvis.bulletPointBeskjed')}</li>
-          </ul>
-        </AmplitudeAwareAccordion>
+        <Heading level="2" size="small" spacing>
+          {formatMessage('søknad.veiledning.accordionHvis.title')}
+        </Heading>
+        <ul>
+          <li>{formatMessage('søknad.veiledning.accordionHvis.bulletPointOppfølging')}</li>
+          <li>{formatMessage('søknad.veiledning.accordionHvis.bulletPointPlikt')}</li>
+          <li>{formatMessage('søknad.veiledning.accordionHvis.bulletPointMeldekort')}</li>
+          <li>{formatMessage('søknad.veiledning.accordionHvis.bulletPointTilbakebetaling')}</li>
+          <li>{formatMessage('søknad.veiledning.accordionHvis.bulletPointBeskjed')}</li>
+        </ul>
         <AmplitudeAwareAccordion
           title={formatMessage('søknad.veiledning.accordionInformasjon.title')}
         >
