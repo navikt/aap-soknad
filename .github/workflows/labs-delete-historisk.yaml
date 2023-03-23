@@ -14,6 +14,6 @@ jobs:
         uses: nais/deploy/actions/deploy@v1
         env:
           APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
-          CLUSTER: labs-gcp
+          CLUSTER: dev-gcp
           RESOURCE: ".nais/historisk-labs.yaml"
-          VAR: image=${{ env.IMAGE }},appname=${{env.APP_NAME}},ingress=https://${{env.APP_NAME}}.labs.nais.io,replicas=0,branchState=deleted
+          VAR: image=${{ env.IMAGE }},appname=${{env.APP_NAME}},ingress=https://${{env.APP_NAME}}.ekstern.dev.nav.no,replicas=0,branchState=deleted

@@ -59,7 +59,6 @@ jobs:
         uses: "nais/deploy/actions/deploy@v1"
         env:
           "APIKEY": "${{ secrets.NAIS_DEPLOY_APIKEY }}"
-          "CLUSTER": "labs-gcp"
+          "CLUSTER": "dev-gcp"
           "RESOURCE": ".nais/historisk-labs.yaml"
-          "VAR": image=${{ env.IMAGE }},ingress=https://${{ steps.slug.outputs.slug }}.labs.nais.io,appname=${{ steps.slug.outputs.slug }},replicas=1,branchState=alive
-          "DEPLOY_SERVER": deploy.nais.io:443
+          "VAR": image=${{ env.IMAGE }},ingress=https://${{ steps.slug.outputs.slug }}.ekstern.dev.nav.no,appname=${{ steps.slug.outputs.slug }},replicas=1,branchState=alive

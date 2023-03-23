@@ -64,9 +64,8 @@ jobs:
         uses: "nais/deploy/actions/deploy@v1"
         env:
           "APIKEY": "${{ secrets.NAIS_DEPLOY_APIKEY }}"
-          "CLUSTER": "labs-gcp"
+          "CLUSTER": "dev-gcp"
           "RESOURCE": ".nais/labs-gcp.yaml"
-          "DEPLOY_SERVER": deploy.nais.io:443
   # "deployAppToLabsFrozen":
   #   name: "Deploy app to labs"
   #   needs: "build"
