@@ -12,4 +12,4 @@ export const clientSideIsProd = () =>
   typeof window !== 'undefined' && window.location.href.includes('www.nav.no');
 
 export const clientSideIsLabs = () =>
-  typeof window !== 'undefined' && window.location.href.includes('labs.nais.io');
+  typeof window !== 'undefined' && window.location.href.includes('ekstern.dev.nav.no');
