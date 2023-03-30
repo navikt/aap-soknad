@@ -21,3 +21,6 @@ spec:
   replicas:
     min: 2
     max: 2
+  accessPolicy:
+    external:
+      - host: "dekoratoren.ekstern.dev.no"
