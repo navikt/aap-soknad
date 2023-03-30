@@ -23,4 +23,4 @@ spec:
     max: 2
   accessPolicy:
     external:
-      - host: "dekoratoren.ekstern.dev.no"
+      - host: "dekoratoren.ekstern.dev.nav.no"
