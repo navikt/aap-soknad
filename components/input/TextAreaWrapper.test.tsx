@@ -145,7 +145,7 @@ describe('textareawrapper', () => {
       )
     );
 
-    const feilmelding = screen.getByText('Antall tegn for mye 72');
+    const feilmelding = screen.getByText('72 tegn for mye');
 
     expect(feilmelding).toBeInTheDocument();
   });
