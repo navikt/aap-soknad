@@ -87,7 +87,7 @@ jobs:
         with:
           context: .
           file: Dockerfile
-          tags: ${{ env.IMAGE }}
+          tags: ${{ env.IMAGE }}, latest
           push: true
           cache-from: type=gha
           cache-to: type=gha,mode=max
