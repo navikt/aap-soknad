@@ -19,7 +19,6 @@ jobs:
       contents: read
       id-token: write
       packages: write
-      artifact-registry: read
     steps:
       - uses: actions/checkout@v3
 
