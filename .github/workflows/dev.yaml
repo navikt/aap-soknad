@@ -1,72 +1,77 @@
-name: "Build and deploy aap-soknad to dev"
+name: Build and deploy aap-soknad to dev
 on:
   workflow_dispatch:
   push:
     branches:
-      - "main"
+      - main
     paths-ignore:
       - '**.md'
 env:
   IMAGE_BASE: europe-north1-docker.pkg.dev/${{ vars.NAIS_MANAGEMENT_PROJECT_ID }}/aap/${{ github.event.repository.name }}
   SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
 jobs:
-  "build":
-    name: "build"
-    runs-on: "ubuntu-latest"
+  build:
+    name: build
+    runs-on: ubuntu-latest
+    outputs:
+      image: ${{ steps.image.outputs.image }}
     permissions:
-      contents: 'read'
-      id-token: 'write'
-      packages: 'write'
+      contents: read
+      id-token: write
+      packages: write
     steps:
-      - uses: "actions/checkout@v2"
+      - uses: actions/checkout@v2
 
-      - uses: "actions/setup-node@v2"
+      - uses: actions/setup-node@v2
         with:
-          node-version: "16"
-          registry-url: "https://npm.pkg.github.com"
-          cache: "yarn"
+          node-version: 16
+          registry-url: https://npm.pkg.github.com
+          cache: yarn
 
-      - name: "Cache node_modules"
-        id: "cache-node-modules"
-        uses: "actions/cache@v2"
+      - name: Cache node_modules
+        id: cache-node-modules
+        uses: actions/cache@v2
         with:
-          path: "node_modules"
-          key: "${{ runner.os }}-modules-${{ hashFiles('yarn.lock') }}"
+          path: node_modules
+          key: ${{ runner.os }}-modules-${{ hashFiles('yarn.lock') }}
 
-      - name: "install dependencies Yarn"
-        if: "steps.cache-node-modules.outputs.cache-hit != 'true'"
-        run: "yarn install --frozen-lockfile"
+      - name: install dependencies Yarn
+        if: steps.cache-node-modules.outputs.cache-hit != 'true'
+        run: yarn install --frozen-lockfile
         env:
           NODE_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
 
       - name: Copy env-file for dev
         run: cp .nais/dev.env .env.local
 
-      - name: "client tests"
-        run: "yarn test"
+      - name: client tests
+        run: yarn test
 
-      - name: "check diff on translations"
-        run: "yarn intl:diff"
+      - name: check diff on translations
+        run: yarn intl:diff
 
-      - name: "Bygg klient(yarn run build)"
-        run: "yarn run build"
+      - name: Bygg klient(yarn run build)
+        run: yarn run build
 
       - name: Upload static files to NAV CDN dev
         uses: navikt/frontend/actions/cdn-upload/v1@main
         with:
           cdn-team-name: aap
           source: ./.next/static
-          destination: '/aap-soknad/_next'
+          destination: /aap-soknad/_next
 
-      - name: "Set up Docker Buildx"
-        id: "buildx"
-        uses: "docker/setup-buildx-action@v1"
+      - name: Set up Docker Buildx
+        id: buildx
+        uses: docker/setup-buildx-action@v1
 
       - name: Setter tag-navn
         run: echo "TAG=$(date +%Y.%m.%d.%H%M%S)-$(echo $GITHUB_SHA | cut -c1-7)" >> $GITHUB_ENV
 
       - name: Setter image-navn
-        run: echo "IMAGE=$(echo $IMAGE_BASE)-$(echo $TAG)" >> $GITHUB_ENV
+        id: image
+        run:  |
+           echo "IMAGE=$(echo $IMAGE_BASE)-$(echo $TAG)" >> $GITHUB_ENV
+           echo "image=$(echo $IMAGE_BASE)-$(echo $TAG)" >> $GITHUB_OUTPUT
 
       - name: Login GAR
         uses: nais/login@v0
@@ -75,25 +80,28 @@ jobs:
           identity_provider: ${{ secrets.NAIS_WORKLOAD_IDENTITY_PROVIDER }}
           team: aap
 
-      - name: "Build and push Docker"
-        uses: "docker/build-push-action@v2"
+      - name: Build and push Docker
+        uses: docker/build-push-action@v2
         with:
           context: .
           file: Dockerfile
-          tags: "${{ env.IMAGE }}"
-          push: "true"
-          cache-from: "type=gha"
-          cache-to: "type=gha,mode=max"
-  "deployAppToDev":
-    name: "Deploy app to dev"
-    needs: "build"
-    runs-on: "ubuntu-latest"
+          tags: ${{ env.IMAGE }}
+          push: true
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+
+  deployAppToDev:
+    name: Deploy app to dev
+    needs: build
+    runs-on: ubuntu-latest
     steps:
-      - uses: "actions/checkout@v3"
-      - name: "Deploy to DEV"
-        uses: "nais/deploy/actions/deploy@v1"
+      - uses: actions/checkout@v3
+      - name: Deploy to DEV
+        uses: nais/deploy/actions/deploy@v1
         env:
-          "APIKEY": "${{ secrets.NAIS_DEPLOY_APIKEY }}"
-          "CLUSTER": "dev-gcp"
-          "RESOURCE": ".nais/nais.yaml"
-          "VARS": ".nais/dev.yaml"
+          IMAGE: ${{needs.build.outputs.image}}
+          APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
+          CLUSTER: dev-gcp
+          RESOURCE: .nais/nais.yaml
+          VARS: nais/dev.yaml
