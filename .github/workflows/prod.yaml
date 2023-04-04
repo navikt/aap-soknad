@@ -16,7 +16,7 @@ jobs:
     outputs:
       image: ${{ steps.image.outputs.image }}
     permissions:
-      contents: read
+      contents: write
       id-token: write
       packages: write
     steps:
@@ -86,7 +86,7 @@ jobs:
         with:
           context: .
           file: Dockerfile
-          tags: ${{ env.IMAGE }}
+          tags: ${{ env.IMAGE }}:latest
           push: true
           cache-from: type=gha
           cache-to: type=gha,mode=max
