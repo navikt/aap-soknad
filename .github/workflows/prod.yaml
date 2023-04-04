@@ -92,13 +92,17 @@ jobs:
           cache-to: type=gha,mode=max
 
   functionalTests:
+    permissions:
+      contents: read
+      id-token: write
+      packages: read
     timeout-minutes: 60
     runs-on: ubuntu-latest
     needs: build
     services:
       soknad:
+        image: ${{needs.build.outputs.image}}
         env:
-          image: ${{needs.build.outputs.image}}
           FUNCTIONAL_TESTS: enabled
         ports:
           - 3000:3000
