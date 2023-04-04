@@ -19,6 +19,7 @@ jobs:
       contents: read
       id-token: write
       packages: write
+      artifact-registry: read
     steps:
       - uses: actions/checkout@v3
 
@@ -87,7 +88,7 @@ jobs:
         with:
           context: .
           file: Dockerfile
-          tags: ${{ env.IMAGE }}
+          tags: ${{ env.IMAGE }}:latest
           push: true
           cache-from: type=gha
           cache-to: type=gha,mode=max
