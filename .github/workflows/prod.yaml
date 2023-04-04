@@ -130,7 +130,7 @@ jobs:
 
   deployAppToProd:
     name: Deploy app to prod
-    needs: build
+    needs: functionalTests
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
