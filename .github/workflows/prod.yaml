@@ -97,8 +97,8 @@ jobs:
     needs: build
     services:
       soknad:
-        image: ${{needs.build.outputs.image}}
         env:
+          image: ${{needs.build.outputs.image}}
           FUNCTIONAL_TESTS: enabled
         ports:
           - 3000:3000
