@@ -18,7 +18,7 @@ test('test', async ({ page }) => {
 
   await page.getByRole('button', { name: 'Start søknad' }).click();
 
-  await page.goto('http://localhost:3000/aap/soknad/1/');
+  //await page.goto('http://localhost:3000/aap/soknad/1/');
   wcagRes = await checkWcag(page);
   await expect(wcagRes.violations).toEqual([]);
 
