@@ -55,6 +55,13 @@ jobs:
           npx browserslist@latest --update-db          
           yarn run build
 
+      - name: Upload static files to NAV CDN dev
+        uses: navikt/frontend/actions/cdn-upload/v1@main
+        with:
+          cdn-team-name: aap
+          source: ./.next/static
+          destination: /aap-soknad/_next
+
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps
     
@@ -67,12 +74,7 @@ jobs:
           path: playwright-report/
           retention-days: 30
 
-      - name: Upload static files to NAV CDN dev
-        uses: navikt/frontend/actions/cdn-upload/v1@main
-        with:
-          cdn-team-name: aap
-          source: ./.next/static
-          destination: /aap-soknad/_next
+
 
       - name: Set up Docker Buildx
         id: buildx

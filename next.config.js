@@ -12,10 +12,7 @@ const nextConfig = {
   reactStrictMode: true,
   swcMinify: true, // Blir default på i Next 12.2
   output: 'standalone',
-  assetPrefix:
-    process.env.ASSET_PREFIX && process.env.ASSET_PREFIX.length > 0
-      ? process.env.ASSET_PREFIX
-      : undefined,
+  assetPrefix: process.env.ASSET_PREFIX ?? undefined,
 
   i18n: {
     locales: ['nb', 'nn'],
