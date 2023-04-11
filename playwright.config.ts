@@ -99,7 +99,7 @@ const config: PlaywrightTestConfig = {
 
   /* Run your local dev server before starting the tests */
   webServer: {
-    command: 'FUNCTIONAL_TESTS=enabled yarn start',
+    command: 'ASSET_PREFIX="" FUNCTIONAL_TESTS=enabled yarn start',
     port: 3000,
   },
 };
