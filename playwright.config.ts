@@ -22,7 +22,7 @@ const config: PlaywrightTestConfig = {
     timeout: 10 * 1000,
   },
   /* Run tests in files in parallel */
-  fullyParallel: false,
+  fullyParallel: true,
   /* Fail the build on CI if you accidentally left test.only in the source code. */
   forbidOnly: !!process.env.CI,
   /* Retry on CI only */
@@ -51,14 +51,14 @@ const config: PlaywrightTestConfig = {
       },
     },
 
-    /*{
+    {
       name: 'firefox',
       use: {
         ...devices['Desktop Firefox'],
       },
     },
 
-    {
+    /*{
       name: 'webkit',
       use: {
         ...devices['Desktop Safari'],
@@ -66,12 +66,12 @@ const config: PlaywrightTestConfig = {
     },*/
 
     /* Test against mobile viewports. */
-    // {
-    //   name: 'Mobile Chrome',
-    //   use: {
-    //     ...devices['Pixel 5'],
-    //   },
-    // },
+    {
+      name: 'Mobile Chrome',
+      use: {
+        ...devices['Pixel 5'],
+      },
+    },
     // {
     //   name: 'Mobile Safari',
     //   use: {
