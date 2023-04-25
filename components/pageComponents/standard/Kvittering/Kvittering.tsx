@@ -28,7 +28,7 @@ const Kvittering = ({ søker, kontaktinformasjon, søknad }: StudentProps) => {
     ? process.env.NEXT_PUBLIC_MINE_AAP_URL
     : clientSideIsProd()
     ? 'https://nav.no/aap/mine-aap'
-    : 'https://aap-innsyn.dev.nav.no/aap/mine-aap';
+    : 'https://aap-mine-aap.intern.dev.nav.no/aap/mine-aap';
   const dittNavUrl = clientSideIsProd()
     ? 'https://www.nav.no/person/dittnav/'
     : 'https://www.dev.nav.no/person/dittnav/';
