@@ -22,4 +22,4 @@ env:
 - name:  ENABLE_SENTRY
   value: "enabled"
 externals:
-  - "dekoratoren.dev.no"
+  - "www.nav.no"
