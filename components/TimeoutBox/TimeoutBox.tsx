@@ -41,8 +41,10 @@ export const TimeoutBox = ({ logoutTextKey }: Props) => {
       fetch('/aap/soknad/oauth2/session')
         .then((res) => res.json())
         .then((data) => {
-          const endsInSeconds = data.session.ends_in_seconds;
-          setLogoutTime(beregnUtloggingsTidspunkt(endsInSeconds));
+          const expireInSeconds = data.tokens.expire_in_seconds;
+          // Sesjonen vi får fra Wonderwall er på 6 timer, men det virker ikke som om token refreshes automatisk.
+          // Bruker token sin expire, siden sesion.ends_in_seconds ligger et sekund bak
+          setLogoutTime(beregnUtloggingsTidspunkt(expireInSeconds));
         })
         .catch((err) => console.log(err));
     }
