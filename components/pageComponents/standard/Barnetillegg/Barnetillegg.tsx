@@ -34,7 +34,7 @@ interface Props {
 export const BARN = 'barn';
 export const MANUELLE_BARN = 'manuelleBarn';
 
-export const GRUNNBELØP = '111 477';
+export const GRUNNBELØP = '118 620';
 
 export const getUniqueIshIdForBarn = (barn: ManuelleBarn) => {
   return `${formatDate(barn.fødseldato, 'yyyy-MM-dd') ?? ''}_${barn.navn.fornavn}_${
