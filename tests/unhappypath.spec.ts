@@ -329,25 +329,25 @@ test('test', async ({ page }) => {
   await expect(await page.getByRole('heading', { name: 'Barnetillegg' })).toBeVisible();
   await page.getByRole('button', { name: 'Neste steg' }).click();
   await expect(
-    page.getByText('Du må svare på om barnet har en årlig inntekt over 111 477kr')
+    page.getByText('Du må svare på om barnet har en årlig inntekt over 118 620kr')
   ).toHaveCount(4);
   await page
-    .getByRole('link', { name: 'Du må svare på om barnet har en årlig inntekt over 111 477kr' })
+    .getByRole('link', { name: 'Du må svare på om barnet har en årlig inntekt over 118 620kr' })
     .first()
     .click();
   await expect(page).toHaveURL('http://localhost:3000/aap/soknad/5/#barn.0.harInntekt');
   await page
-    .getByRole('link', { name: 'Du må svare på om barnet har en årlig inntekt over 111 477kr' })
+    .getByRole('link', { name: 'Du må svare på om barnet har en årlig inntekt over 118 620kr' })
     .nth(1)
     .click();
   await expect(page).toHaveURL('http://localhost:3000/aap/soknad/5/#barn.1.harInntekt');
   await page
-    .getByRole('group', { name: 'Har barnet årlig inntekt over 111 477kr?' })
+    .getByRole('group', { name: 'Har barnet årlig inntekt over 118 620kr?' })
     .first()
     .getByLabel('Ja')
     .check();
   await page
-    .getByRole('group', { name: 'Har barnet årlig inntekt over 111 477kr?' })
+    .getByRole('group', { name: 'Har barnet årlig inntekt over 118 620kr?' })
     .nth(1)
     .getByLabel('Nei')
     .check();
@@ -369,7 +369,7 @@ test('test', async ({ page }) => {
     await page.getByText('Du må svare på hvilken relasjon du har til barnet.')
   ).toBeVisible();
   await expect(
-    await page.getByText('Du må svare på om barnet har en årlig inntekt over 111 477kr')
+    await page.getByText('Du må svare på om barnet har en årlig inntekt over 118 620kr')
   ).toBeVisible();
   await page.getByLabel('Fornavn og mellomnavn').fill('Kjell T.');
   await page.getByLabel('Etternavn').fill('Ringen');
