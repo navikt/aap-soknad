@@ -35,9 +35,9 @@
   "devDependencies": {
     "@axe-core/playwright": "^4.5.2",
     "@playwright/test": "^1.27.1",
-    "@testing-library/dom": "^8.18.1",
+    "@testing-library/dom": "^9.3.0",
     "@testing-library/jest-dom": "^5.16.1",
-    "@testing-library/react": "^13.0.0",
+    "@testing-library/react": "^14.0.0",
     "@testing-library/user-event": "^14.0.0",
     "@types/amplitude-js": "^8.16.2",
     "@types/jest": "^29.0.0",
