@@ -1,4 +1,4 @@
-import { UNSAFE_DatePicker, UNSAFE_useDatepicker } from '@navikt/ds-react';
+import { DatePicker, useDatepicker } from '@navikt/ds-react';
 import { addYears, parse, subYears } from 'date-fns';
 import React from 'react';
 import { Matcher } from 'react-day-picker';
@@ -31,7 +31,7 @@ export const DatePickerWrapper = <FormFieldValues extends FieldValues>({
   disabled,
   dropdownCaption = false,
 }: DateProps<FormFieldValues>) => {
-  const { datepickerProps, inputProps } = UNSAFE_useDatepicker({
+  const { datepickerProps, inputProps } = useDatepicker({
     defaultSelected: selectedDate ? new Date(selectedDate) : undefined,
     inputFormat: 'dd.MM.yyyy',
   });
@@ -42,7 +42,7 @@ export const DatePickerWrapper = <FormFieldValues extends FieldValues>({
       control={control}
       render={({ field: { name, value, onChange }, fieldState: { error } }) => {
         return (
-          <UNSAFE_DatePicker
+          <DatePicker
             {...datepickerProps}
             id={name}
             onChange={onChange}
@@ -53,7 +53,7 @@ export const DatePickerWrapper = <FormFieldValues extends FieldValues>({
             toDate={toDate}
             disabled={disabled}
           >
-            <UNSAFE_DatePicker.Input
+            <DatePicker.Input
               id={name}
               onChange={(datoInput) =>
                 onChange(parse(datoInput.currentTarget.value, 'dd.MM.yyyy', new Date()))
@@ -68,7 +68,7 @@ export const DatePickerWrapper = <FormFieldValues extends FieldValues>({
               label={label}
               {...inputProps}
             />
-          </UNSAFE_DatePicker>
+          </DatePicker>
         );
       }}
     />
