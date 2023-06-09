@@ -1,5 +1,6 @@
 import { MonthPicker, useMonthpicker } from '@navikt/ds-react';
 import { Control, Controller, FieldPath, FieldValues } from 'react-hook-form';
+import { parse } from 'date-fns';
 
 export interface MonthPickerProps<FormFieldValues extends FieldValues> {
   name: FieldPath<FormFieldValues>;
@@ -44,6 +45,12 @@ export const MonthPickerWrapper = <FormFieldValues extends FieldValues>({
               id={name}
               name={name}
               error={error && error.message}
+              onChange={(datoInput) =>
+                onChange(parse(datoInput.currentTarget.value, 'dd.MM.yyyy', new Date()))
+              }
+              onInput={(datoInput) =>
+                onChange(parse(datoInput.currentTarget.value, 'dd.MM.yyyy', new Date()))
+              }
               label={label}
               {...inputProps}
             />
