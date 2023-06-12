@@ -196,28 +196,28 @@ const UtenlandsPeriodeVelger = ({
             <Grid>
               <Cell xs={12} lg={5}>
                 <MonthPickerWrapper
+                  control={control}
                   name="fraDato"
                   selectedDate={utenlandsPeriode?.fraDato}
-                  setValue={setValue}
                   label={formatMessage(
                     'søknad.medlemskap.utenlandsperiode.modal.periode.fraDato.label'
                   )}
                   fromDate={subYears(new Date(), antallÅrTilbake)}
                   toDate={new Date()}
-                  error={errors?.fraDato?.message}
+                  dropdownCaption={true}
                 />
               </Cell>
               <Cell xs={12} lg={5}>
                 <MonthPickerWrapper
+                  control={control}
                   name="tilDato"
                   selectedDate={utenlandsPeriode?.tilDato}
-                  setValue={setValue}
                   label={formatMessage(
                     'søknad.medlemskap.utenlandsperiode.modal.periode.tilDato.label'
                   )}
                   fromDate={subYears(new Date(), antallÅrTilbake)}
                   toDate={new Date()}
-                  error={errors?.tilDato?.message}
+                  dropdownCaption={true}
                 />
               </Cell>
             </Grid>
