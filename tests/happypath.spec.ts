@@ -104,6 +104,16 @@ test('test', async ({ page }) => {
   wcagRes = await checkWcag(page);
   await expect(wcagRes.violations).toEqual([]);
 
+  // test på accordion
+  await expect(page.getByText('Folkeregistrert adresse')).toBeVisible();
+  await expect(page.getByText('Har du sykepenger nå?')).not.toBeVisible();
+
+  await page.getByRole('button', { name: /^Om deg$/ }).click();
+  await expect(page.getByText('Folkeregistrert adresse')).not.toBeVisible();
+
+  await page.getByRole('button', { name: /^Startdato$/ }).click();
+  await expect(page.getByText('Har du sykepenger nå?')).toBeVisible();
+
   await page
     .getByLabel(
       'Jeg har lest all informasjonen jeg har fått i søknaden og bekrefter at opplysningene jeg har gitt er korrekte.'

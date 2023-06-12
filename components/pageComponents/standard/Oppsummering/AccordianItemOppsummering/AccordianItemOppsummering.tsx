@@ -1,4 +1,4 @@
-import { Accordion, Alert, BodyShort, Cell, Grid, Link, Tag } from '@navikt/ds-react';
+import { Accordion, Alert, BodyShort, Cell, Grid, Link } from '@navikt/ds-react';
 import React, { useState } from 'react';
 import * as classes from './AccordianItemOppsummering.module.css';
 import { Back } from '@navikt/ds-icons';
@@ -30,7 +30,6 @@ const AccordianItemOppsummering = ({
     if (toggleAll !== undefined) setOpen(toggleAll);
   }, [toggleAll]);
 
-  console.log('accordion open:', open);
   return (
     <Accordion.Item open={open}>
       <Accordion.Header
