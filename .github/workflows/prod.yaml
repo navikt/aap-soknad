@@ -25,7 +25,7 @@ jobs:
 
       - uses: actions/setup-node@v3
         with:
-          node-version: 16
+          node-version: 18
           registry-url: https://npm.pkg.github.com
           cache: yarn
 
@@ -63,10 +63,10 @@ jobs:
 
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps
-  
+
       - name: Run Playwright tests
         run: yarn playwright test
-  
+
       - uses: actions/upload-artifact@v3
         with:
           name: playwright-report
