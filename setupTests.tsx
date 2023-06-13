@@ -17,6 +17,10 @@ import links from 'translations/links.json';
 jest.setTimeout(10 * 1000);
 configure({ asyncUtilTimeout: 10 * 1000 });
 
+jest.mock('next/router', () => ({
+  useRouter: jest.fn(),
+}));
+
 const tekster = { ...messages['nb'], ...flattenMessages({ applinks: links }) };
 function render(ui: ReactElement, { locale = 'nb', ...options } = {}) {
   function Wrapper({ children }: { children: ReactElement }): ReactElement {
