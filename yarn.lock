@@ -984,6 +984,11 @@
     prop-types "^15.7.2"
     react "^17.0.2"
 
+"@navikt/next-api-proxy@3.2.0":
+  version "3.2.0"
+  resolved "https://npm.pkg.github.com/download/@navikt/next-api-proxy/3.2.0/af63cc82c9f4f50f0ab4fd7b4628fe73ae4bfbbf#af63cc82c9f4f50f0ab4fd7b4628fe73ae4bfbbf"
+  integrity sha512-oL0nBKqeQGIs0o5Q5qlBeqxAJXnQgGJfSxPpGKkWvuDFrR685ZJL3SxdH9DnatImm9MMnZyN5ZisRpkgu6VG2g==
+
 "@next/env@12.3.1":
   version "12.3.1"
   resolved "https://registry.yarnpkg.com/@next/env/-/env-12.3.1.tgz#18266bd92de3b4aa4037b1927aa59e6f11879260"

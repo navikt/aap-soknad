@@ -1,8 +1,6 @@
-import { getAccessToken } from 'auth/accessToken';
 import { beskyttetSide } from 'auth/beskyttetSide';
 import { GetServerSidePropsResult, NextPageContext } from 'next';
 import { useRouter } from 'next/router';
-import { lesVedlegg } from 'pages/api/vedlegg/les';
 import { useEffect, useState } from 'react';
 import { getStringFromPossiblyArrayQuery } from 'utils/string';
 
