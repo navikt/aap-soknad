@@ -16,6 +16,7 @@ import { SUPPORTED_LOCALE } from 'lib/translations/locale';
 import { useRouter } from 'next/router';
 import { NavDecorator } from 'components/NavDecorator/NavDecorator';
 import { Locale } from '@navikt/nav-dekoratoren-moduler';
+import { initializeFaro } from '@grafana/faro-web-sdk';
 
 const getLocaleOrFallback = (locale?: string) => {
   if (locale && SUPPORTED_LOCALE.includes(locale)) {
@@ -36,6 +37,18 @@ const CustomApp = ({ Component, pageProps }: AppProps) => {
 
   useEffect(() => {
     initAmplitude();
+  }, []);
+
+  useEffect(() => {
+    if (process.env.NEXT_PUBLIC_FARO_URL) {
+      initializeFaro({
+        url: process.env.NEXT_PUBLIC_FARO_URL,
+        app: {
+          name: 'aap-soknad',
+          version: process.env.NEXT_PUBLIC_ENVIRONMENT ?? '',
+        },
+      });
+    }
   }, []);
 
   if (Modal.setAppElement) {
