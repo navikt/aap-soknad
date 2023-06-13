@@ -15,7 +15,7 @@ import Head from 'next/head';
 import { SUPPORTED_LOCALE } from 'lib/translations/locale';
 import { useRouter } from 'next/router';
 import { NavDecorator } from 'components/NavDecorator/NavDecorator';
-import { Locale } from '@navikt/nav-dekoratoren-moduler';
+import { DecoratorLocale } from '@navikt/nav-dekoratoren-moduler';
 import { initializeFaro } from '@grafana/faro-web-sdk';
 
 const getLocaleOrFallback = (locale?: string) => {
@@ -31,7 +31,7 @@ const CustomApp = ({ Component, pageProps }: AppProps) => {
   const locale = getLocaleOrFallback(router.locale);
 
   const currentMessages = useMemo(
-    () => ({ ...messages[locale as Locale], ...flattenMessages({ applinks: links }) }),
+    () => ({ ...messages[locale as DecoratorLocale], ...flattenMessages({ applinks: links }) }),
     [locale]
   );
 

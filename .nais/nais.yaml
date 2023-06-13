@@ -53,6 +53,8 @@ spec:
     outbound:
       rules:
         - application: soknad-api
+        - application: nav-dekoratoren
+          namespace: personbruker
       external:
         {{#each externals as |host|}}
         - host: {{host}}
