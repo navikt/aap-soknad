@@ -14,7 +14,7 @@ import SoknadFormWrapper from 'components/SoknadFormWrapper/SoknadFormWrapper';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import ColorPanel from 'components/panel/ColorPanel';
-import { LucaGuidePanel } from '@navikt/aap-felles-innbygger-react';
+import { LucaGuidePanel } from '@navikt/aap-felles-react';
 import { useFeatureToggleIntl } from 'hooks/useFeatureToggleIntl';
 import { deleteOpplastedeVedlegg, useSoknadContextStandard } from 'context/soknadContextStandard';
 import { slettLagretSoknadState, updateSøknadData } from 'context/soknadContextCommon';

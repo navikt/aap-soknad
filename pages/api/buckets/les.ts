@@ -1,8 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { getAccessTokenFromRequest } from 'auth/accessToken';
 import { beskyttetApi } from 'auth/beskyttetApi';
-import { tokenXApiProxy } from '@navikt/aap-felles-innbygger-utils';
-import { logger } from '@navikt/aap-felles-innbygger-utils';
+import { tokenXApiProxy, logger } from '@navikt/aap-felles-utils';
 import metrics from 'utils/metrics';
 import { lesCache } from 'mock/mellomlagringsCache';
 import { erGyldigSøknadsType, GYLDIGE_SØKNADS_TYPER, SøknadsType } from 'utils/api';

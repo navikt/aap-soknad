@@ -17,7 +17,7 @@ import { scrollRefIntoView } from 'utils/dom';
 import { getSøkerUtenBarn } from 'pages/api/oppslag/soekerUtenBarn';
 import { useFeatureToggleIntl } from 'hooks/useFeatureToggleIntl';
 import { TimeoutBox } from 'components/TimeoutBox/TimeoutBox';
-import { logger } from '@navikt/aap-felles-innbygger-utils';
+import { logger } from '@navikt/aap-felles-utils';
 import { getFulltNavn } from '../lib/søker';
 interface PageProps {
   søker: Soker;
