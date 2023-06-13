@@ -15,7 +15,7 @@ import { useDebounceLagreSoknad } from 'hooks/useDebounceLagreSoknad';
 import FieldArrayFileInput from 'components/input/FileInput/FieldArrayFileInput';
 import { GenericSoknadContextState } from 'types/SoknadContext';
 import { scrollRefIntoView } from 'utils/dom';
-import { LucaGuidePanel, ScanningGuide } from '@navikt/aap-felles-innbygger-react';
+import { LucaGuidePanel, ScanningGuide } from '@navikt/aap-felles-react';
 import { useIntl } from 'react-intl';
 
 interface Props {

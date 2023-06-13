@@ -2,7 +2,7 @@ import { NextPageContext, GetServerSidePropsResult } from 'next';
 import { isMock } from '../utils/environments';
 import { getAccessToken } from './accessToken';
 import { verifyIdportenAccessToken } from './verifyIdPortenAccessToken';
-import { logger } from '@navikt/aap-felles-innbygger-utils';
+import { logger } from '@navikt/aap-felles-utils';
 
 type PageHandler = (context: NextPageContext) => void | Promise<GetServerSidePropsResult<{}>>;
 

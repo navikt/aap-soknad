@@ -8,7 +8,7 @@ import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useStepWizard } from 'context/stepWizardContextV2';
 import SoknadFormWrapper from 'components/SoknadFormWrapper/SoknadFormWrapper';
-import { LucaGuidePanel } from '@navikt/aap-felles-innbygger-react';
+import { LucaGuidePanel } from '@navikt/aap-felles-react';
 import { useFeatureToggleIntl } from 'hooks/useFeatureToggleIntl';
 import { slettLagretSoknadState, updateSøknadData } from 'context/soknadContextCommon';
 import { deleteOpplastedeVedlegg, useSoknadContextStandard } from 'context/soknadContextStandard';

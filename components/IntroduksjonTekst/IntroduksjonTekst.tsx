@@ -1,4 +1,4 @@
-import { LucaGuidePanel } from '@navikt/aap-felles-innbygger-react';
+import { LucaGuidePanel } from '@navikt/aap-felles-react';
 import { BodyShort, Heading, Link } from '@navikt/ds-react';
 import { FormattedMessage } from 'react-intl';
 import { AmplitudeAwareAccordion } from '../AmplitudeAwareAccordion/AmplitudeAwareAccordion';
