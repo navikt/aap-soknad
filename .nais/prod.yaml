@@ -19,7 +19,5 @@ env:
   value: "http://soknad-api"
 - name:  SOKNAD_API_AUDIENCE
   value: "prod-gcp:aap:soknad-api"
-- name:  ENABLE_SENTRY
-  value: "enabled"
 externals:
   - "www.nav.no"
