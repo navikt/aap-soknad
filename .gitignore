@@ -36,8 +36,6 @@ package-lock.json
 
 .next
 
-# Sentry
-.sentryclirc
 /test-results/
 /playwright-report/
 /playwright/.cache/
