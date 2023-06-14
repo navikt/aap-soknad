@@ -102,18 +102,22 @@ export const getAndreUtbetalingerSchema = (formatMessage: (id: string) => string
         .array()
         .ensure()
         .min(1, formatMessage('søknad.andreUtbetalinger.stønad.validation.required')),
-      afp: yup.object().when('stønad', ([stønad], schema) => {
-        if (stønad?.includes(StønadType.AFP)) {
-          return yup.object({
-            hvemBetaler: yup
-              .string()
-              .required(
-                formatMessage('søknad.andreUtbetalinger.hvemBetalerAfp.validation.required')
-              ),
-          });
-        }
-        return schema;
-      }),
+      afp: yup
+        .object({
+          hvemBetaler: yup.string().nullable(),
+        })
+        .when('stønad', ([stønad], schema) => {
+          if (stønad?.includes(StønadType.AFP)) {
+            return yup.object({
+              hvemBetaler: yup
+                .string()
+                .required(
+                  formatMessage('søknad.andreUtbetalinger.hvemBetalerAfp.validation.required')
+                ),
+            });
+          }
+          return schema;
+        }),
     }),
   });
 
@@ -130,6 +134,7 @@ export const AndreUtbetalinger = ({ onBackClick, onNext, defaultValues }: Props)
   } = useForm({
     resolver: yupResolver(getAndreUtbetalingerSchema(formatMessage)),
     defaultValues: {
+      /* @ts-ignore */
       [ANDRE_UTBETALINGER]: defaultValues?.søknad?.andreUtbetalinger,
     },
   });
