@@ -7,16 +7,12 @@ import userEvent from '@testing-library/user-event';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 
-interface FormFields {
-  tillatelse: string;
-}
-
 const TestComponent = () => {
   const schema = yup.object().shape({
     tillatelse: yup.boolean().required('Du må godkjenne for å gå videre').oneOf([true]).nullable(),
   });
 
-  const { control, handleSubmit } = useForm<FormFields>({ resolver: yupResolver(schema) });
+  const { control, handleSubmit } = useForm({ resolver: yupResolver(schema) });
 
   return (
     <form onSubmit={handleSubmit(() => jest.fn())}>

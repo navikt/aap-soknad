@@ -1,4 +1,4 @@
-import { FieldValues, useForm, useWatch } from 'react-hook-form';
+import { useForm, useWatch } from 'react-hook-form';
 import { Soknad } from 'types/Soknad';
 import React, { useEffect, useMemo } from 'react';
 import { Label, Alert, BodyShort, Heading, Radio } from '@navikt/ds-react';
@@ -18,7 +18,6 @@ import { useDebounceLagreSoknad } from 'hooks/useDebounceLagreSoknad';
 
 import { GenericSoknadContextState } from 'types/SoknadContext';
 import * as classes from './StartDato.module.css';
-import { formatDate } from 'utils/date';
 import { setFocusOnErrorSummary } from 'components/schema/FormErrorSummary';
 import { DatePickerWrapper } from '../../../input/DatePickerWrapper/DatePickerWrapper';
 export enum FerieType {
@@ -53,46 +52,70 @@ export const getStartDatoSchema = (formatMessage: (id: string) => string) => {
       .required(formatMessage('søknad.startDato.sykepenger.required'))
       .oneOf([JaEllerNei.JA, JaEllerNei.NEI])
       .nullable(),
-    [FERIE]: yup.object().when([SYKEPENGER], {
-      is: JaEllerNei.JA,
-      then: yup.object({
-        [SKALHAFERIE]: yup
-          .string()
-          .required(formatMessage('søknad.startDato.skalHaFerie.validation.required'))
-          .oneOf([JaEllerNei.JA, JaEllerNei.NEI]),
-        [FERIETYPE]: yup.string().when([SKALHAFERIE], {
-          is: JaEllerNei.JA,
-          then: yup
-            .string()
-            .required(formatMessage('søknad.startDato.ferieType.validation.required'))
-            .nullable(),
-        }),
-        ['fraDato']: yup.date().when([FERIETYPE], {
-          is: FerieType.PERIODE,
-          then: yup
-            .date()
-            .required(formatMessage('søknad.startDato.periode.fraDato.validation.required'))
-            .typeError(formatMessage('søknad.startDato.periode.fraDato.validation.typeError')),
-        }),
-        ['tilDato']: yup.date().when([FERIETYPE], {
-          is: FerieType.PERIODE,
-          then: yup
-            .date()
-            .required(formatMessage('søknad.startDato.periode.tilDato.validation.required'))
-            .min(
-              yup.ref('fraDato'),
-              formatMessage('søknad.startDato.periode.tilDato.validation.fraDatoEtterTilDato')
-            )
-            .typeError(formatMessage('søknad.startDato.periode.tilDato.validation.typeError')),
-        }),
-        ['antallDager']: yup.string().when([FERIETYPE], {
-          is: FerieType.DAGER,
-          then: yup
-            .string()
-            .required(formatMessage('søknad.startDato.antallDager.validation.required')),
-        }),
+    [FERIE]: yup
+      .object({
+        [SKALHAFERIE]: yup.string().nullable(),
+        [FERIETYPE]: yup.string().nullable(),
+        fraDato: yup.date().nullable(),
+        tilDato: yup.date().nullable(),
+        antallDager: yup.string().nullable(),
+      })
+      .when(SYKEPENGER, ([sykepenger], schema) => {
+        if (sykepenger === JaEllerNei.JA) {
+          return yup.object({
+            [SKALHAFERIE]: yup
+              .string()
+              .required(formatMessage('søknad.startDato.skalHaFerie.validation.required'))
+              .oneOf([JaEllerNei.JA, JaEllerNei.NEI]),
+
+            [FERIETYPE]: yup.string().when(SKALHAFERIE, ([skalHaFerie], schema) => {
+              if (skalHaFerie === JaEllerNei.JA) {
+                return yup
+                  .string()
+                  .required(formatMessage('søknad.startDato.ferieType.validation.required'))
+                  .nullable();
+              }
+              return schema;
+            }),
+
+            fraDato: yup.date().when(FERIETYPE, ([ferieType], schema) => {
+              if (ferieType === FerieType.PERIODE) {
+                return yup
+                  .date()
+                  .required(formatMessage('søknad.startDato.periode.fraDato.validation.required'))
+                  .typeError(
+                    formatMessage('søknad.startDato.periode.fraDato.validation.typeError')
+                  );
+              }
+              return schema;
+            }),
+
+            tilDato: yup.date().when(FERIETYPE, ([ferieType], schema) => {
+              if (ferieType === FerieType.PERIODE) {
+                return yup
+                  .date()
+                  .required(formatMessage('søknad.startDato.periode.tilDato.validation.required'))
+                  .typeError(formatMessage('søknad.startDato.periode.tilDato.validation.typeError'))
+                  .min(
+                    yup.ref('fraDato'),
+                    formatMessage('søknad.startDato.periode.tilDato.validation.fraDatoEtterTilDato')
+                  );
+              }
+              return schema;
+            }),
+
+            antallDager: yup.string().when(FERIETYPE, ([ferieType], schema) => {
+              if (ferieType === FerieType.DAGER) {
+                return yup
+                  .string()
+                  .required(formatMessage('søknad.startDato.antallDager.validation.required'));
+              }
+              return schema;
+            }),
+          });
+        }
+        return schema;
       }),
-    }),
   });
 };
 
@@ -106,14 +129,14 @@ const StartDato = ({ onBackClick, onNext, defaultValues }: Props) => {
     setValue,
     clearErrors,
     formState: { errors },
-  } = useForm<FieldValues>({
+  } = useForm({
     resolver: yupResolver(getStartDatoSchema(formatMessage)),
     defaultValues: {
       [SYKEPENGER]: defaultValues?.søknad?.[SYKEPENGER],
       ferie: {
         ...defaultValues?.søknad?.ferie,
-        fraDato: formatDate(defaultValues?.søknad?.ferie?.fraDato, 'yyyy-MM-dd'),
-        tilDato: formatDate(defaultValues?.søknad?.ferie?.tilDato, 'yyyy-MM-dd'),
+        fraDato: defaultValues?.søknad?.ferie?.fraDato,
+        tilDato: defaultValues?.søknad?.ferie?.tilDato,
       },
     },
   });
@@ -228,7 +251,7 @@ const StartDato = ({ onBackClick, onNext, defaultValues }: Props) => {
                 <DatePickerWrapper
                   control={control}
                   label={formatMessage('søknad.startDato.periode.tilDato.label')}
-                  selectedDate={allFields?.ferie.tilDato}
+                  selectedDate={allFields.ferie?.tilDato}
                   name={`${FERIE}.tilDato`}
                   fromDate={new Date()}
                 />

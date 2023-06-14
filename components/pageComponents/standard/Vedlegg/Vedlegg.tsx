@@ -28,7 +28,6 @@ const Vedlegg = ({ onBackClick, onNext, defaultValues }: Props) => {
   const { formatMessage } = useFeatureToggleIntl();
   const [scanningGuideOpen, setScanningGuideOpen] = useState(false);
   const scanningGuideElement = useRef(null);
-  const schema = yup.object().shape({});
   const { søknadState, søknadDispatch } = useSoknadContextStandard();
   const { stepList } = useStepWizard();
   const { locale } = useIntl();
@@ -40,7 +39,6 @@ const Vedlegg = ({ onBackClick, onNext, defaultValues }: Props) => {
     handleSubmit,
     formState: { errors },
   } = useForm<SoknadVedlegg>({
-    resolver: yupResolver(schema),
     defaultValues: { ...defaultValues?.søknad?.vedlegg },
   });
 

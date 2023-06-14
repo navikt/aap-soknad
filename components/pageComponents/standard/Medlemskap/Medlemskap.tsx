@@ -41,10 +41,11 @@ const ARBEID_UTENFOR_NORGE_FØR_SYKDOM = 'arbeidetUtenforNorgeFørSykdom';
 const OGSÅ_ARBEID_UTENFOR_NORGE = 'iTilleggArbeidUtenforNorge';
 export const ARBEID_I_NORGE = 'harArbeidetINorgeSiste5År';
 const MEDLEMSKAP = 'medlemskap';
-const validateArbeidINorge = (boddINorge?: JaEllerNei) => boddINorge === JaEllerNei.NEI;
-const validateArbeidUtenforNorgeFørSykdom = (boddINorge?: JaEllerNei) =>
+
+const validateArbeidINorge = (boddINorge?: JaEllerNei | null) => boddINorge === JaEllerNei.NEI;
+const validateArbeidUtenforNorgeFørSykdom = (boddINorge?: JaEllerNei | null) =>
   boddINorge === JaEllerNei.JA;
-const valideOgsåArbeidetUtenforNorge = (boddINorge?: JaEllerNei, JobbINorge?: JaEllerNei) =>
+const valideOgsåArbeidetUtenforNorge = (boddINorge?: JaEllerNei | null, JobbINorge?: JaEllerNei) =>
   boddINorge === JaEllerNei.NEI && JobbINorge === JaEllerNei.JA;
 const validateUtenlandsPeriode = (
   arbeidINorge?: JaEllerNei,
@@ -62,31 +63,33 @@ export const getMedlemskapSchema = (formatMessage: (id: string) => string) => {
   return yup.object().shape({
     [MEDLEMSKAP]: yup.object().shape({
       [BODD_I_NORGE]: yup
-        .string()
+        .mixed<JaEllerNei>()
         .required(formatMessage('søknad.medlemskap.harBoddINorgeSiste5År.validation.required'))
-        .oneOf([JaNeiVetIkke.JA, JaNeiVetIkke.NEI])
+        .oneOf([JaEllerNei.JA, JaEllerNei.NEI])
         .nullable(),
-      [ARBEID_I_NORGE]: yup.string().when(BODD_I_NORGE, {
+      [ARBEID_I_NORGE]: yup.mixed<JaEllerNei>().when(BODD_I_NORGE, {
         is: validateArbeidINorge,
         then: (yupSchema) =>
           yupSchema
             .required(
               formatMessage('søknad.medlemskap.harArbeidetINorgeSiste5År.validation.required')
             )
-            .oneOf([JaNeiVetIkke.JA, JaNeiVetIkke.NEI])
+            .oneOf([JaEllerNei.JA, JaEllerNei.NEI])
             .nullable(),
         otherwise: (yupSchema) => yupSchema.notRequired(),
       }),
-      [ARBEID_UTENFOR_NORGE_FØR_SYKDOM]: yup.string().when([BODD_I_NORGE, ARBEID_I_NORGE], {
-        is: validateArbeidUtenforNorgeFørSykdom,
-        then: (yupSchema) =>
-          yupSchema
-            .required(formatMessage('søknad.medlemskap.arbeidUtenforNorge.validation.required'))
-            .oneOf([JaNeiVetIkke.JA, JaNeiVetIkke.NEI])
-            .nullable(),
-        otherwise: (yupSchema) => yupSchema.notRequired(),
-      }),
-      [OGSÅ_ARBEID_UTENFOR_NORGE]: yup.string().when([BODD_I_NORGE, ARBEID_I_NORGE], {
+      [ARBEID_UTENFOR_NORGE_FØR_SYKDOM]: yup
+        .mixed<JaEllerNei>()
+        .when([BODD_I_NORGE, ARBEID_I_NORGE], {
+          is: validateArbeidUtenforNorgeFørSykdom,
+          then: (yupSchema) =>
+            yupSchema
+              .required(formatMessage('søknad.medlemskap.arbeidUtenforNorge.validation.required'))
+              .oneOf([JaEllerNei.JA, JaEllerNei.NEI])
+              .nullable(),
+          otherwise: (yupSchema) => yupSchema.notRequired(),
+        }),
+      [OGSÅ_ARBEID_UTENFOR_NORGE]: yup.mixed<JaEllerNei>().when([BODD_I_NORGE, ARBEID_I_NORGE], {
         is: valideOgsåArbeidetUtenforNorge,
         then: (yupSchema) =>
           yupSchema
@@ -133,7 +136,7 @@ export const getMedlemskapSchema = (formatMessage: (id: string) => string) => {
 };
 export const utenlandsPeriodeArbeidEllerBodd = (
   arbeidINorge?: JaEllerNei,
-  boddINorge?: JaEllerNei
+  boddINorge?: JaEllerNei | null
 ) => {
   if (boddINorge === JaEllerNei.NEI && arbeidINorge === JaEllerNei.NEI) {
     return ArbeidEllerBodd.BODD;
@@ -150,9 +153,7 @@ export const Medlemskap = ({ onBackClick, onNext, defaultValues }: Props) => {
     setValue,
     clearErrors,
     formState: { errors },
-  } = useForm<{
-    [MEDLEMSKAP]: MedlemskapType;
-  }>({
+  } = useForm({
     resolver: yupResolver(getMedlemskapSchema(formatMessage)),
     defaultValues: {
       [MEDLEMSKAP]: defaultValues?.søknad?.medlemskap,

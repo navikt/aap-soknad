@@ -262,6 +262,7 @@ const Steps = ({ søker, mellomlagretSøknad }: PageProps) => {
               {step === '9' && (
                 <Oppsummering
                   onBackClick={onPreviousStep}
+                  // @ts-ignore-line TODO: grave i denne
                   onSubmitSoknad={submitSoknad}
                   submitErrorMessageRef={submitErrorMessageRef}
                   hasSubmitError={showFetchErrorMessage}

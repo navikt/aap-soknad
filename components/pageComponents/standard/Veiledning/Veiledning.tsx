@@ -35,7 +35,7 @@ export const Veiledning = ({
       .oneOf([true], formatMessage('søknad.veiledning.veiledningConfirm.validation.required')),
   });
 
-  const { control, handleSubmit } = useForm<VeiledningType>({
+  const { control, handleSubmit } = useForm({
     resolver: yupResolver(schema),
   });
 

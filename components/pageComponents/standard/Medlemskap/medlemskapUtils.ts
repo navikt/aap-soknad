@@ -1,10 +1,10 @@
 import { JaEllerNei } from 'types/Generic';
 
-export const shouldShowArbeidetUtenforNorgeSiste5År = (boddINorge?: JaEllerNei) => {
+export const shouldShowArbeidetUtenforNorgeSiste5År = (boddINorge?: JaEllerNei | null) => {
   return boddINorge === JaEllerNei.JA;
 };
 
-export const shouldShowArbeidetSammenhengendeINorgeSiste5År = (boddINorge?: JaEllerNei) => {
+export const shouldShowArbeidetSammenhengendeINorgeSiste5År = (boddINorge?: JaEllerNei | null) => {
   return boddINorge === JaEllerNei.NEI;
 };
 

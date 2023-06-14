@@ -41,7 +41,7 @@ export const Yrkesskade = ({ onBackClick, onNext, defaultValues }: Props) => {
     control,
     handleSubmit,
     formState: { errors },
-  } = useForm<FieldValues>({
+  } = useForm({
     resolver: yupResolver(getYrkesskadeSchema(formatMessage)),
     defaultValues: {
       [YRKESSKADE]: defaultValues?.søknad?.yrkesskade,
