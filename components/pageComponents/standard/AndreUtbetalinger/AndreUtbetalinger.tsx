@@ -102,16 +102,21 @@ export const getAndreUtbetalingerSchema = (formatMessage: (id: string) => string
         .array()
         .ensure()
         .min(1, formatMessage('søknad.andreUtbetalinger.stønad.validation.required')),
-      afp: yup.object().when(['stønad'], {
-        is: (stønad: StønadType[] | undefined) => stønad?.includes(StønadType.AFP),
-        then: yup.object({
-          hvemBetaler: yup
-            .string()
-            .required(formatMessage('søknad.andreUtbetalinger.hvemBetalerAfp.validation.required')),
-        }),
+      afp: yup.object().when('stønad', ([stønad], schema) => {
+        if (stønad?.includes(StønadType.AFP)) {
+          return yup.object({
+            hvemBetaler: yup
+              .string()
+              .required(
+                formatMessage('søknad.andreUtbetalinger.hvemBetalerAfp.validation.required')
+              ),
+          });
+        }
+        return schema;
       }),
     }),
   });
+
 export const AndreUtbetalinger = ({ onBackClick, onNext, defaultValues }: Props) => {
   const { formatMessage } = useFeatureToggleIntl();
   const { søknadState, søknadDispatch } = useSoknadContextStandard();
@@ -122,9 +127,7 @@ export const AndreUtbetalinger = ({ onBackClick, onNext, defaultValues }: Props)
     setValue,
     watch,
     formState: { errors },
-  } = useForm<{
-    [ANDRE_UTBETALINGER]: AndreUtbetalingerFormFields;
-  }>({
+  } = useForm({
     resolver: yupResolver(getAndreUtbetalingerSchema(formatMessage)),
     defaultValues: {
       [ANDRE_UTBETALINGER]: defaultValues?.søknad?.andreUtbetalinger,
