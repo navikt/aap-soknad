@@ -75,7 +75,7 @@ export const getUtenlandsPeriodeSchema = (
         )
       )
       .nullable(),
-    iArbeid: yup.string().when('', ([], schema) => {
+    iArbeid: yup.string().when('arbeidEllerBodd', ([], schema) => {
       if (arbeidEllerBodd === ArbeidEllerBodd.BODD) {
         return yup
           .string()

@@ -36,6 +36,7 @@ describe('AndreUtbetalinger validation', () => {
       andreUtbetalinger: {
         lønn: JaEllerNei.JA,
         stønad: [StønadType.INTRODUKSJONSSTØNAD],
+        afp: {},
       },
     };
     const result = await schema.validate(form, { abortEarly: false }).catch((err) => err);

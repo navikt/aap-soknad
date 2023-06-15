@@ -65,9 +65,7 @@ export const getStartDatoSchema = (formatMessage: (id: string) => string) => {
           return yup.object({
             [SKALHAFERIE]: yup
               .string()
-              .required(formatMessage('søknad.startDato.skalHaFerie.validation.required'))
-              .oneOf([JaEllerNei.JA, JaEllerNei.NEI]),
-
+              .required(formatMessage('søknad.startDato.skalHaFerie.validation.required')),
             [FERIETYPE]: yup.string().when(SKALHAFERIE, ([skalHaFerie], schema) => {
               if (skalHaFerie === JaEllerNei.JA) {
                 return yup
