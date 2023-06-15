@@ -17,9 +17,9 @@ export type FieldAndLabel<T> = {
   value?: T;
 };
 export type Navn = {
-  fornavn: string;
+  fornavn?: string;
   mellomnavn?: string;
-  etternavn: string;
+  etternavn?: string;
 };
 export type Periode = {
   fraDato?: Date;
@@ -85,7 +85,7 @@ export type ManuelleBarn = {
   navn: Navn;
   internId: string;
   fødseldato?: Date;
-  harInntekt?: string;
+  harInntekt?: JaEllerNei;
   relasjon: Relasjon;
   vedlegg?: Vedlegg[];
 };

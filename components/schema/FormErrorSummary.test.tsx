@@ -46,7 +46,7 @@ const TestComponent = () => {
     control,
     handleSubmit,
     formState: { errors },
-  } = useForm<FormField>({ resolver: yupResolver(schema) });
+  } = useForm({ resolver: yupResolver(schema) });
 
   return (
     <form onSubmit={handleSubmit(() => jest.fn())}>

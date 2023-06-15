@@ -17,16 +17,6 @@ interface Props {
   behandler?: any;
 }
 
-interface FormFields {
-  firstname: string;
-  lastname: string;
-  legekontor: string;
-  gateadresse: string;
-  postnummer: string;
-  poststed: string;
-  telefon: string;
-}
-
 export const getBehandlerSchema = (formatMessage: (id: string, options?: {}) => string) => {
   return yup.object().shape({
     firstname: yup
@@ -44,10 +34,10 @@ export const AddBehandlerModal = ({ showModal, onCloseClick, onSaveClick, behand
   const { formatMessage } = useFeatureToggleIntl();
   const schema = getBehandlerSchema(formatMessage);
 
-  const { control, handleSubmit, reset } = useForm<FormFields>({
+  const { control, handleSubmit, reset } = useForm({
     resolver: yupResolver(schema),
     defaultValues: {
-      ...(behandler ? behandler : {}),
+      ...(behandler ?? {}),
     },
   });
 

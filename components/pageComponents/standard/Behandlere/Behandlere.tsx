@@ -39,6 +39,7 @@ export const getBehandlerSchema = (formatMessage: (id: string) => string) =>
           .nullable(),
       })
     ),
+    [ANDRE_BEHANDLERE]: yup.array(),
   });
 export const Behandlere = ({ onBackClick, onNext, defaultValues }: Props) => {
   const { formatMessage } = useFeatureToggleIntl();
@@ -49,10 +50,7 @@ export const Behandlere = ({ onBackClick, onNext, defaultValues }: Props) => {
     control,
     handleSubmit,
     formState: { errors },
-  } = useForm<{
-    [REGISTRERTE_BEHANDLERE]: Array<RegistrertBehandler>;
-    [ANDRE_BEHANDLERE]: Array<Behandler>;
-  }>({
+  } = useForm({
     resolver: yupResolver(getBehandlerSchema(formatMessage)),
     defaultValues: {
       [REGISTRERTE_BEHANDLERE]: defaultValues?.søknad?.registrerteBehandlere,
@@ -89,6 +87,7 @@ export const Behandlere = ({ onBackClick, onNext, defaultValues }: Props) => {
   const controlledFields = registrertBehandlerFields.map((field, index) => {
     return {
       ...field,
+      /* @ts-ignore-line */
       ...watchFieldArray[index],
     };
   });
@@ -157,24 +156,28 @@ export const Behandlere = ({ onBackClick, onNext, defaultValues }: Props) => {
                     {formatMessage('søknad.helseopplysninger.registrertFastlege.navn')}
                   </Label>
                 </dt>
+                {/* @ts-ignore-line */}
                 <dd>{formatNavn(field.navn)}</dd>
                 <dt>
                   <Label as={'span'}>
                     {formatMessage('søknad.helseopplysninger.registrertFastlege.legekontor')}
                   </Label>
                 </dt>
+                {/* @ts-ignore-line */}
                 <dd>{field.kontaktinformasjon.kontor}</dd>
                 <dt>
                   <Label as={'span'}>
                     {formatMessage('søknad.helseopplysninger.registrertFastlege.adresse')}
                   </Label>
                 </dt>
+                {/* @ts-ignore-line */}
                 <dd>{formatFullAdresse(field.kontaktinformasjon.adresse)}</dd>
                 <dt>
                   <Label as={'span'}>
                     {formatMessage('søknad.helseopplysninger.registrertFastlege.telefon')}
                   </Label>
                 </dt>
+                {/* @ts-ignore-line */}
                 <dd>{formatTelefonnummer(field.kontaktinformasjon.telefon)}</dd>
               </dl>
               <RadioGroupWrapper

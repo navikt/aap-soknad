@@ -59,16 +59,18 @@ export const getStudentSchema = (formatMessage: (id: string) => string) =>
           formatMessage('søknad.student.erStudent.required')
         )
         .typeError(formatMessage('søknad.student.erStudent.required')),
-      [KOMME_TILBAKE]: yup.string().when([ER_STUDENT], {
-        is: JaNeiAvbrutt.AVBRUTT,
-        then: yup
-          .string()
-          .required(formatMessage('søknad.student.kommeTilbake.required'))
-          .oneOf(
-            [JaNeiVetIkke.JA, JaNeiVetIkke.NEI, JaNeiVetIkke.VET_IKKE],
-            formatMessage('søknad.student.kommeTilbake.required')
-          )
-          .typeError(formatMessage('søknad.student.kommeTilbake.required')),
+      [KOMME_TILBAKE]: yup.string().when(ER_STUDENT, ([erStudent], schema) => {
+        if (erStudent === JaNeiAvbrutt.AVBRUTT) {
+          return yup
+            .string()
+            .required(formatMessage('søknad.student.kommeTilbake.required'))
+            .oneOf(
+              [JaNeiVetIkke.JA, JaNeiVetIkke.NEI, JaNeiVetIkke.VET_IKKE],
+              formatMessage('søknad.student.kommeTilbake.required')
+            )
+            .typeError(formatMessage('søknad.student.kommeTilbake.required'));
+        }
+        return schema;
       }),
     }),
   });
@@ -83,7 +85,7 @@ const Student = ({ onBackClick, onNext, defaultValues }: Props) => {
     setValue,
     clearErrors,
     formState: { errors },
-  } = useForm<FieldValues>({
+  } = useForm({
     resolver: yupResolver(getStudentSchema(formatMessage)),
     defaultValues: {
       [STUDENT]: defaultValues?.søknad?.student,

@@ -13,7 +13,7 @@ import React, { useEffect } from 'react';
 import { Soknad, ManuelleBarn } from 'types/Soknad';
 import TextFieldWrapper from 'components/input/TextFieldWrapper';
 import RadioGroupWrapper from 'components/input/RadioGroupWrapper/RadioGroupWrapper';
-import { FieldValues, useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import * as classes from './Barnetillegg.module.css';
@@ -22,7 +22,6 @@ import { useFeatureToggleIntl } from 'hooks/useFeatureToggleIntl';
 import { GRUNNBELØP } from './Barnetillegg';
 
 import { add, sub, subYears } from 'date-fns';
-import { formatDate } from 'utils/date';
 import { DatePickerWrapper } from '../../../input/DatePickerWrapper/DatePickerWrapper';
 
 interface Props {
@@ -93,27 +92,17 @@ export const getAddBarnSchema = (formatMessage: (id: string, options?: {}) => st
 export const AddBarnModal = ({ showModal, onCloseClick, onSaveClick, barn }: Props) => {
   const { formatMessage } = useFeatureToggleIntl();
 
-  const { control, handleSubmit, setValue, reset, watch } = useForm<FieldValues>({
+  const { control, handleSubmit, reset, watch } = useForm({
     resolver: yupResolver(getAddBarnSchema(formatMessage)),
     defaultValues: {
-      ...(barn
-        ? {
-            ...barn,
-            fødseldato: formatDate(barn.fødseldato, 'yyyy-MM-dd'),
-          }
-        : {}),
+      ...(barn ?? {}),
     },
   });
 
-  const barnepensjon = watch('barnepensjon');
   const relasjon = watch('relasjon');
 
   useEffect(() => {
-    if (barnepensjon === JaEllerNei.JA) setValue('harInntekt', undefined);
-  }, [barnepensjon]);
-
-  useEffect(() => {
-    reset({ ...barn, fødseldato: formatDate(barn?.fødseldato, 'yyyy-MM-dd') });
+    reset({ ...barn });
   }, [barn, showModal, reset]);
 
   return (

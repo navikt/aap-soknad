@@ -9,7 +9,7 @@ describe('StartDato validation', () => {
     expect(result.errors.length).not.toBe(0);
   });
   it('kommer ikke fra sykepenger', async () => {
-    const form = { sykepenger: JaEllerNei.NEI };
+    const form = { sykepenger: JaEllerNei.NEI, ferie: {} };
     const result = await schema.validate(form, { abortEarly: false }).catch((err) => err);
     expect(result).toStrictEqual(form);
   });

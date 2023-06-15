@@ -9,7 +9,7 @@ export interface DateProps<FormFieldValues extends FieldValues> {
   label: string;
   description?: React.ReactNode;
   disableWeekend?: boolean;
-  selectedDate?: string | Date;
+  selectedDate?: Date | null;
   control: Control<FormFieldValues>;
   fromDate?: Date;
   toDate?: Date;
