@@ -23,6 +23,8 @@ import { GenericSoknadContextState } from 'types/SoknadContext';
 import { ValidationError } from 'yup';
 import { logSkjemastegFullførtEvent } from '../../../../utils/amplitude';
 import { FieldErrors } from 'react-hook-form';
+import { setFocusOnErrorSummary } from '../../../schema/FormErrorSummary';
+import { validate } from '../../../../lib/utils/validationUtils';
 
 interface Props {
   onBackClick: () => void;
@@ -55,26 +57,11 @@ export const Yrkesskade = ({ onBackClick, defaultValues }: Props) => {
   return (
     <SoknadFormWrapper
       onNext={async (data) => {
-        try {
-          await getYrkesskadeSchema(formatMessage).validate(søknadState.søknad, {
-            abortEarly: false,
-          });
-        } catch (e) {
-          if (e instanceof ValidationError) {
-            const errors: FieldErrors = e.inner.reduce(
-              (acc, currentValue) => ({
-                ...acc,
-                [currentValue.path as string]: {
-                  message: currentValue.message,
-                  type: currentValue.type,
-                },
-              }),
-              {}
-            );
-
-            setErrors(errors);
-            return;
-          }
+        const errors = await validate(getYrkesskadeSchema(formatMessage), søknadState.søknad);
+        if (errors) {
+          setErrors(errors);
+          setFocusOnErrorSummary();
+          return;
         }
 
         logSkjemastegFullførtEvent(currentStepIndex ?? 0);

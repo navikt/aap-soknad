@@ -1,12 +1,10 @@
 import { Soknad } from 'types/Soknad';
-import RadioGroupWrapper from 'components/input/RadioGroupWrapper/RadioGroupWrapper';
-import { BodyShort, Heading, Radio, Alert } from '@navikt/ds-react';
+import { Alert, BodyShort, Heading, Radio, RadioGroup } from '@navikt/ds-react';
 import { JaNeiVetIkke } from 'types/Generic';
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import * as yup from 'yup';
-import { useStepWizard } from 'context/stepWizardContextV2';
-import { FieldValues, useForm, useWatch } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
+import { completeAndGoToNextStep, useStepWizard } from 'context/stepWizardContextV2';
+import { FieldErrors } from 'react-hook-form';
 import SoknadFormWrapper from 'components/SoknadFormWrapper/SoknadFormWrapper';
 import ColorPanel from 'components/panel/ColorPanel';
 import { LucaGuidePanel } from '@navikt/aap-felles-react';
@@ -21,6 +19,8 @@ import { deleteOpplastedeVedlegg, useSoknadContextStandard } from 'context/sokna
 import { useDebounceLagreSoknad } from 'hooks/useDebounceLagreSoknad';
 import { GenericSoknadContextState } from 'types/SoknadContext';
 import { setFocusOnErrorSummary } from 'components/schema/FormErrorSummary';
+import { validate } from '../../../../lib/utils/validationUtils';
+import { logSkjemastegFullførtEvent } from '../../../../utils/amplitude';
 
 export const AVBRUTT_STUDIE_VEDLEGG = 'avbruttStudie';
 export const STUDENT = 'student';
@@ -50,55 +50,40 @@ interface Props {
 
 export const getStudentSchema = (formatMessage: (id: string) => string) =>
   yup.object().shape({
-    [STUDENT]: yup.object().shape({
-      [ER_STUDENT]: yup
-        .string()
-        .required(formatMessage('søknad.student.erStudent.required'))
-        .oneOf(
-          [JaNeiAvbrutt.JA, JaNeiAvbrutt.NEI, JaNeiAvbrutt.AVBRUTT],
-          formatMessage('søknad.student.erStudent.required')
-        )
-        .typeError(formatMessage('søknad.student.erStudent.required')),
-      [KOMME_TILBAKE]: yup.string().when(ER_STUDENT, ([erStudent], schema) => {
-        if (erStudent === JaNeiAvbrutt.AVBRUTT) {
-          return yup
-            .string()
-            .required(formatMessage('søknad.student.kommeTilbake.required'))
-            .oneOf(
-              [JaNeiVetIkke.JA, JaNeiVetIkke.NEI, JaNeiVetIkke.VET_IKKE],
-              formatMessage('søknad.student.kommeTilbake.required')
-            )
-            .typeError(formatMessage('søknad.student.kommeTilbake.required'));
-        }
-        return schema;
-      }),
+    [ER_STUDENT]: yup
+      .string()
+      .required(formatMessage('søknad.student.erStudent.required'))
+      .oneOf(
+        [JaNeiAvbrutt.JA, JaNeiAvbrutt.NEI, JaNeiAvbrutt.AVBRUTT],
+        formatMessage('søknad.student.erStudent.required')
+      )
+      .typeError(formatMessage('søknad.student.erStudent.required')),
+    [KOMME_TILBAKE]: yup.string().when(ER_STUDENT, ([erStudent], schema) => {
+      if (erStudent === JaNeiAvbrutt.AVBRUTT) {
+        return yup
+          .string()
+          .required(formatMessage('søknad.student.kommeTilbake.required'))
+          .oneOf(
+            [JaNeiVetIkke.JA, JaNeiVetIkke.NEI, JaNeiVetIkke.VET_IKKE],
+            formatMessage('søknad.student.kommeTilbake.required')
+          )
+          .typeError(formatMessage('søknad.student.kommeTilbake.required'));
+      }
+      return schema;
     }),
   });
 
 const Student = ({ onBackClick, onNext, defaultValues }: Props) => {
   const { formatMessage } = useFeatureToggleIntl();
   const { søknadState, søknadDispatch } = useSoknadContextStandard();
-  const { stepList } = useStepWizard();
-  const {
-    control,
-    handleSubmit,
-    setValue,
-    clearErrors,
-    formState: { errors },
-  } = useForm({
-    resolver: yupResolver(getStudentSchema(formatMessage)),
-    defaultValues: {
-      [STUDENT]: defaultValues?.søknad?.student,
-    },
-  });
+  const { stepList, currentStepIndex, stepWizardDispatch } = useStepWizard();
 
-  const erStudent = useWatch({ control, name: `${STUDENT}.${ER_STUDENT}` });
-  const kommeTilbake = useWatch({ control, name: `${STUDENT}.${KOMME_TILBAKE}` });
   const debouncedLagre = useDebounceLagreSoknad<Soknad>();
-  const allFields = useWatch({ control });
+
   useEffect(() => {
-    debouncedLagre(søknadState, stepList, allFields);
-  }, [allFields]);
+    debouncedLagre(søknadState, stepList, {});
+  }, [søknadState.søknad?.student]);
+
   const ErStudentAlternativer = useMemo(
     () => ({
       [JaNeiAvbrutt.JA]: formatMessage(jaNeiAvbruttToTekstnøkkel(JaNeiAvbrutt.JA)),
@@ -109,14 +94,7 @@ const Student = ({ onBackClick, onNext, defaultValues }: Props) => {
   );
 
   useEffect(() => {
-    clearErrors();
-    if (erStudent !== JaNeiAvbrutt.AVBRUTT) {
-      setValue(`${STUDENT}.${KOMME_TILBAKE}`, undefined);
-    }
-  }, [erStudent]);
-
-  useEffect(() => {
-    if (kommeTilbake === JaNeiVetIkke.JA) {
+    if (søknadState.søknad?.student?.kommeTilbake === JaNeiVetIkke.JA) {
       addRequiredVedlegg(
         [
           {
@@ -129,13 +107,22 @@ const Student = ({ onBackClick, onNext, defaultValues }: Props) => {
     } else {
       removeRequiredVedlegg(AVBRUTT_STUDIE_VEDLEGG, søknadDispatch);
     }
-  }, [kommeTilbake]);
+  }, [søknadState.søknad?.student?.kommeTilbake]);
 
+  const [errors, setErrors] = useState<FieldErrors | undefined>();
   return (
     <SoknadFormWrapper
-      onNext={handleSubmit((data) => {
-        onNext(data);
-      }, setFocusOnErrorSummary)}
+      onNext={async (data) => {
+        const errors = await validate(getStudentSchema(formatMessage), søknadState.søknad?.student);
+        if (errors) {
+          setErrors(errors);
+          setFocusOnErrorSummary();
+          return;
+        }
+
+        logSkjemastegFullførtEvent(currentStepIndex ?? 0);
+        completeAndGoToNextStep(stepWizardDispatch);
+      }}
       onBack={() => {
         updateSøknadData<Soknad>(søknadDispatch, { ...søknadState.søknad });
         onBackClick();
@@ -155,10 +142,22 @@ const Student = ({ onBackClick, onNext, defaultValues }: Props) => {
       <LucaGuidePanel>
         <BodyShort spacing>{formatMessage('søknad.student.guide.guide1')}</BodyShort>
       </LucaGuidePanel>
-      <RadioGroupWrapper
-        name={`${STUDENT}.${ER_STUDENT}`}
+      <RadioGroup
+        name={`${ER_STUDENT}`}
+        value={defaultValues?.søknad?.student?.erStudent || ''}
         legend={formatMessage(`søknad.${STUDENT}.${ER_STUDENT}.legend`)}
-        control={control}
+        onChange={(value) => {
+          const copy = errors;
+          delete copy?.erStudent;
+          setErrors(copy);
+          updateSøknadData(søknadDispatch, {
+            student: {
+              ...søknadState.søknad?.student,
+              erStudent: value,
+            },
+          });
+        }}
+        error={errors?.erStudent?.message as string}
       >
         <Radio value={JaNeiAvbrutt.JA}>
           <BodyShort>{ErStudentAlternativer?.[JaNeiAvbrutt.JA]}</BodyShort>
@@ -169,13 +168,25 @@ const Student = ({ onBackClick, onNext, defaultValues }: Props) => {
         <Radio value={JaNeiAvbrutt.NEI}>
           <BodyShort>{ErStudentAlternativer?.[JaNeiAvbrutt.NEI]}</BodyShort>
         </Radio>
-      </RadioGroupWrapper>
-      {erStudent === JaNeiAvbrutt.AVBRUTT && (
+      </RadioGroup>
+      {søknadState.søknad?.student?.erStudent === JaNeiAvbrutt.AVBRUTT && (
         <ColorPanel color={'grey'}>
-          <RadioGroupWrapper
-            name={`${STUDENT}.${KOMME_TILBAKE}`}
+          <RadioGroup
+            name={`${KOMME_TILBAKE}`}
+            value={defaultValues?.søknad?.student?.kommeTilbake || ''}
             legend={formatMessage(`søknad.${STUDENT}.${KOMME_TILBAKE}.legend`)}
-            control={control}
+            onChange={(value) => {
+              const copy = errors;
+              delete copy?.kommeTilbake;
+              setErrors(copy);
+              updateSøknadData(søknadDispatch, {
+                student: {
+                  ...søknadState.søknad?.student,
+                  kommeTilbake: value,
+                },
+              });
+            }}
+            error={errors?.kommeTilbake?.message as string}
           >
             <Radio value={JaNeiVetIkke.JA}>
               <BodyShort>{JaNeiVetIkke.JA}</BodyShort>
@@ -186,10 +197,10 @@ const Student = ({ onBackClick, onNext, defaultValues }: Props) => {
             <Radio value={JaNeiVetIkke.VET_IKKE}>
               <BodyShort>{JaNeiVetIkke.VET_IKKE}</BodyShort>
             </Radio>
-          </RadioGroupWrapper>
+          </RadioGroup>
         </ColorPanel>
       )}
-      {kommeTilbake === JaNeiVetIkke.JA && (
+      {søknadState.søknad?.student?.kommeTilbake === JaNeiVetIkke.JA && (
         <Alert variant="info">
           <BodyShort>{formatMessage('søknad.student.vedlegg.title')}</BodyShort>
           <ul>
