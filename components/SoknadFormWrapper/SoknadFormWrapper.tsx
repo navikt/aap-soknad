@@ -171,7 +171,13 @@ const SøknadFormWrapper = ({
   };
   return (
     <>
-      <form onSubmit={onNext} className={`${classes?.formContent} ${className}`}>
+      <form
+        onSubmit={(event) => {
+          event.preventDefault();
+          onNext(event);
+        }}
+        className={`${classes?.formContent} ${className}`}
+      >
         {errors && <FormErrorSummary errors={errors} data-testid={'error-summary'} />}
         {children}
         <div className={classes?.fourButtonWrapper}>

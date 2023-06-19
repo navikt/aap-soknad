@@ -26,7 +26,6 @@ import { FieldErrors } from 'react-hook-form';
 
 interface Props {
   onBackClick: () => void;
-  onNext: (data: any) => void;
   defaultValues?: GenericSoknadContextState<Soknad>;
 }
 
@@ -39,7 +38,7 @@ export const getYrkesskadeSchema = (formatMessage: (id: string) => string) =>
       .nullable(),
   });
 
-export const Yrkesskade = ({ onBackClick, onNext, defaultValues }: Props) => {
+export const Yrkesskade = ({ onBackClick, defaultValues }: Props) => {
   const { formatMessage, FormatElement } = useFeatureToggleIntl();
 
   const { søknadState, søknadDispatch } = useSoknadContextStandard();
