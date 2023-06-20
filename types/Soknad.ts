@@ -1,16 +1,10 @@
-import {
-  AttachmentType,
-  StønadType,
-} from 'components/pageComponents/standard/AndreUtbetalinger/AndreUtbetalinger';
+import { StønadType } from 'components/pageComponents/standard/AndreUtbetalinger/AndreUtbetalinger';
 import { Relasjon } from 'components/pageComponents/standard/Barnetillegg/AddBarnModal';
 import { JaEllerNei, JaNeiVetIkke } from './Generic';
-import {
-  AVBRUTT_STUDIE_VEDLEGG,
-  JaNeiAvbrutt,
-} from 'components/pageComponents/standard/Student/Student';
+import { JaNeiAvbrutt } from 'components/pageComponents/standard/Student/Student';
 import { OppslagBehandler } from 'context/sokerOppslagContext';
 import { BARN } from 'components/pageComponents/standard/Barnetillegg/Barnetillegg';
-import { FerieType, SYKEPENGER } from 'components/pageComponents/standard/StartDato/StartDato';
+import { FerieType } from 'components/pageComponents/standard/StartDato/StartDato';
 
 export type FieldAndLabel<T> = {
   label?: string;
@@ -117,7 +111,7 @@ export type SoknadVedlegg = {
 };
 
 export interface Soknad {
-  [SYKEPENGER]?: JaEllerNei;
+  sykepenger?: JaEllerNei;
   yrkesskade?: Yrkesskade;
   medlemskap?: Medlemskap;
   registrerteBehandlere?: RegistrertBehandler[];

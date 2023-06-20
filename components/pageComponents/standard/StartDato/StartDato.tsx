@@ -34,11 +34,6 @@ export enum FerieType {
   PERIODE = 'PERIODE',
 }
 
-const FERIE = 'ferie';
-export const SYKEPENGER = 'sykepenger';
-const FERIETYPE = 'ferieType';
-const SKALHAFERIE = 'skalHaFerie';
-
 export const FerieTypeToMessageKey = (ferieType: FerieType) => {
   switch (ferieType) {
     case FerieType.PERIODE:
@@ -55,26 +50,26 @@ interface Props {
 
 export const getStartDatoSchema = (formatMessage: (id: string) => string) => {
   return yup.object().shape({
-    [SYKEPENGER]: yup
+    sykepenger: yup
       .string()
       .required(formatMessage('søknad.startDato.sykepenger.required'))
       .oneOf([JaEllerNei.JA, JaEllerNei.NEI])
       .nullable(),
-    [FERIE]: yup
+    ferie: yup
       .object({
-        [SKALHAFERIE]: yup.string().nullable(),
-        [FERIETYPE]: yup.string().nullable(),
+        skalHaFerie: yup.string().nullable(),
+        ferieType: yup.string().nullable(),
         fraDato: yup.date().nullable(),
         tilDato: yup.date().nullable(),
         antallDager: yup.string().nullable(),
       })
-      .when(SYKEPENGER, ([sykepenger], schema) => {
+      .when('sykepenger', ([sykepenger], schema) => {
         if (sykepenger === JaEllerNei.JA) {
           return yup.object({
-            [SKALHAFERIE]: yup
+            skalHaFerie: yup
               .string()
               .required(formatMessage('søknad.startDato.skalHaFerie.validation.required')),
-            [FERIETYPE]: yup.string().when(SKALHAFERIE, ([skalHaFerie], schema) => {
+            ferieType: yup.string().when('skalHaFerie', ([skalHaFerie], schema) => {
               if (skalHaFerie === JaEllerNei.JA) {
                 return yup
                   .string()
@@ -84,7 +79,7 @@ export const getStartDatoSchema = (formatMessage: (id: string) => string) => {
               return schema;
             }),
 
-            fraDato: yup.date().when(FERIETYPE, ([ferieType], schema) => {
+            fraDato: yup.date().when('ferieType', ([ferieType], schema) => {
               if (ferieType === FerieType.PERIODE) {
                 return yup
                   .date()
@@ -96,7 +91,7 @@ export const getStartDatoSchema = (formatMessage: (id: string) => string) => {
               return schema;
             }),
 
-            tilDato: yup.date().when(FERIETYPE, ([ferieType], schema) => {
+            tilDato: yup.date().when('ferieType', ([ferieType], schema) => {
               if (ferieType === FerieType.PERIODE) {
                 return yup
                   .date()
@@ -110,7 +105,7 @@ export const getStartDatoSchema = (formatMessage: (id: string) => string) => {
               return schema;
             }),
 
-            antallDager: yup.string().when(FERIETYPE, ([ferieType], schema) => {
+            antallDager: yup.string().when('ferieType', ([ferieType], schema) => {
               if (ferieType === FerieType.DAGER) {
                 return yup
                   .string()
@@ -214,14 +209,14 @@ const StartDato = ({ onBackClick, defaultValues }: Props) => {
       <RadioGroup
         legend={formatMessage('søknad.startDato.sykepenger.legend')}
         description={formatMessage('søknad.startDato.sykepenger.description')}
-        name={`${SYKEPENGER}`}
+        name={'sykepenger'}
+        id={'sykepenger'}
         value={defaultValues?.søknad?.sykepenger || ''}
         onChange={(value) => {
           clearError('sykepenger');
           updateSøknadData(søknadDispatch, { sykepenger: value });
         }}
         error={findError('sykepenger')}
-        id={'sykepenger'}
       >
         <Radio value={JaEllerNei.JA}>{JaEllerNei.JA}</Radio>
         <Radio value={JaEllerNei.NEI}>{JaEllerNei.NEI}</Radio>
@@ -231,8 +226,8 @@ const StartDato = ({ onBackClick, defaultValues }: Props) => {
           <RadioGroup
             legend={formatMessage('søknad.startDato.skalHaFerie.label')}
             description={formatMessage('søknad.startDato.skalHaFerie.description')}
-            name={`${FERIE}.${SKALHAFERIE}`}
-            id={`${FERIE}.${SKALHAFERIE}`}
+            name={'ferie.skalHaFerie'}
+            id={'ferie.skalHaFerie'}
             value={defaultValues?.søknad?.ferie?.skalHaFerie || ''}
             onChange={(value) => {
               clearError('ferie.skalHaFerie');
@@ -248,8 +243,8 @@ const StartDato = ({ onBackClick, defaultValues }: Props) => {
           {søknadState?.søknad?.ferie?.skalHaFerie === JaEllerNei.JA && (
             <RadioGroup
               legend={formatMessage('søknad.startDato.ferieType.label')}
-              name={`${FERIE}.${FERIETYPE}`}
-              id={`${FERIE}.${FERIETYPE}`}
+              name={'ferie.ferieType'}
+              id={'ferie.ferieType'}
               value={defaultValues?.søknad?.ferie?.ferieType || ''}
               onChange={(value) => {
                 clearError('ferie.ferieType');
@@ -275,8 +270,8 @@ const StartDato = ({ onBackClick, defaultValues }: Props) => {
                   <DatePicker.Input
                     {...fraDatoInputProps}
                     label={formatMessage('søknad.startDato.periode.fraDato.label')}
-                    name={`${FERIE}.fraDato`}
-                    id={`${FERIE}.fraDato`}
+                    name={'ferie.fraDato'}
+                    id={'ferie.fraDato'}
                     error={findError('ferie.fraDato')}
                   />
                 </DatePicker>
@@ -284,8 +279,8 @@ const StartDato = ({ onBackClick, defaultValues }: Props) => {
                   <DatePicker.Input
                     {...tilDatoInputProps}
                     label={formatMessage('søknad.startDato.periode.tilDato.label')}
-                    name={`${FERIE}.tilDato`}
-                    id={`${FERIE}.tilDato`}
+                    name={'ferie.tilDato'}
+                    id={'ferie.tilDato'}
                     error={findError('ferie.tilDato')}
                   />
                 </DatePicker>
@@ -296,8 +291,8 @@ const StartDato = ({ onBackClick, defaultValues }: Props) => {
             <div className={classes?.antallDagerContainer}>
               <TextField
                 className={classes?.antallDagerTekst}
-                name={`${FERIE}.antallDager`}
-                id={`${FERIE}.antallDager`}
+                name={'ferie.antallDager'}
+                id={'ferie.antallDager'}
                 value={defaultValues?.søknad?.ferie?.antallDager || ''}
                 label={formatMessage('søknad.startDato.antallDager.label')}
                 description={formatMessage('søknad.startDato.antallDager.description')}

@@ -1,9 +1,9 @@
 import {
   AVBRUTT_STUDIE_VEDLEGG,
-  STUDENT,
   ER_STUDENT,
   jaNeiAvbruttToTekstnøkkel,
   KOMME_TILBAKE,
+  STUDENT,
 } from 'components/pageComponents/standard/Student/Student';
 import {
   AttachmentType,
@@ -14,7 +14,7 @@ import { Soker } from 'context/sokerOppslagContext';
 import { Soknad, SoknadVedlegg, Vedlegg } from 'types/Soknad';
 import { BehandlerBackendState, SøknadBackendState } from 'types/SoknadBackendState';
 import { formatDate } from './date';
-import { formatNavn, formatFullAdresse } from 'utils/StringFormatters';
+import { formatFullAdresse, formatNavn } from 'utils/StringFormatters';
 import { BARN, GRUNNBELØP } from 'components/pageComponents/standard/Barnetillegg/Barnetillegg';
 import { RequiredVedlegg } from 'types/SoknadContext';
 import { Relasjon } from 'components/pageComponents/standard/Barnetillegg/AddBarnModal';
@@ -26,7 +26,6 @@ import {
 import {
   FerieType,
   FerieTypeToMessageKey,
-  SYKEPENGER,
 } from 'components/pageComponents/standard/StartDato/StartDato';
 import { JaEllerNei } from 'types/Generic';
 
@@ -293,7 +292,7 @@ export const mapSøknadToPdf = (
 ) => {
   const getStartDato = (søknad?: Soknad) => {
     const rows = [
-      ...createField(formatMessage('søknad.startDato.sykepenger.legend'), søknad?.[SYKEPENGER]),
+      ...createField(formatMessage('søknad.startDato.sykepenger.legend'), søknad?.sykepenger),
       ...createField(
         formatMessage('søknad.startDato.skalHaFerie.label'),
         søknad?.ferie?.skalHaFerie,
