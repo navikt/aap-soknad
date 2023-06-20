@@ -110,7 +110,7 @@ const Steps = ({ søker, mellomlagretSøknad }: PageProps) => {
     }
   }, [showFetchErrorMessage]);
 
-  const submitSoknad: SubmitHandler<Soknad> = async (data) => {
+  const submitSoknad: SubmitHandler<Soknad> = async () => {
     if (currentStep?.name === StepNames.OPPSUMMERING) {
       setShowFetchErrorMessage(false);
       const sendtTimestamp = new Date();
@@ -138,7 +138,6 @@ const Steps = ({ søker, mellomlagretSøknad }: PageProps) => {
         router.push('kvittering');
         return true;
       } else {
-        const navCallid = postResponse?.data?.navCallId;
         setShowFetchErrorMessage(true);
       }
     } else {
@@ -191,9 +190,6 @@ const Steps = ({ søker, mellomlagretSøknad }: PageProps) => {
                     router.push('0');
                   }}
                   defaultValues={søknadState}
-                  onNext={(data) => {
-                    onNextStep(data);
-                  }}
                 />
               )}
               {step === '2' && (

@@ -1,24 +1,19 @@
-import { useForm, useWatch } from 'react-hook-form';
 import { Soknad } from 'types/Soknad';
 import React, { useEffect, useMemo, useState } from 'react';
 import {
-  Label,
   Alert,
   BodyShort,
+  DatePicker,
   Heading,
+  Label,
   Radio,
   RadioGroup,
-  DatePicker,
   TextField,
   useDatepicker,
 } from '@navikt/ds-react';
-import RadioGroupWrapper from 'components/input/RadioGroupWrapper/RadioGroupWrapper';
 import { JaEllerNei } from 'types/Generic';
-import TextFieldWrapper from 'components/input/TextFieldWrapper';
 import ColorPanel from 'components/panel/ColorPanel';
-import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
-import SoknadFormWrapper from 'components/SoknadFormWrapper/SoknadFormWrapper';
 import { completeAndGoToNextStep, useStepWizard } from 'context/stepWizardContextV2';
 import { LucaGuidePanel } from '@navikt/aap-felles-react';
 import { useFeatureToggleIntl } from 'hooks/useFeatureToggleIntl';
@@ -26,15 +21,14 @@ import { deleteOpplastedeVedlegg, useSoknadContextStandard } from 'context/sokna
 import { slettLagretSoknadState, updateSøknadData } from 'context/soknadContextCommon';
 import { useDebounceLagreSoknad } from 'hooks/useDebounceLagreSoknad';
 
-import { GenericSoknadContextState, SøknadType } from 'types/SoknadContext';
+import { GenericSoknadContextState } from 'types/SoknadContext';
 import * as classes from './StartDato.module.css';
 import { setFocusOnErrorSummary } from 'components/schema/FormErrorSummary';
-import { DatePickerWrapper } from '../../../input/DatePickerWrapper/DatePickerWrapper';
 import SoknadFormWrapperNew from '../../../SoknadFormWrapper/SoknadFormWrapperNew';
 import { validate } from '../../../../lib/utils/validationUtils';
 import { logSkjemastegFullførtEvent } from '../../../../utils/amplitude';
-import { getYrkesskadeSchema } from '../Yrkesskade/Yrkesskade';
 import { SøknadValidationError } from '../../../schema/FormErrorSummaryNew';
+
 export enum FerieType {
   DAGER = 'DAGER',
   PERIODE = 'PERIODE',
@@ -56,7 +50,6 @@ export const FerieTypeToMessageKey = (ferieType: FerieType) => {
 
 interface Props {
   onBackClick: () => void;
-  onNext: (data: any) => void;
   defaultValues?: GenericSoknadContextState<Soknad>;
 }
 
@@ -132,36 +125,18 @@ export const getStartDatoSchema = (formatMessage: (id: string) => string) => {
   });
 };
 
-const StartDato = ({ onBackClick, onNext, defaultValues }: Props) => {
+const StartDato = ({ onBackClick, defaultValues }: Props) => {
   const { formatMessage } = useFeatureToggleIntl();
-  const { søknadState, søknadDispatch } = useSoknadContextStandard();
-  // const { stepList } = useStepWizard();
-  /*const {
-    control,
-    handleSubmit,
-    setValue,
-    clearErrors,
-    formState: { errors },
-  } = useForm({
-    resolver: yupResolver(getStartDatoSchema(formatMessage)),
-    defaultValues: {
-      [SYKEPENGER]: defaultValues?.søknad?.[SYKEPENGER],
-      ferie: {
-        ...defaultValues?.søknad?.ferie,
-        fraDato: defaultValues?.søknad?.ferie?.fraDato,
-        tilDato: defaultValues?.søknad?.ferie?.tilDato,
-      },
-    },
-  });*/
   const debouncedLagre = useDebounceLagreSoknad<Soknad>();
-  //const allFields = useWatch({ control });
-  //const memoFields = useMemo(() => allFields, [allFields]);
-  /*useEffect(() => {
-    debouncedLagre(søknadState, stepList, memoFields);
-  }, [memoFields]);
-  const erPåSykepenger = useWatch({ control, name: `${SYKEPENGER}` });
-  const skalHaFerie = useWatch({ control, name: `${FERIE}.${SKALHAFERIE}` });
-  const ferieType = useWatch({ control, name: `${FERIE}.${FERIETYPE}` });*/
+  const { currentStepIndex, stepWizardDispatch, stepList } = useStepWizard();
+
+  const [errors, setErrors] = useState<SøknadValidationError[] | undefined>();
+  const { søknadState, søknadDispatch } = useSoknadContextStandard();
+
+  useEffect(() => {
+    debouncedLagre(søknadState, stepList, {});
+  }, [søknadState.søknad?.yrkesskade]);
+
   const FerieTypeTekster = useMemo(
     () => ({
       [FerieType.PERIODE]: formatMessage(FerieTypeToMessageKey(FerieType.PERIODE)),
@@ -170,53 +145,43 @@ const StartDato = ({ onBackClick, onNext, defaultValues }: Props) => {
     [formatMessage]
   );
 
-  /*useEffect(() => {
-    if (erPåSykepenger !== JaEllerNei.JA) {
-      setValue(`${FERIE}.${SKALHAFERIE}`, '');
-    }
-    clearErrors();
-  }, [erPåSykepenger]);
-  useEffect(() => {
-    if (skalHaFerie !== JaEllerNei.JA) {
-      // @ts-ignore // TODO: Finne ut av hvorfor state blir riktig med '' og ikke undefined
-      setValue(`${FERIE}.${FERIETYPE}`, '');
-    }
-    clearErrors();
-  }, [skalHaFerie]);
-
-  useEffect(() => {
-    if (ferieType !== søknadState?.søknad?.ferie?.ferieType) {
-      setValue(`${FERIE}.fraDato`, undefined);
-      setValue(`${FERIE}.tilDato`, undefined);
-      setValue(`${FERIE}.antallDager`, '');
-    }
-    clearErrors();
-  }, [ferieType, søknadState]);*/
-  const { currentStepIndex, stepWizardDispatch, stepList } = useStepWizard();
   const { datepickerProps: fraDatoProps, inputProps: fraDatoInputProps } = useDatepicker({
     fromDate: new Date(),
-    onDateChange: (value) =>
+    onDateChange: (value) => {
+      clearError('ferie.fraDato');
       updateSøknadData(søknadDispatch, {
         ferie: { ...søknadState?.søknad?.ferie, fraDato: value },
-      }),
+      });
+    },
     ...(defaultValues?.søknad?.ferie?.fraDato !== undefined && {
       defaultSelected: new Date(defaultValues.søknad.ferie.fraDato),
     }),
   });
+
   const { datepickerProps: tilDatoProps, inputProps: tilDatoInputProps } = useDatepicker({
     fromDate: new Date(),
-    onDateChange: (value) =>
+    onDateChange: (value) => {
+      clearError('ferie.tilDato');
       updateSøknadData(søknadDispatch, {
         ferie: { ...søknadState?.søknad?.ferie, tilDato: value },
-      }),
+      });
+    },
     ...(defaultValues?.søknad?.ferie?.tilDato !== undefined && {
       defaultSelected: new Date(defaultValues.søknad.ferie.tilDato),
     }),
   });
-  const [errors, setErrors] = useState<SøknadValidationError[] | undefined>();
+
+  function clearError(path: string) {
+    setErrors(errors?.filter((error) => error.path != path));
+  }
+
+  function findError(path: string): string | undefined {
+    return errors?.find((error) => error.path === path)?.message;
+  }
+
   return (
     <SoknadFormWrapperNew
-      onNext={async (data) => {
+      onNext={async () => {
         const errors = await validate(getStartDatoSchema(formatMessage), søknadState.søknad);
         if (errors) {
           setErrors(errors);
@@ -252,10 +217,10 @@ const StartDato = ({ onBackClick, onNext, defaultValues }: Props) => {
         name={`${SYKEPENGER}`}
         value={defaultValues?.søknad?.sykepenger || ''}
         onChange={(value) => {
-          setErrors(errors?.filter((error) => error.path != 'sykepenger'));
+          clearError('sykepenger');
           updateSøknadData(søknadDispatch, { sykepenger: value });
         }}
-        error={errors?.find((error) => error.path === 'sykepenger')?.message}
+        error={findError('sykepenger')}
         id={'sykepenger'}
       >
         <Radio value={JaEllerNei.JA}>{JaEllerNei.JA}</Radio>
@@ -267,14 +232,15 @@ const StartDato = ({ onBackClick, onNext, defaultValues }: Props) => {
             legend={formatMessage('søknad.startDato.skalHaFerie.label')}
             description={formatMessage('søknad.startDato.skalHaFerie.description')}
             name={`${FERIE}.${SKALHAFERIE}`}
+            id={`${FERIE}.${SKALHAFERIE}`}
             value={defaultValues?.søknad?.ferie?.skalHaFerie || ''}
             onChange={(value) => {
+              clearError('ferie.skalHaFerie');
               updateSøknadData(søknadDispatch, {
                 ferie: { ...søknadState?.søknad?.ferie, skalHaFerie: value },
               });
             }}
-            error={errors?.find((error) => error.path === 'ferie.skalHaFerie')?.message}
-            id={'ferie.skalHaFerie'}
+            error={findError('ferie.skalHaFerie')}
           >
             <Radio value={JaEllerNei.JA}>{JaEllerNei.JA}</Radio>
             <Radio value={JaEllerNei.NEI}>{JaEllerNei.NEI}</Radio>
@@ -283,12 +249,15 @@ const StartDato = ({ onBackClick, onNext, defaultValues }: Props) => {
             <RadioGroup
               legend={formatMessage('søknad.startDato.ferieType.label')}
               name={`${FERIE}.${FERIETYPE}`}
+              id={`${FERIE}.${FERIETYPE}`}
               value={defaultValues?.søknad?.ferie?.ferieType || ''}
               onChange={(value) => {
+                clearError('ferie.ferieType');
                 updateSøknadData(søknadDispatch, {
                   ferie: { ...søknadState?.søknad?.ferie, ferieType: value },
                 });
               }}
+              error={findError('ferie.ferieType')}
             >
               <Radio value={FerieType.PERIODE}>
                 <BodyShort>{FerieTypeTekster.PERIODE}</BodyShort>
@@ -307,6 +276,8 @@ const StartDato = ({ onBackClick, onNext, defaultValues }: Props) => {
                     {...fraDatoInputProps}
                     label={formatMessage('søknad.startDato.periode.fraDato.label')}
                     name={`${FERIE}.fraDato`}
+                    id={`${FERIE}.fraDato`}
+                    error={findError('ferie.fraDato')}
                   />
                 </DatePicker>
                 <DatePicker {...tilDatoProps}>
@@ -314,6 +285,8 @@ const StartDato = ({ onBackClick, onNext, defaultValues }: Props) => {
                     {...tilDatoInputProps}
                     label={formatMessage('søknad.startDato.periode.tilDato.label')}
                     name={`${FERIE}.tilDato`}
+                    id={`${FERIE}.tilDato`}
+                    error={findError('ferie.tilDato')}
                   />
                 </DatePicker>
               </div>
@@ -324,13 +297,16 @@ const StartDato = ({ onBackClick, onNext, defaultValues }: Props) => {
               <TextField
                 className={classes?.antallDagerTekst}
                 name={`${FERIE}.antallDager`}
+                id={`${FERIE}.antallDager`}
                 label={formatMessage('søknad.startDato.antallDager.label')}
                 description={formatMessage('søknad.startDato.antallDager.description')}
                 onChange={(value) => {
+                  clearError('ferie.antallDager');
                   updateSøknadData(søknadDispatch, {
                     ferie: { ...søknadState?.søknad?.ferie, antallDager: value.target.value },
                   });
                 }}
+                error={findError('ferie.antallDager')}
               />
             </div>
           )}

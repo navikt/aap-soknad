@@ -10,7 +10,7 @@ export interface SøknadValidationError {
 }
 
 interface Props {
-  errors?: SøknadValidationError[];
+  errors: SøknadValidationError[];
 }
 
 const FormErrorSummaryNew = (props: Props) => {
@@ -19,26 +19,27 @@ const FormErrorSummaryNew = (props: Props) => {
 
   const errorSummaryRef: Ref<HTMLDivElement> = useRef(null);
 
-  const scrollToErrorSummary = useMemo(() => {
-    return errors != undefined;
+  const isError = useMemo(() => {
+    return errors.length > 0;
   }, [errors]);
 
   useEffect(() => {
-    if (scrollToErrorSummary) {
+    if (isError) {
       setFocusHtmlRef(errorSummaryRef);
     }
-  }, [scrollToErrorSummary]);
+  }, [isError]);
 
+  console.log(!isError);
   // Må rendre ErrorSummary selv om det ikke er feil pga UU
-  if (!errors) {
+  if (!isError) {
     return (
       <ErrorSummary
         ref={errorSummaryRef}
         heading={formatMessage('errorSummary.title')}
         role={'alert'}
-        aria-hidden={!errors}
+        aria-hidden={!isError}
         tabIndex={-1}
-        className={!errors ? classes?.visuallyHidden : ''}
+        className={!isError ? classes?.visuallyHidden : ''}
         {...props}
       >
         {'hidden'}
@@ -52,8 +53,8 @@ const FormErrorSummaryNew = (props: Props) => {
       ref={errorSummaryRef}
       heading={formatMessage('errorSummary.title')}
       role={'alert'}
-      aria-hidden={!errors}
-      className={!errors ? classes?.visuallyHidden : ''}
+      aria-hidden={!isError}
+      className={!isError ? classes?.visuallyHidden : ''}
       {...props}
     >
       {errors.map((error) => (
