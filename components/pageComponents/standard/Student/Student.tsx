@@ -143,6 +143,7 @@ const Student = ({ onBackClick, onNext, defaultValues }: Props) => {
       </LucaGuidePanel>
       <RadioGroup
         name={`${ER_STUDENT}`}
+        id={`${ER_STUDENT}`}
         value={defaultValues?.søknad?.student?.erStudent || ''}
         legend={formatMessage(`søknad.${STUDENT}.${ER_STUDENT}.legend`)}
         onChange={(value) => {
@@ -170,6 +171,7 @@ const Student = ({ onBackClick, onNext, defaultValues }: Props) => {
         <ColorPanel color={'grey'}>
           <RadioGroup
             name={`${KOMME_TILBAKE}`}
+            id={`${KOMME_TILBAKE}`}
             value={defaultValues?.søknad?.student?.kommeTilbake || ''}
             legend={formatMessage(`søknad.${STUDENT}.${KOMME_TILBAKE}.legend`)}
             onChange={(value) => {

@@ -87,6 +87,7 @@ export const Yrkesskade = ({ onBackClick, defaultValues }: Props) => {
       </LucaGuidePanel>
       <RadioGroup
         name={'yrkesskade'}
+        id={'yrkesskade'}
         legend={formatMessage(`søknad.yrkesskade.harDuYrkesskade.label`)}
         value={defaultValues?.søknad?.yrkesskade || ''}
         onChange={(value) => {
