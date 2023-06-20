@@ -298,6 +298,7 @@ const StartDato = ({ onBackClick, defaultValues }: Props) => {
                 className={classes?.antallDagerTekst}
                 name={`${FERIE}.antallDager`}
                 id={`${FERIE}.antallDager`}
+                value={defaultValues?.søknad?.ferie?.antallDager || ''}
                 label={formatMessage('søknad.startDato.antallDager.label')}
                 description={formatMessage('søknad.startDato.antallDager.description')}
                 onChange={(value) => {
