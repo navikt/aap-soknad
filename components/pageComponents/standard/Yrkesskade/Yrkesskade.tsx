@@ -13,18 +13,17 @@ import { Soknad } from 'types/Soknad';
 import { JaEllerNei } from 'types/Generic';
 import * as yup from 'yup';
 import { completeAndGoToNextStep, useStepWizard } from 'context/stepWizardContextV2';
-import SoknadFormWrapper from 'components/SoknadFormWrapper/SoknadFormWrapper';
 import { LucaGuidePanel } from '@navikt/aap-felles-react';
 import { useFeatureToggleIntl } from 'hooks/useFeatureToggleIntl';
 import { slettLagretSoknadState, updateSøknadData } from 'context/soknadContextCommon';
 import { deleteOpplastedeVedlegg, useSoknadContextStandard } from 'context/soknadContextStandard';
 import { useDebounceLagreSoknad } from 'hooks/useDebounceLagreSoknad';
 import { GenericSoknadContextState } from 'types/SoknadContext';
-import { ValidationError } from 'yup';
 import { logSkjemastegFullførtEvent } from '../../../../utils/amplitude';
-import { FieldErrors } from 'react-hook-form';
 import { setFocusOnErrorSummary } from '../../../schema/FormErrorSummary';
 import { validate } from '../../../../lib/utils/validationUtils';
+import { SøknadValidationError } from '../../../schema/FormErrorSummaryNew';
+import SoknadFormWrapperNew from '../../../SoknadFormWrapper/SoknadFormWrapperNew';
 
 interface Props {
   onBackClick: () => void;
@@ -52,10 +51,10 @@ export const Yrkesskade = ({ onBackClick, defaultValues }: Props) => {
     debouncedLagre(søknadState, stepList, {});
   }, [søknadState.søknad?.yrkesskade]);
 
-  const [errors, setErrors] = useState<FieldErrors | undefined>();
+  const [errors, setErrors] = useState<SøknadValidationError[] | undefined>();
 
   return (
-    <SoknadFormWrapper
+    <SoknadFormWrapperNew
       onNext={async (data) => {
         const errors = await validate(getYrkesskadeSchema(formatMessage), søknadState.søknad);
         if (errors) {
@@ -94,7 +93,7 @@ export const Yrkesskade = ({ onBackClick, defaultValues }: Props) => {
           setErrors(undefined);
           updateSøknadData(søknadDispatch, { yrkesskade: value });
         }}
-        error={errors?.yrkesskade?.message as string}
+        error={errors?.find((error) => error.path === 'yrkesskade')?.message}
       >
         <ReadMore
           header={formatMessage('søknad.yrkesskade.harDuYrkesskade.readMore.title')}
@@ -137,6 +136,6 @@ export const Yrkesskade = ({ onBackClick, defaultValues }: Props) => {
           </ul>
         </Alert>
       )}
-    </SoknadFormWrapper>
+    </SoknadFormWrapperNew>
   );
 };

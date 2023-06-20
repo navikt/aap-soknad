@@ -1,12 +1,10 @@
-import { FieldErrors } from 'react-hook-form';
 import { ObjectSchema, ValidationError } from 'yup';
-import { GenericSoknadContextState } from '../../types/SoknadContext';
-import { Soknad } from '../../types/Soknad';
+import { SøknadValidationError } from '../../components/schema/FormErrorSummaryNew';
 
 export async function validate(
   yupSchema: ObjectSchema<any>,
   søknadState: any
-): Promise<FieldErrors | undefined> {
+): Promise<SøknadValidationError[] | undefined> {
   try {
     await yupSchema.validate(søknadState, {
       abortEarly: false,
@@ -14,16 +12,12 @@ export async function validate(
     return undefined;
   } catch (e) {
     if (e instanceof ValidationError) {
-      return e.inner.reduce(
-        (acc, currentValue) => ({
-          ...acc,
-          [currentValue.path as string]: {
-            message: currentValue.message,
-            type: currentValue.type,
-          },
-        }),
-        {}
-      );
+      return e.inner.map((error) => {
+        return {
+          path: error.path || '',
+          message: error.message,
+        };
+      });
     }
   }
 }

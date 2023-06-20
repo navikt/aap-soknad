@@ -4,8 +4,6 @@ import { JaNeiVetIkke } from 'types/Generic';
 import React, { useEffect, useMemo, useState } from 'react';
 import * as yup from 'yup';
 import { completeAndGoToNextStep, useStepWizard } from 'context/stepWizardContextV2';
-import { FieldErrors } from 'react-hook-form';
-import SoknadFormWrapper from 'components/SoknadFormWrapper/SoknadFormWrapper';
 import ColorPanel from 'components/panel/ColorPanel';
 import { LucaGuidePanel } from '@navikt/aap-felles-react';
 import { useFeatureToggleIntl } from 'hooks/useFeatureToggleIntl';
@@ -21,6 +19,8 @@ import { GenericSoknadContextState } from 'types/SoknadContext';
 import { setFocusOnErrorSummary } from 'components/schema/FormErrorSummary';
 import { validate } from '../../../../lib/utils/validationUtils';
 import { logSkjemastegFullførtEvent } from '../../../../utils/amplitude';
+import { SøknadValidationError } from '../../../schema/FormErrorSummaryNew';
+import SoknadFormWrapperNew from '../../../SoknadFormWrapper/SoknadFormWrapperNew';
 
 export const AVBRUTT_STUDIE_VEDLEGG = 'avbruttStudie';
 export const STUDENT = 'student';
@@ -93,31 +93,30 @@ const Student = ({ onBackClick, onNext, defaultValues }: Props) => {
     [formatMessage]
   );
 
-  useEffect(() => {
-    if (søknadState.søknad?.student?.kommeTilbake === JaNeiVetIkke.JA) {
-      addRequiredVedlegg(
-        [
-          {
-            type: AVBRUTT_STUDIE_VEDLEGG,
-            description: formatMessage('søknad.student.vedlegg.description'),
-          },
-        ],
-        søknadDispatch
-      );
-    } else {
-      removeRequiredVedlegg(AVBRUTT_STUDIE_VEDLEGG, søknadDispatch);
-    }
-  }, [søknadState.søknad?.student?.kommeTilbake]);
+  const [errors, setErrors] = useState<SøknadValidationError[] | undefined>();
 
-  const [errors, setErrors] = useState<FieldErrors | undefined>();
   return (
-    <SoknadFormWrapper
+    <SoknadFormWrapperNew
       onNext={async (data) => {
         const errors = await validate(getStudentSchema(formatMessage), søknadState.søknad?.student);
         if (errors) {
           setErrors(errors);
           setFocusOnErrorSummary();
           return;
+        }
+
+        if (søknadState.søknad?.student?.kommeTilbake === JaNeiVetIkke.JA) {
+          addRequiredVedlegg(
+            [
+              {
+                type: AVBRUTT_STUDIE_VEDLEGG,
+                description: formatMessage('søknad.student.vedlegg.description'),
+              },
+            ],
+            søknadDispatch
+          );
+        } else {
+          removeRequiredVedlegg(AVBRUTT_STUDIE_VEDLEGG, søknadDispatch);
         }
 
         logSkjemastegFullførtEvent(currentStepIndex ?? 0);
@@ -147,9 +146,7 @@ const Student = ({ onBackClick, onNext, defaultValues }: Props) => {
         value={defaultValues?.søknad?.student?.erStudent || ''}
         legend={formatMessage(`søknad.${STUDENT}.${ER_STUDENT}.legend`)}
         onChange={(value) => {
-          const copy = errors;
-          delete copy?.erStudent;
-          setErrors(copy);
+          setErrors(errors?.filter((error) => error.path != 'erStudent'));
           updateSøknadData(søknadDispatch, {
             student: {
               ...søknadState.søknad?.student,
@@ -157,7 +154,7 @@ const Student = ({ onBackClick, onNext, defaultValues }: Props) => {
             },
           });
         }}
-        error={errors?.erStudent?.message as string}
+        error={errors?.find((error) => error.path === 'erStudent')?.message}
       >
         <Radio value={JaNeiAvbrutt.JA}>
           <BodyShort>{ErStudentAlternativer?.[JaNeiAvbrutt.JA]}</BodyShort>
@@ -176,9 +173,7 @@ const Student = ({ onBackClick, onNext, defaultValues }: Props) => {
             value={defaultValues?.søknad?.student?.kommeTilbake || ''}
             legend={formatMessage(`søknad.${STUDENT}.${KOMME_TILBAKE}.legend`)}
             onChange={(value) => {
-              const copy = errors;
-              delete copy?.kommeTilbake;
-              setErrors(copy);
+              setErrors(errors?.filter((error) => error.path != 'kommeTilbake'));
               updateSøknadData(søknadDispatch, {
                 student: {
                   ...søknadState.søknad?.student,
@@ -186,7 +181,7 @@ const Student = ({ onBackClick, onNext, defaultValues }: Props) => {
                 },
               });
             }}
-            error={errors?.kommeTilbake?.message as string}
+            error={errors?.find((error) => error.path === 'kommeTilbake')?.message}
           >
             <Radio value={JaNeiVetIkke.JA}>
               <BodyShort>{JaNeiVetIkke.JA}</BodyShort>
@@ -209,7 +204,7 @@ const Student = ({ onBackClick, onNext, defaultValues }: Props) => {
           <BodyShort>{formatMessage('søknad.student.vedlegg.lastOppSenere')}</BodyShort>
         </Alert>
       )}
-    </SoknadFormWrapper>
+    </SoknadFormWrapperNew>
   );
 };
 export default Student;
