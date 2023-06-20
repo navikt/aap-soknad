@@ -1,7 +1,7 @@
 import { useForm, useWatch } from 'react-hook-form';
 import { Soknad } from 'types/Soknad';
 import React, { useEffect, useMemo } from 'react';
-import { Label, Alert, BodyShort, Heading, Radio } from '@navikt/ds-react';
+import { Label, Alert, BodyShort, Heading, Radio, RadioGroup, DatePicker, TextField } from '@navikt/ds-react';
 import RadioGroupWrapper from 'components/input/RadioGroupWrapper/RadioGroupWrapper';
 import { JaEllerNei } from 'types/Generic';
 import TextFieldWrapper from 'components/input/TextFieldWrapper';
@@ -16,7 +16,7 @@ import { deleteOpplastedeVedlegg, useSoknadContextStandard } from 'context/sokna
 import { slettLagretSoknadState, updateSøknadData } from 'context/soknadContextCommon';
 import { useDebounceLagreSoknad } from 'hooks/useDebounceLagreSoknad';
 
-import { GenericSoknadContextState } from 'types/SoknadContext';
+import { GenericSoknadContextState, SøknadType } from 'types/SoknadContext';
 import * as classes from './StartDato.module.css';
 import { setFocusOnErrorSummary } from 'components/schema/FormErrorSummary';
 import { DatePickerWrapper } from '../../../input/DatePickerWrapper/DatePickerWrapper';
@@ -121,7 +121,7 @@ const StartDato = ({ onBackClick, onNext, defaultValues }: Props) => {
   const { formatMessage } = useFeatureToggleIntl();
   const { søknadState, søknadDispatch } = useSoknadContextStandard();
   const { stepList } = useStepWizard();
-  const {
+  /*const {
     control,
     handleSubmit,
     setValue,
@@ -137,16 +137,16 @@ const StartDato = ({ onBackClick, onNext, defaultValues }: Props) => {
         tilDato: defaultValues?.søknad?.ferie?.tilDato,
       },
     },
-  });
+  });*/
   const debouncedLagre = useDebounceLagreSoknad<Soknad>();
-  const allFields = useWatch({ control });
-  const memoFields = useMemo(() => allFields, [allFields]);
-  useEffect(() => {
+ //const allFields = useWatch({ control });
+  //const memoFields = useMemo(() => allFields, [allFields]);
+  /*useEffect(() => {
     debouncedLagre(søknadState, stepList, memoFields);
   }, [memoFields]);
   const erPåSykepenger = useWatch({ control, name: `${SYKEPENGER}` });
   const skalHaFerie = useWatch({ control, name: `${FERIE}.${SKALHAFERIE}` });
-  const ferieType = useWatch({ control, name: `${FERIE}.${FERIETYPE}` });
+  const ferieType = useWatch({ control, name: `${FERIE}.${FERIETYPE}` });*/
   const FerieTypeTekster = useMemo(
     () => ({
       [FerieType.PERIODE]: formatMessage(FerieTypeToMessageKey(FerieType.PERIODE)),
@@ -155,7 +155,7 @@ const StartDato = ({ onBackClick, onNext, defaultValues }: Props) => {
     [formatMessage]
   );
 
-  useEffect(() => {
+  /*useEffect(() => {
     if (erPåSykepenger !== JaEllerNei.JA) {
       setValue(`${FERIE}.${SKALHAFERIE}`, '');
     }
@@ -176,12 +176,10 @@ const StartDato = ({ onBackClick, onNext, defaultValues }: Props) => {
       setValue(`${FERIE}.antallDager`, '');
     }
     clearErrors();
-  }, [ferieType, søknadState]);
+  }, [ferieType, søknadState]);*/
   return (
     <SoknadFormWrapper
-      onNext={handleSubmit((data) => {
-        onNext(data);
-      }, setFocusOnErrorSummary)}
+      onNext={() => {}}
       onBack={() => {
         updateSøknadData<Soknad>(søknadDispatch, { ...søknadState.søknad });
         onBackClick();
@@ -193,7 +191,7 @@ const StartDato = ({ onBackClick, onNext, defaultValues }: Props) => {
       nextButtonText={formatMessage('navigation.next')}
       backButtonText={formatMessage('navigation.back')}
       cancelButtonText={formatMessage('navigation.cancel')}
-      errors={errors}
+      //errors={errors}
     >
       <Heading size="large" level="2">
         {formatMessage('søknad.startDato.title')}
@@ -201,31 +199,31 @@ const StartDato = ({ onBackClick, onNext, defaultValues }: Props) => {
       <LucaGuidePanel>
         <BodyShort spacing>{formatMessage('søknad.startDato.guide.text1')}</BodyShort>
       </LucaGuidePanel>
-      <RadioGroupWrapper
+      <RadioGroup
         legend={formatMessage('søknad.startDato.sykepenger.legend')}
         description={formatMessage('søknad.startDato.sykepenger.description')}
         name={`${SYKEPENGER}`}
-        control={control}
+        onChange={(value) => {updateSøknadData(søknadDispatch, {sykepenger:value})}}
       >
         <Radio value={JaEllerNei.JA}>{JaEllerNei.JA}</Radio>
         <Radio value={JaEllerNei.NEI}>{JaEllerNei.NEI}</Radio>
-      </RadioGroupWrapper>
-      {erPåSykepenger === JaEllerNei.JA && (
+      </RadioGroup>
+      {søknadState?.søknad?.sykepenger === JaEllerNei.JA && (
         <ColorPanel color={'grey'}>
-          <RadioGroupWrapper
+          <RadioGroup
             legend={formatMessage('søknad.startDato.skalHaFerie.label')}
             description={formatMessage('søknad.startDato.skalHaFerie.description')}
             name={`${FERIE}.${SKALHAFERIE}`}
-            control={control}
+            onChange={(value) => {updateSøknadData(søknadDispatch, {ferie:{...søknadState?.søknad?.ferie, skalHaFerie:value}})}}
           >
             <Radio value={JaEllerNei.JA}>{JaEllerNei.JA}</Radio>
             <Radio value={JaEllerNei.NEI}>{JaEllerNei.NEI}</Radio>
-          </RadioGroupWrapper>
-          {skalHaFerie === JaEllerNei.JA && (
-            <RadioGroupWrapper
+          </RadioGroup>
+          {søknadState?.søknad?.ferie?.skalHaFerie === JaEllerNei.JA && (
+            <RadioGroup
               legend={formatMessage('søknad.startDato.ferieType.label')}
               name={`${FERIE}.${FERIETYPE}`}
-              control={control}
+              onChange={(value) => {updateSøknadData(søknadDispatch, {ferie:{...søknadState?.søknad?.ferie, ferieType:value}})}}
             >
               <Radio value={FerieType.PERIODE}>
                 <BodyShort>{FerieTypeTekster.PERIODE}</BodyShort>
@@ -233,41 +231,49 @@ const StartDato = ({ onBackClick, onNext, defaultValues }: Props) => {
               <Radio value={FerieType.DAGER}>
                 <BodyShort>{FerieTypeTekster.DAGER}</BodyShort>
               </Radio>
-            </RadioGroupWrapper>
+            </RadioGroup>
           )}
-          {ferieType === FerieType.PERIODE && (
+          {søknadState?.søknad?.ferie?.ferieType === FerieType.PERIODE && (
             <div className={classes?.periodeContainer}>
               <Label>{formatMessage('søknad.startDato.periode.label')}</Label>
               <div className={classes?.datoContainer}>
-                <DatePickerWrapper
-                  control={control}
+                <DatePicker
+                  onChange={(value) => {updateSøknadData(søknadDispatch, {ferie: {...søknadState?.søknad?.ferie, fraDato:value}})}}
+                  fromDate={new Date()}
+                  defaultSelected={søknadState?.søknad?.ferie?.fraDato}
+                >
+                  <DatePicker.Input  
                   label={formatMessage('søknad.startDato.periode.fraDato.label')}
-                  selectedDate={allFields.ferie?.fraDato}
                   name={`${FERIE}.fraDato`}
+
+                  />
+                  </DatePicker>
+                  <DatePicker
+                  onChange={(value) => {updateSøknadData(søknadDispatch, {ferie: {...søknadState?.søknad?.ferie, tilDato:value}})}}
                   fromDate={new Date()}
-                />
-                <DatePickerWrapper
-                  control={control}
+                  defaultSelected={søknadState?.søknad?.ferie?.tilDato}
+                >
+                  <DatePicker.Input  
                   label={formatMessage('søknad.startDato.periode.tilDato.label')}
-                  selectedDate={allFields.ferie?.tilDato}
                   name={`${FERIE}.tilDato`}
-                  fromDate={new Date()}
-                />
+
+                  />
+                  </DatePicker>
               </div>
             </div>
           )}
-          {ferieType === FerieType.DAGER && (
+          {søknadState?.søknad?.ferie?.ferieType === FerieType.DAGER && (
             <div className={classes?.antallDagerContainer}>
-              <TextFieldWrapper
+              <TextField
                 className={classes?.antallDagerTekst}
                 name={`${FERIE}.antallDager`}
                 label={formatMessage('søknad.startDato.antallDager.label')}
                 description={formatMessage('søknad.startDato.antallDager.description')}
-                control={control}
+                onChange={(value) => {updateSøknadData(søknadDispatch, {ferie: {...søknadState?.søknad?.ferie, antallDager:value}})}}
               />
             </div>
           )}
-          {skalHaFerie === JaEllerNei.NEI && (
+          {søknadState?.søknad?.ferie?.skalHaFerie === JaEllerNei.NEI && (
             <Alert variant={'info'}>{formatMessage('søknad.startDato.alert.text')}</Alert>
           )}
         </ColorPanel>
