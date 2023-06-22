@@ -18,12 +18,11 @@ import { JaEllerNei } from 'types/Generic';
 import RadioGroupWrapper from 'components/input/RadioGroupWrapper/RadioGroupWrapper';
 import CountrySelector from 'components/input/CountrySelector';
 import TextFieldWrapper from 'components/input/TextFieldWrapper';
-import { useFeatureToggleIntl } from 'hooks/useFeatureToggleIntl';
 import { ModalButtonWrapper } from 'components/ButtonWrapper/ModalButtonWrapper';
 import { UtenlandsPeriode } from 'types/Soknad';
-import { formatDate } from 'utils/date';
 import { MonthPickerWrapper } from 'components/input/MonthPickerWrapper/MonthPickerWrapper';
 import { subYears } from 'date-fns';
+import { useIntl } from 'react-intl';
 
 const { eeaMember } = require('is-european');
 
@@ -42,37 +41,39 @@ interface UtenlandsPeriodeProps {
 }
 
 export const getUtenlandsPeriodeSchema = (
-  formatMessage: (id: string) => string,
+  formatMessage: any,
   arbeidEllerBodd = ArbeidEllerBodd.BODD
 ) => {
   return yup.object().shape({
     land: yup
       .string()
-      .required(formatMessage('søknad.medlemskap.utenlandsperiode.modal.land.validation.required'))
+      .required(
+        formatMessage({ id: 'søknad.medlemskap.utenlandsperiode.modal.land.validation.required' })
+      )
       .notOneOf(
         ['none'],
-        formatMessage('søknad.medlemskap.utenlandsperiode.modal.land.validation.required')
+        formatMessage({ id: 'søknad.medlemskap.utenlandsperiode.modal.land.validation.required' })
       ),
     fraDato: yup
       .date()
       .required(
-        formatMessage(
-          'søknad.medlemskap.utenlandsperiode.modal.periode.fraDato.validation.required'
-        )
+        formatMessage({
+          id: 'søknad.medlemskap.utenlandsperiode.modal.periode.fraDato.validation.required',
+        })
       )
       .nullable(),
     tilDato: yup
       .date()
       .required(
-        formatMessage(
-          'søknad.medlemskap.utenlandsperiode.modal.periode.tilDato.validation.required'
-        )
+        formatMessage({
+          id: 'søknad.medlemskap.utenlandsperiode.modal.periode.tilDato.validation.required',
+        })
       )
       .min(
         yup.ref('fraDato'),
-        formatMessage(
-          'søknad.medlemskap.utenlandsperiode.modal.periode.tilDato.validation.fraDatoEtterTilDato'
-        )
+        formatMessage({
+          id: 'søknad.medlemskap.utenlandsperiode.modal.periode.tilDato.validation.fraDatoEtterTilDato',
+        })
       )
       .nullable(),
     iArbeid: yup.string().when('arbeidEllerBodd', ([], schema) => {
@@ -80,7 +81,9 @@ export const getUtenlandsPeriodeSchema = (
         return yup
           .string()
           .required(
-            formatMessage('søknad.medlemskap.utenlandsperiode.modal.iArbeid.validation.required')
+            formatMessage({
+              id: 'søknad.medlemskap.utenlandsperiode.modal.iArbeid.validation.required',
+            })
           )
           .oneOf([JaEllerNei.JA, JaEllerNei.NEI])
           .nullable();
@@ -99,7 +102,7 @@ const UtenlandsPeriodeVelger = ({
   open,
   arbeidEllerBodd,
 }: UtenlandsPeriodeProps) => {
-  const { formatMessage } = useFeatureToggleIntl();
+  const { formatMessage } = useIntl();
 
   const schema = getUtenlandsPeriodeSchema(formatMessage, arbeidEllerBodd);
 
@@ -159,14 +162,20 @@ const UtenlandsPeriodeVelger = ({
     <Modal open={open} onClose={onClose}>
       <Modal.Content className={classes.utenlandsPeriodeVelger}>
         <Heading size={'medium'} level={'2'} spacing>
-          {formatMessage(`søknad.medlemskap.utenlandsperiode.modal.title.${arbeidEllerBodd}`)}
+          {formatMessage({
+            id: `søknad.medlemskap.utenlandsperiode.modal.title.${arbeidEllerBodd}`,
+          })}
         </Heading>
         <BodyLong spacing={!(arbeidEllerBodd === 'BODD')}>
-          {formatMessage(`søknad.medlemskap.utenlandsperiode.modal.ingress.${arbeidEllerBodd}`)}
+          {formatMessage({
+            id: `søknad.medlemskap.utenlandsperiode.modal.ingress.${arbeidEllerBodd}`,
+          })}
         </BodyLong>
         {arbeidEllerBodd === 'BODD' && (
           <BodyLong spacing>
-            {formatMessage(`søknad.medlemskap.utenlandsperiode.modal.ingress.${arbeidEllerBodd}_2`)}
+            {formatMessage({
+              id: `søknad.medlemskap.utenlandsperiode.modal.ingress.${arbeidEllerBodd}_2`,
+            })}
           </BodyLong>
         )}
         <form
@@ -179,16 +188,16 @@ const UtenlandsPeriodeVelger = ({
           <CountrySelector
             className={classes.countrySelector}
             name={'land'}
-            label={formatMessage(
-              `søknad.medlemskap.utenlandsperiode.modal.land.label.${arbeidEllerBodd}`
-            )}
+            label={formatMessage({
+              id: `søknad.medlemskap.utenlandsperiode.modal.land.label.${arbeidEllerBodd}`,
+            })}
             control={control}
           />
           <div>
             <Label>
-              {formatMessage(
-                `søknad.medlemskap.utenlandsperiode.modal.periode.label.${arbeidEllerBodd}`
-              )}
+              {formatMessage({
+                id: `søknad.medlemskap.utenlandsperiode.modal.periode.label.${arbeidEllerBodd}`,
+              })}
             </Label>
             <Grid>
               <Cell xs={12} lg={5}>
@@ -196,9 +205,9 @@ const UtenlandsPeriodeVelger = ({
                   control={control}
                   name="fraDato"
                   selectedDate={utenlandsPeriode?.fraDato}
-                  label={formatMessage(
-                    'søknad.medlemskap.utenlandsperiode.modal.periode.fraDato.label'
-                  )}
+                  label={formatMessage({
+                    id: 'søknad.medlemskap.utenlandsperiode.modal.periode.fraDato.label',
+                  })}
                   fromDate={subYears(new Date(), antallÅrTilbake)}
                   toDate={new Date()}
                   dropdownCaption={true}
@@ -209,9 +218,9 @@ const UtenlandsPeriodeVelger = ({
                   control={control}
                   name="tilDato"
                   selectedDate={utenlandsPeriode?.tilDato}
-                  label={formatMessage(
-                    'søknad.medlemskap.utenlandsperiode.modal.periode.tilDato.label'
-                  )}
+                  label={formatMessage({
+                    id: 'søknad.medlemskap.utenlandsperiode.modal.periode.tilDato.label',
+                  })}
                   fromDate={subYears(new Date(), antallÅrTilbake)}
                   toDate={new Date()}
                   dropdownCaption={true}
@@ -222,7 +231,9 @@ const UtenlandsPeriodeVelger = ({
           {arbeidEllerBodd === ArbeidEllerBodd.BODD && (
             <RadioGroupWrapper
               name={'iArbeid'}
-              legend={formatMessage('søknad.medlemskap.utenlandsperiode.modal.iArbeid.label')}
+              legend={formatMessage({
+                id: 'søknad.medlemskap.utenlandsperiode.modal.iArbeid.label',
+              })}
               control={control}
             >
               <Radio value={JaEllerNei.JA}>
@@ -237,7 +248,9 @@ const UtenlandsPeriodeVelger = ({
             <TextFieldWrapper
               className={classes.pidInput}
               name={'utenlandsId'}
-              label={formatMessage('søknad.medlemskap.utenlandsperiode.modal.utenlandsId.label')}
+              label={formatMessage({
+                id: 'søknad.medlemskap.utenlandsperiode.modal.utenlandsId.label',
+              })}
               control={control}
             />
           )}
@@ -250,11 +263,11 @@ const UtenlandsPeriodeVelger = ({
                 onCancel();
               }}
             >
-              {formatMessage('søknad.medlemskap.utenlandsperiode.modal.buttons.avbryt')}
+              {formatMessage({ id: 'søknad.medlemskap.utenlandsperiode.modal.buttons.avbryt' })}
             </Button>
 
             <Button>
-              {formatMessage('søknad.medlemskap.utenlandsperiode.modal.buttons.lagre')}
+              {formatMessage({ id: 'søknad.medlemskap.utenlandsperiode.modal.buttons.lagre' })}
             </Button>
           </ModalButtonWrapper>
         </form>

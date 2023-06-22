@@ -1,6 +1,6 @@
-import { FieldValues, useForm, useWatch } from 'react-hook-form';
+import { useForm, useWatch } from 'react-hook-form';
 import React, { useEffect } from 'react';
-import { ReadMore, BodyLong, BodyShort, Heading, Radio, Alert, Link } from '@navikt/ds-react';
+import { Alert, BodyLong, BodyShort, Heading, Link, Radio, ReadMore } from '@navikt/ds-react';
 import RadioGroupWrapper from 'components/input/RadioGroupWrapper/RadioGroupWrapper';
 import { Soknad } from 'types/Soknad';
 import { JaEllerNei } from 'types/Generic';
@@ -9,12 +9,12 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useStepWizard } from 'context/stepWizardContextV2';
 import SoknadFormWrapper from 'components/SoknadFormWrapper/SoknadFormWrapper';
 import { LucaGuidePanel } from '@navikt/aap-felles-react';
-import { useFeatureToggleIntl } from 'hooks/useFeatureToggleIntl';
 import { slettLagretSoknadState, updateSøknadData } from 'context/soknadContextCommon';
 import { deleteOpplastedeVedlegg, useSoknadContextStandard } from 'context/soknadContextStandard';
 import { useDebounceLagreSoknad } from 'hooks/useDebounceLagreSoknad';
 import { GenericSoknadContextState } from 'types/SoknadContext';
 import { setFocusOnErrorSummary } from 'components/schema/FormErrorSummary';
+import { FormattedMessage, useIntl } from 'react-intl';
 
 interface Props {
   onBackClick: () => void;
@@ -23,17 +23,17 @@ interface Props {
 }
 const YRKESSKADE = 'yrkesskade';
 
-export const getYrkesskadeSchema = (formatMessage: (id: string) => string) =>
+export const getYrkesskadeSchema = (formatMessage: any) =>
   yup.object().shape({
     [YRKESSKADE]: yup
       .string()
-      .required(formatMessage('søknad.yrkesskade.harDuYrkesskade.validation.required'))
+      .required(formatMessage({ id: 'søknad.yrkesskade.harDuYrkesskade.validation.required' }))
       .oneOf([JaEllerNei.JA, JaEllerNei.NEI])
       .nullable(),
   });
 
 export const Yrkesskade = ({ onBackClick, onNext, defaultValues }: Props) => {
-  const { formatMessage, FormatElement } = useFeatureToggleIntl();
+  const { formatMessage } = useIntl();
 
   const { søknadState, søknadDispatch } = useSoknadContextStandard();
   const { stepList } = useStepWizard();
@@ -66,38 +66,38 @@ export const Yrkesskade = ({ onBackClick, onNext, defaultValues }: Props) => {
         await deleteOpplastedeVedlegg(søknadState.søknad);
         await slettLagretSoknadState<Soknad>(søknadDispatch, søknadState);
       }}
-      nextButtonText={formatMessage('navigation.next')}
-      backButtonText={formatMessage('navigation.back')}
-      cancelButtonText={formatMessage('navigation.cancel')}
+      nextButtonText={formatMessage({ id: 'navigation.next' })}
+      backButtonText={formatMessage({ id: 'navigation.back' })}
+      cancelButtonText={formatMessage({ id: 'navigation.cancel' })}
       errors={errors}
     >
       <Heading size="large" level="2">
-        {formatMessage('søknad.yrkesskade.title')}
+        {formatMessage({ id: 'søknad.yrkesskade.title' })}
       </Heading>
       <LucaGuidePanel>
-        <BodyLong>{formatMessage('søknad.yrkesskade.guide.text')}</BodyLong>
+        <BodyLong>{formatMessage({ id: 'søknad.yrkesskade.guide.text' })}</BodyLong>
       </LucaGuidePanel>
       <RadioGroupWrapper
         name={`${YRKESSKADE}`}
-        legend={formatMessage(`søknad.yrkesskade.harDuYrkesskade.label`)}
+        legend={formatMessage({ id: `søknad.yrkesskade.harDuYrkesskade.label` })}
         control={control}
       >
         <ReadMore
-          header={formatMessage('søknad.yrkesskade.harDuYrkesskade.readMore.title')}
+          header={formatMessage({ id: 'søknad.yrkesskade.harDuYrkesskade.readMore.title' })}
           type={'button'}
         >
           <div>
             <BodyShort spacing>
-              {formatMessage('søknad.yrkesskade.harDuYrkesskade.readMore.text1')}
+              {formatMessage({ id: 'søknad.yrkesskade.harDuYrkesskade.readMore.text1' })}
             </BodyShort>
             <BodyShort spacing>
-              <FormatElement
+              <FormattedMessage
                 id={'søknad.yrkesskade.harDuYrkesskade.readMore.text2'}
                 values={{
-                  a: (chunks: string[]) => (
+                  a: (chunks) => (
                     <Link
                       target="_blank"
-                      href={formatMessage('applinks.forskriftOmYrkessykdommer')}
+                      href={formatMessage({ id: 'applinks.forskriftOmYrkessykdommer' })}
                     >
                       {chunks}
                     </Link>
@@ -116,10 +116,10 @@ export const Yrkesskade = ({ onBackClick, onNext, defaultValues }: Props) => {
       </RadioGroupWrapper>
       {harSkadeEllerSykdom && harSkadeEllerSykdom !== JaEllerNei.NEI && (
         <Alert variant={'info'}>
-          {formatMessage('søknad.yrkesskade.alert.navVilSjekke')}
+          {formatMessage({ id: 'søknad.yrkesskade.alert.navVilSjekke' })}
           <ul>
-            <li>{formatMessage('søknad.yrkesskade.alert.bulletPointGodkjent')}</li>
-            <li>{formatMessage('søknad.yrkesskade.alert.bulletPointArbeidsevne')}</li>
+            <li>{formatMessage({ id: 'søknad.yrkesskade.alert.bulletPointGodkjent' })}</li>
+            <li>{formatMessage({ id: 'søknad.yrkesskade.alert.bulletPointArbeidsevne' })}</li>
           </ul>
         </Alert>
       )}
