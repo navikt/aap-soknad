@@ -14,7 +14,6 @@ import SoknadFormWrapper from 'components/SoknadFormWrapper/SoknadFormWrapper';
 import { goToNamedStep, useStepWizard } from 'context/stepWizardContextV2';
 import { StepNames } from 'pages';
 import { LucaGuidePanel } from '@navikt/aap-felles-react';
-import { useFeatureToggleIntl } from 'hooks/useFeatureToggleIntl';
 import { slettLagretSoknadState } from 'context/soknadContextCommon';
 import { useSoknadContextStandard } from 'context/soknadContextStandard';
 import { OppsummeringVedlegg } from './OppsummeringVedlegg/OppsummeringVedlegg';
@@ -44,6 +43,7 @@ import { getYrkesskadeSchema } from 'components/pageComponents/standard/Yrkesska
 import { getMedlemskapSchema } from 'components/pageComponents/standard/Medlemskap/Medlemskap';
 import { getBehandlerSchema } from 'components/pageComponents/standard/Behandlere/Behandlere';
 import { logSkjemaValideringFeiletEvent } from 'utils/amplitude';
+import { useIntl } from 'react-intl';
 
 interface OppsummeringProps {
   onBackClick: () => void;
@@ -62,7 +62,7 @@ const Oppsummering = ({
   submitErrorMessageRef,
   hasSubmitError,
 }: OppsummeringProps) => {
-  const { formatMessage } = useFeatureToggleIntl();
+  const { formatMessage } = useIntl();
   const [nextIsLoading, setNextIsLoading] = useState<boolean>(false);
 
   const { søknadState, søknadDispatch } = useSoknadContextStandard();
@@ -70,8 +70,8 @@ const Oppsummering = ({
   const schema = yup.object().shape({
     søknadBekreft: yup
       .boolean()
-      .required(formatMessage('søknad.oppsummering.confirmation.required'))
-      .oneOf([true], formatMessage('søknad.oppsummering.confirmation.required')),
+      .required(formatMessage({ id: 'søknad.oppsummering.confirmation.required' }))
+      .oneOf([true], formatMessage({ id: 'søknad.oppsummering.confirmation.required' })),
   });
   const {
     control,
@@ -122,7 +122,7 @@ const Oppsummering = ({
   const SummaryRowIfExists = ({ labelKey, value }: { labelKey: string; value?: any }) => {
     return value ? (
       <div>
-        <Label>{formatMessage(labelKey)}</Label>
+        <Label>{formatMessage({ id: labelKey })}</Label>
         <BodyShort>{value}</BodyShort>
       </div>
     ) : (
@@ -142,13 +142,13 @@ const Oppsummering = ({
       nextIsLoading={nextIsLoading}
       onBack={() => onBackClick()}
       onDelete={() => slettLagretSoknadState<Soknad>(søknadDispatch, søknadState)}
-      nextButtonText={formatMessage('navigation.send')}
-      backButtonText={formatMessage('navigation.back')}
-      cancelButtonText={formatMessage('navigation.cancel')}
+      nextButtonText={formatMessage({ id: 'navigation.send' })}
+      backButtonText={formatMessage({ id: 'navigation.back' })}
+      cancelButtonText={formatMessage({ id: 'navigation.cancel' })}
       errors={errors}
     >
       <Heading size="large" level="2">
-        {formatMessage('søknad.oppsummering.title')}
+        {formatMessage({ id: 'søknad.oppsummering.title' })}
       </Heading>
       <div aria-live="polite" ref={submitErrorMessageRef}>
         {hasSubmitError && (
@@ -160,17 +160,17 @@ const Oppsummering = ({
           </Alert>
         )}
       </div>
-      <LucaGuidePanel>{formatMessage('søknad.oppsummering.guide.text')}</LucaGuidePanel>
+      <LucaGuidePanel>{formatMessage({ id: 'søknad.oppsummering.guide.text' })}</LucaGuidePanel>
       <div style={{ display: 'flex', flexDirection: 'row-reverse' }}>
         <Switch position="right" size="medium" onChange={() => setToggleAll(!toggleAll)}>
           {!toggleAll
-            ? formatMessage('søknad.oppsummering.toggle.open')
-            : formatMessage('søknad.oppsummering.toggle.close')}
+            ? formatMessage({ id: 'søknad.oppsummering.toggle.open' })
+            : formatMessage({ id: 'søknad.oppsummering.toggle.close' })}
         </Switch>
       </div>
       <Accordion>
         <AccordianItemOppsummering
-          title={formatMessage('søknad.oppsummering.contactInformation.title')}
+          title={formatMessage({ id: 'søknad.oppsummering.contactInformation.title' })}
           defaultOpen={true}
           showEdit={false}
           toggleAll={toggleAll}
@@ -178,8 +178,8 @@ const Oppsummering = ({
           <OppsummeringKontaktinfo />
         </AccordianItemOppsummering>
         <AccordianItemOppsummering
-          title={formatMessage('søknad.oppsummering.startDato.title')}
-          editText={formatMessage('søknad.oppsummering.startDato.editText')}
+          title={formatMessage({ id: 'søknad.oppsummering.startDato.title' })}
+          editText={formatMessage({ id: 'søknad.oppsummering.startDato.editText' })}
           toggleAll={toggleAll}
           onEdit={() => editStep(StepNames.STARTDATO)}
           hasError={!getStartDatoSchema(formatMessage).isValidSync(søknadState?.søknad)}
@@ -196,7 +196,7 @@ const Oppsummering = ({
             labelKey={'søknad.startDato.ferieType.label'}
             value={
               søknadState?.søknad?.ferie?.ferieType
-                ? formatMessage(FerieTypeToMessageKey(søknadState.søknad.ferie.ferieType))
+                ? formatMessage({ id: FerieTypeToMessageKey(søknadState.søknad.ferie.ferieType) })
                 : ''
             }
           />
@@ -209,7 +209,7 @@ const Oppsummering = ({
             tilDato: søknadState?.søknad?.ferie?.tilDato,
           }) ? (
             <div>
-              <Label>{formatMessage('søknad.oppsummering.startDato.planlagtFerie')}</Label>
+              <Label>{formatMessage({ id: 'søknad.oppsummering.startDato.planlagtFerie' })}</Label>
               <OppsummeringPeriode
                 periode={{
                   fraDato: søknadState?.søknad?.ferie?.fraDato,
@@ -222,8 +222,8 @@ const Oppsummering = ({
           )}
         </AccordianItemOppsummering>
         <AccordianItemOppsummering
-          title={formatMessage('søknad.oppsummering.medlemskap.title')}
-          editText={formatMessage('søknad.oppsummering.medlemskap.editText')}
+          title={formatMessage({ id: 'søknad.oppsummering.medlemskap.title' })}
+          editText={formatMessage({ id: 'søknad.oppsummering.medlemskap.editText' })}
           toggleAll={toggleAll}
           onEdit={() => editStep(StepNames.MEDLEMSKAP)}
           hasError={!getMedlemskapSchema(formatMessage).isValidSync(søknadState?.søknad)}
@@ -247,7 +247,7 @@ const Oppsummering = ({
           {søknadState?.søknad?.medlemskap?.utenlandsOpphold ? (
             <>
               <Label>
-                {formatMessage('søknad.oppsummering.medlemskap.utenlandsopphold.title')}
+                {formatMessage({ id: 'søknad.oppsummering.medlemskap.utenlandsopphold.title' })}
               </Label>
               <OppsummeringUtenlandsopphold
                 opphold={søknadState?.søknad?.medlemskap?.utenlandsOpphold}
@@ -259,8 +259,8 @@ const Oppsummering = ({
         </AccordianItemOppsummering>
 
         <AccordianItemOppsummering
-          title={formatMessage('søknad.oppsummering.yrkesskade.title')}
-          editText={formatMessage('søknad.oppsummering.yrkesskade.editText')}
+          title={formatMessage({ id: 'søknad.oppsummering.yrkesskade.title' })}
+          editText={formatMessage({ id: 'søknad.oppsummering.yrkesskade.editText' })}
           toggleAll={toggleAll}
           onEdit={() => editStep(StepNames.YRKESSKADE)}
           hasError={!getYrkesskadeSchema(formatMessage).isValidSync(søknadState?.søknad)}
@@ -271,8 +271,8 @@ const Oppsummering = ({
           />
         </AccordianItemOppsummering>
         <AccordianItemOppsummering
-          title={formatMessage('søknad.oppsummering.helseopplysninger.title')}
-          editText={formatMessage('søknad.oppsummering.helseopplysninger.editText')}
+          title={formatMessage({ id: 'søknad.oppsummering.helseopplysninger.title' })}
+          editText={formatMessage({ id: 'søknad.oppsummering.helseopplysninger.editText' })}
           toggleAll={toggleAll}
           onEdit={() => editStep(StepNames.FASTLEGE)}
           hasError={!getBehandlerSchema(formatMessage).isValidSync(søknadState?.søknad)}
@@ -281,7 +281,7 @@ const Oppsummering = ({
             {søknadState?.søknad?.registrerteBehandlere?.map((behandler, index) => (
               <article key={'behandler-' + index}>
                 <Heading size={'small'} level={'3'}>
-                  {formatMessage('søknad.oppsummering.helseopplysninger.fastlege')}
+                  {formatMessage({ id: 'søknad.oppsummering.helseopplysninger.fastlege' })}
                 </Heading>
                 <BodyShort>{formatNavn(behandler.navn)}</BodyShort>
                 <BodyShort>{behandler.kontaktinformasjon.kontor}</BodyShort>
@@ -289,9 +289,9 @@ const Oppsummering = ({
                 <BodyShort>{`Telefon: ${formatTelefonnummer(
                   behandler.kontaktinformasjon.telefon
                 )}`}</BodyShort>
-                <BodyShort>{`${formatMessage(
-                  'søknad.oppsummering.helseopplysninger.informasjonOmFastlege'
-                )} ${behandler.erRegistrertFastlegeRiktig}`}</BodyShort>
+                <BodyShort>{`${formatMessage({
+                  id: 'søknad.oppsummering.helseopplysninger.informasjonOmFastlege',
+                })} ${behandler.erRegistrertFastlegeRiktig}`}</BodyShort>
               </article>
             ))}
 
@@ -301,8 +301,8 @@ const Oppsummering = ({
           </>
         </AccordianItemOppsummering>
         <AccordianItemOppsummering
-          title={formatMessage('søknad.oppsummering.barnetillegg.title')}
-          editText={formatMessage('søknad.oppsummering.barnetillegg.editText')}
+          title={formatMessage({ id: 'søknad.oppsummering.barnetillegg.title' })}
+          editText={formatMessage({ id: 'søknad.oppsummering.barnetillegg.editText' })}
           toggleAll={toggleAll}
           onEdit={() => editStep(StepNames.BARNETILLEGG)}
           //@ts-ignore
@@ -318,8 +318,8 @@ const Oppsummering = ({
           </>
         </AccordianItemOppsummering>
         <AccordianItemOppsummering
-          title={formatMessage('søknad.oppsummering.student.title')}
-          editText={formatMessage('søknad.oppsummering.student.editText')}
+          title={formatMessage({ id: 'søknad.oppsummering.student.title' })}
+          editText={formatMessage({ id: 'søknad.oppsummering.student.editText' })}
           toggleAll={toggleAll}
           onEdit={() => editStep(StepNames.STUDENT)}
           hasError={!getStudentSchema(formatMessage).isValidSync(søknadState?.søknad)}
@@ -328,7 +328,9 @@ const Oppsummering = ({
             labelKey={`søknad.student.erStudent.legend`}
             value={
               søknadState?.søknad?.student?.erStudent &&
-              formatMessage(jaNeiAvbruttToTekstnøkkel(søknadState?.søknad?.student?.erStudent))
+              formatMessage({
+                id: jaNeiAvbruttToTekstnøkkel(søknadState?.søknad?.student?.erStudent),
+              })
             }
           />
           <SummaryRowIfExists
@@ -337,8 +339,8 @@ const Oppsummering = ({
           />
         </AccordianItemOppsummering>
         <AccordianItemOppsummering
-          title={formatMessage('søknad.oppsummering.utbetalinger.title')}
-          editText={formatMessage('søknad.oppsummering.utbetalinger.editText')}
+          title={formatMessage({ id: 'søknad.oppsummering.utbetalinger.title' })}
+          editText={formatMessage({ id: 'søknad.oppsummering.utbetalinger.editText' })}
           toggleAll={toggleAll}
           onEdit={() => editStep(StepNames.ANDRE_UTBETALINGER)}
           hasError={!getAndreUtbetalingerSchema(formatMessage).isValidSync(søknadState?.søknad)}
@@ -349,10 +351,12 @@ const Oppsummering = ({
           />
           {søknadState?.søknad?.andreUtbetalinger ? (
             <div>
-              <Label>{formatMessage(`søknad.andreUtbetalinger.stønad.label`)}</Label>
+              <Label>{formatMessage({ id: `søknad.andreUtbetalinger.stønad.label` })}</Label>
               {søknadState?.søknad?.andreUtbetalinger?.stønad?.map(
                 (stønadType: StønadType, index) => {
-                  const stønadTekst = formatMessage(stønadTypeToAlternativNøkkel(stønadType));
+                  const stønadTekst = formatMessage({
+                    id: stønadTypeToAlternativNøkkel(stønadType),
+                  });
                   return (
                     <BodyShort key={'stønad-' + index}>
                       {stønadType === StønadType.AFP
@@ -368,8 +372,8 @@ const Oppsummering = ({
           )}
         </AccordianItemOppsummering>
         <AccordianItemOppsummering
-          title={formatMessage('søknad.oppsummering.vedlegg.title')}
-          editText={formatMessage('søknad.oppsummering.vedlegg.editText')}
+          title={formatMessage({ id: 'søknad.oppsummering.vedlegg.title' })}
+          editText={formatMessage({ id: 'søknad.oppsummering.vedlegg.editText' })}
           toggleAll={toggleAll}
           onEdit={() => editStep(StepNames.VEDLEGG)}
         >
@@ -381,11 +385,11 @@ const Oppsummering = ({
         </AccordianItemOppsummering>
       </Accordion>
       <ConfirmationPanelWrapper
-        label={formatMessage('søknad.oppsummering.confirmation.text')}
+        label={formatMessage({ id: 'søknad.oppsummering.confirmation.text' })}
         control={control}
         name={'søknadBekreft'}
       >
-        <Label>{formatMessage('søknad.oppsummering.confirmation.title')}</Label>
+        <Label>{formatMessage({ id: 'søknad.oppsummering.confirmation.title' })}</Label>
       </ConfirmationPanelWrapper>
     </SoknadFormWrapper>
   );

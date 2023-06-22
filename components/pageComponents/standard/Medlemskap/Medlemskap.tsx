@@ -1,21 +1,20 @@
 import { BodyShort, Button, Cell, Grid, Heading, Radio, ReadMore, Table } from '@navikt/ds-react';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useFieldArray, useForm, useWatch } from 'react-hook-form';
-import { JaEllerNei, JaNeiVetIkke } from 'types/Generic';
+import { JaEllerNei } from 'types/Generic';
 import { Add, Delete } from '@navikt/ds-icons';
 import UtenlandsPeriodeVelger, {
   ArbeidEllerBodd,
 } from '..//UtenlandsPeriodeVelger/UtenlandsPeriodeVelger';
 import { formatDate } from 'utils/date';
 import RadioGroupWrapper from 'components/input/RadioGroupWrapper/RadioGroupWrapper';
-import { Medlemskap as MedlemskapType, Soknad } from 'types/Soknad';
+import { Soknad } from 'types/Soknad';
 import { useStepWizard } from 'context/stepWizardContextV2';
 import SoknadFormWrapper from 'components/SoknadFormWrapper/SoknadFormWrapper';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import ColorPanel from 'components/panel/ColorPanel';
 import { LucaGuidePanel } from '@navikt/aap-felles-react';
-import { useFeatureToggleIntl } from 'hooks/useFeatureToggleIntl';
 import { deleteOpplastedeVedlegg, useSoknadContextStandard } from 'context/soknadContextStandard';
 import { slettLagretSoknadState, updateSøknadData } from 'context/soknadContextCommon';
 import { useDebounceLagreSoknad } from 'hooks/useDebounceLagreSoknad';
@@ -28,6 +27,7 @@ import {
   shouldShowPeriodevelger,
 } from './medlemskapUtils';
 import { setFocusOnErrorSummary } from 'components/schema/FormErrorSummary';
+import { useIntl } from 'react-intl';
 
 interface Props {
   onBackClick: () => void;
@@ -59,12 +59,14 @@ const validateUtenlandsPeriode = (
   );
 };
 
-export const getMedlemskapSchema = (formatMessage: (id: string) => string) => {
+export const getMedlemskapSchema = (formatMessage: any) => {
   return yup.object().shape({
     [MEDLEMSKAP]: yup.object().shape({
       [BODD_I_NORGE]: yup
         .mixed<JaEllerNei>()
-        .required(formatMessage('søknad.medlemskap.harBoddINorgeSiste5År.validation.required'))
+        .required(
+          formatMessage({ id: 'søknad.medlemskap.harBoddINorgeSiste5År.validation.required' })
+        )
         .oneOf([JaEllerNei.JA, JaEllerNei.NEI])
         .nullable(),
       [ARBEID_I_NORGE]: yup.mixed<JaEllerNei>().when(BODD_I_NORGE, {
@@ -72,7 +74,9 @@ export const getMedlemskapSchema = (formatMessage: (id: string) => string) => {
         then: (yupSchema) =>
           yupSchema
             .required(
-              formatMessage('søknad.medlemskap.harArbeidetINorgeSiste5År.validation.required')
+              formatMessage({
+                id: 'søknad.medlemskap.harArbeidetINorgeSiste5År.validation.required',
+              })
             )
             .oneOf([JaEllerNei.JA, JaEllerNei.NEI])
             .nullable(),
@@ -84,7 +88,9 @@ export const getMedlemskapSchema = (formatMessage: (id: string) => string) => {
           is: validateArbeidUtenforNorgeFørSykdom,
           then: (yupSchema) =>
             yupSchema
-              .required(formatMessage('søknad.medlemskap.arbeidUtenforNorge.validation.required'))
+              .required(
+                formatMessage({ id: 'søknad.medlemskap.arbeidUtenforNorge.validation.required' })
+              )
               .oneOf([JaEllerNei.JA, JaEllerNei.NEI])
               .nullable(),
           otherwise: (yupSchema) => yupSchema.notRequired(),
@@ -94,7 +100,9 @@ export const getMedlemskapSchema = (formatMessage: (id: string) => string) => {
         then: (yupSchema) =>
           yupSchema
             .required(
-              formatMessage('søknad.medlemskap.iTilleggArbeidUtenforNorge.validation.required')
+              formatMessage({
+                id: 'søknad.medlemskap.iTilleggArbeidUtenforNorge.validation.required',
+              })
             )
             .oneOf([JaEllerNei.JA, JaEllerNei.NEI])
             .nullable(),
@@ -108,9 +116,9 @@ export const getMedlemskapSchema = (formatMessage: (id: string) => string) => {
           then: (yupSchema) =>
             yupSchema.min(
               1,
-              formatMessage(
-                'søknad.medlemskap.utenlandsperiode.boddINorgeArbeidUtenforNorge.validation.required'
-              )
+              formatMessage({
+                id: 'søknad.medlemskap.utenlandsperiode.boddINorgeArbeidUtenforNorge.validation.required',
+              })
             ),
         })
         .when([OGSÅ_ARBEID_UTENFOR_NORGE], {
@@ -118,9 +126,9 @@ export const getMedlemskapSchema = (formatMessage: (id: string) => string) => {
           then: (yupSchema) =>
             yupSchema.min(
               1,
-              formatMessage(
-                'søknad.medlemskap.utenlandsperiode.ogsåArbeidUtenforNorge.validation.required'
-              )
+              formatMessage({
+                id: 'søknad.medlemskap.utenlandsperiode.ogsåArbeidUtenforNorge.validation.required',
+              })
             ),
         })
         .when([ARBEID_I_NORGE], {
@@ -128,7 +136,9 @@ export const getMedlemskapSchema = (formatMessage: (id: string) => string) => {
           then: (yupSchema) =>
             yupSchema.min(
               1,
-              formatMessage('søknad.medlemskap.utenlandsperiode.arbeidINorge.validation.required')
+              formatMessage({
+                id: 'søknad.medlemskap.utenlandsperiode.arbeidINorge.validation.required',
+              })
             ),
         }),
     }),
@@ -144,7 +154,7 @@ export const utenlandsPeriodeArbeidEllerBodd = (
   return ArbeidEllerBodd.ARBEID;
 };
 export const Medlemskap = ({ onBackClick, onNext, defaultValues }: Props) => {
-  const { formatMessage } = useFeatureToggleIntl();
+  const { formatMessage } = useIntl();
 
   const { søknadState, søknadDispatch } = useSoknadContextStandard();
   const {
@@ -252,25 +262,25 @@ export const Medlemskap = ({ onBackClick, onNext, defaultValues }: Props) => {
           await deleteOpplastedeVedlegg(søknadState.søknad);
           await slettLagretSoknadState<Soknad>(søknadDispatch, søknadState);
         }}
-        nextButtonText={formatMessage('navigation.next')}
-        backButtonText={formatMessage('navigation.back')}
-        cancelButtonText={formatMessage('navigation.cancel')}
+        nextButtonText={formatMessage({ id: 'navigation.next' })}
+        backButtonText={formatMessage({ id: 'navigation.back' })}
+        cancelButtonText={formatMessage({ id: 'navigation.cancel' })}
         errors={errors}
       >
         <Heading size="large" level="2">
-          {formatMessage('søknad.medlemskap.title')}
+          {formatMessage({ id: 'søknad.medlemskap.title' })}
         </Heading>
-        <LucaGuidePanel>{formatMessage('søknad.medlemskap.guide.text')}</LucaGuidePanel>
+        <LucaGuidePanel>{formatMessage({ id: 'søknad.medlemskap.guide.text' })}</LucaGuidePanel>
         <RadioGroupWrapper
           name={`${MEDLEMSKAP}.${BODD_I_NORGE}`}
-          legend={formatMessage('søknad.medlemskap.harBoddINorgeSiste5År.label')}
+          legend={formatMessage({ id: 'søknad.medlemskap.harBoddINorgeSiste5År.label' })}
           control={control}
         >
           <ReadMore
-            header={formatMessage('søknad.medlemskap.harBoddINorgeSiste5År.readMore.title')}
+            header={formatMessage({ id: 'søknad.medlemskap.harBoddINorgeSiste5År.readMore.title' })}
             type={'button'}
           >
-            {formatMessage('søknad.medlemskap.harBoddINorgeSiste5År.readMore.text')}
+            {formatMessage({ id: 'søknad.medlemskap.harBoddINorgeSiste5År.readMore.text' })}
           </ReadMore>
           <Radio value={JaEllerNei.JA}>
             <BodyShort>Ja</BodyShort>
@@ -283,14 +293,16 @@ export const Medlemskap = ({ onBackClick, onNext, defaultValues }: Props) => {
           <>
             <RadioGroupWrapper
               name={`${MEDLEMSKAP}.${ARBEID_I_NORGE}`}
-              legend={formatMessage('søknad.medlemskap.harArbeidetINorgeSiste5År.label')}
+              legend={formatMessage({ id: 'søknad.medlemskap.harArbeidetINorgeSiste5År.label' })}
               control={control}
             >
               <ReadMore
-                header={formatMessage('søknad.medlemskap.harArbeidetINorgeSiste5År.readMore.title')}
+                header={formatMessage({
+                  id: 'søknad.medlemskap.harArbeidetINorgeSiste5År.readMore.title',
+                })}
                 type={'button'}
               >
-                {formatMessage('søknad.medlemskap.harArbeidetINorgeSiste5År.readMore.text')}
+                {formatMessage({ id: 'søknad.medlemskap.harArbeidetINorgeSiste5År.readMore.text' })}
               </ReadMore>
               <Radio value={JaEllerNei.JA}>
                 <BodyShort>Ja</BodyShort>
@@ -306,14 +318,16 @@ export const Medlemskap = ({ onBackClick, onNext, defaultValues }: Props) => {
           <>
             <RadioGroupWrapper
               name={`${MEDLEMSKAP}.${ARBEID_UTENFOR_NORGE_FØR_SYKDOM}`}
-              legend={formatMessage('søknad.medlemskap.arbeidUtenforNorge.label')}
+              legend={formatMessage({ id: 'søknad.medlemskap.arbeidUtenforNorge.label' })}
               control={control}
             >
               <ReadMore
-                header={formatMessage('søknad.medlemskap.arbeidUtenforNorge.readMore.title')}
+                header={formatMessage({
+                  id: 'søknad.medlemskap.arbeidUtenforNorge.readMore.title',
+                })}
                 type={'button'}
               >
-                {formatMessage('søknad.medlemskap.arbeidUtenforNorge.readMore.text')}
+                {formatMessage({ id: 'søknad.medlemskap.arbeidUtenforNorge.readMore.text' })}
               </ReadMore>
               <Radio value={JaEllerNei.JA}>
                 <BodyShort>Ja</BodyShort>
@@ -328,19 +342,21 @@ export const Medlemskap = ({ onBackClick, onNext, defaultValues }: Props) => {
           <>
             <RadioGroupWrapper
               name={`${MEDLEMSKAP}.${OGSÅ_ARBEID_UTENFOR_NORGE}`}
-              legend={formatMessage('søknad.medlemskap.iTilleggArbeidUtenforNorge.label')}
-              description={formatMessage(
-                'søknad.medlemskap.iTilleggArbeidUtenforNorge.description'
-              )}
+              legend={formatMessage({ id: 'søknad.medlemskap.iTilleggArbeidUtenforNorge.label' })}
+              description={formatMessage({
+                id: 'søknad.medlemskap.iTilleggArbeidUtenforNorge.description',
+              })}
               control={control}
             >
               <ReadMore
-                header={formatMessage(
-                  'søknad.medlemskap.iTilleggArbeidUtenforNorge.readMore.title'
-                )}
+                header={formatMessage({
+                  id: 'søknad.medlemskap.iTilleggArbeidUtenforNorge.readMore.title',
+                })}
                 type={'button'}
               >
-                {formatMessage('søknad.medlemskap.iTilleggArbeidUtenforNorge.readMore.text')}
+                {formatMessage({
+                  id: 'søknad.medlemskap.iTilleggArbeidUtenforNorge.readMore.text',
+                })}
               </ReadMore>
               <Radio value={JaEllerNei.JA}>
                 <BodyShort>Ja</BodyShort>
@@ -354,13 +370,15 @@ export const Medlemskap = ({ onBackClick, onNext, defaultValues }: Props) => {
         {showLeggTilUtenlandsPeriode && (
           <ColorPanel color={'grey'}>
             <BodyShort spacing>
-              {formatMessage(`søknad.medlemskap.utenlandsperiode.modal.ingress.${arbeidEllerBodd}`)}
+              {formatMessage({
+                id: `søknad.medlemskap.utenlandsperiode.modal.ingress.${arbeidEllerBodd}`,
+              })}
             </BodyShort>
             {arbeidEllerBodd === 'BODD' && (
               <BodyShort spacing>
-                {formatMessage(
-                  `søknad.medlemskap.utenlandsperiode.modal.ingress.${arbeidEllerBodd}_2`
-                )}
+                {formatMessage({
+                  id: `søknad.medlemskap.utenlandsperiode.modal.ingress.${arbeidEllerBodd}_2`,
+                })}
               </BodyShort>
             )}
             {fields?.length > 0 ? (
@@ -369,9 +387,9 @@ export const Medlemskap = ({ onBackClick, onNext, defaultValues }: Props) => {
                   <Table.Row>
                     <Table.HeaderCell colSpan={2}>
                       <Heading size="xsmall" level="3">
-                        {formatMessage(
-                          `søknad.medlemskap.utenlandsperiode.perioder.title.${arbeidEllerBodd}`
-                        )}
+                        {formatMessage({
+                          id: `søknad.medlemskap.utenlandsperiode.perioder.title.${arbeidEllerBodd}`,
+                        })}
                       </Heading>
                     </Table.HeaderCell>
                   </Table.Row>

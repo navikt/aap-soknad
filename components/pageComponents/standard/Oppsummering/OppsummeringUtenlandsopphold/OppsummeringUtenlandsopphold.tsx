@@ -3,26 +3,28 @@ import { BodyShort, Label } from '@navikt/ds-react';
 import { UtenlandsPeriode } from 'types/Soknad';
 import { formatDate } from 'utils/date';
 import { landNavnFraSelector } from 'utils/StringFormatters';
-import { useFeatureToggleIntl } from 'hooks/useFeatureToggleIntl';
+import { useIntl } from 'react-intl';
 
 interface Props {
   opphold?: UtenlandsPeriode[];
 }
 
 const OppsummeringUtenlandsopphold = ({ opphold }: Props) => {
-  const { formatMessage } = useFeatureToggleIntl();
+  const { formatMessage } = useIntl();
 
   return (
     <>
       {opphold?.map((etOpphold, index) => (
         <div key={index} style={{ paddingLeft: '12px' }}>
           <div>
-            <Label>{formatMessage('søknad.oppsummering.medlemskap.utenlandsopphold.land')}</Label>
+            <Label>
+              {formatMessage({ id: 'søknad.oppsummering.medlemskap.utenlandsopphold.land' })}
+            </Label>
             <BodyShort>{landNavnFraSelector(etOpphold?.land)}</BodyShort>
           </div>
           <div>
             <Label>
-              {formatMessage('søknad.oppsummering.medlemskap.utenlandsopphold.periode')}
+              {formatMessage({ id: 'søknad.oppsummering.medlemskap.utenlandsopphold.periode' })}
             </Label>
             <BodyShort>{`${formatDate(etOpphold?.fraDato)} - ${formatDate(
               etOpphold?.tilDato
@@ -31,7 +33,9 @@ const OppsummeringUtenlandsopphold = ({ opphold }: Props) => {
           {etOpphold?.iArbeid && (
             <div>
               <Label>
-                {formatMessage('søknad.oppsummering.medlemskap.utenlandsopphold.jobbetIPerioden')}
+                {formatMessage({
+                  id: 'søknad.oppsummering.medlemskap.utenlandsopphold.jobbetIPerioden',
+                })}
               </Label>
               <BodyShort>{etOpphold?.iArbeid}</BodyShort>
             </div>
@@ -39,7 +43,9 @@ const OppsummeringUtenlandsopphold = ({ opphold }: Props) => {
           {etOpphold?.utenlandsId && (
             <div>
               <Label>
-                {formatMessage('søknad.medlemskap.utenlandsperiode.modal.utenlandsId.label')}
+                {formatMessage({
+                  id: 'søknad.medlemskap.utenlandsperiode.modal.utenlandsId.label',
+                })}
               </Label>
               <BodyShort>{etOpphold?.utenlandsId}</BodyShort>
             </div>
