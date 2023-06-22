@@ -7,7 +7,7 @@ import { useEffect } from 'react';
 import { Button, Heading, Modal } from '@navikt/ds-react';
 import TextFieldWrapper from 'components/input/TextFieldWrapper';
 import { ModalButtonWrapper } from 'components/ButtonWrapper/ModalButtonWrapper';
-import { useFeatureToggleIntl } from 'hooks/useFeatureToggleIntl';
+import { useIntl } from 'react-intl';
 
 interface Props {
   søknad?: Soknad;
@@ -17,21 +17,23 @@ interface Props {
   behandler?: any;
 }
 
-export const getBehandlerSchema = (formatMessage: (id: string, options?: {}) => string) => {
+export const getBehandlerSchema = (formatMessage: any) => {
   return yup.object().shape({
     firstname: yup
       .string()
-      .required(formatMessage('søknad.helseopplysninger.modal.fornavn.validation.required'))
+      .required(formatMessage({ id: 'søknad.helseopplysninger.modal.fornavn.validation.required' }))
       .nullable(),
     lastname: yup
       .string()
-      .required(formatMessage('søknad.helseopplysninger.modal.etternavn.validation.required'))
+      .required(
+        formatMessage({ id: 'søknad.helseopplysninger.modal.etternavn.validation.required' })
+      )
       .nullable(),
   });
 };
 
 export const AddBehandlerModal = ({ showModal, onCloseClick, onSaveClick, behandler }: Props) => {
-  const { formatMessage } = useFeatureToggleIntl();
+  const { formatMessage } = useIntl();
   const schema = getBehandlerSchema(formatMessage);
 
   const { control, handleSubmit, reset } = useForm({
@@ -59,7 +61,7 @@ export const AddBehandlerModal = ({ showModal, onCloseClick, onSaveClick, behand
     >
       <Modal.Content className={classes?.addBehandlerModalContent}>
         <Heading className={classes?.modalHeading} size={'small'} level={'3'}>
-          {formatMessage('søknad.helseopplysninger.modal.title')}
+          {formatMessage({ id: 'søknad.helseopplysninger.modal.title' })}
         </Heading>
         <form
           onSubmit={handleSubmit((data) => {
@@ -72,41 +74,41 @@ export const AddBehandlerModal = ({ showModal, onCloseClick, onSaveClick, behand
         >
           <TextFieldWrapper
             control={control}
-            label={formatMessage('søknad.helseopplysninger.modal.fornavn.label')}
+            label={formatMessage({ id: 'søknad.helseopplysninger.modal.fornavn.label' })}
             name={'firstname'}
           />
           <TextFieldWrapper
             control={control}
-            label={formatMessage('søknad.helseopplysninger.modal.etternavn.label')}
+            label={formatMessage({ id: 'søknad.helseopplysninger.modal.etternavn.label' })}
             name={'lastname'}
           />
           <TextFieldWrapper
             control={control}
-            label={formatMessage('søknad.helseopplysninger.modal.legekontor.label')}
+            label={formatMessage({ id: 'søknad.helseopplysninger.modal.legekontor.label' })}
             name={'legekontor'}
           />
           <TextFieldWrapper
             control={control}
-            label={formatMessage('søknad.helseopplysninger.modal.gateadresse.label')}
+            label={formatMessage({ id: 'søknad.helseopplysninger.modal.gateadresse.label' })}
             name={'gateadresse'}
           />
           <div className={classes?.addresseFlexContainer}>
             <TextFieldWrapper
               className={classes?.addresseFlexItem}
               control={control}
-              label={formatMessage('søknad.helseopplysninger.modal.postnummer.label')}
+              label={formatMessage({ id: 'søknad.helseopplysninger.modal.postnummer.label' })}
               name={'postnummer'}
             />
             <TextFieldWrapper
               className={classes?.addresseFlexItem}
               control={control}
-              label={formatMessage('søknad.helseopplysninger.modal.poststed.label')}
+              label={formatMessage({ id: 'søknad.helseopplysninger.modal.poststed.label' })}
               name={'poststed'}
             />
           </div>
           <TextFieldWrapper
             control={control}
-            label={formatMessage('søknad.helseopplysninger.modal.telefonnummer.label')}
+            label={formatMessage({ id: 'søknad.helseopplysninger.modal.telefonnummer.label' })}
             name={'telefon'}
           />
           <ModalButtonWrapper>
@@ -118,10 +120,10 @@ export const AddBehandlerModal = ({ showModal, onCloseClick, onSaveClick, behand
                 onCloseClick();
               }}
             >
-              {formatMessage('søknad.helseopplysninger.modal.buttons.avbryt')}
+              {formatMessage({ id: 'søknad.helseopplysninger.modal.buttons.avbryt' })}
             </Button>
             <Button type={'submit'}>
-              {formatMessage('søknad.helseopplysninger.modal.buttons.lagre')}
+              {formatMessage({ id: 'søknad.helseopplysninger.modal.buttons.lagre' })}
             </Button>
           </ModalButtonWrapper>
         </form>
