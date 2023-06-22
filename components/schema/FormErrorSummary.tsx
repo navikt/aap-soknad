@@ -2,8 +2,8 @@ import React, { Ref, useEffect, useMemo, useRef } from 'react';
 import { FieldError, FieldErrors, FieldValues } from 'react-hook-form';
 import { ErrorSummary } from '@navikt/ds-react';
 import * as classes from './FormErrorSummary.module.css';
-import { useFeatureToggleIntl } from 'hooks/useFeatureToggleIntl';
 import { setFocusHtmlRef } from '../../utils/dom';
+import { useIntl } from 'react-intl';
 
 export const setFocusOnErrorSummary = () => {
   const errorSummary = document?.getElementById('aap-error-summary');
@@ -16,7 +16,7 @@ interface Props<FormFieldValues extends FieldValues> {
 
 const FormErrorSummary = <FormFieldValues extends FieldValues>(props: Props<FormFieldValues>) => {
   const { errors } = props;
-  const { formatMessage } = useFeatureToggleIntl();
+  const { formatMessage } = useIntl();
 
   const errorSummaryRef: Ref<HTMLDivElement> = useRef(null);
 
@@ -38,7 +38,7 @@ const FormErrorSummary = <FormFieldValues extends FieldValues>(props: Props<Form
     return (
       <ErrorSummary
         ref={errorSummaryRef}
-        heading={formatMessage('errorSummary.title')}
+        heading={formatMessage({ id: 'errorSummary.title' })}
         role={'alert'}
         aria-hidden={keyList?.length === 0}
         tabIndex={-1}
@@ -54,7 +54,7 @@ const FormErrorSummary = <FormFieldValues extends FieldValues>(props: Props<Form
     <ErrorSummary
       id="aap-error-summary"
       ref={errorSummaryRef}
-      heading={formatMessage('errorSummary.title')}
+      heading={formatMessage({ id: 'errorSummary.title' })}
       role={'alert'}
       aria-hidden={keyList?.length === 0}
       className={keyList?.length === 0 ? classes?.visuallyHidden : ''}
