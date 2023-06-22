@@ -13,7 +13,6 @@ import SoknadFormWrapper from 'components/SoknadFormWrapper/SoknadFormWrapper';
 import { AddBarnModal, Relasjon } from './AddBarnModal';
 import { formatNavn } from 'utils/StringFormatters';
 import { LucaGuidePanel } from '@navikt/aap-felles-react';
-import { useFeatureToggleIntl } from 'hooks/useFeatureToggleIntl';
 import {
   addRequiredVedlegg,
   removeRequiredVedlegg,
@@ -25,6 +24,7 @@ import { useDebounceLagreSoknad } from 'hooks/useDebounceLagreSoknad';
 import { GenericSoknadContextState } from 'types/SoknadContext';
 import { formatDate } from 'utils/date';
 import { setFocusOnErrorSummary } from 'components/schema/FormErrorSummary';
+import { useIntl } from 'react-intl';
 
 interface Props {
   onBackClick: () => void;
@@ -42,7 +42,7 @@ export const getUniqueIshIdForBarn = (barn: ManuelleBarn) => {
   }`;
 };
 
-export const getBarnetillegSchema = (formatMessage: (id: string, options: unknown) => string) =>
+export const getBarnetillegSchema = (formatMessage: any) =>
   yup.object().shape({
     [BARN]: yup.array().of(
       yup.object().shape({
@@ -50,9 +50,12 @@ export const getBarnetillegSchema = (formatMessage: (id: string, options: unknow
           .string()
           .nullable()
           .required(
-            formatMessage('søknad.barnetillegg.leggTilBarn.modal.harInntekt.validation.required', {
-              grunnbeløp: GRUNNBELØP,
-            })
+            formatMessage(
+              { id: 'søknad.barnetillegg.leggTilBarn.modal.harInntekt.validation.required' },
+              {
+                grunnbeløp: GRUNNBELØP,
+              }
+            )
           )
           .oneOf([JaEllerNei.JA, JaEllerNei.NEI])
           .nullable(),
@@ -61,7 +64,7 @@ export const getBarnetillegSchema = (formatMessage: (id: string, options: unknow
   });
 
 export const Barnetillegg = ({ onBackClick, onNext, defaultValues }: Props) => {
-  const { formatMessage } = useFeatureToggleIntl();
+  const { formatMessage } = useIntl();
 
   const { søknadState, søknadDispatch } = useSoknadContextStandard();
   const { stepList } = useStepWizard();
@@ -139,9 +142,12 @@ export const Barnetillegg = ({ onBackClick, onNext, defaultValues }: Props) => {
           {
             filterType: barn.relasjon,
             type: `barn-${barn.internId}`,
-            description: formatMessage(`søknad.vedlegg.andreBarn.description.${barn.relasjon}`, {
-              navn: `${barn?.navn?.fornavn} ${barn?.navn?.etternavn}`,
-            }),
+            description: formatMessage(
+              { id: `søknad.vedlegg.andreBarn.description.${barn.relasjon}` },
+              {
+                navn: `${barn?.navn?.fornavn} ${barn?.navn?.etternavn}`,
+              }
+            ),
           },
         ],
         søknadDispatch
@@ -176,25 +182,25 @@ export const Barnetillegg = ({ onBackClick, onNext, defaultValues }: Props) => {
           await deleteOpplastedeVedlegg(søknadState.søknad);
           await slettLagretSoknadState<Soknad>(søknadDispatch, søknadState);
         }}
-        nextButtonText={formatMessage('navigation.next')}
-        backButtonText={formatMessage('navigation.back')}
-        cancelButtonText={formatMessage('navigation.cancel')}
+        nextButtonText={formatMessage({ id: 'navigation.next' })}
+        backButtonText={formatMessage({ id: 'navigation.back' })}
+        cancelButtonText={formatMessage({ id: 'navigation.cancel' })}
         errors={errors}
       >
         <Heading size="large" level="2">
-          {formatMessage('søknad.barnetillegg.title')}
+          {formatMessage({ id: 'søknad.barnetillegg.title' })}
         </Heading>
         <LucaGuidePanel>
-          <BodyShort spacing>{formatMessage('søknad.barnetillegg.guide.text1')}</BodyShort>
-          <BodyShort>{formatMessage('søknad.barnetillegg.guide.text2')}</BodyShort>
+          <BodyShort spacing>{formatMessage({ id: 'søknad.barnetillegg.guide.text1' })}</BodyShort>
+          <BodyShort>{formatMessage({ id: 'søknad.barnetillegg.guide.text2' })}</BodyShort>
         </LucaGuidePanel>
         <div>
           <Heading size="small" level="3" spacing>
-            {formatMessage('søknad.barnetillegg.registrerteBarn.title')}
+            {formatMessage({ id: 'søknad.barnetillegg.registrerteBarn.title' })}
           </Heading>
           {fields.length === 0 && (
             <BodyShort spacing>
-              {formatMessage('søknad.barnetillegg.registrerteBarn.notfound')}
+              {formatMessage({ id: 'søknad.barnetillegg.registrerteBarn.notfound' })}
             </BodyShort>
           )}
           {fields.length > 0 && (
@@ -204,18 +210,21 @@ export const Barnetillegg = ({ onBackClick, onNext, defaultValues }: Props) => {
                   <li key={barn?.id}>
                     <article className={classes.barneKort}>
                       <BodyShort>
-                        <Label>{formatMessage('søknad.barnetillegg.registrerteBarn.navn')}: </Label>
+                        <Label>
+                          {formatMessage({ id: 'søknad.barnetillegg.registrerteBarn.navn' })}:{' '}
+                        </Label>
                         {formatNavn(barn?.navn)}
                       </BodyShort>
                       <BodyShort>
                         <Label>
-                          {formatMessage('søknad.barnetillegg.registrerteBarn.fødselsdato')}:{' '}
+                          {formatMessage({ id: 'søknad.barnetillegg.registrerteBarn.fødselsdato' })}
+                          :{' '}
                         </Label>
                         {formatDate(barn?.fødseldato)}
                       </BodyShort>
                       <RadioGroupWrapper
                         legend={formatMessage(
-                          'søknad.barnetillegg.registrerteBarn.harInntekt.label',
+                          { id: 'søknad.barnetillegg.registrerteBarn.harInntekt.label' },
                           {
                             grunnbeløp: GRUNNBELØP,
                           }
@@ -224,12 +233,12 @@ export const Barnetillegg = ({ onBackClick, onNext, defaultValues }: Props) => {
                         control={control}
                       >
                         <ReadMore
-                          header={formatMessage(
-                            'søknad.barnetillegg.registrerteBarn.harInntekt.readMore.title'
-                          )}
+                          header={formatMessage({
+                            id: 'søknad.barnetillegg.registrerteBarn.harInntekt.readMore.title',
+                          })}
                         >
                           {formatMessage(
-                            'søknad.barnetillegg.registrerteBarn.harInntekt.readMore.text',
+                            { id: 'søknad.barnetillegg.registrerteBarn.harInntekt.readMore.text' },
                             {
                               grunnbeløp: GRUNNBELØP,
                             }
@@ -237,12 +246,12 @@ export const Barnetillegg = ({ onBackClick, onNext, defaultValues }: Props) => {
                         </ReadMore>
                         <Radio value={JaEllerNei.JA}>
                           <BodyShort>
-                            {formatMessage(`answerOptions.jaEllerNei.${JaEllerNei.JA}`)}
+                            {formatMessage({ id: `answerOptions.jaEllerNei.${JaEllerNei.JA}` })}
                           </BodyShort>
                         </Radio>
                         <Radio value={JaEllerNei.NEI}>
                           <BodyShort>
-                            {formatMessage(`answerOptions.jaEllerNei.${JaEllerNei.NEI}`)}
+                            {formatMessage({ id: `answerOptions.jaEllerNei.${JaEllerNei.NEI}` })}
                           </BodyShort>
                         </Radio>
                       </RadioGroupWrapper>
@@ -256,7 +265,7 @@ export const Barnetillegg = ({ onBackClick, onNext, defaultValues }: Props) => {
         </div>
         <div>
           <Heading size="small" level="3" spacing>
-            {formatMessage('søknad.barnetillegg.manuelleBarn.title')}
+            {formatMessage({ id: 'søknad.barnetillegg.manuelleBarn.title' })}
           </Heading>
           {manuelleBarnFields.length > 0 && (
             <ul className={classes.barnList}>
@@ -265,38 +274,48 @@ export const Barnetillegg = ({ onBackClick, onNext, defaultValues }: Props) => {
                   <li key={barn?.id}>
                     <article className={classes.barneKort}>
                       <BodyShort>
-                        <Label>{formatMessage('søknad.barnetillegg.registrerteBarn.navn')}: </Label>
+                        <Label>
+                          {formatMessage({ id: 'søknad.barnetillegg.registrerteBarn.navn' })}:{' '}
+                        </Label>
                         {formatNavn(barn?.navn)}
                       </BodyShort>
                       <BodyShort>
                         <Label>
-                          {formatMessage('søknad.barnetillegg.manuelleBarn.fødselsdato')}:{' '}
+                          {formatMessage({ id: 'søknad.barnetillegg.manuelleBarn.fødselsdato' })}:{' '}
                         </Label>
 
                         {formatDate(barn?.fødseldato)}
                       </BodyShort>
                       {barn?.relasjon === Relasjon.FORELDER && (
                         <BodyShort>
-                          {formatMessage('søknad.barnetillegg.manuelleBarn.erForelder')}
+                          {formatMessage({ id: 'søknad.barnetillegg.manuelleBarn.erForelder' })}
                         </BodyShort>
                       )}
                       {barn?.relasjon === Relasjon.FOSTERFORELDER && (
                         <BodyShort>
-                          {formatMessage('søknad.barnetillegg.manuelleBarn.erFosterforelder')}
+                          {formatMessage({
+                            id: 'søknad.barnetillegg.manuelleBarn.erFosterforelder',
+                          })}
                         </BodyShort>
                       )}
                       {barn?.harInntekt === JaEllerNei.JA && (
                         <BodyShort>
-                          {formatMessage('søknad.barnetillegg.manuelleBarn.inntektOver1G', {
-                            grunnbeløp: GRUNNBELØP,
-                          })}
+                          {formatMessage(
+                            { id: 'søknad.barnetillegg.manuelleBarn.inntektOver1G' },
+                            {
+                              grunnbeløp: GRUNNBELØP,
+                            }
+                          )}
                         </BodyShort>
                       )}
                       {barn?.harInntekt === JaEllerNei.NEI && (
                         <BodyShort>
-                          {formatMessage('søknad.barnetillegg.manuelleBarn.inntektIkkeOver1G', {
-                            grunnbeløp: GRUNNBELØP,
-                          })}
+                          {formatMessage(
+                            { id: 'søknad.barnetillegg.manuelleBarn.inntektIkkeOver1G' },
+                            {
+                              grunnbeløp: GRUNNBELØP,
+                            }
+                          )}
                         </BodyShort>
                       )}
                       <div className={classes?.cardButtonWrapper}>
@@ -305,7 +324,7 @@ export const Barnetillegg = ({ onBackClick, onNext, defaultValues }: Props) => {
                           type="button"
                           onClick={() => editNyttBarn(index)}
                         >
-                          {formatMessage('søknad.barnetillegg.manuelleBarn.redigerBarn')}
+                          {formatMessage({ id: 'søknad.barnetillegg.manuelleBarn.redigerBarn' })}
                         </Button>
                         <Button
                           variant="tertiary"
@@ -316,7 +335,7 @@ export const Barnetillegg = ({ onBackClick, onNext, defaultValues }: Props) => {
                             slettBarn(index);
                           }}
                         >
-                          {formatMessage('søknad.barnetillegg.manuelleBarn.slettBarn')}
+                          {formatMessage({ id: 'søknad.barnetillegg.manuelleBarn.slettBarn' })}
                         </Button>
                       </div>
                     </article>
@@ -326,7 +345,7 @@ export const Barnetillegg = ({ onBackClick, onNext, defaultValues }: Props) => {
             </ul>
           )}
           <BodyShort spacing>
-            {formatMessage('søknad.barnetillegg.leggTilBarn.description')}
+            {formatMessage({ id: 'søknad.barnetillegg.leggTilBarn.description' })}
           </BodyShort>
           <Button
             variant="tertiary"
@@ -338,33 +357,45 @@ export const Barnetillegg = ({ onBackClick, onNext, defaultValues }: Props) => {
               setShowModal(true);
             }}
           >
-            {formatMessage('søknad.barnetillegg.leggTilBarn.buttonText')}
+            {formatMessage({ id: 'søknad.barnetillegg.leggTilBarn.buttonText' })}
           </Button>
         </div>
         {(erForelderTilManueltBarn || erFosterforelderTilManueltBarn) && (
           <Alert variant="info">
-            {formatMessage('søknad.barnetillegg.alert.leggeVedTekst')}
+            {formatMessage({ id: 'søknad.barnetillegg.alert.leggeVedTekst' })}
             <ul>
               {erForelderTilManueltBarn && (
-                <li>{formatMessage('søknad.barnetillegg.alert.bulletPointVedleggForelder')}</li>
+                <li>
+                  {formatMessage({ id: 'søknad.barnetillegg.alert.bulletPointVedleggForelder' })}
+                </li>
               )}
               {erFosterforelderTilManueltBarn && (
                 <li>
-                  {formatMessage('søknad.barnetillegg.alert.bulletPointVedleggFosterforelder')}
+                  {formatMessage({
+                    id: 'søknad.barnetillegg.alert.bulletPointVedleggFosterforelder',
+                  })}
                 </li>
               )}
             </ul>
-            {formatMessage('søknad.barnetillegg.alert.lasteOppVedleggTekst')}
+            {formatMessage({ id: 'søknad.barnetillegg.alert.lasteOppVedleggTekst' })}
           </Alert>
         )}
         {(fields.length > 0 || manuelleBarnFields.length > 0) && (
           <Alert variant="info">
-            {formatMessage('søknad.barnetillegg.alert.barneTillegg.title')}
+            {formatMessage({ id: 'søknad.barnetillegg.alert.barneTillegg.title' })}
             <ul>
-              <li>{formatMessage('søknad.barnetillegg.alert.barneTillegg.bulletpoint1')}</li>
-              <li>{formatMessage('søknad.barnetillegg.alert.barneTillegg.bulletpoint2')}</li>
-              <li>{formatMessage('søknad.barnetillegg.alert.barneTillegg.bulletpoint3')}</li>
-              <li>{formatMessage('søknad.barnetillegg.alert.barneTillegg.bulletpoint4')}</li>
+              <li>
+                {formatMessage({ id: 'søknad.barnetillegg.alert.barneTillegg.bulletpoint1' })}
+              </li>
+              <li>
+                {formatMessage({ id: 'søknad.barnetillegg.alert.barneTillegg.bulletpoint2' })}
+              </li>
+              <li>
+                {formatMessage({ id: 'søknad.barnetillegg.alert.barneTillegg.bulletpoint3' })}
+              </li>
+              <li>
+                {formatMessage({ id: 'søknad.barnetillegg.alert.barneTillegg.bulletpoint4' })}
+              </li>
             </ul>
           </Alert>
         )}
