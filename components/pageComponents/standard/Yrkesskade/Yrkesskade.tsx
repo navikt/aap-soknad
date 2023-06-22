@@ -14,7 +14,7 @@ import { deleteOpplastedeVedlegg, useSoknadContextStandard } from 'context/sokna
 import { useDebounceLagreSoknad } from 'hooks/useDebounceLagreSoknad';
 import { GenericSoknadContextState } from 'types/SoknadContext';
 import { setFocusOnErrorSummary } from 'components/schema/FormErrorSummary';
-import { FormattedMessage, useIntl } from 'react-intl';
+import { FormattedMessage, IntlFormatters, useIntl } from 'react-intl';
 
 interface Props {
   onBackClick: () => void;
@@ -23,7 +23,7 @@ interface Props {
 }
 const YRKESSKADE = 'yrkesskade';
 
-export const getYrkesskadeSchema = (formatMessage: any) =>
+export const getYrkesskadeSchema = (formatMessage: IntlFormatters['formatMessage']) =>
   yup.object().shape({
     [YRKESSKADE]: yup
       .string()

@@ -22,7 +22,7 @@ import { ModalButtonWrapper } from 'components/ButtonWrapper/ModalButtonWrapper'
 import { UtenlandsPeriode } from 'types/Soknad';
 import { MonthPickerWrapper } from 'components/input/MonthPickerWrapper/MonthPickerWrapper';
 import { subYears } from 'date-fns';
-import { useIntl } from 'react-intl';
+import { IntlFormatters, useIntl } from 'react-intl';
 
 const { eeaMember } = require('is-european');
 
@@ -41,7 +41,7 @@ interface UtenlandsPeriodeProps {
 }
 
 export const getUtenlandsPeriodeSchema = (
-  formatMessage: any,
+  formatMessage: IntlFormatters['formatMessage'],
   arbeidEllerBodd = ArbeidEllerBodd.BODD
 ) => {
   return yup.object().shape({

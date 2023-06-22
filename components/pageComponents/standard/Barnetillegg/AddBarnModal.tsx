@@ -22,7 +22,7 @@ import { GRUNNBELØP } from './Barnetillegg';
 
 import { add, sub, subYears } from 'date-fns';
 import { DatePickerWrapper } from '../../../input/DatePickerWrapper/DatePickerWrapper';
-import { useIntl } from 'react-intl';
+import { IntlFormatters, useIntl } from 'react-intl';
 
 interface Props {
   søknad?: Soknad;
@@ -41,7 +41,7 @@ const NAVN = 'navn';
 
 const ALDER_BARN_ÅR = 18;
 
-export const getAddBarnSchema = (formatMessage: any) => {
+export const getAddBarnSchema = (formatMessage: IntlFormatters['formatMessage']) => {
   return yup.object().shape({
     [NAVN]: yup.object().shape({
       fornavn: yup.string().required(

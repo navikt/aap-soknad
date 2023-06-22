@@ -7,7 +7,7 @@ import { useEffect } from 'react';
 import { Button, Heading, Modal } from '@navikt/ds-react';
 import TextFieldWrapper from 'components/input/TextFieldWrapper';
 import { ModalButtonWrapper } from 'components/ButtonWrapper/ModalButtonWrapper';
-import { useIntl } from 'react-intl';
+import { IntlFormatters, useIntl } from 'react-intl';
 
 interface Props {
   søknad?: Soknad;
@@ -17,7 +17,7 @@ interface Props {
   behandler?: any;
 }
 
-export const getBehandlerSchema = (formatMessage: any) => {
+export const getBehandlerSchema = (formatMessage: IntlFormatters['formatMessage']) => {
   return yup.object().shape({
     firstname: yup
       .string()

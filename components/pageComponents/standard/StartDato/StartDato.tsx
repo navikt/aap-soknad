@@ -19,7 +19,7 @@ import { GenericSoknadContextState } from 'types/SoknadContext';
 import * as classes from './StartDato.module.css';
 import { setFocusOnErrorSummary } from 'components/schema/FormErrorSummary';
 import { DatePickerWrapper } from '../../../input/DatePickerWrapper/DatePickerWrapper';
-import { useIntl } from 'react-intl';
+import { IntlFormatters, useIntl } from 'react-intl';
 
 export enum FerieType {
   DAGER = 'DAGER',
@@ -46,7 +46,7 @@ interface Props {
   defaultValues?: GenericSoknadContextState<Soknad>;
 }
 
-export const getStartDatoSchema = (formatMessage: any) => {
+export const getStartDatoSchema = (formatMessage: IntlFormatters['formatMessage']) => {
   return yup.object().shape({
     [SYKEPENGER]: yup
       .string()

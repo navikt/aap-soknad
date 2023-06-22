@@ -24,7 +24,7 @@ import { useDebounceLagreSoknad } from 'hooks/useDebounceLagreSoknad';
 import { GenericSoknadContextState } from 'types/SoknadContext';
 import { formatDate } from 'utils/date';
 import { setFocusOnErrorSummary } from 'components/schema/FormErrorSummary';
-import { useIntl } from 'react-intl';
+import { IntlFormatters, useIntl } from 'react-intl';
 
 interface Props {
   onBackClick: () => void;
@@ -42,7 +42,7 @@ export const getUniqueIshIdForBarn = (barn: ManuelleBarn) => {
   }`;
 };
 
-export const getBarnetillegSchema = (formatMessage: any) =>
+export const getBarnetillegSchema = (formatMessage: IntlFormatters['formatMessage']) =>
   yup.object().shape({
     [BARN]: yup.array().of(
       yup.object().shape({

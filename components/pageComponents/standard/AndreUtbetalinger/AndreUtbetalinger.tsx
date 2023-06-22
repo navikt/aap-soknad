@@ -22,7 +22,7 @@ import { deleteOpplastedeVedlegg, useSoknadContextStandard } from 'context/sokna
 import { useDebounceLagreSoknad } from 'hooks/useDebounceLagreSoknad';
 import { GenericSoknadContextState } from 'types/SoknadContext';
 import { setFocusOnErrorSummary } from 'components/schema/FormErrorSummary';
-import { useIntl } from 'react-intl';
+import { IntlFormatters, useIntl } from 'react-intl';
 
 interface Props {
   onBackClick: () => void;
@@ -90,7 +90,7 @@ export const stønadTypeToAlternativNøkkel = (stønadType: StønadType) => {
       return `søknad.${ANDRE_UTBETALINGER}.${STØNAD}.values.nei`;
   }
 };
-export const getAndreUtbetalingerSchema = (formatMessage: any) =>
+export const getAndreUtbetalingerSchema = (formatMessage: IntlFormatters['formatMessage']) =>
   yup.object().shape({
     andreUtbetalinger: yup.object().shape({
       lønn: yup

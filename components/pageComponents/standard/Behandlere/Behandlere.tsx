@@ -17,7 +17,7 @@ import { GenericSoknadContextState } from 'types/SoknadContext';
 import RadioGroupWrapper from 'components/input/RadioGroupWrapper/RadioGroupWrapper';
 import { JaEllerNei } from 'types/Generic';
 import { formatFullAdresse, formatNavn, formatTelefonnummer } from 'utils/StringFormatters';
-import { useIntl } from 'react-intl';
+import { IntlFormatters, useIntl } from 'react-intl';
 
 interface Props {
   onBackClick: () => void;
@@ -28,7 +28,7 @@ const REGISTRERTE_BEHANDLERE = 'registrerteBehandlere';
 const ANDRE_BEHANDLERE = 'andreBehandlere';
 const RIKTIG_FASTLEGE = 'erRegistrertFastlegeRiktig';
 
-export const getBehandlerSchema = (formatMessage: any) =>
+export const getBehandlerSchema = (formatMessage: IntlFormatters['formatMessage']) =>
   yup.object().shape({
     [REGISTRERTE_BEHANDLERE]: yup.array().of(
       yup.object().shape({

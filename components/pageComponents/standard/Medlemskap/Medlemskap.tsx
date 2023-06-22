@@ -27,7 +27,7 @@ import {
   shouldShowPeriodevelger,
 } from './medlemskapUtils';
 import { setFocusOnErrorSummary } from 'components/schema/FormErrorSummary';
-import { useIntl } from 'react-intl';
+import { IntlFormatters, useIntl } from 'react-intl';
 
 interface Props {
   onBackClick: () => void;
@@ -59,7 +59,7 @@ const validateUtenlandsPeriode = (
   );
 };
 
-export const getMedlemskapSchema = (formatMessage: any) => {
+export const getMedlemskapSchema = (formatMessage: IntlFormatters['formatMessage']) => {
   return yup.object().shape({
     [MEDLEMSKAP]: yup.object().shape({
       [BODD_I_NORGE]: yup
