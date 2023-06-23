@@ -2,7 +2,6 @@ import PageHeader from 'components/PageHeader';
 import React, { useEffect, useState } from 'react';
 import { SokerOppslagState, SøkerView } from 'context/sokerOppslagContext';
 import { SoknadContextProviderStandard } from 'context/soknadContextStandard';
-import { useFeatureToggleIntl } from 'hooks/useFeatureToggleIntl';
 import Kvittering from 'components/pageComponents/standard/Kvittering/Kvittering';
 import * as classes from 'components/pageComponents/standard/standard.module.css';
 import { beskyttetSide } from 'auth/beskyttetSide';
@@ -12,6 +11,7 @@ import { getSøknader, SøknadApiType } from 'pages/api/oppslag/soeknader';
 import { getSøker } from 'pages/api/oppslag/soeker';
 import { logger } from '@navikt/aap-felles-utils';
 import metrics from 'utils/metrics';
+import { FormattedMessage } from 'react-intl';
 
 interface PageProps {
   søker: SokerOppslagState;
@@ -19,8 +19,6 @@ interface PageProps {
 }
 
 const KvitteringPage = ({ søker, søknader }: PageProps) => {
-  const { FormatElement } = useFeatureToggleIntl();
-
   const [soker, setSoker] = useState({});
 
   useEffect(() => {
@@ -37,7 +35,7 @@ const KvitteringPage = ({ søker, søknader }: PageProps) => {
   return (
     <SoknadContextProviderStandard>
       <PageHeader align="center" className={classes?.pageHeader}>
-        <FormatElement id={'søknad.pagetitle'} values={{ wbr: () => <>&shy;</> }} />
+        <FormattedMessage id={'søknad.pagetitle'} values={{ wbr: () => <>&shy;</> }} />
       </PageHeader>
       <Kvittering
         søker={soker}

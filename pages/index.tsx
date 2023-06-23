@@ -1,7 +1,6 @@
 import { Veiledning } from 'components/pageComponents/standard/Veiledning/Veiledning';
-import { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Soker, SøkerView } from 'context/sokerOppslagContext';
-import React from 'react';
 import { useRouter } from 'next/router';
 import { GetServerSidePropsResult, NextPageContext } from 'next/types';
 import { beskyttetSide } from 'auth/beskyttetSide';
@@ -15,10 +14,10 @@ import { logSkjemaStartetEvent } from 'utils/amplitude';
 import metrics from 'utils/metrics';
 import { scrollRefIntoView } from 'utils/dom';
 import { getSøkerUtenBarn } from 'pages/api/oppslag/soekerUtenBarn';
-import { useFeatureToggleIntl } from 'hooks/useFeatureToggleIntl';
 import { TimeoutBox } from 'components/TimeoutBox/TimeoutBox';
 import { logger } from '@navikt/aap-felles-utils';
 import { getFulltNavn } from '../lib/søker';
+
 interface PageProps {
   søker: Soker;
 }
@@ -50,7 +49,6 @@ export const defaultStepList = [
 
 const Introduksjon = ({ søker }: PageProps) => {
   const router = useRouter();
-  const { formatMessage } = useFeatureToggleIntl();
 
   const [isLoading, setIsLoading] = useState(false);
   const [hasError, setHasError] = useState(false);

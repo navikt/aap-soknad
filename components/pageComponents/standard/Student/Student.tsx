@@ -1,16 +1,15 @@
 import { Soknad } from 'types/Soknad';
 import RadioGroupWrapper from 'components/input/RadioGroupWrapper/RadioGroupWrapper';
-import { BodyShort, Heading, Radio, Alert } from '@navikt/ds-react';
+import { Alert, BodyShort, Heading, Radio } from '@navikt/ds-react';
 import { JaNeiVetIkke } from 'types/Generic';
 import React, { useEffect, useMemo } from 'react';
 import * as yup from 'yup';
 import { useStepWizard } from 'context/stepWizardContextV2';
-import { FieldValues, useForm, useWatch } from 'react-hook-form';
+import { useForm, useWatch } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import SoknadFormWrapper from 'components/SoknadFormWrapper/SoknadFormWrapper';
 import ColorPanel from 'components/panel/ColorPanel';
 import { LucaGuidePanel } from '@navikt/aap-felles-react';
-import { useFeatureToggleIntl } from 'hooks/useFeatureToggleIntl';
 import {
   addRequiredVedlegg,
   removeRequiredVedlegg,
@@ -21,6 +20,7 @@ import { deleteOpplastedeVedlegg, useSoknadContextStandard } from 'context/sokna
 import { useDebounceLagreSoknad } from 'hooks/useDebounceLagreSoknad';
 import { GenericSoknadContextState } from 'types/SoknadContext';
 import { setFocusOnErrorSummary } from 'components/schema/FormErrorSummary';
+import { IntlFormatters, useIntl } from 'react-intl';
 
 export const AVBRUTT_STUDIE_VEDLEGG = 'avbruttStudie';
 export const STUDENT = 'student';
@@ -48,27 +48,27 @@ interface Props {
   defaultValues?: GenericSoknadContextState<Soknad>;
 }
 
-export const getStudentSchema = (formatMessage: (id: string) => string) =>
+export const getStudentSchema = (formatMessage: IntlFormatters['formatMessage']) =>
   yup.object().shape({
     [STUDENT]: yup.object().shape({
       [ER_STUDENT]: yup
         .string()
-        .required(formatMessage('søknad.student.erStudent.required'))
+        .required(formatMessage({ id: 'søknad.student.erStudent.required' }))
         .oneOf(
           [JaNeiAvbrutt.JA, JaNeiAvbrutt.NEI, JaNeiAvbrutt.AVBRUTT],
-          formatMessage('søknad.student.erStudent.required')
+          formatMessage({ id: 'søknad.student.erStudent.required' })
         )
-        .typeError(formatMessage('søknad.student.erStudent.required')),
+        .typeError(formatMessage({ id: 'søknad.student.erStudent.required' })),
       [KOMME_TILBAKE]: yup.string().when(ER_STUDENT, ([erStudent], schema) => {
         if (erStudent === JaNeiAvbrutt.AVBRUTT) {
           return yup
             .string()
-            .required(formatMessage('søknad.student.kommeTilbake.required'))
+            .required(formatMessage({ id: 'søknad.student.kommeTilbake.required' }))
             .oneOf(
               [JaNeiVetIkke.JA, JaNeiVetIkke.NEI, JaNeiVetIkke.VET_IKKE],
-              formatMessage('søknad.student.kommeTilbake.required')
+              formatMessage({ id: 'søknad.student.kommeTilbake.required' })
             )
-            .typeError(formatMessage('søknad.student.kommeTilbake.required'));
+            .typeError(formatMessage({ id: 'søknad.student.kommeTilbake.required' }));
         }
         return schema;
       }),
@@ -76,7 +76,7 @@ export const getStudentSchema = (formatMessage: (id: string) => string) =>
   });
 
 const Student = ({ onBackClick, onNext, defaultValues }: Props) => {
-  const { formatMessage } = useFeatureToggleIntl();
+  const { formatMessage } = useIntl();
   const { søknadState, søknadDispatch } = useSoknadContextStandard();
   const { stepList } = useStepWizard();
   const {
@@ -101,9 +101,11 @@ const Student = ({ onBackClick, onNext, defaultValues }: Props) => {
   }, [allFields]);
   const ErStudentAlternativer = useMemo(
     () => ({
-      [JaNeiAvbrutt.JA]: formatMessage(jaNeiAvbruttToTekstnøkkel(JaNeiAvbrutt.JA)),
-      [JaNeiAvbrutt.NEI]: formatMessage(jaNeiAvbruttToTekstnøkkel(JaNeiAvbrutt.NEI)),
-      [JaNeiAvbrutt.AVBRUTT]: formatMessage(jaNeiAvbruttToTekstnøkkel(JaNeiAvbrutt.AVBRUTT)),
+      [JaNeiAvbrutt.JA]: formatMessage({ id: jaNeiAvbruttToTekstnøkkel(JaNeiAvbrutt.JA) }),
+      [JaNeiAvbrutt.NEI]: formatMessage({ id: jaNeiAvbruttToTekstnøkkel(JaNeiAvbrutt.NEI) }),
+      [JaNeiAvbrutt.AVBRUTT]: formatMessage({
+        id: jaNeiAvbruttToTekstnøkkel(JaNeiAvbrutt.AVBRUTT),
+      }),
     }),
     [formatMessage]
   );
@@ -121,7 +123,7 @@ const Student = ({ onBackClick, onNext, defaultValues }: Props) => {
         [
           {
             type: AVBRUTT_STUDIE_VEDLEGG,
-            description: formatMessage('søknad.student.vedlegg.description'),
+            description: formatMessage({ id: 'søknad.student.vedlegg.description' }),
           },
         ],
         søknadDispatch
@@ -150,14 +152,14 @@ const Student = ({ onBackClick, onNext, defaultValues }: Props) => {
       errors={errors}
     >
       <Heading size="large" level="2">
-        {formatMessage('søknad.student.title')}
+        {formatMessage({ id: 'søknad.student.title' })}
       </Heading>
       <LucaGuidePanel>
-        <BodyShort spacing>{formatMessage('søknad.student.guide.guide1')}</BodyShort>
+        <BodyShort spacing>{formatMessage({ id: 'søknad.student.guide.guide1' })}</BodyShort>
       </LucaGuidePanel>
       <RadioGroupWrapper
         name={`${STUDENT}.${ER_STUDENT}`}
-        legend={formatMessage(`søknad.${STUDENT}.${ER_STUDENT}.legend`)}
+        legend={formatMessage({ id: `søknad.${STUDENT}.${ER_STUDENT}.legend` })}
         control={control}
       >
         <Radio value={JaNeiAvbrutt.JA}>
@@ -174,7 +176,7 @@ const Student = ({ onBackClick, onNext, defaultValues }: Props) => {
         <ColorPanel color={'grey'}>
           <RadioGroupWrapper
             name={`${STUDENT}.${KOMME_TILBAKE}`}
-            legend={formatMessage(`søknad.${STUDENT}.${KOMME_TILBAKE}.legend`)}
+            legend={formatMessage({ id: `søknad.${STUDENT}.${KOMME_TILBAKE}.legend` })}
             control={control}
           >
             <Radio value={JaNeiVetIkke.JA}>
@@ -191,11 +193,11 @@ const Student = ({ onBackClick, onNext, defaultValues }: Props) => {
       )}
       {kommeTilbake === JaNeiVetIkke.JA && (
         <Alert variant="info">
-          <BodyShort>{formatMessage('søknad.student.vedlegg.title')}</BodyShort>
+          <BodyShort>{formatMessage({ id: 'søknad.student.vedlegg.title' })}</BodyShort>
           <ul>
-            <li>{formatMessage('søknad.student.vedlegg.description')}</li>
+            <li>{formatMessage({ id: 'søknad.student.vedlegg.description' })}</li>
           </ul>
-          <BodyShort>{formatMessage('søknad.student.vedlegg.lastOppSenere')}</BodyShort>
+          <BodyShort>{formatMessage({ id: 'søknad.student.vedlegg.lastOppSenere' })}</BodyShort>
         </Alert>
       )}
     </SoknadFormWrapper>

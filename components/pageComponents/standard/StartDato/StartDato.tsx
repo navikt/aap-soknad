@@ -1,7 +1,7 @@
 import { useForm, useWatch } from 'react-hook-form';
 import { Soknad } from 'types/Soknad';
 import React, { useEffect, useMemo } from 'react';
-import { Label, Alert, BodyShort, Heading, Radio } from '@navikt/ds-react';
+import { Alert, BodyShort, Heading, Label, Radio } from '@navikt/ds-react';
 import RadioGroupWrapper from 'components/input/RadioGroupWrapper/RadioGroupWrapper';
 import { JaEllerNei } from 'types/Generic';
 import TextFieldWrapper from 'components/input/TextFieldWrapper';
@@ -11,7 +11,6 @@ import * as yup from 'yup';
 import SoknadFormWrapper from 'components/SoknadFormWrapper/SoknadFormWrapper';
 import { useStepWizard } from 'context/stepWizardContextV2';
 import { LucaGuidePanel } from '@navikt/aap-felles-react';
-import { useFeatureToggleIntl } from 'hooks/useFeatureToggleIntl';
 import { deleteOpplastedeVedlegg, useSoknadContextStandard } from 'context/soknadContextStandard';
 import { slettLagretSoknadState, updateSøknadData } from 'context/soknadContextCommon';
 import { useDebounceLagreSoknad } from 'hooks/useDebounceLagreSoknad';
@@ -20,6 +19,8 @@ import { GenericSoknadContextState } from 'types/SoknadContext';
 import * as classes from './StartDato.module.css';
 import { setFocusOnErrorSummary } from 'components/schema/FormErrorSummary';
 import { DatePickerWrapper } from '../../../input/DatePickerWrapper/DatePickerWrapper';
+import { IntlFormatters, useIntl } from 'react-intl';
+
 export enum FerieType {
   DAGER = 'DAGER',
   PERIODE = 'PERIODE',
@@ -45,11 +46,11 @@ interface Props {
   defaultValues?: GenericSoknadContextState<Soknad>;
 }
 
-export const getStartDatoSchema = (formatMessage: (id: string) => string) => {
+export const getStartDatoSchema = (formatMessage: IntlFormatters['formatMessage']) => {
   return yup.object().shape({
     [SYKEPENGER]: yup
       .string()
-      .required(formatMessage('søknad.startDato.sykepenger.required'))
+      .required(formatMessage({ id: 'søknad.startDato.sykepenger.required' }))
       .oneOf([JaEllerNei.JA, JaEllerNei.NEI])
       .nullable(),
     [FERIE]: yup
@@ -65,12 +66,12 @@ export const getStartDatoSchema = (formatMessage: (id: string) => string) => {
           return yup.object({
             [SKALHAFERIE]: yup
               .string()
-              .required(formatMessage('søknad.startDato.skalHaFerie.validation.required')),
+              .required(formatMessage({ id: 'søknad.startDato.skalHaFerie.validation.required' })),
             [FERIETYPE]: yup.string().when(SKALHAFERIE, ([skalHaFerie], schema) => {
               if (skalHaFerie === JaEllerNei.JA) {
                 return yup
                   .string()
-                  .required(formatMessage('søknad.startDato.ferieType.validation.required'))
+                  .required(formatMessage({ id: 'søknad.startDato.ferieType.validation.required' }))
                   .nullable();
               }
               return schema;
@@ -80,9 +81,11 @@ export const getStartDatoSchema = (formatMessage: (id: string) => string) => {
               if (ferieType === FerieType.PERIODE) {
                 return yup
                   .date()
-                  .required(formatMessage('søknad.startDato.periode.fraDato.validation.required'))
+                  .required(
+                    formatMessage({ id: 'søknad.startDato.periode.fraDato.validation.required' })
+                  )
                   .typeError(
-                    formatMessage('søknad.startDato.periode.fraDato.validation.typeError')
+                    formatMessage({ id: 'søknad.startDato.periode.fraDato.validation.typeError' })
                   );
               }
               return schema;
@@ -92,11 +95,17 @@ export const getStartDatoSchema = (formatMessage: (id: string) => string) => {
               if (ferieType === FerieType.PERIODE) {
                 return yup
                   .date()
-                  .required(formatMessage('søknad.startDato.periode.tilDato.validation.required'))
-                  .typeError(formatMessage('søknad.startDato.periode.tilDato.validation.typeError'))
+                  .required(
+                    formatMessage({ id: 'søknad.startDato.periode.tilDato.validation.required' })
+                  )
+                  .typeError(
+                    formatMessage({ id: 'søknad.startDato.periode.tilDato.validation.typeError' })
+                  )
                   .min(
                     yup.ref('fraDato'),
-                    formatMessage('søknad.startDato.periode.tilDato.validation.fraDatoEtterTilDato')
+                    formatMessage({
+                      id: 'søknad.startDato.periode.tilDato.validation.fraDatoEtterTilDato',
+                    })
                   );
               }
               return schema;
@@ -106,7 +115,9 @@ export const getStartDatoSchema = (formatMessage: (id: string) => string) => {
               if (ferieType === FerieType.DAGER) {
                 return yup
                   .string()
-                  .required(formatMessage('søknad.startDato.antallDager.validation.required'));
+                  .required(
+                    formatMessage({ id: 'søknad.startDato.antallDager.validation.required' })
+                  );
               }
               return schema;
             }),
@@ -118,7 +129,7 @@ export const getStartDatoSchema = (formatMessage: (id: string) => string) => {
 };
 
 const StartDato = ({ onBackClick, onNext, defaultValues }: Props) => {
-  const { formatMessage } = useFeatureToggleIntl();
+  const { formatMessage } = useIntl();
   const { søknadState, søknadDispatch } = useSoknadContextStandard();
   const { stepList } = useStepWizard();
   const {
@@ -149,8 +160,8 @@ const StartDato = ({ onBackClick, onNext, defaultValues }: Props) => {
   const ferieType = useWatch({ control, name: `${FERIE}.${FERIETYPE}` });
   const FerieTypeTekster = useMemo(
     () => ({
-      [FerieType.PERIODE]: formatMessage(FerieTypeToMessageKey(FerieType.PERIODE)),
-      [FerieType.DAGER]: formatMessage(FerieTypeToMessageKey(FerieType.DAGER)),
+      [FerieType.PERIODE]: formatMessage({ id: FerieTypeToMessageKey(FerieType.PERIODE) }),
+      [FerieType.DAGER]: formatMessage({ id: FerieTypeToMessageKey(FerieType.DAGER) }),
     }),
     [formatMessage]
   );
@@ -190,20 +201,20 @@ const StartDato = ({ onBackClick, onNext, defaultValues }: Props) => {
         await deleteOpplastedeVedlegg(søknadState.søknad);
         await slettLagretSoknadState<Soknad>(søknadDispatch, søknadState);
       }}
-      nextButtonText={formatMessage('navigation.next')}
-      backButtonText={formatMessage('navigation.back')}
-      cancelButtonText={formatMessage('navigation.cancel')}
+      nextButtonText={formatMessage({ id: 'navigation.next' })}
+      backButtonText={formatMessage({ id: 'navigation.back' })}
+      cancelButtonText={formatMessage({ id: 'navigation.cancel' })}
       errors={errors}
     >
       <Heading size="large" level="2">
-        {formatMessage('søknad.startDato.title')}
+        {formatMessage({ id: 'søknad.startDato.title' })}
       </Heading>
       <LucaGuidePanel>
-        <BodyShort spacing>{formatMessage('søknad.startDato.guide.text1')}</BodyShort>
+        <BodyShort spacing>{formatMessage({ id: 'søknad.startDato.guide.text1' })}</BodyShort>
       </LucaGuidePanel>
       <RadioGroupWrapper
-        legend={formatMessage('søknad.startDato.sykepenger.legend')}
-        description={formatMessage('søknad.startDato.sykepenger.description')}
+        legend={formatMessage({ id: 'søknad.startDato.sykepenger.legend' })}
+        description={formatMessage({ id: 'søknad.startDato.sykepenger.description' })}
         name={`${SYKEPENGER}`}
         control={control}
       >
@@ -213,8 +224,8 @@ const StartDato = ({ onBackClick, onNext, defaultValues }: Props) => {
       {erPåSykepenger === JaEllerNei.JA && (
         <ColorPanel color={'grey'}>
           <RadioGroupWrapper
-            legend={formatMessage('søknad.startDato.skalHaFerie.label')}
-            description={formatMessage('søknad.startDato.skalHaFerie.description')}
+            legend={formatMessage({ id: 'søknad.startDato.skalHaFerie.label' })}
+            description={formatMessage({ id: 'søknad.startDato.skalHaFerie.description' })}
             name={`${FERIE}.${SKALHAFERIE}`}
             control={control}
           >
@@ -223,7 +234,7 @@ const StartDato = ({ onBackClick, onNext, defaultValues }: Props) => {
           </RadioGroupWrapper>
           {skalHaFerie === JaEllerNei.JA && (
             <RadioGroupWrapper
-              legend={formatMessage('søknad.startDato.ferieType.label')}
+              legend={formatMessage({ id: 'søknad.startDato.ferieType.label' })}
               name={`${FERIE}.${FERIETYPE}`}
               control={control}
             >
@@ -237,18 +248,18 @@ const StartDato = ({ onBackClick, onNext, defaultValues }: Props) => {
           )}
           {ferieType === FerieType.PERIODE && (
             <div className={classes?.periodeContainer}>
-              <Label>{formatMessage('søknad.startDato.periode.label')}</Label>
+              <Label>{formatMessage({ id: 'søknad.startDato.periode.label' })}</Label>
               <div className={classes?.datoContainer}>
                 <DatePickerWrapper
                   control={control}
-                  label={formatMessage('søknad.startDato.periode.fraDato.label')}
+                  label={formatMessage({ id: 'søknad.startDato.periode.fraDato.label' })}
                   selectedDate={allFields.ferie?.fraDato}
                   name={`${FERIE}.fraDato`}
                   fromDate={new Date()}
                 />
                 <DatePickerWrapper
                   control={control}
-                  label={formatMessage('søknad.startDato.periode.tilDato.label')}
+                  label={formatMessage({ id: 'søknad.startDato.periode.tilDato.label' })}
                   selectedDate={allFields.ferie?.tilDato}
                   name={`${FERIE}.tilDato`}
                   fromDate={new Date()}
@@ -261,14 +272,14 @@ const StartDato = ({ onBackClick, onNext, defaultValues }: Props) => {
               <TextFieldWrapper
                 className={classes?.antallDagerTekst}
                 name={`${FERIE}.antallDager`}
-                label={formatMessage('søknad.startDato.antallDager.label')}
-                description={formatMessage('søknad.startDato.antallDager.description')}
+                label={formatMessage({ id: 'søknad.startDato.antallDager.label' })}
+                description={formatMessage({ id: 'søknad.startDato.antallDager.description' })}
                 control={control}
               />
             </div>
           )}
           {skalHaFerie === JaEllerNei.NEI && (
-            <Alert variant={'info'}>{formatMessage('søknad.startDato.alert.text')}</Alert>
+            <Alert variant={'info'}>{formatMessage({ id: 'søknad.startDato.alert.text' })}</Alert>
           )}
         </ColorPanel>
       )}

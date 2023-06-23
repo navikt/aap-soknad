@@ -1,13 +1,12 @@
 import { ArrayPath, Control, FieldError, FieldErrors, useFieldArray } from 'react-hook-form';
-import { useFeatureToggleIntl } from 'hooks/useFeatureToggleIntl';
 import React, { DragEventHandler, useEffect, useMemo, useRef, useState } from 'react';
 import * as classes from './FileInput.module.css';
 import { BodyShort, Detail, Heading, Label, Link, Loader, Panel } from '@navikt/ds-react';
-import { Cancel, Delete, FileError, FileSuccess } from '@navikt/ds-icons';
-import { Upload as SvgUpload } from '@navikt/ds-icons';
+import { Cancel, Delete, FileError, FileSuccess, Upload as SvgUpload } from '@navikt/ds-icons';
 import { useSoknadContextStandard } from 'context/soknadContextStandard';
 import { updateRequiredVedlegg } from 'context/soknadContextCommon';
 import { SoknadVedlegg } from '../../../types/Soknad';
+import { useIntl } from 'react-intl';
 
 const MAX_TOTAL_FILE_SIZE = 52428800; // 50mb
 type Props = {
@@ -39,7 +38,7 @@ const FieldArrayFileInput = ({
     updateRequiredVedlegg({ type: type, completed: fields.length > 0 }, søknadDispatch);
   }, [fields]);
 
-  const { formatMessage } = useFeatureToggleIntl();
+  const { formatMessage } = useIntl();
 
   const { søknadDispatch } = useSoknadContextStandard();
 
@@ -83,21 +82,21 @@ const FieldArrayFileInput = ({
       case 422:
         return error422Text(substatus);
       case 413:
-        return formatMessage('fileInputErrors.fileTooLarge');
+        return formatMessage({ id: 'fileInputErrors.fileTooLarge' });
       case 415:
-        return formatMessage('fileInputErrors.unsupportedMediaType');
+        return formatMessage({ id: 'fileInputErrors.unsupportedMediaType' });
       default:
-        return formatMessage('fileInputErrors.other');
+        return formatMessage({ id: 'fileInputErrors.other' });
     }
   };
   const error422Text = (subType: string) => {
     switch (subType) {
       case 'PASSWORD_PROTECTED':
-        return formatMessage('fileInputErrors.passordbeskyttet');
+        return formatMessage({ id: 'fileInputErrors.passordbeskyttet' });
       case 'VIRUS':
-        return formatMessage('fileInputErrors.virus');
+        return formatMessage({ id: 'fileInputErrors.virus' });
       case 'SIZE':
-        return formatMessage('fileInputErrors.size');
+        return formatMessage({ id: 'fileInputErrors.size' });
       default:
         return '';
     }
