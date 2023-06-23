@@ -3,7 +3,7 @@
 // expect(element).toHaveTextContent(/react/i)
 // learn more: https://github.com/testing-library/jest-dom
 import '@testing-library/jest-dom';
-import { render as rtlRender, configure } from '@testing-library/react';
+import { configure, render as rtlRender } from '@testing-library/react';
 import { AppStateContext, AppStateContextState } from 'context/appStateContext';
 import { SoknadContextData } from 'context/soknadContextCommon';
 import { SoknadContextStandard } from 'context/soknadContextStandard';
@@ -12,8 +12,9 @@ import { ReactElement } from 'react';
 import { IntlProvider } from 'react-intl';
 import { Soknad } from 'types/Soknad';
 import { SøknadType } from 'types/SoknadContext';
-import { messages, flattenMessages } from 'utils/message';
+import { messages } from 'utils/message';
 import links from 'translations/links.json';
+
 jest.setTimeout(10 * 1000);
 configure({ asyncUtilTimeout: 10 * 1000 });
 
@@ -21,7 +22,7 @@ jest.mock('next/router', () => ({
   useRouter: jest.fn(),
 }));
 
-const tekster = { ...messages['nb'], ...flattenMessages({ applinks: links }) };
+const tekster = { ...messages['nb'], ...links };
 function render(ui: ReactElement, { locale = 'nb', ...options } = {}) {
   function Wrapper({ children }: { children: ReactElement }): ReactElement {
     return (

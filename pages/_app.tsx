@@ -6,7 +6,7 @@ import { IntlProvider } from 'react-intl';
 import { AppProps } from 'next/app';
 import { Modal } from '@navikt/ds-react';
 import links from 'translations/links.json';
-import { messages, flattenMessages } from 'utils/message';
+import { messages } from 'utils/message';
 import { SokerOppslagProvider } from 'context/sokerOppslagContext';
 import { StepWizardProvider } from 'context/stepWizardContextV2';
 import { initAmplitude } from 'utils/amplitude';
@@ -31,7 +31,7 @@ const CustomApp = ({ Component, pageProps }: AppProps) => {
   const locale = getLocaleOrFallback(router.locale);
 
   const currentMessages = useMemo(
-    () => ({ ...messages[locale as DecoratorLocale], ...flattenMessages({ applinks: links }) }),
+    () => ({ ...messages[locale as DecoratorLocale], ...links }),
     [locale]
   );
 
