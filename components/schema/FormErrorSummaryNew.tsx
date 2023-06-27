@@ -1,8 +1,8 @@
 import React, { Ref, useEffect, useMemo, useRef } from 'react';
 import { ErrorSummary } from '@navikt/ds-react';
 import * as classes from './FormErrorSummary.module.css';
-import { useFeatureToggleIntl } from 'hooks/useFeatureToggleIntl';
 import { setFocusHtmlRef } from '../../utils/dom';
+import { useIntl } from 'react-intl';
 
 export interface SøknadValidationError {
   path: string;
@@ -15,7 +15,7 @@ interface Props {
 
 const FormErrorSummaryNew = (props: Props) => {
   const { errors } = props;
-  const { formatMessage } = useFeatureToggleIntl();
+  const { formatMessage } = useIntl();
 
   const errorSummaryRef: Ref<HTMLDivElement> = useRef(null);
 
@@ -35,7 +35,7 @@ const FormErrorSummaryNew = (props: Props) => {
     return (
       <ErrorSummary
         ref={errorSummaryRef}
-        heading={formatMessage('errorSummary.title')}
+        heading={formatMessage({ id: 'errorSummary.title' })}
         role={'alert'}
         aria-hidden={!isError}
         tabIndex={-1}
@@ -51,7 +51,7 @@ const FormErrorSummaryNew = (props: Props) => {
     <ErrorSummary
       id="aap-error-summary"
       ref={errorSummaryRef}
-      heading={formatMessage('errorSummary.title')}
+      heading={formatMessage({ id: 'errorSummary.title' })}
       role={'alert'}
       aria-hidden={!isError}
       className={!isError ? classes?.visuallyHidden : ''}

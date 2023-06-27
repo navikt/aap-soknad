@@ -2,11 +2,11 @@ import React, { useState } from 'react';
 import { Alert, BodyShort, Button, Detail, Heading, Loader, Modal } from '@navikt/ds-react';
 import * as classes from './SoknadFormWrapper.module.css';
 import { SuccessStroke } from '@navikt/ds-icons';
-import { useFeatureToggleIntl } from 'hooks/useFeatureToggleIntl';
 import { useAppStateContext } from 'context/appStateContext';
 import { clientSideIsProd } from 'utils/environments';
 import { useRouter } from 'next/router';
-import { SøknadValidationError, FormErrorSummaryNew } from '../schema/FormErrorSummaryNew';
+import { FormErrorSummaryNew, SøknadValidationError } from '../schema/FormErrorSummaryNew';
+import { useIntl } from 'react-intl';
 
 interface Props {
   children?: React.ReactNode;
@@ -28,14 +28,14 @@ interface LagreModalProps {
 }
 
 export const LagreModal = ({ isOpen, onClose }: LagreModalProps) => {
-  const { formatMessage } = useFeatureToggleIntl();
+  const { formatMessage } = useIntl();
   return (
     <Modal open={isOpen} onClose={() => onClose(false)}>
       <Modal.Content className={classes?.modalContent}>
         <Heading size={'small'} level={'1'}>
-          {formatMessage('lagreModal.heading')}
+          {formatMessage({ id: 'lagreModal.heading' })}
         </Heading>
-        <BodyShort>{formatMessage('lagreModal.text')}</BodyShort>
+        <BodyShort>{formatMessage({ id: 'lagreModal.text' })}</BodyShort>
         <div className={classes?.buttonWrapper}>
           <Button
             variant="primary"
@@ -48,10 +48,10 @@ export const LagreModal = ({ isOpen, onClose }: LagreModalProps) => {
               }
             }}
           >
-            {formatMessage('lagreModal.lagreButtonText')}
+            {formatMessage({ id: 'lagreModal.lagreButtonText' })}
           </Button>
           <Button variant="tertiary" type="button" onClick={() => onClose(false)}>
-            {formatMessage('lagreModal.avbrytButtonText')}
+            {formatMessage({ id: 'lagreModal.avbrytButtonText' })}
           </Button>
         </div>
       </Modal.Content>
@@ -73,7 +73,7 @@ export const SlettModal = ({
   isDeletingSøknad,
   slettSøknadOgAvbryt,
 }: SlettModalProps) => {
-  const { formatMessage } = useFeatureToggleIntl();
+  const { formatMessage } = useIntl();
   const router = useRouter();
   return (
     <Modal
@@ -86,19 +86,20 @@ export const SlettModal = ({
         {!slettSøknadSuccess && (
           <>
             <Heading className={classes?.modalHeading} size={'small'} level={'1'}>
-              {formatMessage('avbrytOgSlettModal.heading')}
+              {formatMessage({ id: 'avbrytOgSlettModal.heading' })}
             </Heading>
             <div className={classes?.buttonWrapper}>
               <Button variant="primary" type="button" onClick={() => slettSøknadOgAvbryt()}>
                 {isDeletingSøknad && <Loader />}
-                {!isDeletingSøknad && formatMessage('avbrytOgSlettModal.avbrytOgSlettButtonText')}
+                {!isDeletingSøknad &&
+                  formatMessage({ id: 'avbrytOgSlettModal.avbrytOgSlettButtonText' })}
               </Button>
               <Button
                 variant="tertiary"
                 type="button"
                 onClick={() => !isDeletingSøknad && onClose(false)}
               >
-                {formatMessage('avbrytOgSlettModal.avbrytButtonText')}
+                {formatMessage({ id: 'avbrytOgSlettModal.avbrytButtonText' })}
               </Button>
             </div>
           </>
@@ -119,7 +120,7 @@ export const SlettModal = ({
                   }
                 }}
               >
-                {formatMessage('avbrytOgSlettModal.lukkButtonText')}
+                {formatMessage({ id: 'avbrytOgSlettModal.lukkButtonText' })}
               </Button>
               <Button
                 variant="tertiary"
@@ -130,7 +131,7 @@ export const SlettModal = ({
                   }
                 }}
               >
-                {formatMessage('avbrytOgSlettModal.sendNyButtonText')}
+                {formatMessage({ id: 'avbrytOgSlettModal.sendNyButtonText' })}
               </Button>
             </div>
           </>
@@ -151,7 +152,7 @@ const SøknadFormWrapperNew = ({
   nextIsLoading = false,
   className = '',
 }: Props) => {
-  const { formatMessage } = useFeatureToggleIntl();
+  const { formatMessage } = useIntl();
   const { appState } = useAppStateContext();
   const [showLagreModal, setShowLagreModal] = useState<boolean>(false);
   const [showAvbrytModal, setShowAvbrytModal] = useState<boolean>(false);
@@ -212,7 +213,7 @@ const SøknadFormWrapperNew = ({
             type="button"
             onClick={() => setShowLagreModal(true)}
           >
-            {formatMessage('navigation.save')}
+            {formatMessage({ id: 'navigation.save' })}
           </Button>
           <Button
             className={classes?.buttonCancel}
@@ -220,7 +221,7 @@ const SøknadFormWrapperNew = ({
             type="button"
             onClick={() => setShowAvbrytModal(true)}
           >
-            {formatMessage('navigation.cancel')}
+            {formatMessage({ id: 'navigation.cancel' })}
           </Button>
         </div>
       </form>
