@@ -53,8 +53,7 @@ export const lesBucket = async (type: SøknadsType, accessToken?: string) => {
     }
     return mellomlagretSøknad;
   } catch (error) {
-    // @ts-ignore
-    logger.info('Fant ingen mellomlagret søknad', error.toString());
+    logger.info('Fant ingen mellomlagret søknad');
     return undefined;
   }
 };
