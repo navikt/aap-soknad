@@ -1,5 +1,5 @@
 import { FieldErrors } from 'react-hook-form';
-import React, { useState } from 'react';
+import React, { ReactNode, useState } from 'react';
 import { Alert, BodyShort, Button, Detail, Heading, Loader, Modal } from '@navikt/ds-react';
 import { FormErrorSummary } from '../schema/FormErrorSummary';
 import * as classes from './SoknadFormWrapper.module.css';
@@ -7,13 +7,13 @@ import { SuccessStroke } from '@navikt/ds-icons';
 import { useAppStateContext } from 'context/appStateContext';
 import { clientSideIsProd } from 'utils/environments';
 import { useRouter } from 'next/router';
-import { useIntl } from 'react-intl';
+import { useIntl } from '../../utils/Intls';
 
 interface Props {
   children?: React.ReactNode;
-  nextButtonText: string;
-  backButtonText?: string;
-  cancelButtonText: string;
+  nextButtonText: ReactNode;
+  backButtonText?: ReactNode;
+  cancelButtonText: ReactNode;
   onNext: (data: any) => void;
   onBack?: () => void;
   onDelete: () => Promise<any>;

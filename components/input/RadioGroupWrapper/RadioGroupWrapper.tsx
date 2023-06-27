@@ -5,7 +5,7 @@ import * as classes from './RadioGroupWrapper.module.css';
 
 export interface RadioProps<FormFieldValues extends FieldValues> {
   name: FieldPath<FormFieldValues>;
-  legend?: string;
+  legend?: ReactNode;
   control: Control<FormFieldValues>;
   description?: string;
   children?: ReactNode;

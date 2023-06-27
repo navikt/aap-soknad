@@ -7,7 +7,10 @@ import messagesNn from '../translations/nn.json';
 import messagesNb from '../translations/nb.json';
 import links from '../translations/links.json';
 
-type IntlMessageKeys = keyof typeof messagesNn | keyof typeof messagesNb | keyof typeof links;
+export type IntlMessageKeys =
+  | keyof typeof messagesNn
+  | keyof typeof messagesNb
+  | keyof typeof links;
 
 type FormatMessageArgs = Parameters<IntlFormatters<ReactNode>['formatMessage']>;
 
@@ -19,15 +22,21 @@ export function FormattedMessage({ id, ...rest }: FormattedMessageProps) {
   return <ReactIntlFormattedMessage id={id} {...rest} />;
 }
 
+export interface TypedFormatMessageArgs {
+  descriptor: FormatMessageArgs[0] & {
+    id?: IntlMessageKeys;
+  };
+  values?: FormatMessageArgs[1];
+  options?: FormatMessageArgs[2];
+}
+
 export function useIntl() {
   const { formatMessage, ...rest } = useReactIntl();
 
   const typedFormatMessage = (
-    descriptor: FormatMessageArgs[0] & {
-      id?: IntlMessageKeys;
-    },
-    values?: FormatMessageArgs[1],
-    options?: FormatMessageArgs[2]
+    descriptor: TypedFormatMessageArgs['descriptor'],
+    values?: TypedFormatMessageArgs['values'],
+    options?: TypedFormatMessageArgs['options']
   ) => {
     return formatMessage(descriptor, values, options);
   };

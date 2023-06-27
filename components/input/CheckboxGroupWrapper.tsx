@@ -4,7 +4,7 @@ import { Control, Controller, FieldPath, FieldValues } from 'react-hook-form';
 
 export interface CheckboxProps<FormFieldValues extends FieldValues> {
   name: FieldPath<FormFieldValues>;
-  legend?: string;
+  legend?: ReactNode;
   size?: 'small' | 'medium';
   control: Control<FormFieldValues>;
   children?: ReactNode;

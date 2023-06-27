@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 import { TextField } from '@navikt/ds-react';
 import { Control, Controller, FieldPath, FieldValues } from 'react-hook-form';
 
 export interface TextFieldProps<FormFieldValues extends FieldValues> {
   name: FieldPath<FormFieldValues>;
-  label: string;
+  label: ReactNode;
   description?: string;
   className?: string;
   control: Control<FormFieldValues>;

@@ -22,7 +22,8 @@ import { deleteOpplastedeVedlegg, useSoknadContextStandard } from 'context/sokna
 import { useDebounceLagreSoknad } from 'hooks/useDebounceLagreSoknad';
 import { GenericSoknadContextState } from 'types/SoknadContext';
 import { setFocusOnErrorSummary } from 'components/schema/FormErrorSummary';
-import { IntlFormatters, useIntl } from 'react-intl';
+import { IntlMessageKeys, useIntl } from '../../../../utils/Intls';
+import { IntlFormatters } from 'react-intl';
 
 interface Props {
   onBackClick: () => void;
@@ -66,7 +67,7 @@ const STØNAD = 'stønad';
 const AFP = 'afp';
 const HVEMBETALER = 'hvemBetaler';
 
-export const stønadTypeToAlternativNøkkel = (stønadType: StønadType) => {
+export const stønadTypeToAlternativNøkkel = (stønadType: StønadType): IntlMessageKeys => {
   switch (stønadType) {
     case StønadType.ØKONOMISK_SOSIALHJELP:
       return `søknad.${ANDRE_UTBETALINGER}.${STØNAD}.values.økonomiskSosialhjelp`;
