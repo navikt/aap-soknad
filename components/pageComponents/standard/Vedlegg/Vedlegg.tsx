@@ -2,13 +2,10 @@ import { useForm, useWatch } from 'react-hook-form';
 import { Soknad, SoknadVedlegg } from 'types/Soknad';
 import React, { useEffect, useRef, useState } from 'react';
 import { Alert, BodyLong, BodyShort, Heading, Label, ReadMore, Textarea } from '@navikt/ds-react';
-import * as yup from 'yup';
 import { useStepWizard } from 'context/stepWizardContextV2';
-import { yupResolver } from '@hookform/resolvers/yup';
 import SoknadFormWrapper from 'components/SoknadFormWrapper/SoknadFormWrapper';
 import { AttachmentType } from '../AndreUtbetalinger/AndreUtbetalinger';
 import { AVBRUTT_STUDIE_VEDLEGG } from '../Student/Student';
-import { useFeatureToggleIntl } from 'hooks/useFeatureToggleIntl';
 import { slettLagretSoknadState, updateSøknadData } from 'context/soknadContextCommon';
 import { deleteOpplastedeVedlegg, useSoknadContextStandard } from 'context/soknadContextStandard';
 import { useDebounceLagreSoknad } from 'hooks/useDebounceLagreSoknad';
@@ -25,7 +22,7 @@ interface Props {
 }
 
 const Vedlegg = ({ onBackClick, onNext, defaultValues }: Props) => {
-  const { formatMessage } = useFeatureToggleIntl();
+  const { formatMessage } = useIntl();
   const [scanningGuideOpen, setScanningGuideOpen] = useState(false);
   const scanningGuideElement = useRef(null);
   const { søknadState, søknadDispatch } = useSoknadContextStandard();
@@ -75,23 +72,23 @@ const Vedlegg = ({ onBackClick, onNext, defaultValues }: Props) => {
         await deleteOpplastedeVedlegg(søknadState.søknad);
         await slettLagretSoknadState<Soknad>(søknadDispatch, søknadState);
       }}
-      nextButtonText={formatMessage('navigation.next')}
-      backButtonText={formatMessage('navigation.back')}
-      cancelButtonText={formatMessage('navigation.cancel')}
+      nextButtonText={formatMessage({ id: 'navigation.next' })}
+      backButtonText={formatMessage({ id: 'navigation.back' })}
+      cancelButtonText={formatMessage({ id: 'navigation.cancel' })}
       errors={errors}
     >
       <Heading size="large" level="2">
-        {formatMessage('søknad.vedlegg.title')}
+        {formatMessage({ id: 'søknad.vedlegg.title' })}
       </Heading>
       {søknadState.requiredVedlegg.length > 0 && (
         <LucaGuidePanel>
-          <BodyShort spacing>{formatMessage('søknad.vedlegg.guide.text1')}</BodyShort>
-          <BodyShort>{formatMessage('søknad.vedlegg.guide.text2')}</BodyShort>
+          <BodyShort spacing>{formatMessage({ id: 'søknad.vedlegg.guide.text1' })}</BodyShort>
+          <BodyShort>{formatMessage({ id: 'søknad.vedlegg.guide.text2' })}</BodyShort>
         </LucaGuidePanel>
       )}
       {søknadState.requiredVedlegg.length > 0 ? (
         <div>
-          <Label as={'p'}>{formatMessage('søknad.vedlegg.harVedlegg.title')}</Label>
+          <Label as={'p'}>{formatMessage({ id: 'søknad.vedlegg.harVedlegg.title' })}</Label>
           <ul>
             {søknadState?.requiredVedlegg?.map((vedlegg, index) => (
               <li key={index}>{vedlegg?.description}</li>
@@ -100,16 +97,20 @@ const Vedlegg = ({ onBackClick, onNext, defaultValues }: Props) => {
         </div>
       ) : (
         <Alert variant={'info'}>
-          <BodyLong spacing>{formatMessage('søknad.vedlegg.ingenVedlegg.alert.text1')}</BodyLong>
-          <BodyLong spacing>{formatMessage('søknad.vedlegg.ingenVedlegg.alert.text2')}</BodyLong>
-          <BodyLong>{formatMessage('søknad.vedlegg.ingenVedlegg.alert.text3')}</BodyLong>
+          <BodyLong spacing>
+            {formatMessage({ id: 'søknad.vedlegg.ingenVedlegg.alert.text1' })}
+          </BodyLong>
+          <BodyLong spacing>
+            {formatMessage({ id: 'søknad.vedlegg.ingenVedlegg.alert.text2' })}
+          </BodyLong>
+          <BodyLong>{formatMessage({ id: 'søknad.vedlegg.ingenVedlegg.alert.text3' })}</BodyLong>
         </Alert>
       )}
       <>
         <div>
-          <BodyLong>{formatMessage('søknad.vedlegg.vedleggPåPapir.text')}</BodyLong>
+          <BodyLong>{formatMessage({ id: 'søknad.vedlegg.vedleggPåPapir.text' })}</BodyLong>
           <ReadMore
-            header={formatMessage('søknad.vedlegg.vedleggPåPapir.readMore.title')}
+            header={formatMessage({ id: 'søknad.vedlegg.vedleggPåPapir.readMore.title' })}
             type={'button'}
             open={scanningGuideOpen}
             onClick={scanningGuideOnClick}
@@ -128,8 +129,8 @@ const Vedlegg = ({ onBackClick, onNext, defaultValues }: Props) => {
           errors={errors}
           setError={setError}
           clearErrors={clearErrors}
-          heading={formatMessage('søknad.student.vedlegg.name')}
-          ingress={formatMessage('søknad.student.vedlegg.description')}
+          heading={formatMessage({ id: 'søknad.student.vedlegg.name' })}
+          ingress={formatMessage({ id: 'søknad.student.vedlegg.description' })}
         />
       )}
       {søknadState?.requiredVedlegg?.find((e) => e.type === AttachmentType.LØNN_OG_ANDRE_GODER) && (
@@ -141,7 +142,7 @@ const Vedlegg = ({ onBackClick, onNext, defaultValues }: Props) => {
           setError={setError}
           clearErrors={clearErrors}
           heading={'Lønn og andre goder'}
-          ingress={formatMessage('søknad.andreUtbetalinger.vedlegg.andreGoder')}
+          ingress={formatMessage({ id: 'søknad.andreUtbetalinger.vedlegg.andreGoder' })}
         />
       )}
       {søknadState?.requiredVedlegg?.find((e) => e.type === AttachmentType.OMSORGSSTØNAD) && (
@@ -152,8 +153,8 @@ const Vedlegg = ({ onBackClick, onNext, defaultValues }: Props) => {
           errors={errors}
           setError={setError}
           clearErrors={clearErrors}
-          heading={formatMessage('søknad.andreUtbetalinger.stønad.values.omsorgsstønad')}
-          ingress={formatMessage('søknad.andreUtbetalinger.vedlegg.omsorgsstønad')}
+          heading={formatMessage({ id: 'søknad.andreUtbetalinger.stønad.values.omsorgsstønad' })}
+          ingress={formatMessage({ id: 'søknad.andreUtbetalinger.vedlegg.omsorgsstønad' })}
         />
       )}
       {søknadState?.requiredVedlegg?.find((e) => e.type === AttachmentType.UTLANDSSTØNAD) && (
@@ -164,8 +165,8 @@ const Vedlegg = ({ onBackClick, onNext, defaultValues }: Props) => {
           errors={errors}
           setError={setError}
           clearErrors={clearErrors}
-          heading={formatMessage('søknad.andreUtbetalinger.stønad.values.utland')}
-          ingress={formatMessage('søknad.andreUtbetalinger.vedlegg.utlandsStønad')}
+          heading={formatMessage({ id: 'søknad.andreUtbetalinger.stønad.values.utland' })}
+          ingress={formatMessage({ id: 'søknad.andreUtbetalinger.vedlegg.utlandsStønad' })}
         />
       )}
       {søknadState?.requiredVedlegg?.find((e) => e.type === AttachmentType.LÅN) && (
@@ -176,8 +177,8 @@ const Vedlegg = ({ onBackClick, onNext, defaultValues }: Props) => {
           errors={errors}
           setError={setError}
           clearErrors={clearErrors}
-          heading={formatMessage('søknad.andreUtbetalinger.stønad.values.lån')}
-          ingress={formatMessage('søknad.andreUtbetalinger.vedlegg.lån')}
+          heading={formatMessage({ id: 'søknad.andreUtbetalinger.stønad.values.lån' })}
+          ingress={formatMessage({ id: 'søknad.andreUtbetalinger.vedlegg.lån' })}
         />
       )}
       {søknadState?.requiredVedlegg?.find((e) => e.type === AttachmentType.SYKESTIPEND) && (
@@ -188,8 +189,8 @@ const Vedlegg = ({ onBackClick, onNext, defaultValues }: Props) => {
           errors={errors}
           setError={setError}
           clearErrors={clearErrors}
-          heading={formatMessage('søknad.andreUtbetalinger.stønad.values.stipend')}
-          ingress={formatMessage('søknad.andreUtbetalinger.vedlegg.sykeStipend')}
+          heading={formatMessage({ id: 'søknad.andreUtbetalinger.stønad.values.stipend' })}
+          ingress={formatMessage({ id: 'søknad.andreUtbetalinger.vedlegg.sykeStipend' })}
         />
       )}
       {søknadState?.søknad?.manuelleBarn?.map((barn, index) => {
@@ -206,7 +207,7 @@ const Vedlegg = ({ onBackClick, onNext, defaultValues }: Props) => {
             setError={setError}
             clearErrors={clearErrors}
             heading={formatMessage(
-              `søknad.vedlegg.andreBarn.title.${requiredVedlegg?.filterType}`,
+              { id: `søknad.vedlegg.andreBarn.title.${requiredVedlegg?.filterType}` },
               {
                 navn: `${barn?.navn?.fornavn} ${barn?.navn?.etternavn}`,
               }
@@ -231,8 +232,10 @@ const Vedlegg = ({ onBackClick, onNext, defaultValues }: Props) => {
         value={søknadState.søknad?.tilleggsopplysninger}
         name={`tilleggsopplysninger`}
         onChange={onTilleggsopplysningerChange}
-        label={formatMessage(`søknad.tilleggsopplysninger.tilleggsopplysninger.label`)}
-        description={formatMessage(`søknad.tilleggsopplysninger.tilleggsopplysninger.description`)}
+        label={formatMessage({ id: `søknad.tilleggsopplysninger.tilleggsopplysninger.label` })}
+        description={formatMessage({
+          id: `søknad.tilleggsopplysninger.tilleggsopplysninger.description`,
+        })}
         maxLength={4000}
       />
     </SoknadFormWrapper>

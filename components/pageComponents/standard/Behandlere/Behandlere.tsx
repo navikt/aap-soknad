@@ -1,8 +1,8 @@
-import { Alert, Label, BodyLong, BodyShort, Button, Heading, Radio } from '@navikt/ds-react';
+import { Alert, BodyLong, BodyShort, Button, Heading, Label, Radio } from '@navikt/ds-react';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useFieldArray, useForm, useWatch } from 'react-hook-form';
 import { Add, Delete } from '@navikt/ds-icons';
-import { Soknad, Behandler, RegistrertBehandler } from 'types/Soknad';
+import { Behandler, Soknad } from 'types/Soknad';
 import * as yup from 'yup';
 import { useStepWizard } from 'context/stepWizardContextV2';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -10,14 +10,14 @@ import SoknadFormWrapper from 'components/SoknadFormWrapper/SoknadFormWrapper';
 import { AddBehandlerModal } from './AddBehandlerModal';
 import { LucaGuidePanel } from '@navikt/aap-felles-react';
 import * as classes from './Behandlere.module.css';
-import { useFeatureToggleIntl } from 'hooks/useFeatureToggleIntl';
 import { deleteOpplastedeVedlegg, useSoknadContextStandard } from 'context/soknadContextStandard';
 import { slettLagretSoknadState, updateSøknadData } from 'context/soknadContextCommon';
 import { useDebounceLagreSoknad } from 'hooks/useDebounceLagreSoknad';
 import { GenericSoknadContextState } from 'types/SoknadContext';
 import RadioGroupWrapper from 'components/input/RadioGroupWrapper/RadioGroupWrapper';
 import { JaEllerNei } from 'types/Generic';
-import { formatNavn, formatFullAdresse, formatTelefonnummer } from 'utils/StringFormatters';
+import { formatFullAdresse, formatNavn, formatTelefonnummer } from 'utils/StringFormatters';
+import { IntlFormatters, useIntl } from 'react-intl';
 
 interface Props {
   onBackClick: () => void;
@@ -28,13 +28,15 @@ const REGISTRERTE_BEHANDLERE = 'registrerteBehandlere';
 const ANDRE_BEHANDLERE = 'andreBehandlere';
 const RIKTIG_FASTLEGE = 'erRegistrertFastlegeRiktig';
 
-export const getBehandlerSchema = (formatMessage: (id: string) => string) =>
+export const getBehandlerSchema = (formatMessage: IntlFormatters['formatMessage']) =>
   yup.object().shape({
     [REGISTRERTE_BEHANDLERE]: yup.array().of(
       yup.object().shape({
         [RIKTIG_FASTLEGE]: yup
           .string()
-          .required(formatMessage(`søknad.helseopplysninger.erRegistrertFastlegeRiktig.required`))
+          .required(
+            formatMessage({ id: `søknad.helseopplysninger.erRegistrertFastlegeRiktig.required` })
+          )
           .oneOf([JaEllerNei.JA, JaEllerNei.NEI])
           .nullable(),
       })
@@ -42,7 +44,7 @@ export const getBehandlerSchema = (formatMessage: (id: string) => string) =>
     [ANDRE_BEHANDLERE]: yup.array(),
   });
 export const Behandlere = ({ onBackClick, onNext, defaultValues }: Props) => {
-  const { formatMessage } = useFeatureToggleIntl();
+  const { formatMessage } = useIntl();
 
   const { søknadState, søknadDispatch } = useSoknadContextStandard();
   const { stepList } = useStepWizard();
@@ -127,25 +129,29 @@ export const Behandlere = ({ onBackClick, onNext, defaultValues }: Props) => {
           await deleteOpplastedeVedlegg(søknadState.søknad);
           await slettLagretSoknadState<Soknad>(søknadDispatch, søknadState);
         }}
-        nextButtonText={formatMessage('navigation.next')}
-        backButtonText={formatMessage('navigation.back')}
-        cancelButtonText={formatMessage('navigation.cancel')}
+        nextButtonText={formatMessage({ id: 'navigation.next' })}
+        backButtonText={formatMessage({ id: 'navigation.back' })}
+        cancelButtonText={formatMessage({ id: 'navigation.cancel' })}
         errors={errors}
       >
         <Heading size="large" level="2">
-          {formatMessage('søknad.helseopplysninger.title')}
+          {formatMessage({ id: 'søknad.helseopplysninger.title' })}
         </Heading>
         <LucaGuidePanel>
-          <BodyShort spacing>{formatMessage('søknad.helseopplysninger.guide.text1')}</BodyShort>
-          <BodyShort spacing>{formatMessage('søknad.helseopplysninger.guide.text2')}</BodyShort>
+          <BodyShort spacing>
+            {formatMessage({ id: 'søknad.helseopplysninger.guide.text1' })}
+          </BodyShort>
+          <BodyShort spacing>
+            {formatMessage({ id: 'søknad.helseopplysninger.guide.text2' })}
+          </BodyShort>
         </LucaGuidePanel>
         <div>
           <Heading size={'small'} level={'3'}>
-            {formatMessage('søknad.helseopplysninger.registrertFastlege.title')}
+            {formatMessage({ id: 'søknad.helseopplysninger.registrertFastlege.title' })}
           </Heading>
           {controlledFields.length === 0 && (
             <BodyLong>
-              {formatMessage('søknad.helseopplysninger.registrertFastlege.ingenFastlege')}
+              {formatMessage({ id: 'søknad.helseopplysninger.registrertFastlege.ingenFastlege' })}
             </BodyLong>
           )}
           {controlledFields.map((field, index) => (
@@ -153,28 +159,30 @@ export const Behandlere = ({ onBackClick, onNext, defaultValues }: Props) => {
               <dl className={classes?.fastLege}>
                 <dt>
                   <Label as={'span'}>
-                    {formatMessage('søknad.helseopplysninger.registrertFastlege.navn')}
+                    {formatMessage({ id: 'søknad.helseopplysninger.registrertFastlege.navn' })}
                   </Label>
                 </dt>
                 {/* @ts-ignore-line */}
                 <dd>{formatNavn(field.navn)}</dd>
                 <dt>
                   <Label as={'span'}>
-                    {formatMessage('søknad.helseopplysninger.registrertFastlege.legekontor')}
+                    {formatMessage({
+                      id: 'søknad.helseopplysninger.registrertFastlege.legekontor',
+                    })}
                   </Label>
                 </dt>
                 {/* @ts-ignore-line */}
                 <dd>{field.kontaktinformasjon.kontor}</dd>
                 <dt>
                   <Label as={'span'}>
-                    {formatMessage('søknad.helseopplysninger.registrertFastlege.adresse')}
+                    {formatMessage({ id: 'søknad.helseopplysninger.registrertFastlege.adresse' })}
                   </Label>
                 </dt>
                 {/* @ts-ignore-line */}
                 <dd>{formatFullAdresse(field.kontaktinformasjon.adresse)}</dd>
                 <dt>
                   <Label as={'span'}>
-                    {formatMessage('søknad.helseopplysninger.registrertFastlege.telefon')}
+                    {formatMessage({ id: 'søknad.helseopplysninger.registrertFastlege.telefon' })}
                   </Label>
                 </dt>
                 {/* @ts-ignore-line */}
@@ -182,7 +190,9 @@ export const Behandlere = ({ onBackClick, onNext, defaultValues }: Props) => {
               </dl>
               <RadioGroupWrapper
                 name={`${REGISTRERTE_BEHANDLERE}.${index}.${RIKTIG_FASTLEGE}`}
-                legend={formatMessage(`søknad.helseopplysninger.erRegistrertFastlegeRiktig.label`)}
+                legend={formatMessage({
+                  id: `søknad.helseopplysninger.erRegistrertFastlegeRiktig.label`,
+                })}
                 control={control}
               >
                 <Radio value={JaEllerNei.JA}>
@@ -194,7 +204,9 @@ export const Behandlere = ({ onBackClick, onNext, defaultValues }: Props) => {
               </RadioGroupWrapper>
               {field.erRegistrertFastlegeRiktig === JaEllerNei.NEI && (
                 <Alert variant={'info'}>
-                  {formatMessage('søknad.helseopplysninger.erRegistrertFastlegeRiktig.alertInfo')}
+                  {formatMessage({
+                    id: 'søknad.helseopplysninger.erRegistrertFastlegeRiktig.alertInfo',
+                  })}
                 </Alert>
               )}
             </div>
@@ -202,15 +214,15 @@ export const Behandlere = ({ onBackClick, onNext, defaultValues }: Props) => {
         </div>
         <div>
           <Heading size={'small'} level={'3'} spacing>
-            {formatMessage('søknad.helseopplysninger.annenBehandler.title')}
+            {formatMessage({ id: 'søknad.helseopplysninger.annenBehandler.title' })}
           </Heading>
           <BodyShort spacing>
-            {formatMessage('søknad.helseopplysninger.annenBehandler.description')}
+            {formatMessage({ id: 'søknad.helseopplysninger.annenBehandler.description' })}
           </BodyShort>
           {fields.length > 0 && (
             <>
               <Heading size={'xsmall'} level={'4'} spacing>
-                {formatMessage('søknad.helseopplysninger.dineBehandlere.title')}
+                {formatMessage({ id: 'søknad.helseopplysninger.dineBehandlere.title' })}
               </Heading>
               <ul className={classes?.legeList}>
                 {fields.map((field, index) => (
@@ -220,7 +232,10 @@ export const Behandlere = ({ onBackClick, onNext, defaultValues }: Props) => {
                         <div className={classes?.oneLineDetail}>
                           <dt>
                             <Label as={'span'}>
-                              {formatMessage('søknad.helseopplysninger.dineBehandlere.navn')}:
+                              {formatMessage({
+                                id: 'søknad.helseopplysninger.dineBehandlere.navn',
+                              })}
+                              :
                             </Label>
                           </dt>
                           <dd>{`${field?.firstname} ${field?.lastname}`}</dd>
@@ -229,9 +244,9 @@ export const Behandlere = ({ onBackClick, onNext, defaultValues }: Props) => {
                           <div className={classes?.oneLineDetail}>
                             <dt>
                               <Label as={'span'}>
-                                {formatMessage(
-                                  'søknad.helseopplysninger.dineBehandlere.legekontor'
-                                )}
+                                {formatMessage({
+                                  id: 'søknad.helseopplysninger.dineBehandlere.legekontor',
+                                })}
                                 :
                               </Label>
                             </dt>
@@ -242,7 +257,10 @@ export const Behandlere = ({ onBackClick, onNext, defaultValues }: Props) => {
                           <div className={classes?.oneLineDetail}>
                             <dt>
                               <Label as={'span'}>
-                                {formatMessage('søknad.helseopplysninger.dineBehandlere.adresse')}:
+                                {formatMessage({
+                                  id: 'søknad.helseopplysninger.dineBehandlere.adresse',
+                                })}
+                                :
                               </Label>
                             </dt>
                             <dd>
@@ -257,7 +275,10 @@ export const Behandlere = ({ onBackClick, onNext, defaultValues }: Props) => {
                           <div className={classes?.oneLineDetail}>
                             <dt>
                               <Label as={'span'}>
-                                {formatMessage('søknad.helseopplysninger.dineBehandlere.telefon')}:
+                                {formatMessage({
+                                  id: 'søknad.helseopplysninger.dineBehandlere.telefon',
+                                })}
+                                :
                               </Label>
                             </dt>
                             <dd>{formatTelefonnummer(field?.telefon)}</dd>
@@ -270,7 +291,9 @@ export const Behandlere = ({ onBackClick, onNext, defaultValues }: Props) => {
                           variant="tertiary"
                           onClick={() => editNyBehandler(index)}
                         >
-                          {formatMessage('søknad.helseopplysninger.dineBehandlere.editButton')}
+                          {formatMessage({
+                            id: 'søknad.helseopplysninger.dineBehandlere.editButton',
+                          })}
                         </Button>
                         <Button
                           variant="tertiary"
@@ -281,7 +304,9 @@ export const Behandlere = ({ onBackClick, onNext, defaultValues }: Props) => {
                             slettBehandler(index);
                           }}
                         >
-                          {formatMessage('søknad.helseopplysninger.dineBehandlere.slettButton')}
+                          {formatMessage({
+                            id: 'søknad.helseopplysninger.dineBehandlere.slettButton',
+                          })}
                         </Button>
                       </div>
                     </article>
@@ -296,9 +321,9 @@ export const Behandlere = ({ onBackClick, onNext, defaultValues }: Props) => {
             type="button"
             icon={
               <Add
-                title={formatMessage(
-                  'søknad.helseopplysninger.annenBehandler.accessibleButtonTitle'
-                )}
+                title={formatMessage({
+                  id: 'søknad.helseopplysninger.annenBehandler.accessibleButtonTitle',
+                })}
               />
             }
             iconPosition={'left'}
@@ -307,7 +332,7 @@ export const Behandlere = ({ onBackClick, onNext, defaultValues }: Props) => {
               setShowModal(true);
             }}
           >
-            {formatMessage('søknad.helseopplysninger.annenBehandler.addBehandlerButton')}
+            {formatMessage({ id: 'søknad.helseopplysninger.annenBehandler.addBehandlerButton' })}
           </Button>
         </div>
       </SoknadFormWrapper>

@@ -14,13 +14,13 @@ import { JaEllerNei } from 'types/Generic';
 import * as yup from 'yup';
 import { completeAndGoToNextStep, useStepWizard } from 'context/stepWizardContextV2';
 import { LucaGuidePanel } from '@navikt/aap-felles-react';
-import { useFeatureToggleIntl } from 'hooks/useFeatureToggleIntl';
 import { slettLagretSoknadState, updateSøknadData } from 'context/soknadContextCommon';
 import { deleteOpplastedeVedlegg, useSoknadContextStandard } from 'context/soknadContextStandard';
 import { useDebounceLagreSoknad } from 'hooks/useDebounceLagreSoknad';
 import { GenericSoknadContextState } from 'types/SoknadContext';
+import { setFocusOnErrorSummary } from 'components/schema/FormErrorSummary';
+import { FormattedMessage, IntlFormatters, useIntl } from 'react-intl';
 import { logSkjemastegFullførtEvent } from '../../../../utils/amplitude';
-import { setFocusOnErrorSummary } from '../../../schema/FormErrorSummary';
 import { validate } from '../../../../lib/utils/validationUtils';
 import { SøknadValidationError } from '../../../schema/FormErrorSummaryNew';
 import SoknadFormWrapperNew from '../../../SoknadFormWrapper/SoknadFormWrapperNew';
@@ -30,17 +30,17 @@ interface Props {
   defaultValues?: GenericSoknadContextState<Soknad>;
 }
 
-export const getYrkesskadeSchema = (formatMessage: (id: string) => string) =>
+export const getYrkesskadeSchema = (formatMessage: IntlFormatters['formatMessage']) =>
   yup.object().shape({
     yrkesskade: yup
       .string()
-      .required(formatMessage('søknad.yrkesskade.harDuYrkesskade.validation.required'))
+      .required(formatMessage({ id: 'søknad.yrkesskade.harDuYrkesskade.validation.required' }))
       .oneOf([JaEllerNei.JA, JaEllerNei.NEI])
       .nullable(),
   });
 
 export const Yrkesskade = ({ onBackClick, defaultValues }: Props) => {
-  const { formatMessage, FormatElement } = useFeatureToggleIntl();
+  const { formatMessage } = useIntl();
 
   const { søknadState, søknadDispatch } = useSoknadContextStandard();
   const { currentStepIndex, stepWizardDispatch, stepList } = useStepWizard();
@@ -74,21 +74,21 @@ export const Yrkesskade = ({ onBackClick, defaultValues }: Props) => {
         await deleteOpplastedeVedlegg(søknadState.søknad);
         await slettLagretSoknadState<Soknad>(søknadDispatch, søknadState);
       }}
-      nextButtonText={formatMessage('navigation.next')}
-      backButtonText={formatMessage('navigation.back')}
-      cancelButtonText={formatMessage('navigation.cancel')}
+      nextButtonText={formatMessage({ id: 'navigation.next' })}
+      backButtonText={formatMessage({ id: 'navigation.back' })}
+      cancelButtonText={formatMessage({ id: 'navigation.cancel' })}
       errors={errors}
     >
       <Heading size="large" level="2">
-        {formatMessage('søknad.yrkesskade.title')}
+        {formatMessage({ id: 'søknad.yrkesskade.title' })}
       </Heading>
       <LucaGuidePanel>
-        <BodyLong>{formatMessage('søknad.yrkesskade.guide.text')}</BodyLong>
+        <BodyLong>{formatMessage({ id: 'søknad.yrkesskade.guide.text' })}</BodyLong>
       </LucaGuidePanel>
       <RadioGroup
         name={'yrkesskade'}
         id={'yrkesskade'}
-        legend={formatMessage(`søknad.yrkesskade.harDuYrkesskade.label`)}
+        legend={formatMessage({ id: `søknad.yrkesskade.harDuYrkesskade.label` })}
         value={defaultValues?.søknad?.yrkesskade || ''}
         onChange={(value) => {
           setErrors(undefined);
@@ -97,21 +97,21 @@ export const Yrkesskade = ({ onBackClick, defaultValues }: Props) => {
         error={errors?.find((error) => error.path === 'yrkesskade')?.message}
       >
         <ReadMore
-          header={formatMessage('søknad.yrkesskade.harDuYrkesskade.readMore.title')}
+          header={formatMessage({ id: 'søknad.yrkesskade.harDuYrkesskade.readMore.title' })}
           type={'button'}
         >
           <div>
             <BodyShort spacing>
-              {formatMessage('søknad.yrkesskade.harDuYrkesskade.readMore.text1')}
+              {formatMessage({ id: 'søknad.yrkesskade.harDuYrkesskade.readMore.text1' })}
             </BodyShort>
             <BodyShort spacing>
-              <FormatElement
+              <FormattedMessage
                 id={'søknad.yrkesskade.harDuYrkesskade.readMore.text2'}
                 values={{
-                  a: (chunks: string[]) => (
+                  a: (chunks) => (
                     <Link
                       target="_blank"
-                      href={formatMessage('applinks.forskriftOmYrkessykdommer')}
+                      href={formatMessage({ id: 'applinks.forskriftOmYrkessykdommer' })}
                     >
                       {chunks}
                     </Link>
@@ -130,10 +130,10 @@ export const Yrkesskade = ({ onBackClick, defaultValues }: Props) => {
       </RadioGroup>
       {søknadState.søknad?.yrkesskade === JaEllerNei.JA && (
         <Alert variant={'info'}>
-          {formatMessage('søknad.yrkesskade.alert.navVilSjekke')}
+          {formatMessage({ id: 'søknad.yrkesskade.alert.navVilSjekke' })}
           <ul>
-            <li>{formatMessage('søknad.yrkesskade.alert.bulletPointGodkjent')}</li>
-            <li>{formatMessage('søknad.yrkesskade.alert.bulletPointArbeidsevne')}</li>
+            <li>{formatMessage({ id: 'søknad.yrkesskade.alert.bulletPointGodkjent' })}</li>
+            <li>{formatMessage({ id: 'søknad.yrkesskade.alert.bulletPointArbeidsevne' })}</li>
           </ul>
         </Alert>
       )}

@@ -5,8 +5,8 @@ import { SøkerView } from 'context/sokerOppslagContext';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as classes from './Veiledning.module.css';
-import { useFeatureToggleIntl } from 'hooks/useFeatureToggleIntl';
 import { IntroduksjonTekst } from '../../../IntroduksjonTekst/IntroduksjonTekst';
+import { FormattedMessage, useIntl } from 'react-intl';
 
 const VEILEDNING_CONFIRM = 'veiledningConfirm';
 type VeiledningType = {
@@ -26,13 +26,16 @@ export const Veiledning = ({
   errorMessageRef,
   onSubmit,
 }: VeiledningProps) => {
-  const { formatMessage, FormatElement } = useFeatureToggleIntl();
+  const { formatMessage } = useIntl();
 
   const schema = yup.object().shape({
     veiledningConfirm: yup
       .boolean()
-      .required(formatMessage('søknad.veiledning.veiledningConfirm.validation.required'))
-      .oneOf([true], formatMessage('søknad.veiledning.veiledningConfirm.validation.required')),
+      .required(formatMessage({ id: 'søknad.veiledning.veiledningConfirm.validation.required' }))
+      .oneOf(
+        [true],
+        formatMessage({ id: 'søknad.veiledning.veiledningConfirm.validation.required' })
+      ),
   });
 
   const { control, handleSubmit } = useForm({
@@ -43,7 +46,7 @@ export const Veiledning = ({
     <>
       <header className={classes?.veiledningHeader}>
         <Heading size="large" level="1">
-          <FormatElement
+          <FormattedMessage
             id={`søknad.veiledning.title`}
             values={{
               wbr: () => <>&shy;</>,
@@ -70,16 +73,18 @@ export const Veiledning = ({
           autoComplete="off"
         >
           <ConfirmationPanelWrapper
-            label={formatMessage('søknad.veiledning.veiledningConfirm.label')}
+            label={formatMessage({ id: 'søknad.veiledning.veiledningConfirm.label' })}
             control={control}
             name={VEILEDNING_CONFIRM}
           >
-            <Label as={'span'}>{formatMessage('søknad.veiledning.veiledningConfirm.title')}</Label>
+            <Label as={'span'}>
+              {formatMessage({ id: 'søknad.veiledning.veiledningConfirm.title' })}
+            </Label>
           </ConfirmationPanelWrapper>
 
           <div className={classes?.startButton}>
             <Button variant="primary" type="submit" loading={isLoading}>
-              {formatMessage(`søknad.veiledning.startSøknad`)}
+              {formatMessage({ id: `søknad.veiledning.startSøknad` })}
             </Button>
           </div>
         </form>

@@ -16,7 +16,6 @@ import ColorPanel from 'components/panel/ColorPanel';
 import * as yup from 'yup';
 import { completeAndGoToNextStep, useStepWizard } from 'context/stepWizardContextV2';
 import { LucaGuidePanel } from '@navikt/aap-felles-react';
-import { useFeatureToggleIntl } from 'hooks/useFeatureToggleIntl';
 import { deleteOpplastedeVedlegg, useSoknadContextStandard } from 'context/soknadContextStandard';
 import { slettLagretSoknadState, updateSøknadData } from 'context/soknadContextCommon';
 import { useDebounceLagreSoknad } from 'hooks/useDebounceLagreSoknad';
@@ -28,6 +27,9 @@ import SoknadFormWrapperNew from '../../../SoknadFormWrapper/SoknadFormWrapperNe
 import { validate } from '../../../../lib/utils/validationUtils';
 import { logSkjemastegFullførtEvent } from '../../../../utils/amplitude';
 import { SøknadValidationError } from '../../../schema/FormErrorSummaryNew';
+
+import { DatePickerWrapper } from '../../../input/DatePickerWrapper/DatePickerWrapper';
+import { IntlFormatters, useIntl } from 'react-intl';
 
 export enum FerieType {
   DAGER = 'DAGER',
@@ -48,11 +50,11 @@ interface Props {
   defaultValues?: GenericSoknadContextState<Soknad>;
 }
 
-export const getStartDatoSchema = (formatMessage: (id: string) => string) => {
+export const getStartDatoSchema = (formatMessage: IntlFormatters['formatMessage']) => {
   return yup.object().shape({
     sykepenger: yup
       .string()
-      .required(formatMessage('søknad.startDato.sykepenger.required'))
+      .required(formatMessage({ id: 'søknad.startDato.sykepenger.required' }))
       .oneOf([JaEllerNei.JA, JaEllerNei.NEI])
       .nullable(),
     ferie: yup
@@ -68,12 +70,12 @@ export const getStartDatoSchema = (formatMessage: (id: string) => string) => {
           return yup.object({
             skalHaFerie: yup
               .string()
-              .required(formatMessage('søknad.startDato.skalHaFerie.validation.required')),
+              .required(formatMessage({ id: 'søknad.startDato.skalHaFerie.validation.required' })),
             ferieType: yup.string().when('skalHaFerie', ([skalHaFerie], schema) => {
               if (skalHaFerie === JaEllerNei.JA) {
                 return yup
                   .string()
-                  .required(formatMessage('søknad.startDato.ferieType.validation.required'))
+                  .required(formatMessage({ id: 'søknad.startDato.ferieType.validation.required' }))
                   .nullable();
               }
               return schema;
@@ -83,9 +85,11 @@ export const getStartDatoSchema = (formatMessage: (id: string) => string) => {
               if (ferieType === FerieType.PERIODE) {
                 return yup
                   .date()
-                  .required(formatMessage('søknad.startDato.periode.fraDato.validation.required'))
+                  .required(
+                    formatMessage({ id: 'søknad.startDato.periode.fraDato.validation.required' })
+                  )
                   .typeError(
-                    formatMessage('søknad.startDato.periode.fraDato.validation.typeError')
+                    formatMessage({ id: 'søknad.startDato.periode.fraDato.validation.typeError' })
                   );
               }
               return schema;
@@ -95,11 +99,17 @@ export const getStartDatoSchema = (formatMessage: (id: string) => string) => {
               if (ferieType === FerieType.PERIODE) {
                 return yup
                   .date()
-                  .required(formatMessage('søknad.startDato.periode.tilDato.validation.required'))
-                  .typeError(formatMessage('søknad.startDato.periode.tilDato.validation.typeError'))
+                  .required(
+                    formatMessage({ id: 'søknad.startDato.periode.tilDato.validation.required' })
+                  )
+                  .typeError(
+                    formatMessage({ id: 'søknad.startDato.periode.tilDato.validation.typeError' })
+                  )
                   .min(
                     yup.ref('fraDato'),
-                    formatMessage('søknad.startDato.periode.tilDato.validation.fraDatoEtterTilDato')
+                    formatMessage({
+                      id: 'søknad.startDato.periode.tilDato.validation.fraDatoEtterTilDato',
+                    })
                   );
               }
               return schema;
@@ -109,7 +119,9 @@ export const getStartDatoSchema = (formatMessage: (id: string) => string) => {
               if (ferieType === FerieType.DAGER) {
                 return yup
                   .string()
-                  .required(formatMessage('søknad.startDato.antallDager.validation.required'));
+                  .required(
+                    formatMessage({ id: 'søknad.startDato.antallDager.validation.required' })
+                  );
               }
               return schema;
             }),
@@ -121,7 +133,7 @@ export const getStartDatoSchema = (formatMessage: (id: string) => string) => {
 };
 
 const StartDato = ({ onBackClick, defaultValues }: Props) => {
-  const { formatMessage } = useFeatureToggleIntl();
+  const { formatMessage } = useIntl();
   const debouncedLagre = useDebounceLagreSoknad<Soknad>();
   const { currentStepIndex, stepWizardDispatch, stepList } = useStepWizard();
 
@@ -134,8 +146,8 @@ const StartDato = ({ onBackClick, defaultValues }: Props) => {
 
   const FerieTypeTekster = useMemo(
     () => ({
-      [FerieType.PERIODE]: formatMessage(FerieTypeToMessageKey(FerieType.PERIODE)),
-      [FerieType.DAGER]: formatMessage(FerieTypeToMessageKey(FerieType.DAGER)),
+      [FerieType.PERIODE]: formatMessage({ id: FerieTypeToMessageKey(FerieType.PERIODE) }),
+      [FerieType.DAGER]: formatMessage({ id: FerieTypeToMessageKey(FerieType.DAGER) }),
     }),
     [formatMessage]
   );
@@ -195,20 +207,20 @@ const StartDato = ({ onBackClick, defaultValues }: Props) => {
         await deleteOpplastedeVedlegg(søknadState.søknad);
         await slettLagretSoknadState<Soknad>(søknadDispatch, søknadState);
       }}
-      nextButtonText={formatMessage('navigation.next')}
-      backButtonText={formatMessage('navigation.back')}
-      cancelButtonText={formatMessage('navigation.cancel')}
+      nextButtonText={formatMessage({ id: 'navigation.next' })}
+      backButtonText={formatMessage({ id: 'navigation.back' })}
+      cancelButtonText={formatMessage({ id: 'navigation.cancel' })}
       errors={errors}
     >
       <Heading size="large" level="2">
-        {formatMessage('søknad.startDato.title')}
+        {formatMessage({ id: 'søknad.startDato.title' })}
       </Heading>
       <LucaGuidePanel>
-        <BodyShort spacing>{formatMessage('søknad.startDato.guide.text1')}</BodyShort>
+        <BodyShort spacing>{formatMessage({ id: 'søknad.startDato.guide.text1' })}</BodyShort>
       </LucaGuidePanel>
       <RadioGroup
-        legend={formatMessage('søknad.startDato.sykepenger.legend')}
-        description={formatMessage('søknad.startDato.sykepenger.description')}
+        legend={formatMessage({ id: 'søknad.startDato.sykepenger.legend' })}
+        description={formatMessage({ id: 'søknad.startDato.sykepenger.description' })}
         name={'sykepenger'}
         id={'sykepenger'}
         value={defaultValues?.søknad?.sykepenger || ''}
@@ -224,8 +236,8 @@ const StartDato = ({ onBackClick, defaultValues }: Props) => {
       {søknadState?.søknad?.sykepenger === JaEllerNei.JA && (
         <ColorPanel color={'grey'}>
           <RadioGroup
-            legend={formatMessage('søknad.startDato.skalHaFerie.label')}
-            description={formatMessage('søknad.startDato.skalHaFerie.description')}
+            legend={formatMessage({ id: 'søknad.startDato.skalHaFerie.label' })}
+            description={formatMessage({ id: 'søknad.startDato.skalHaFerie.description' })}
             name={'ferie.skalHaFerie'}
             id={'ferie.skalHaFerie'}
             value={defaultValues?.søknad?.ferie?.skalHaFerie || ''}
@@ -242,7 +254,7 @@ const StartDato = ({ onBackClick, defaultValues }: Props) => {
           </RadioGroup>
           {søknadState?.søknad?.ferie?.skalHaFerie === JaEllerNei.JA && (
             <RadioGroup
-              legend={formatMessage('søknad.startDato.ferieType.label')}
+              legend={formatMessage({ id: 'søknad.startDato.ferieType.label' })}
               name={'ferie.ferieType'}
               id={'ferie.ferieType'}
               value={defaultValues?.søknad?.ferie?.ferieType || ''}
@@ -264,12 +276,12 @@ const StartDato = ({ onBackClick, defaultValues }: Props) => {
           )}
           {søknadState?.søknad?.ferie?.ferieType === FerieType.PERIODE && (
             <div className={classes?.periodeContainer}>
-              <Label>{formatMessage('søknad.startDato.periode.label')}</Label>
+              <Label>{formatMessage({ id: 'søknad.startDato.periode.label' })}</Label>
               <div className={classes?.datoContainer}>
                 <DatePicker {...fraDatoProps}>
                   <DatePicker.Input
                     {...fraDatoInputProps}
-                    label={formatMessage('søknad.startDato.periode.fraDato.label')}
+                    label={formatMessage({ id: 'søknad.startDato.periode.fraDato.label' })}
                     name={'ferie.fraDato'}
                     id={'ferie.fraDato'}
                     error={findError('ferie.fraDato')}
@@ -278,7 +290,7 @@ const StartDato = ({ onBackClick, defaultValues }: Props) => {
                 <DatePicker {...tilDatoProps}>
                   <DatePicker.Input
                     {...tilDatoInputProps}
-                    label={formatMessage('søknad.startDato.periode.tilDato.label')}
+                    label={formatMessage({ id: 'søknad.startDato.periode.tilDato.label' })}
                     name={'ferie.tilDato'}
                     id={'ferie.tilDato'}
                     error={findError('ferie.tilDato')}
@@ -294,8 +306,8 @@ const StartDato = ({ onBackClick, defaultValues }: Props) => {
                 name={'ferie.antallDager'}
                 id={'ferie.antallDager'}
                 value={defaultValues?.søknad?.ferie?.antallDager || ''}
-                label={formatMessage('søknad.startDato.antallDager.label')}
-                description={formatMessage('søknad.startDato.antallDager.description')}
+                label={formatMessage({ id: 'søknad.startDato.antallDager.label' })}
+                description={formatMessage({ id: 'søknad.startDato.antallDager.description' })}
                 onChange={(value) => {
                   clearError('ferie.antallDager');
                   updateSøknadData(søknadDispatch, {
@@ -307,7 +319,7 @@ const StartDato = ({ onBackClick, defaultValues }: Props) => {
             </div>
           )}
           {søknadState?.søknad?.ferie?.skalHaFerie === JaEllerNei.NEI && (
-            <Alert variant={'info'}>{formatMessage('søknad.startDato.alert.text')}</Alert>
+            <Alert variant={'info'}>{formatMessage({ id: 'søknad.startDato.alert.text' })}</Alert>
           )}
         </ColorPanel>
       )}

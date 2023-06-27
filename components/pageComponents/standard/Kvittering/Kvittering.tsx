@@ -3,9 +3,9 @@ import React from 'react';
 import * as classes from './Kvittering.module.css';
 import { SøkerView } from 'context/sokerOppslagContext';
 import { Download, SuccessStroke } from '@navikt/ds-icons';
-import { useFeatureToggleIntl } from 'hooks/useFeatureToggleIntl';
 import { SøknadApiType } from 'pages/api/oppslag/soeknader';
 import { clientSideIsLabs, clientSideIsProd } from 'utils/environments';
+import { FormattedMessage, useIntl } from 'react-intl';
 
 interface StudentProps {
   søker: SøkerView;
@@ -22,7 +22,7 @@ const getDownloadUrl = (journalpostId?: string) => {
 };
 
 const Kvittering = ({ søker, kontaktinformasjon, søknad }: StudentProps) => {
-  const { formatMessage, FormatElement } = useFeatureToggleIntl();
+  const { formatMessage } = useIntl();
 
   const mineAapUrl = clientSideIsLabs()
     ? process.env.NEXT_PUBLIC_MINE_AAP_URL
@@ -44,30 +44,30 @@ const Kvittering = ({ søker, kontaktinformasjon, søknad }: StudentProps) => {
         aria-hidden={true}
       />
       <Heading size={'large'} level={'2'}>
-        <FormatElement id={'søknad.kvittering.title'} values={{ navn: søker?.fulltNavn }} />
+        <FormattedMessage id={'søknad.kvittering.title'} values={{ navn: søker?.fulltNavn }} />
       </Heading>
       <Alert variant={'success'}>
         <BodyLong>
-          {formatMessage('søknad.kvittering.alert.text')}
+          {formatMessage({ id: 'søknad.kvittering.alert.text' })}
           {(søknad?.manglendeVedlegg?.length ?? 0) === 0 && (
-            <> {formatMessage('søknad.kvittering.ingenManglendeVedlegg')}</>
+            <> {formatMessage({ id: 'søknad.kvittering.ingenManglendeVedlegg' })}</>
           )}
         </BodyLong>
       </Alert>
       {(søknad?.manglendeVedlegg?.length ?? 0) > 0 && (
         <Alert variant="warning">
           <BodyShort spacing>
-            {formatMessage('søknad.kvittering.manglendeVedlegg.tekst1')}
+            {formatMessage({ id: 'søknad.kvittering.manglendeVedlegg.tekst1' })}
             <Link target="_blank" href={`${mineAapUrl}/${søknad?.søknadId}/ettersendelse/`}>
-              {formatMessage('søknad.kvittering.manglendeVedlegg.ettersendelseLink')}
+              {formatMessage({ id: 'søknad.kvittering.manglendeVedlegg.ettersendelseLink' })}
             </Link>
           </BodyShort>
           <BodyShort spacing>
-            <FormatElement
+            <FormattedMessage
               id={'søknad.kvittering.manglendeVedlegg.tekst2'}
               values={{
-                a: (chunks: string[]) => (
-                  <Link target="_blank" href={formatMessage('applinks.ettersending')}>
+                a: (chunks) => (
+                  <Link target="_blank" href={formatMessage({ id: 'applinks.ettersending' })}>
                     {chunks}
                   </Link>
                 ),
@@ -77,26 +77,28 @@ const Kvittering = ({ søker, kontaktinformasjon, søknad }: StudentProps) => {
         </Alert>
       )}
 
-      <FormatElement
+      <FormattedMessage
         id={'søknad.kvittering.saksbehandlingstid'}
         values={{
-          a: (chunks: string[]) => (
-            <Link href={formatMessage('applinks.saksbehandlingstid')}>{chunks}</Link>
+          a: (chunks) => (
+            <Link href={formatMessage({ id: 'applinks.saksbehandlingstid' })}>{chunks}</Link>
           ),
         }}
       />
       {(kontaktinformasjon?.mobil || kontaktinformasjon?.epost) && (
         <div>
-          {formatMessage('søknad.kvittering.bekreftelse.title')}
+          {formatMessage({ id: 'søknad.kvittering.bekreftelse.title' })}
           <ul className={classes?.kvitteringList}>
             {kontaktinformasjon?.mobil && (
               <li>
-                {formatMessage('søknad.kvittering.bekreftelse.sms')}: {kontaktinformasjon?.mobil}
+                {formatMessage({ id: 'søknad.kvittering.bekreftelse.sms' })}:{' '}
+                {kontaktinformasjon?.mobil}
               </li>
             )}
             {kontaktinformasjon?.epost && (
               <li>
-                {formatMessage('søknad.kvittering.bekreftelse.epost')}: {kontaktinformasjon?.epost}
+                {formatMessage({ id: 'søknad.kvittering.bekreftelse.epost' })}:{' '}
+                {kontaktinformasjon?.epost}
               </li>
             )}
           </ul>
@@ -108,11 +110,11 @@ const Kvittering = ({ søker, kontaktinformasjon, søknad }: StudentProps) => {
         className={classes?.linkButton}
       >
         <Download title="Last ned søknad" />
-        {formatMessage('søknad.kvittering.lastNedSøknad')}
+        {formatMessage({ id: 'søknad.kvittering.lastNedSøknad' })}
       </Link>
       <form action={dittNavUrl}>
         <Button as={'a'} variant={'primary'} href={mineAapUrl}>
-          {formatMessage('søknad.kvittering.dittNavKnapp')}
+          {formatMessage({ id: 'søknad.kvittering.dittNavKnapp' })}
         </Button>
       </form>
     </div>

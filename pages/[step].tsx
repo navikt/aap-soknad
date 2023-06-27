@@ -12,7 +12,6 @@ import {
   setStepList,
   useStepWizard,
 } from 'context/stepWizardContextV2';
-import { useFeatureToggleIntl } from 'hooks/useFeatureToggleIntl';
 import { GenericSoknadContextState } from 'types/SoknadContext';
 import { useDebounceLagreSoknad } from 'hooks/useDebounceLagreSoknad';
 import { StepWizard } from 'components/StepWizard';
@@ -57,6 +56,7 @@ import { TimeoutBox } from 'components/TimeoutBox/TimeoutBox';
 import { Steg0 } from 'components/pageComponents/standard/Steg0/Steg0';
 import * as classes from './step.module.css';
 import { migrateStepList } from '../lib/utils/migrateStepList';
+import { FormattedMessage, useIntl } from 'react-intl';
 
 interface PageProps {
   søker: SokerOppslagState;
@@ -67,7 +67,7 @@ const Steps = ({ søker, mellomlagretSøknad }: PageProps) => {
   const router = useRouter();
   const { step } = router.query;
 
-  const { formatMessage, FormatElement } = useFeatureToggleIntl();
+  const { formatMessage } = useIntl();
 
   const { søknadState, søknadDispatch } = useSoknadContextStandard();
   const { oppslagDispatch } = useSokerOppslag();
@@ -164,7 +164,7 @@ const Steps = ({ søker, mellomlagretSøknad }: PageProps) => {
     <>
       <header>
         <PageHeader align="center">
-          <FormatElement
+          <FormattedMessage
             id={'søknad.pagetitle'}
             values={{
               wbr: () => <>&shy;</>,
