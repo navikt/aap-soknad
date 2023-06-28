@@ -32,6 +32,9 @@ spec:
   prometheus:
     enabled: true
     path: /aap/soknad/api/internal/prometheus/
+  observability:
+    tracing:
+      enabled: true
   idporten:
     enabled: true
     sidecar:
