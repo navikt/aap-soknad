@@ -27,8 +27,6 @@ import SoknadFormWrapperNew from '../../../SoknadFormWrapper/SoknadFormWrapperNe
 import { validate } from '../../../../lib/utils/validationUtils';
 import { logSkjemastegFullførtEvent } from '../../../../utils/amplitude';
 import { SøknadValidationError } from '../../../schema/FormErrorSummaryNew';
-
-import { DatePickerWrapper } from '../../../input/DatePickerWrapper/DatePickerWrapper';
 import { IntlFormatters, useIntl } from 'react-intl';
 
 export enum FerieType {
@@ -155,7 +153,7 @@ const StartDato = ({ onBackClick, defaultValues }: Props) => {
   const { datepickerProps: fraDatoProps, inputProps: fraDatoInputProps } = useDatepicker({
     fromDate: new Date(),
     onDateChange: (value) => {
-      clearError('ferie.fraDato');
+      clearErrors();
       updateSøknadData(søknadDispatch, {
         ferie: { ...søknadState?.søknad?.ferie, fraDato: value },
       });
@@ -168,7 +166,7 @@ const StartDato = ({ onBackClick, defaultValues }: Props) => {
   const { datepickerProps: tilDatoProps, inputProps: tilDatoInputProps } = useDatepicker({
     fromDate: new Date(),
     onDateChange: (value) => {
-      clearError('ferie.tilDato');
+      clearErrors();
       updateSøknadData(søknadDispatch, {
         ferie: { ...søknadState?.søknad?.ferie, tilDato: value },
       });
@@ -178,8 +176,8 @@ const StartDato = ({ onBackClick, defaultValues }: Props) => {
     }),
   });
 
-  function clearError(path: string) {
-    setErrors(errors?.filter((error) => error.path != path));
+  function clearErrors() {
+    setErrors(undefined);
   }
 
   function findError(path: string): string | undefined {
@@ -225,7 +223,7 @@ const StartDato = ({ onBackClick, defaultValues }: Props) => {
         id={'sykepenger'}
         value={defaultValues?.søknad?.sykepenger || ''}
         onChange={(value) => {
-          clearError('sykepenger');
+          clearErrors();
           updateSøknadData(søknadDispatch, { sykepenger: value });
         }}
         error={findError('sykepenger')}
@@ -242,7 +240,7 @@ const StartDato = ({ onBackClick, defaultValues }: Props) => {
             id={'ferie.skalHaFerie'}
             value={defaultValues?.søknad?.ferie?.skalHaFerie || ''}
             onChange={(value) => {
-              clearError('ferie.skalHaFerie');
+              clearErrors();
               updateSøknadData(søknadDispatch, {
                 ferie: { ...søknadState?.søknad?.ferie, skalHaFerie: value },
               });
@@ -259,7 +257,7 @@ const StartDato = ({ onBackClick, defaultValues }: Props) => {
               id={'ferie.ferieType'}
               value={defaultValues?.søknad?.ferie?.ferieType || ''}
               onChange={(value) => {
-                clearError('ferie.ferieType');
+                clearErrors();
                 updateSøknadData(søknadDispatch, {
                   ferie: { ...søknadState?.søknad?.ferie, ferieType: value },
                 });
@@ -309,7 +307,7 @@ const StartDato = ({ onBackClick, defaultValues }: Props) => {
                 label={formatMessage({ id: 'søknad.startDato.antallDager.label' })}
                 description={formatMessage({ id: 'søknad.startDato.antallDager.description' })}
                 onChange={(value) => {
-                  clearError('ferie.antallDager');
+                  clearErrors();
                   updateSøknadData(søknadDispatch, {
                     ferie: { ...søknadState?.søknad?.ferie, antallDager: value.target.value },
                   });
