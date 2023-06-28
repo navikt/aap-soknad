@@ -2,7 +2,7 @@ import { expect, test } from '@playwright/test';
 import { addDays, addMonths, format, subYears } from 'date-fns';
 import { formatDate } from '../utils/date';
 
-test('test', async ({ page }) => {
+test('at alle feilmeldinger skal dukke opp', async ({ page }) => {
   await page.goto('http://localhost:3000/aap/soknad/');
   await page.getByRole('button', { name: 'Start søknad' }).click();
   await expect(

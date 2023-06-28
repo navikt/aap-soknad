@@ -5,7 +5,7 @@ const wcagTags = ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'];
 const checkWcag = async (page: Page) =>
   new AxeBuilder({ page }).include('#app').withTags(wcagTags).analyze();
 
-test('test', async ({ page }) => {
+test('at enkel gjennomkjøring av søknaden fungerer', async ({ page }) => {
   await page.goto('http://localhost:3000/aap/soknad/');
   let wcagRes = await checkWcag(page);
   await expect(wcagRes.violations).toEqual([]);
