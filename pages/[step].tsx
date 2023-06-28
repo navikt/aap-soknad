@@ -55,8 +55,8 @@ import { scrollRefIntoView } from 'utils/dom';
 import { TimeoutBox } from 'components/TimeoutBox/TimeoutBox';
 import { Steg0 } from 'components/pageComponents/standard/Steg0/Steg0';
 import * as classes from './step.module.css';
-import { migrateStepList } from '../lib/utils/migrateStepList';
 import { FormattedMessage, useIntl } from 'react-intl';
+import { logger } from '@navikt/aap-felles-utils';
 
 interface PageProps {
   søker: SokerOppslagState;
@@ -284,7 +284,12 @@ export const getServerSideProps = beskyttetSide(
 
     stopTimer();
 
+    if (mellomlagretSøknad && !mellomlagretSøknad.lagretStepList) {
+      logger.error('Mellomlagret søknad finnes, men mangler stepList');
+    }
+
     if (!mellomlagretSøknad?.lagretStepList) {
+      logger.warn('lagretStepList mangler i mellomlagret søknad, redirecter til startsiden');
       return {
         redirect: {
           destination: '/',
@@ -292,13 +297,9 @@ export const getServerSideProps = beskyttetSide(
         },
       };
     }
-    const nyMellomlagrtSøknad = {
-      ...mellomlagretSøknad,
-      lagretStepList: migrateStepList(mellomlagretSøknad?.lagretStepList),
-    };
 
     return {
-      props: { søker, mellomlagretSøknad: nyMellomlagrtSøknad },
+      props: { søker, mellomlagretSøknad },
     };
   }
 );

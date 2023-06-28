@@ -9,6 +9,7 @@ import { isLabs, isMock } from 'utils/environments';
 import { getStringFromPossiblyArrayQuery } from 'utils/string';
 import { SØKNAD_CONTEXT_VERSION } from 'context/soknadContextCommon';
 import { defaultStepList } from 'pages';
+import { ErrorMedStatus } from 'auth/ErrorMedStatus';
 
 const handler = beskyttetApi(async (req: NextApiRequest, res: NextApiResponse) => {
   const type = getStringFromPossiblyArrayQuery(req.query.type);
@@ -20,7 +21,7 @@ const handler = beskyttetApi(async (req: NextApiRequest, res: NextApiResponse) =
   res.status(200).json(result);
 });
 
-export const lesBucket = async (type: SøknadsType, accessToken?: string) => {
+export const lesBucket = async (type: SøknadsType, accessToken?: string, retryCount = 3) => {
   const nySøknad = {
     type: 'STANDARD',
     version: SØKNAD_CONTEXT_VERSION,
@@ -53,6 +54,17 @@ export const lesBucket = async (type: SøknadsType, accessToken?: string) => {
     }
     return mellomlagretSøknad;
   } catch (error) {
+    if (error instanceof ErrorMedStatus && error.status === 503) {
+      logger.info(`Mellomlagring ga 'Service is unavailable (503). Prøver på nytt`);
+      if (retryCount > 0) {
+        await new Promise((resolve) => setTimeout(resolve, 300));
+        const mellomlagretSøknad: any = await lesBucket(type, accessToken, retryCount - 1);
+        return mellomlagretSøknad;
+      }
+      if (retryCount === 0) {
+        logger.error(`RetryCount for å hente mellomlagret søknad er 0. Gir opp.`);
+      }
+    }
     logger.info('Fant ingen mellomlagret søknad');
     return undefined;
   }
