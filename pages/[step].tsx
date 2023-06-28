@@ -222,15 +222,7 @@ const Steps = ({ søker, mellomlagretSøknad }: PageProps) => {
                   }}
                 />
               )}
-              {step === '6' && (
-                <Student
-                  onBackClick={onPreviousStep}
-                  defaultValues={søknadState}
-                  onNext={(data) => {
-                    onNextStep(data);
-                  }}
-                />
-              )}
+              {step === '6' && <Student onBackClick={onPreviousStep} defaultValues={søknadState} />}
               {step === '7' && (
                 <AndreUtbetalinger
                   onBackClick={onPreviousStep}

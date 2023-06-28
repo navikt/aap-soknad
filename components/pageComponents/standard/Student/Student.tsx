@@ -1,12 +1,8 @@
 import { Soknad } from 'types/Soknad';
-import RadioGroupWrapper from 'components/input/RadioGroupWrapper/RadioGroupWrapper';
 import { Alert, BodyShort, Heading, Radio, RadioGroup } from '@navikt/ds-react';
 import { JaNeiVetIkke } from 'types/Generic';
 import React, { useEffect, useMemo, useState } from 'react';
 import * as yup from 'yup';
-import { useForm, useWatch } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
-import SoknadFormWrapper from 'components/SoknadFormWrapper/SoknadFormWrapper';
 import { completeAndGoToNextStep, useStepWizard } from 'context/stepWizardContextV2';
 import ColorPanel from 'components/panel/ColorPanel';
 import { LucaGuidePanel } from '@navikt/aap-felles-react';
@@ -48,7 +44,6 @@ export const jaNeiAvbruttToTekstnøkkel = (jaNeiAvbrutt: JaNeiAvbrutt) => {
 };
 interface Props {
   onBackClick: () => void;
-  onNext: (data: any) => void;
   defaultValues?: GenericSoknadContextState<Soknad>;
 }
 
@@ -77,7 +72,7 @@ export const getStudentSchema = (formatMessage: IntlFormatters['formatMessage'])
     }),
   });
 
-const Student = ({ onBackClick, onNext, defaultValues }: Props) => {
+const Student = ({ onBackClick, defaultValues }: Props) => {
   const { formatMessage } = useIntl();
   const { søknadState, søknadDispatch } = useSoknadContextStandard();
   const { stepList, currentStepIndex, stepWizardDispatch } = useStepWizard();

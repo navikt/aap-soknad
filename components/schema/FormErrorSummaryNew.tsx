@@ -29,7 +29,6 @@ const FormErrorSummaryNew = (props: Props) => {
     }
   }, [isError]);
 
-  console.log(!isError);
   // Må rendre ErrorSummary selv om det ikke er feil pga UU
   if (!isError) {
     return (
