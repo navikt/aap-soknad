@@ -8,6 +8,10 @@ const nextConfig = {
   output: 'standalone',
   assetPrefix: process.env.ASSET_PREFIX ?? undefined,
 
+  experimental: {
+    instrumentationHook: true,
+  },
+
   i18n: {
     locales: ['nb', 'nn'],
     defaultLocale: 'nb',
