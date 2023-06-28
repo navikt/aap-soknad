@@ -32,7 +32,7 @@ describe('Startdato', () => {
   });
   it('Er på sykepenger - vis spørsmål om ferie', async () => {
     renderStepSoknadStandard(STARTDATO, <Component />, {});
-    await waitFor(() => userEvent.click(screen.getByRole('radio', { name: JaEllerNei.JA })));
+    await waitFor(() => user.click(screen.getByRole('radio', { name: JaEllerNei.JA })));
     const skalHaFerieLabel = messagesNb?.søknad?.startDato?.skalHaFerie?.label;
     const oppfølgingsspørsmål = await screen.findByRole('group', { name: skalHaFerieLabel });
     expect(oppfølgingsspørsmål).not.toBeNull();
