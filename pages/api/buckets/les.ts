@@ -66,6 +66,7 @@ export const lesBucket = async (type: SøknadsType, accessToken?: string, retryC
       }
     }
     logger.info('Fant ingen mellomlagret søknad');
+    logger.info(`Error fra tokenXProxy er: ${JSON.stringify(error)}`);
     return undefined;
   }
 };
