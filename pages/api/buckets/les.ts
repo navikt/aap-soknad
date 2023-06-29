@@ -53,8 +53,8 @@ export const lesBucket = async (type: SøknadsType, accessToken?: string, retryC
       );
     }
     return mellomlagretSøknad;
-  } catch (error) {
-    if (error instanceof ErrorMedStatus && error.status === 503) {
+  } catch (error: any) {
+    if (error?.status === 503) {
       logger.info(`Mellomlagring ga 'Service is unavailable (503). Prøver på nytt`);
       if (retryCount > 0) {
         await new Promise((resolve) => setTimeout(resolve, 300));
