@@ -1,13 +1,12 @@
 import { FieldErrors } from 'react-hook-form';
 import React, { useState } from 'react';
-import { Alert, BodyShort, Button, Detail, Heading, Loader, Modal } from '@navikt/ds-react';
+import { Button, Detail } from '@navikt/ds-react';
 import { FormErrorSummary } from '../schema/FormErrorSummary';
 import * as classes from './SoknadFormWrapper.module.css';
-import { SuccessStroke } from '@navikt/ds-icons';
 import { useAppStateContext } from 'context/appStateContext';
-import { clientSideIsProd } from 'utils/environments';
-import { useRouter } from 'next/router';
 import { useIntl } from 'react-intl';
+import SlettModal from './SlettModal';
+import LagreModal from './LagreModal';
 
 interface Props {
   children?: React.ReactNode;
@@ -22,125 +21,6 @@ interface Props {
   errors?: FieldErrors;
   className?: string;
 }
-
-interface LagreModalProps {
-  isOpen: boolean;
-  onClose: (value: boolean) => void;
-}
-
-export const LagreModal = ({ isOpen, onClose }: LagreModalProps) => {
-  const { formatMessage } = useIntl();
-  return (
-    <Modal open={isOpen} onClose={() => onClose(false)}>
-      <Modal.Content className={classes?.modalContent}>
-        <Heading size={'small'} level={'1'}>
-          {formatMessage({ id: 'lagreModal.heading' })}
-        </Heading>
-        <BodyShort>{formatMessage({ id: 'lagreModal.text' })}</BodyShort>
-        <div className={classes?.buttonWrapper}>
-          <Button
-            variant="primary"
-            type="button"
-            onClick={() => {
-              if (window?.location) {
-                window.location.href = clientSideIsProd()
-                  ? 'https://www.nav.no/minside/'
-                  : 'https://www.dev.nav.no/minside/';
-              }
-            }}
-          >
-            {formatMessage({ id: 'lagreModal.lagreButtonText' })}
-          </Button>
-          <Button variant="tertiary" type="button" onClick={() => onClose(false)}>
-            {formatMessage({ id: 'lagreModal.avbrytButtonText' })}
-          </Button>
-        </div>
-      </Modal.Content>
-    </Modal>
-  );
-};
-
-interface SlettModalProps {
-  isOpen: boolean;
-  onClose: (value: boolean) => void;
-  slettSøknadSuccess: boolean;
-  isDeletingSøknad: boolean;
-  slettSøknadOgAvbryt: () => void;
-}
-export const SlettModal = ({
-  isOpen,
-  onClose,
-  slettSøknadSuccess,
-  isDeletingSøknad,
-  slettSøknadOgAvbryt,
-}: SlettModalProps) => {
-  const { formatMessage } = useIntl();
-  const router = useRouter();
-  return (
-    <Modal
-      open={isOpen}
-      onClose={() => onClose(false)}
-      closeButton={!slettSøknadSuccess}
-      shouldCloseOnOverlayClick={!slettSøknadSuccess}
-    >
-      <Modal.Content className={classes?.modalContent}>
-        {!slettSøknadSuccess && (
-          <>
-            <Heading className={classes?.modalHeading} size={'small'} level={'1'}>
-              {formatMessage({ id: 'avbrytOgSlettModal.heading' })}
-            </Heading>
-            <div className={classes?.buttonWrapper}>
-              <Button variant="primary" type="button" onClick={() => slettSøknadOgAvbryt()}>
-                {isDeletingSøknad && <Loader />}
-                {!isDeletingSøknad &&
-                  formatMessage({ id: 'avbrytOgSlettModal.avbrytOgSlettButtonText' })}
-              </Button>
-              <Button
-                variant="tertiary"
-                type="button"
-                onClick={() => !isDeletingSøknad && onClose(false)}
-              >
-                {formatMessage({ id: 'avbrytOgSlettModal.avbrytButtonText' })}
-              </Button>
-            </div>
-          </>
-        )}
-        {slettSøknadSuccess && (
-          <>
-            <SuccessStroke className={classes?.successStroke} color={'var(--a-border-success)'} />
-            <Alert variant={'success'}>Søknaden er slettet</Alert>
-            <div className={classes?.buttonWrapper}>
-              <Button
-                variant="primary"
-                type="button"
-                onClick={() => {
-                  if (window?.location) {
-                    window.location.href = clientSideIsProd()
-                      ? 'https://www.nav.no/person/dittnav'
-                      : 'https://www.dev.nav.no/person/dittnav';
-                  }
-                }}
-              >
-                {formatMessage({ id: 'avbrytOgSlettModal.lukkButtonText' })}
-              </Button>
-              <Button
-                variant="tertiary"
-                type="button"
-                onClick={() => {
-                  if (window?.location) {
-                    router.reload();
-                  }
-                }}
-              >
-                {formatMessage({ id: 'avbrytOgSlettModal.sendNyButtonText' })}
-              </Button>
-            </div>
-          </>
-        )}
-      </Modal.Content>
-    </Modal>
-  );
-};
 
 const SøknadFormWrapper = ({
   children,
