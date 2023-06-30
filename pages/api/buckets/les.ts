@@ -57,6 +57,7 @@ export const lesBucket = async (type: SøknadsType, accessToken?: string, retryC
     if (error?.status === 503) {
       logger.info(`Mellomlagring ga 'Service is unavailable (503). Prøver på nytt`);
       if (retryCount > 0) {
+        logger.info(`Gjør nytt mellomlagringskall. RetryCount: ${retryCount}`);
         await new Promise((resolve) => setTimeout(resolve, 300));
         const mellomlagretSøknad: any = await lesBucket(type, accessToken, retryCount - 1);
         return mellomlagretSøknad;
