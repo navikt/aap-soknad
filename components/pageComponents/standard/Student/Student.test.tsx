@@ -23,7 +23,7 @@ describe('Student', () => {
     return (
       <StepWizard>
         <Step name={STUDENT}>
-          <Student onBackClick={jest.fn()} onNext={jest.fn()} />
+          <Student onBackClick={jest.fn()} />
         </Step>
       </StepWizard>
     );

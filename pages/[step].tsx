@@ -55,8 +55,8 @@ import { scrollRefIntoView } from 'utils/dom';
 import { TimeoutBox } from 'components/TimeoutBox/TimeoutBox';
 import { Steg0 } from 'components/pageComponents/standard/Steg0/Steg0';
 import * as classes from './step.module.css';
-import { migrateStepList } from '../lib/utils/migrateStepList';
 import { FormattedMessage, useIntl } from 'react-intl';
+import { logger } from '@navikt/aap-felles-utils';
 
 interface PageProps {
   søker: SokerOppslagState;
@@ -110,7 +110,7 @@ const Steps = ({ søker, mellomlagretSøknad }: PageProps) => {
     }
   }, [showFetchErrorMessage]);
 
-  const submitSoknad: SubmitHandler<Soknad> = async (data) => {
+  const submitSoknad: SubmitHandler<Soknad> = async () => {
     if (currentStep?.name === StepNames.OPPSUMMERING) {
       setShowFetchErrorMessage(false);
       const sendtTimestamp = new Date();
@@ -138,7 +138,6 @@ const Steps = ({ søker, mellomlagretSøknad }: PageProps) => {
         router.push('kvittering');
         return true;
       } else {
-        const navCallid = postResponse?.data?.navCallId;
         setShowFetchErrorMessage(true);
       }
     } else {
@@ -191,9 +190,6 @@ const Steps = ({ søker, mellomlagretSøknad }: PageProps) => {
                     router.push('0');
                   }}
                   defaultValues={søknadState}
-                  onNext={(data) => {
-                    onNextStep(data);
-                  }}
                 />
               )}
               {step === '2' && (
@@ -206,13 +202,7 @@ const Steps = ({ søker, mellomlagretSøknad }: PageProps) => {
                 />
               )}
               {step === '3' && (
-                <Yrkesskade
-                  onBackClick={onPreviousStep}
-                  defaultValues={søknadState}
-                  onNext={(data) => {
-                    onNextStep(data);
-                  }}
-                />
+                <Yrkesskade onBackClick={onPreviousStep} defaultValues={søknadState} />
               )}
               {step === '4' && (
                 <Behandlere
@@ -232,15 +222,7 @@ const Steps = ({ søker, mellomlagretSøknad }: PageProps) => {
                   }}
                 />
               )}
-              {step === '6' && (
-                <Student
-                  onBackClick={onPreviousStep}
-                  defaultValues={søknadState}
-                  onNext={(data) => {
-                    onNextStep(data);
-                  }}
-                />
-              )}
+              {step === '6' && <Student onBackClick={onPreviousStep} defaultValues={søknadState} />}
               {step === '7' && (
                 <AndreUtbetalinger
                   onBackClick={onPreviousStep}
@@ -294,7 +276,12 @@ export const getServerSideProps = beskyttetSide(
 
     stopTimer();
 
+    if (mellomlagretSøknad && !mellomlagretSøknad.lagretStepList) {
+      logger.error('Mellomlagret søknad finnes, men mangler stepList');
+    }
+
     if (!mellomlagretSøknad?.lagretStepList) {
+      logger.warn('lagretStepList mangler i mellomlagret søknad, redirecter til startsiden');
       return {
         redirect: {
           destination: '/',
@@ -302,13 +289,9 @@ export const getServerSideProps = beskyttetSide(
         },
       };
     }
-    const nyMellomlagrtSøknad = {
-      ...mellomlagretSøknad,
-      lagretStepList: migrateStepList(mellomlagretSøknad?.lagretStepList),
-    };
 
     return {
-      props: { søker, mellomlagretSøknad: nyMellomlagrtSøknad },
+      props: { søker, mellomlagretSøknad },
     };
   }
 );

@@ -26,7 +26,6 @@ import {
 import {
   FerieType,
   FerieTypeToMessageKey,
-  SYKEPENGER,
 } from 'components/pageComponents/standard/StartDato/StartDato';
 import { JaEllerNei } from 'types/Generic';
 
@@ -295,7 +294,7 @@ export const mapSøknadToPdf = (
     const rows = [
       ...createField(
         formatMessage({ id: 'søknad.startDato.sykepenger.legend' }),
-        søknad?.[SYKEPENGER]
+        søknad?.sykepenger
       ),
       ...createField(
         formatMessage({ id: 'søknad.startDato.skalHaFerie.label' }),

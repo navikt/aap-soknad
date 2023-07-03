@@ -17,7 +17,7 @@ describe('Startdato', () => {
     return (
       <StepWizard>
         <Step name={STARTDATO}>
-          <StartDato onBackClick={jest.fn()} onNext={jest.fn()} />
+          <StartDato onBackClick={jest.fn()} />
         </Step>
       </StepWizard>
     );
@@ -30,13 +30,15 @@ describe('Startdato', () => {
     const påkrevdTekst = messagesNb?.søknad?.startDato?.sykepenger?.required;
     expect(await findByRole(errorSummary, 'link', { name: påkrevdTekst })).not.toBeNull();
   });
+
   it('Er på sykepenger - vis spørsmål om ferie', async () => {
     renderStepSoknadStandard(STARTDATO, <Component />, {});
-    await waitFor(() => userEvent.click(screen.getByRole('radio', { name: JaEllerNei.JA })));
+    await waitFor(() => user.click(screen.getByRole('radio', { name: JaEllerNei.JA })));
     const skalHaFerieLabel = messagesNb?.søknad?.startDato?.skalHaFerie?.label;
     const oppfølgingsspørsmål = await screen.findByRole('group', { name: skalHaFerieLabel });
     expect(oppfølgingsspørsmål).not.toBeNull();
   });
+
   it('Er på sykepenger - ikke svart på spørsmål om ferie', async () => {
     renderStepSoknadStandard(STARTDATO, <Component />, {});
     await waitFor(() => user.click(screen.getByRole('radio', { name: JaEllerNei.JA })));
@@ -45,6 +47,7 @@ describe('Startdato', () => {
     const påkrevdTekst = messagesNb?.søknad?.startDato?.skalHaFerie?.validation?.required;
     expect(await findByRole(errorSummary, 'link', { name: påkrevdTekst })).not.toBeNull();
   });
+
   it('Skal ha ferie - ferietype: visning og påkrevd', async () => {
     renderStepSoknadStandard(STARTDATO, <Component />, {});
     // Sykepenger
@@ -68,6 +71,7 @@ describe('Startdato', () => {
     const påkrevdTekst = messagesNb?.søknad?.startDato?.ferieType?.validation?.required;
     expect(await findByRole(errorSummary, 'link', { name: påkrevdTekst })).not.toBeNull();
   });
+
   it('Skal ha ferie, ferietype: PERIODE - fraDato/tilDato: visning og påkrevd', async () => {
     renderStepSoknadStandard(STARTDATO, <Component />, {});
     // Sykepenger
@@ -101,6 +105,7 @@ describe('Startdato', () => {
     expect(await findByRole(errorSummary, 'link', { name: påkrevdTekstFra })).not.toBeNull();
     expect(await findByRole(errorSummary, 'link', { name: påkrevdTekstTil })).not.toBeNull();
   });
+
   it('Skal ha ferie, ferietype: DAGER - antallDager: visning og påkrevd', async () => {
     renderStepSoknadStandard(STARTDATO, <Component />, {});
     // Sykepenger
@@ -136,6 +141,7 @@ describe('Startdato', () => {
       await findByRole(errorSummary, 'link', { name: påkrevdTekstAntallDager })
     ).not.toBeNull();
   });
+
   it('UU', async () => {
     const { container } = renderStepSoknadStandard(STARTDATO, <Component />, {});
     expect(await axe(container)).toHaveNoViolations();

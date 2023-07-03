@@ -12,11 +12,11 @@ import { RegistrertBehandler, Soknad, Vedlegg } from 'types/Soknad';
 import { OppslagBarn, OppslagBehandler } from './sokerOppslagContext';
 import { BARN } from 'components/pageComponents/standard/Barnetillegg/Barnetillegg';
 
-const soknadContextInititalStateStandard = {
+export const soknadContextInititalStateStandard = {
   ...soknadContextInititalState,
   type: SøknadType.STANDARD,
 };
-function soknadReducerStandard(
+export function soknadReducerStandard(
   state: GenericSoknadContextState<Soknad>,
   action: SoknadAction<Soknad>
 ): GenericSoknadContextState<Soknad> {

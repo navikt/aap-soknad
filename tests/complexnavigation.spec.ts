@@ -2,7 +2,7 @@ import { expect, test } from '@playwright/test';
 import { addDays, addMonths, format } from 'date-fns';
 import { formatDate } from '../utils/date';
 
-test('test', async ({ page }) => {
+test('at navigering i søknaden fungerer', async ({ page }) => {
   await page.goto('http://localhost:3000/aap/soknad/');
   await page.getByLabel('Jeg vil svare så godt jeg kan på spørsmålene i søknaden.').check();
   await page.getByRole('button', { name: 'Start søknad' }).click();

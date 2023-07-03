@@ -7,6 +7,7 @@ import { erGyldigSøknadsType, GYLDIGE_SØKNADS_TYPER, SøknadsType } from 'util
 import { isLabs, isMock } from 'utils/environments';
 import { getStringFromPossiblyArrayQuery } from 'utils/string';
 import metrics from 'utils/metrics';
+import { lesBucket } from './les';
 
 const handler = beskyttetApi(async (req: NextApiRequest, res: NextApiResponse) => {
   const type = getStringFromPossiblyArrayQuery(req.query.type);
@@ -14,6 +15,16 @@ const handler = beskyttetApi(async (req: NextApiRequest, res: NextApiResponse) =
     res.status(400).json({ error: 'type må være en av ' + GYLDIGE_SØKNADS_TYPER.join(', ') });
   }
   const accessToken = getAccessTokenFromRequest(req);
+
+  const eksisterendeSøknad = await lesBucket(type as SøknadsType, accessToken);
+  if (
+    eksisterendeSøknad &&
+    eksisterendeSøknad.søknad &&
+    Object.keys(eksisterendeSøknad.søknad).length > 0 &&
+    Object.keys(req.body.søknad).length === 0
+  ) {
+    logger.error('Overskriver eksisterende søknad med en tom søknad');
+  }
   await lagreBucket(type as SøknadsType, req.body, accessToken);
   res.status(201).json({});
 });

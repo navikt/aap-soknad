@@ -322,7 +322,7 @@ const Oppsummering = ({
           editText={formatMessage({ id: 'søknad.oppsummering.student.editText' })}
           toggleAll={toggleAll}
           onEdit={() => editStep(StepNames.STUDENT)}
-          hasError={!getStudentSchema(formatMessage).isValidSync(søknadState?.søknad)}
+          hasError={!getStudentSchema(formatMessage).isValidSync(søknadState?.søknad?.student)}
         >
           <SummaryRowIfExists
             labelKey={`søknad.student.erStudent.legend`}

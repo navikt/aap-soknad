@@ -2,7 +2,7 @@ import { expect, test } from '@playwright/test';
 import { addDays, addMonths, format, subYears } from 'date-fns';
 import { formatDate } from '../utils/date';
 
-test('test', async ({ page }) => {
+test('at alle feilmeldinger skal dukke opp', async ({ page }) => {
   await page.goto('http://localhost:3000/aap/soknad/');
   await page.getByRole('button', { name: 'Start søknad' }).click();
   await expect(
@@ -377,7 +377,7 @@ test('test', async ({ page }) => {
   const over18years = subYears(new Date(), 19);
 
   await page.getByLabel('Fødselsdato (dd.mm.åååå)').fill(format(over18years, 'dd.MM.yyyy'));
-  await page.getByRole('radio', { name: 'Forelder' }).check();
+  await page.getByRole('radio', { name: 'Forelder', exact: true }).check();
   await page.getByRole('radio', { name: 'Nei' }).check();
   await page.getByRole('button', { name: 'Lagre' }).click();
   await expect(
@@ -402,7 +402,7 @@ test('test', async ({ page }) => {
   await page.getByRole('button', { name: 'Neste steg' }).click();
   await expect(await page.locator('p:has-text("Du må svare på om du er student.")')).toBeVisible();
   await page.getByRole('link', { name: 'Du må svare på om du er student.' }).click();
-  await expect(page).toHaveURL('http://localhost:3000/aap/soknad/6/#student.erStudent');
+  await expect(page).toHaveURL('http://localhost:3000/aap/soknad/6/#erStudent');
   await page.getByLabel('Ja, men har avbrutt studiet helt på grunn av sykdom').check();
   await page.getByRole('button', { name: 'Neste steg' }).click();
   await expect(
@@ -411,8 +411,8 @@ test('test', async ({ page }) => {
   await page
     .getByRole('link', { name: 'Du må svare på om du har planer om å komme tilbake til studiet.' })
     .click();
-  await expect(page).toHaveURL('http://localhost:3000/aap/soknad/6/#student.kommeTilbake');
-  await page.getByRole('radio', { name: 'Ja' }).check();
+  await expect(page).toHaveURL('http://localhost:3000/aap/soknad/6/#kommeTilbake');
+  await page.getByRole('radio', { name: 'Ja', exact: true }).check();
   await expect(
     page.getByText(
       'InformasjonDu må legge ved:Bekreftelse fra studiested på hvilken dato studiet bl'
