@@ -1,13 +1,18 @@
-import { useForm, useWatch } from 'react-hook-form';
-import React, { useEffect } from 'react';
-import { Alert, BodyLong, BodyShort, Heading, Link, Radio, ReadMore } from '@navikt/ds-react';
-import RadioGroupWrapper from 'components/input/RadioGroupWrapper/RadioGroupWrapper';
+import React, { useEffect, useState } from 'react';
+import {
+  Alert,
+  BodyLong,
+  BodyShort,
+  Heading,
+  Link,
+  Radio,
+  RadioGroup,
+  ReadMore,
+} from '@navikt/ds-react';
 import { Soknad } from 'types/Soknad';
 import { JaEllerNei } from 'types/Generic';
 import * as yup from 'yup';
-import { yupResolver } from '@hookform/resolvers/yup';
-import { useStepWizard } from 'context/stepWizardContextV2';
-import SoknadFormWrapper from 'components/SoknadFormWrapper/SoknadFormWrapper';
+import { completeAndGoToNextStep, useStepWizard } from 'context/stepWizardContextV2';
 import { LucaGuidePanel } from '@navikt/aap-felles-react';
 import { slettLagretSoknadState, updateSøknadData } from 'context/soknadContextCommon';
 import { deleteOpplastedeVedlegg, useSoknadContextStandard } from 'context/soknadContextStandard';
@@ -15,49 +20,52 @@ import { useDebounceLagreSoknad } from 'hooks/useDebounceLagreSoknad';
 import { GenericSoknadContextState } from 'types/SoknadContext';
 import { setFocusOnErrorSummary } from 'components/schema/FormErrorSummary';
 import { FormattedMessage, IntlFormatters, useIntl } from 'react-intl';
+import { logSkjemastegFullførtEvent } from '../../../../utils/amplitude';
+import { validate } from '../../../../lib/utils/validationUtils';
+import { SøknadValidationError } from '../../../schema/FormErrorSummaryNew';
+import SoknadFormWrapperNew from '../../../SoknadFormWrapper/SoknadFormWrapperNew';
 
 interface Props {
   onBackClick: () => void;
-  onNext: (data: any) => void;
   defaultValues?: GenericSoknadContextState<Soknad>;
 }
-const YRKESSKADE = 'yrkesskade';
 
 export const getYrkesskadeSchema = (formatMessage: IntlFormatters['formatMessage']) =>
   yup.object().shape({
-    [YRKESSKADE]: yup
+    yrkesskade: yup
       .string()
       .required(formatMessage({ id: 'søknad.yrkesskade.harDuYrkesskade.validation.required' }))
       .oneOf([JaEllerNei.JA, JaEllerNei.NEI])
       .nullable(),
   });
 
-export const Yrkesskade = ({ onBackClick, onNext, defaultValues }: Props) => {
+export const Yrkesskade = ({ onBackClick, defaultValues }: Props) => {
   const { formatMessage } = useIntl();
 
   const { søknadState, søknadDispatch } = useSoknadContextStandard();
-  const { stepList } = useStepWizard();
-  const {
-    control,
-    handleSubmit,
-    formState: { errors },
-  } = useForm({
-    resolver: yupResolver(getYrkesskadeSchema(formatMessage)),
-    defaultValues: {
-      [YRKESSKADE]: defaultValues?.søknad?.yrkesskade,
-    },
-  });
+  const { currentStepIndex, stepWizardDispatch, stepList } = useStepWizard();
+
   const debouncedLagre = useDebounceLagreSoknad<Soknad>();
-  const allFields = useWatch({ control });
+
   useEffect(() => {
-    debouncedLagre(søknadState, stepList, allFields);
-  }, [allFields]);
-  const harSkadeEllerSykdom = useWatch({ control, name: `${YRKESSKADE}` });
+    debouncedLagre(søknadState, stepList, {});
+  }, [søknadState.søknad?.yrkesskade]);
+
+  const [errors, setErrors] = useState<SøknadValidationError[] | undefined>();
+
   return (
-    <SoknadFormWrapper
-      onNext={handleSubmit((data) => {
-        onNext(data);
-      }, setFocusOnErrorSummary)}
+    <SoknadFormWrapperNew
+      onNext={async (data) => {
+        const errors = await validate(getYrkesskadeSchema(formatMessage), søknadState.søknad);
+        if (errors) {
+          setErrors(errors);
+          setFocusOnErrorSummary();
+          return;
+        }
+
+        logSkjemastegFullførtEvent(currentStepIndex ?? 0);
+        completeAndGoToNextStep(stepWizardDispatch);
+      }}
       onBack={() => {
         updateSøknadData<Soknad>(søknadDispatch, { ...søknadState.søknad });
         onBackClick();
@@ -77,10 +85,16 @@ export const Yrkesskade = ({ onBackClick, onNext, defaultValues }: Props) => {
       <LucaGuidePanel>
         <BodyLong>{formatMessage({ id: 'søknad.yrkesskade.guide.text' })}</BodyLong>
       </LucaGuidePanel>
-      <RadioGroupWrapper
-        name={`${YRKESSKADE}`}
+      <RadioGroup
+        name={'yrkesskade'}
+        id={'yrkesskade'}
         legend={formatMessage({ id: `søknad.yrkesskade.harDuYrkesskade.label` })}
-        control={control}
+        value={defaultValues?.søknad?.yrkesskade || ''}
+        onChange={(value) => {
+          setErrors(undefined);
+          updateSøknadData(søknadDispatch, { yrkesskade: value });
+        }}
+        error={errors?.find((error) => error.path === 'yrkesskade')?.message}
       >
         <ReadMore
           header={formatMessage({ id: 'søknad.yrkesskade.harDuYrkesskade.readMore.title' })}
@@ -113,8 +127,8 @@ export const Yrkesskade = ({ onBackClick, onNext, defaultValues }: Props) => {
         <Radio value={JaEllerNei.NEI}>
           <BodyShort>{JaEllerNei.NEI}</BodyShort>
         </Radio>
-      </RadioGroupWrapper>
-      {harSkadeEllerSykdom && harSkadeEllerSykdom !== JaEllerNei.NEI && (
+      </RadioGroup>
+      {søknadState.søknad?.yrkesskade === JaEllerNei.JA && (
         <Alert variant={'info'}>
           {formatMessage({ id: 'søknad.yrkesskade.alert.navVilSjekke' })}
           <ul>
@@ -123,6 +137,6 @@ export const Yrkesskade = ({ onBackClick, onNext, defaultValues }: Props) => {
           </ul>
         </Alert>
       )}
-    </SoknadFormWrapper>
+    </SoknadFormWrapperNew>
   );
 };

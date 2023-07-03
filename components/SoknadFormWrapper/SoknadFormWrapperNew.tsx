@@ -1,12 +1,11 @@
-import { FieldErrors } from 'react-hook-form';
 import React, { useState } from 'react';
 import { Button, Detail } from '@navikt/ds-react';
-import { FormErrorSummary } from '../schema/FormErrorSummary';
 import * as classes from './SoknadFormWrapper.module.css';
 import { useAppStateContext } from 'context/appStateContext';
+import { FormErrorSummaryNew, SøknadValidationError } from '../schema/FormErrorSummaryNew';
 import { useIntl } from 'react-intl';
-import SlettModal from './SlettModal';
 import LagreModal from './LagreModal';
+import SlettModal from './SlettModal';
 
 interface Props {
   children?: React.ReactNode;
@@ -18,11 +17,11 @@ interface Props {
   onDelete: () => Promise<any>;
   nextIsLoading?: boolean;
   focusOnErrors?: boolean;
-  errors?: FieldErrors;
+  errors?: SøknadValidationError[];
   className?: string;
 }
 
-const SøknadFormWrapper = ({
+const SøknadFormWrapperNew = ({
   children,
   nextButtonText,
   backButtonText,
@@ -59,7 +58,7 @@ const SøknadFormWrapper = ({
         }}
         className={`${classes?.formContent} ${className}`}
       >
-        {errors && <FormErrorSummary errors={errors} data-testid={'error-summary'} />}
+        {errors && <FormErrorSummaryNew errors={errors} data-testid={'error-summary'} />}
         {children}
         <div className={classes?.fourButtonWrapper}>
           {onBack && (
@@ -117,4 +116,4 @@ const SøknadFormWrapper = ({
     </>
   );
 };
-export default SøknadFormWrapper;
+export default SøknadFormWrapperNew;

@@ -6,9 +6,13 @@ import '@testing-library/jest-dom';
 import { render as rtlRender, configure } from '@testing-library/react';
 import { AppStateContext, AppStateContextState } from 'context/appStateContext';
 import { SoknadContextData } from 'context/soknadContextCommon';
-import { SoknadContextStandard } from 'context/soknadContextStandard';
+import {
+  soknadContextInititalStateStandard,
+  SoknadContextStandard,
+  soknadReducerStandard,
+} from 'context/soknadContextStandard';
 import { StepWizardContext, StepWizardContextState } from 'context/stepWizardContextV2';
-import { ReactElement } from 'react';
+import { ReactElement, useReducer } from 'react';
 import { IntlProvider } from 'react-intl';
 import { Soknad } from 'types/Soknad';
 import { SøknadType } from 'types/SoknadContext';
@@ -39,13 +43,10 @@ function renderStepSoknadStandard(
   { locale = 'nb', ...options } = {}
 ) {
   function ProvidersWrapper({ children }: { children: ReactElement }): ReactElement {
+    const [state, dispatch] = useReducer(soknadReducerStandard, soknadContextInititalStateStandard);
     const soknadContext: SoknadContextData<Soknad> = {
-      søknadState: {
-        version: 1,
-        type: SøknadType.STANDARD,
-        requiredVedlegg: [],
-      },
-      søknadDispatch: () => {},
+      søknadState: state,
+      søknadDispatch: dispatch,
     };
     const wizardContext: StepWizardContextState = {
       stepList: [{ name: stepName }],
