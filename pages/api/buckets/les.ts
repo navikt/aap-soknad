@@ -53,10 +53,11 @@ export const lesBucket = async (type: SøknadsType, accessToken?: string, retryC
       );
     }
     return mellomlagretSøknad;
-  } catch (error) {
-    if (error instanceof ErrorMedStatus && error.status === 503) {
+  } catch (error: any) {
+    if (error?.status === 503) {
       logger.info(`Mellomlagring ga 'Service is unavailable (503). Prøver på nytt`);
       if (retryCount > 0) {
+        logger.info(`Gjør nytt mellomlagringskall. RetryCount: ${retryCount}`);
         await new Promise((resolve) => setTimeout(resolve, 300));
         const mellomlagretSøknad: any = await lesBucket(type, accessToken, retryCount - 1);
         return mellomlagretSøknad;
@@ -66,6 +67,7 @@ export const lesBucket = async (type: SøknadsType, accessToken?: string, retryC
       }
     }
     logger.info('Fant ingen mellomlagret søknad');
+    logger.info(`Error fra tokenXProxy er: ${JSON.stringify(error)}`);
     return undefined;
   }
 };
