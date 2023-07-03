@@ -1,16 +1,6 @@
 import { Soknad } from 'types/Soknad';
 import React, { useEffect, useMemo, useState } from 'react';
-import {
-  Alert,
-  BodyShort,
-  DatePicker,
-  Heading,
-  Label,
-  Radio,
-  RadioGroup,
-  TextField,
-  useDatepicker,
-} from '@navikt/ds-react';
+import { Alert, BodyShort, Heading, Label, Radio, RadioGroup, TextField } from '@navikt/ds-react';
 import { JaEllerNei } from 'types/Generic';
 import ColorPanel from 'components/panel/ColorPanel';
 import * as yup from 'yup';
@@ -28,6 +18,8 @@ import { validate } from '../../../../lib/utils/validationUtils';
 import { logSkjemastegFullførtEvent } from '../../../../utils/amplitude';
 import { SøknadValidationError } from '../../../schema/FormErrorSummaryNew';
 import { IntlFormatters, useIntl } from 'react-intl';
+import TilDato from './TilDato';
+import FraDato from './FraDato';
 
 export enum FerieType {
   DAGER = 'DAGER',
@@ -150,31 +142,63 @@ const StartDato = ({ onBackClick, defaultValues }: Props) => {
     [formatMessage]
   );
 
-  const { datepickerProps: fraDatoProps, inputProps: fraDatoInputProps } = useDatepicker({
-    fromDate: new Date(),
-    onDateChange: (value) => {
-      clearErrors();
+  useEffect(() => {
+    if (søknadState.søknad?.sykepenger !== JaEllerNei.JA) {
       updateSøknadData(søknadDispatch, {
-        ferie: { ...søknadState?.søknad?.ferie, fraDato: value },
+        ferie: {
+          ...søknadState.søknad?.ferie,
+          skalHaFerie: '',
+        },
       });
-    },
-    ...(defaultValues?.søknad?.ferie?.fraDato !== undefined && {
-      defaultSelected: new Date(defaultValues.søknad.ferie.fraDato),
-    }),
-  });
+    }
+    clearErrors();
+  }, [søknadState.søknad?.sykepenger]);
 
-  const { datepickerProps: tilDatoProps, inputProps: tilDatoInputProps } = useDatepicker({
-    fromDate: new Date(),
-    onDateChange: (value) => {
-      clearErrors();
+  useEffect(() => {
+    if (søknadState.søknad?.ferie?.skalHaFerie !== JaEllerNei.JA) {
       updateSøknadData(søknadDispatch, {
-        ferie: { ...søknadState?.søknad?.ferie, tilDato: value },
+        ferie: {
+          ...søknadState.søknad?.ferie,
+          ferieType: undefined,
+        },
       });
-    },
-    ...(defaultValues?.søknad?.ferie?.tilDato !== undefined && {
-      defaultSelected: new Date(defaultValues.søknad.ferie.tilDato),
-    }),
-  });
+    }
+    clearErrors();
+  }, [søknadState.søknad?.ferie?.skalHaFerie]);
+
+  useEffect(() => {
+    if (!søknadState.søknad?.ferie?.ferieType) {
+      updateSøknadData(søknadDispatch, {
+        ferie: {
+          ...søknadState.søknad?.ferie,
+          fraDato: undefined,
+          tilDato: undefined,
+          antallDager: undefined,
+        },
+      });
+    } else {
+      if (søknadState?.søknad?.ferie?.ferieType != FerieType.PERIODE) {
+        updateSøknadData(søknadDispatch, {
+          ferie: {
+            ...søknadState.søknad?.ferie,
+            fraDato: undefined,
+            tilDato: undefined,
+          },
+        });
+      }
+
+      if (søknadState?.søknad?.ferie?.ferieType != FerieType.DAGER) {
+        updateSøknadData(søknadDispatch, {
+          ferie: {
+            ...søknadState.søknad?.ferie,
+            antallDager: undefined,
+          },
+        });
+      }
+    }
+
+    clearErrors();
+  }, [søknadState.søknad?.ferie?.ferieType]);
 
   function clearErrors() {
     setErrors(undefined);
@@ -276,24 +300,16 @@ const StartDato = ({ onBackClick, defaultValues }: Props) => {
             <div className={classes?.periodeContainer}>
               <Label>{formatMessage({ id: 'søknad.startDato.periode.label' })}</Label>
               <div className={classes?.datoContainer}>
-                <DatePicker {...fraDatoProps}>
-                  <DatePicker.Input
-                    {...fraDatoInputProps}
-                    label={formatMessage({ id: 'søknad.startDato.periode.fraDato.label' })}
-                    name={'ferie.fraDato'}
-                    id={'ferie.fraDato'}
-                    error={findError('ferie.fraDato')}
-                  />
-                </DatePicker>
-                <DatePicker {...tilDatoProps}>
-                  <DatePicker.Input
-                    {...tilDatoInputProps}
-                    label={formatMessage({ id: 'søknad.startDato.periode.tilDato.label' })}
-                    name={'ferie.tilDato'}
-                    id={'ferie.tilDato'}
-                    error={findError('ferie.tilDato')}
-                  />
-                </DatePicker>
+                <FraDato
+                  clearErrors={clearErrors}
+                  errorMessage={findError('ferie.fraDato')}
+                  defaultValues={defaultValues}
+                />
+                <TilDato
+                  clearErrors={clearErrors}
+                  errorMessage={findError('ferie.tilDato')}
+                  defaultValues={defaultValues}
+                />
               </div>
             </div>
           )}
