@@ -131,18 +131,15 @@ export const getAndreUtbetalingerSchema = (formatMessage: IntlFormatters['format
     }),
   });
 
-export const AndreUtbetalinger = ({ onBackClick, onNext, defaultValues }: Props) => {
+export const AndreUtbetalinger = ({ onBackClick, defaultValues }: Props) => {
   const { formatMessage } = useIntl();
   const { søknadState, søknadDispatch } = useSoknadContextStandard();
   const { stepList, currentStepIndex, stepWizardDispatch } = useStepWizard();
 
   const debouncedLagre = useDebounceLagreSoknad<Soknad>();
-  // const allFields = useWatch({ control });
   useEffect(() => {
     debouncedLagre(søknadState, stepList, {});
   }, [søknadState.søknad?.andreUtbetalinger]);
-  // const lønnEtterlønnEllerSluttpakke = useWatch({ control, name: `${ANDRE_UTBETALINGER}.${LØNN}` });
-  // const stønadEllerVerv = useWatch({ control, name: `${ANDRE_UTBETALINGER}.${STØNAD}` });
   const StønadAlternativer = useMemo(
     () => ({
       [StønadType.ØKONOMISK_SOSIALHJELP]: formatMessage({
@@ -216,8 +213,8 @@ export const AndreUtbetalinger = ({ onBackClick, onNext, defaultValues }: Props)
     }
     return attachments;
   }, [søknadState.søknad?.andreUtbetalinger?.stønad, søknadState.søknad?.andreUtbetalinger?.lønn]);
+
   useEffect(() => {
-    // håndterer toggling av checkboxer (fjerner valg ved 'nei' og 'nei' ved andre valg)
     const lastChecked = søknadState.søknad?.andreUtbetalinger?.stønad?.slice(-1)?.[0];
     if (lastChecked === StønadType.NEI) {
       if ((søknadState.søknad?.andreUtbetalinger?.stønad?.length ?? 0) > 1) {
@@ -227,7 +224,6 @@ export const AndreUtbetalinger = ({ onBackClick, onNext, defaultValues }: Props)
             stønad: [StønadType.NEI],
           },
         });
-        // setValue(`${ANDRE_UTBETALINGER}.${STØNAD}`, [StønadType.NEI]);
       }
     } else if (søknadState.søknad?.andreUtbetalinger?.stønad?.includes(StønadType.NEI)) {
       const newList = [...søknadState.søknad?.andreUtbetalinger?.stønad].filter(
@@ -239,7 +235,6 @@ export const AndreUtbetalinger = ({ onBackClick, onNext, defaultValues }: Props)
           stønad: newList,
         },
       });
-      // setValue(`${ANDRE_UTBETALINGER}.${STØNAD}`, newList);
     }
   }, [søknadState.søknad?.andreUtbetalinger?.stønad]);
 
