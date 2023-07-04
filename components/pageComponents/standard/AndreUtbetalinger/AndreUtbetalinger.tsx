@@ -36,7 +36,6 @@ import { logSkjemastegFullførtEvent } from '../../../../utils/amplitude';
 
 interface Props {
   onBackClick: () => void;
-  onNext: (data: any) => void;
   defaultValues?: GenericSoknadContextState<Soknad>;
 }
 export enum AttachmentType {
