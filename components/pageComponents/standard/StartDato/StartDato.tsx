@@ -132,7 +132,7 @@ const StartDato = ({ onBackClick, defaultValues }: Props) => {
 
   useEffect(() => {
     debouncedLagre(søknadState, stepList, {});
-  }, [søknadState.søknad?.yrkesskade]);
+  }, [søknadState.søknad?.sykepenger, søknadState.søknad?.ferie]);
 
   const FerieTypeTekster = useMemo(
     () => ({
