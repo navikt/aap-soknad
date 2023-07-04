@@ -38,6 +38,11 @@ interface Props {
   onBackClick: () => void;
   defaultValues?: GenericSoknadContextState<Soknad>;
 }
+
+type StønadAlternativer = {
+  [key in StønadType]: string;
+};
+
 export enum AttachmentType {
   LØNN_OG_ANDRE_GODER = 'LØNN_OG_ANDRE_GODER',
   OMSORGSSTØNAD = 'OMSORGSSTØNAD',
@@ -115,47 +120,35 @@ export const getAndreUtbetalingerSchema = (formatMessage: IntlFormatters['format
   });
 
 export const AndreUtbetalinger = ({ onBackClick, defaultValues }: Props) => {
-  const { formatMessage } = useIntl();
+  const [errors, setErrors] = useState<SøknadValidationError[] | undefined>();
   const { søknadState, søknadDispatch } = useSoknadContextStandard();
   const { stepList, currentStepIndex, stepWizardDispatch } = useStepWizard();
-
+  const { formatMessage } = useIntl();
   const debouncedLagre = useDebounceLagreSoknad<Soknad>();
+
   useEffect(() => {
     debouncedLagre(søknadState, stepList, {});
   }, [søknadState.søknad?.andreUtbetalinger]);
 
-  const StønadAlternativer = useMemo(
-    () => ({
-      [StønadType.ØKONOMISK_SOSIALHJELP]: formatMessage({
-        id: stønadTypeToAlternativNøkkel(StønadType.ØKONOMISK_SOSIALHJELP),
-      }),
-      [StønadType.OMSORGSSTØNAD]: formatMessage({
-        id: stønadTypeToAlternativNøkkel(StønadType.OMSORGSSTØNAD),
-      }),
-      [StønadType.INTRODUKSJONSSTØNAD]: formatMessage({
-        id: stønadTypeToAlternativNøkkel(StønadType.INTRODUKSJONSSTØNAD),
-      }),
-      [StønadType.KVALIFISERINGSSTØNAD]: formatMessage({
-        id: stønadTypeToAlternativNøkkel(StønadType.KVALIFISERINGSSTØNAD),
-      }),
-      [StønadType.VERV]: formatMessage({ id: stønadTypeToAlternativNøkkel(StønadType.VERV) }),
-      [StønadType.UTLAND]: formatMessage({ id: stønadTypeToAlternativNøkkel(StønadType.UTLAND) }),
-      [StønadType.AFP]: formatMessage({ id: stønadTypeToAlternativNøkkel(StønadType.AFP) }),
-      [StønadType.STIPEND]: formatMessage({ id: stønadTypeToAlternativNøkkel(StønadType.STIPEND) }),
-      [StønadType.LÅN]: formatMessage({ id: stønadTypeToAlternativNøkkel(StønadType.LÅN) }),
-      [StønadType.NEI]: formatMessage({ id: stønadTypeToAlternativNøkkel(StønadType.NEI) }),
-    }),
-    [formatMessage]
-  );
-  const Attachments = useMemo(() => {
-    function addAttachment(type: AttachmentType, id: string): void {
+  const StønadAlternativer = useMemo(() => {
+    const stønadTypes: StønadType[] = Object.keys(StønadType) as StønadType[];
+    return stønadTypes.reduce((acc, stønadType) => {
+      acc[stønadType] = formatMessage({
+        id: stønadTypeToAlternativNøkkel(stønadType),
+      });
+      return acc;
+    }, {} as StønadAlternativer);
+  }, [formatMessage]);
+
+  const attachments = useMemo(() => {
+    function addAttachment(type: AttachmentType, id: string) {
       attachments.push({
         type,
         description: formatMessage({ id }),
       });
     }
 
-    let attachments: Array<{ type: string; description: string }> = [];
+    let attachments: Array<{ type: AttachmentType; description: string }> = [];
 
     if (søknadState.søknad?.andreUtbetalinger?.stønad?.includes(StønadType.OMSORGSSTØNAD)) {
       addAttachment(AttachmentType.OMSORGSSTØNAD, 'søknad.andreUtbetalinger.vedlegg.omsorgsstønad');
@@ -208,9 +201,8 @@ export const AndreUtbetalinger = ({ onBackClick, defaultValues }: Props) => {
     removeRequiredVedlegg(AttachmentType.SYKESTIPEND, søknadDispatch);
     removeRequiredVedlegg(AttachmentType.LÅN, søknadDispatch);
     removeRequiredVedlegg(AttachmentType.LØNN_OG_ANDRE_GODER, søknadDispatch);
-    addRequiredVedlegg(Attachments, søknadDispatch);
-  }, [Attachments]);
-  const [errors, setErrors] = useState<SøknadValidationError[] | undefined>();
+    addRequiredVedlegg(attachments, søknadDispatch);
+  }, [attachments]);
 
   return (
     <SoknadFormWrapperNew
@@ -337,11 +329,11 @@ export const AndreUtbetalinger = ({ onBackClick, defaultValues }: Props) => {
         <Checkbox value={StønadType.STIPEND}>{StønadAlternativer.STIPEND}</Checkbox>
         <Checkbox value={StønadType.NEI}>{StønadAlternativer.NEI}</Checkbox>
       </CheckboxGroup>
-      {Attachments.length > 0 && (
+      {attachments.length > 0 && (
         <Alert variant={'info'}>
           {formatMessage({ id: 'søknad.andreUtbetalinger.alert.leggeVedTekst' })}
           <ul>
-            {Attachments.map((attachment, index) => (
+            {attachments.map((attachment, index) => (
               <li key={index}>{attachment?.description}</li>
             ))}
           </ul>
