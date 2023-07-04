@@ -62,16 +62,7 @@ export enum StønadType {
   NEI = 'NEI',
 }
 
-export interface AndreUtbetalingerFormFields {
-  lønn?: string;
-  stønad?: Array<StønadType>;
-  afp?: {
-    hvemBetaler?: string;
-  };
-}
-
 const ANDRE_UTBETALINGER = 'andreUtbetalinger';
-const LØNN = 'lønn';
 const STØNAD = 'stønad';
 const AFP = 'afp';
 const HVEMBETALER = 'hvemBetaler';
@@ -250,7 +241,7 @@ export const AndreUtbetalinger = ({ onBackClick, defaultValues }: Props) => {
 
   return (
     <SoknadFormWrapperNew
-      onNext={async (data) => {
+      onNext={async () => {
         const errors = await validate(
           getAndreUtbetalingerSchema(formatMessage),
           søknadState.søknad?.andreUtbetalinger
@@ -284,11 +275,11 @@ export const AndreUtbetalinger = ({ onBackClick, defaultValues }: Props) => {
       </LucaGuidePanel>
       <RadioGroup
         legend={formatMessage({ id: 'søknad.andreUtbetalinger.lønn.label' })}
-        name={`${ANDRE_UTBETALINGER}.${LØNN}`}
-        id={`${ANDRE_UTBETALINGER}.${LØNN}`}
+        name={'lønn'}
+        id={'lønn'}
         value={defaultValues?.søknad?.andreUtbetalinger?.lønn || ''}
         onChange={(value) => {
-          setErrors(errors?.filter((error) => error.path != 'andreUtbetalinger.lønn'));
+          setErrors(errors?.filter((error) => error.path != 'lønn'));
           updateSøknadData(søknadDispatch, {
             andreUtbetalinger: {
               ...søknadState.søknad?.andreUtbetalinger,
@@ -296,6 +287,7 @@ export const AndreUtbetalinger = ({ onBackClick, defaultValues }: Props) => {
             },
           });
         }}
+        error={errors?.find((e) => e.path === 'lønn')?.message}
       >
         <ReadMore
           header={formatMessage({ id: 'søknad.andreUtbetalinger.lønn.readMore.title' })}
@@ -315,13 +307,13 @@ export const AndreUtbetalinger = ({ onBackClick, defaultValues }: Props) => {
         </Radio>
       </RadioGroup>
       <CheckboxGroup
-        name={`${ANDRE_UTBETALINGER}.${STØNAD}`}
-        id={`${ANDRE_UTBETALINGER}.${STØNAD}`}
+        name={'stønad'}
+        id={'stønad'}
         size="medium"
         legend={formatMessage({ id: 'søknad.andreUtbetalinger.stønad.label' })}
         value={defaultValues?.søknad?.andreUtbetalinger?.stønad || []}
         onChange={(value) => {
-          setErrors(errors?.filter((error) => error.path != 'andreUtbetalinger.stønad'));
+          setErrors(errors?.filter((error) => error.path != 'stønad'));
           updateSøknadData(søknadDispatch, {
             andreUtbetalinger: {
               ...søknadState.søknad?.andreUtbetalinger,
@@ -329,6 +321,7 @@ export const AndreUtbetalinger = ({ onBackClick, defaultValues }: Props) => {
             },
           });
         }}
+        error={errors?.find((e) => e.path === 'stønad')?.message}
       >
         <Checkbox value={StønadType.VERV}>{StønadAlternativer.VERV}</Checkbox>
         <Checkbox value={StønadType.ØKONOMISK_SOSIALHJELP}>
@@ -348,8 +341,20 @@ export const AndreUtbetalinger = ({ onBackClick, defaultValues }: Props) => {
             <Grid>
               <Cell xs={7}>
                 <TextField
-                  name={`${ANDRE_UTBETALINGER}.${AFP}.${HVEMBETALER}`}
+                  name={`${AFP}.${HVEMBETALER}`}
+                  id={`${AFP}.${HVEMBETALER}`}
+                  onChange={(e) =>
+                    updateSøknadData(søknadDispatch, {
+                      andreUtbetalinger: {
+                        ...søknadState.søknad?.andreUtbetalinger,
+                        afp: {
+                          hvemBetaler: e.target.value,
+                        },
+                      },
+                    })
+                  }
                   label={formatMessage({ id: 'søknad.andreUtbetalinger.hvemBetalerAfp.label' })}
+                  error={errors?.find((e) => e.path === 'afp.hvemBetaler')?.message}
                 />
               </Cell>
             </Grid>

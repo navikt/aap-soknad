@@ -26,7 +26,7 @@ export type UtenlandsPeriode = {
   iArbeid: JaEllerNei;
   utenlandsId?: string;
 };
-type Yrkesskade = JaEllerNei;
+
 export type Medlemskap = {
   harBoddINorgeSiste5År?: JaEllerNei;
   harArbeidetINorgeSiste5År?: JaEllerNei;
@@ -112,7 +112,7 @@ export type SoknadVedlegg = {
 
 export interface Soknad {
   sykepenger?: JaEllerNei;
-  yrkesskade?: Yrkesskade;
+  yrkesskade?: JaEllerNei;
   medlemskap?: Medlemskap;
   registrerteBehandlere?: RegistrertBehandler[];
   andreBehandlere?: Behandler[];
