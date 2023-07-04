@@ -153,52 +153,32 @@ export const AndreUtbetalinger = ({ onBackClick, defaultValues }: Props) => {
     [formatMessage]
   );
   const Attachments = useMemo(() => {
+    function addAttachment(type: AttachmentType, id: string): void {
+      attachments.push({
+        type,
+        description: formatMessage({ id }),
+      });
+    }
+
     let attachments: Array<{ type: string; description: string }> = [];
 
     if (søknadState.søknad?.andreUtbetalinger?.stønad?.includes(StønadType.OMSORGSSTØNAD)) {
-      attachments = [
-        ...attachments,
-        {
-          type: AttachmentType.OMSORGSSTØNAD,
-          description: formatMessage({ id: `søknad.andreUtbetalinger.vedlegg.omsorgsstønad` }),
-        },
-      ];
+      addAttachment(AttachmentType.OMSORGSSTØNAD, 'søknad.andreUtbetalinger.vedlegg.omsorgsstønad');
     }
     if (søknadState.søknad?.andreUtbetalinger?.stønad?.includes(StønadType.UTLAND)) {
-      attachments = [
-        ...attachments,
-        {
-          type: AttachmentType.UTLANDSSTØNAD,
-          description: formatMessage({ id: `søknad.andreUtbetalinger.vedlegg.utlandsStønad` }),
-        },
-      ];
+      addAttachment(AttachmentType.UTLANDSSTØNAD, 'søknad.andreUtbetalinger.vedlegg.utlandsStønad');
     }
     if (søknadState.søknad?.andreUtbetalinger?.stønad?.includes(StønadType.STIPEND)) {
-      attachments = [
-        ...attachments,
-        {
-          type: AttachmentType.SYKESTIPEND,
-          description: formatMessage({ id: `søknad.andreUtbetalinger.vedlegg.sykeStipend` }),
-        },
-      ];
+      addAttachment(AttachmentType.SYKESTIPEND, 'søknad.andreUtbetalinger.vedlegg.sykeStipend');
     }
     if (søknadState.søknad?.andreUtbetalinger?.stønad?.includes(StønadType.LÅN)) {
-      attachments = [
-        ...attachments,
-        {
-          type: AttachmentType.LÅN,
-          description: formatMessage({ id: `søknad.andreUtbetalinger.vedlegg.lån` }),
-        },
-      ];
+      addAttachment(AttachmentType.LÅN, 'søknad.andreUtbetalinger.vedlegg.lån');
     }
     if (søknadState.søknad?.andreUtbetalinger?.lønn === JaEllerNei.JA) {
-      attachments = [
-        ...attachments,
-        {
-          type: AttachmentType.LØNN_OG_ANDRE_GODER,
-          description: formatMessage({ id: `søknad.andreUtbetalinger.vedlegg.andreGoder` }),
-        },
-      ];
+      addAttachment(
+        AttachmentType.LØNN_OG_ANDRE_GODER,
+        'søknad.andreUtbetalinger.vedlegg.andreGoder'
+      );
     }
     return attachments;
   }, [søknadState.søknad?.andreUtbetalinger?.stønad, søknadState.søknad?.andreUtbetalinger?.lønn]);
