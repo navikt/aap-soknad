@@ -61,33 +61,28 @@ export enum StønadType {
   NEI = 'NEI',
 }
 
-const ANDRE_UTBETALINGER = 'andreUtbetalinger';
-const STØNAD = 'stønad';
-const AFP = 'afp';
-const HVEMBETALER = 'hvemBetaler';
-
 export const stønadTypeToAlternativNøkkel = (stønadType: StønadType) => {
   switch (stønadType) {
     case StønadType.ØKONOMISK_SOSIALHJELP:
-      return `søknad.${ANDRE_UTBETALINGER}.${STØNAD}.values.økonomiskSosialhjelp`;
+      return 'søknad.andreUtbetalinger.stønad.values.økonomiskSosialhjelp';
     case StønadType.OMSORGSSTØNAD:
-      return `søknad.${ANDRE_UTBETALINGER}.${STØNAD}.values.omsorgsstønad`;
+      return 'søknad.andreUtbetalinger.stønad.values.omsorgsstønad';
     case StønadType.INTRODUKSJONSSTØNAD:
-      return `søknad.${ANDRE_UTBETALINGER}.${STØNAD}.values.introduksjonsStønad`;
+      return 'søknad.andreUtbetalinger.stønad.values.introduksjonsStønad';
     case StønadType.KVALIFISERINGSSTØNAD:
-      return `søknad.${ANDRE_UTBETALINGER}.${STØNAD}.values.kvalifiseringsstønad`;
+      return 'søknad.andreUtbetalinger.stønad.values.kvalifiseringsstønad';
     case StønadType.VERV:
-      return `søknad.${ANDRE_UTBETALINGER}.${STØNAD}.values.verv`;
+      return 'søknad.andreUtbetalinger.stønad.values.verv';
     case StønadType.UTLAND:
-      return `søknad.${ANDRE_UTBETALINGER}.${STØNAD}.values.utland`;
+      return 'søknad.andreUtbetalinger.stønad.values.utland';
     case StønadType.AFP:
-      return `søknad.${ANDRE_UTBETALINGER}.${STØNAD}.values.afp`;
+      return 'søknad.andreUtbetalinger.stønad.values.afp';
     case StønadType.STIPEND:
-      return `søknad.${ANDRE_UTBETALINGER}.${STØNAD}.values.stipend`;
+      return 'søknad.andreUtbetalinger.stønad.values.stipend';
     case StønadType.LÅN:
-      return `søknad.${ANDRE_UTBETALINGER}.${STØNAD}.values.lån`;
+      return 'søknad.andreUtbetalinger.stønad.values.lån';
     case StønadType.NEI:
-      return `søknad.${ANDRE_UTBETALINGER}.${STØNAD}.values.nei`;
+      return 'søknad.andreUtbetalinger.stønad.values.nei';
   }
 };
 export const getAndreUtbetalingerSchema = (formatMessage: IntlFormatters['formatMessage']) =>
@@ -319,8 +314,8 @@ export const AndreUtbetalinger = ({ onBackClick, defaultValues }: Props) => {
             <Grid>
               <Cell xs={7}>
                 <TextField
-                  name={`${AFP}.${HVEMBETALER}`}
-                  id={`${AFP}.${HVEMBETALER}`}
+                  name={'afp.hvemBetaler'}
+                  id={'afp.hvemBetaler'}
                   onChange={(e) =>
                     updateSøknadData(søknadDispatch, {
                       andreUtbetalinger: {
