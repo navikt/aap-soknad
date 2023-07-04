@@ -279,10 +279,16 @@ export const AndreUtbetalinger = ({ onBackClick, defaultValues }: Props) => {
         value={defaultValues?.søknad?.andreUtbetalinger?.stønad || []}
         onChange={(value) => {
           setErrors(errors?.filter((error) => error.path != 'stønad'));
+          const afpErValgt = value.includes(StønadType.AFP);
           updateSøknadData(søknadDispatch, {
             andreUtbetalinger: {
               ...søknadState.søknad?.andreUtbetalinger,
               stønad: value,
+              afp: {
+                hvemBetaler: afpErValgt
+                  ? søknadState.søknad?.andreUtbetalinger?.afp?.hvemBetaler
+                  : undefined,
+              },
             },
           });
         }}
