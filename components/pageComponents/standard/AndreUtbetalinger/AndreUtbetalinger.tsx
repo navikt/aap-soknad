@@ -92,33 +92,31 @@ export const stønadTypeToAlternativNøkkel = (stønadType: StønadType) => {
 };
 export const getAndreUtbetalingerSchema = (formatMessage: IntlFormatters['formatMessage']) =>
   yup.object().shape({
-    andreUtbetalinger: yup.object().shape({
-      lønn: yup
-        .string()
-        .required(formatMessage({ id: 'søknad.andreUtbetalinger.lønn.validation.required' }))
-        .oneOf([JaEllerNei.JA, JaEllerNei.NEI])
-        .nullable(),
-      stønad: yup
-        .array()
-        .ensure()
-        .min(1, formatMessage({ id: 'søknad.andreUtbetalinger.stønad.validation.required' })),
-      afp: yup
-        .object({
-          hvemBetaler: yup.string().nullable(),
-        })
-        .when('stønad', ([stønad], schema) => {
-          if (stønad?.includes(StønadType.AFP)) {
-            return yup.object({
-              hvemBetaler: yup.string().required(
-                formatMessage({
-                  id: 'søknad.andreUtbetalinger.hvemBetalerAfp.validation.required',
-                })
-              ),
-            });
-          }
-          return schema;
-        }),
-    }),
+    lønn: yup
+      .string()
+      .required(formatMessage({ id: 'søknad.andreUtbetalinger.lønn.validation.required' }))
+      .oneOf([JaEllerNei.JA, JaEllerNei.NEI])
+      .nullable(),
+    stønad: yup
+      .array()
+      .ensure()
+      .min(1, formatMessage({ id: 'søknad.andreUtbetalinger.stønad.validation.required' })),
+    afp: yup
+      .object({
+        hvemBetaler: yup.string().nullable(),
+      })
+      .when('stønad', ([stønad], schema) => {
+        if (stønad?.includes(StønadType.AFP)) {
+          return yup.object({
+            hvemBetaler: yup.string().required(
+              formatMessage({
+                id: 'søknad.andreUtbetalinger.hvemBetalerAfp.validation.required',
+              })
+            ),
+          });
+        }
+        return schema;
+      }),
   });
 
 export const AndreUtbetalinger = ({ onBackClick, defaultValues }: Props) => {
@@ -130,6 +128,7 @@ export const AndreUtbetalinger = ({ onBackClick, defaultValues }: Props) => {
   useEffect(() => {
     debouncedLagre(søknadState, stepList, {});
   }, [søknadState.søknad?.andreUtbetalinger]);
+
   const StønadAlternativer = useMemo(
     () => ({
       [StønadType.ØKONOMISK_SOSIALHJELP]: formatMessage({

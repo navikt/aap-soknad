@@ -83,7 +83,10 @@ const Oppsummering = ({
 
   const [toggleAll, setToggleAll] = useState<boolean | undefined>(undefined);
   const [startDatoHasErrors] = useState<boolean>(
-    !getStartDatoSchema(formatMessage).isValidSync(søknadState.søknad)
+    !getStartDatoSchema(formatMessage).isValidSync({
+      sykepenger: søknadState.søknad?.sykepenger,
+      ferie: søknadState.søknad?.ferie,
+    })
   );
   const [medlemskapHasErrors] = useState<boolean>(
     !getMedlemskapSchema(formatMessage).isValidSync(søknadState.søknad)
@@ -183,7 +186,7 @@ const Oppsummering = ({
           editText={formatMessage({ id: 'søknad.oppsummering.startDato.editText' })}
           toggleAll={toggleAll}
           onEdit={() => editStep(StepNames.STARTDATO)}
-          hasError={!getStartDatoSchema(formatMessage).isValidSync(søknadState?.søknad)}
+          hasError={startDatoHasErrors}
         >
           <SummaryRowIfExists
             labelKey="søknad.startDato.sykepenger.legend"
@@ -227,7 +230,7 @@ const Oppsummering = ({
           editText={formatMessage({ id: 'søknad.oppsummering.medlemskap.editText' })}
           toggleAll={toggleAll}
           onEdit={() => editStep(StepNames.MEDLEMSKAP)}
-          hasError={!getMedlemskapSchema(formatMessage).isValidSync(søknadState?.søknad)}
+          hasError={medlemskapHasErrors}
         >
           <SummaryRowIfExists
             labelKey={'søknad.medlemskap.harBoddINorgeSiste5År.label'}
@@ -264,7 +267,7 @@ const Oppsummering = ({
           editText={formatMessage({ id: 'søknad.oppsummering.yrkesskade.editText' })}
           toggleAll={toggleAll}
           onEdit={() => editStep(StepNames.YRKESSKADE)}
-          hasError={!getYrkesskadeSchema(formatMessage).isValidSync(søknadState?.søknad)}
+          hasError={yrkesskadeHasErrors}
         >
           <SummaryRowIfExists
             labelKey={`søknad.yrkesskade.harDuYrkesskade.label`}
@@ -276,7 +279,7 @@ const Oppsummering = ({
           editText={formatMessage({ id: 'søknad.oppsummering.helseopplysninger.editText' })}
           toggleAll={toggleAll}
           onEdit={() => editStep(StepNames.FASTLEGE)}
-          hasError={!getBehandlerSchema(formatMessage).isValidSync(søknadState?.søknad)}
+          hasError={behandlereHasErrors}
         >
           <>
             {søknadState?.søknad?.registrerteBehandlere?.map((behandler, index) => (
@@ -306,8 +309,7 @@ const Oppsummering = ({
           editText={formatMessage({ id: 'søknad.oppsummering.barnetillegg.editText' })}
           toggleAll={toggleAll}
           onEdit={() => editStep(StepNames.BARNETILLEGG)}
-          //@ts-ignore
-          hasError={!getBarnetillegSchema(formatMessage).isValidSync(søknadState?.søknad)}
+          hasError={barnetilleggHasErrors}
         >
           <>
             {søknadState?.søknad?.[BARN]?.map((barn, index) => (
