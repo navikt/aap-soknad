@@ -220,7 +220,6 @@ export const AndreUtbetalinger = ({ onBackClick, defaultValues }: Props) => {
         completeAndGoToNextStep(stepWizardDispatch);
       }}
       onBack={() => {
-        updateSøknadData<Soknad>(søknadDispatch, { ...søknadState.søknad });
         onBackClick();
       }}
       onDelete={async () => {
