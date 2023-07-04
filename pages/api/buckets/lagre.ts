@@ -8,6 +8,7 @@ import { isLabs, isMock } from 'utils/environments';
 import { getStringFromPossiblyArrayQuery } from 'utils/string';
 import metrics from 'utils/metrics';
 import { lesBucket } from './les';
+import { StepType } from '../../../components/StepWizard/Step';
 
 const handler = beskyttetApi(async (req: NextApiRequest, res: NextApiResponse) => {
   const type = getStringFromPossiblyArrayQuery(req.query.type);
@@ -23,7 +24,13 @@ const handler = beskyttetApi(async (req: NextApiRequest, res: NextApiResponse) =
     Object.keys(eksisterendeSøknad.søknad).length > 0 &&
     Object.keys(req.body.søknad).length === 0
   ) {
-    logger.error('Overskriver eksisterende søknad med en tom søknad');
+    const activeStepIndex = eksisterendeSøknad?.lagretStepList?.find(
+      (e: StepType) => e.active
+    )?.stepIndex;
+
+    logger.error(
+      `Overskriver eksisterende søknad med en tom søknad på side ${activeStepIndex ?? 'ukjent'}`
+    );
   }
   await lagreBucket(type as SøknadsType, req.body, accessToken);
   res.status(201).json({});
