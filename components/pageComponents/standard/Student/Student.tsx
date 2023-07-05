@@ -98,7 +98,7 @@ const Student = ({ onBackClick, defaultValues }: Props) => {
 
   return (
     <SoknadFormWrapperNew
-      onNext={async (data) => {
+      onNext={async () => {
         const errors = await validate(getStudentSchema(formatMessage), søknadState.søknad?.student);
         if (errors) {
           setErrors(errors);
@@ -127,13 +127,6 @@ const Student = ({ onBackClick, defaultValues }: Props) => {
         updateSøknadData<Soknad>(søknadDispatch, { ...søknadState.søknad });
         onBackClick();
       }}
-      onDelete={async () => {
-        await deleteOpplastedeVedlegg(søknadState.søknad);
-        await slettLagretSoknadState<Soknad>(søknadDispatch, søknadState);
-      }}
-      nextButtonText={'Neste steg'}
-      backButtonText={'Forrige steg'}
-      cancelButtonText={'Avbryt søknad'}
       errors={errors}
     >
       <Heading size="large" level="2">

@@ -28,7 +28,6 @@ const SøknadFormWrapper = ({
   backButtonText,
   onNext,
   onBack,
-  onDelete,
   errors,
   nextIsLoading = false,
   className = '',
@@ -37,19 +36,7 @@ const SøknadFormWrapper = ({
   const { appState } = useAppStateContext();
   const [showLagreModal, setShowLagreModal] = useState<boolean>(false);
   const [showAvbrytModal, setShowAvbrytModal] = useState<boolean>(false);
-  const [isSlettingSøknad, setIsSlettingSøknad] = useState<boolean>(false);
-  const [slettSøknadSuccess, setSlettSøknadSuccess] = useState<boolean>(false);
-  const slettSøknadOgAvbryt = async () => {
-    try {
-      setIsSlettingSøknad(true);
-      await onDelete();
-      setIsSlettingSøknad(false);
-      setSlettSøknadSuccess(true);
-    } catch (err) {
-      setIsSlettingSøknad(false);
-      console.error(err);
-    }
-  };
+
   return (
     <>
       <form
@@ -107,13 +94,7 @@ const SøknadFormWrapper = ({
         </div>
       </form>
       <LagreModal isOpen={showLagreModal} onClose={(value) => setShowLagreModal(value)} />
-      <SlettModal
-        isOpen={showAvbrytModal}
-        onClose={(value: boolean) => setShowAvbrytModal(value)}
-        slettSøknadSuccess={slettSøknadSuccess}
-        isDeletingSøknad={isSlettingSøknad}
-        slettSøknadOgAvbryt={() => slettSøknadOgAvbryt()}
-      />
+      <SlettModal isOpen={showAvbrytModal} onClose={(value) => setShowAvbrytModal(value)} />
     </>
   );
 };
