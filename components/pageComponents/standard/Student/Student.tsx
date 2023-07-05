@@ -9,10 +9,9 @@ import { LucaGuidePanel } from '@navikt/aap-felles-react';
 import {
   addRequiredVedlegg,
   removeRequiredVedlegg,
-  slettLagretSoknadState,
   updateSøknadData,
 } from 'context/soknadContextCommon';
-import { deleteOpplastedeVedlegg, useSoknadContextStandard } from 'context/soknadContextStandard';
+import { useSoknadContextStandard } from 'context/soknadContextStandard';
 import { useDebounceLagreSoknad } from 'hooks/useDebounceLagreSoknad';
 import { GenericSoknadContextState } from 'types/SoknadContext';
 import { setFocusOnErrorSummary } from 'components/schema/FormErrorSummary';
