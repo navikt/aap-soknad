@@ -2,13 +2,13 @@ import React, { createContext, Dispatch, useContext, useMemo, useReducer } from 
 import structuredClone from '@ungap/structured-clone';
 import { GenericSoknadContextState, SøknadType } from 'types/SoknadContext';
 import {
-  soknadContextInititalState,
-  SoknadAction,
-  SoknadContextData,
   ProviderProps,
+  SoknadAction,
   SoknadActionKeys,
+  SoknadContextData,
+  soknadContextInititalState,
 } from './soknadContextCommon';
-import { RegistrertBehandler, Soknad, Vedlegg } from 'types/Soknad';
+import { RegistrertBehandler, Soknad } from 'types/Soknad';
 import { OppslagBarn, OppslagBehandler } from './sokerOppslagContext';
 import { BARN } from 'components/pageComponents/standard/Barnetillegg/Barnetillegg';
 
@@ -159,9 +159,8 @@ export const addBehandlerIfMissing = (
 
 export const getVedleggUuidsFromSoknad = (søknad?: Soknad) => {
   const vedlegg = søknad?.vedlegg;
-  console.log('vedlegg', vedlegg);
   return Object.values(vedlegg ?? {})
-    .reduce((acc: Vedlegg[], v: Vedlegg[]) => {
+    .reduce((acc, v) => {
       return acc.concat(v);
     }, [])
     .map((v) => v.vedleggId);

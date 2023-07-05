@@ -4,24 +4,41 @@ import { Alert, Button, Heading, Loader, Modal } from '@navikt/ds-react';
 import * as classes from './SoknadFormWrapper.module.css';
 import { SuccessStroke } from '@navikt/ds-icons';
 import { clientSideIsProd } from '../../utils/environments';
-import React from 'react';
+import React, { useState } from 'react';
+import {
+  deleteOpplastedeVedlegg,
+  useSoknadContextStandard,
+} from '../../context/soknadContextStandard';
+import { slettLagretSoknadState } from '../../context/soknadContextCommon';
+import { Soknad } from '../../types/Soknad';
 
 interface Props {
   isOpen: boolean;
   onClose: (value: boolean) => void;
-  slettSøknadSuccess: boolean;
-  isDeletingSøknad: boolean;
-  slettSøknadOgAvbryt: () => void;
 }
-const SlettModal = ({
-  isOpen,
-  onClose,
-  slettSøknadSuccess,
-  isDeletingSøknad,
-  slettSøknadOgAvbryt,
-}: Props) => {
+const SlettModal = ({ isOpen, onClose }: Props) => {
+  const [isDeletingSøknad, setIsDeletingSøknad] = useState<boolean>(false);
+  const [slettSøknadSuccess, setSlettSøknadSuccess] = useState<boolean>(false);
+  const { søknadState, søknadDispatch } = useSoknadContextStandard();
   const { formatMessage } = useIntl();
   const router = useRouter();
+
+  async function onDelete() {
+    await deleteOpplastedeVedlegg(søknadState.søknad);
+    await slettLagretSoknadState<Soknad>(søknadDispatch, søknadState);
+  }
+
+  const slettSøknadOgAvbryt = async () => {
+    try {
+      setIsDeletingSøknad(true);
+      await onDelete();
+      setIsDeletingSøknad(false);
+      setSlettSøknadSuccess(true);
+    } catch (err) {
+      setIsDeletingSøknad(false);
+      console.error(err);
+    }
+  };
   return (
     <Modal
       open={isOpen}

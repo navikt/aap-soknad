@@ -14,8 +14,8 @@ import { JaEllerNei } from 'types/Generic';
 import * as yup from 'yup';
 import { completeAndGoToNextStep, useStepWizard } from 'context/stepWizardContextV2';
 import { LucaGuidePanel } from '@navikt/aap-felles-react';
-import { slettLagretSoknadState, updateSøknadData } from 'context/soknadContextCommon';
-import { deleteOpplastedeVedlegg, useSoknadContextStandard } from 'context/soknadContextStandard';
+import { updateSøknadData } from 'context/soknadContextCommon';
+import { useSoknadContextStandard } from 'context/soknadContextStandard';
 import { useDebounceLagreSoknad } from 'hooks/useDebounceLagreSoknad';
 import { GenericSoknadContextState } from 'types/SoknadContext';
 import { setFocusOnErrorSummary } from 'components/schema/FormErrorSummary';
@@ -55,7 +55,7 @@ export const Yrkesskade = ({ onBackClick, defaultValues }: Props) => {
 
   return (
     <SoknadFormWrapperNew
-      onNext={async (data) => {
+      onNext={async () => {
         const errors = await validate(getYrkesskadeSchema(formatMessage), søknadState.søknad);
         if (errors) {
           setErrors(errors);
@@ -70,13 +70,6 @@ export const Yrkesskade = ({ onBackClick, defaultValues }: Props) => {
         updateSøknadData<Soknad>(søknadDispatch, { ...søknadState.søknad });
         onBackClick();
       }}
-      onDelete={async () => {
-        await deleteOpplastedeVedlegg(søknadState.søknad);
-        await slettLagretSoknadState<Soknad>(søknadDispatch, søknadState);
-      }}
-      nextButtonText={formatMessage({ id: 'navigation.next' })}
-      backButtonText={formatMessage({ id: 'navigation.back' })}
-      cancelButtonText={formatMessage({ id: 'navigation.cancel' })}
       errors={errors}
     >
       <Heading size="large" level="2">

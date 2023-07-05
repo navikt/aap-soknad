@@ -8,53 +8,36 @@ import LagreModal from './LagreModal';
 import SlettModal from './SlettModal';
 
 interface Props {
-  children?: React.ReactNode;
-  nextButtonText: string;
-  backButtonText?: string;
-  cancelButtonText: string;
-  onNext: (data: any) => void;
+  children: React.ReactNode;
+  onNext: () => void;
   onBack?: () => void;
-  onDelete: () => Promise<any>;
+  nextButtonText?: string;
   nextIsLoading?: boolean;
-  focusOnErrors?: boolean;
   errors?: SøknadValidationError[];
   className?: string;
 }
 
-const SøknadFormWrapperNew = ({
-  children,
-  nextButtonText,
-  backButtonText,
-  onNext,
-  onBack,
-  onDelete,
-  errors,
-  nextIsLoading = false,
-  className = '',
-}: Props) => {
+const SøknadFormWrapperNew = (props: Props) => {
   const { formatMessage } = useIntl();
+  const {
+    children,
+    onNext,
+    onBack,
+    errors,
+    nextButtonText = formatMessage({ id: 'navigation.next' }),
+    nextIsLoading = false,
+    className,
+  } = props;
   const { appState } = useAppStateContext();
-  const [showLagreModal, setShowLagreModal] = useState<boolean>(false);
-  const [showAvbrytModal, setShowAvbrytModal] = useState<boolean>(false);
-  const [isSlettingSøknad, setIsSlettingSøknad] = useState<boolean>(false);
-  const [slettSøknadSuccess, setSlettSøknadSuccess] = useState<boolean>(false);
-  const slettSøknadOgAvbryt = async () => {
-    try {
-      setIsSlettingSøknad(true);
-      await onDelete();
-      setIsSlettingSøknad(false);
-      setSlettSøknadSuccess(true);
-    } catch (err) {
-      setIsSlettingSøknad(false);
-      console.error(err);
-    }
-  };
+  const [visLagreModal, setVisLagreModal] = useState<boolean>(false);
+  const [visAvbrytModal, setVisAvbrytModal] = useState<boolean>(false);
+
   return (
     <>
       <form
         onSubmit={(event) => {
           event.preventDefault();
-          onNext(event);
+          onNext();
         }}
         className={`${classes?.formContent} ${className}`}
       >
@@ -68,7 +51,7 @@ const SøknadFormWrapperNew = ({
               type="button"
               onClick={onBack}
             >
-              {backButtonText}
+              {formatMessage({ id: 'navigation.back' })}
             </Button>
           )}
           <Button
@@ -91,7 +74,7 @@ const SøknadFormWrapperNew = ({
             className={classes?.buttonSave}
             variant="tertiary"
             type="button"
-            onClick={() => setShowLagreModal(true)}
+            onClick={() => setVisLagreModal(true)}
           >
             {formatMessage({ id: 'navigation.save' })}
           </Button>
@@ -99,20 +82,14 @@ const SøknadFormWrapperNew = ({
             className={classes?.buttonCancel}
             variant="tertiary"
             type="button"
-            onClick={() => setShowAvbrytModal(true)}
+            onClick={() => setVisAvbrytModal(true)}
           >
             {formatMessage({ id: 'navigation.cancel' })}
           </Button>
         </div>
       </form>
-      <LagreModal isOpen={showLagreModal} onClose={(value) => setShowLagreModal(value)} />
-      <SlettModal
-        isOpen={showAvbrytModal}
-        onClose={(value: boolean) => setShowAvbrytModal(value)}
-        slettSøknadSuccess={slettSøknadSuccess}
-        isDeletingSøknad={isSlettingSøknad}
-        slettSøknadOgAvbryt={() => slettSøknadOgAvbryt()}
-      />
+      <LagreModal isOpen={visLagreModal} onClose={(value) => setVisLagreModal(value)} />
+      <SlettModal isOpen={visAvbrytModal} onClose={(value) => setVisAvbrytModal(value)} />
     </>
   );
 };
