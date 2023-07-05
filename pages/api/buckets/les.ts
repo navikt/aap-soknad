@@ -52,6 +52,11 @@ export const lesBucket = async (type: SøknadsType, accessToken?: string, retryC
         `Cache version: ${mellomlagretSøknad?.version}, SØKNAD_CONTEXT_VERSION: ${SØKNAD_CONTEXT_VERSION}`
       );
     }
+
+    if (!mellomlagretSøknad) {
+      logger.info('Mellomlagret søknad returnert fra tokenXApiProxy er undefined');
+    }
+
     return mellomlagretSøknad;
   } catch (error: any) {
     if (error?.status === 503) {
