@@ -8,7 +8,7 @@ import LagreModal from './LagreModal';
 import SlettModal from './SlettModal';
 
 interface Props {
-  children?: React.ReactNode;
+  children: React.ReactNode;
   onNext: () => void;
   onBack?: () => void;
   nextButtonText?: string;
