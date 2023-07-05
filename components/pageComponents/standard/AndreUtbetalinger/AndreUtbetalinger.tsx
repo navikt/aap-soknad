@@ -1,15 +1,21 @@
-import { Alert, BodyShort, Cell, Checkbox, Grid, Heading, Radio, ReadMore } from '@navikt/ds-react';
-import React, { useEffect, useMemo } from 'react';
-import { useForm, useWatch } from 'react-hook-form';
-import CheckboxGroupWrapper from 'components/input/CheckboxGroupWrapper';
-import RadioGroupWrapper from 'components/input/RadioGroupWrapper/RadioGroupWrapper';
+import {
+  Alert,
+  BodyShort,
+  Cell,
+  Checkbox,
+  CheckboxGroup,
+  Grid,
+  Heading,
+  Radio,
+  RadioGroup,
+  ReadMore,
+  TextField,
+} from '@navikt/ds-react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { JaEllerNei } from 'types/Generic';
 import { Soknad } from 'types/Soknad';
 import * as yup from 'yup';
-import { useStepWizard } from 'context/stepWizardContextV2';
-import { yupResolver } from '@hookform/resolvers/yup';
-import SoknadFormWrapper from 'components/SoknadFormWrapper/SoknadFormWrapper';
-import TextFieldWrapper from 'components/input/TextFieldWrapper';
+import { completeAndGoToNextStep, useStepWizard } from 'context/stepWizardContextV2';
 import ColorPanel from 'components/panel/ColorPanel';
 import { LucaGuidePanel } from '@navikt/aap-felles-react';
 import {
@@ -23,12 +29,20 @@ import { useDebounceLagreSoknad } from 'hooks/useDebounceLagreSoknad';
 import { GenericSoknadContextState } from 'types/SoknadContext';
 import { setFocusOnErrorSummary } from 'components/schema/FormErrorSummary';
 import { IntlFormatters, useIntl } from 'react-intl';
+import SoknadFormWrapperNew from '../../../SoknadFormWrapper/SoknadFormWrapperNew';
+import { validate } from '../../../../lib/utils/validationUtils';
+import { SøknadValidationError } from '../../../schema/FormErrorSummaryNew';
+import { logSkjemastegFullførtEvent } from '../../../../utils/amplitude';
 
 interface Props {
   onBackClick: () => void;
-  onNext: (data: any) => void;
   defaultValues?: GenericSoknadContextState<Soknad>;
 }
+
+type StønadAlternativer = {
+  [key in StønadType]: string;
+};
+
 export enum AttachmentType {
   LØNN_OG_ANDRE_GODER = 'LØNN_OG_ANDRE_GODER',
   OMSORGSSTØNAD = 'OMSORGSSTØNAD',
@@ -52,183 +66,134 @@ export enum StønadType {
   NEI = 'NEI',
 }
 
-export interface AndreUtbetalingerFormFields {
-  lønn?: string;
-  stønad?: Array<StønadType>;
-  afp?: {
-    hvemBetaler?: string;
-  };
-}
-
-const ANDRE_UTBETALINGER = 'andreUtbetalinger';
-const LØNN = 'lønn';
-const STØNAD = 'stønad';
-const AFP = 'afp';
-const HVEMBETALER = 'hvemBetaler';
-
 export const stønadTypeToAlternativNøkkel = (stønadType: StønadType) => {
   switch (stønadType) {
     case StønadType.ØKONOMISK_SOSIALHJELP:
-      return `søknad.${ANDRE_UTBETALINGER}.${STØNAD}.values.økonomiskSosialhjelp`;
+      return 'søknad.andreUtbetalinger.stønad.values.økonomiskSosialhjelp';
     case StønadType.OMSORGSSTØNAD:
-      return `søknad.${ANDRE_UTBETALINGER}.${STØNAD}.values.omsorgsstønad`;
+      return 'søknad.andreUtbetalinger.stønad.values.omsorgsstønad';
     case StønadType.INTRODUKSJONSSTØNAD:
-      return `søknad.${ANDRE_UTBETALINGER}.${STØNAD}.values.introduksjonsStønad`;
+      return 'søknad.andreUtbetalinger.stønad.values.introduksjonsStønad';
     case StønadType.KVALIFISERINGSSTØNAD:
-      return `søknad.${ANDRE_UTBETALINGER}.${STØNAD}.values.kvalifiseringsstønad`;
+      return 'søknad.andreUtbetalinger.stønad.values.kvalifiseringsstønad';
     case StønadType.VERV:
-      return `søknad.${ANDRE_UTBETALINGER}.${STØNAD}.values.verv`;
+      return 'søknad.andreUtbetalinger.stønad.values.verv';
     case StønadType.UTLAND:
-      return `søknad.${ANDRE_UTBETALINGER}.${STØNAD}.values.utland`;
+      return 'søknad.andreUtbetalinger.stønad.values.utland';
     case StønadType.AFP:
-      return `søknad.${ANDRE_UTBETALINGER}.${STØNAD}.values.afp`;
+      return 'søknad.andreUtbetalinger.stønad.values.afp';
     case StønadType.STIPEND:
-      return `søknad.${ANDRE_UTBETALINGER}.${STØNAD}.values.stipend`;
+      return 'søknad.andreUtbetalinger.stønad.values.stipend';
     case StønadType.LÅN:
-      return `søknad.${ANDRE_UTBETALINGER}.${STØNAD}.values.lån`;
+      return 'søknad.andreUtbetalinger.stønad.values.lån';
     case StønadType.NEI:
-      return `søknad.${ANDRE_UTBETALINGER}.${STØNAD}.values.nei`;
+      return 'søknad.andreUtbetalinger.stønad.values.nei';
   }
 };
 export const getAndreUtbetalingerSchema = (formatMessage: IntlFormatters['formatMessage']) =>
   yup.object().shape({
-    andreUtbetalinger: yup.object().shape({
-      lønn: yup
-        .string()
-        .required(formatMessage({ id: 'søknad.andreUtbetalinger.lønn.validation.required' }))
-        .oneOf([JaEllerNei.JA, JaEllerNei.NEI])
-        .nullable(),
-      stønad: yup
-        .array()
-        .ensure()
-        .min(1, formatMessage({ id: 'søknad.andreUtbetalinger.stønad.validation.required' })),
-      afp: yup
-        .object({
-          hvemBetaler: yup.string().nullable(),
-        })
-        .when('stønad', ([stønad], schema) => {
-          if (stønad?.includes(StønadType.AFP)) {
-            return yup.object({
-              hvemBetaler: yup.string().required(
-                formatMessage({
-                  id: 'søknad.andreUtbetalinger.hvemBetalerAfp.validation.required',
-                })
-              ),
-            });
-          }
-          return schema;
-        }),
-    }),
+    lønn: yup
+      .string()
+      .required(formatMessage({ id: 'søknad.andreUtbetalinger.lønn.validation.required' }))
+      .oneOf([JaEllerNei.JA, JaEllerNei.NEI])
+      .nullable(),
+    stønad: yup
+      .array()
+      .ensure()
+      .min(1, formatMessage({ id: 'søknad.andreUtbetalinger.stønad.validation.required' })),
+    afp: yup
+      .object({
+        hvemBetaler: yup.string().nullable(),
+      })
+      .when('stønad', ([stønad], schema) => {
+        if (stønad?.includes(StønadType.AFP)) {
+          return yup.object({
+            hvemBetaler: yup.string().required(
+              formatMessage({
+                id: 'søknad.andreUtbetalinger.hvemBetalerAfp.validation.required',
+              })
+            ),
+          });
+        }
+        return schema;
+      }),
   });
 
-export const AndreUtbetalinger = ({ onBackClick, onNext, defaultValues }: Props) => {
-  const { formatMessage } = useIntl();
+export const AndreUtbetalinger = ({ onBackClick, defaultValues }: Props) => {
+  const [errors, setErrors] = useState<SøknadValidationError[] | undefined>();
   const { søknadState, søknadDispatch } = useSoknadContextStandard();
-  const { stepList } = useStepWizard();
-  const {
-    control,
-    handleSubmit,
-    setValue,
-    watch,
-    formState: { errors },
-  } = useForm({
-    resolver: yupResolver(getAndreUtbetalingerSchema(formatMessage)),
-    defaultValues: {
-      /* @ts-ignore */
-      [ANDRE_UTBETALINGER]: defaultValues?.søknad?.andreUtbetalinger,
-    },
-  });
-
+  const { stepList, currentStepIndex, stepWizardDispatch } = useStepWizard();
+  const { formatMessage } = useIntl();
   const debouncedLagre = useDebounceLagreSoknad<Soknad>();
-  const allFields = useWatch({ control });
-  useEffect(() => {
-    debouncedLagre(søknadState, stepList, allFields);
-  }, [allFields]);
-  const lønnEtterlønnEllerSluttpakke = useWatch({ control, name: `${ANDRE_UTBETALINGER}.${LØNN}` });
-  const stønadEllerVerv = useWatch({ control, name: `${ANDRE_UTBETALINGER}.${STØNAD}` });
-  const StønadAlternativer = useMemo(
-    () => ({
-      [StønadType.ØKONOMISK_SOSIALHJELP]: formatMessage({
-        id: stønadTypeToAlternativNøkkel(StønadType.ØKONOMISK_SOSIALHJELP),
-      }),
-      [StønadType.OMSORGSSTØNAD]: formatMessage({
-        id: stønadTypeToAlternativNøkkel(StønadType.OMSORGSSTØNAD),
-      }),
-      [StønadType.INTRODUKSJONSSTØNAD]: formatMessage({
-        id: stønadTypeToAlternativNøkkel(StønadType.INTRODUKSJONSSTØNAD),
-      }),
-      [StønadType.KVALIFISERINGSSTØNAD]: formatMessage({
-        id: stønadTypeToAlternativNøkkel(StønadType.KVALIFISERINGSSTØNAD),
-      }),
-      [StønadType.VERV]: formatMessage({ id: stønadTypeToAlternativNøkkel(StønadType.VERV) }),
-      [StønadType.UTLAND]: formatMessage({ id: stønadTypeToAlternativNøkkel(StønadType.UTLAND) }),
-      [StønadType.AFP]: formatMessage({ id: stønadTypeToAlternativNøkkel(StønadType.AFP) }),
-      [StønadType.STIPEND]: formatMessage({ id: stønadTypeToAlternativNøkkel(StønadType.STIPEND) }),
-      [StønadType.LÅN]: formatMessage({ id: stønadTypeToAlternativNøkkel(StønadType.LÅN) }),
-      [StønadType.NEI]: formatMessage({ id: stønadTypeToAlternativNøkkel(StønadType.NEI) }),
-    }),
-    [formatMessage]
-  );
-  const Attachments = useMemo(() => {
-    let attachments: Array<{ type: string; description: string }> = [];
 
-    if (stønadEllerVerv?.includes(StønadType.OMSORGSSTØNAD)) {
-      attachments = [
-        ...attachments,
-        {
-          type: AttachmentType.OMSORGSSTØNAD,
-          description: formatMessage({ id: `søknad.andreUtbetalinger.vedlegg.omsorgsstønad` }),
-        },
-      ];
+  useEffect(() => {
+    debouncedLagre(søknadState, stepList, {});
+  }, [søknadState.søknad?.andreUtbetalinger]);
+
+  const StønadAlternativer = useMemo(() => {
+    const stønadTypes: StønadType[] = Object.keys(StønadType) as StønadType[];
+    return stønadTypes.reduce((acc, stønadType) => {
+      acc[stønadType] = formatMessage({
+        id: stønadTypeToAlternativNøkkel(stønadType),
+      });
+      return acc;
+    }, {} as StønadAlternativer);
+  }, [formatMessage]);
+
+  const attachments = useMemo(() => {
+    function addAttachment(type: AttachmentType, id: string) {
+      attachments.push({
+        type,
+        description: formatMessage({ id }),
+      });
     }
-    if (stønadEllerVerv?.includes(StønadType.UTLAND)) {
-      attachments = [
-        ...attachments,
-        {
-          type: AttachmentType.UTLANDSSTØNAD,
-          description: formatMessage({ id: `søknad.andreUtbetalinger.vedlegg.utlandsStønad` }),
-        },
-      ];
+
+    let attachments: Array<{ type: AttachmentType; description: string }> = [];
+
+    if (søknadState.søknad?.andreUtbetalinger?.stønad?.includes(StønadType.OMSORGSSTØNAD)) {
+      addAttachment(AttachmentType.OMSORGSSTØNAD, 'søknad.andreUtbetalinger.vedlegg.omsorgsstønad');
     }
-    if (stønadEllerVerv?.includes(StønadType.STIPEND)) {
-      attachments = [
-        ...attachments,
-        {
-          type: AttachmentType.SYKESTIPEND,
-          description: formatMessage({ id: `søknad.andreUtbetalinger.vedlegg.sykeStipend` }),
-        },
-      ];
+    if (søknadState.søknad?.andreUtbetalinger?.stønad?.includes(StønadType.UTLAND)) {
+      addAttachment(AttachmentType.UTLANDSSTØNAD, 'søknad.andreUtbetalinger.vedlegg.utlandsStønad');
     }
-    if (stønadEllerVerv?.includes(StønadType.LÅN)) {
-      attachments = [
-        ...attachments,
-        {
-          type: AttachmentType.LÅN,
-          description: formatMessage({ id: `søknad.andreUtbetalinger.vedlegg.lån` }),
-        },
-      ];
+    if (søknadState.søknad?.andreUtbetalinger?.stønad?.includes(StønadType.STIPEND)) {
+      addAttachment(AttachmentType.SYKESTIPEND, 'søknad.andreUtbetalinger.vedlegg.sykeStipend');
     }
-    if (lønnEtterlønnEllerSluttpakke === JaEllerNei.JA) {
-      attachments = [
-        ...attachments,
-        {
-          type: AttachmentType.LØNN_OG_ANDRE_GODER,
-          description: formatMessage({ id: `søknad.andreUtbetalinger.vedlegg.andreGoder` }),
-        },
-      ];
+    if (søknadState.søknad?.andreUtbetalinger?.stønad?.includes(StønadType.LÅN)) {
+      addAttachment(AttachmentType.LÅN, 'søknad.andreUtbetalinger.vedlegg.lån');
+    }
+    if (søknadState.søknad?.andreUtbetalinger?.lønn === JaEllerNei.JA) {
+      addAttachment(
+        AttachmentType.LØNN_OG_ANDRE_GODER,
+        'søknad.andreUtbetalinger.vedlegg.andreGoder'
+      );
     }
     return attachments;
-  }, [stønadEllerVerv, lønnEtterlønnEllerSluttpakke]);
+  }, [søknadState.søknad?.andreUtbetalinger?.stønad, søknadState.søknad?.andreUtbetalinger?.lønn]);
+
   useEffect(() => {
-    const lastChecked = stønadEllerVerv?.slice(-1)?.[0];
+    const lastChecked = søknadState.søknad?.andreUtbetalinger?.stønad?.slice(-1)?.[0];
     if (lastChecked === StønadType.NEI) {
-      if ((stønadEllerVerv?.length ?? 0) > 1)
-        setValue(`${ANDRE_UTBETALINGER}.${STØNAD}`, [StønadType.NEI]);
-    } else if (stønadEllerVerv?.includes(StønadType.NEI)) {
-      const newList = [...stønadEllerVerv].filter((e) => e !== StønadType.NEI);
-      setValue(`${ANDRE_UTBETALINGER}.${STØNAD}`, newList);
+      if ((søknadState.søknad?.andreUtbetalinger?.stønad?.length ?? 0) > 1) {
+        updateSøknadData(søknadDispatch, {
+          andreUtbetalinger: {
+            ...søknadState.søknad?.andreUtbetalinger,
+            stønad: [StønadType.NEI],
+          },
+        });
+      }
+    } else if (søknadState.søknad?.andreUtbetalinger?.stønad?.includes(StønadType.NEI)) {
+      const newList = [...søknadState.søknad?.andreUtbetalinger?.stønad].filter(
+        (e) => e !== StønadType.NEI
+      );
+      updateSøknadData(søknadDispatch, {
+        andreUtbetalinger: {
+          ...søknadState.søknad?.andreUtbetalinger,
+          stønad: newList,
+        },
+      });
     }
-  }, [stønadEllerVerv]);
+  }, [søknadState.søknad?.andreUtbetalinger?.stønad]);
 
   useEffect(() => {
     removeRequiredVedlegg(AttachmentType.OMSORGSSTØNAD, søknadDispatch);
@@ -236,15 +201,25 @@ export const AndreUtbetalinger = ({ onBackClick, onNext, defaultValues }: Props)
     removeRequiredVedlegg(AttachmentType.SYKESTIPEND, søknadDispatch);
     removeRequiredVedlegg(AttachmentType.LÅN, søknadDispatch);
     removeRequiredVedlegg(AttachmentType.LØNN_OG_ANDRE_GODER, søknadDispatch);
-    addRequiredVedlegg(Attachments, søknadDispatch);
-  }, [Attachments]);
+    addRequiredVedlegg(attachments, søknadDispatch);
+  }, [attachments]);
+
   return (
-    <SoknadFormWrapper
-      onNext={handleSubmit((data) => {
-        onNext(data);
-      }, setFocusOnErrorSummary)}
+    <SoknadFormWrapperNew
+      onNext={async () => {
+        const errors = await validate(
+          getAndreUtbetalingerSchema(formatMessage),
+          søknadState.søknad?.andreUtbetalinger
+        );
+        if (errors) {
+          setErrors(errors);
+          setFocusOnErrorSummary();
+          return;
+        }
+        logSkjemastegFullførtEvent(currentStepIndex ?? 0);
+        completeAndGoToNextStep(stepWizardDispatch);
+      }}
       onBack={() => {
-        updateSøknadData<Soknad>(søknadDispatch, { ...søknadState.søknad });
         onBackClick();
       }}
       onDelete={async () => {
@@ -262,10 +237,21 @@ export const AndreUtbetalinger = ({ onBackClick, onNext, defaultValues }: Props)
       <LucaGuidePanel>
         {formatMessage({ id: `søknad.andreUtbetalinger.guide.text` })}
       </LucaGuidePanel>
-      <RadioGroupWrapper
+      <RadioGroup
         legend={formatMessage({ id: 'søknad.andreUtbetalinger.lønn.label' })}
-        name={`${ANDRE_UTBETALINGER}.${LØNN}`}
-        control={control}
+        name={'lønn'}
+        id={'lønn'}
+        value={defaultValues?.søknad?.andreUtbetalinger?.lønn || ''}
+        onChange={(value) => {
+          setErrors(errors?.filter((error) => error.path != 'lønn'));
+          updateSøknadData(søknadDispatch, {
+            andreUtbetalinger: {
+              ...søknadState.søknad?.andreUtbetalinger,
+              lønn: value,
+            },
+          });
+        }}
+        error={errors?.find((e) => e.path === 'lønn')?.message}
       >
         <ReadMore
           header={formatMessage({ id: 'søknad.andreUtbetalinger.lønn.readMore.title' })}
@@ -283,12 +269,29 @@ export const AndreUtbetalinger = ({ onBackClick, onNext, defaultValues }: Props)
             {formatMessage({ id: `answerOptions.jaEllerNei.${JaEllerNei.NEI}` })}
           </BodyShort>
         </Radio>
-      </RadioGroupWrapper>
-      <CheckboxGroupWrapper
-        name={`${ANDRE_UTBETALINGER}.${STØNAD}`}
-        control={control}
+      </RadioGroup>
+      <CheckboxGroup
+        name={'stønad'}
+        id={'stønad'}
         size="medium"
         legend={formatMessage({ id: 'søknad.andreUtbetalinger.stønad.label' })}
+        value={defaultValues?.søknad?.andreUtbetalinger?.stønad || []}
+        onChange={(value) => {
+          setErrors(errors?.filter((error) => error.path != 'stønad'));
+          const afpErValgt = value.includes(StønadType.AFP);
+          updateSøknadData(søknadDispatch, {
+            andreUtbetalinger: {
+              ...søknadState.søknad?.andreUtbetalinger,
+              stønad: value,
+              afp: {
+                hvemBetaler: afpErValgt
+                  ? søknadState.søknad?.andreUtbetalinger?.afp?.hvemBetaler
+                  : undefined,
+              },
+            },
+          });
+        }}
+        error={errors?.find((e) => e.path === 'stønad')?.message}
       >
         <Checkbox value={StønadType.VERV}>{StønadAlternativer.VERV}</Checkbox>
         <Checkbox value={StønadType.ØKONOMISK_SOSIALHJELP}>
@@ -303,14 +306,25 @@ export const AndreUtbetalinger = ({ onBackClick, onNext, defaultValues }: Props)
         </Checkbox>
         <Checkbox value={StønadType.UTLAND}>{StønadAlternativer.UTLAND}</Checkbox>
         <Checkbox value={StønadType.AFP}>{StønadAlternativer.AFP}</Checkbox>
-        {stønadEllerVerv?.includes(StønadType.AFP) && (
+        {søknadState.søknad?.andreUtbetalinger?.stønad?.includes(StønadType.AFP) && (
           <ColorPanel color="grey">
             <Grid>
               <Cell xs={7}>
-                <TextFieldWrapper
-                  name={`${ANDRE_UTBETALINGER}.${AFP}.${HVEMBETALER}`}
+                <TextField
+                  name={'afp.hvemBetaler'}
+                  id={'afp.hvemBetaler'}
+                  onChange={(e) =>
+                    updateSøknadData(søknadDispatch, {
+                      andreUtbetalinger: {
+                        ...søknadState.søknad?.andreUtbetalinger,
+                        afp: {
+                          hvemBetaler: e.target.value,
+                        },
+                      },
+                    })
+                  }
                   label={formatMessage({ id: 'søknad.andreUtbetalinger.hvemBetalerAfp.label' })}
-                  control={control}
+                  error={errors?.find((e) => e.path === 'afp.hvemBetaler')?.message}
                 />
               </Cell>
             </Grid>
@@ -319,18 +333,18 @@ export const AndreUtbetalinger = ({ onBackClick, onNext, defaultValues }: Props)
         <Checkbox value={StønadType.LÅN}>{StønadAlternativer.LÅN}</Checkbox>
         <Checkbox value={StønadType.STIPEND}>{StønadAlternativer.STIPEND}</Checkbox>
         <Checkbox value={StønadType.NEI}>{StønadAlternativer.NEI}</Checkbox>
-      </CheckboxGroupWrapper>
-      {Attachments.length > 0 && (
+      </CheckboxGroup>
+      {attachments.length > 0 && (
         <Alert variant={'info'}>
           {formatMessage({ id: 'søknad.andreUtbetalinger.alert.leggeVedTekst' })}
           <ul>
-            {Attachments.map((attachment, index) => (
+            {attachments.map((attachment, index) => (
               <li key={index}>{attachment?.description}</li>
             ))}
           </ul>
           {formatMessage({ id: 'søknad.andreUtbetalinger.alert.lasteOppVedleggTekst' })}
         </Alert>
       )}
-    </SoknadFormWrapper>
+    </SoknadFormWrapperNew>
   );
 };
