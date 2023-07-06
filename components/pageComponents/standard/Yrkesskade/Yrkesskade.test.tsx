@@ -13,7 +13,7 @@ describe('Startdato', () => {
     return (
       <StepWizard>
         <Step name={YRKESSKADE}>
-          <Yrkesskade onBackClick={jest.fn()} onNext={jest.fn()} />
+          <Yrkesskade onBackClick={jest.fn()} />
         </Step>
       </StepWizard>
     );

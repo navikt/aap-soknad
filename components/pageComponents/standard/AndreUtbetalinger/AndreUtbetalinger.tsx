@@ -21,10 +21,9 @@ import { LucaGuidePanel } from '@navikt/aap-felles-react';
 import {
   addRequiredVedlegg,
   removeRequiredVedlegg,
-  slettLagretSoknadState,
   updateSøknadData,
 } from 'context/soknadContextCommon';
-import { deleteOpplastedeVedlegg, useSoknadContextStandard } from 'context/soknadContextStandard';
+import { useSoknadContextStandard } from 'context/soknadContextStandard';
 import { useDebounceLagreSoknad } from 'hooks/useDebounceLagreSoknad';
 import { GenericSoknadContextState } from 'types/SoknadContext';
 import { setFocusOnErrorSummary } from 'components/schema/FormErrorSummary';
@@ -222,13 +221,6 @@ export const AndreUtbetalinger = ({ onBackClick, defaultValues }: Props) => {
       onBack={() => {
         onBackClick();
       }}
-      onDelete={async () => {
-        await deleteOpplastedeVedlegg(søknadState.søknad);
-        await slettLagretSoknadState<Soknad>(søknadDispatch, søknadState);
-      }}
-      nextButtonText={formatMessage({ id: 'navigation.next' })}
-      backButtonText={formatMessage({ id: 'navigation.back' })}
-      cancelButtonText={formatMessage({ id: 'navigation.cancel' })}
       errors={errors}
     >
       <Heading size="large" level="2">

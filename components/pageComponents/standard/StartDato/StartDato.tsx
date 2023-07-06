@@ -6,8 +6,8 @@ import ColorPanel from 'components/panel/ColorPanel';
 import * as yup from 'yup';
 import { completeAndGoToNextStep, useStepWizard } from 'context/stepWizardContextV2';
 import { LucaGuidePanel } from '@navikt/aap-felles-react';
-import { deleteOpplastedeVedlegg, useSoknadContextStandard } from 'context/soknadContextStandard';
-import { slettLagretSoknadState, updateSøknadData } from 'context/soknadContextCommon';
+import { useSoknadContextStandard } from 'context/soknadContextStandard';
+import { updateSøknadData } from 'context/soknadContextCommon';
 import { useDebounceLagreSoknad } from 'hooks/useDebounceLagreSoknad';
 
 import { GenericSoknadContextState } from 'types/SoknadContext';
@@ -222,16 +222,8 @@ const StartDato = ({ onBackClick, defaultValues }: Props) => {
         completeAndGoToNextStep(stepWizardDispatch);
       }}
       onBack={() => {
-        updateSøknadData<Soknad>(søknadDispatch, { ...søknadState.søknad });
         onBackClick();
       }}
-      onDelete={async () => {
-        await deleteOpplastedeVedlegg(søknadState.søknad);
-        await slettLagretSoknadState<Soknad>(søknadDispatch, søknadState);
-      }}
-      nextButtonText={formatMessage({ id: 'navigation.next' })}
-      backButtonText={formatMessage({ id: 'navigation.back' })}
-      cancelButtonText={formatMessage({ id: 'navigation.cancel' })}
       errors={errors}
     >
       <Heading size="large" level="2">
