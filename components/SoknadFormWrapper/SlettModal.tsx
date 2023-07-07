@@ -91,7 +91,7 @@ const SlettModal = ({ isOpen, onClose }: Props) => {
                 type="button"
                 onClick={() => {
                   if (window?.location) {
-                    router.reload();
+                    router.push('/');
                   }
                 }}
               >
