@@ -26,7 +26,7 @@ export const lesBucket = async (
   retryCount = 3
 ): Promise<any> => {
   if (retryCount === 0) {
-    logger.error(`RetryCount for å hente mellomlagret søknad er 0. Gir opp.`);
+    logger.info(`RetryCount for å hente mellomlagret søknad er 0. Gir opp.`);
     return undefined;
   }
   if (isLabs()) {
@@ -52,6 +52,7 @@ export const lesBucket = async (
       metricsTimer: metrics.backendApiDurationHistogram,
       logger: logger,
     });
+
     if (!mellomlagretSøknad) {
       logger.info(
         `Mellomlagret søknad returnert fra tokenXApiProxy er undefined. Prøver på nytt. RetryCount: ${retryCount}`
