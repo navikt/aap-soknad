@@ -9,7 +9,7 @@ import {
   ReadMore,
   Table,
 } from '@navikt/ds-react';
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { JaEllerNei } from 'types/Generic';
 import { Add, Delete } from '@navikt/ds-icons';
 import UtenlandsPeriodeVelger, {
@@ -17,7 +17,7 @@ import UtenlandsPeriodeVelger, {
 } from '..//UtenlandsPeriodeVelger/UtenlandsPeriodeVelger';
 import { formatDate } from 'utils/date';
 import { validate } from 'lib/utils/validationUtils';
-import { Soknad } from 'types/Soknad';
+import { Soknad, UtenlandsPeriode } from 'types/Soknad';
 import { completeAndGoToNextStep, useStepWizard } from 'context/stepWizardContextV2';
 import * as yup from 'yup';
 import ColorPanel from 'components/panel/ColorPanel';
@@ -31,6 +31,7 @@ import { logSkjemastegFullførtEvent } from 'utils/amplitude';
 import { SøknadValidationError } from 'components/schema/FormErrorSummaryNew';
 import { useSoknadContextStandard } from 'context/soknadContextStandard';
 import { updateSøknadData } from 'context/soknadContextCommon';
+import { useDebounceLagreSoknad } from 'hooks/useDebounceLagreSoknad';
 
 interface Props {
   onBackClick: () => void;
@@ -162,15 +163,75 @@ export const Medlemskap = ({ onBackClick, defaultValues }: Props) => {
   const { currentStepIndex, stepWizardDispatch, stepList } = useStepWizard();
   const { søknadState, søknadDispatch } = useSoknadContextStandard();
   const [showUtenlandsPeriodeModal, setShowUtenlandsPeriodeModal] = useState<boolean>(false);
-  const [selectedUtenlandsPeriodeIndex, setSelectedUtenlandsPeriodeIndex] = useState<
-    number | undefined
-  >(undefined);
+  const [selectedUtenlandsPeriodeId, setSelectedUtenlandsPeriodeId] = useState<string | undefined>(
+    undefined
+  );
+  const debouncedLagre = useDebounceLagreSoknad<Soknad>();
 
-  const append = (thing) => console.log('append', thing);
-  const update = (index: number, thing: any) => console.log('update', thing);
-  const remove = (thing) => console.log('remove', thing);
+  useEffect(() => {
+    debouncedLagre(søknadState, stepList, {});
+  }, [søknadState.søknad?.medlemskap]);
 
-  const selectedUtenlandsPeriode = undefined;
+  const append = (thing: any) => {
+    const id = typeof window !== 'undefined' ? window.crypto.randomUUID() : 'nocrypto';
+    updateSøknadData(søknadDispatch, {
+      medlemskap: {
+        ...søknadState?.søknad?.medlemskap,
+        utenlandsOpphold: [
+          ...(søknadState?.søknad?.medlemskap?.utenlandsOpphold || []),
+          {
+            id,
+            ...thing,
+          },
+        ],
+      },
+    });
+  };
+  const update = (thing: UtenlandsPeriode) => {
+    console.log('update', thing);
+    updateSøknadData(søknadDispatch, {
+      medlemskap: {
+        ...søknadState?.søknad?.medlemskap,
+        utenlandsOpphold: søknadState?.søknad?.medlemskap?.utenlandsOpphold?.map((e) => {
+          if (e.id === thing.id) {
+            return thing;
+          } else {
+            return e;
+          }
+        }),
+      },
+    });
+  };
+  const remove = (id?: string) => {
+    console.log('remove', id);
+    if (id) {
+      updateSøknadData(søknadDispatch, {
+        medlemskap: {
+          ...søknadState?.søknad?.medlemskap,
+          utenlandsOpphold: søknadState?.søknad?.medlemskap?.utenlandsOpphold?.filter(
+            (e) => e.id !== id
+          ),
+        },
+      });
+    } else {
+      updateSøknadData(søknadDispatch, {
+        medlemskap: {
+          ...søknadState?.søknad?.medlemskap,
+          utenlandsOpphold: [],
+        },
+      });
+    }
+  };
+
+  const selectedUtenlandsPeriode = useMemo(
+    () =>
+      selectedUtenlandsPeriodeId
+        ? søknadState?.søknad?.medlemskap?.utenlandsOpphold?.find(
+            (e) => e.id === selectedUtenlandsPeriodeId
+          )
+        : undefined,
+    [selectedUtenlandsPeriodeId]
+  );
 
   const [errors, setErrors] = useState<SøknadValidationError[] | undefined>();
   const showArbeidINorge = useMemo(
@@ -223,6 +284,7 @@ export const Medlemskap = ({ onBackClick, defaultValues }: Props) => {
     setErrors(undefined);
   }
 
+  console.log('medlemskap', søknadState?.søknad?.medlemskap);
   return (
     <>
       <SoknadFormWrapperNew
@@ -397,8 +459,8 @@ export const Medlemskap = ({ onBackClick, defaultValues }: Props) => {
                 })}
               </BodyShort>
             )}
-            {søknadState?.søknad?.medlemskap?.utenlandsOpphold?.length &&
-            søknadState?.søknad?.medlemskap?.utenlandsOpphold?.length > 0 ? (
+            {defaultValues?.søknad?.medlemskap?.utenlandsOpphold?.length &&
+            defaultValues?.søknad?.medlemskap?.utenlandsOpphold?.length > 0 ? (
               <Table size="medium">
                 <Table.Header>
                   <Table.Row>
@@ -412,14 +474,14 @@ export const Medlemskap = ({ onBackClick, defaultValues }: Props) => {
                   </Table.Row>
                 </Table.Header>
                 <Table.Body>
-                  {søknadState?.søknad?.medlemskap?.utenlandsOpphold?.map((field, index) => (
+                  {defaultValues?.søknad?.medlemskap?.utenlandsOpphold?.map((field, index) => (
                     <Table.Row key={field.id}>
                       <Table.DataCell className={styles.dataCell}>
                         <Button
                           variant="tertiary"
                           type="button"
                           onClick={() => {
-                            setSelectedUtenlandsPeriodeIndex(index);
+                            setSelectedUtenlandsPeriodeId(field.id);
                             setShowUtenlandsPeriodeModal(true);
                           }}
                         >
@@ -440,10 +502,10 @@ export const Medlemskap = ({ onBackClick, defaultValues }: Props) => {
                           variant={'tertiary'}
                           onKeyPress={(event) => {
                             if (event.key === 'Enter') {
-                              remove(index);
+                              remove(field.id);
                             }
                           }}
-                          onClick={() => remove(index)}
+                          onClick={() => remove(field.id)}
                           icon={
                             <Delete
                               className={styles.deleteIcon}
@@ -473,7 +535,7 @@ export const Medlemskap = ({ onBackClick, defaultValues }: Props) => {
                   icon={<Add title={'Legg til'} />}
                   iconPosition={'left'}
                   onClick={() => {
-                    setSelectedUtenlandsPeriodeIndex(undefined);
+                    setSelectedUtenlandsPeriodeId(undefined);
                     setShowUtenlandsPeriodeModal(true);
                   }}
                 >
@@ -503,8 +565,8 @@ export const Medlemskap = ({ onBackClick, defaultValues }: Props) => {
         onSave={(data) => {
           if (selectedUtenlandsPeriode === undefined) {
             append({ ...data });
-          } else if (selectedUtenlandsPeriodeIndex !== undefined) {
-            update(selectedUtenlandsPeriodeIndex, { ...data });
+          } else if (selectedUtenlandsPeriodeId !== undefined) {
+            update({ ...data });
           }
 
           setShowUtenlandsPeriodeModal(false);
