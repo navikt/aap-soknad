@@ -149,7 +149,6 @@ const StartDato = ({ onBackClick, defaultValues }: Props) => {
   function findError(path: string): string | undefined {
     return errors?.find((error) => error.path === path)?.message;
   }
-  console.log(søknadState?.søknad);
   return (
     <SoknadFormWrapperNew
       onNext={async () => {

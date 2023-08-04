@@ -289,10 +289,7 @@ export const Medlemskap = ({ onBackClick, defaultValues }: Props) => {
     <>
       <SoknadFormWrapperNew
         onNext={async () => {
-          const errors = await validate(
-            getMedlemskapSchema(formatMessage),
-            søknadState.søknad?.student
-          );
+          const errors = await validate(getMedlemskapSchema(formatMessage), søknadState.søknad);
           if (errors) {
             setErrors(errors);
             setFocusOnErrorSummary();
