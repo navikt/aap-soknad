@@ -1,7 +1,5 @@
-import React, { useEffect, useMemo } from 'react';
-import { useForm } from 'react-hook-form';
+import React, { useMemo, useState } from 'react';
 import * as yup from 'yup';
-import { yupResolver } from '@hookform/resolvers/yup';
 import * as classes from './UtenlandsPeriode.module.css';
 import {
   BodyLong,
@@ -13,16 +11,18 @@ import {
   Label,
   Modal,
   Radio,
+  RadioGroup,
+  TextField,
 } from '@navikt/ds-react';
 import { JaEllerNei } from 'types/Generic';
-import RadioGroupWrapper from 'components/input/RadioGroupWrapper/RadioGroupWrapper';
 import CountrySelector from 'components/input/CountrySelector';
-import TextFieldWrapper from 'components/input/TextFieldWrapper';
 import { ModalButtonWrapper } from 'components/ButtonWrapper/ModalButtonWrapper';
 import { UtenlandsPeriode } from 'types/Soknad';
 import { MonthPickerWrapper } from 'components/input/MonthPickerWrapper/MonthPickerWrapper';
 import { subYears } from 'date-fns';
 import { IntlFormatters, useIntl } from 'react-intl';
+import { SøknadValidationError } from 'components/schema/FormErrorSummaryNew';
+import { validate } from 'lib/utils/validationUtils';
 
 const { eeaMember } = require('is-european');
 
@@ -33,7 +33,8 @@ export enum ArbeidEllerBodd {
 
 interface UtenlandsPeriodeProps {
   utenlandsPeriode?: UtenlandsPeriode;
-  onSave: (data: any) => void;
+  onSave: () => void;
+  update: (data: UtenlandsPeriode) => void;
   onCancel: () => void;
   onClose: () => void;
   open: boolean;
@@ -97,6 +98,7 @@ export const getUtenlandsPeriodeSchema = (
 const UtenlandsPeriodeVelger = ({
   utenlandsPeriode,
   onSave,
+  update,
   onCancel,
   onClose,
   open,
@@ -105,42 +107,20 @@ const UtenlandsPeriodeVelger = ({
   const { formatMessage } = useIntl();
 
   const schema = getUtenlandsPeriodeSchema(formatMessage, arbeidEllerBodd);
+  const [errors, setErrors] = useState<SøknadValidationError[] | undefined>();
+  function clearErrors() {
+    setErrors(undefined);
+  }
 
-  const {
-    control,
-    watch,
-    formState: { errors },
-    reset,
-    handleSubmit,
-    setValue,
-  } = useForm({
-    resolver: yupResolver(schema),
-    defaultValues: {
-      ...(utenlandsPeriode
-        ? {
-            ...utenlandsPeriode,
-            land: utenlandsPeriode.land,
-            fraDato: utenlandsPeriode.fraDato,
-            tilDato: utenlandsPeriode.tilDato,
-            arbeidEllerBodd: arbeidEllerBodd,
-          }
-        : {}),
-    },
-  });
-
-  useEffect(() => {
-    reset({
-      ...utenlandsPeriode,
-      fraDato: utenlandsPeriode?.fraDato,
-      tilDato: utenlandsPeriode?.tilDato,
-    });
-  }, [utenlandsPeriode, arbeidEllerBodd, open, reset]);
+  function findError(path: string): string | undefined {
+    return errors?.find((error) => error.path === path)?.message;
+  }
 
   const antallÅrTilbake = arbeidEllerBodd === ArbeidEllerBodd.ARBEID ? 5 : 60;
 
-  const valgtLand = watch('land');
+  // const valgtLand = watch('land');
   const showUtenlandsId = useMemo(() => {
-    const landKode = valgtLand?.split(':')?.[0];
+    const landKode = utenlandsPeriode?.land?.split(':')?.[0];
     return (
       landKode === 'GB' ||
       landKode === 'CH' ||
@@ -148,15 +128,7 @@ const UtenlandsPeriodeVelger = ({
       landKode === 'JE' ||
       eeaMember(landKode)
     );
-  }, [valgtLand]);
-
-  const clearModal = () => {
-    setValue('land', '');
-    setValue('fraDato', null);
-    setValue('tilDato', null);
-    setValue('iArbeid', '');
-    setValue('utenlandsId', '');
-  };
+  }, [utenlandsPeriode?.land]);
 
   return (
     <Modal open={open} onClose={onClose}>
@@ -180,18 +152,35 @@ const UtenlandsPeriodeVelger = ({
         )}
         <form
           className={classes.modalForm}
-          onSubmit={handleSubmit((data) => {
-            onSave(data);
-            clearModal();
-          })}
+          onSubmit={async (e) => {
+            e.preventDefault();
+            const errors = await validate(
+              getUtenlandsPeriodeSchema(formatMessage),
+              utenlandsPeriode
+            );
+            if (errors) {
+              setErrors(errors);
+              return;
+            } else {
+              onSave();
+            }
+          }}
         >
           <CountrySelector
-            className={classes.countrySelector}
             name={'land'}
+            value={utenlandsPeriode?.land}
+            onChange={(e) => {
+              clearErrors();
+              update({
+                ...utenlandsPeriode,
+                land: e.target.value,
+              } as UtenlandsPeriode);
+            }}
+            className={classes.countrySelector}
             label={formatMessage({
               id: `søknad.medlemskap.utenlandsperiode.modal.land.label.${arbeidEllerBodd}`,
             })}
-            control={control}
+            error={findError('land')}
           />
           <div>
             <Label>
@@ -202,7 +191,6 @@ const UtenlandsPeriodeVelger = ({
             <Grid>
               <Cell xs={12} lg={5}>
                 <MonthPickerWrapper
-                  control={control}
                   name="fraDato"
                   selectedDate={utenlandsPeriode?.fraDato}
                   label={formatMessage({
@@ -211,30 +199,51 @@ const UtenlandsPeriodeVelger = ({
                   fromDate={subYears(new Date(), antallÅrTilbake)}
                   toDate={new Date()}
                   dropdownCaption={true}
+                  onChange={(selectedMonth: Date) => {
+                    update({
+                      ...utenlandsPeriode,
+                      fraDato: selectedMonth,
+                    } as UtenlandsPeriode);
+                  }}
+                  error={findError('fraDato')}
                 />
               </Cell>
               <Cell xs={12} lg={5}>
                 <MonthPickerWrapper
-                  control={control}
                   name="tilDato"
-                  selectedDate={utenlandsPeriode?.tilDato}
+                  selectedDate={utenlandsPeriode?.fraDato}
                   label={formatMessage({
                     id: 'søknad.medlemskap.utenlandsperiode.modal.periode.tilDato.label',
                   })}
                   fromDate={subYears(new Date(), antallÅrTilbake)}
                   toDate={new Date()}
                   dropdownCaption={true}
+                  onChange={(selectedMonth: Date) => {
+                    update({
+                      ...utenlandsPeriode,
+                      tilDato: selectedMonth,
+                    } as UtenlandsPeriode);
+                  }}
+                  error={findError('tilDato')}
                 />
               </Cell>
             </Grid>
           </div>
           {arbeidEllerBodd === ArbeidEllerBodd.BODD && (
-            <RadioGroupWrapper
+            <RadioGroup
               name={'iArbeid'}
+              id={'iArbeid'}
+              value={utenlandsPeriode?.iArbeid}
+              onChange={(value) => {
+                update({
+                  ...utenlandsPeriode,
+                  iArbeid: value,
+                } as UtenlandsPeriode);
+              }}
               legend={formatMessage({
                 id: 'søknad.medlemskap.utenlandsperiode.modal.iArbeid.label',
               })}
-              control={control}
+              error={findError('iArbeid')}
             >
               <Radio value={JaEllerNei.JA}>
                 <BodyShort>Ja</BodyShort>
@@ -242,16 +251,22 @@ const UtenlandsPeriodeVelger = ({
               <Radio value={JaEllerNei.NEI}>
                 <BodyShort>Nei</BodyShort>
               </Radio>
-            </RadioGroupWrapper>
+            </RadioGroup>
           )}
           {showUtenlandsId && (
-            <TextFieldWrapper
+            <TextField
               className={classes.pidInput}
               name={'utenlandsId'}
+              value={utenlandsPeriode?.utenlandsId}
+              onChange={(event) => {
+                update({
+                  ...utenlandsPeriode,
+                  utenlandsId: event.target.value,
+                } as UtenlandsPeriode);
+              }}
               label={formatMessage({
                 id: 'søknad.medlemskap.utenlandsperiode.modal.utenlandsId.label',
               })}
-              control={control}
             />
           )}
           <ModalButtonWrapper>
@@ -259,7 +274,7 @@ const UtenlandsPeriodeVelger = ({
               type="button"
               variant={'secondary'}
               onClick={() => {
-                clearModal();
+                // clearModal();
                 onCancel();
               }}
             >

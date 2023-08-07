@@ -157,6 +157,7 @@ export const utenlandsPeriodeArbeidEllerBodd = (
   }
   return ArbeidEllerBodd.ARBEID;
 };
+
 export const Medlemskap = ({ onBackClick, defaultValues }: Props) => {
   const { formatMessage } = useIntl();
 
@@ -230,7 +231,7 @@ export const Medlemskap = ({ onBackClick, defaultValues }: Props) => {
             (e) => e.id === selectedUtenlandsPeriodeId
           )
         : undefined,
-    [selectedUtenlandsPeriodeId]
+    [selectedUtenlandsPeriodeId, søknadState]
   );
 
   const [errors, setErrors] = useState<SøknadValidationError[] | undefined>();
@@ -284,7 +285,8 @@ export const Medlemskap = ({ onBackClick, defaultValues }: Props) => {
     setErrors(undefined);
   }
 
-  console.log('medlemskap', søknadState?.søknad?.medlemskap);
+  // console.log('medlemskap', søknadState?.søknad?.medlemskap);
+  // console.log('selectedUtenlandsperiodeID', selectedUtenlandsPeriodeId, selectedUtenlandsPeriode)
   return (
     <>
       <SoknadFormWrapperNew
@@ -532,7 +534,10 @@ export const Medlemskap = ({ onBackClick, defaultValues }: Props) => {
                   icon={<Add title={'Legg til'} />}
                   iconPosition={'left'}
                   onClick={() => {
-                    setSelectedUtenlandsPeriodeId(undefined);
+                    // setSelectedUtenlandsPeriodeId(undefined);
+                    const id = window?.crypto?.randomUUID() || 'no-crypto';
+                    append({ id });
+                    setSelectedUtenlandsPeriodeId(id);
                     setShowUtenlandsPeriodeModal(true);
                   }}
                 >
@@ -559,14 +564,15 @@ export const Medlemskap = ({ onBackClick, defaultValues }: Props) => {
       <UtenlandsPeriodeVelger
         utenlandsPeriode={selectedUtenlandsPeriode}
         open={showUtenlandsPeriodeModal}
-        onSave={(data) => {
-          if (selectedUtenlandsPeriode === undefined) {
-            append({ ...data });
-          } else if (selectedUtenlandsPeriodeId !== undefined) {
-            update({ ...data });
-          }
-
+        update={update}
+        onSave={() => {
           setShowUtenlandsPeriodeModal(false);
+
+          // if (selectedUtenlandsPeriode === undefined) {
+          //   append({ ...data });
+          // } else if (selectedUtenlandsPeriodeId !== undefined) {
+          //   update({ ...data });
+          // }
         }}
         arbeidEllerBodd={arbeidEllerBodd}
         onCancel={() => setShowUtenlandsPeriodeModal(false)}

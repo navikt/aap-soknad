@@ -1,24 +1,20 @@
 import React, { useMemo } from 'react';
 import countries from 'i18n-iso-countries';
-import SelectWrapper from './SelectWrapper';
-import { Control, FieldPath, FieldValues } from 'react-hook-form';
+import { Select } from '@navikt/ds-react';
 
 // Support norwegian & english languages.
 countries.registerLocale(require('i18n-iso-countries/langs/en.json'));
 countries.registerLocale(require('i18n-iso-countries/langs/nb.json'));
 
-interface Props<FormFieldValues extends FieldValues> {
-  name: FieldPath<FormFieldValues>;
+interface Props {
+  value?: string;
+  onChange: React.ChangeEventHandler<HTMLSelectElement>;
+  name: string;
   label: string;
   className?: string;
-  control: Control<FormFieldValues>;
+  error?: string;
 }
-const CountrySelector = <FormFieldValues extends FieldValues>({
-  name,
-  label,
-  className,
-  control,
-}: Props<FormFieldValues>) => {
+const CountrySelector = ({ value, onChange, name, label, className, error }: Props) => {
   const countryList = useMemo(() => {
     return Object.entries(countries.getNames('nb', { select: 'official' }))
       .filter((country) => country[0] !== 'NO' && country[0] !== 'SJ')
@@ -29,7 +25,7 @@ const CountrySelector = <FormFieldValues extends FieldValues>({
 
   return (
     <div className={className}>
-      <SelectWrapper name={name} label={label} control={control}>
+      <Select onChange={onChange} name={name} label={label} value={value} error={error}>
         {[
           <option key="none" value="none">
             Velg land
@@ -40,7 +36,7 @@ const CountrySelector = <FormFieldValues extends FieldValues>({
             </option>
           )),
         ]}
-      </SelectWrapper>
+      </Select>
     </div>
   );
 };
