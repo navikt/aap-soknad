@@ -21,7 +21,7 @@ export type Periode = {
 };
 
 export type UtenlandsPeriode = {
-  id: string;
+  id?: string;
   land?: string;
   tilDato?: Date;
   fraDato?: Date;

@@ -32,6 +32,7 @@ import { SøknadValidationError } from 'components/schema/FormErrorSummaryNew';
 import { useSoknadContextStandard } from 'context/soknadContextStandard';
 import { updateSøknadData } from 'context/soknadContextCommon';
 import { useDebounceLagreSoknad } from 'hooks/useDebounceLagreSoknad';
+import { v4 as uuid4 } from 'uuid';
 
 interface Props {
   onBackClick: () => void;
@@ -165,9 +166,7 @@ export const Medlemskap = ({ onBackClick, defaultValues }: Props) => {
   const { currentStepIndex, stepWizardDispatch, stepList } = useStepWizard();
   const { søknadState, søknadDispatch } = useSoknadContextStandard();
   const [showUtenlandsPeriodeModal, setShowUtenlandsPeriodeModal] = useState<boolean>(false);
-  const [selectedUtenlandsPeriode, setSelectedUtenlandsPeriode] = useState<
-    UtenlandsPeriode | undefined
-  >(undefined);
+  const [selectedUtenlandsPeriode, setSelectedUtenlandsPeriode] = useState<UtenlandsPeriode>({});
   const debouncedLagre = useDebounceLagreSoknad<Soknad>();
 
   useEffect(() => {
@@ -523,7 +522,7 @@ export const Medlemskap = ({ onBackClick, defaultValues }: Props) => {
                   icon={<Add title={'Legg til'} />}
                   iconPosition={'left'}
                   onClick={() => {
-                    setSelectedUtenlandsPeriode(undefined);
+                    setSelectedUtenlandsPeriode({});
                     setShowUtenlandsPeriodeModal(true);
                   }}
                 >
@@ -549,16 +548,19 @@ export const Medlemskap = ({ onBackClick, defaultValues }: Props) => {
       </SoknadFormWrapperNew>
       <UtenlandsPeriodeVelger
         utenlandsPeriode={selectedUtenlandsPeriode}
+        setUtenlandsPeriode={setSelectedUtenlandsPeriode}
         isOpen={showUtenlandsPeriodeModal}
         arbeidEllerBodd={arbeidEllerBodd}
-        closeModal={() => setShowUtenlandsPeriodeModal(!showUtenlandsPeriodeModal)}
+        closeModal={() => {
+          setSelectedUtenlandsPeriode({});
+          setShowUtenlandsPeriodeModal(!showUtenlandsPeriodeModal);
+        }}
         onSave={(utenlandsperiode) => {
-          if (selectedUtenlandsPeriode === undefined) {
-            append(utenlandsperiode);
+          if (selectedUtenlandsPeriode.id === undefined) {
+            append({ ...utenlandsperiode, id: uuid4() });
           } else {
             update(utenlandsperiode);
           }
-          setShowUtenlandsPeriodeModal(false);
         }}
       />
     </>
