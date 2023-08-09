@@ -21,9 +21,7 @@ export const MonthPickerWrapper = ({
   dropdownCaption,
   error,
 }: Props) => {
-  console.log('selectedDate', selectedDate);
-
-  const { monthpickerProps, inputProps, selectedMonth } = useMonthpicker({
+  const { monthpickerProps, inputProps } = useMonthpicker({
     fromDate: fromDate,
     toDate: toDate,
     onMonthChange: onChange,
