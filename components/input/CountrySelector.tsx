@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { ChangeEventHandler, useMemo } from 'react';
 import countries from 'i18n-iso-countries';
 import { Select } from '@navikt/ds-react';
 
@@ -7,14 +7,14 @@ countries.registerLocale(require('i18n-iso-countries/langs/en.json'));
 countries.registerLocale(require('i18n-iso-countries/langs/nb.json'));
 
 interface Props {
-  value?: string;
-  onChange: React.ChangeEventHandler<HTMLSelectElement>;
   name: string;
   label: string;
+  value?: string;
   className?: string;
+  onChange: ChangeEventHandler<HTMLSelectElement>;
   error?: string;
 }
-const CountrySelector = ({ value, onChange, name, label, className, error }: Props) => {
+const CountrySelector = ({ name, label, className, onChange, value, error }: Props) => {
   const countryList = useMemo(() => {
     return Object.entries(countries.getNames('nb', { select: 'official' }))
       .filter((country) => country[0] !== 'NO' && country[0] !== 'SJ')
@@ -25,7 +25,7 @@ const CountrySelector = ({ value, onChange, name, label, className, error }: Pro
 
   return (
     <div className={className}>
-      <Select onChange={onChange} name={name} label={label} value={value} error={error}>
+      <Select name={name} label={label} onChange={onChange} value={value} error={error}>
         {[
           <option key="none" value="none">
             Velg land

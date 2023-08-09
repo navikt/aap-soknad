@@ -1,55 +1,43 @@
 import { MonthPicker, useMonthpicker } from '@navikt/ds-react';
-import { Control, Controller, FieldPath, FieldValues } from 'react-hook-form';
-import { parse } from 'date-fns';
 
-export interface MonthPickerProps {
-  name: string;
-  onChange: (e: any) => void;
+interface Props {
+  id: string;
   label: string;
-  selectedDate?: string | Date;
+  selectedDate?: Date;
   fromDate?: Date;
   toDate?: Date;
+  onChange: (date?: Date) => void;
   dropdownCaption?: boolean;
   error?: string;
 }
 
-export const MonthPickerWrapper = <FormFieldValues extends FieldValues>({
-  name,
+export const MonthPickerWrapper = ({
+  id,
   label,
   selectedDate,
-  onChange,
-  dropdownCaption,
   fromDate,
   toDate,
+  onChange,
+  dropdownCaption,
   error,
-}: MonthPickerProps) => {
+}: Props) => {
+  console.log('selectedDate', selectedDate);
+
   const { monthpickerProps, inputProps, selectedMonth } = useMonthpicker({
-    defaultSelected: selectedDate ? new Date(selectedDate) : undefined,
-    inputFormat: 'MM.yyyy',
+    fromDate: fromDate,
+    toDate: toDate,
     onMonthChange: onChange,
+    defaultSelected: selectedDate ? new Date(selectedDate) : undefined,
   });
+
   return (
     <MonthPicker
       {...monthpickerProps}
-      id={name}
-      onInput={onChange}
+      id={id}
       dropdownCaption={dropdownCaption}
-      fromDate={fromDate}
-      toDate={toDate}
+      defaultSelected={selectedDate}
     >
-      <MonthPicker.Input
-        id={name}
-        name={name}
-        error={error}
-        onChange={(datoInput) =>
-          onChange(parse(datoInput.currentTarget.value, 'dd.MM.yyyy', new Date()))
-        }
-        onInput={(datoInput) =>
-          onChange(parse(datoInput.currentTarget.value, 'dd.MM.yyyy', new Date()))
-        }
-        label={label}
-        {...inputProps}
-      />
+      <MonthPicker.Input {...inputProps} label={label} error={error} />
     </MonthPicker>
   );
 };

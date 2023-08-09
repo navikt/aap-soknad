@@ -148,6 +148,7 @@ export const getMedlemskapSchema = (formatMessage: IntlFormatters['formatMessage
     }),
   });
 };
+
 export const utenlandsPeriodeArbeidEllerBodd = (
   arbeidINorge?: JaEllerNei,
   boddINorge?: JaEllerNei | null
@@ -164,38 +165,35 @@ export const Medlemskap = ({ onBackClick, defaultValues }: Props) => {
   const { currentStepIndex, stepWizardDispatch, stepList } = useStepWizard();
   const { søknadState, søknadDispatch } = useSoknadContextStandard();
   const [showUtenlandsPeriodeModal, setShowUtenlandsPeriodeModal] = useState<boolean>(false);
-  const [selectedUtenlandsPeriodeId, setSelectedUtenlandsPeriodeId] = useState<string | undefined>(
-    undefined
-  );
+  const [selectedUtenlandsPeriode, setSelectedUtenlandsPeriode] = useState<
+    UtenlandsPeriode | undefined
+  >(undefined);
   const debouncedLagre = useDebounceLagreSoknad<Soknad>();
 
   useEffect(() => {
     debouncedLagre(søknadState, stepList, {});
   }, [søknadState.søknad?.medlemskap]);
 
-  const append = (thing: any) => {
-    const id = typeof window !== 'undefined' ? window.crypto.randomUUID() : 'nocrypto';
+  const append = (utenlandsPeriode: UtenlandsPeriode) => {
     updateSøknadData(søknadDispatch, {
       medlemskap: {
         ...søknadState?.søknad?.medlemskap,
         utenlandsOpphold: [
           ...(søknadState?.søknad?.medlemskap?.utenlandsOpphold || []),
           {
-            id,
-            ...thing,
+            ...utenlandsPeriode,
           },
         ],
       },
     });
   };
-  const update = (thing: UtenlandsPeriode) => {
-    console.log('update', thing);
+  const update = (utenlandsPeriode: UtenlandsPeriode) => {
     updateSøknadData(søknadDispatch, {
       medlemskap: {
         ...søknadState?.søknad?.medlemskap,
         utenlandsOpphold: søknadState?.søknad?.medlemskap?.utenlandsOpphold?.map((e) => {
-          if (e.id === thing.id) {
-            return thing;
+          if (e.id === utenlandsPeriode.id) {
+            return utenlandsPeriode;
           } else {
             return e;
           }
@@ -223,16 +221,6 @@ export const Medlemskap = ({ onBackClick, defaultValues }: Props) => {
       });
     }
   };
-
-  const selectedUtenlandsPeriode = useMemo(
-    () =>
-      selectedUtenlandsPeriodeId
-        ? søknadState?.søknad?.medlemskap?.utenlandsOpphold?.find(
-            (e) => e.id === selectedUtenlandsPeriodeId
-          )
-        : undefined,
-    [selectedUtenlandsPeriodeId, søknadState]
-  );
 
   const [errors, setErrors] = useState<SøknadValidationError[] | undefined>();
   const showArbeidINorge = useMemo(
@@ -285,8 +273,7 @@ export const Medlemskap = ({ onBackClick, defaultValues }: Props) => {
     setErrors(undefined);
   }
 
-  // console.log('medlemskap', søknadState?.søknad?.medlemskap);
-  // console.log('selectedUtenlandsperiodeID', selectedUtenlandsPeriodeId, selectedUtenlandsPeriode)
+  // console.log('selectedutenlandsperiode i Medlemskap', selectedUtenlandsPeriode);
   return (
     <>
       <SoknadFormWrapperNew
@@ -473,24 +460,26 @@ export const Medlemskap = ({ onBackClick, defaultValues }: Props) => {
                   </Table.Row>
                 </Table.Header>
                 <Table.Body>
-                  {defaultValues?.søknad?.medlemskap?.utenlandsOpphold?.map((field, index) => (
-                    <Table.Row key={field.id}>
+                  {defaultValues?.søknad?.medlemskap?.utenlandsOpphold?.map((utenlandsPeriode) => (
+                    <Table.Row key={utenlandsPeriode.id}>
                       <Table.DataCell className={styles.dataCell}>
                         <Button
                           variant="tertiary"
                           type="button"
                           onClick={() => {
-                            setSelectedUtenlandsPeriodeId(field.id);
+                            setSelectedUtenlandsPeriode(utenlandsPeriode);
                             setShowUtenlandsPeriodeModal(true);
                           }}
                         >
                           <div className={styles.tableRowButtonContainer}>
-                            <span>{`${field?.land?.split(':')?.[1]} `}</span>
+                            <span>{`${utenlandsPeriode?.land?.split(':')?.[1]} `}</span>
                             <span>
-                              {`${formatDate(field?.fraDato, 'MMMM yyyy')} - ${formatDate(
-                                field?.tilDato,
+                              {`${formatDate(
+                                utenlandsPeriode?.fraDato,
                                 'MMMM yyyy'
-                              )}${field?.iArbeid === 'Ja' ? ' (Jobb)' : ''}`}
+                              )} - ${formatDate(utenlandsPeriode?.tilDato, 'MMMM yyyy')}${
+                                utenlandsPeriode?.iArbeid === 'Ja' ? ' (Jobb)' : ''
+                              }`}
                             </span>
                           </div>
                         </Button>
@@ -501,10 +490,10 @@ export const Medlemskap = ({ onBackClick, defaultValues }: Props) => {
                           variant={'tertiary'}
                           onKeyPress={(event) => {
                             if (event.key === 'Enter') {
-                              remove(field.id);
+                              remove(utenlandsPeriode.id);
                             }
                           }}
-                          onClick={() => remove(field.id)}
+                          onClick={() => remove(utenlandsPeriode.id)}
                           icon={
                             <Delete
                               className={styles.deleteIcon}
@@ -534,10 +523,7 @@ export const Medlemskap = ({ onBackClick, defaultValues }: Props) => {
                   icon={<Add title={'Legg til'} />}
                   iconPosition={'left'}
                   onClick={() => {
-                    // setSelectedUtenlandsPeriodeId(undefined);
-                    const id = window?.crypto?.randomUUID() || 'no-crypto';
-                    append({ id });
-                    setSelectedUtenlandsPeriodeId(id);
+                    setSelectedUtenlandsPeriode(undefined);
                     setShowUtenlandsPeriodeModal(true);
                   }}
                 >
@@ -563,20 +549,17 @@ export const Medlemskap = ({ onBackClick, defaultValues }: Props) => {
       </SoknadFormWrapperNew>
       <UtenlandsPeriodeVelger
         utenlandsPeriode={selectedUtenlandsPeriode}
-        open={showUtenlandsPeriodeModal}
-        update={update}
-        onSave={() => {
-          setShowUtenlandsPeriodeModal(false);
-
-          // if (selectedUtenlandsPeriode === undefined) {
-          //   append({ ...data });
-          // } else if (selectedUtenlandsPeriodeId !== undefined) {
-          //   update({ ...data });
-          // }
-        }}
+        isOpen={showUtenlandsPeriodeModal}
         arbeidEllerBodd={arbeidEllerBodd}
-        onCancel={() => setShowUtenlandsPeriodeModal(false)}
-        onClose={() => setShowUtenlandsPeriodeModal(false)}
+        closeModal={() => setShowUtenlandsPeriodeModal(!showUtenlandsPeriodeModal)}
+        onSave={(utenlandsperiode) => {
+          if (selectedUtenlandsPeriode === undefined) {
+            append(utenlandsperiode);
+          } else {
+            update(utenlandsperiode);
+          }
+          setShowUtenlandsPeriodeModal(false);
+        }}
       />
     </>
   );
