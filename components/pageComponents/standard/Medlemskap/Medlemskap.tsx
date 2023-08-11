@@ -413,7 +413,7 @@ export const Medlemskap = ({ onBackClick, defaultValues }: Props) => {
             {defaultValues?.søknad?.medlemskap?.utenlandsOpphold &&
               defaultValues?.søknad.medlemskap.utenlandsOpphold.length > 0 && (
                 <UtenlandsOppholdTabell
-                  utenlandsOpphold={defaultValues?.søknad?.medlemskap.utenlandsOpphold}
+                  utenlandsPerioder={defaultValues?.søknad?.medlemskap.utenlandsOpphold}
                   setSelectedUtenlandsPeriode={setSelectedUtenlandsPeriode}
                   setShowUtenlandsPeriodeModal={setShowUtenlandsPeriodeModal}
                   arbeidEllerBodd={arbeidEllerBodd}

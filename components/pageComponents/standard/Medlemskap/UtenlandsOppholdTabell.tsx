@@ -10,13 +10,13 @@ import { useSoknadContextStandard } from '../../../../context/soknadContextStand
 import { ArbeidEllerBodd } from '../UtenlandsPeriodeVelger/UtenlandsPeriodeVelger';
 
 interface Props {
-  utenlandsOpphold: UtenlandsPeriode[];
+  utenlandsPerioder: UtenlandsPeriode[];
   setSelectedUtenlandsPeriode: Dispatch<UtenlandsPeriode>;
   setShowUtenlandsPeriodeModal: Dispatch<boolean>;
   arbeidEllerBodd: ArbeidEllerBodd;
 }
 const UtenlandsOppholdTabell = ({
-  utenlandsOpphold,
+  utenlandsPerioder,
   setSelectedUtenlandsPeriode,
   setShowUtenlandsPeriodeModal,
   arbeidEllerBodd,
@@ -49,7 +49,7 @@ const UtenlandsOppholdTabell = ({
         </Table.Row>
       </Table.Header>
       <Table.Body>
-        {utenlandsOpphold.map((utenlandsPeriode) => (
+        {utenlandsPerioder.map((utenlandsPeriode) => (
           <Table.Row key={utenlandsPeriode.id}>
             <Table.DataCell className={styles.dataCell}>
               <Button
