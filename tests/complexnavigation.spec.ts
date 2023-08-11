@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import { addDays, addMonths, format } from 'date-fns';
+import { addDays, format, subMonths } from 'date-fns';
 import { formatDate } from '../utils/date';
 
 test('at navigering i søknaden fungerer', async ({ page }) => {
@@ -102,15 +102,15 @@ test('at navigering i søknaden fungerer', async ({ page }) => {
     .getByRole('combobox', { name: 'Hvilket land jobbet du i?' })
     .selectOption('AL:Albania');
 
+  const lastMonth = subMonths(new Date(), 1);
   const thisMonth = new Date();
-  const nextMonth = addMonths(new Date(), 1);
 
   await page
     .getByRole('textbox', { name: /fra og med måned \(mm\.åååå\)/i })
-    .fill(formatDate(thisMonth) ?? '');
+    .fill(formatDate(lastMonth) ?? '');
   await page
     .getByRole('textbox', { name: /til og med måned \(mm\.åååå\)/i })
-    .fill(formatDate(nextMonth) ?? '');
+    .fill(formatDate(thisMonth) ?? '');
   await page.getByRole('button', { name: 'Lagre' }).click();
 
   await page.getByRole('button', { name: 'Neste steg' }).click();
@@ -134,7 +134,7 @@ test('at navigering i søknaden fungerer', async ({ page }) => {
 
   await expect(
     await page.getByRole('button', {
-      name: `Albania ${formatDate(thisMonth, 'MMMM yyyy')} - ${formatDate(nextMonth, 'MMMM yyyy')}`,
+      name: `Albania ${formatDate(lastMonth, 'MMMM yyyy')} - ${formatDate(thisMonth, 'MMMM yyyy')}`,
     })
   ).toBeVisible();
 
@@ -162,10 +162,10 @@ test('at navigering i søknaden fungerer', async ({ page }) => {
 
   await page
     .getByRole('textbox', { name: /fra og med måned \(mm\.åååå\)/i })
-    .fill(formatDate(thisMonth) ?? '');
+    .fill(formatDate(lastMonth) ?? '');
   await page
     .getByRole('textbox', { name: /til og med måned \(mm\.åååå\)/i })
-    .fill(formatDate(nextMonth) ?? '');
+    .fill(formatDate(thisMonth) ?? '');
 
   await expect(
     await page.getByLabel('ID-nummer/personnummer for det landet du har jobbet i (valgfritt)')
@@ -203,8 +203,8 @@ test('at navigering i søknaden fungerer', async ({ page }) => {
 
   await expect(
     await page.getByRole('button', {
-      name: `Bulgaria ${formatDate(thisMonth, 'MMMM yyyy')} - ${formatDate(
-        nextMonth,
+      name: `Bulgaria ${formatDate(lastMonth, 'MMMM yyyy')} - ${formatDate(
+        thisMonth,
         'MMMM yyyy'
       )}`,
     })
@@ -221,10 +221,10 @@ test('at navigering i søknaden fungerer', async ({ page }) => {
 
   await page
     .getByRole('textbox', { name: /fra og med måned \(mm\.åååå\)/i })
-    .fill(formatDate(thisMonth) ?? '');
+    .fill(formatDate(lastMonth) ?? '');
   await page
     .getByRole('textbox', { name: /til og med måned \(mm\.åååå\)/i })
-    .fill(formatDate(nextMonth) ?? '');
+    .fill(formatDate(thisMonth) ?? '');
 
   await page
     .getByRole('group', { name: 'Jobbet du i dette landet i denne perioden?' })
@@ -254,8 +254,8 @@ test('at navigering i søknaden fungerer', async ({ page }) => {
 
   await expect(
     await page.getByRole('button', {
-      name: `Brasil ${formatDate(thisMonth, 'MMMM yyyy')} - ${formatDate(
-        nextMonth,
+      name: `Brasil ${formatDate(lastMonth, 'MMMM yyyy')} - ${formatDate(
+        thisMonth,
         'MMMM yyyy'
       )} (Jobb)`,
     })
