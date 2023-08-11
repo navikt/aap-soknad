@@ -193,13 +193,7 @@ const Steps = ({ søker, mellomlagretSøknad }: PageProps) => {
                 />
               )}
               {step === '2' && (
-                <Medlemskap
-                  onBackClick={onPreviousStep}
-                  defaultValues={søknadState}
-                  onNext={(data) => {
-                    onNextStep(data);
-                  }}
-                />
+                <Medlemskap onBackClick={onPreviousStep} defaultValues={søknadState} />
               )}
               {step === '3' && (
                 <Yrkesskade onBackClick={onPreviousStep} defaultValues={søknadState} />

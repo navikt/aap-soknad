@@ -6,7 +6,7 @@ export const formatNavn = (navn?: Navn) =>
     navn?.etternavn || ''
   }`;
 
-export const landNavnFraSelector = (str: string) => str?.split(':')?.[1];
+export const landNavnFraSelector = (str?: string) => str?.split(':')?.[1];
 
 export const formatFullAdresse = (adresse?: Adresse) =>
   `${adresse?.adressenavn}${adresse?.husnummer || adresse?.husbokstav ? ' ' : ''}${

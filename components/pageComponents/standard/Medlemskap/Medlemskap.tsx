@@ -7,22 +7,19 @@ import {
   Radio,
   RadioGroup,
   ReadMore,
-  Table,
 } from '@navikt/ds-react';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { JaEllerNei } from 'types/Generic';
-import { Add, Delete } from '@navikt/ds-icons';
+import { Add } from '@navikt/ds-icons';
 import UtenlandsPeriodeVelger, {
   ArbeidEllerBodd,
 } from '..//UtenlandsPeriodeVelger/UtenlandsPeriodeVelger';
-import { formatDate } from 'utils/date';
 import { validate } from 'lib/utils/validationUtils';
-import { Soknad, UtenlandsPeriode } from 'types/Soknad';
+import { Medlemskap as MedlemskapType, Soknad, UtenlandsPeriode } from 'types/Soknad';
 import { completeAndGoToNextStep, useStepWizard } from 'context/stepWizardContextV2';
 import * as yup from 'yup';
 import ColorPanel from 'components/panel/ColorPanel';
 import { LucaGuidePanel } from '@navikt/aap-felles-react';
-import * as styles from './Medlemskap.module.css';
 import { GenericSoknadContextState } from 'types/SoknadContext';
 import { setFocusOnErrorSummary } from 'components/schema/FormErrorSummary';
 import { IntlFormatters, useIntl } from 'react-intl';
@@ -33,48 +30,37 @@ import { useSoknadContextStandard } from 'context/soknadContextStandard';
 import { updateSøknadData } from 'context/soknadContextCommon';
 import { useDebounceLagreSoknad } from 'hooks/useDebounceLagreSoknad';
 import { v4 as uuid4 } from 'uuid';
+import UtenlandsOppholdTabell from './UtenlandsOppholdTabell';
 
 interface Props {
   onBackClick: () => void;
-  onNext: (data: any) => void;
   defaultValues?: GenericSoknadContextState<Soknad>;
 }
-
-const UTENLANDSOPPHOLD = 'utenlandsOpphold';
-export const BODD_I_NORGE = 'harBoddINorgeSiste5År';
-const ARBEID_UTENFOR_NORGE_FØR_SYKDOM = 'arbeidetUtenforNorgeFørSykdom';
-const OGSÅ_ARBEID_UTENFOR_NORGE = 'iTilleggArbeidUtenforNorge';
-export const ARBEID_I_NORGE = 'harArbeidetINorgeSiste5År';
-const MEDLEMSKAP = 'medlemskap';
 
 const validateArbeidINorge = (boddINorge?: JaEllerNei | null) => boddINorge === JaEllerNei.NEI;
 const validateArbeidUtenforNorgeFørSykdom = (boddINorge?: JaEllerNei | null) =>
   boddINorge === JaEllerNei.JA;
 const valideOgsåArbeidetUtenforNorge = (boddINorge?: JaEllerNei | null, JobbINorge?: JaEllerNei) =>
   boddINorge === JaEllerNei.NEI && JobbINorge === JaEllerNei.JA;
-const validateUtenlandsPeriode = (
-  arbeidINorge?: JaEllerNei,
-  arbeidUtenforNorge?: JaEllerNei,
-  iTilleggArbeidUtenforNorge?: JaEllerNei
-) => {
+const validateUtenlandsPeriode = (medlemskap?: MedlemskapType) => {
   return (
-    arbeidUtenforNorge === JaEllerNei.JA ||
-    arbeidINorge === JaEllerNei.NEI ||
-    iTilleggArbeidUtenforNorge === JaEllerNei.JA
+    medlemskap?.arbeidetUtenforNorgeFørSykdom === JaEllerNei.JA ||
+    medlemskap?.harArbeidetINorgeSiste5År === JaEllerNei.NEI ||
+    medlemskap?.iTilleggArbeidUtenforNorge === JaEllerNei.JA
   );
 };
 
 export const getMedlemskapSchema = (formatMessage: IntlFormatters['formatMessage']) => {
   return yup.object().shape({
-    [MEDLEMSKAP]: yup.object().shape({
-      [BODD_I_NORGE]: yup
+    medlemskap: yup.object().shape({
+      harBoddINorgeSiste5År: yup
         .mixed<JaEllerNei>()
         .required(
           formatMessage({ id: 'søknad.medlemskap.harBoddINorgeSiste5År.validation.required' })
         )
         .oneOf([JaEllerNei.JA, JaEllerNei.NEI])
         .nullable(),
-      [ARBEID_I_NORGE]: yup.mixed<JaEllerNei>().when(BODD_I_NORGE, {
+      harArbeidetINorgeSiste5År: yup.mixed<JaEllerNei>().when('harBoddINorgeSiste5År', {
         is: validateArbeidINorge,
         then: (yupSchema) =>
           yupSchema
@@ -87,9 +73,9 @@ export const getMedlemskapSchema = (formatMessage: IntlFormatters['formatMessage
             .nullable(),
         otherwise: (yupSchema) => yupSchema.notRequired(),
       }),
-      [ARBEID_UTENFOR_NORGE_FØR_SYKDOM]: yup
+      arbeidetUtenforNorgeFørSykdom: yup
         .mixed<JaEllerNei>()
-        .when([BODD_I_NORGE, ARBEID_I_NORGE], {
+        .when(['harBoddINorgeSiste5År', 'harArbeidetINorgeSiste5År'], {
           is: validateArbeidUtenforNorgeFørSykdom,
           then: (yupSchema) =>
             yupSchema
@@ -100,65 +86,88 @@ export const getMedlemskapSchema = (formatMessage: IntlFormatters['formatMessage
               .nullable(),
           otherwise: (yupSchema) => yupSchema.notRequired(),
         }),
-      [OGSÅ_ARBEID_UTENFOR_NORGE]: yup.mixed<JaEllerNei>().when([BODD_I_NORGE, ARBEID_I_NORGE], {
-        is: valideOgsåArbeidetUtenforNorge,
-        then: (yupSchema) =>
-          yupSchema
-            .required(
-              formatMessage({
-                id: 'søknad.medlemskap.iTilleggArbeidUtenforNorge.validation.required',
-              })
-            )
-            .oneOf([JaEllerNei.JA, JaEllerNei.NEI])
-            .nullable(),
-        otherwise: (yupSchema) => yupSchema.notRequired(),
-      }),
-      [UTENLANDSOPPHOLD]: yup
+      iTilleggArbeidUtenforNorge: yup
+        .mixed<JaEllerNei>()
+        .when(['harBoddINorgeSiste5År', 'harArbeidetINorgeSiste5År'], {
+          is: valideOgsåArbeidetUtenforNorge,
+          then: (yupSchema) =>
+            yupSchema
+              .required(
+                formatMessage({
+                  id: 'søknad.medlemskap.iTilleggArbeidUtenforNorge.validation.required',
+                })
+              )
+              .oneOf([JaEllerNei.JA, JaEllerNei.NEI])
+              .nullable(),
+          otherwise: (yupSchema) => yupSchema.notRequired(),
+        }),
+      utenlandsOpphold: yup
         .array()
-        .when([BODD_I_NORGE, ARBEID_UTENFOR_NORGE_FØR_SYKDOM], {
-          is: (boddINorge: JaEllerNei, arbeidUtenforNorge: JaEllerNei) =>
-            boddINorge === JaEllerNei.JA && arbeidUtenforNorge === JaEllerNei.JA,
+        .when(['harBoddINorgeSiste5År', 'arbeidetUtenforNorgeFørSykdom'], {
+          is: (harBoddINorgeSiste5År: JaEllerNei, arbeidetUtenforNorgeFørSykdom: JaEllerNei) =>
+            harBoddINorgeSiste5År === JaEllerNei.JA &&
+            arbeidetUtenforNorgeFørSykdom === JaEllerNei.JA,
           then: (yupSchema) =>
-            yupSchema.min(
-              1,
-              formatMessage({
-                id: 'søknad.medlemskap.utenlandsperiode.boddINorgeArbeidUtenforNorge.validation.required',
-              })
-            ),
+            yupSchema
+              .required(
+                formatMessage({
+                  id: 'søknad.medlemskap.utenlandsperiode.boddINorgeArbeidUtenforNorge.validation.required',
+                })
+              )
+              .min(
+                1,
+                formatMessage({
+                  id: 'søknad.medlemskap.utenlandsperiode.boddINorgeArbeidUtenforNorge.validation.required',
+                })
+              ),
         })
-        .when([OGSÅ_ARBEID_UTENFOR_NORGE], {
-          is: (ogsåArbeidUtenforNorge: JaEllerNei) => ogsåArbeidUtenforNorge === JaEllerNei.JA,
+        .when(['iTilleggArbeidUtenforNorge'], {
+          is: (iTilleggArbeidUtenforNorge: JaEllerNei) =>
+            iTilleggArbeidUtenforNorge === JaEllerNei.JA,
           then: (yupSchema) =>
-            yupSchema.min(
-              1,
-              formatMessage({
-                id: 'søknad.medlemskap.utenlandsperiode.ogsåArbeidUtenforNorge.validation.required',
-              })
-            ),
+            yupSchema
+              .required(
+                formatMessage({
+                  id: 'søknad.medlemskap.utenlandsperiode.ogsåArbeidUtenforNorge.validation.required',
+                })
+              )
+              .min(
+                1,
+                formatMessage({
+                  id: 'søknad.medlemskap.utenlandsperiode.ogsåArbeidUtenforNorge.validation.required',
+                })
+              ),
         })
-        .when([ARBEID_I_NORGE], {
-          is: (arbeidINorge: JaEllerNei) => arbeidINorge === JaEllerNei.NEI,
+        .when(['harArbeidetINorgeSiste5År'], {
+          is: (harArbeidetINorgeSiste5År: JaEllerNei) =>
+            harArbeidetINorgeSiste5År === JaEllerNei.NEI,
           then: (yupSchema) =>
-            yupSchema.min(
-              1,
-              formatMessage({
-                id: 'søknad.medlemskap.utenlandsperiode.arbeidINorge.validation.required',
-              })
-            ),
+            yupSchema
+              .required(
+                formatMessage({
+                  id: 'søknad.medlemskap.utenlandsperiode.arbeidINorge.validation.required',
+                })
+              )
+              .min(
+                1,
+                formatMessage({
+                  id: 'søknad.medlemskap.utenlandsperiode.arbeidINorge.validation.required',
+                })
+              ),
         }),
     }),
   });
 };
 
-export const utenlandsPeriodeArbeidEllerBodd = (
-  arbeidINorge?: JaEllerNei,
-  boddINorge?: JaEllerNei | null
-) => {
-  if (boddINorge === JaEllerNei.NEI && arbeidINorge === JaEllerNei.NEI) {
+export function utenlandsPeriodeArbeidEllerBodd(medlemskap?: MedlemskapType) {
+  if (
+    medlemskap?.harBoddINorgeSiste5År === JaEllerNei.NEI &&
+    medlemskap?.harArbeidetINorgeSiste5År === JaEllerNei.NEI
+  ) {
     return ArbeidEllerBodd.BODD;
   }
   return ArbeidEllerBodd.ARBEID;
-};
+}
 
 export const Medlemskap = ({ onBackClick, defaultValues }: Props) => {
   const { formatMessage } = useIntl();
@@ -167,6 +176,7 @@ export const Medlemskap = ({ onBackClick, defaultValues }: Props) => {
   const { søknadState, søknadDispatch } = useSoknadContextStandard();
   const [showUtenlandsPeriodeModal, setShowUtenlandsPeriodeModal] = useState<boolean>(false);
   const [selectedUtenlandsPeriode, setSelectedUtenlandsPeriode] = useState<UtenlandsPeriode>({});
+  const [errors, setErrors] = useState<SøknadValidationError[] | undefined>();
   const debouncedLagre = useDebounceLagreSoknad<Soknad>();
 
   useEffect(() => {
@@ -186,97 +196,49 @@ export const Medlemskap = ({ onBackClick, defaultValues }: Props) => {
       },
     });
   };
+
   const update = (utenlandsPeriode: UtenlandsPeriode) => {
     updateSøknadData(søknadDispatch, {
       medlemskap: {
         ...søknadState?.søknad?.medlemskap,
-        utenlandsOpphold: søknadState?.søknad?.medlemskap?.utenlandsOpphold?.map((e) => {
-          if (e.id === utenlandsPeriode.id) {
-            return utenlandsPeriode;
-          } else {
-            return e;
-          }
-        }),
+        utenlandsOpphold: søknadState.søknad?.medlemskap?.utenlandsOpphold?.map((e) =>
+          e.id === utenlandsPeriode.id ? utenlandsPeriode : e
+        ),
       },
     });
   };
-  const remove = (id?: string) => {
-    console.log('remove', id);
-    if (id) {
-      updateSøknadData(søknadDispatch, {
-        medlemskap: {
-          ...søknadState?.søknad?.medlemskap,
-          utenlandsOpphold: søknadState?.søknad?.medlemskap?.utenlandsOpphold?.filter(
-            (e) => e.id !== id
-          ),
-        },
-      });
-    } else {
-      updateSøknadData(søknadDispatch, {
-        medlemskap: {
-          ...søknadState?.søknad?.medlemskap,
-          utenlandsOpphold: [],
-        },
-      });
-    }
-  };
 
-  const [errors, setErrors] = useState<SøknadValidationError[] | undefined>();
-  const showArbeidINorge = useMemo(
-    () => validateArbeidINorge(søknadState?.søknad?.medlemskap?.harBoddINorgeSiste5År),
-    [søknadState?.søknad?.medlemskap?.harBoddINorgeSiste5År]
-  );
-  const showArbeidUtenforNorgeFørSykdom = useMemo(
-    () =>
-      validateArbeidUtenforNorgeFørSykdom(søknadState?.søknad?.medlemskap?.harBoddINorgeSiste5År),
-    [søknadState?.søknad?.medlemskap?.harBoddINorgeSiste5År]
-  );
-  const showOgsåArbeidetUtenforNorge = useMemo(
-    () =>
-      valideOgsåArbeidetUtenforNorge(
-        søknadState?.søknad?.medlemskap?.harBoddINorgeSiste5År,
-        søknadState?.søknad?.medlemskap?.harArbeidetINorgeSiste5År
-      ),
-    [
-      søknadState?.søknad?.medlemskap?.harBoddINorgeSiste5År,
-      søknadState?.søknad?.medlemskap?.harArbeidetINorgeSiste5År,
-    ]
-  );
-  const showLeggTilUtenlandsPeriode = useMemo(
-    () =>
-      validateUtenlandsPeriode(
-        søknadState?.søknad?.medlemskap?.harArbeidetINorgeSiste5År,
-        søknadState?.søknad?.medlemskap?.arbeidetUtenforNorgeFørSykdom,
-        søknadState?.søknad?.medlemskap?.iTilleggArbeidUtenforNorge
-      ),
-    [
-      søknadState?.søknad?.medlemskap?.harArbeidetINorgeSiste5År,
-      søknadState?.søknad?.medlemskap?.arbeidetUtenforNorgeFørSykdom,
-      søknadState?.søknad?.medlemskap?.iTilleggArbeidUtenforNorge,
-    ]
+  const visArbeidINorge = validateArbeidINorge(
+    søknadState?.søknad?.medlemskap?.harBoddINorgeSiste5År
   );
 
-  const arbeidEllerBodd = useMemo(
-    () =>
-      utenlandsPeriodeArbeidEllerBodd(
-        søknadState?.søknad?.medlemskap?.harArbeidetINorgeSiste5År,
-        søknadState?.søknad?.medlemskap?.harBoddINorgeSiste5År
-      ),
-    [
-      søknadState?.søknad?.medlemskap?.harArbeidetINorgeSiste5År,
-      søknadState?.søknad?.medlemskap?.harBoddINorgeSiste5År,
-    ]
+  const visArbeidUtenforNorgeFørSykdom = validateArbeidUtenforNorgeFørSykdom(
+    søknadState?.søknad?.medlemskap?.harBoddINorgeSiste5År
   );
+
+  const visOgsåArbeidetUtenforNorge = valideOgsåArbeidetUtenforNorge(
+    søknadState?.søknad?.medlemskap?.harBoddINorgeSiste5År,
+    søknadState?.søknad?.medlemskap?.harArbeidetINorgeSiste5År
+  );
+
+  const visLeggTilUtenlandsPeriode = validateUtenlandsPeriode(søknadState.søknad?.medlemskap);
+
+  const arbeidEllerBodd = utenlandsPeriodeArbeidEllerBodd(søknadState?.søknad?.medlemskap);
 
   function clearErrors() {
     setErrors(undefined);
   }
 
-  // console.log('selectedutenlandsperiode i Medlemskap', selectedUtenlandsPeriode);
+  const findError = (path: string) => errors?.find((error) => error.path === path)?.message;
+  const utenlandsOppholdErrorMessage = findError('medlemskap.utenlandsOpphold');
+
+  console.log('errors', errors);
+
   return (
     <>
       <SoknadFormWrapperNew
         onNext={async () => {
+          console.log(søknadState.søknad);
           const errors = await validate(getMedlemskapSchema(formatMessage), søknadState.søknad);
           if (errors) {
             setErrors(errors);
@@ -298,14 +260,15 @@ export const Medlemskap = ({ onBackClick, defaultValues }: Props) => {
         </Heading>
         <LucaGuidePanel>{formatMessage({ id: 'søknad.medlemskap.guide.text' })}</LucaGuidePanel>
         <RadioGroup
-          name={`${BODD_I_NORGE}`}
-          id={`${BODD_I_NORGE}`}
+          name={`medlemskap.harBoddINorgeSiste5År`}
+          id={`medlemskap.harBoddINorgeSiste5År`}
           legend={formatMessage({ id: 'søknad.medlemskap.harBoddINorgeSiste5År.label' })}
           value={defaultValues?.søknad?.medlemskap?.harBoddINorgeSiste5År || ''}
           onChange={(value) => {
             clearErrors();
             updateSøknadData(søknadDispatch, { medlemskap: { harBoddINorgeSiste5År: value } });
           }}
+          error={findError('medlemskap.harBoddINorgeSiste5År')}
         >
           <ReadMore
             header={formatMessage({ id: 'søknad.medlemskap.harBoddINorgeSiste5År.readMore.title' })}
@@ -320,11 +283,11 @@ export const Medlemskap = ({ onBackClick, defaultValues }: Props) => {
             <BodyShort>Nei</BodyShort>
           </Radio>
         </RadioGroup>
-        {showArbeidINorge && (
+        {visArbeidINorge && (
           <>
             <RadioGroup
-              name={`${ARBEID_I_NORGE}`}
-              id={`${ARBEID_I_NORGE}`}
+              name={'medlemskap.harArbeidetINorgeSiste5År'}
+              id={'medlemskap.harArbeidetINorgeSiste5År'}
               legend={formatMessage({ id: 'søknad.medlemskap.harArbeidetINorgeSiste5År.label' })}
               value={defaultValues?.søknad?.medlemskap?.harArbeidetINorgeSiste5År || ''}
               onChange={(value) => {
@@ -336,6 +299,7 @@ export const Medlemskap = ({ onBackClick, defaultValues }: Props) => {
                   },
                 });
               }}
+              error={findError('medlemskap.harArbeidetINorgeSiste5År')}
             >
               <ReadMore
                 header={formatMessage({
@@ -354,12 +318,12 @@ export const Medlemskap = ({ onBackClick, defaultValues }: Props) => {
             </RadioGroup>
           </>
         )}
-        {showArbeidUtenforNorgeFørSykdom && (
+        {visArbeidUtenforNorgeFørSykdom && (
           // Gjelder §11-19 og beregning av utbetaling. Skal kun komme opp hvis §11-2 er oppfyltt
           <>
             <RadioGroup
-              name={`${ARBEID_UTENFOR_NORGE_FØR_SYKDOM}`}
-              id={`${ARBEID_UTENFOR_NORGE_FØR_SYKDOM}`}
+              name={'medlemskap.arbeidetUtenforNorgeFørSykdom'}
+              id={'medlemskap.arbeidetUtenforNorgeFørSykdom'}
               legend={formatMessage({ id: 'søknad.medlemskap.arbeidUtenforNorge.label' })}
               value={defaultValues?.søknad?.medlemskap?.arbeidetUtenforNorgeFørSykdom || ''}
               onChange={(value) => {
@@ -371,6 +335,7 @@ export const Medlemskap = ({ onBackClick, defaultValues }: Props) => {
                   },
                 });
               }}
+              error={findError('medlemskap.arbeidetUtenforNorgeFørSykdom')}
             >
               <ReadMore
                 header={formatMessage({
@@ -389,11 +354,11 @@ export const Medlemskap = ({ onBackClick, defaultValues }: Props) => {
             </RadioGroup>
           </>
         )}
-        {showOgsåArbeidetUtenforNorge && (
+        {visOgsåArbeidetUtenforNorge && (
           <>
             <RadioGroup
-              name={`${OGSÅ_ARBEID_UTENFOR_NORGE}`}
-              id={`${OGSÅ_ARBEID_UTENFOR_NORGE}`}
+              name={'medlemskap.iTilleggArbeidUtenforNorge'}
+              id={'medlemskap.iTilleggArbeidUtenforNorge'}
               legend={formatMessage({ id: 'søknad.medlemskap.iTilleggArbeidUtenforNorge.label' })}
               description={formatMessage({
                 id: 'søknad.medlemskap.iTilleggArbeidUtenforNorge.description',
@@ -410,6 +375,7 @@ export const Medlemskap = ({ onBackClick, defaultValues }: Props) => {
                   },
                 });
               }}
+              error={findError('medlemskap.iTilleggArbeidUtenforNorge')}
             >
               <ReadMore
                 header={formatMessage({
@@ -430,7 +396,7 @@ export const Medlemskap = ({ onBackClick, defaultValues }: Props) => {
             </RadioGroup>
           </>
         )}
-        {showLeggTilUtenlandsPeriode && (
+        {visLeggTilUtenlandsPeriode && (
           <ColorPanel color={'grey'}>
             <BodyShort spacing>
               {formatMessage({
@@ -444,75 +410,15 @@ export const Medlemskap = ({ onBackClick, defaultValues }: Props) => {
                 })}
               </BodyShort>
             )}
-            {defaultValues?.søknad?.medlemskap?.utenlandsOpphold?.length &&
-            defaultValues?.søknad?.medlemskap?.utenlandsOpphold?.length > 0 ? (
-              <Table size="medium">
-                <Table.Header>
-                  <Table.Row>
-                    <Table.HeaderCell colSpan={2}>
-                      <Heading size="xsmall" level="3">
-                        {formatMessage({
-                          id: `søknad.medlemskap.utenlandsperiode.perioder.title.${arbeidEllerBodd}`,
-                        })}
-                      </Heading>
-                    </Table.HeaderCell>
-                  </Table.Row>
-                </Table.Header>
-                <Table.Body>
-                  {defaultValues?.søknad?.medlemskap?.utenlandsOpphold?.map((utenlandsPeriode) => (
-                    <Table.Row key={utenlandsPeriode.id}>
-                      <Table.DataCell className={styles.dataCell}>
-                        <Button
-                          variant="tertiary"
-                          type="button"
-                          onClick={() => {
-                            setSelectedUtenlandsPeriode(utenlandsPeriode);
-                            setShowUtenlandsPeriodeModal(true);
-                          }}
-                        >
-                          <div className={styles.tableRowButtonContainer}>
-                            <span>{`${utenlandsPeriode?.land?.split(':')?.[1]} `}</span>
-                            <span>
-                              {`${formatDate(
-                                utenlandsPeriode?.fraDato,
-                                'MMMM yyyy'
-                              )} - ${formatDate(utenlandsPeriode?.tilDato, 'MMMM yyyy')}${
-                                utenlandsPeriode?.iArbeid === 'Ja' ? ' (Jobb)' : ''
-                              }`}
-                            </span>
-                          </div>
-                        </Button>
-                      </Table.DataCell>
-                      <Table.DataCell>
-                        <Button
-                          type={'button'}
-                          variant={'tertiary'}
-                          onKeyPress={(event) => {
-                            if (event.key === 'Enter') {
-                              remove(utenlandsPeriode.id);
-                            }
-                          }}
-                          onClick={() => remove(utenlandsPeriode.id)}
-                          icon={
-                            <Delete
-                              className={styles.deleteIcon}
-                              title={'Slett utenlandsopphold'}
-                              role={'button'}
-                              tabIndex={0}
-                            />
-                          }
-                          iconPosition={'left'}
-                        >
-                          Fjern
-                        </Button>
-                      </Table.DataCell>
-                    </Table.Row>
-                  ))}
-                </Table.Body>
-              </Table>
-            ) : (
-              <></>
-            )}
+            {defaultValues?.søknad?.medlemskap?.utenlandsOpphold &&
+              defaultValues?.søknad.medlemskap.utenlandsOpphold.length > 0 && (
+                <UtenlandsOppholdTabell
+                  utenlandsOpphold={defaultValues?.søknad?.medlemskap.utenlandsOpphold}
+                  setSelectedUtenlandsPeriode={setSelectedUtenlandsPeriode}
+                  setShowUtenlandsPeriodeModal={setShowUtenlandsPeriodeModal}
+                  arbeidEllerBodd={arbeidEllerBodd}
+                />
+              )}
             <Grid>
               <Cell xs={12}>
                 <Button
@@ -533,15 +439,10 @@ export const Medlemskap = ({ onBackClick, defaultValues }: Props) => {
               </Cell>
             </Grid>
 
-            {/* TODO: react-hook-form antar at vi kun har validering på hvert enkelt field i FieldArrays */}
-            {/* @ts-ignore-line */}
-            {errors?.[MEDLEMSKAP]?.[UTENLANDSOPPHOLD]?.message ? (
+            {utenlandsOppholdErrorMessage && (
               <div className={'navds-error-message navds-error-message--medium navds-label'}>
-                {/* @ts-ignore-line*/}
-                {errors?.[MEDLEMSKAP]?.[UTENLANDSOPPHOLD]?.message}
+                {utenlandsOppholdErrorMessage}
               </div>
-            ) : (
-              <></>
             )}
           </ColorPanel>
         )}
