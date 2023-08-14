@@ -37,14 +37,14 @@ export type Medlemskap = {
   utenlandsOpphold?: UtenlandsPeriode[];
 };
 export type Behandler = {
-  firstname: string;
-  lastname: string;
-  gateadresse: string;
-  legekontor: string;
-  postnummer: string;
-  poststed: string;
-  telefon: string;
-  id: string;
+  firstname?: string;
+  lastname?: string;
+  gateadresse?: string;
+  legekontor?: string;
+  postnummer?: string;
+  poststed?: string;
+  telefon?: string;
+  id?: string;
 };
 export interface RegistrertBehandler extends OppslagBehandler {
   erRegistrertFastlegeRiktig?: JaEllerNei;
