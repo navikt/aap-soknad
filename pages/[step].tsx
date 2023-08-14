@@ -57,6 +57,7 @@ import { Steg0 } from 'components/pageComponents/standard/Steg0/Steg0';
 import * as classes from './step.module.css';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { logger } from '@navikt/aap-felles-utils';
+import { v4 as uuid4 } from 'uuid';
 
 interface PageProps {
   søker: SokerOppslagState;
@@ -193,13 +194,7 @@ const Steps = ({ søker, mellomlagretSøknad }: PageProps) => {
                 />
               )}
               {step === '2' && (
-                <Medlemskap
-                  onBackClick={onPreviousStep}
-                  defaultValues={søknadState}
-                  onNext={(data) => {
-                    onNextStep(data);
-                  }}
-                />
+                <Medlemskap onBackClick={onPreviousStep} defaultValues={søknadState} />
               )}
               {step === '3' && (
                 <Yrkesskade onBackClick={onPreviousStep} defaultValues={søknadState} />
@@ -284,8 +279,34 @@ export const getServerSideProps = beskyttetSide(
       };
     }
 
+    // Etter innføring av ID i utenlandsopphold så må vi legge til en id i eksisterende opphold frem til september 2023.
+    const utenlandsOpphold = mellomlagretSøknad?.søknad?.medlemskap?.utenlandsOpphold?.map(
+      (utenlandsOpphold) => {
+        if (utenlandsOpphold.id === undefined) {
+          return { ...utenlandsOpphold, id: uuid4() };
+        } else {
+          return utenlandsOpphold;
+        }
+      }
+    );
+
+    let mellomLagretSøknadMedUtenlandsOppholdId = mellomlagretSøknad;
+
+    if (utenlandsOpphold) {
+      mellomLagretSøknadMedUtenlandsOppholdId = {
+        ...mellomlagretSøknad,
+        søknad: {
+          ...mellomlagretSøknad.søknad,
+          medlemskap: {
+            ...mellomlagretSøknad.søknad?.medlemskap,
+            utenlandsOpphold: utenlandsOpphold,
+          },
+        },
+      };
+    }
+
     return {
-      props: { søker, mellomlagretSøknad },
+      props: { søker, mellomlagretSøknad: mellomLagretSøknadMedUtenlandsOppholdId },
     };
   }
 );

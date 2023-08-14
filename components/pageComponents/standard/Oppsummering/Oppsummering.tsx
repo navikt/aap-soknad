@@ -40,10 +40,11 @@ import {
   getStartDatoSchema,
 } from 'components/pageComponents/standard/StartDato/StartDato';
 import { getYrkesskadeSchema } from 'components/pageComponents/standard/Yrkesskade/Yrkesskade';
-import { getMedlemskapSchema } from 'components/pageComponents/standard/Medlemskap/Medlemskap';
+
 import { getBehandlerSchema } from 'components/pageComponents/standard/Behandlere/Behandlere';
 import { logSkjemaValideringFeiletEvent } from 'utils/amplitude';
 import { useIntl } from 'react-intl';
+import { getMedlemskapSchema } from '../Medlemskap/medlemskapSchema';
 
 interface OppsummeringProps {
   onBackClick: () => void;

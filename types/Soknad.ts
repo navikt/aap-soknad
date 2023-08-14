@@ -19,11 +19,13 @@ export type Periode = {
   fraDato?: Date;
   tilDato?: Date;
 };
+
 export type UtenlandsPeriode = {
-  land: string;
-  tilDato: Date;
-  fraDato: Date;
-  iArbeid: JaEllerNei;
+  id?: string;
+  land?: string;
+  tilDato?: Date;
+  fraDato?: Date;
+  iArbeid?: JaEllerNei;
   utenlandsId?: string;
 };
 

@@ -142,64 +142,6 @@ const StartDato = ({ onBackClick, defaultValues }: Props) => {
     [formatMessage]
   );
 
-  useEffect(() => {
-    if (søknadState.søknad?.sykepenger !== JaEllerNei.JA) {
-      updateSøknadData(søknadDispatch, {
-        ferie: {
-          ...søknadState.søknad?.ferie,
-          skalHaFerie: '',
-        },
-      });
-    }
-    clearErrors();
-  }, [søknadState.søknad?.sykepenger]);
-
-  useEffect(() => {
-    if (søknadState.søknad?.ferie?.skalHaFerie !== JaEllerNei.JA) {
-      updateSøknadData(søknadDispatch, {
-        ferie: {
-          ...søknadState.søknad?.ferie,
-          ferieType: undefined,
-        },
-      });
-    }
-    clearErrors();
-  }, [søknadState.søknad?.ferie?.skalHaFerie]);
-
-  useEffect(() => {
-    if (!søknadState.søknad?.ferie?.ferieType) {
-      updateSøknadData(søknadDispatch, {
-        ferie: {
-          ...søknadState.søknad?.ferie,
-          fraDato: undefined,
-          tilDato: undefined,
-          antallDager: undefined,
-        },
-      });
-    } else {
-      if (søknadState?.søknad?.ferie?.ferieType != FerieType.PERIODE) {
-        updateSøknadData(søknadDispatch, {
-          ferie: {
-            ...søknadState.søknad?.ferie,
-            fraDato: undefined,
-            tilDato: undefined,
-          },
-        });
-      }
-
-      if (søknadState?.søknad?.ferie?.ferieType != FerieType.DAGER) {
-        updateSøknadData(søknadDispatch, {
-          ferie: {
-            ...søknadState.søknad?.ferie,
-            antallDager: undefined,
-          },
-        });
-      }
-    }
-
-    clearErrors();
-  }, [søknadState.søknad?.ferie?.ferieType]);
-
   function clearErrors() {
     setErrors(undefined);
   }
@@ -207,7 +149,6 @@ const StartDato = ({ onBackClick, defaultValues }: Props) => {
   function findError(path: string): string | undefined {
     return errors?.find((error) => error.path === path)?.message;
   }
-
   return (
     <SoknadFormWrapperNew
       onNext={async () => {
@@ -240,7 +181,7 @@ const StartDato = ({ onBackClick, defaultValues }: Props) => {
         value={defaultValues?.søknad?.sykepenger || ''}
         onChange={(value) => {
           clearErrors();
-          updateSøknadData(søknadDispatch, { sykepenger: value });
+          updateSøknadData(søknadDispatch, { sykepenger: value, ferie: undefined });
         }}
         error={findError('sykepenger')}
       >
@@ -258,7 +199,7 @@ const StartDato = ({ onBackClick, defaultValues }: Props) => {
             onChange={(value) => {
               clearErrors();
               updateSøknadData(søknadDispatch, {
-                ferie: { ...søknadState?.søknad?.ferie, skalHaFerie: value },
+                ferie: { skalHaFerie: value },
               });
             }}
             error={findError('ferie.skalHaFerie')}
@@ -275,7 +216,10 @@ const StartDato = ({ onBackClick, defaultValues }: Props) => {
               onChange={(value) => {
                 clearErrors();
                 updateSøknadData(søknadDispatch, {
-                  ferie: { ...søknadState?.søknad?.ferie, ferieType: value },
+                  ferie: {
+                    skalHaFerie: søknadState?.søknad?.ferie?.skalHaFerie,
+                    ferieType: value,
+                  },
                 });
               }}
               error={findError('ferie.ferieType')}
@@ -317,7 +261,11 @@ const StartDato = ({ onBackClick, defaultValues }: Props) => {
                 onChange={(value) => {
                   clearErrors();
                   updateSøknadData(søknadDispatch, {
-                    ferie: { ...søknadState?.søknad?.ferie, antallDager: value.target.value },
+                    ferie: {
+                      skalHaFerie: søknadState?.søknad?.ferie?.skalHaFerie,
+                      ferieType: søknadState?.søknad?.ferie?.ferieType,
+                      antallDager: value.target.value,
+                    },
                   });
                 }}
                 error={findError('ferie.antallDager')}

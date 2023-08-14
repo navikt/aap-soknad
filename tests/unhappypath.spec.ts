@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import { addDays, addMonths, format, subYears } from 'date-fns';
+import { addDays, format, subMonths, subYears } from 'date-fns';
 import { formatDate } from '../utils/date';
 
 test('at alle feilmeldinger skal dukke opp', async ({ page }) => {
@@ -151,15 +151,15 @@ test('at alle feilmeldinger skal dukke opp', async ({ page }) => {
     .getByRole('combobox', { name: 'Hvilket land jobbet du i?' })
     .selectOption('AL:Albania');
 
+  const lastMonth = subMonths(new Date(), 1);
   const thisMonth = new Date();
-  const nextMonth = addMonths(new Date(), 1);
 
   await page
     .getByRole('textbox', { name: /fra og med måned \(mm\.åååå\)/i })
-    .fill(formatDate(nextMonth) ?? '');
+    .fill(formatDate(thisMonth) ?? '');
   await page
     .getByRole('textbox', { name: /til og med måned \(mm\.åååå\)/i })
-    .fill(formatDate(thisMonth) ?? '');
+    .fill(formatDate(lastMonth) ?? '');
 
   await page.getByRole('button', { name: 'Lagre' }).click();
   await expect(
@@ -167,10 +167,10 @@ test('at alle feilmeldinger skal dukke opp', async ({ page }) => {
   ).toBeVisible();
   await page
     .getByRole('textbox', { name: /fra og med måned \(mm\.åååå\)/i })
-    .fill(formatDate(thisMonth) ?? '');
+    .fill(formatDate(lastMonth) ?? '');
   await page
     .getByRole('textbox', { name: /til og med måned \(mm\.åååå\)/i })
-    .fill(formatDate(nextMonth) ?? '');
+    .fill(formatDate(thisMonth) ?? '');
 
   await page.getByRole('button', { name: 'Lagre' }).click();
 

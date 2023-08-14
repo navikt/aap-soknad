@@ -1,37 +1,40 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { render, screen, waitFor } from 'setupTests';
 import CountrySelector from './CountrySelector';
 import * as yup from 'yup';
-import { useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup/dist/yup';
 import { Button } from '@navikt/ds-react';
 import userEvent from '@testing-library/user-event';
+import { validate } from '../../lib/utils/validationUtils';
+import { SøknadValidationError } from '../schema/FormErrorSummaryNew';
 
 interface Props {
   defaultValue?: string;
 }
 
-interface FormFields {
-  land: string;
-}
-
 const TestComponent = (props: Props) => {
+  const [land, setLand] = useState('');
+  const [error, setError] = useState<SøknadValidationError[] | undefined>();
   const schema = yup.object().shape({
     land: yup.string().required('Dette er et påkrevd felt.'),
   });
 
-  const { control, handleSubmit } = useForm<FormFields>({
-    resolver: yupResolver(schema),
-    defaultValues: {
-      land: props.defaultValue,
-    },
-  });
-
-  const submitFunction = jest.fn();
-
   return (
-    <form onSubmit={handleSubmit(() => submitFunction())}>
-      <CountrySelector name={'land'} label={'Hvilket land liker du?'} control={control} />
+    <form
+      onSubmit={async (e) => {
+        e.preventDefault();
+        const error = await validate(schema, { land });
+        if (error) {
+          setError(error);
+        }
+      }}
+    >
+      <CountrySelector
+        name={'land'}
+        label={'Hvilket land liker du?'}
+        onChange={(e) => setLand(e.target.value)}
+        value={props.defaultValue}
+        error={error?.find((error) => error.path === 'land')?.message}
+      />
       <Button>Fullfør</Button>
     </form>
   );
