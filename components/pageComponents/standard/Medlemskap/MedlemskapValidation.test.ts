@@ -1,5 +1,5 @@
-import { getMedlemskapSchema } from './Medlemskap';
 import { JaEllerNei } from '../../../../types/Generic';
+import { getMedlemskapSchema } from './medlemskapSchema';
 
 describe('Medlemskap validation', () => {
   const schema = getMedlemskapSchema(jest.fn());

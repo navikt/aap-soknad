@@ -18,12 +18,12 @@ import { formatFullAdresse, formatNavn } from 'utils/StringFormatters';
 import { BARN, GRUNNBELØP } from 'components/pageComponents/standard/Barnetillegg/Barnetillegg';
 import { RequiredVedlegg } from 'types/SoknadContext';
 import { Relasjon } from 'components/pageComponents/standard/Barnetillegg/AddBarnModal';
-import { utenlandsPeriodeArbeidEllerBodd } from 'components/pageComponents/standard/Medlemskap/Medlemskap';
 import {
   FerieType,
   FerieTypeToMessageKey,
 } from 'components/pageComponents/standard/StartDato/StartDato';
 import { JaEllerNei } from 'types/Generic';
+import { utenlandsPeriodeArbeidEllerBodd } from '../components/pageComponents/standard/Medlemskap/medlemskapUtils';
 
 export type SøknadsType = 'UTLAND' | 'STANDARD';
 
