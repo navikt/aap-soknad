@@ -9,6 +9,8 @@ import { isLabs, isMock } from 'utils/environments';
 import { getStringFromPossiblyArrayQuery } from 'utils/string';
 import { SØKNAD_CONTEXT_VERSION } from 'context/soknadContextCommon';
 import { defaultStepList } from 'pages';
+import { Soknad } from '../../../types/Soknad';
+import { GenericSoknadContextState, SøknadType } from '../../../types/SoknadContext';
 
 const handler = beskyttetApi(async (req: NextApiRequest, res: NextApiResponse) => {
   const type = getStringFromPossiblyArrayQuery(req.query.type);
@@ -24,17 +26,18 @@ export const lesBucket = async (
   type: SøknadsType,
   accessToken?: string,
   retryCount = 3
-): Promise<any> => {
+): Promise<GenericSoknadContextState<Soknad> | undefined> => {
   if (retryCount === 0) {
     logger.info(`RetryCount for å hente mellomlagret søknad er 0. Gir opp.`);
     return undefined;
   }
   if (isLabs()) {
     return {
-      type: 'STANDARD',
+      type: SøknadType.STANDARD,
       version: SØKNAD_CONTEXT_VERSION,
       søknad: {},
       lagretStepList: defaultStepList,
+      requiredVedlegg: [],
     };
   }
   if (isMock()) {
