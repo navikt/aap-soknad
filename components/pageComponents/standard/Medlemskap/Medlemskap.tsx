@@ -332,6 +332,7 @@ export const Medlemskap = ({ onBackClick, defaultValues }: Props) => {
         onSave={(utenlandsperiode) => {
           if (selectedUtenlandsPeriode.id === undefined) {
             append({ ...utenlandsperiode, id: uuid4() });
+            clearErrors();
           } else {
             update(utenlandsperiode);
           }
