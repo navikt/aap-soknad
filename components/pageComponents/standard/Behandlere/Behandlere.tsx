@@ -75,7 +75,12 @@ export const Behandlere = ({ onBackClick, defaultValues }: Props) => {
     setErrors(undefined);
   }
 
-  const append = (behandler: Behandler) => {};
+  const append = (behandler: Behandler) => {
+    updateSøknadData(søknadDispatch, {
+      andreBehandlere: [...(søknadState.søknad?.andreBehandlere || []), behandler],
+    });
+  };
+
   const update = (behandler: Behandler) => {};
   const saveNyBehandler = (behandler: Behandler) => {
     if (behandler.id === undefined) {
