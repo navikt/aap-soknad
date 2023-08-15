@@ -12,7 +12,7 @@ import React, { useEffect, useState } from 'react';
 import { Add, Delete } from '@navikt/ds-icons';
 import { Behandler, Soknad } from 'types/Soknad';
 import * as yup from 'yup';
-import { useStepWizard } from 'context/stepWizardContextV2';
+import { completeAndGoToNextStep, useStepWizard } from 'context/stepWizardContextV2';
 import { AddBehandlerModal } from './AddBehandlerModal';
 import { LucaGuidePanel } from '@navikt/aap-felles-react';
 import * as classes from './Behandlere.module.css';
@@ -26,10 +26,10 @@ import { IntlFormatters, useIntl } from 'react-intl';
 import SoknadFormWrapperNew from '../../../SoknadFormWrapper/SoknadFormWrapperNew';
 import { SøknadValidationError } from '../../../schema/FormErrorSummaryNew';
 import { v4 as uuid4 } from 'uuid';
+import { logSkjemastegFullførtEvent } from '../../../../utils/amplitude';
 
 interface Props {
   onBackClick: () => void;
-  onNext: (data: any) => void;
   defaultValues?: GenericSoknadContextState<Soknad>;
 }
 
@@ -48,10 +48,11 @@ export const getBehandlerSchema = (formatMessage: IntlFormatters['formatMessage'
     ),
     andreBehandlere: yup.array(),
   });
-export const Behandlere = ({ onBackClick, onNext, defaultValues }: Props) => {
+export const Behandlere = ({ onBackClick, defaultValues }: Props) => {
   const { formatMessage } = useIntl();
 
   const { søknadState, søknadDispatch } = useSoknadContextStandard();
+  const { currentStepIndex, stepWizardDispatch } = useStepWizard();
   const [errors, setErrors] = useState<SøknadValidationError[] | undefined>();
 
   const { stepList } = useStepWizard();
@@ -98,7 +99,12 @@ export const Behandlere = ({ onBackClick, onNext, defaultValues }: Props) => {
   return (
     <>
       <SoknadFormWrapperNew
-        onNext={async () => {}}
+        onNext={async () => {
+          // Validate and do shit here
+
+          logSkjemastegFullførtEvent(currentStepIndex ?? 0);
+          completeAndGoToNextStep(stepWizardDispatch);
+        }}
         onBack={() => {
           updateSøknadData<Soknad>(søknadDispatch, { ...søknadState.søknad });
           onBackClick();

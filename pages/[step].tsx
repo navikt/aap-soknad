@@ -200,13 +200,7 @@ const Steps = ({ søker, mellomlagretSøknad }: PageProps) => {
                 <Yrkesskade onBackClick={onPreviousStep} defaultValues={søknadState} />
               )}
               {step === '4' && (
-                <Behandlere
-                  onBackClick={onPreviousStep}
-                  defaultValues={søknadState}
-                  onNext={(data) => {
-                    onNextStep(data);
-                  }}
-                />
+                <Behandlere onBackClick={onPreviousStep} defaultValues={søknadState} />
               )}
               {step === '5' && (
                 <Barnetillegg
