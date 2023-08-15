@@ -29,6 +29,7 @@ import { v4 as uuid4 } from 'uuid';
 import { logSkjemastegFullførtEvent } from '../../../../utils/amplitude';
 import { validate } from '../../../../lib/utils/validationUtils';
 import { setFocusOnErrorSummary } from '../../../schema/FormErrorSummary';
+import { RegistrertBehandler } from './RegistrertBehandler';
 
 interface Props {
   onBackClick: () => void;
@@ -50,22 +51,19 @@ export const getBehandlerSchema = (formatMessage: IntlFormatters['formatMessage'
     ),
   });
 export const Behandlere = ({ onBackClick, defaultValues }: Props) => {
-  const { formatMessage } = useIntl();
+  const [errors, setErrors] = useState<SøknadValidationError[] | undefined>();
+  const [showModal, setShowModal] = useState(false);
+  const [selectedBehandler, setSelectedBehandler] = useState<Behandler>({});
 
+  const { formatMessage } = useIntl();
   const { søknadState, søknadDispatch } = useSoknadContextStandard();
   const { currentStepIndex, stepWizardDispatch } = useStepWizard();
-  const [errors, setErrors] = useState<SøknadValidationError[] | undefined>();
-
   const { stepList } = useStepWizard();
-
   const debouncedLagre = useDebounceLagreSoknad<Soknad>();
 
   useEffect(() => {
     debouncedLagre(søknadState, stepList, {});
   }, [søknadState.søknad?.andreBehandlere, søknadState.søknad?.registrerteBehandlere]);
-
-  const [showModal, setShowModal] = useState(false);
-  const [selectedBehandler, setSelectedBehandler] = useState<Behandler>({});
 
   function clearErrors() {
     setErrors(undefined);
@@ -139,79 +137,13 @@ export const Behandlere = ({ onBackClick, defaultValues }: Props) => {
             </BodyLong>
           )}
           {defaultValues?.søknad?.registrerteBehandlere?.map((registrertBehandler, index) => (
-            <div key={registrertBehandler.kontaktinformasjon.behandlerRef}>
-              <dl className={classes?.fastLege}>
-                <dt>
-                  <Label as={'span'}>
-                    {formatMessage({ id: 'søknad.helseopplysninger.registrertFastlege.navn' })}
-                  </Label>
-                </dt>
-                <dd>{formatNavn(registrertBehandler.navn)}</dd>
-                <dt>
-                  <Label as={'span'}>
-                    {formatMessage({
-                      id: 'søknad.helseopplysninger.registrertFastlege.legekontor',
-                    })}
-                  </Label>
-                </dt>
-
-                <dd>{registrertBehandler.kontaktinformasjon.kontor}</dd>
-                <dt>
-                  <Label as={'span'}>
-                    {formatMessage({ id: 'søknad.helseopplysninger.registrertFastlege.adresse' })}
-                  </Label>
-                </dt>
-
-                <dd>{formatFullAdresse(registrertBehandler.kontaktinformasjon.adresse)}</dd>
-                <dt>
-                  <Label as={'span'}>
-                    {formatMessage({ id: 'søknad.helseopplysninger.registrertFastlege.telefon' })}
-                  </Label>
-                </dt>
-
-                <dd>{formatTelefonnummer(registrertBehandler.kontaktinformasjon.telefon)}</dd>
-              </dl>
-              <RadioGroup
-                name={`registrerteBehandlere[${index}].erRegistrertFastlegeRiktig`}
-                id={`registrerteBehandlere[${index}].erRegistrertFastlegeRiktig`}
-                legend={formatMessage({
-                  id: `søknad.helseopplysninger.erRegistrertFastlegeRiktig.label`,
-                })}
-                value={registrertBehandler.erRegistrertFastlegeRiktig || ''}
-                onChange={(value) => {
-                  clearErrors();
-                  updateSøknadData(søknadDispatch, {
-                    registrerteBehandlere: søknadState.søknad?.registrerteBehandlere?.map(
-                      (behandler) => {
-                        if (
-                          behandler.kontaktinformasjon.behandlerRef ===
-                          registrertBehandler.kontaktinformasjon.behandlerRef
-                        ) {
-                          return { ...behandler, erRegistrertFastlegeRiktig: value };
-                        } else {
-                          return behandler;
-                        }
-                      }
-                    ),
-                  });
-                }}
-                error={findError(`registrerteBehandlere[${index}].erRegistrertFastlegeRiktig`)}
-              >
-                <Radio value={JaEllerNei.JA}>
-                  <BodyShort>{JaEllerNei.JA}</BodyShort>
-                </Radio>
-                <Radio value={JaEllerNei.NEI}>
-                  <BodyShort>{JaEllerNei.NEI}</BodyShort>
-                </Radio>
-              </RadioGroup>
-              {registrertBehandler.erRegistrertFastlegeRiktig === JaEllerNei.NEI && (
-                <Alert variant={'info'}>
-                  {formatMessage({
-                    id: 'søknad.helseopplysninger.erRegistrertFastlegeRiktig.alertInfo',
-                  })}
-                </Alert>
-              )}
-            </div>
+            <RegistrertBehandler
+              key={registrertBehandler.kontaktinformasjon.behandlerRef}
+              index={index}
+              registrertBehandler={registrertBehandler}
+              clearErrors={clearErrors}
+              errorMessage={findError(`registrerteBehandlere[${index}].erRegistrertFastlegeRiktig`)}
+            />
           ))}
         </div>
         <div>
