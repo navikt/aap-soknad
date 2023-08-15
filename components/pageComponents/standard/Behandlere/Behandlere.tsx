@@ -8,17 +8,16 @@ import {
   Radio,
   RadioGroup,
 } from '@navikt/ds-react';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Add, Delete } from '@navikt/ds-icons';
 import { Behandler, Soknad } from 'types/Soknad';
 import * as yup from 'yup';
 import { useStepWizard } from 'context/stepWizardContextV2';
-import { yupResolver } from '@hookform/resolvers/yup';
 import { AddBehandlerModal } from './AddBehandlerModal';
 import { LucaGuidePanel } from '@navikt/aap-felles-react';
 import * as classes from './Behandlere.module.css';
-import { deleteOpplastedeVedlegg, useSoknadContextStandard } from 'context/soknadContextStandard';
-import { slettLagretSoknadState, updateSøknadData } from 'context/soknadContextCommon';
+import { useSoknadContextStandard } from 'context/soknadContextStandard';
+import { updateSøknadData } from 'context/soknadContextCommon';
 import { useDebounceLagreSoknad } from 'hooks/useDebounceLagreSoknad';
 import { GenericSoknadContextState } from 'types/SoknadContext';
 import { JaEllerNei } from 'types/Generic';
@@ -59,50 +58,15 @@ export const Behandlere = ({ onBackClick, onNext, defaultValues }: Props) => {
   const [errors, setErrors] = useState<SøknadValidationError[] | undefined>();
 
   const { stepList } = useStepWizard();
-  // const {
-  //   control,
-  //   handleSubmit,
-  //   formState: { errors },
-  // } = useForm({
-  //   resolver: yupResolver(getBehandlerSchema(formatMessage)),
-  //   defaultValues: {
-  //     [REGISTRERTE_BEHANDLERE]: defaultValues?.søknad?.registrerteBehandlere,
-  //     [ANDRE_BEHANDLERE]: defaultValues?.søknad?.andreBehandlere,
-  //   },
-  // });
 
   const debouncedLagre = useDebounceLagreSoknad<Soknad>();
-  // const allFields = useWatch({ control });
 
   useEffect(() => {
     debouncedLagre(søknadState, stepList, {});
   }, [søknadState.søknad?.andreBehandlere, søknadState.søknad?.registrerteBehandlere]);
 
   const [showModal, setShowModal] = useState(false);
-  const [selectedBehandlerIndex, setSelectedBehandler] = useState<Behandler>({});
-
-  // const { fields: registrertBehandlerFields } = useFieldArray({
-  //   name: REGISTRERTE_BEHANDLERE,
-  //   control,
-  // });
-
-  // const { fields, append, remove, update } = useFieldArray({
-  //   name: ANDRE_BEHANDLERE,
-  //   control,
-  // });
-  // const selectedBehandler = useMemo(() => {
-  //   if (selectedBehandlerIndex === undefined) return undefined;
-  //   return fields[selectedBehandlerIndex];
-  // }, [selectedBehandlerIndex, fields]);
-
-  // const watchFieldArray = useWatch({ control, name: REGISTRERTE_BEHANDLERE });
-  // const controlledFields = registrertBehandlerFields.map((field, index) => {
-  //   return {
-  //     ...field,
-  //     /* @ts-ignore-line */
-  //     ...watchFieldArray[index],
-  //   };
-  // });
+  const [selectedBehandler, setSelectedBehandler] = useState<Behandler>({});
 
   const editNyBehandler = (behandler: Behandler) => {
     setSelectedBehandler(behandler);
@@ -126,7 +90,7 @@ export const Behandlere = ({ onBackClick, onNext, defaultValues }: Props) => {
     }
   };
 
-  const slettBehandler = (behandlerId: string) => {
+  const slettBehandler = (behandlerId?: string) => {
     updateSøknadData(søknadDispatch, {
       andreBehandlere: søknadState.søknad?.andreBehandlere?.filter(
         (behandler) => behandlerId !== behandler.id
@@ -134,7 +98,6 @@ export const Behandlere = ({ onBackClick, onNext, defaultValues }: Props) => {
     });
   };
 
-  console.log(søknadState);
   return (
     <>
       <SoknadFormWrapperNew
@@ -371,7 +334,7 @@ export const Behandlere = ({ onBackClick, onNext, defaultValues }: Props) => {
         onCloseClick={() => setShowModal(false)}
         onSaveClick={saveNyBehandler}
         showModal={showModal}
-        // behandler={selectedBehandler}
+        behandler={selectedBehandler}
       />
     </>
   );
