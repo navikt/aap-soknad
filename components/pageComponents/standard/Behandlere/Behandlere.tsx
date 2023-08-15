@@ -1,15 +1,6 @@
-import {
-  Alert,
-  BodyLong,
-  BodyShort,
-  Button,
-  Heading,
-  Label,
-  Radio,
-  RadioGroup,
-} from '@navikt/ds-react';
+import { BodyLong, BodyShort, Button, Heading } from '@navikt/ds-react';
 import React, { useEffect, useState } from 'react';
-import { Add, Delete } from '@navikt/ds-icons';
+import { Add } from '@navikt/ds-icons';
 import { Behandler, Soknad } from 'types/Soknad';
 import * as yup from 'yup';
 import { completeAndGoToNextStep, useStepWizard } from 'context/stepWizardContextV2';
@@ -21,7 +12,6 @@ import { updateSøknadData } from 'context/soknadContextCommon';
 import { useDebounceLagreSoknad } from 'hooks/useDebounceLagreSoknad';
 import { GenericSoknadContextState } from 'types/SoknadContext';
 import { JaEllerNei } from 'types/Generic';
-import { formatFullAdresse, formatNavn, formatTelefonnummer } from 'utils/StringFormatters';
 import { IntlFormatters, useIntl } from 'react-intl';
 import SoknadFormWrapperNew from '../../../SoknadFormWrapper/SoknadFormWrapperNew';
 import { SøknadValidationError } from '../../../schema/FormErrorSummaryNew';
@@ -30,6 +20,7 @@ import { logSkjemastegFullførtEvent } from '../../../../utils/amplitude';
 import { validate } from '../../../../lib/utils/validationUtils';
 import { setFocusOnErrorSummary } from '../../../schema/FormErrorSummary';
 import { RegistrertBehandler } from './RegistrertBehandler';
+import { AnnenBehandler } from './AnnenBehandler';
 
 interface Props {
   onBackClick: () => void;
@@ -85,14 +76,6 @@ export const Behandlere = ({ onBackClick, defaultValues }: Props) => {
           return behandler;
         }
       }),
-    });
-  };
-
-  const slettBehandler = (behandlerId?: string) => {
-    updateSøknadData(søknadDispatch, {
-      andreBehandlere: søknadState.søknad?.andreBehandlere?.filter(
-        (behandler) => behandlerId !== behandler.id
-      ),
     });
   };
 
@@ -160,98 +143,13 @@ export const Behandlere = ({ onBackClick, defaultValues }: Props) => {
                   {formatMessage({ id: 'søknad.helseopplysninger.dineBehandlere.title' })}
                 </Heading>
                 <ul className={classes?.legeList}>
-                  {defaultValues.søknad.andreBehandlere.map((behandler, index) => (
-                    <li key={behandler.id}>
-                      <article className={classes?.legeKort}>
-                        <dl>
-                          <div className={classes?.oneLineDetail}>
-                            <dt>
-                              <Label as={'span'}>
-                                {formatMessage({
-                                  id: 'søknad.helseopplysninger.dineBehandlere.navn',
-                                })}
-                                :
-                              </Label>
-                            </dt>
-                            <dd>{`${behandler?.firstname} ${behandler?.lastname}`}</dd>
-                          </div>
-                          {behandler?.legekontor && (
-                            <div className={classes?.oneLineDetail}>
-                              <dt>
-                                <Label as={'span'}>
-                                  {formatMessage({
-                                    id: 'søknad.helseopplysninger.dineBehandlere.legekontor',
-                                  })}
-                                  :
-                                </Label>
-                              </dt>
-                              <dd>{behandler?.legekontor}</dd>
-                            </div>
-                          )}
-                          {behandler?.gateadresse && (
-                            <div className={classes?.oneLineDetail}>
-                              <dt>
-                                <Label as={'span'}>
-                                  {formatMessage({
-                                    id: 'søknad.helseopplysninger.dineBehandlere.adresse',
-                                  })}
-                                  :
-                                </Label>
-                              </dt>
-                              <dd>
-                                {formatFullAdresse({
-                                  adressenavn: behandler.gateadresse,
-                                  postnummer: {
-                                    postnr: behandler.postnummer,
-                                    poststed: behandler.poststed,
-                                  },
-                                })}
-                              </dd>
-                            </div>
-                          )}
-                          {behandler?.telefon && (
-                            <div className={classes?.oneLineDetail}>
-                              <dt>
-                                <Label as={'span'}>
-                                  {formatMessage({
-                                    id: 'søknad.helseopplysninger.dineBehandlere.telefon',
-                                  })}
-                                  :
-                                </Label>
-                              </dt>
-                              <dd>{formatTelefonnummer(behandler?.telefon)}</dd>
-                            </div>
-                          )}
-                        </dl>
-                        <div className={classes?.cardButtonWrapper}>
-                          <Button
-                            type="button"
-                            variant="tertiary"
-                            onClick={() => {
-                              setSelectedBehandler(behandler);
-                              setShowModal(true);
-                            }}
-                          >
-                            {formatMessage({
-                              id: 'søknad.helseopplysninger.dineBehandlere.editButton',
-                            })}
-                          </Button>
-                          <Button
-                            variant="tertiary"
-                            type="button"
-                            icon={<Delete title={'Slett'} />}
-                            iconPosition={'left'}
-                            onClick={() => {
-                              slettBehandler(behandler.id);
-                            }}
-                          >
-                            {formatMessage({
-                              id: 'søknad.helseopplysninger.dineBehandlere.slettButton',
-                            })}
-                          </Button>
-                        </div>
-                      </article>
-                    </li>
+                  {defaultValues.søknad.andreBehandlere.map((behandler) => (
+                    <AnnenBehandler
+                      key={behandler.id}
+                      behandler={behandler}
+                      setSelectedBehandler={setSelectedBehandler}
+                      setShowModal={setShowModal}
+                    />
                   ))}
                 </ul>
               </>
