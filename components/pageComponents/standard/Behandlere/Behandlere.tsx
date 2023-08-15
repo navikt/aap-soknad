@@ -344,6 +344,7 @@ export const Behandlere = ({ onBackClick, defaultValues }: Props) => {
         onSaveClick={saveNyBehandler}
         showModal={showModal}
         behandler={selectedBehandler}
+        setBehandler={setSelectedBehandler}
       />
     </>
   );

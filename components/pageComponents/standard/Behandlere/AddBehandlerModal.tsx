@@ -1,20 +1,21 @@
-import { yupResolver } from '@hookform/resolvers/yup';
-import { useForm } from 'react-hook-form';
-import { Soknad } from 'types/Soknad';
+import { Behandler, Soknad } from 'types/Soknad';
 import * as yup from 'yup';
 import * as classes from './AddBehandlerModal.module.css';
-import { useEffect } from 'react';
-import { Button, Heading, Modal } from '@navikt/ds-react';
-import TextFieldWrapper from 'components/input/TextFieldWrapper';
+import { Button, Heading, Modal, TextField } from '@navikt/ds-react';
 import { ModalButtonWrapper } from 'components/ButtonWrapper/ModalButtonWrapper';
 import { IntlFormatters, useIntl } from 'react-intl';
+import { Dispatch, useState } from 'react';
+import { valid } from 'semver';
+import { validate } from '../../../../lib/utils/validationUtils';
+import { SøknadValidationError } from '../../../schema/FormErrorSummaryNew';
+import { setFocusOnErrorSummary } from '../../../schema/FormErrorSummary';
 
 interface Props {
-  søknad?: Soknad;
   onCloseClick: () => void;
   onSaveClick: (data: any) => void;
   showModal: boolean;
-  behandler?: any;
+  behandler: Behandler;
+  setBehandler: Dispatch<Behandler>;
 }
 
 export const getBehandlerSchema = (formatMessage: IntlFormatters['formatMessage']) => {
@@ -32,30 +33,26 @@ export const getBehandlerSchema = (formatMessage: IntlFormatters['formatMessage'
   });
 };
 
-export const AddBehandlerModal = ({ showModal, onCloseClick, onSaveClick, behandler }: Props) => {
+export const AddBehandlerModal = ({
+  showModal,
+  onCloseClick,
+  onSaveClick,
+  behandler,
+  setBehandler,
+}: Props) => {
   const { formatMessage } = useIntl();
-  const schema = getBehandlerSchema(formatMessage);
+  const [errors, setErrors] = useState<SøknadValidationError[] | undefined>();
 
-  const { control, handleSubmit, reset } = useForm({
-    resolver: yupResolver(schema),
-    defaultValues: {
-      ...(behandler ?? {}),
-    },
-  });
+  function clearErrors() {
+    setErrors(undefined);
+  }
 
-  useEffect(() => {
-    reset({ ...behandler });
-  }, [behandler, reset]);
-
-  const clearModal = () => {
-    reset({});
-  };
+  const findError = (path: string) => errors?.find((error) => error.path === path)?.message;
 
   return (
     <Modal
       open={showModal}
       onClose={() => {
-        clearModal();
         onCloseClick();
       }}
     >
@@ -64,59 +61,95 @@ export const AddBehandlerModal = ({ showModal, onCloseClick, onSaveClick, behand
           {formatMessage({ id: 'søknad.helseopplysninger.modal.title' })}
         </Heading>
         <form
-          onSubmit={handleSubmit((data) => {
-            const newData = { ...data };
-            onSaveClick(newData);
-            clearModal();
-            onCloseClick();
-          })}
+          onSubmit={async (formEvent) => {
+            formEvent.preventDefault();
+            const errors = await validate(getBehandlerSchema(formatMessage), behandler);
+            if (errors) {
+              setErrors(errors);
+            } else {
+              onSaveClick(behandler);
+              onCloseClick();
+            }
+          }}
           className={classes?.modalForm}
         >
-          <TextFieldWrapper
-            control={control}
+          <TextField
             label={formatMessage({ id: 'søknad.helseopplysninger.modal.fornavn.label' })}
             name={'firstname'}
+            onChange={(event) => {
+              clearErrors();
+              setBehandler({ ...behandler, firstname: event.target.value });
+            }}
+            error={findError('firstname')}
+            value={behandler.firstname || ''}
           />
-          <TextFieldWrapper
-            control={control}
+          <TextField
             label={formatMessage({ id: 'søknad.helseopplysninger.modal.etternavn.label' })}
             name={'lastname'}
+            onChange={(event) => {
+              clearErrors();
+              setBehandler({ ...behandler, lastname: event.target.value });
+            }}
+            error={findError('lastname')}
+            value={behandler.lastname || ''}
           />
-          <TextFieldWrapper
-            control={control}
+          <TextField
             label={formatMessage({ id: 'søknad.helseopplysninger.modal.legekontor.label' })}
             name={'legekontor'}
+            onChange={(event) => {
+              clearErrors();
+              setBehandler({ ...behandler, legekontor: event.target.value });
+            }}
+            error={findError('legekontor')}
+            value={behandler.legekontor || ''}
           />
-          <TextFieldWrapper
-            control={control}
+          <TextField
             label={formatMessage({ id: 'søknad.helseopplysninger.modal.gateadresse.label' })}
             name={'gateadresse'}
+            onChange={(event) => {
+              clearErrors();
+              setBehandler({ ...behandler, gateadresse: event.target.value });
+            }}
+            error={findError('gateadresse')}
+            value={behandler.gateadresse || ''}
           />
           <div className={classes?.addresseFlexContainer}>
-            <TextFieldWrapper
-              className={classes?.addresseFlexItem}
-              control={control}
+            <TextField
               label={formatMessage({ id: 'søknad.helseopplysninger.modal.postnummer.label' })}
               name={'postnummer'}
+              onChange={(event) => {
+                clearErrors();
+                setBehandler({ ...behandler, postnummer: event.target.value });
+              }}
+              error={findError('postnummer')}
+              value={behandler.postnummer || ''}
             />
-            <TextFieldWrapper
-              className={classes?.addresseFlexItem}
-              control={control}
+            <TextField
               label={formatMessage({ id: 'søknad.helseopplysninger.modal.poststed.label' })}
               name={'poststed'}
+              onChange={(event) => {
+                clearErrors();
+                setBehandler({ ...behandler, poststed: event.target.value });
+              }}
+              error={findError('poststed')}
+              value={behandler.poststed || ''}
             />
           </div>
-          <TextFieldWrapper
-            control={control}
+          <TextField
             label={formatMessage({ id: 'søknad.helseopplysninger.modal.telefonnummer.label' })}
             name={'telefon'}
+            onChange={(event) => {
+              clearErrors();
+              setBehandler({ ...behandler, telefon: event.target.value });
+            }}
+            error={findError('telefon')}
+            value={behandler.telefon || ''}
           />
           <ModalButtonWrapper>
             <Button
               type="button"
               variant={'secondary'}
               onClick={() => {
-                clearModal();
                 onCloseClick();
               }}
             >

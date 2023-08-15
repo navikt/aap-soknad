@@ -155,7 +155,10 @@ const UtenlandsPeriodeVelger = ({
             label={formatMessage({
               id: `søknad.medlemskap.utenlandsperiode.modal.land.label.${arbeidEllerBodd}`,
             })}
-            onChange={(e) => setUtenlandsPeriode({ ...utenlandsPeriode, land: e.target.value })}
+            onChange={(e) => {
+              clearErrors();
+              setUtenlandsPeriode({ ...utenlandsPeriode, land: e.target.value });
+            }}
             error={findError('land')}
           />
           <div>
