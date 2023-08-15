@@ -32,15 +32,12 @@ interface Props {
   onNext: (data: any) => void;
   defaultValues?: GenericSoknadContextState<Soknad>;
 }
-const REGISTRERTE_BEHANDLERE = 'registrerteBehandlere';
-const ANDRE_BEHANDLERE = 'andreBehandlere';
-const RIKTIG_FASTLEGE = 'erRegistrertFastlegeRiktig';
 
 export const getBehandlerSchema = (formatMessage: IntlFormatters['formatMessage']) =>
   yup.object().shape({
-    [REGISTRERTE_BEHANDLERE]: yup.array().of(
+    registrerteBehandlere: yup.array().of(
       yup.object().shape({
-        [RIKTIG_FASTLEGE]: yup
+        erRegistrertFastlegeRiktig: yup
           .string()
           .required(
             formatMessage({ id: `søknad.helseopplysninger.erRegistrertFastlegeRiktig.required` })
@@ -49,7 +46,7 @@ export const getBehandlerSchema = (formatMessage: IntlFormatters['formatMessage'
           .nullable(),
       })
     ),
-    [ANDRE_BEHANDLERE]: yup.array(),
+    andreBehandlere: yup.array(),
   });
 export const Behandlere = ({ onBackClick, onNext, defaultValues }: Props) => {
   const { formatMessage } = useIntl();
@@ -106,6 +103,7 @@ export const Behandlere = ({ onBackClick, onNext, defaultValues }: Props) => {
           updateSøknadData<Soknad>(søknadDispatch, { ...søknadState.søknad });
           onBackClick();
         }}
+        errors={errors}
       >
         <Heading size="large" level="2">
           {formatMessage({ id: 'søknad.helseopplysninger.title' })}
@@ -161,11 +159,11 @@ export const Behandlere = ({ onBackClick, onNext, defaultValues }: Props) => {
                 <dd>{formatTelefonnummer(field.kontaktinformasjon.telefon)}</dd>
               </dl>
               <RadioGroup
-                name={`${REGISTRERTE_BEHANDLERE}.${index}.${RIKTIG_FASTLEGE}`}
+                name={`registrerteBehandlere.${index}.erRegistrertFastlegeRiktig`}
                 legend={formatMessage({
                   id: `søknad.helseopplysninger.erRegistrertFastlegeRiktig.label`,
                 })}
-                id={`${REGISTRERTE_BEHANDLERE}.${index}.${RIKTIG_FASTLEGE}`}
+                id={`registrerteBehandlere.${index}.erRegistrertFastlegeRiktig`}
                 value={field.erRegistrertFastlegeRiktig || ''}
                 onChange={(value) => {
                   clearErrors();
