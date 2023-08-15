@@ -1,18 +1,16 @@
-import { Behandler, Soknad } from 'types/Soknad';
+import { Behandler } from 'types/Soknad';
 import * as yup from 'yup';
 import * as classes from './AddBehandlerModal.module.css';
 import { Button, Heading, Modal, TextField } from '@navikt/ds-react';
 import { ModalButtonWrapper } from 'components/ButtonWrapper/ModalButtonWrapper';
 import { IntlFormatters, useIntl } from 'react-intl';
 import { Dispatch, useState } from 'react';
-import { valid } from 'semver';
 import { validate } from '../../../../lib/utils/validationUtils';
 import { SøknadValidationError } from '../../../schema/FormErrorSummaryNew';
-import { setFocusOnErrorSummary } from '../../../schema/FormErrorSummary';
 
 interface Props {
   onCloseClick: () => void;
-  onSaveClick: (data: any) => void;
+  onSaveClick: (data: Behandler) => void;
   showModal: boolean;
   behandler: Behandler;
   setBehandler: Dispatch<Behandler>;
@@ -33,7 +31,7 @@ export const getBehandlerSchema = (formatMessage: IntlFormatters['formatMessage'
   });
 };
 
-export const AddBehandlerModal = ({
+export const LeggTilBehandlerModal = ({
   showModal,
   onCloseClick,
   onSaveClick,
@@ -50,12 +48,7 @@ export const AddBehandlerModal = ({
   const findError = (path: string) => errors?.find((error) => error.path === path)?.message;
 
   return (
-    <Modal
-      open={showModal}
-      onClose={() => {
-        onCloseClick();
-      }}
-    >
+    <Modal open={showModal} onClose={onCloseClick}>
       <Modal.Content className={classes?.addBehandlerModalContent}>
         <Heading className={classes?.modalHeading} size={'small'} level={'3'}>
           {formatMessage({ id: 'søknad.helseopplysninger.modal.title' })}

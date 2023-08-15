@@ -13,7 +13,7 @@ import { Add, Delete } from '@navikt/ds-icons';
 import { Behandler, Soknad } from 'types/Soknad';
 import * as yup from 'yup';
 import { completeAndGoToNextStep, useStepWizard } from 'context/stepWizardContextV2';
-import { AddBehandlerModal } from './AddBehandlerModal';
+import { LeggTilBehandlerModal } from './LeggTilBehandlerModal';
 import { LucaGuidePanel } from '@navikt/aap-felles-react';
 import * as classes from './Behandlere.module.css';
 import { useSoknadContextStandard } from 'context/soknadContextStandard';
@@ -66,11 +66,6 @@ export const Behandlere = ({ onBackClick, defaultValues }: Props) => {
   const [showModal, setShowModal] = useState(false);
   const [selectedBehandler, setSelectedBehandler] = useState<Behandler>({});
 
-  const editNyBehandler = (behandler: Behandler) => {
-    setSelectedBehandler(behandler);
-    setShowModal(true);
-  };
-
   function clearErrors() {
     setErrors(undefined);
   }
@@ -81,16 +76,16 @@ export const Behandlere = ({ onBackClick, defaultValues }: Props) => {
     });
   };
 
-  const update = (behandler: Behandler) => {};
-  const saveNyBehandler = (behandler: Behandler) => {
-    if (behandler.id === undefined) {
-      append({
-        ...behandler,
-        id: uuid4(),
-      });
-    } else {
-      update(behandler);
-    }
+  const update = (updatedBehandler: Behandler) => {
+    updateSøknadData(søknadDispatch, {
+      andreBehandlere: søknadState.søknad?.andreBehandlere?.map((behandler) => {
+        if (behandler.id === updatedBehandler.id) {
+          return updatedBehandler;
+        } else {
+          return behandler;
+        }
+      }),
+    });
   };
 
   const slettBehandler = (behandlerId?: string) => {
@@ -292,7 +287,10 @@ export const Behandlere = ({ onBackClick, defaultValues }: Props) => {
                           <Button
                             type="button"
                             variant="tertiary"
-                            onClick={() => editNyBehandler(behandler)}
+                            onClick={() => {
+                              setSelectedBehandler(behandler);
+                              setShowModal(true);
+                            }}
                           >
                             {formatMessage({
                               id: 'søknad.helseopplysninger.dineBehandlere.editButton',
@@ -339,9 +337,21 @@ export const Behandlere = ({ onBackClick, defaultValues }: Props) => {
           </Button>
         </div>
       </SoknadFormWrapperNew>
-      <AddBehandlerModal
-        onCloseClick={() => setShowModal(false)}
-        onSaveClick={saveNyBehandler}
+      <LeggTilBehandlerModal
+        onCloseClick={() => {
+          setShowModal(false);
+          setSelectedBehandler({});
+        }}
+        onSaveClick={(behandler) => {
+          if (behandler.id === undefined) {
+            append({
+              ...behandler,
+              id: uuid4(),
+            });
+          } else {
+            update(behandler);
+          }
+        }}
         showModal={showModal}
         behandler={selectedBehandler}
         setBehandler={setSelectedBehandler}
