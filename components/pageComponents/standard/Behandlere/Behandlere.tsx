@@ -27,6 +27,8 @@ import SoknadFormWrapperNew from '../../../SoknadFormWrapper/SoknadFormWrapperNe
 import { SøknadValidationError } from '../../../schema/FormErrorSummaryNew';
 import { v4 as uuid4 } from 'uuid';
 import { logSkjemastegFullførtEvent } from '../../../../utils/amplitude';
+import { validate } from '../../../../lib/utils/validationUtils';
+import { setFocusOnErrorSummary } from '../../../schema/FormErrorSummary';
 
 interface Props {
   onBackClick: () => void;
@@ -46,7 +48,6 @@ export const getBehandlerSchema = (formatMessage: IntlFormatters['formatMessage'
           .nullable(),
       })
     ),
-    andreBehandlere: yup.array(),
   });
 export const Behandlere = ({ onBackClick, defaultValues }: Props) => {
   const { formatMessage } = useIntl();
@@ -69,6 +70,7 @@ export const Behandlere = ({ onBackClick, defaultValues }: Props) => {
   function clearErrors() {
     setErrors(undefined);
   }
+  const findError = (path: string) => errors?.find((error) => error.path === path)?.message;
 
   const append = (behandler: Behandler) => {
     updateSøknadData(søknadDispatch, {
@@ -100,10 +102,15 @@ export const Behandlere = ({ onBackClick, defaultValues }: Props) => {
     <>
       <SoknadFormWrapperNew
         onNext={async () => {
-          // Validate and do shit here
+          const errors = await validate(getBehandlerSchema(formatMessage), søknadState.søknad);
 
-          logSkjemastegFullførtEvent(currentStepIndex ?? 0);
-          completeAndGoToNextStep(stepWizardDispatch);
+          if (errors) {
+            setErrors(errors);
+            setFocusOnErrorSummary();
+          } else {
+            logSkjemastegFullførtEvent(currentStepIndex ?? 0);
+            completeAndGoToNextStep(stepWizardDispatch);
+          }
         }}
         onBack={() => {
           updateSøknadData<Soknad>(søknadDispatch, { ...søknadState.søknad });
@@ -126,20 +133,20 @@ export const Behandlere = ({ onBackClick, defaultValues }: Props) => {
           <Heading size={'small'} level={'3'}>
             {formatMessage({ id: 'søknad.helseopplysninger.registrertFastlege.title' })}
           </Heading>
-          {søknadState.søknad?.registrerteBehandlere?.length === 0 && (
+          {defaultValues?.søknad?.registrerteBehandlere?.length === 0 && (
             <BodyLong>
               {formatMessage({ id: 'søknad.helseopplysninger.registrertFastlege.ingenFastlege' })}
             </BodyLong>
           )}
-          {søknadState.søknad?.registrerteBehandlere?.map((field, index) => (
-            <div key={field.kontaktinformasjon.behandlerRef}>
+          {defaultValues?.søknad?.registrerteBehandlere?.map((registrertBehandler, index) => (
+            <div key={registrertBehandler.kontaktinformasjon.behandlerRef}>
               <dl className={classes?.fastLege}>
                 <dt>
                   <Label as={'span'}>
                     {formatMessage({ id: 'søknad.helseopplysninger.registrertFastlege.navn' })}
                   </Label>
                 </dt>
-                <dd>{formatNavn(field.navn)}</dd>
+                <dd>{formatNavn(registrertBehandler.navn)}</dd>
                 <dt>
                   <Label as={'span'}>
                     {formatMessage({
@@ -148,29 +155,29 @@ export const Behandlere = ({ onBackClick, defaultValues }: Props) => {
                   </Label>
                 </dt>
 
-                <dd>{field.kontaktinformasjon.kontor}</dd>
+                <dd>{registrertBehandler.kontaktinformasjon.kontor}</dd>
                 <dt>
                   <Label as={'span'}>
                     {formatMessage({ id: 'søknad.helseopplysninger.registrertFastlege.adresse' })}
                   </Label>
                 </dt>
 
-                <dd>{formatFullAdresse(field.kontaktinformasjon.adresse)}</dd>
+                <dd>{formatFullAdresse(registrertBehandler.kontaktinformasjon.adresse)}</dd>
                 <dt>
                   <Label as={'span'}>
                     {formatMessage({ id: 'søknad.helseopplysninger.registrertFastlege.telefon' })}
                   </Label>
                 </dt>
 
-                <dd>{formatTelefonnummer(field.kontaktinformasjon.telefon)}</dd>
+                <dd>{formatTelefonnummer(registrertBehandler.kontaktinformasjon.telefon)}</dd>
               </dl>
               <RadioGroup
-                name={`registrerteBehandlere.${index}.erRegistrertFastlegeRiktig`}
+                name={`registrerteBehandlere[${index}].erRegistrertFastlegeRiktig`}
+                id={`registrerteBehandlere[${index}].erRegistrertFastlegeRiktig`}
                 legend={formatMessage({
                   id: `søknad.helseopplysninger.erRegistrertFastlegeRiktig.label`,
                 })}
-                id={`registrerteBehandlere.${index}.erRegistrertFastlegeRiktig`}
-                value={field.erRegistrertFastlegeRiktig || ''}
+                value={registrertBehandler.erRegistrertFastlegeRiktig || ''}
                 onChange={(value) => {
                   clearErrors();
                   updateSøknadData(søknadDispatch, {
@@ -178,7 +185,7 @@ export const Behandlere = ({ onBackClick, defaultValues }: Props) => {
                       (behandler) => {
                         if (
                           behandler.kontaktinformasjon.behandlerRef ===
-                          field.kontaktinformasjon.behandlerRef
+                          registrertBehandler.kontaktinformasjon.behandlerRef
                         ) {
                           return { ...behandler, erRegistrertFastlegeRiktig: value };
                         } else {
@@ -188,6 +195,7 @@ export const Behandlere = ({ onBackClick, defaultValues }: Props) => {
                     ),
                   });
                 }}
+                error={findError(`registrerteBehandlere[${index}].erRegistrertFastlegeRiktig`)}
               >
                 <Radio value={JaEllerNei.JA}>
                   <BodyShort>{JaEllerNei.JA}</BodyShort>
@@ -196,7 +204,7 @@ export const Behandlere = ({ onBackClick, defaultValues }: Props) => {
                   <BodyShort>{JaEllerNei.NEI}</BodyShort>
                 </Radio>
               </RadioGroup>
-              {field.erRegistrertFastlegeRiktig === JaEllerNei.NEI && (
+              {registrertBehandler.erRegistrertFastlegeRiktig === JaEllerNei.NEI && (
                 <Alert variant={'info'}>
                   {formatMessage({
                     id: 'søknad.helseopplysninger.erRegistrertFastlegeRiktig.alertInfo',
@@ -213,14 +221,14 @@ export const Behandlere = ({ onBackClick, defaultValues }: Props) => {
           <BodyShort spacing>
             {formatMessage({ id: 'søknad.helseopplysninger.annenBehandler.description' })}
           </BodyShort>
-          {søknadState.søknad?.andreBehandlere &&
-            søknadState.søknad?.andreBehandlere?.length > 0 && (
+          {defaultValues?.søknad?.andreBehandlere &&
+            defaultValues?.søknad?.andreBehandlere?.length > 0 && (
               <>
                 <Heading size={'xsmall'} level={'4'} spacing>
                   {formatMessage({ id: 'søknad.helseopplysninger.dineBehandlere.title' })}
                 </Heading>
                 <ul className={classes?.legeList}>
-                  {søknadState.søknad.andreBehandlere.map((behandler, index) => (
+                  {defaultValues.søknad.andreBehandlere.map((behandler, index) => (
                     <li key={behandler.id}>
                       <article className={classes?.legeKort}>
                         <dl>
