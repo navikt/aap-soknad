@@ -57,7 +57,7 @@ import { Steg0 } from 'components/pageComponents/standard/Steg0/Steg0';
 import * as classes from './step.module.css';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { logger } from '@navikt/aap-felles-utils';
-import { v4 as uuid4 } from 'uuid';
+import { migrerMellomlagretSøknad } from '../lib/utils/migrateMellomlagring';
 
 interface PageProps {
   søker: SokerOppslagState;
@@ -272,49 +272,9 @@ export const getServerSideProps = beskyttetSide(
         },
       };
     }
-
-    /**
-     * TODO Etter innføring av ID i utenlandsopphold og AndreBehandlere så må vi legge til
-     * en id i eksisterende opphold frem til september 2023.
-     *
-     * Utenlandsopphold: 14.08.2023
-     * AndreBehandlere: 17.08.2023
-     */
-
-    const andreBehandlereMedId = mellomlagretSøknad.søknad?.andreBehandlere?.map((behandlere) => {
-      if (behandlere.id === undefined) {
-        return { ...behandlere, id: uuid4() };
-      } else {
-        return behandlere;
-      }
-    });
-
-    const utenlandsOpphold = mellomlagretSøknad?.søknad?.medlemskap?.utenlandsOpphold?.map(
-      (utenlandsOpphold) => {
-        if (utenlandsOpphold.id === undefined) {
-          return { ...utenlandsOpphold, id: uuid4() };
-        } else {
-          return utenlandsOpphold;
-        }
-      }
-    );
-
-    let midlertidigMellomLagretSøknad = mellomlagretSøknad;
-
-    midlertidigMellomLagretSøknad = {
-      ...mellomlagretSøknad,
-      søknad: {
-        ...mellomlagretSøknad.søknad,
-        medlemskap: {
-          ...mellomlagretSøknad.søknad?.medlemskap,
-          utenlandsOpphold: utenlandsOpphold || [],
-        },
-        andreBehandlere: andreBehandlereMedId || [],
-      },
-    };
-
+    const migrertMellomlagretSøknad = migrerMellomlagretSøknad(mellomlagretSøknad);
     return {
-      props: { søker, mellomlagretSøknad: midlertidigMellomLagretSøknad },
+      props: { søker, mellomlagretSøknad: migrertMellomlagretSøknad },
     };
   }
 );
