@@ -255,7 +255,7 @@ export const getServerSideProps = beskyttetSide(
     });
     const bearerToken = getAccessToken(ctx);
     const søker = await getSøker(bearerToken);
-    const mellomlagretSøknad = await lesBucket('STANDARD', bearerToken);
+    let mellomlagretSøknad = await lesBucket('STANDARD', bearerToken);
 
     stopTimer();
 
@@ -273,7 +273,22 @@ export const getServerSideProps = beskyttetSide(
       };
     }
 
-    // Etter innføring av ID i utenlandsopphold så må vi legge til en id i eksisterende opphold frem til september 2023.
+    /**
+     * TODO Etter innføring av ID i utenlandsopphold og AndreBehandlere så må vi legge til
+     * en id i eksisterende opphold frem til september 2023.
+     *
+     * Utenlandsopphold: 14.08.2023
+     * AndreBehandlere: 17.08.2023
+     */
+
+    const andreBehandlereMedId = mellomlagretSøknad.søknad?.andreBehandlere?.map((behandlere) => {
+      if (behandlere.id === undefined) {
+        return { ...behandlere, id: uuid4() };
+      } else {
+        return behandlere;
+      }
+    });
+
     const utenlandsOpphold = mellomlagretSøknad?.søknad?.medlemskap?.utenlandsOpphold?.map(
       (utenlandsOpphold) => {
         if (utenlandsOpphold.id === undefined) {
@@ -284,23 +299,20 @@ export const getServerSideProps = beskyttetSide(
       }
     );
 
-    let mellomLagretSøknadMedUtenlandsOppholdId = mellomlagretSøknad;
-
-    if (utenlandsOpphold) {
-      mellomLagretSøknadMedUtenlandsOppholdId = {
-        ...mellomlagretSøknad,
-        søknad: {
-          ...mellomlagretSøknad.søknad,
-          medlemskap: {
-            ...mellomlagretSøknad.søknad?.medlemskap,
-            utenlandsOpphold: utenlandsOpphold,
-          },
+    mellomlagretSøknad = {
+      ...mellomlagretSøknad,
+      søknad: {
+        ...mellomlagretSøknad.søknad,
+        medlemskap: {
+          ...mellomlagretSøknad.søknad?.medlemskap,
+          utenlandsOpphold: utenlandsOpphold ? utenlandsOpphold : undefined,
         },
-      };
-    }
+        andreBehandlere: andreBehandlereMedId ? andreBehandlereMedId : undefined,
+      },
+    };
 
     return {
-      props: { søker, mellomlagretSøknad: mellomLagretSøknadMedUtenlandsOppholdId },
+      props: { søker, mellomlagretSøknad },
     };
   }
 );
