@@ -255,7 +255,7 @@ export const getServerSideProps = beskyttetSide(
     });
     const bearerToken = getAccessToken(ctx);
     const søker = await getSøker(bearerToken);
-    let mellomlagretSøknad = await lesBucket('STANDARD', bearerToken);
+    const mellomlagretSøknad = await lesBucket('STANDARD', bearerToken);
 
     stopTimer();
 
@@ -299,20 +299,22 @@ export const getServerSideProps = beskyttetSide(
       }
     );
 
-    mellomlagretSøknad = {
+    let midlertidigMellomLagretSøknad = mellomlagretSøknad;
+
+    midlertidigMellomLagretSøknad = {
       ...mellomlagretSøknad,
       søknad: {
         ...mellomlagretSøknad.søknad,
         medlemskap: {
           ...mellomlagretSøknad.søknad?.medlemskap,
-          utenlandsOpphold: utenlandsOpphold ? utenlandsOpphold : undefined,
+          utenlandsOpphold: utenlandsOpphold || [],
         },
-        andreBehandlere: andreBehandlereMedId ? andreBehandlereMedId : undefined,
+        andreBehandlere: andreBehandlereMedId || [],
       },
     };
 
     return {
-      props: { søker, mellomlagretSøknad },
+      props: { søker, mellomlagretSøknad: midlertidigMellomLagretSøknad },
     };
   }
 );
