@@ -57,7 +57,7 @@ import { Steg0 } from 'components/pageComponents/standard/Steg0/Steg0';
 import * as classes from './step.module.css';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { logger } from '@navikt/aap-felles-utils';
-import { v4 as uuid4 } from 'uuid';
+import { migrerMellomlagretSøknad } from '../lib/utils/migrateMellomlagring';
 
 interface PageProps {
   søker: SokerOppslagState;
@@ -200,13 +200,7 @@ const Steps = ({ søker, mellomlagretSøknad }: PageProps) => {
                 <Yrkesskade onBackClick={onPreviousStep} defaultValues={søknadState} />
               )}
               {step === '4' && (
-                <Behandlere
-                  onBackClick={onPreviousStep}
-                  defaultValues={søknadState}
-                  onNext={(data) => {
-                    onNextStep(data);
-                  }}
-                />
+                <Behandlere onBackClick={onPreviousStep} defaultValues={søknadState} />
               )}
               {step === '5' && (
                 <Barnetillegg
@@ -278,35 +272,9 @@ export const getServerSideProps = beskyttetSide(
         },
       };
     }
-
-    // Etter innføring av ID i utenlandsopphold så må vi legge til en id i eksisterende opphold frem til september 2023.
-    const utenlandsOpphold = mellomlagretSøknad?.søknad?.medlemskap?.utenlandsOpphold?.map(
-      (utenlandsOpphold) => {
-        if (utenlandsOpphold.id === undefined) {
-          return { ...utenlandsOpphold, id: uuid4() };
-        } else {
-          return utenlandsOpphold;
-        }
-      }
-    );
-
-    let mellomLagretSøknadMedUtenlandsOppholdId = mellomlagretSøknad;
-
-    if (utenlandsOpphold) {
-      mellomLagretSøknadMedUtenlandsOppholdId = {
-        ...mellomlagretSøknad,
-        søknad: {
-          ...mellomlagretSøknad.søknad,
-          medlemskap: {
-            ...mellomlagretSøknad.søknad?.medlemskap,
-            utenlandsOpphold: utenlandsOpphold,
-          },
-        },
-      };
-    }
-
+    const migrertMellomlagretSøknad = migrerMellomlagretSøknad(mellomlagretSøknad);
     return {
-      props: { søker, mellomlagretSøknad: mellomLagretSøknadMedUtenlandsOppholdId },
+      props: { søker, mellomlagretSøknad: migrertMellomlagretSøknad },
     };
   }
 );
