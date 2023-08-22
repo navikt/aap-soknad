@@ -3,7 +3,6 @@ import { Relasjon } from 'components/pageComponents/standard/Barnetillegg/AddBar
 import { JaEllerNei, JaNeiVetIkke } from './Generic';
 import { JaNeiAvbrutt } from 'components/pageComponents/standard/Student/Student';
 import { OppslagBehandler } from 'context/sokerOppslagContext';
-import { BARN } from 'components/pageComponents/standard/Barnetillegg/Barnetillegg';
 import { FerieType } from 'components/pageComponents/standard/StartDato/StartDato';
 
 export type FieldAndLabel<T> = {
@@ -120,7 +119,7 @@ export interface Soknad {
   andreBehandlere?: Behandler[];
   student?: Student;
   andreUtbetalinger?: AndreUtbetalinger;
-  [BARN]?: Barn[];
+  barn?: Barn[];
   manuelleBarn?: ManuelleBarn[];
   tilleggsopplysninger?: string;
   ferie?: Ferie;
