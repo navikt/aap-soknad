@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import { addDays, addMonths, format, subYears } from 'date-fns';
+import { addDays, format, subMonths, subYears } from 'date-fns';
 import { formatDate } from '../utils/date';
 
 test('at alle feilmeldinger skal dukke opp', async ({ page }) => {
@@ -151,15 +151,15 @@ test('at alle feilmeldinger skal dukke opp', async ({ page }) => {
     .getByRole('combobox', { name: 'Hvilket land jobbet du i?' })
     .selectOption('AL:Albania');
 
+  const lastMonth = subMonths(new Date(), 1);
   const thisMonth = new Date();
-  const nextMonth = addMonths(new Date(), 1);
 
   await page
     .getByRole('textbox', { name: /fra og med måned \(mm\.åååå\)/i })
-    .fill(formatDate(nextMonth) ?? '');
+    .fill(formatDate(thisMonth) ?? '');
   await page
     .getByRole('textbox', { name: /til og med måned \(mm\.åååå\)/i })
-    .fill(formatDate(thisMonth) ?? '');
+    .fill(formatDate(lastMonth) ?? '');
 
   await page.getByRole('button', { name: 'Lagre' }).click();
   await expect(
@@ -167,10 +167,10 @@ test('at alle feilmeldinger skal dukke opp', async ({ page }) => {
   ).toBeVisible();
   await page
     .getByRole('textbox', { name: /fra og med måned \(mm\.åååå\)/i })
-    .fill(formatDate(thisMonth) ?? '');
+    .fill(formatDate(lastMonth) ?? '');
   await page
     .getByRole('textbox', { name: /til og med måned \(mm\.åååå\)/i })
-    .fill(formatDate(nextMonth) ?? '');
+    .fill(formatDate(thisMonth) ?? '');
 
   await page.getByRole('button', { name: 'Lagre' }).click();
 
@@ -302,7 +302,7 @@ test('at alle feilmeldinger skal dukke opp', async ({ page }) => {
     })
     .click();
   await expect(page).toHaveURL(
-    'http://localhost:3000/aap/soknad/4/#registrerteBehandlere.0.erRegistrertFastlegeRiktig'
+    'http://localhost:3000/aap/soknad/4/#registrerteBehandlere[0].erRegistrertFastlegeRiktig'
   );
   await page.getByLabel('Nei').check();
   await expect(
@@ -448,13 +448,13 @@ test('at alle feilmeldinger skal dukke opp', async ({ page }) => {
       name: 'Du må krysse av for om du har fått eller skal få ekstra utbetalinger fra arbeidsgiver.',
     })
     .click();
-  await expect(page).toHaveURL('http://localhost:3000/aap/soknad/7/#andreUtbetalinger.l%C3%B8nn');
+  await expect(page).toHaveURL('http://localhost:3000/aap/soknad/7/#l%C3%B8nn');
   await page
     .getByRole('link', {
       name: 'Du må krysse av for om du får eller nylig har søkt om noen av utbetalingene over.',
     })
     .click();
-  await expect(page).toHaveURL('http://localhost:3000/aap/soknad/7/#andreUtbetalinger.st%C3%B8nad');
+  await expect(page).toHaveURL('http://localhost:3000/aap/soknad/7/#st%C3%B8nad');
   await page.getByLabel('Ja').check();
   await page.getByLabel('Avtalefestet pensjon (AFP)').check();
   await page.getByRole('button', { name: 'Neste steg' }).click();
@@ -465,9 +465,7 @@ test('at alle feilmeldinger skal dukke opp', async ({ page }) => {
   await page
     .getByRole('link', { name: 'Du må svare på hvem som utbetaler avtalefestet pensjon (AFP).' })
     .click();
-  await expect(page).toHaveURL(
-    'http://localhost:3000/aap/soknad/7/#andreUtbetalinger.afp.hvemBetaler'
-  );
+  await expect(page).toHaveURL('http://localhost:3000/aap/soknad/7/#afp.hvemBetaler');
   await page.getByLabel('Hvem utbetaler avtalefestet pensjon (AFP)?').fill('nav');
   await page.getByRole('button', { name: 'Neste steg' }).click();
 

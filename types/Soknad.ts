@@ -19,14 +19,16 @@ export type Periode = {
   fraDato?: Date;
   tilDato?: Date;
 };
+
 export type UtenlandsPeriode = {
-  land: string;
-  tilDato: Date;
-  fraDato: Date;
-  iArbeid: JaEllerNei;
+  id?: string;
+  land?: string;
+  tilDato?: Date;
+  fraDato?: Date;
+  iArbeid?: JaEllerNei;
   utenlandsId?: string;
 };
-type Yrkesskade = JaEllerNei;
+
 export type Medlemskap = {
   harBoddINorgeSiste5År?: JaEllerNei;
   harArbeidetINorgeSiste5År?: JaEllerNei;
@@ -35,14 +37,14 @@ export type Medlemskap = {
   utenlandsOpphold?: UtenlandsPeriode[];
 };
 export type Behandler = {
-  firstname: string;
-  lastname: string;
-  gateadresse: string;
-  legekontor: string;
-  postnummer: string;
-  poststed: string;
-  telefon: string;
-  id: string;
+  firstname?: string;
+  lastname?: string;
+  gateadresse?: string;
+  legekontor?: string;
+  postnummer?: string;
+  poststed?: string;
+  telefon?: string;
+  id?: string;
 };
 export interface RegistrertBehandler extends OppslagBehandler {
   erRegistrertFastlegeRiktig?: JaEllerNei;
@@ -112,7 +114,7 @@ export type SoknadVedlegg = {
 
 export interface Soknad {
   sykepenger?: JaEllerNei;
-  yrkesskade?: Yrkesskade;
+  yrkesskade?: JaEllerNei;
   medlemskap?: Medlemskap;
   registrerteBehandlere?: RegistrertBehandler[];
   andreBehandlere?: Behandler[];

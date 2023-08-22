@@ -1,17 +1,10 @@
-import { Alert, Button, Heading, Label } from '@navikt/ds-react';
-import { useForm } from 'react-hook-form';
-import ConfirmationPanelWrapper from 'components/input/ConfirmationPanelWrapper';
+import { Alert, Button, ConfirmationPanel, Heading, Label } from '@navikt/ds-react';
 import { SøkerView } from 'context/sokerOppslagContext';
-import * as yup from 'yup';
-import { yupResolver } from '@hookform/resolvers/yup';
 import * as classes from './Veiledning.module.css';
 import { IntroduksjonTekst } from '../../../IntroduksjonTekst/IntroduksjonTekst';
 import { FormattedMessage, useIntl } from 'react-intl';
+import { FormEvent, useRef, useState } from 'react';
 
-const VEILEDNING_CONFIRM = 'veiledningConfirm';
-type VeiledningType = {
-  veiledningConfirm?: boolean;
-};
 interface VeiledningProps {
   søker: SøkerView;
   isLoading: boolean;
@@ -27,20 +20,19 @@ export const Veiledning = ({
   onSubmit,
 }: VeiledningProps) => {
   const { formatMessage } = useIntl();
+  const [errorMessage, setErrorMessage] = useState<string | undefined>(undefined);
+  const confirmRef = useRef<HTMLInputElement>(null);
 
-  const schema = yup.object().shape({
-    veiledningConfirm: yup
-      .boolean()
-      .required(formatMessage({ id: 'søknad.veiledning.veiledningConfirm.validation.required' }))
-      .oneOf(
-        [true],
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    if (!confirmRef.current?.checked) {
+      setErrorMessage(
         formatMessage({ id: 'søknad.veiledning.veiledningConfirm.validation.required' })
-      ),
-  });
-
-  const { control, handleSubmit } = useForm({
-    resolver: yupResolver(schema),
-  });
+      );
+      return;
+    }
+    await onSubmit();
+  }
 
   return (
     <>
@@ -66,21 +58,17 @@ export const Veiledning = ({
 
         <IntroduksjonTekst navn={søker.fulltNavn} />
 
-        <form
-          onSubmit={handleSubmit(async () => {
-            await onSubmit();
-          })}
-          autoComplete="off"
-        >
-          <ConfirmationPanelWrapper
+        <form onSubmit={(event) => handleSubmit(event)} autoComplete="off">
+          <ConfirmationPanel
+            ref={confirmRef}
             label={formatMessage({ id: 'søknad.veiledning.veiledningConfirm.label' })}
-            control={control}
-            name={VEILEDNING_CONFIRM}
+            error={errorMessage}
+            onChange={() => setErrorMessage(undefined)}
           >
             <Label as={'span'}>
               {formatMessage({ id: 'søknad.veiledning.veiledningConfirm.title' })}
             </Label>
-          </ConfirmationPanelWrapper>
+          </ConfirmationPanel>
 
           <div className={classes?.startButton}>
             <Button variant="primary" type="submit" loading={isLoading}>

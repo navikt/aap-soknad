@@ -57,6 +57,7 @@ import { Steg0 } from 'components/pageComponents/standard/Steg0/Steg0';
 import * as classes from './step.module.css';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { logger } from '@navikt/aap-felles-utils';
+import { migrerMellomlagretSøknad } from '../lib/utils/migrateMellomlagring';
 
 interface PageProps {
   søker: SokerOppslagState;
@@ -193,25 +194,13 @@ const Steps = ({ søker, mellomlagretSøknad }: PageProps) => {
                 />
               )}
               {step === '2' && (
-                <Medlemskap
-                  onBackClick={onPreviousStep}
-                  defaultValues={søknadState}
-                  onNext={(data) => {
-                    onNextStep(data);
-                  }}
-                />
+                <Medlemskap onBackClick={onPreviousStep} defaultValues={søknadState} />
               )}
               {step === '3' && (
                 <Yrkesskade onBackClick={onPreviousStep} defaultValues={søknadState} />
               )}
               {step === '4' && (
-                <Behandlere
-                  onBackClick={onPreviousStep}
-                  defaultValues={søknadState}
-                  onNext={(data) => {
-                    onNextStep(data);
-                  }}
-                />
+                <Behandlere onBackClick={onPreviousStep} defaultValues={søknadState} />
               )}
               {step === '5' && (
                 <Barnetillegg
@@ -224,13 +213,7 @@ const Steps = ({ søker, mellomlagretSøknad }: PageProps) => {
               )}
               {step === '6' && <Student onBackClick={onPreviousStep} defaultValues={søknadState} />}
               {step === '7' && (
-                <AndreUtbetalinger
-                  onBackClick={onPreviousStep}
-                  defaultValues={søknadState}
-                  onNext={(data) => {
-                    onNextStep(data);
-                  }}
-                />
+                <AndreUtbetalinger onBackClick={onPreviousStep} defaultValues={søknadState} />
               )}
               {step === '8' && (
                 <Vedlegg
@@ -289,9 +272,9 @@ export const getServerSideProps = beskyttetSide(
         },
       };
     }
-
+    const migrertMellomlagretSøknad = migrerMellomlagretSøknad(mellomlagretSøknad);
     return {
-      props: { søker, mellomlagretSøknad },
+      props: { søker, mellomlagretSøknad: migrertMellomlagretSøknad },
     };
   }
 );

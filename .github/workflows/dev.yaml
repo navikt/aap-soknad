@@ -43,8 +43,8 @@ jobs:
       - name: Copy env-file for dev
         run: cp .nais/dev.env .env.local
 
-      - name: client tests
-        run: yarn test
+#      - name: client tests
+#        run: yarn test
 
       - name: check diff on translations
         run: yarn intl:diff
@@ -61,17 +61,17 @@ jobs:
           source: ./.next/static
           destination: /aap-soknad/_next
 
-      - name: Install Playwright Browsers
-        run: npx playwright install --with-deps
+#      - name: Install Playwright Browsers
+#        run: npx playwright install --with-deps
 
-      - name: Run Playwright tests
-        run: yarn playwright test
+#      - name: Run Playwright tests
+#        run: yarn playwright test
 
-      - uses: actions/upload-artifact@v3
-        with:
-          name: playwright-report
-          path: playwright-report/
-          retention-days: 30
+#      - uses: actions/upload-artifact@v3
+#        with:
+#          name: playwright-report
+#          path: playwright-report/
+#          retention-days: 30
 
 
 

@@ -1,38 +1,37 @@
-import { Alert, BodyLong, BodyShort, Button, Heading, Label, Radio } from '@navikt/ds-react';
-import React, { useEffect, useMemo, useState } from 'react';
-import { useFieldArray, useForm, useWatch } from 'react-hook-form';
-import { Add, Delete } from '@navikt/ds-icons';
+import { BodyLong, BodyShort, Button, Heading } from '@navikt/ds-react';
+import React, { useEffect, useState } from 'react';
+import { Add } from '@navikt/ds-icons';
 import { Behandler, Soknad } from 'types/Soknad';
 import * as yup from 'yup';
-import { useStepWizard } from 'context/stepWizardContextV2';
-import { yupResolver } from '@hookform/resolvers/yup';
-import SoknadFormWrapper from 'components/SoknadFormWrapper/SoknadFormWrapper';
-import { AddBehandlerModal } from './AddBehandlerModal';
+import { completeAndGoToNextStep, useStepWizard } from 'context/stepWizardContextV2';
+import { LeggTilBehandlerModal } from './LeggTilBehandlerModal';
 import { LucaGuidePanel } from '@navikt/aap-felles-react';
 import * as classes from './Behandlere.module.css';
-import { deleteOpplastedeVedlegg, useSoknadContextStandard } from 'context/soknadContextStandard';
-import { slettLagretSoknadState, updateSøknadData } from 'context/soknadContextCommon';
+import { useSoknadContextStandard } from 'context/soknadContextStandard';
+import { updateSøknadData } from 'context/soknadContextCommon';
 import { useDebounceLagreSoknad } from 'hooks/useDebounceLagreSoknad';
 import { GenericSoknadContextState } from 'types/SoknadContext';
-import RadioGroupWrapper from 'components/input/RadioGroupWrapper/RadioGroupWrapper';
 import { JaEllerNei } from 'types/Generic';
-import { formatFullAdresse, formatNavn, formatTelefonnummer } from 'utils/StringFormatters';
 import { IntlFormatters, useIntl } from 'react-intl';
+import SoknadFormWrapperNew from '../../../SoknadFormWrapper/SoknadFormWrapperNew';
+import { SøknadValidationError } from '../../../schema/FormErrorSummaryNew';
+import { v4 as uuid4 } from 'uuid';
+import { logSkjemastegFullførtEvent } from '../../../../utils/amplitude';
+import { validate } from '../../../../lib/utils/validationUtils';
+import { setFocusOnErrorSummary } from '../../../schema/FormErrorSummary';
+import { RegistrertBehandler } from './RegistrertBehandler';
+import { AnnenBehandler } from './AnnenBehandler';
 
 interface Props {
   onBackClick: () => void;
-  onNext: (data: any) => void;
   defaultValues?: GenericSoknadContextState<Soknad>;
 }
-const REGISTRERTE_BEHANDLERE = 'registrerteBehandlere';
-const ANDRE_BEHANDLERE = 'andreBehandlere';
-const RIKTIG_FASTLEGE = 'erRegistrertFastlegeRiktig';
 
 export const getBehandlerSchema = (formatMessage: IntlFormatters['formatMessage']) =>
   yup.object().shape({
-    [REGISTRERTE_BEHANDLERE]: yup.array().of(
+    registrerteBehandlere: yup.array().of(
       yup.object().shape({
-        [RIKTIG_FASTLEGE]: yup
+        erRegistrertFastlegeRiktig: yup
           .string()
           .required(
             formatMessage({ id: `søknad.helseopplysninger.erRegistrertFastlegeRiktig.required` })
@@ -41,97 +40,63 @@ export const getBehandlerSchema = (formatMessage: IntlFormatters['formatMessage'
           .nullable(),
       })
     ),
-    [ANDRE_BEHANDLERE]: yup.array(),
   });
-export const Behandlere = ({ onBackClick, onNext, defaultValues }: Props) => {
+export const Behandlere = ({ onBackClick, defaultValues }: Props) => {
+  const [errors, setErrors] = useState<SøknadValidationError[] | undefined>();
+  const [showModal, setShowModal] = useState(false);
+  const [selectedBehandler, setSelectedBehandler] = useState<Behandler>({});
+
   const { formatMessage } = useIntl();
-
   const { søknadState, søknadDispatch } = useSoknadContextStandard();
+  const { currentStepIndex, stepWizardDispatch } = useStepWizard();
   const { stepList } = useStepWizard();
-  const {
-    control,
-    handleSubmit,
-    formState: { errors },
-  } = useForm({
-    resolver: yupResolver(getBehandlerSchema(formatMessage)),
-    defaultValues: {
-      [REGISTRERTE_BEHANDLERE]: defaultValues?.søknad?.registrerteBehandlere,
-      [ANDRE_BEHANDLERE]: defaultValues?.søknad?.andreBehandlere,
-    },
-  });
-
   const debouncedLagre = useDebounceLagreSoknad<Soknad>();
-  const allFields = useWatch({ control });
 
   useEffect(() => {
-    debouncedLagre(søknadState, stepList, allFields);
-  }, [allFields]);
-  const [showModal, setShowModal] = useState(false);
-  const [selectedBehandlerIndex, setSelectedBehandlerIndex] = useState<number | undefined>(
-    undefined
-  );
+    debouncedLagre(søknadState, stepList, {});
+  }, [søknadState.søknad?.andreBehandlere, søknadState.søknad?.registrerteBehandlere]);
 
-  const { fields: registrertBehandlerFields } = useFieldArray({
-    name: REGISTRERTE_BEHANDLERE,
-    control,
-  });
+  function clearErrors() {
+    setErrors(undefined);
+  }
+  const findError = (path: string) => errors?.find((error) => error.path === path)?.message;
 
-  const { fields, append, remove, update } = useFieldArray({
-    name: ANDRE_BEHANDLERE,
-    control,
-  });
-  const selectedBehandler = useMemo(() => {
-    if (selectedBehandlerIndex === undefined) return undefined;
-    return fields[selectedBehandlerIndex];
-  }, [selectedBehandlerIndex, fields]);
-
-  const watchFieldArray = useWatch({ control, name: REGISTRERTE_BEHANDLERE });
-  const controlledFields = registrertBehandlerFields.map((field, index) => {
-    return {
-      ...field,
-      /* @ts-ignore-line */
-      ...watchFieldArray[index],
-    };
-  });
-
-  const editNyBehandler = (index: number) => {
-    setSelectedBehandlerIndex(index);
-    setShowModal(true);
+  const append = (behandler: Behandler) => {
+    updateSøknadData(søknadDispatch, {
+      andreBehandlere: [...(søknadState.søknad?.andreBehandlere || []), behandler],
+    });
   };
-  const saveNyBehandler = (behandler: Behandler) => {
-    if (selectedBehandler === undefined) {
-      append({
-        ...behandler,
-      });
-    } else {
-      if (selectedBehandlerIndex !== undefined)
-        update(selectedBehandlerIndex, {
-          ...behandler,
-        });
-    }
+
+  const update = (updatedBehandler: Behandler) => {
+    updateSøknadData(søknadDispatch, {
+      andreBehandlere: søknadState.søknad?.andreBehandlere?.map((behandler) => {
+        if (behandler.id === updatedBehandler.id) {
+          return updatedBehandler;
+        } else {
+          return behandler;
+        }
+      }),
+    });
   };
-  const slettBehandler = (index: number) => {
-    remove(index);
-    setSelectedBehandlerIndex(undefined);
-    setShowModal(false);
-  };
+
   return (
     <>
-      <SoknadFormWrapper
-        onNext={handleSubmit((data) => {
-          onNext(data);
-        })}
+      <SoknadFormWrapperNew
+        onNext={async () => {
+          const errors = await validate(getBehandlerSchema(formatMessage), søknadState.søknad);
+
+          if (errors) {
+            setErrors(errors);
+            setFocusOnErrorSummary();
+          } else {
+            logSkjemastegFullførtEvent(currentStepIndex ?? 0);
+            completeAndGoToNextStep(stepWizardDispatch);
+          }
+        }}
         onBack={() => {
           updateSøknadData<Soknad>(søknadDispatch, { ...søknadState.søknad });
           onBackClick();
         }}
-        onDelete={async () => {
-          await deleteOpplastedeVedlegg(søknadState.søknad);
-          await slettLagretSoknadState<Soknad>(søknadDispatch, søknadState);
-        }}
-        nextButtonText={formatMessage({ id: 'navigation.next' })}
-        backButtonText={formatMessage({ id: 'navigation.back' })}
-        cancelButtonText={formatMessage({ id: 'navigation.cancel' })}
         errors={errors}
       >
         <Heading size="large" level="2">
@@ -149,67 +114,19 @@ export const Behandlere = ({ onBackClick, onNext, defaultValues }: Props) => {
           <Heading size={'small'} level={'3'}>
             {formatMessage({ id: 'søknad.helseopplysninger.registrertFastlege.title' })}
           </Heading>
-          {controlledFields.length === 0 && (
+          {defaultValues?.søknad?.registrerteBehandlere?.length === 0 && (
             <BodyLong>
               {formatMessage({ id: 'søknad.helseopplysninger.registrertFastlege.ingenFastlege' })}
             </BodyLong>
           )}
-          {controlledFields.map((field, index) => (
-            <div key={field.id}>
-              <dl className={classes?.fastLege}>
-                <dt>
-                  <Label as={'span'}>
-                    {formatMessage({ id: 'søknad.helseopplysninger.registrertFastlege.navn' })}
-                  </Label>
-                </dt>
-                {/* @ts-ignore-line */}
-                <dd>{formatNavn(field.navn)}</dd>
-                <dt>
-                  <Label as={'span'}>
-                    {formatMessage({
-                      id: 'søknad.helseopplysninger.registrertFastlege.legekontor',
-                    })}
-                  </Label>
-                </dt>
-                {/* @ts-ignore-line */}
-                <dd>{field.kontaktinformasjon.kontor}</dd>
-                <dt>
-                  <Label as={'span'}>
-                    {formatMessage({ id: 'søknad.helseopplysninger.registrertFastlege.adresse' })}
-                  </Label>
-                </dt>
-                {/* @ts-ignore-line */}
-                <dd>{formatFullAdresse(field.kontaktinformasjon.adresse)}</dd>
-                <dt>
-                  <Label as={'span'}>
-                    {formatMessage({ id: 'søknad.helseopplysninger.registrertFastlege.telefon' })}
-                  </Label>
-                </dt>
-                {/* @ts-ignore-line */}
-                <dd>{formatTelefonnummer(field.kontaktinformasjon.telefon)}</dd>
-              </dl>
-              <RadioGroupWrapper
-                name={`${REGISTRERTE_BEHANDLERE}.${index}.${RIKTIG_FASTLEGE}`}
-                legend={formatMessage({
-                  id: `søknad.helseopplysninger.erRegistrertFastlegeRiktig.label`,
-                })}
-                control={control}
-              >
-                <Radio value={JaEllerNei.JA}>
-                  <BodyShort>{JaEllerNei.JA}</BodyShort>
-                </Radio>
-                <Radio value={JaEllerNei.NEI}>
-                  <BodyShort>{JaEllerNei.NEI}</BodyShort>
-                </Radio>
-              </RadioGroupWrapper>
-              {field.erRegistrertFastlegeRiktig === JaEllerNei.NEI && (
-                <Alert variant={'info'}>
-                  {formatMessage({
-                    id: 'søknad.helseopplysninger.erRegistrertFastlegeRiktig.alertInfo',
-                  })}
-                </Alert>
-              )}
-            </div>
+          {defaultValues?.søknad?.registrerteBehandlere?.map((registrertBehandler, index) => (
+            <RegistrertBehandler
+              key={registrertBehandler.kontaktinformasjon.behandlerRef}
+              index={index}
+              registrertBehandler={registrertBehandler}
+              clearErrors={clearErrors}
+              errorMessage={findError(`registrerteBehandlere[${index}].erRegistrertFastlegeRiktig`)}
+            />
           ))}
         </div>
         <div>
@@ -219,102 +136,24 @@ export const Behandlere = ({ onBackClick, onNext, defaultValues }: Props) => {
           <BodyShort spacing>
             {formatMessage({ id: 'søknad.helseopplysninger.annenBehandler.description' })}
           </BodyShort>
-          {fields.length > 0 && (
-            <>
-              <Heading size={'xsmall'} level={'4'} spacing>
-                {formatMessage({ id: 'søknad.helseopplysninger.dineBehandlere.title' })}
-              </Heading>
-              <ul className={classes?.legeList}>
-                {fields.map((field, index) => (
-                  <li key={field.id}>
-                    <article className={classes?.legeKort}>
-                      <dl>
-                        <div className={classes?.oneLineDetail}>
-                          <dt>
-                            <Label as={'span'}>
-                              {formatMessage({
-                                id: 'søknad.helseopplysninger.dineBehandlere.navn',
-                              })}
-                              :
-                            </Label>
-                          </dt>
-                          <dd>{`${field?.firstname} ${field?.lastname}`}</dd>
-                        </div>
-                        {field?.legekontor && (
-                          <div className={classes?.oneLineDetail}>
-                            <dt>
-                              <Label as={'span'}>
-                                {formatMessage({
-                                  id: 'søknad.helseopplysninger.dineBehandlere.legekontor',
-                                })}
-                                :
-                              </Label>
-                            </dt>
-                            <dd>{field?.legekontor}</dd>
-                          </div>
-                        )}
-                        {field?.gateadresse && (
-                          <div className={classes?.oneLineDetail}>
-                            <dt>
-                              <Label as={'span'}>
-                                {formatMessage({
-                                  id: 'søknad.helseopplysninger.dineBehandlere.adresse',
-                                })}
-                                :
-                              </Label>
-                            </dt>
-                            <dd>
-                              {formatFullAdresse({
-                                adressenavn: field.gateadresse,
-                                postnummer: { postnr: field.postnummer, poststed: field.poststed },
-                              })}
-                            </dd>
-                          </div>
-                        )}
-                        {field?.telefon && (
-                          <div className={classes?.oneLineDetail}>
-                            <dt>
-                              <Label as={'span'}>
-                                {formatMessage({
-                                  id: 'søknad.helseopplysninger.dineBehandlere.telefon',
-                                })}
-                                :
-                              </Label>
-                            </dt>
-                            <dd>{formatTelefonnummer(field?.telefon)}</dd>
-                          </div>
-                        )}
-                      </dl>
-                      <div className={classes?.cardButtonWrapper}>
-                        <Button
-                          type="button"
-                          variant="tertiary"
-                          onClick={() => editNyBehandler(index)}
-                        >
-                          {formatMessage({
-                            id: 'søknad.helseopplysninger.dineBehandlere.editButton',
-                          })}
-                        </Button>
-                        <Button
-                          variant="tertiary"
-                          type="button"
-                          icon={<Delete title={'Slett'} />}
-                          iconPosition={'left'}
-                          onClick={() => {
-                            slettBehandler(index);
-                          }}
-                        >
-                          {formatMessage({
-                            id: 'søknad.helseopplysninger.dineBehandlere.slettButton',
-                          })}
-                        </Button>
-                      </div>
-                    </article>
-                  </li>
-                ))}
-              </ul>
-            </>
-          )}
+          {defaultValues?.søknad?.andreBehandlere &&
+            defaultValues?.søknad?.andreBehandlere?.length > 0 && (
+              <>
+                <Heading size={'xsmall'} level={'4'} spacing>
+                  {formatMessage({ id: 'søknad.helseopplysninger.dineBehandlere.title' })}
+                </Heading>
+                <ul className={classes?.legeList}>
+                  {defaultValues.søknad.andreBehandlere.map((behandler) => (
+                    <AnnenBehandler
+                      key={behandler.id}
+                      behandler={behandler}
+                      setSelectedBehandler={setSelectedBehandler}
+                      setShowModal={setShowModal}
+                    />
+                  ))}
+                </ul>
+              </>
+            )}
 
           <Button
             variant="tertiary"
@@ -328,19 +167,32 @@ export const Behandlere = ({ onBackClick, onNext, defaultValues }: Props) => {
             }
             iconPosition={'left'}
             onClick={() => {
-              setSelectedBehandlerIndex(undefined);
+              setSelectedBehandler({});
               setShowModal(true);
             }}
           >
             {formatMessage({ id: 'søknad.helseopplysninger.annenBehandler.addBehandlerButton' })}
           </Button>
         </div>
-      </SoknadFormWrapper>
-      <AddBehandlerModal
-        onCloseClick={() => setShowModal(false)}
-        onSaveClick={saveNyBehandler}
+      </SoknadFormWrapperNew>
+      <LeggTilBehandlerModal
+        onCloseClick={() => {
+          setShowModal(false);
+          setSelectedBehandler({});
+        }}
+        onSaveClick={(behandler) => {
+          if (behandler.id === undefined) {
+            append({
+              ...behandler,
+              id: uuid4(),
+            });
+          } else {
+            update(behandler);
+          }
+        }}
         showModal={showModal}
         behandler={selectedBehandler}
+        setBehandler={setSelectedBehandler}
       />
     </>
   );

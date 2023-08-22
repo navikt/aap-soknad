@@ -1,5 +1,4 @@
-import { JaEllerNei } from 'types/Generic';
-import { getBehandlerSchema } from './AddBehandlerModal';
+import { getBehandlerSchema } from './LeggTilBehandlerModal';
 
 describe('AddBehandlerModal validering test', () => {
   const schema = getBehandlerSchema(jest.fn());

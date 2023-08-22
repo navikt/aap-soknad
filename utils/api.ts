@@ -19,15 +19,11 @@ import { BARN, GRUNNBELØP } from 'components/pageComponents/standard/Barnetille
 import { RequiredVedlegg } from 'types/SoknadContext';
 import { Relasjon } from 'components/pageComponents/standard/Barnetillegg/AddBarnModal';
 import {
-  ARBEID_I_NORGE,
-  BODD_I_NORGE,
-  utenlandsPeriodeArbeidEllerBodd,
-} from 'components/pageComponents/standard/Medlemskap/Medlemskap';
-import {
   FerieType,
   FerieTypeToMessageKey,
 } from 'components/pageComponents/standard/StartDato/StartDato';
 import { JaEllerNei } from 'types/Generic';
+import { utenlandsPeriodeArbeidEllerBodd } from '../components/pageComponents/standard/Medlemskap/medlemskapUtils';
 
 export type SøknadsType = 'UTLAND' | 'STANDARD';
 
@@ -123,7 +119,7 @@ export const mapSøknadToBackend = (søknad?: Soknad): SøknadBackendState => {
       iTilleggArbeidUtenforNorge: jaNeiToBoolean(søknad?.medlemskap?.iTilleggArbeidUtenforNorge),
       utenlandsopphold:
         søknad?.medlemskap?.utenlandsOpphold?.map((utenlandsopphold) => ({
-          land: utenlandsopphold.land.split(':')[0],
+          land: utenlandsopphold.land ? utenlandsopphold.land.split(':')[0] : undefined,
           periode: {
             fom: formatDate(utenlandsopphold.fraDato, 'yyyy-MM-dd'),
             tom: formatDate(utenlandsopphold.tilDato, 'yyyy-MM-dd'),
@@ -327,13 +323,12 @@ export const mapSøknadToPdf = (
             createGruppe(
               formatMessage({
                 id: `søknad.medlemskap.utenlandsperiode.modal.ingress.${utenlandsPeriodeArbeidEllerBodd(
-                  søknad?.medlemskap?.[ARBEID_I_NORGE],
-                  søknad?.medlemskap?.[BODD_I_NORGE]
+                  søknad?.medlemskap
                 )}`,
               }),
               søknad?.medlemskap?.utenlandsOpphold?.map((opphold) =>
                 createFeltgruppe([
-                  ...createField('Land', opphold?.land.split(':')[1]),
+                  ...createField('Land', opphold.land ? opphold.land.split(':')[1] : undefined),
                   ...createField(
                     'Periode',
                     `Fra ${formatDate(opphold?.fraDato, 'MMMM yyyy')} til ${formatDate(

@@ -9,10 +9,9 @@ import { LucaGuidePanel } from '@navikt/aap-felles-react';
 import {
   addRequiredVedlegg,
   removeRequiredVedlegg,
-  slettLagretSoknadState,
   updateSøknadData,
 } from 'context/soknadContextCommon';
-import { deleteOpplastedeVedlegg, useSoknadContextStandard } from 'context/soknadContextStandard';
+import { useSoknadContextStandard } from 'context/soknadContextStandard';
 import { useDebounceLagreSoknad } from 'hooks/useDebounceLagreSoknad';
 import { GenericSoknadContextState } from 'types/SoknadContext';
 import { setFocusOnErrorSummary } from 'components/schema/FormErrorSummary';
@@ -98,7 +97,7 @@ const Student = ({ onBackClick, defaultValues }: Props) => {
 
   return (
     <SoknadFormWrapperNew
-      onNext={async (data) => {
+      onNext={async () => {
         const errors = await validate(getStudentSchema(formatMessage), søknadState.søknad?.student);
         if (errors) {
           setErrors(errors);
@@ -127,13 +126,6 @@ const Student = ({ onBackClick, defaultValues }: Props) => {
         updateSøknadData<Soknad>(søknadDispatch, { ...søknadState.søknad });
         onBackClick();
       }}
-      onDelete={async () => {
-        await deleteOpplastedeVedlegg(søknadState.søknad);
-        await slettLagretSoknadState<Soknad>(søknadDispatch, søknadState);
-      }}
-      nextButtonText={'Neste steg'}
-      backButtonText={'Forrige steg'}
-      cancelButtonText={'Avbryt søknad'}
       errors={errors}
     >
       <Heading size="large" level="2">

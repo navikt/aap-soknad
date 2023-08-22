@@ -1,23 +1,13 @@
 import { Soknad } from 'types/Soknad';
 import React, { useEffect, useMemo, useState } from 'react';
-import {
-  Alert,
-  BodyShort,
-  DatePicker,
-  Heading,
-  Label,
-  Radio,
-  RadioGroup,
-  TextField,
-  useDatepicker,
-} from '@navikt/ds-react';
+import { Alert, BodyShort, Heading, Label, Radio, RadioGroup, TextField } from '@navikt/ds-react';
 import { JaEllerNei } from 'types/Generic';
 import ColorPanel from 'components/panel/ColorPanel';
 import * as yup from 'yup';
 import { completeAndGoToNextStep, useStepWizard } from 'context/stepWizardContextV2';
 import { LucaGuidePanel } from '@navikt/aap-felles-react';
-import { deleteOpplastedeVedlegg, useSoknadContextStandard } from 'context/soknadContextStandard';
-import { slettLagretSoknadState, updateSøknadData } from 'context/soknadContextCommon';
+import { useSoknadContextStandard } from 'context/soknadContextStandard';
+import { updateSøknadData } from 'context/soknadContextCommon';
 import { useDebounceLagreSoknad } from 'hooks/useDebounceLagreSoknad';
 
 import { GenericSoknadContextState } from 'types/SoknadContext';
@@ -28,6 +18,8 @@ import { validate } from '../../../../lib/utils/validationUtils';
 import { logSkjemastegFullførtEvent } from '../../../../utils/amplitude';
 import { SøknadValidationError } from '../../../schema/FormErrorSummaryNew';
 import { IntlFormatters, useIntl } from 'react-intl';
+import TilDato from './TilDato';
+import FraDato from './FraDato';
 
 export enum FerieType {
   DAGER = 'DAGER',
@@ -140,7 +132,7 @@ const StartDato = ({ onBackClick, defaultValues }: Props) => {
 
   useEffect(() => {
     debouncedLagre(søknadState, stepList, {});
-  }, [søknadState.søknad?.yrkesskade]);
+  }, [søknadState.søknad?.sykepenger, søknadState.søknad?.ferie]);
 
   const FerieTypeTekster = useMemo(
     () => ({
@@ -150,32 +142,6 @@ const StartDato = ({ onBackClick, defaultValues }: Props) => {
     [formatMessage]
   );
 
-  const { datepickerProps: fraDatoProps, inputProps: fraDatoInputProps } = useDatepicker({
-    fromDate: new Date(),
-    onDateChange: (value) => {
-      clearErrors();
-      updateSøknadData(søknadDispatch, {
-        ferie: { ...søknadState?.søknad?.ferie, fraDato: value },
-      });
-    },
-    ...(defaultValues?.søknad?.ferie?.fraDato !== undefined && {
-      defaultSelected: new Date(defaultValues.søknad.ferie.fraDato),
-    }),
-  });
-
-  const { datepickerProps: tilDatoProps, inputProps: tilDatoInputProps } = useDatepicker({
-    fromDate: new Date(),
-    onDateChange: (value) => {
-      clearErrors();
-      updateSøknadData(søknadDispatch, {
-        ferie: { ...søknadState?.søknad?.ferie, tilDato: value },
-      });
-    },
-    ...(defaultValues?.søknad?.ferie?.tilDato !== undefined && {
-      defaultSelected: new Date(defaultValues.søknad.ferie.tilDato),
-    }),
-  });
-
   function clearErrors() {
     setErrors(undefined);
   }
@@ -183,7 +149,6 @@ const StartDato = ({ onBackClick, defaultValues }: Props) => {
   function findError(path: string): string | undefined {
     return errors?.find((error) => error.path === path)?.message;
   }
-
   return (
     <SoknadFormWrapperNew
       onNext={async () => {
@@ -198,16 +163,8 @@ const StartDato = ({ onBackClick, defaultValues }: Props) => {
         completeAndGoToNextStep(stepWizardDispatch);
       }}
       onBack={() => {
-        updateSøknadData<Soknad>(søknadDispatch, { ...søknadState.søknad });
         onBackClick();
       }}
-      onDelete={async () => {
-        await deleteOpplastedeVedlegg(søknadState.søknad);
-        await slettLagretSoknadState<Soknad>(søknadDispatch, søknadState);
-      }}
-      nextButtonText={formatMessage({ id: 'navigation.next' })}
-      backButtonText={formatMessage({ id: 'navigation.back' })}
-      cancelButtonText={formatMessage({ id: 'navigation.cancel' })}
       errors={errors}
     >
       <Heading size="large" level="2">
@@ -224,7 +181,7 @@ const StartDato = ({ onBackClick, defaultValues }: Props) => {
         value={defaultValues?.søknad?.sykepenger || ''}
         onChange={(value) => {
           clearErrors();
-          updateSøknadData(søknadDispatch, { sykepenger: value });
+          updateSøknadData(søknadDispatch, { sykepenger: value, ferie: undefined });
         }}
         error={findError('sykepenger')}
       >
@@ -242,7 +199,7 @@ const StartDato = ({ onBackClick, defaultValues }: Props) => {
             onChange={(value) => {
               clearErrors();
               updateSøknadData(søknadDispatch, {
-                ferie: { ...søknadState?.søknad?.ferie, skalHaFerie: value },
+                ferie: { skalHaFerie: value },
               });
             }}
             error={findError('ferie.skalHaFerie')}
@@ -259,7 +216,10 @@ const StartDato = ({ onBackClick, defaultValues }: Props) => {
               onChange={(value) => {
                 clearErrors();
                 updateSøknadData(søknadDispatch, {
-                  ferie: { ...søknadState?.søknad?.ferie, ferieType: value },
+                  ferie: {
+                    skalHaFerie: søknadState?.søknad?.ferie?.skalHaFerie,
+                    ferieType: value,
+                  },
                 });
               }}
               error={findError('ferie.ferieType')}
@@ -276,24 +236,16 @@ const StartDato = ({ onBackClick, defaultValues }: Props) => {
             <div className={classes?.periodeContainer}>
               <Label>{formatMessage({ id: 'søknad.startDato.periode.label' })}</Label>
               <div className={classes?.datoContainer}>
-                <DatePicker {...fraDatoProps}>
-                  <DatePicker.Input
-                    {...fraDatoInputProps}
-                    label={formatMessage({ id: 'søknad.startDato.periode.fraDato.label' })}
-                    name={'ferie.fraDato'}
-                    id={'ferie.fraDato'}
-                    error={findError('ferie.fraDato')}
-                  />
-                </DatePicker>
-                <DatePicker {...tilDatoProps}>
-                  <DatePicker.Input
-                    {...tilDatoInputProps}
-                    label={formatMessage({ id: 'søknad.startDato.periode.tilDato.label' })}
-                    name={'ferie.tilDato'}
-                    id={'ferie.tilDato'}
-                    error={findError('ferie.tilDato')}
-                  />
-                </DatePicker>
+                <FraDato
+                  clearErrors={clearErrors}
+                  errorMessage={findError('ferie.fraDato')}
+                  defaultValues={defaultValues}
+                />
+                <TilDato
+                  clearErrors={clearErrors}
+                  errorMessage={findError('ferie.tilDato')}
+                  defaultValues={defaultValues}
+                />
               </div>
             </div>
           )}
@@ -309,7 +261,11 @@ const StartDato = ({ onBackClick, defaultValues }: Props) => {
                 onChange={(value) => {
                   clearErrors();
                   updateSøknadData(søknadDispatch, {
-                    ferie: { ...søknadState?.søknad?.ferie, antallDager: value.target.value },
+                    ferie: {
+                      skalHaFerie: søknadState?.søknad?.ferie?.skalHaFerie,
+                      ferieType: søknadState?.søknad?.ferie?.ferieType,
+                      antallDager: value.target.value,
+                    },
                   });
                 }}
                 error={findError('ferie.antallDager')}
