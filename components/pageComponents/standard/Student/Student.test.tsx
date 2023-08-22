@@ -12,6 +12,7 @@ import Student, { JaNeiAvbrutt } from './Student';
 import { axe, toHaveNoViolations } from 'jest-axe';
 import messagesNb from 'translations/nb.json';
 import userEvent from '@testing-library/user-event';
+
 expect.extend(toHaveNoViolations);
 
 const STUDENT = 'student';
@@ -43,16 +44,16 @@ describe('Student', () => {
   });
   it('Avbrutt studie - vis oppfølgingsspørsmål', async () => {
     renderStepSoknadStandard(STUDENT, <Component />, {});
-    const avbruttLabel = messagesNb?.søknad?.student?.erStudent?.avbrutt;
+    const avbruttLabel = messagesNb['søknad.student.erStudent.avbrutt'];
     fireEvent.click(screen.getByRole('radio', { name: avbruttLabel }), {});
-    const kommetilbakeTilStudietLegend = messagesNb?.søknad?.student?.kommeTilbake?.legend;
+    const kommetilbakeTilStudietLegend = messagesNb['søknad.student.kommeTilbake.legend'];
     const oppfølgingsspørsmål = screen.getByRole('group', { name: kommetilbakeTilStudietLegend });
     expect(oppfølgingsspørsmål).not.toBeNull();
   });
   it('Avbrutt studie - oppfølgingsspørsmål påkrevd', async () => {
     renderStepSoknadStandard(STUDENT, <Component />, {});
 
-    const avbruttLabel = messagesNb?.søknad?.student?.erStudent?.avbrutt;
+    const avbruttLabel = messagesNb['søknad.student.erStudent.avbrutt'];
     const avbruttStudie = screen.getByRole('radio', { name: avbruttLabel });
     await waitFor(() => user.click(avbruttStudie));
 
@@ -60,7 +61,7 @@ describe('Student', () => {
     await waitFor(() => user.click(nesteStegKnapp));
 
     const errorSummary = await screen.findByRole('alert');
-    const påkrevdTekst = messagesNb?.søknad?.student?.kommeTilbake?.required;
+    const påkrevdTekst = messagesNb['søknad.student.kommeTilbake.required'];
     expect(await findByRole(errorSummary, 'link', { name: påkrevdTekst })).not.toBeNull();
   });
 

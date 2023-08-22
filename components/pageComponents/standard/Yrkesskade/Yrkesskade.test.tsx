@@ -4,6 +4,7 @@ import React from 'react';
 import { axe, toHaveNoViolations } from 'jest-axe';
 import messagesNb from 'translations/nb.json';
 import { Yrkesskade } from './Yrkesskade';
+
 expect.extend(toHaveNoViolations);
 
 const YRKESSKADE = 'yrkesskade';
@@ -23,7 +24,7 @@ describe('Startdato', () => {
     renderStepSoknadStandard(YRKESSKADE, <Component />, {});
     fireEvent.submit(screen.getByRole('button', { name: 'Neste steg' }));
     const errorSummary = await screen.findByRole('alert');
-    const påkrevdTekst = messagesNb?.søknad?.yrkesskade?.harDuYrkesskade?.validation?.required;
+    const påkrevdTekst = messagesNb['søknad.yrkesskade.harDuYrkesskade.validation.required'];
     expect(await findByRole(errorSummary, 'link', { name: påkrevdTekst })).not.toBeNull();
   });
   it('UU', async () => {
