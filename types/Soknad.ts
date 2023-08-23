@@ -77,11 +77,11 @@ export type Barn = {
 };
 
 export type ManuelleBarn = {
-  navn: Navn;
-  internId: string;
+  navn?: Navn;
+  internId?: string;
   fødseldato?: Date;
   harInntekt?: JaEllerNei;
-  relasjon: Relasjon;
+  relasjon?: Relasjon;
   vedlegg?: Vedlegg[];
 };
 

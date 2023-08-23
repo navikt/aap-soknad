@@ -6,15 +6,14 @@ import {
   Ingress,
   Modal,
   Radio,
+  RadioGroup,
   ReadMore,
+  TextField,
 } from '@navikt/ds-react';
 import { JaEllerNei } from 'types/Generic';
-import React, { useEffect } from 'react';
+import React, { Dispatch } from 'react';
 import { ManuelleBarn, Soknad } from 'types/Soknad';
-import TextFieldWrapper from 'components/input/TextFieldWrapper';
-import RadioGroupWrapper from 'components/input/RadioGroupWrapper/RadioGroupWrapper';
-import { useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
+
 import * as yup from 'yup';
 import * as classes from './Barnetillegg.module.css';
 import { ModalButtonWrapper } from 'components/ButtonWrapper/ModalButtonWrapper';
@@ -23,13 +22,16 @@ import { GRUNNBELØP } from './Barnetillegg';
 import { add, sub, subYears } from 'date-fns';
 import { DatePickerWrapper } from '../../../input/DatePickerWrapper/DatePickerWrapper';
 import { IntlFormatters, useIntl } from 'react-intl';
+import { validate } from '../../../../lib/utils/validationUtils';
+import { useFormErrors } from '../../../../hooks/useFormErrors';
 
 interface Props {
   søknad?: Soknad;
   onCloseClick: () => void;
   onSaveClick: (data: any) => void;
   showModal: boolean;
-  barn?: ManuelleBarn;
+  barn: ManuelleBarn;
+  setBarn: Dispatch<ManuelleBarn>;
 }
 
 export enum Relasjon {
@@ -37,13 +39,11 @@ export enum Relasjon {
   FOSTERFORELDER = 'FOSTERFORELDER',
 }
 
-const NAVN = 'navn';
-
 const ALDER_BARN_ÅR = 18;
 
 export const getAddBarnSchema = (formatMessage: IntlFormatters['formatMessage']) => {
   return yup.object().shape({
-    [NAVN]: yup.object().shape({
+    navn: yup.object().shape({
       fornavn: yup.string().required(
         formatMessage({
           id: 'søknad.barnetillegg.leggTilBarn.modal.navn.fornavn.validation.required',
@@ -98,21 +98,9 @@ export const getAddBarnSchema = (formatMessage: IntlFormatters['formatMessage'])
   });
 };
 
-export const AddBarnModal = ({ showModal, onCloseClick, onSaveClick, barn }: Props) => {
+export const AddBarnModal = ({ showModal, onCloseClick, onSaveClick, barn, setBarn }: Props) => {
   const { formatMessage } = useIntl();
-
-  const { control, handleSubmit, reset, watch } = useForm({
-    resolver: yupResolver(getAddBarnSchema(formatMessage)),
-    defaultValues: {
-      ...(barn ?? {}),
-    },
-  });
-
-  const relasjon = watch('relasjon');
-
-  useEffect(() => {
-    reset({ ...barn });
-  }, [barn, showModal, reset]);
+  const { setErrors, findError, clearErrors } = useFormErrors();
 
   return (
     <Modal
@@ -130,39 +118,66 @@ export const AddBarnModal = ({ showModal, onCloseClick, onSaveClick, barn }: Pro
         </Ingress>
         <form
           className={classes?.modalForm}
-          onSubmit={handleSubmit((data) => {
-            onSaveClick(data);
-          })}
+          onSubmit={async (formEvent) => {
+            formEvent.preventDefault();
+            const errors = await validate(getAddBarnSchema(formatMessage), barn);
+            if (errors) {
+              setErrors(errors);
+            } else {
+              onSaveClick(barn);
+              onCloseClick();
+            }
+          }}
         >
-          <TextFieldWrapper
-            control={control}
+          <TextField
             label={formatMessage({
               id: 'søknad.barnetillegg.leggTilBarn.modal.navn.fornavn.label',
             })}
             name={'navn.fornavn'}
+            onChange={(event) => {
+              clearErrors();
+              setBarn({ ...barn, navn: { ...barn.navn, fornavn: event.target.value } });
+            }}
+            error={findError('navn.fornavn')}
+            value={barn.navn?.fornavn || ''}
           />
 
-          <TextFieldWrapper
-            control={control}
+          <TextField
             label={formatMessage({
               id: 'søknad.barnetillegg.leggTilBarn.modal.navn.etternavn.label',
             })}
             name={'navn.etternavn'}
+            onChange={(event) => {
+              clearErrors();
+              setBarn({ ...barn, navn: { ...barn.navn, etternavn: event.target.value } });
+            }}
+            error={findError('navn.etternavn')}
+            value={barn.navn?.etternavn || ''}
           />
 
           <DatePickerWrapper
-            control={control}
             label={formatMessage({ id: 'søknad.barnetillegg.leggTilBarn.modal.fødselsdato.label' })}
             selectedDate={barn?.fødseldato}
             name="fødseldato"
             fromDate={subYears(new Date(), ALDER_BARN_ÅR)}
             toDate={new Date()}
+            onChange={(dato) => {
+              clearErrors();
+              setBarn({ ...barn, fødseldato: dato });
+            }}
+            error={findError('fødselsdato')}
+            id={'fødselsdato'}
           />
 
-          <RadioGroupWrapper
-            control={control}
+          <RadioGroup
             legend={formatMessage({ id: 'søknad.barnetillegg.leggTilBarn.modal.relasjon.label' })}
             name={'relasjon'}
+            onChange={(value) => {
+              clearErrors();
+              setBarn({ ...barn, relasjon: value });
+            }}
+            value={barn.relasjon || ''}
+            error={findError('relasjon')}
           >
             <Radio value={Relasjon.FORELDER}>
               <BodyShort>
@@ -174,9 +189,8 @@ export const AddBarnModal = ({ showModal, onCloseClick, onSaveClick, barn }: Pro
                 {formatMessage({ id: `answerOptions.relasjon.${Relasjon.FOSTERFORELDER}` })}
               </BodyShort>
             </Radio>
-          </RadioGroupWrapper>
-          <RadioGroupWrapper
-            control={control}
+          </RadioGroup>
+          <RadioGroup
             legend={formatMessage(
               { id: 'søknad.barnetillegg.leggTilBarn.modal.harInntekt.label' },
               {
@@ -184,6 +198,12 @@ export const AddBarnModal = ({ showModal, onCloseClick, onSaveClick, barn }: Pro
               }
             )}
             name={'harInntekt'}
+            onChange={(value) => {
+              clearErrors();
+              setBarn({ ...barn, harInntekt: value });
+            }}
+            value={barn.harInntekt || ''}
+            error={findError('harInntekt')}
           >
             <ReadMore
               header={formatMessage({
@@ -207,9 +227,9 @@ export const AddBarnModal = ({ showModal, onCloseClick, onSaveClick, barn }: Pro
                 {formatMessage({ id: `answerOptions.jaEllerNei.${JaEllerNei.NEI}` })}
               </BodyShort>
             </Radio>
-          </RadioGroupWrapper>
+          </RadioGroup>
 
-          {relasjon === Relasjon.FORELDER && (
+          {barn.relasjon === Relasjon.FORELDER && (
             <Alert variant={'info'}>
               {formatMessage({ id: 'søknad.barnetillegg.alert.leggeVedTekst' })}
               <ul>
@@ -220,7 +240,7 @@ export const AddBarnModal = ({ showModal, onCloseClick, onSaveClick, barn }: Pro
               {formatMessage({ id: 'søknad.barnetillegg.alert.lasteOppVedleggTekst' })}
             </Alert>
           )}
-          {relasjon === Relasjon.FOSTERFORELDER && (
+          {barn.relasjon === Relasjon.FOSTERFORELDER && (
             <Alert variant={'info'}>
               {formatMessage({ id: 'søknad.barnetillegg.alert.leggeVedTekst' })}
               <ul>

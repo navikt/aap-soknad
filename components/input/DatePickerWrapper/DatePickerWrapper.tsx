@@ -1,8 +1,8 @@
 import { DatePicker, useDatepicker } from '@navikt/ds-react';
-import { addYears, parse, subYears } from 'date-fns';
+import { addYears, subYears } from 'date-fns';
 import React from 'react';
 import { Matcher } from 'react-day-picker';
-import { Control, Controller, FieldPath, FieldValues } from 'react-hook-form';
+import { FieldPath, FieldValues } from 'react-hook-form';
 
 export interface DateProps<FormFieldValues extends FieldValues> {
   name: FieldPath<FormFieldValues>;
@@ -10,11 +10,13 @@ export interface DateProps<FormFieldValues extends FieldValues> {
   description?: React.ReactNode;
   disableWeekend?: boolean;
   selectedDate?: Date | null;
-  control: Control<FormFieldValues>;
   fromDate?: Date;
   toDate?: Date;
   disabled?: Matcher[];
   dropdownCaption?: boolean;
+  onChange: (date?: Date) => void;
+  error?: string;
+  id: string;
 }
 
 const FRA_DATO = subYears(new Date(), 80);
@@ -23,54 +25,35 @@ export const DatePickerWrapper = <FormFieldValues extends FieldValues>({
   name,
   label,
   description,
-  control,
   selectedDate,
   disableWeekend = false,
   fromDate = FRA_DATO,
   toDate = TIL_DATO,
   disabled,
   dropdownCaption = false,
+  onChange,
+  error,
+  id,
 }: DateProps<FormFieldValues>) => {
   const { datepickerProps, inputProps } = useDatepicker({
     defaultSelected: selectedDate ? new Date(selectedDate) : undefined,
     inputFormat: 'dd.MM.yyyy',
+    fromDate: fromDate,
+    toDate: toDate,
+    onDateChange: onChange,
+    disableWeekends: disableWeekend,
+    disabled: disabled,
   });
 
   return (
-    <Controller
-      name={name}
-      control={control}
-      render={({ field: { name, value, onChange }, fieldState: { error } }) => {
-        return (
-          <DatePicker
-            {...datepickerProps}
-            id={name}
-            onChange={onChange}
-            onSelect={onChange}
-            disableWeekends={disableWeekend}
-            dropdownCaption={dropdownCaption}
-            fromDate={fromDate}
-            toDate={toDate}
-            disabled={disabled}
-          >
-            <DatePicker.Input
-              id={name}
-              onChange={(datoInput) =>
-                onChange(parse(datoInput.currentTarget.value, 'dd.MM.yyyy', new Date()))
-              }
-              onInput={(datoInput) =>
-                onChange(parse(datoInput.currentTarget.value, 'dd.MM.yyyy', new Date()))
-              }
-              value={value ? value.toString() : ''}
-              name={name}
-              description={description}
-              error={error && error.message}
-              label={label}
-              {...inputProps}
-            />
-          </DatePicker>
-        );
-      }}
-    />
+    <DatePicker {...datepickerProps} id={name} dropdownCaption={dropdownCaption}>
+      <DatePicker.Input
+        label={label}
+        {...inputProps}
+        error={error}
+        description={description}
+        id={id}
+      />
+    </DatePicker>
   );
 };

@@ -29,7 +29,7 @@ import { useFormErrors } from '../../../../hooks/useFormErrors';
 import SoknadFormWrapperNew from '../../../SoknadFormWrapper/SoknadFormWrapperNew';
 import { validate } from '../../../../lib/utils/validationUtils';
 import { logSkjemastegFullførtEvent } from '../../../../utils/amplitude';
-
+import { v4 as uuid4 } from 'uuid';
 interface Props {
   onBackClick: () => void;
   onNext: (data: any) => void;
@@ -38,11 +38,11 @@ interface Props {
 
 export const GRUNNBELØP = '118 620';
 
-export const getUniqueIshIdForBarn = (barn: ManuelleBarn) => {
-  return `${formatDate(barn.fødseldato, 'yyyy-MM-dd') ?? ''}_${barn.navn.fornavn}_${
-    barn.navn.etternavn
-  }`;
-};
+// export const getUniqueIshIdForBarn = (barn: ManuelleBarn) => {
+//   return `${formatDate(barn.fødseldato, 'yyyy-MM-dd') ?? ''}_${barn.navn.fornavn}_${
+//     barn.navn.etternavn
+//   }`;
+// };
 
 export const getBarnetillegSchema = (formatMessage: IntlFormatters['formatMessage']) =>
   yup.object().shape({
@@ -87,7 +87,7 @@ export const Barnetillegg = ({ onBackClick, onNext, defaultValues }: Props) => {
   //     [MANUELLE_BARN]: defaultValues?.søknad?.[MANUELLE_BARN],
   //   },
   // });
-  const [selectedBarn, setSelectedBarn] = useState<ManuelleBarn | undefined>(undefined);
+  const [selectedBarn, setSelectedBarn] = useState<ManuelleBarn>({});
   const [showModal, setShowModal] = useState<boolean>(false);
   // const { fields } = useFieldArray({
   //   name: BARN,
@@ -110,11 +110,11 @@ export const Barnetillegg = ({ onBackClick, onNext, defaultValues }: Props) => {
   //   debouncedLagre(søknadState, stepList, allFields);
   // }, [allFields]);
 
-  useEffect(() => {
-    if (!showModal) {
-      setSelectedBarn(undefined);
-    }
-  }, [showModal]);
+  // useEffect(() => {
+  //   if (!showModal) {
+  //     setSelectedBarn({});
+  //   }
+  // }, [showModal]);
 
   // const selectedBarn = useMemo(() => {
   //   if (selectedBarnIndex === undefined) return undefined;
@@ -141,6 +141,24 @@ export const Barnetillegg = ({ onBackClick, onNext, defaultValues }: Props) => {
   const harManuelleBarn = () =>
     defaultValues?.søknad?.manuelleBarn && defaultValues.søknad.manuelleBarn.length > 0;
   const harBarn = () => defaultValues?.søknad?.barn && defaultValues.søknad.barn.length > 0;
+
+  const append = (barn: ManuelleBarn) => {
+    updateSøknadData(søknadDispatch, {
+      manuelleBarn: [...(søknadState.søknad?.manuelleBarn || []), barn],
+    });
+  };
+
+  const update = (updatedBarn: ManuelleBarn) => {
+    updateSøknadData(søknadDispatch, {
+      manuelleBarn: søknadState.søknad?.manuelleBarn?.map((barn) => {
+        if (barn.internId === updatedBarn.internId) {
+          return updatedBarn;
+        } else {
+          return barn;
+        }
+      }),
+    });
+  };
 
   // const editNyttBarn = (index: number) => {
   //   setSelectedBarnIndex(index);
@@ -182,6 +200,7 @@ export const Barnetillegg = ({ onBackClick, onNext, defaultValues }: Props) => {
   //     setShowModal(false);
   //   }
   // };
+  console.log(søknadState.søknad?.manuelleBarn);
   return (
     <>
       <SoknadFormWrapperNew
@@ -355,7 +374,10 @@ export const Barnetillegg = ({ onBackClick, onNext, defaultValues }: Props) => {
                           <Button
                             variant="tertiary"
                             type="button"
-                            // onClick={() => editNyttBarn(index)}
+                            onClick={() => {
+                              setSelectedBarn(barn);
+                              setShowModal(true);
+                            }}
                           >
                             {formatMessage({ id: 'søknad.barnetillegg.manuelleBarn.redigerBarn' })}
                           </Button>
@@ -386,7 +408,7 @@ export const Barnetillegg = ({ onBackClick, onNext, defaultValues }: Props) => {
             icon={<Add title={'Legg til'} />}
             iconPosition={'left'}
             onClick={() => {
-              setSelectedBarn(undefined);
+              setSelectedBarn({});
               setShowModal(true);
             }}
           >
@@ -435,10 +457,23 @@ export const Barnetillegg = ({ onBackClick, onNext, defaultValues }: Props) => {
           ))}
       </SoknadFormWrapperNew>
       <AddBarnModal
-        onCloseClick={() => setShowModal(false)}
-        onSaveClick={() => {}}
+        onCloseClick={() => {
+          setShowModal(false);
+          setSelectedBarn({});
+        }}
+        onSaveClick={(barn) => {
+          if (barn.id === undefined) {
+            append({
+              ...barn,
+              internId: uuid4(),
+            });
+          } else {
+            update(barn);
+          }
+        }}
         showModal={showModal}
         barn={selectedBarn}
+        setBarn={setSelectedBarn}
       />
     </>
   );
