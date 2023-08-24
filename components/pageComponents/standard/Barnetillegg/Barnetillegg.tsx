@@ -200,6 +200,11 @@ export const Barnetillegg = ({ onBackClick, onNext, defaultValues }: Props) => {
   //     setShowModal(false);
   //   }
   // };
+  const slettBarn = (barnId?: string) => {
+    updateSøknadData(søknadDispatch, {
+      manuelleBarn: søknadState.søknad?.manuelleBarn?.filter((barn) => barnId !== barn.internId),
+    });
+  };
   console.log(søknadState.søknad?.manuelleBarn);
   return (
     <>
@@ -387,7 +392,7 @@ export const Barnetillegg = ({ onBackClick, onNext, defaultValues }: Props) => {
                             icon={<Delete title={'Slett'} />}
                             iconPosition={'left'}
                             onClick={() => {
-                              // slettBarn(index);
+                              slettBarn(barn.internId);
                             }}
                           >
                             {formatMessage({ id: 'søknad.barnetillegg.manuelleBarn.slettBarn' })}

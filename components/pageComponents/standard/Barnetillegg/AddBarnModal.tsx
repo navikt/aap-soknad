@@ -165,7 +165,7 @@ export const AddBarnModal = ({ showModal, onCloseClick, onSaveClick, barn, setBa
               clearErrors();
               setBarn({ ...barn, fødseldato: dato });
             }}
-            error={findError('fødselsdato')}
+            error={findError('fødseldato')}
             id={'fødselsdato'}
           />
 

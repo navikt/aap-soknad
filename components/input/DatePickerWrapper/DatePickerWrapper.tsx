@@ -46,10 +46,11 @@ export const DatePickerWrapper = <FormFieldValues extends FieldValues>({
   });
 
   return (
-    <DatePicker {...datepickerProps} id={name} dropdownCaption={dropdownCaption}>
+    <DatePicker {...datepickerProps} dropdownCaption={dropdownCaption}>
       <DatePicker.Input
-        label={label}
         {...inputProps}
+        name={name}
+        label={label}
         error={error}
         description={description}
         id={id}
