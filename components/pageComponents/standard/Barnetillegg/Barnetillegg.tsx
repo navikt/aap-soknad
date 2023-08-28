@@ -38,12 +38,6 @@ interface Props {
 
 export const GRUNNBELØP = '118 620';
 
-// export const getUniqueIshIdForBarn = (barn: ManuelleBarn) => {
-//   return `${formatDate(barn.fødseldato, 'yyyy-MM-dd') ?? ''}_${barn.navn.fornavn}_${
-//     barn.navn.etternavn
-//   }`;
-// };
-
 export const getBarnetillegSchema = (formatMessage: IntlFormatters['formatMessage']) =>
   yup.object().shape({
     barn: yup.array().of(
@@ -72,54 +66,13 @@ export const Barnetillegg = ({ onBackClick, onNext, defaultValues }: Props) => {
   const { søknadState, søknadDispatch } = useSoknadContextStandard();
   const { currentStepIndex, stepWizardDispatch } = useStepWizard();
   const { stepList } = useStepWizard();
-  // const {
-  //   control,
-  //   handleSubmit,
-  //   formState: { errors },
-  // } = useForm<{
-  //   [BARN]: Array<Barn>;
-  //   [MANUELLE_BARN]: Array<ManuelleBarn>;
-  // }>({
-  //   //@ts-ignore
-  //   resolver: yupResolver(getBarnetillegSchema(formatMessage)),
-  //   defaultValues: {
-  //     [BARN]: defaultValues?.søknad?.[BARN],
-  //     [MANUELLE_BARN]: defaultValues?.søknad?.[MANUELLE_BARN],
-  //   },
-  // });
   const [selectedBarn, setSelectedBarn] = useState<ManuelleBarn>({});
   const [showModal, setShowModal] = useState<boolean>(false);
-  // const { fields } = useFieldArray({
-  //   name: BARN,
-  //   control,
-  // });
-
-  // const {
-  //   fields: manuelleBarnFields,
-  //   append: manuelleBarnAppend,
-  //   remove: manuelleBarnRemove,
-  //   update: manuelleBarnUpdate,
-  // } = useFieldArray({
-  //   name: MANUELLE_BARN,
-  //   control,
-  // });
 
   const debouncedLagre = useDebounceLagreSoknad<Soknad>();
-  // const allFields = useWatch({ control });
-  // useEffect(() => {
-  //   debouncedLagre(søknadState, stepList, allFields);
-  // }, [allFields]);
-
-  // useEffect(() => {
-  //   if (!showModal) {
-  //     setSelectedBarn({});
-  //   }
-  // }, [showModal]);
-
-  // const selectedBarn = useMemo(() => {
-  //   if (selectedBarnIndex === undefined) return undefined;
-  //   return manuelleBarnFields[selectedBarnIndex];
-  // }, [selectedBarnIndex, manuelleBarnFields]);
+  useEffect(() => {
+    debouncedLagre(søknadState, stepList, {});
+  }, [søknadState.søknad?.barn, søknadState.søknad?.manuelleBarn]);
 
   const erForelderTilManueltBarn = useMemo(() => {
     return (
@@ -160,52 +113,12 @@ export const Barnetillegg = ({ onBackClick, onNext, defaultValues }: Props) => {
     });
   };
 
-  // const editNyttBarn = (index: number) => {
-  //   setSelectedBarnIndex(index);
-  //   setShowModal(true);
-  // };
-  // const saveNyttBarn = (barn: ManuelleBarn) => {
-  //   if (selectedBarn === undefined) {
-  //     barn.internId = crypto.randomUUID();
-  //     manuelleBarnAppend({
-  //       ...barn,
-  //     });
-  //     addRequiredVedlegg(
-  //       [
-  //         {
-  //           filterType: barn.relasjon,
-  //           type: `barn-${barn.internId}`,
-  //           description: formatMessage(
-  //             { id: `søknad.vedlegg.andreBarn.description.${barn.relasjon}` },
-  //             {
-  //               navn: `${barn?.navn?.fornavn} ${barn?.navn?.etternavn}`,
-  //             }
-  //           ),
-  //         },
-  //       ],
-  //       søknadDispatch
-  //     );
-  //   } else if (selectedBarnIndex !== undefined) {
-  //     manuelleBarnUpdate(selectedBarnIndex, {
-  //       ...barn,
-  //     });
-  //   }
-  //   setShowModal(false);
-  // };
-  // const slettBarn = (index: number) => {
-  //   if (index != undefined) {
-  //     const barn = manuelleBarnFields[index];
-  //     removeRequiredVedlegg(`barn-${barn.internId}`, søknadDispatch);
-  //     manuelleBarnRemove(index);
-  //     setShowModal(false);
-  //   }
-  // };
   const slettBarn = (barnId?: string) => {
     updateSøknadData(søknadDispatch, {
       manuelleBarn: søknadState.søknad?.manuelleBarn?.filter((barn) => barnId !== barn.internId),
     });
   };
-  console.log(søknadState.søknad?.manuelleBarn);
+
   return (
     <>
       <SoknadFormWrapperNew
@@ -223,10 +136,6 @@ export const Barnetillegg = ({ onBackClick, onNext, defaultValues }: Props) => {
           updateSøknadData<Soknad>(søknadDispatch, { ...søknadState.søknad });
           onBackClick();
         }}
-        // onDelete={async () => {
-        //   await deleteOpplastedeVedlegg(søknadState.søknad);
-        //   await slettLagretSoknadState<Soknad>(søknadDispatch, søknadState);
-        // }}
         errors={errors}
       >
         <Heading size="large" level="2">
