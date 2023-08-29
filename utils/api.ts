@@ -214,7 +214,7 @@ export const mapSøknadToBackend = (søknad?: Soknad): SøknadBackendState => {
   };
 };
 
-export function getVedleggForManueltBarn(internId: string, vedlegg?: SoknadVedlegg) {
+export function getVedleggForManueltBarn(internId?: string, vedlegg?: SoknadVedlegg) {
   const keys = vedlegg ? Object.keys(vedlegg) : [];
   const vedleggKey = keys.find((key) => key === internId);
 

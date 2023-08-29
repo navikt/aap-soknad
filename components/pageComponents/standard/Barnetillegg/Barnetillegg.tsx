@@ -59,7 +59,7 @@ export const getBarnetillegSchema = (formatMessage: IntlFormatters['formatMessag
     ),
   });
 
-export const Barnetillegg = ({ onBackClick, onNext, defaultValues }: Props) => {
+export const Barnetillegg = ({ onBackClick, defaultValues }: Props) => {
   const { errors, setErrors, clearErrors, findError } = useFormErrors();
   const { formatMessage } = useIntl();
 
@@ -234,7 +234,7 @@ export const Barnetillegg = ({ onBackClick, onNext, defaultValues }: Props) => {
           {defaultValues?.søknad?.manuelleBarn &&
             defaultValues?.søknad?.manuelleBarn.length > 0 && (
               <ul className={classes.barnList}>
-                {defaultValues.søknad.manuelleBarn.map((barn, index) => {
+                {defaultValues.søknad.manuelleBarn.map((barn) => {
                   return (
                     // TODO greit å bruke internId her?
                     <li key={barn?.internId}>
@@ -349,26 +349,25 @@ export const Barnetillegg = ({ onBackClick, onNext, defaultValues }: Props) => {
             {formatMessage({ id: 'søknad.barnetillegg.alert.lasteOppVedleggTekst' })}
           </Alert>
         )}
-        {harBarn() ||
-          (harManuelleBarn() && (
-            <Alert variant="info">
-              {formatMessage({ id: 'søknad.barnetillegg.alert.barneTillegg.title' })}
-              <ul>
-                <li>
-                  {formatMessage({ id: 'søknad.barnetillegg.alert.barneTillegg.bulletpoint1' })}
-                </li>
-                <li>
-                  {formatMessage({ id: 'søknad.barnetillegg.alert.barneTillegg.bulletpoint2' })}
-                </li>
-                <li>
-                  {formatMessage({ id: 'søknad.barnetillegg.alert.barneTillegg.bulletpoint3' })}
-                </li>
-                <li>
-                  {formatMessage({ id: 'søknad.barnetillegg.alert.barneTillegg.bulletpoint4' })}
-                </li>
-              </ul>
-            </Alert>
-          ))}
+        {(harBarn() || harManuelleBarn()) && (
+          <Alert variant="info">
+            {formatMessage({ id: 'søknad.barnetillegg.alert.barneTillegg.title' })}
+            <ul>
+              <li>
+                {formatMessage({ id: 'søknad.barnetillegg.alert.barneTillegg.bulletpoint1' })}
+              </li>
+              <li>
+                {formatMessage({ id: 'søknad.barnetillegg.alert.barneTillegg.bulletpoint2' })}
+              </li>
+              <li>
+                {formatMessage({ id: 'søknad.barnetillegg.alert.barneTillegg.bulletpoint3' })}
+              </li>
+              <li>
+                {formatMessage({ id: 'søknad.barnetillegg.alert.barneTillegg.bulletpoint4' })}
+              </li>
+            </ul>
+          </Alert>
+        )}
       </SoknadFormWrapperNew>
       <AddBarnModal
         onCloseClick={() => {
