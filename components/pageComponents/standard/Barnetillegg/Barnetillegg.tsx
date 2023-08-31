@@ -18,7 +18,11 @@ import { completeAndGoToNextStep, useStepWizard } from 'context/stepWizardContex
 import { AddBarnModal, Relasjon } from './AddBarnModal';
 import { formatNavn } from 'utils/StringFormatters';
 import { LucaGuidePanel } from '@navikt/aap-felles-react';
-import { updateSøknadData } from 'context/soknadContextCommon';
+import {
+  addRequiredVedlegg,
+  removeRequiredVedlegg,
+  updateSøknadData,
+} from 'context/soknadContextCommon';
 import { useSoknadContextStandard } from 'context/soknadContextStandard';
 import { useDebounceLagreSoknad } from 'hooks/useDebounceLagreSoknad';
 import { GenericSoknadContextState } from 'types/SoknadContext';
@@ -99,6 +103,21 @@ export const Barnetillegg = ({ onBackClick, defaultValues }: Props) => {
     updateSøknadData(søknadDispatch, {
       manuelleBarn: [...(søknadState.søknad?.manuelleBarn || []), barn],
     });
+    addRequiredVedlegg(
+      [
+        {
+          filterType: barn.relasjon,
+          type: `barn-${barn.internId}`,
+          description: formatMessage(
+            { id: `søknad.vedlegg.andreBarn.description.${barn.relasjon}` },
+            {
+              navn: `${barn?.navn?.fornavn} ${barn?.navn?.etternavn}`,
+            }
+          ),
+        },
+      ],
+      søknadDispatch
+    );
   };
 
   const update = (updatedBarn: ManuelleBarn) => {
@@ -117,6 +136,7 @@ export const Barnetillegg = ({ onBackClick, defaultValues }: Props) => {
     updateSøknadData(søknadDispatch, {
       manuelleBarn: søknadState.søknad?.manuelleBarn?.filter((barn) => barnId !== barn.internId),
     });
+    removeRequiredVedlegg(`barn-${barnId}`, søknadDispatch);
   };
 
   return (

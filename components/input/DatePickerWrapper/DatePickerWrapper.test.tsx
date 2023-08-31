@@ -3,26 +3,44 @@ import { render, screen, waitFor } from 'setupTests';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Button } from '@navikt/ds-react';
-import React from 'react';
+import React, { useState } from 'react';
 import { DatePickerWrapper } from './DatePickerWrapper';
 import userEvent from '@testing-library/user-event';
-import { addDays, format } from 'date-fns';
-import { nb } from 'date-fns/locale';
-import { formatDate } from '../../../utils/date';
+import { validate } from '../../../lib/utils/validationUtils';
+import { SøknadValidationError } from '../../schema/FormErrorSummaryNew';
 
 interface FormFields {
   dato: Date;
 }
 const onSubmitMock = jest.fn();
 const Datovelger = () => {
+  const [state, oppdater] = useState<Date | undefined>();
+  const [errors, setErrors] = useState<SøknadValidationError[] | undefined>();
   const schema = yup.object().shape({
     dato: yup.date().required('Du må velge en dato!').typeError('Ugyldig format på dato.'),
   });
-  const { control, handleSubmit } = useForm<FormFields>({ resolver: yupResolver(schema) });
 
   return (
-    <form onSubmit={handleSubmit(() => onSubmitMock())}>
-      <DatePickerWrapper name={'dato'} label={'Velg dag'} control={control} />
+    <form
+      onSubmit={async () => {
+        const errors = await validate(schema, state);
+        if (errors) {
+          setErrors(errors);
+        } else {
+          setErrors(undefined);
+        }
+      }}
+    >
+      <DatePickerWrapper
+        name={'dato'}
+        label={'Velg dag'}
+        id={'dato'}
+        onChange={(val) => {
+          oppdater(val);
+        }}
+        selectedDate={state}
+        error={errors?.find((k) => k.path === 'dato')?.message}
+      />
       <Button>Fullfør</Button>
     </form>
   );
@@ -78,8 +96,8 @@ describe('DatePickerWrapper', () => {
     expect(onSubmitMock).toHaveBeenCalledTimes(1);
   });
 
-  /* TODO: Må skrives om til å ta høyde for at iMorgen er en ny måned og dermed må 
-  velges fra neste måned i kalenderen 
+  /* TODO: Må skrives om til å ta høyde for at iMorgen er en ny måned og dermed må
+  velges fra neste måned i kalenderen
   test('kan velge en dato fra dato-velgeren', async () => {
     render(<Datovelger />);
     const iDag = new Date();

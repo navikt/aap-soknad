@@ -19,7 +19,7 @@ import * as classes from './Barnetillegg.module.css';
 import { ModalButtonWrapper } from 'components/ButtonWrapper/ModalButtonWrapper';
 import { GRUNNBELØP } from './Barnetillegg';
 
-import { add, sub, subYears } from 'date-fns';
+import { add, sub } from 'date-fns';
 import { DatePickerWrapper } from '../../../input/DatePickerWrapper/DatePickerWrapper';
 import { IntlFormatters, useIntl } from 'react-intl';
 import { validate } from '../../../../lib/utils/validationUtils';
@@ -159,7 +159,7 @@ export const AddBarnModal = ({ showModal, onCloseClick, onSaveClick, barn, setBa
             label={formatMessage({ id: 'søknad.barnetillegg.leggTilBarn.modal.fødselsdato.label' })}
             selectedDate={barn?.fødseldato}
             name="fødseldato"
-            fromDate={subYears(new Date(), ALDER_BARN_ÅR)}
+            // fromDate={subYears(new Date(), ALDER_BARN_ÅR)} // FIXME må avklare hvordan vi skal løse denne
             toDate={new Date()}
             onChange={(dato) => {
               clearErrors();
