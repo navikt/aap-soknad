@@ -12,7 +12,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { JaEllerNei } from 'types/Generic';
 import { ManuelleBarn, Soknad } from 'types/Soknad';
 import * as classes from './Barnetillegg.module.css';
-import { Add, Delete } from '@navikt/ds-icons';
+import { Add } from '@navikt/ds-icons';
 import * as yup from 'yup';
 import { completeAndGoToNextStep, useStepWizard } from 'context/stepWizardContextV2';
 import { AddBarnModal, Relasjon } from './AddBarnModal';
@@ -34,6 +34,7 @@ import SoknadFormWrapperNew from '../../../SoknadFormWrapper/SoknadFormWrapperNe
 import { validate } from '../../../../lib/utils/validationUtils';
 import { logSkjemastegFullførtEvent } from '../../../../utils/amplitude';
 import { v4 as uuid4 } from 'uuid';
+import { ManueltBarn } from './ManueltBarn';
 interface Props {
   onBackClick: () => void;
   onNext: (data: any) => void;
@@ -254,83 +255,15 @@ export const Barnetillegg = ({ onBackClick, defaultValues }: Props) => {
           {defaultValues?.søknad?.manuelleBarn &&
             defaultValues?.søknad?.manuelleBarn.length > 0 && (
               <ul className={classes.barnList}>
-                {defaultValues.søknad.manuelleBarn.map((barn) => {
-                  return (
-                    // TODO greit å bruke internId her?
-                    <li key={barn?.internId}>
-                      <article className={classes.barneKort}>
-                        <BodyShort>
-                          <Label>
-                            {formatMessage({ id: 'søknad.barnetillegg.registrerteBarn.navn' })}:{' '}
-                          </Label>
-                          {formatNavn(barn?.navn)}
-                        </BodyShort>
-                        <BodyShort>
-                          <Label>
-                            {formatMessage({ id: 'søknad.barnetillegg.manuelleBarn.fødselsdato' })}:{' '}
-                          </Label>
-
-                          {formatDate(barn?.fødseldato)}
-                        </BodyShort>
-                        {barn?.relasjon === Relasjon.FORELDER && (
-                          <BodyShort>
-                            {formatMessage({ id: 'søknad.barnetillegg.manuelleBarn.erForelder' })}
-                          </BodyShort>
-                        )}
-                        {barn?.relasjon === Relasjon.FOSTERFORELDER && (
-                          <BodyShort>
-                            {formatMessage({
-                              id: 'søknad.barnetillegg.manuelleBarn.erFosterforelder',
-                            })}
-                          </BodyShort>
-                        )}
-                        {barn?.harInntekt === JaEllerNei.JA && (
-                          <BodyShort>
-                            {formatMessage(
-                              { id: 'søknad.barnetillegg.manuelleBarn.inntektOver1G' },
-                              {
-                                grunnbeløp: GRUNNBELØP,
-                              }
-                            )}
-                          </BodyShort>
-                        )}
-                        {barn?.harInntekt === JaEllerNei.NEI && (
-                          <BodyShort>
-                            {formatMessage(
-                              { id: 'søknad.barnetillegg.manuelleBarn.inntektIkkeOver1G' },
-                              {
-                                grunnbeløp: GRUNNBELØP,
-                              }
-                            )}
-                          </BodyShort>
-                        )}
-                        <div className={classes?.cardButtonWrapper}>
-                          <Button
-                            variant="tertiary"
-                            type="button"
-                            onClick={() => {
-                              setSelectedBarn(barn);
-                              setShowModal(true);
-                            }}
-                          >
-                            {formatMessage({ id: 'søknad.barnetillegg.manuelleBarn.redigerBarn' })}
-                          </Button>
-                          <Button
-                            variant="tertiary"
-                            type="button"
-                            icon={<Delete title={'Slett'} />}
-                            iconPosition={'left'}
-                            onClick={() => {
-                              slettBarn(barn.internId);
-                            }}
-                          >
-                            {formatMessage({ id: 'søknad.barnetillegg.manuelleBarn.slettBarn' })}
-                          </Button>
-                        </div>
-                      </article>
-                    </li>
-                  );
-                })}
+                {defaultValues.søknad.manuelleBarn.map((barn) => (
+                  <ManueltBarn
+                    key={barn.internId}
+                    barn={barn}
+                    setSelectedBarn={setSelectedBarn}
+                    slettBarn={slettBarn}
+                    setShowModal={setShowModal}
+                  />
+                ))}
               </ul>
             )}
           <BodyShort spacing>
