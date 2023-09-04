@@ -56,15 +56,6 @@ export const Veiledning = ({
           )}
         </div>
 
-        <button
-          onClick={() => {
-            //@ts-ignore
-            window?.loginDebug()?.expireToken(20);
-          }}
-        >
-          Test logoutwarning 20 sek
-        </button>
-
         <IntroduksjonTekst navn={søker.fulltNavn} />
 
         <form onSubmit={(event) => handleSubmit(event)} autoComplete="off">
