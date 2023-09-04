@@ -1,22 +1,12 @@
-import {
-  Alert,
-  BodyShort,
-  Button,
-  Heading,
-  Label,
-  Radio,
-  RadioGroup,
-  ReadMore,
-} from '@navikt/ds-react';
+import { Alert, BodyShort, Button, Heading } from '@navikt/ds-react';
 import React, { useEffect, useMemo, useState } from 'react';
 import { JaEllerNei } from 'types/Generic';
-import { ManuelleBarn, Soknad } from 'types/Soknad';
+import { Barn, ManuelleBarn, Soknad } from 'types/Soknad';
 import * as classes from './Barnetillegg.module.css';
 import { Add } from '@navikt/ds-icons';
 import * as yup from 'yup';
 import { completeAndGoToNextStep, useStepWizard } from 'context/stepWizardContextV2';
 import { AddBarnModal, Relasjon } from './AddBarnModal';
-import { formatNavn } from 'utils/StringFormatters';
 import { LucaGuidePanel } from '@navikt/aap-felles-react';
 import {
   addRequiredVedlegg,
@@ -26,7 +16,6 @@ import {
 import { useSoknadContextStandard } from 'context/soknadContextStandard';
 import { useDebounceLagreSoknad } from 'hooks/useDebounceLagreSoknad';
 import { GenericSoknadContextState } from 'types/SoknadContext';
-import { formatDate } from 'utils/date';
 import { setFocusOnErrorSummary } from 'components/schema/FormErrorSummary';
 import { IntlFormatters, useIntl } from 'react-intl';
 import { useFormErrors } from '../../../../hooks/useFormErrors';
@@ -35,6 +24,7 @@ import { validate } from '../../../../lib/utils/validationUtils';
 import { logSkjemastegFullførtEvent } from '../../../../utils/amplitude';
 import { v4 as uuid4 } from 'uuid';
 import { ManueltBarn } from './ManueltBarn';
+import { Registerbarn } from './Registerbarn';
 interface Props {
   onBackClick: () => void;
   onNext: (data: any) => void;
@@ -133,6 +123,18 @@ export const Barnetillegg = ({ onBackClick, defaultValues }: Props) => {
     });
   };
 
+  const updateRegisterbarn = (updatedBarn: Barn, value: any) => {
+    updateSøknadData(søknadDispatch, {
+      barn: søknadState.søknad?.barn?.map((barn) => {
+        if (updatedBarn.fnr === barn.fnr) {
+          return { ...barn, harInntekt: value };
+        } else {
+          return barn;
+        }
+      }),
+    });
+  };
+
   const slettBarn = (barnId?: string) => {
     updateSøknadData(søknadDispatch, {
       manuelleBarn: søknadState.søknad?.manuelleBarn?.filter((barn) => barnId !== barn.internId),
@@ -177,74 +179,15 @@ export const Barnetillegg = ({ onBackClick, defaultValues }: Props) => {
           )}
           {defaultValues?.søknad?.barn && defaultValues?.søknad?.barn?.length > 0 && (
             <ul className={classes.barnList}>
-              {defaultValues?.søknad?.barn.map((barn, index) => {
-                return (
-                  <li key={barn.fnr}>
-                    <article className={classes.barneKort}>
-                      <BodyShort>
-                        <Label>
-                          {formatMessage({ id: 'søknad.barnetillegg.registrerteBarn.navn' })}:{' '}
-                        </Label>
-                        {formatNavn(barn?.navn)}
-                      </BodyShort>
-                      <BodyShort>
-                        <Label>
-                          {formatMessage({ id: 'søknad.barnetillegg.registrerteBarn.fødselsdato' })}
-                          :{' '}
-                        </Label>
-                        {formatDate(barn?.fødseldato)}
-                      </BodyShort>
-                      <RadioGroup
-                        legend={formatMessage(
-                          { id: 'søknad.barnetillegg.registrerteBarn.harInntekt.label' },
-                          {
-                            grunnbeløp: GRUNNBELØP,
-                          }
-                        )}
-                        name={`barn[${index}].harInntekt`}
-                        id={`barn[${index}].harInntekt`}
-                        error={findError(`barn[${index}].harInntekt`)}
-                        value={barn.harInntekt || ''}
-                        onChange={(value) => {
-                          clearErrors();
-                          updateSøknadData(søknadDispatch, {
-                            barn: søknadState.søknad?.barn?.map((barny) => {
-                              if (barn.fnr === barny.fnr) {
-                                return { ...barny, harInntekt: value };
-                              } else {
-                                return barny;
-                              }
-                            }),
-                          });
-                        }}
-                      >
-                        <ReadMore
-                          header={formatMessage({
-                            id: 'søknad.barnetillegg.registrerteBarn.harInntekt.readMore.title',
-                          })}
-                        >
-                          {formatMessage(
-                            { id: 'søknad.barnetillegg.registrerteBarn.harInntekt.readMore.text' },
-                            {
-                              grunnbeløp: GRUNNBELØP,
-                            }
-                          )}
-                        </ReadMore>
-                        <Radio value={JaEllerNei.JA}>
-                          <BodyShort>
-                            {formatMessage({ id: `answerOptions.jaEllerNei.${JaEllerNei.JA}` })}
-                          </BodyShort>
-                        </Radio>
-                        <Radio value={JaEllerNei.NEI}>
-                          <BodyShort>
-                            {formatMessage({ id: `answerOptions.jaEllerNei.${JaEllerNei.NEI}` })}
-                          </BodyShort>
-                        </Radio>
-                      </RadioGroup>
-                    </article>
-                  </li>
-                );
-              })}
+              {defaultValues?.søknad?.barn.map((barn, index) => (
+                <Registerbarn
+                  barn={barn}
+                  index={index}
+                  findError={findError}
+                  clearErrors={clearErrors}
+                  updateRegisterbarn={updateRegisterbarn}
+                />
+              ))}
             </ul>
           )}
         </div>
