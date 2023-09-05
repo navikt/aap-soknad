@@ -38,7 +38,11 @@ export async function verifyIdportenAccessToken(bearerToken: string) {
     throw new Error('client_id matcher ikke min client ID');
   }
 
-  if (verified.payload.acr !== 'Level4') {
-    throw new Error('Har ikke acr Level4');
+  if (!isValidAcr(verified.payload.acr as string)) {
+    throw new Error(
+      `Har ikke gyldig sikkerhetsnivå. Forventet Level4 eller idporten-loa-high, men fikk ${verified.payload.acr}`
+    );
   }
 }
+
+export const isValidAcr = (acr: string) => ['Level4', 'idporten-loa-high'].includes(acr);
