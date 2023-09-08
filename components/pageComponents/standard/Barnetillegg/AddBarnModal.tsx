@@ -104,9 +104,8 @@ export const AddBarnModal = ({ showModal, onCloseClick, onSaveClick, barn, setBa
   const parseFødselsdato = (event: React.FocusEvent<HTMLInputElement>) =>
     parse(event.target.value, 'dd.MM.yyyy', new Date());
 
-  function parseFødselsdatoToString() {
-    return barn.fødseldato && isValid(barn.fødseldato) ? format(barn.fødseldato, 'dd.MM.yyyy') : '';
-  }
+  const parseFødselsdatoToString = () =>
+    barn.fødseldato && isValid(barn.fødseldato) ? format(barn.fødseldato, 'dd.MM.yyyy') : '';
 
   return (
     <Modal
