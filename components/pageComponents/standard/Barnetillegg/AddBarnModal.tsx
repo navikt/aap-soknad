@@ -19,8 +19,7 @@ import * as classes from './Barnetillegg.module.css';
 import { ModalButtonWrapper } from 'components/ButtonWrapper/ModalButtonWrapper';
 import { GRUNNBELØP } from './Barnetillegg';
 
-import { add, sub } from 'date-fns';
-import { DatePickerWrapper } from '../../../input/DatePickerWrapper/DatePickerWrapper';
+import { add, format, isValid, parse, sub } from 'date-fns';
 import { IntlFormatters, useIntl } from 'react-intl';
 import { validate } from '../../../../lib/utils/validationUtils';
 import { useFormErrors } from '../../../../hooks/useFormErrors';
@@ -102,6 +101,13 @@ export const AddBarnModal = ({ showModal, onCloseClick, onSaveClick, barn, setBa
   const { formatMessage } = useIntl();
   const { setErrors, findError, clearErrors } = useFormErrors();
 
+  const parseFødselsdato = (event: React.FocusEvent<HTMLInputElement>) =>
+    parse(event.target.value, 'dd.MM.yyyy', new Date());
+
+  function parseFødselsdatoToString() {
+    return barn.fødseldato && isValid(barn.fødseldato) ? format(barn.fødseldato, 'dd.MM.yyyy') : '';
+  }
+
   return (
     <Modal
       open={showModal}
@@ -155,18 +161,16 @@ export const AddBarnModal = ({ showModal, onCloseClick, onSaveClick, barn, setBa
             value={barn.navn?.etternavn || ''}
           />
 
-          <DatePickerWrapper
+          <TextField
             label={formatMessage({ id: 'søknad.barnetillegg.leggTilBarn.modal.fødselsdato.label' })}
-            selectedDate={barn?.fødseldato}
-            name="fødseldato"
-            // fromDate={subYears(new Date(), ALDER_BARN_ÅR)} // FIXME må avklare hvordan vi skal løse denne
-            toDate={new Date()}
-            onChange={(dato) => {
-              clearErrors();
-              setBarn({ ...barn, fødseldato: dato });
-            }}
-            error={findError('fødseldato')}
+            name={'fødselsdato'}
             id={'fødselsdato'}
+            error={findError('fødseldato')}
+            defaultValue={parseFødselsdatoToString()}
+            onBlur={(event) => {
+              clearErrors();
+              setBarn({ ...barn, fødseldato: parseFødselsdato(event) });
+            }}
           />
 
           <RadioGroup
