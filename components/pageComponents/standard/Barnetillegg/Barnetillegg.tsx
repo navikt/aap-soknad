@@ -186,6 +186,7 @@ export const Barnetillegg = ({ onBackClick, defaultValues }: Props) => {
                   findError={findError}
                   clearErrors={clearErrors}
                   updateRegisterbarn={updateRegisterbarn}
+                  key={index}
                 />
               ))}
             </ul>
