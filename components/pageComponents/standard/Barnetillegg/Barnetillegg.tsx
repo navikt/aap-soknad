@@ -90,7 +90,7 @@ export const Barnetillegg = ({ onBackClick, defaultValues }: Props) => {
     defaultValues?.søknad?.manuelleBarn && defaultValues.søknad.manuelleBarn.length > 0;
   const harBarn = () => defaultValues?.søknad?.barn && defaultValues.søknad.barn.length > 0;
 
-  const append = (barn: ManuelleBarn) => {
+  const appendManuelleBarn = (barn: ManuelleBarn) => {
     updateSøknadData(søknadDispatch, {
       manuelleBarn: [...(søknadState.søknad?.manuelleBarn || []), barn],
     });
@@ -111,7 +111,7 @@ export const Barnetillegg = ({ onBackClick, defaultValues }: Props) => {
     );
   };
 
-  const update = (updatedBarn: ManuelleBarn) => {
+  const updateManuelleBarn = (updatedBarn: ManuelleBarn) => {
     updateSøknadData(søknadDispatch, {
       manuelleBarn: søknadState.søknad?.manuelleBarn?.map((barn) => {
         if (barn.internId === updatedBarn.internId) {
@@ -272,13 +272,13 @@ export const Barnetillegg = ({ onBackClick, defaultValues }: Props) => {
           setSelectedBarn({});
         }}
         onSaveClick={(barn) => {
-          if (barn.id === undefined) {
-            append({
+          if (barn.internId === undefined) {
+            appendManuelleBarn({
               ...barn,
               internId: uuid4(),
             });
           } else {
-            update(barn);
+            updateManuelleBarn(barn);
           }
         }}
         showModal={showModal}
