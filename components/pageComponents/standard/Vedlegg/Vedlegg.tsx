@@ -59,6 +59,11 @@ const Vedlegg = ({ onBackClick, onNext, defaultValues }: Props) => {
   useEffect(() => {
     debouncedLagre(søknadState, stepList, allFields);
   }, [allFields]);
+
+  useEffect(() => {
+    debouncedLagre(søknadState, stepList, {});
+  }, [søknadState.søknad?.tilleggsopplysninger]);
+
   return (
     <SoknadFormWrapper
       onNext={handleSubmit((data) => {
