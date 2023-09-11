@@ -13,7 +13,13 @@ const decoratorEnv = process.env.DECORATOR_ENV as Exclude<DecoratorEnvProps['env
 const decoratorParams: DecoratorFetchProps = {
   env: decoratorEnv ?? 'prod',
   serviceDiscovery: true,
-  params: { context: 'privatperson', chatbot: false, feedback: false, simple: true },
+  params: {
+    context: 'privatperson',
+    chatbot: false,
+    feedback: false,
+    simple: true,
+    logoutWarning: true,
+  },
 };
 
 class _Document extends Document<{ decorator: DecoratorComponents }> {
