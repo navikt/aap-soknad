@@ -5,9 +5,6 @@
   gap: var(--a-spacing-10);
   max-width: 600px;
 }
-.addBehandlerModalContent > h3 {
-  padding-right: 36px;
-}
 
 .addresseFlexContainer {
   display: flex;
@@ -17,10 +14,6 @@
 
 .addresseFlexItem {
   flex-grow: 1;
-}
-
-.modalHeading {
-  width: calc(100% - var(--a-spacing-10));
 }
 
 .modalForm {

@@ -108,6 +108,7 @@ export const Medlemskap = ({ onBackClick, defaultValues }: Props) => {
   const findError = (path: string) => errors?.find((error) => error.path === path)?.message;
   const utenlandsOppholdErrorMessage = findError('medlemskap.utenlandsOpphold');
 
+  console.log('selected', selectedUtenlandsPeriode);
   return (
     <>
       <SoknadFormWrapperNew
@@ -327,8 +328,8 @@ export const Medlemskap = ({ onBackClick, defaultValues }: Props) => {
         arbeidEllerBodd={arbeidEllerBodd}
         closeModal={() => {
           setSelectedUtenlandsPeriode({});
-          setShowUtenlandsPeriodeModal(!showUtenlandsPeriodeModal);
         }}
+        onBeforeClose={() => setShowUtenlandsPeriodeModal(!showUtenlandsPeriodeModal)}
         onSave={(utenlandsperiode) => {
           if (selectedUtenlandsPeriode.id === undefined) {
             append({ ...utenlandsperiode, id: uuid4() });

@@ -1,4 +1,4 @@
-import React, { Dispatch, useState } from 'react';
+import React, { Dispatch, useEffect, useState } from 'react';
 import * as yup from 'yup';
 import * as classes from './UtenlandsPeriode.module.css';
 import {
@@ -35,6 +35,7 @@ export interface UtenlandsPeriodeProps {
   utenlandsPeriode: UtenlandsPeriode;
   setUtenlandsPeriode: Dispatch<UtenlandsPeriode>;
   closeModal: () => void;
+  onBeforeClose: () => void;
   onSave: (utenlandsperiode: UtenlandsPeriode) => void;
   isOpen: boolean;
   arbeidEllerBodd: ArbeidEllerBodd;
@@ -99,10 +100,12 @@ const UtenlandsPeriodeVelger = ({
   setUtenlandsPeriode,
   isOpen,
   closeModal,
+  onBeforeClose,
   onSave,
   arbeidEllerBodd,
 }: UtenlandsPeriodeProps) => {
   const [errors, setErrors] = useState<SøknadValidationError[] | undefined>();
+  const [tor, setTor] = useState<boolean>(true);
   const { formatMessage } = useIntl();
 
   const antallÅrTilbake = arbeidEllerBodd === ArbeidEllerBodd.ARBEID ? 5 : 60;
@@ -113,14 +116,17 @@ const UtenlandsPeriodeVelger = ({
 
   const findError = (path: string) => errors?.find((error) => error.path === path)?.message;
 
+  useEffect(() => setTor(!tor), [utenlandsPeriode, closeModal]);
   return (
-    <Modal open={isOpen} onClose={closeModal}>
-      <Modal.Content className={classes.utenlandsPeriodeVelger}>
-        <Heading size={'medium'} level={'2'} spacing>
+    <Modal open={isOpen} onBeforeClose={onBeforeClose} onClose={closeModal}>
+      <Modal.Header>
+        <Heading size={'medium'} level={'3'} spacing>
           {formatMessage({
             id: `søknad.medlemskap.utenlandsperiode.modal.title.${arbeidEllerBodd}`,
           })}
         </Heading>
+      </Modal.Header>
+      <Modal.Body className={classes.utenlandsPeriodeVelger}>
         <BodyLong spacing={!(arbeidEllerBodd === 'BODD')}>
           {formatMessage({
             id: `søknad.medlemskap.utenlandsperiode.modal.ingress.${arbeidEllerBodd}`,
@@ -144,6 +150,7 @@ const UtenlandsPeriodeVelger = ({
               setErrors(validationErrors);
             } else {
               onSave(utenlandsPeriode);
+              onBeforeClose();
               closeModal();
             }
           }}
@@ -245,6 +252,7 @@ const UtenlandsPeriodeVelger = ({
               type="button"
               variant={'secondary'}
               onClick={() => {
+                onBeforeClose();
                 closeModal();
               }}
             >
@@ -256,7 +264,7 @@ const UtenlandsPeriodeVelger = ({
             </Button>
           </ModalButtonWrapper>
         </form>
-      </Modal.Content>
+      </Modal.Body>
     </Modal>
   );
 };

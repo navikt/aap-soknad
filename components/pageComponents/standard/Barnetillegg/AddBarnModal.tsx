@@ -1,9 +1,9 @@
 import {
   Alert,
+  BodyLong,
   BodyShort,
   Button,
   Heading,
-  Ingress,
   Modal,
   Radio,
   ReadMore,
@@ -121,13 +121,15 @@ export const AddBarnModal = ({ showModal, onCloseClick, onSaveClick, barn }: Pro
         onCloseClick();
       }}
     >
-      <Modal.Content className={classes?.leggTilBarnModalContent}>
+      <Modal.Header>
         <Heading size={'medium'} level={'2'}>
           {formatMessage({ id: 'søknad.barnetillegg.leggTilBarn.modal.title' })}
         </Heading>
-        <Ingress>
+      </Modal.Header>
+      <Modal.Body className={classes?.leggTilBarnModalContent}>
+        <BodyLong>
           {formatMessage({ id: 'søknad.barnetillegg.leggTilBarn.modal.description' })}
-        </Ingress>
+        </BodyLong>
         <form
           className={classes?.modalForm}
           onSubmit={handleSubmit((data) => {
@@ -248,7 +250,7 @@ export const AddBarnModal = ({ showModal, onCloseClick, onSaveClick, barn }: Pro
             </Button>
           </ModalButtonWrapper>
         </form>
-      </Modal.Content>
+      </Modal.Body>
     </Modal>
   );
 };
