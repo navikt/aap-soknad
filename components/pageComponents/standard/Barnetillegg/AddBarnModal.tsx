@@ -130,126 +130,130 @@ export const AddBarnModal = ({ showModal, onCloseClick, onSaveClick, barn }: Pro
         <BodyLong>
           {formatMessage({ id: 'søknad.barnetillegg.leggTilBarn.modal.description' })}
         </BodyLong>
-        <form
-          className={classes?.modalForm}
-          onSubmit={handleSubmit((data) => {
-            onSaveClick(data);
-          })}
-        >
-          <TextFieldWrapper
-            control={control}
-            label={formatMessage({
-              id: 'søknad.barnetillegg.leggTilBarn.modal.navn.fornavn.label',
+        {showModal && (
+          <form
+            className={classes?.modalForm}
+            onSubmit={handleSubmit((data) => {
+              onSaveClick(data);
             })}
-            name={'navn.fornavn'}
-          />
-
-          <TextFieldWrapper
-            control={control}
-            label={formatMessage({
-              id: 'søknad.barnetillegg.leggTilBarn.modal.navn.etternavn.label',
-            })}
-            name={'navn.etternavn'}
-          />
-
-          <DatePickerWrapper
-            control={control}
-            label={formatMessage({ id: 'søknad.barnetillegg.leggTilBarn.modal.fødselsdato.label' })}
-            selectedDate={barn?.fødseldato}
-            name="fødseldato"
-            fromDate={subYears(new Date(), ALDER_BARN_ÅR)}
-            toDate={new Date()}
-          />
-
-          <RadioGroupWrapper
-            control={control}
-            legend={formatMessage({ id: 'søknad.barnetillegg.leggTilBarn.modal.relasjon.label' })}
-            name={'relasjon'}
           >
-            <Radio value={Relasjon.FORELDER}>
-              <BodyShort>
-                {formatMessage({ id: `answerOptions.relasjon.${Relasjon.FORELDER}` })}
-              </BodyShort>
-            </Radio>
-            <Radio value={Relasjon.FOSTERFORELDER}>
-              <BodyShort>
-                {formatMessage({ id: `answerOptions.relasjon.${Relasjon.FOSTERFORELDER}` })}
-              </BodyShort>
-            </Radio>
-          </RadioGroupWrapper>
-          <RadioGroupWrapper
-            control={control}
-            legend={formatMessage(
-              { id: 'søknad.barnetillegg.leggTilBarn.modal.harInntekt.label' },
-              {
-                grunnbeløp: GRUNNBELØP,
-              }
-            )}
-            name={'harInntekt'}
-          >
-            <ReadMore
-              header={formatMessage({
-                id: 'søknad.barnetillegg.leggTilBarn.modal.harInntekt.readMore.title',
+            <TextFieldWrapper
+              control={control}
+              label={formatMessage({
+                id: 'søknad.barnetillegg.leggTilBarn.modal.navn.fornavn.label',
               })}
+              name={'navn.fornavn'}
+            />
+
+            <TextFieldWrapper
+              control={control}
+              label={formatMessage({
+                id: 'søknad.barnetillegg.leggTilBarn.modal.navn.etternavn.label',
+              })}
+              name={'navn.etternavn'}
+            />
+
+            <DatePickerWrapper
+              control={control}
+              label={formatMessage({
+                id: 'søknad.barnetillegg.leggTilBarn.modal.fødselsdato.label',
+              })}
+              selectedDate={barn?.fødseldato}
+              name="fødseldato"
+              fromDate={subYears(new Date(), ALDER_BARN_ÅR)}
+              toDate={new Date()}
+            />
+
+            <RadioGroupWrapper
+              control={control}
+              legend={formatMessage({ id: 'søknad.barnetillegg.leggTilBarn.modal.relasjon.label' })}
+              name={'relasjon'}
             >
-              {formatMessage(
-                { id: 'søknad.barnetillegg.leggTilBarn.modal.harInntekt.readMore.text' },
+              <Radio value={Relasjon.FORELDER}>
+                <BodyShort>
+                  {formatMessage({ id: `answerOptions.relasjon.${Relasjon.FORELDER}` })}
+                </BodyShort>
+              </Radio>
+              <Radio value={Relasjon.FOSTERFORELDER}>
+                <BodyShort>
+                  {formatMessage({ id: `answerOptions.relasjon.${Relasjon.FOSTERFORELDER}` })}
+                </BodyShort>
+              </Radio>
+            </RadioGroupWrapper>
+            <RadioGroupWrapper
+              control={control}
+              legend={formatMessage(
+                { id: 'søknad.barnetillegg.leggTilBarn.modal.harInntekt.label' },
                 {
                   grunnbeløp: GRUNNBELØP,
                 }
               )}
-            </ReadMore>
-            <Radio value={JaEllerNei.JA}>
-              <BodyShort>
-                {formatMessage({ id: `answerOptions.jaEllerNei.${JaEllerNei.JA}` })}
-              </BodyShort>
-            </Radio>
-            <Radio value={JaEllerNei.NEI}>
-              <BodyShort>
-                {formatMessage({ id: `answerOptions.jaEllerNei.${JaEllerNei.NEI}` })}
-              </BodyShort>
-            </Radio>
-          </RadioGroupWrapper>
-
-          {relasjon === Relasjon.FORELDER && (
-            <Alert variant={'info'}>
-              {formatMessage({ id: 'søknad.barnetillegg.alert.leggeVedTekst' })}
-              <ul>
-                <li>
-                  {formatMessage({ id: 'søknad.barnetillegg.alert.bulletPointVedleggForelder' })}
-                </li>
-              </ul>
-              {formatMessage({ id: 'søknad.barnetillegg.alert.lasteOppVedleggTekst' })}
-            </Alert>
-          )}
-          {relasjon === Relasjon.FOSTERFORELDER && (
-            <Alert variant={'info'}>
-              {formatMessage({ id: 'søknad.barnetillegg.alert.leggeVedTekst' })}
-              <ul>
-                <li>
-                  {formatMessage({
-                    id: 'søknad.barnetillegg.alert.bulletPointVedleggFosterforelder',
-                  })}
-                </li>
-              </ul>
-              {formatMessage({ id: 'søknad.barnetillegg.alert.lasteOppVedleggTekst' })}
-            </Alert>
-          )}
-          <ModalButtonWrapper>
-            <Button
-              type="button"
-              variant={'secondary'}
-              onClick={() => {
-                onCloseClick();
-              }}
+              name={'harInntekt'}
             >
-              {formatMessage({ id: 'søknad.barnetillegg.leggTilBarn.modal.buttons.avbryt' })}
-            </Button>
-            <Button type={'submit'}>
-              {formatMessage({ id: 'søknad.barnetillegg.leggTilBarn.modal.buttons.lagre' })}
-            </Button>
-          </ModalButtonWrapper>
-        </form>
+              <ReadMore
+                header={formatMessage({
+                  id: 'søknad.barnetillegg.leggTilBarn.modal.harInntekt.readMore.title',
+                })}
+              >
+                {formatMessage(
+                  { id: 'søknad.barnetillegg.leggTilBarn.modal.harInntekt.readMore.text' },
+                  {
+                    grunnbeløp: GRUNNBELØP,
+                  }
+                )}
+              </ReadMore>
+              <Radio value={JaEllerNei.JA}>
+                <BodyShort>
+                  {formatMessage({ id: `answerOptions.jaEllerNei.${JaEllerNei.JA}` })}
+                </BodyShort>
+              </Radio>
+              <Radio value={JaEllerNei.NEI}>
+                <BodyShort>
+                  {formatMessage({ id: `answerOptions.jaEllerNei.${JaEllerNei.NEI}` })}
+                </BodyShort>
+              </Radio>
+            </RadioGroupWrapper>
+
+            {relasjon === Relasjon.FORELDER && (
+              <Alert variant={'info'}>
+                {formatMessage({ id: 'søknad.barnetillegg.alert.leggeVedTekst' })}
+                <ul>
+                  <li>
+                    {formatMessage({ id: 'søknad.barnetillegg.alert.bulletPointVedleggForelder' })}
+                  </li>
+                </ul>
+                {formatMessage({ id: 'søknad.barnetillegg.alert.lasteOppVedleggTekst' })}
+              </Alert>
+            )}
+            {relasjon === Relasjon.FOSTERFORELDER && (
+              <Alert variant={'info'}>
+                {formatMessage({ id: 'søknad.barnetillegg.alert.leggeVedTekst' })}
+                <ul>
+                  <li>
+                    {formatMessage({
+                      id: 'søknad.barnetillegg.alert.bulletPointVedleggFosterforelder',
+                    })}
+                  </li>
+                </ul>
+                {formatMessage({ id: 'søknad.barnetillegg.alert.lasteOppVedleggTekst' })}
+              </Alert>
+            )}
+            <ModalButtonWrapper>
+              <Button
+                type="button"
+                variant={'secondary'}
+                onClick={() => {
+                  onCloseClick();
+                }}
+              >
+                {formatMessage({ id: 'søknad.barnetillegg.leggTilBarn.modal.buttons.avbryt' })}
+              </Button>
+              <Button type={'submit'}>
+                {formatMessage({ id: 'søknad.barnetillegg.leggTilBarn.modal.buttons.lagre' })}
+              </Button>
+            </ModalButtonWrapper>
+          </form>
+        )}{' '}
       </Modal.Body>
     </Modal>
   );
