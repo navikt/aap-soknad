@@ -31,7 +31,7 @@ export const getBehandlerSchema = (formatMessage: IntlFormatters['formatMessage'
   });
 };
 
-export const LeggTilBehandlerModal = ({
+export const EndreEllerLeggTilBehandlerModal = ({
   showModal,
   onCloseClick,
   onSaveClick,
@@ -48,7 +48,7 @@ export const LeggTilBehandlerModal = ({
   const findError = (path: string) => errors?.find((error) => error.path === path)?.message;
 
   return (
-    <Modal open={showModal} onClose={onCloseClick} header={{ heading: 'heihei' }}>
+    <Modal open={showModal} onClose={onCloseClick}>
       <Modal.Header>
         <Heading className={classes?.modalHeading} size={'small'} level={'3'}>
           {formatMessage({ id: 'søknad.helseopplysninger.modal.title' })}

@@ -4,7 +4,7 @@ import { Add } from '@navikt/ds-icons';
 import { Behandler, Soknad } from 'types/Soknad';
 import * as yup from 'yup';
 import { completeAndGoToNextStep, useStepWizard } from 'context/stepWizardContextV2';
-import { LeggTilBehandlerModal } from './LeggTilBehandlerModal';
+import { EndreEllerLeggTilBehandlerModal } from './EndreEllerLeggTilBehandlerModal';
 import { LucaGuidePanel } from '@navikt/aap-felles-react';
 import * as classes from './Behandlere.module.css';
 import { useSoknadContextStandard } from 'context/soknadContextStandard';
@@ -175,7 +175,7 @@ export const Behandlere = ({ onBackClick, defaultValues }: Props) => {
           </Button>
         </div>
       </SoknadFormWrapperNew>
-      <LeggTilBehandlerModal
+      <EndreEllerLeggTilBehandlerModal
         onCloseClick={() => {
           setShowModal(false);
           setSelectedBehandler({});
