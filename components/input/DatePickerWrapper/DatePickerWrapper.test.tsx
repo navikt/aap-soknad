@@ -79,7 +79,6 @@ describe('DatePickerWrapper', () => {
     expect(input).toHaveValue('12.13.2023');
 
     await waitFor(() => user.click(screen.getByRole('button', { name: /^Fullfør$/ })));
-    // expect(screen.getByText('Ugyldig format på dato.')).toBeVisible(); // FIXME Må avklares
     expect(screen.getByText('Du må velge en dato!')).toBeVisible();
     expect(onSubmitMock).toHaveBeenCalledTimes(0);
   });
