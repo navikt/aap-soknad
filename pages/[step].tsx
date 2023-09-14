@@ -52,7 +52,6 @@ import {
 } from 'utils/amplitude';
 import metrics from 'utils/metrics';
 import { scrollRefIntoView } from 'utils/dom';
-import { TimeoutBox } from 'components/TimeoutBox/TimeoutBox';
 import { Steg0 } from 'components/pageComponents/standard/Steg0/Steg0';
 import * as classes from './step.module.css';
 import { FormattedMessage, useIntl } from 'react-intl';
@@ -237,7 +236,6 @@ const Steps = ({ søker, mellomlagretSøknad }: PageProps) => {
           )}
         </main>
       )}
-      <TimeoutBox logoutTextKey="logoutModal.soknadMessage" />
     </>
   );
 };

@@ -14,7 +14,6 @@ import { logSkjemaStartetEvent } from 'utils/amplitude';
 import metrics from 'utils/metrics';
 import { scrollRefIntoView } from 'utils/dom';
 import { getSøkerUtenBarn } from 'pages/api/oppslag/soekerUtenBarn';
-import { TimeoutBox } from 'components/TimeoutBox/TimeoutBox';
 import { logger } from '@navikt/aap-felles-utils';
 import { getFulltNavn } from '../lib/søker';
 
@@ -101,7 +100,6 @@ const Introduksjon = ({ søker }: PageProps) => {
           await startSoknad();
         }}
       />
-      <TimeoutBox />
     </>
   );
 };
