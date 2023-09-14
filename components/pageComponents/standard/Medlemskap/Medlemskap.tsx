@@ -108,7 +108,6 @@ export const Medlemskap = ({ onBackClick, defaultValues }: Props) => {
   const findError = (path: string) => errors?.find((error) => error.path === path)?.message;
   const utenlandsOppholdErrorMessage = findError('medlemskap.utenlandsOpphold');
 
-  console.log('selected', selectedUtenlandsPeriode);
   return (
     <>
       <SoknadFormWrapperNew
