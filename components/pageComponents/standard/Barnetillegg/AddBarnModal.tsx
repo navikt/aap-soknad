@@ -114,7 +114,7 @@ export const AddBarnModal = ({ showModal, onCloseClick, onSaveClick, barn, setBa
         onCloseClick();
       }}
     >
-      <Modal.Content className={classes?.leggTilBarnModalContent}>
+      <Modal.Content className={classes.leggTilBarnModalContent}>
         <Heading size={'medium'} level={'2'}>
           {formatMessage({ id: 'søknad.barnetillegg.leggTilBarn.modal.title' })}
         </Heading>
@@ -122,7 +122,7 @@ export const AddBarnModal = ({ showModal, onCloseClick, onSaveClick, barn, setBa
           {formatMessage({ id: 'søknad.barnetillegg.leggTilBarn.modal.description' })}
         </Ingress>
         <form
-          className={classes?.modalForm}
+          className={classes.modalForm}
           onSubmit={async (formEvent) => {
             formEvent.preventDefault();
             const errors = await validate(getAddBarnSchema(formatMessage), barn);
@@ -161,6 +161,7 @@ export const AddBarnModal = ({ showModal, onCloseClick, onSaveClick, barn, setBa
           />
 
           <TextField
+            className={classes.foedselsdatoInput}
             label={formatMessage({ id: 'søknad.barnetillegg.leggTilBarn.modal.fødselsdato.label' })}
             name={'fødselsdato'}
             id={'fødselsdato'}
