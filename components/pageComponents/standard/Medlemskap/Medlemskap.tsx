@@ -326,9 +326,9 @@ export const Medlemskap = ({ onBackClick, defaultValues }: Props) => {
         isOpen={showUtenlandsPeriodeModal}
         arbeidEllerBodd={arbeidEllerBodd}
         closeModal={() => {
+          setShowUtenlandsPeriodeModal(false);
           setSelectedUtenlandsPeriode({});
         }}
-        onBeforeClose={() => setShowUtenlandsPeriodeModal(!showUtenlandsPeriodeModal)}
         onSave={(utenlandsperiode) => {
           if (selectedUtenlandsPeriode.id === undefined) {
             append({ ...utenlandsperiode, id: uuid4() });

@@ -34,7 +34,6 @@ export interface UtenlandsPeriodeProps {
   utenlandsPeriode: UtenlandsPeriode;
   setUtenlandsPeriode: Dispatch<UtenlandsPeriode>;
   closeModal: () => void;
-  onBeforeClose: () => void;
   onSave: (utenlandsperiode: UtenlandsPeriode) => void;
   isOpen: boolean;
   arbeidEllerBodd: ArbeidEllerBodd;
@@ -99,7 +98,6 @@ const UtenlandsPeriodeVelger = ({
   setUtenlandsPeriode,
   isOpen,
   closeModal,
-  onBeforeClose,
   onSave,
   arbeidEllerBodd,
 }: UtenlandsPeriodeProps) => {
@@ -115,7 +113,7 @@ const UtenlandsPeriodeVelger = ({
   const findError = (path: string) => errors?.find((error) => error.path === path)?.message;
 
   return (
-    <Modal open={isOpen} onBeforeClose={onBeforeClose} onClose={closeModal}>
+    <Modal open={isOpen} onClose={closeModal}>
       <Modal.Header>
         <Heading size={'medium'} level={'3'} spacing>
           {formatMessage({
@@ -148,7 +146,6 @@ const UtenlandsPeriodeVelger = ({
                 setErrors(validationErrors);
               } else {
                 onSave(utenlandsPeriode);
-                onBeforeClose();
                 closeModal();
               }
             }}
@@ -246,7 +243,6 @@ const UtenlandsPeriodeVelger = ({
                 type="button"
                 variant={'secondary'}
                 onClick={() => {
-                  onBeforeClose();
                   closeModal();
                 }}
               >
