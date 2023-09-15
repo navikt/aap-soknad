@@ -104,8 +104,17 @@ export const AddBarnModal = ({ showModal, onCloseClick, onSaveClick, barn, setBa
   const parseFødselsdato = (event: React.FocusEvent<HTMLInputElement>) =>
     parse(event.target.value, 'dd.MM.yyyy', new Date());
 
-  const parseFødselsdatoToString = () =>
-    barn.fødseldato && isValid(barn.fødseldato) ? format(barn.fødseldato, 'dd.MM.yyyy') : '';
+  const parseFødselsdatoToString = () => {
+    if (!barn.fødseldato) {
+      return '';
+    }
+    if (isValid(barn.fødseldato)) {
+      return format(barn.fødseldato, 'dd.MM.yyyy');
+    }
+    // når dato leses fra mellomlagring er det en string
+    const fødselsdato = new Date(barn.fødseldato);
+    return isValid(fødselsdato) ? format(new Date(barn.fødseldato), 'dd.MM.yyyy') : '';
+  };
 
   return (
     <Modal
