@@ -27,7 +27,7 @@ import { useFormErrors } from '../../../../hooks/useFormErrors';
 interface Props {
   søknad?: Soknad;
   onCloseClick: () => void;
-  onSaveClick: (data: any) => void;
+  onSaveClick: (data: ManuelleBarn) => void;
   showModal: boolean;
   barn: ManuelleBarn;
   setBarn: Dispatch<ManuelleBarn>;
