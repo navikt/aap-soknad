@@ -335,12 +335,12 @@ test('at alle feilmeldinger skal dukke opp', async ({ page }) => {
     .getByRole('link', { name: 'Du må svare på om barnet har en årlig inntekt over 118 620kr' })
     .first()
     .click();
-  await expect(page).toHaveURL('http://localhost:3000/aap/soknad/5/#barn.0.harInntekt');
+  await expect(page).toHaveURL('http://localhost:3000/aap/soknad/5/#barn[0].harInntekt');
   await page
     .getByRole('link', { name: 'Du må svare på om barnet har en årlig inntekt over 118 620kr' })
     .nth(1)
     .click();
-  await expect(page).toHaveURL('http://localhost:3000/aap/soknad/5/#barn.1.harInntekt');
+  await expect(page).toHaveURL('http://localhost:3000/aap/soknad/5/#barn[1].harInntekt');
   await page
     .getByRole('group', { name: 'Har barnet årlig inntekt over 118 620kr?' })
     .first()

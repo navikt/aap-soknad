@@ -15,7 +15,7 @@ import { Soknad, SoknadVedlegg, Vedlegg } from 'types/Soknad';
 import { BehandlerBackendState, SøknadBackendState } from 'types/SoknadBackendState';
 import { formatDate } from './date';
 import { formatFullAdresse, formatNavn } from 'utils/StringFormatters';
-import { BARN, GRUNNBELØP } from 'components/pageComponents/standard/Barnetillegg/Barnetillegg';
+import { GRUNNBELØP } from 'components/pageComponents/standard/Barnetillegg/Barnetillegg';
 import { RequiredVedlegg } from 'types/SoknadContext';
 import { Relasjon } from 'components/pageComponents/standard/Barnetillegg/AddBarnModal';
 import {
@@ -192,7 +192,7 @@ export const mapSøknadToBackend = (søknad?: Soknad): SøknadBackendState => {
         }) ?? [],
     },
     registrerteBarn:
-      søknad?.[BARN]?.map((barn) => ({
+      søknad?.barn?.map((barn) => ({
         merEnnIG: jaNeiToBoolean(barn.harInntekt),
       })) ?? [],
     andreBarn:
@@ -214,7 +214,7 @@ export const mapSøknadToBackend = (søknad?: Soknad): SøknadBackendState => {
   };
 };
 
-export function getVedleggForManueltBarn(internId: string, vedlegg?: SoknadVedlegg) {
+export function getVedleggForManueltBarn(internId?: string, vedlegg?: SoknadVedlegg) {
   const keys = vedlegg ? Object.keys(vedlegg) : [];
   const vedleggKey = keys.find((key) => key === internId);
 
@@ -432,9 +432,9 @@ export const mapSøknadToPdf = (
     return createTema('Andre behandlere', andreBehandlere);
   };
   const getBarn = (søknad?: Soknad) => {
-    const registrerteBarn = !søknad?.[BARN]?.length
+    const registrerteBarn = !søknad?.barn?.length
       ? createFritekst('Fant ingen registrerte barn')
-      : søknad?.[BARN]?.map((barn) =>
+      : søknad?.barn?.map((barn) =>
           createFeltgruppe([
             ...createField('Navn', formatNavn(barn?.navn)),
             ...createField('Fødselsdato', barn?.fødseldato || ''),

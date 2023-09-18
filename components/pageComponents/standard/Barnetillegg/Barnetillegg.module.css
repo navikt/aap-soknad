@@ -40,3 +40,7 @@
   min-width: 185px;
   max-width: 185px;
 }
+
+.foedselsdatoInput input {
+  max-width: 7rem;
+}
