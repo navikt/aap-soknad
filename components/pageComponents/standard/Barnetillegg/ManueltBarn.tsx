@@ -9,15 +9,25 @@ import React, { Dispatch } from 'react';
 import { GRUNNBELØP } from './Barnetillegg';
 import { ManuelleBarn } from '../../../../types/Soknad';
 import { useIntl } from 'react-intl';
+import { removeRequiredVedlegg, updateSøknadData } from '../../../../context/soknadContextCommon';
+import { useSoknadContextStandard } from '../../../../context/soknadContextStandard';
 
 interface BarnKortProps {
   barn: ManuelleBarn;
   setSelectedBarn: Dispatch<ManuelleBarn>;
-  slettBarn: (barnId?: string) => void;
   setShowModal: (vis: boolean) => void;
 }
-const ManueltBarn = ({ barn, setSelectedBarn, slettBarn, setShowModal }: BarnKortProps) => {
+const ManueltBarn = ({ barn, setSelectedBarn, setShowModal }: BarnKortProps) => {
   const { formatMessage } = useIntl();
+  const { søknadState, søknadDispatch } = useSoknadContextStandard();
+
+  const slettBarn = (barnId?: string) => {
+    updateSøknadData(søknadDispatch, {
+      manuelleBarn: søknadState.søknad?.manuelleBarn?.filter((barn) => barnId !== barn.internId),
+    });
+    removeRequiredVedlegg(`barn-${barnId}`, søknadDispatch);
+  };
+
   return (
     <li key={barn?.internId}>
       <article className={classes.barneKort}>

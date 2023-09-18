@@ -27,7 +27,6 @@ import { ManueltBarn } from './ManueltBarn';
 import { Registerbarn } from './Registerbarn';
 interface Props {
   onBackClick: () => void;
-  onNext: (data: any) => void;
   defaultValues?: GenericSoknadContextState<Soknad>;
 }
 
@@ -69,26 +68,19 @@ export const Barnetillegg = ({ onBackClick, defaultValues }: Props) => {
     debouncedLagre(søknadState, stepList, {});
   }, [søknadState.søknad?.barn, søknadState.søknad?.manuelleBarn]);
 
-  const erForelderTilManueltBarn = useMemo(() => {
-    return (
-      defaultValues?.søknad?.manuelleBarn &&
-      defaultValues?.søknad?.manuelleBarn.filter((barn) => barn.relasjon === Relasjon.FORELDER)
-        .length > 0
-    );
-  }, [defaultValues?.søknad?.manuelleBarn]);
+  const erForelderTilManueltBarn =
+    defaultValues?.søknad?.manuelleBarn &&
+    defaultValues?.søknad?.manuelleBarn.filter((barn) => barn.relasjon === Relasjon.FORELDER)
+      .length > 0;
 
-  const erFosterforelderTilManueltBarn = useMemo(() => {
-    return (
-      defaultValues?.søknad?.manuelleBarn &&
-      defaultValues?.søknad?.manuelleBarn.filter(
-        (barn) => barn.relasjon === Relasjon.FOSTERFORELDER
-      ).length > 0
-    );
-  }, [defaultValues?.søknad?.manuelleBarn]);
+  const erFosterforelderTilManueltBarn =
+    defaultValues?.søknad?.manuelleBarn &&
+    defaultValues?.søknad?.manuelleBarn.filter((barn) => barn.relasjon === Relasjon.FOSTERFORELDER)
+      .length > 0;
 
-  const harManuelleBarn = () =>
+  const harManuelleBarn =
     defaultValues?.søknad?.manuelleBarn && defaultValues.søknad.manuelleBarn.length > 0;
-  const harBarn = () => defaultValues?.søknad?.barn && defaultValues.søknad.barn.length > 0;
+  const harBarn = defaultValues?.søknad?.barn && defaultValues.søknad.barn.length > 0;
 
   const appendManuelleBarn = (barn: ManuelleBarn) => {
     updateSøknadData(søknadDispatch, {
@@ -133,13 +125,6 @@ export const Barnetillegg = ({ onBackClick, defaultValues }: Props) => {
         }
       }),
     });
-  };
-
-  const slettBarn = (barnId?: string) => {
-    updateSøknadData(søknadDispatch, {
-      manuelleBarn: søknadState.søknad?.manuelleBarn?.filter((barn) => barnId !== barn.internId),
-    });
-    removeRequiredVedlegg(`barn-${barnId}`, søknadDispatch);
   };
 
   return (
@@ -204,7 +189,6 @@ export const Barnetillegg = ({ onBackClick, defaultValues }: Props) => {
                     key={barn.internId}
                     barn={barn}
                     setSelectedBarn={setSelectedBarn}
-                    slettBarn={slettBarn}
                     setShowModal={setShowModal}
                   />
                 ))}
@@ -246,7 +230,7 @@ export const Barnetillegg = ({ onBackClick, defaultValues }: Props) => {
             {formatMessage({ id: 'søknad.barnetillegg.alert.lasteOppVedleggTekst' })}
           </Alert>
         )}
-        {(harBarn() || harManuelleBarn()) && (
+        {(harBarn || harManuelleBarn) && (
           <Alert variant="info">
             {formatMessage({ id: 'søknad.barnetillegg.alert.barneTillegg.title' })}
             <ul>
