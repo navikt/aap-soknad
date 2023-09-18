@@ -1452,14 +1452,11 @@
   integrity sha512-rJfCY8rCWz3cb4KI6pEofnytvMPuj3YLQwoscCCYZ5DkdiPjo15IQ0US7+mjcWy9H3fcZIzf2pbJZ7ck/h4tug==
 
 "@playwright/test@^1.35.1":
-  version "1.35.1"
-  resolved "https://registry.npmjs.org/@playwright/test/-/test-1.35.1.tgz#a596b61e15b980716696f149cc7a2002f003580c"
-  integrity sha512-b5YoFe6J9exsMYg0pQAobNDR85T1nLumUYgUTtKm4d21iX2L7WqKq9dW8NGJ+2vX0etZd+Y7UeuqsxDXm9+5ZA==
+  version "1.38.0"
+  resolved "https://registry.npmjs.org/@playwright/test/-/test-1.38.0.tgz#0ad33f62394d6a9cb768d0ddfa93b12304c64e13"
+  integrity sha512-xis/RXXsLxwThKnlIXouxmIvvT3zvQj1JE39GsNieMUrMpb3/GySHDh2j8itCG22qKVD4MYLBp7xB73cUW/UUw==
   dependencies:
-    "@types/node" "*"
-    playwright-core "1.35.1"
-  optionalDependencies:
-    fsevents "2.3.2"
+    playwright "1.38.0"
 
 "@protobufjs/aspromise@^1.1.1", "@protobufjs/aspromise@^1.1.2":
   version "1.1.2"
@@ -1865,9 +1862,9 @@
   integrity sha512-MqTGEo5bj5t157U6fA/BiDynNkn0YknVdh48CMPkTSpFTVmvao5UQmm7uEF6xBEo7qIMAlY/JSleYaE6VOdpaA==
 
 "@types/node@*":
-  version "20.2.5"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-20.2.5.tgz#26d295f3570323b2837d322180dfbf1ba156fefb"
-  integrity sha512-JJulVEQXmiY9Px5axXHeYGLSjhkZEnD+MDPDGbCbIAbMslkKwmygtZFy1X6s/075Yo94sf8GuSlFfPzysQrWZQ==
+  version "20.6.2"
+  resolved "https://registry.npmjs.org/@types/node/-/node-20.6.2.tgz#a065925409f59657022e9063275cd0b9bd7e1b12"
+  integrity sha512-Y+/1vGBHV/cYk6OI1Na/LHzwnlNCAfU3ZNGrc1LdRe/LAIbdDPTTv/HU3M7yXN448aTVDq3eKRm2cg7iKLb8gw==
 
 "@types/node@>=12.12.47", "@types/node@>=13.7.0":
   version "20.3.2"
@@ -5315,10 +5312,19 @@ pkg-dir@^4.2.0:
   dependencies:
     find-up "^4.0.0"
 
-playwright-core@1.35.1:
-  version "1.35.1"
-  resolved "https://registry.npmjs.org/playwright-core/-/playwright-core-1.35.1.tgz#52c1e6ffaa6a8c29de1a5bdf8cce0ce290ffb81d"
-  integrity sha512-pNXb6CQ7OqmGDRspEjlxE49w+4YtR6a3X6mT1hZXeJHWmsEz7SunmvZeiG/+y1yyMZdHnnn73WKYdtV1er0Xyg==
+playwright-core@1.38.0:
+  version "1.38.0"
+  resolved "https://registry.npmjs.org/playwright-core/-/playwright-core-1.38.0.tgz#cb8e135da1c0b1918b070642372040ed9aa7009a"
+  integrity sha512-f8z1y8J9zvmHoEhKgspmCvOExF2XdcxMW8jNRuX4vkQFrzV4MlZ55iwb5QeyiFQgOFCUolXiRHgpjSEnqvO48g==
+
+playwright@1.38.0:
+  version "1.38.0"
+  resolved "https://registry.npmjs.org/playwright/-/playwright-1.38.0.tgz#0ee19d38512b7b1f961c0eb44008a6fed373d206"
+  integrity sha512-fJGw+HO0YY+fU/F1N57DMO+TmXHTrmr905J05zwAQE9xkuwP/QLDk63rVhmyxh03dYnEhnRbsdbH9B0UVVRB3A==
+  dependencies:
+    playwright-core "1.38.0"
+  optionalDependencies:
+    fsevents "2.3.2"
 
 "postcss-nested@^4.2.1 || ^5.0.0":
   version "5.0.6"
