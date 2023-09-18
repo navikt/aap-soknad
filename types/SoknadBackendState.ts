@@ -44,13 +44,13 @@ export interface SøknadBackendState {
   andreBarn: Array<{
     barn: {
       fødseldato?: string;
-      navn: {
+      navn?: {
         fornavn?: string;
         mellomnavn?: string;
         etternavn?: string;
       };
     };
-    relasjon: 'FORELDER' | 'FOSTERFORELDER';
+    relasjon?: 'FORELDER' | 'FOSTERFORELDER';
     merEnnIG?: boolean;
     barnepensjon?: boolean;
   }>;

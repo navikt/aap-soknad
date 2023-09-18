@@ -10,7 +10,6 @@ import {
 } from './soknadContextCommon';
 import { RegistrertBehandler, Soknad } from 'types/Soknad';
 import { OppslagBarn, OppslagBehandler } from './sokerOppslagContext';
-import { BARN } from 'components/pageComponents/standard/Barnetillegg/Barnetillegg';
 
 export const soknadContextInititalStateStandard = {
   ...soknadContextInititalState,
@@ -46,7 +45,7 @@ export function soknadReducerStandard(
       };
     }
     case SoknadActionKeys.ADD_BARN_IF_MISSING: {
-      const barn = state?.søknad?.[BARN] || [];
+      const barn = state?.søknad?.barn || [];
       const newBarn = structuredClone(action.payload)?.filter(
         (e: any) => !barn.find((a: any) => a?.fnr === e?.fnr)
       );
@@ -54,7 +53,7 @@ export function soknadReducerStandard(
         ...state,
         søknad: {
           ...state.søknad,
-          [BARN]: [...barn, ...newBarn],
+          barn: [...barn, ...newBarn],
         },
       };
     }

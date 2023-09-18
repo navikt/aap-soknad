@@ -31,10 +31,7 @@ import {
 import { formatFullAdresse, formatNavn, formatTelefonnummer } from 'utils/StringFormatters';
 import OppsummeringPeriode from './OppsummeringPeriode/OppsummeringPeriode';
 import { isNonEmptyPeriode } from 'utils/periode';
-import {
-  BARN,
-  getBarnetillegSchema,
-} from 'components/pageComponents/standard/Barnetillegg/Barnetillegg';
+import { getBarnetillegSchema } from 'components/pageComponents/standard/Barnetillegg/Barnetillegg';
 import {
   FerieTypeToMessageKey,
   getStartDatoSchema,
@@ -313,7 +310,7 @@ const Oppsummering = ({
           hasError={barnetilleggHasErrors}
         >
           <>
-            {søknadState?.søknad?.[BARN]?.map((barn, index) => (
+            {søknadState?.søknad?.barn?.map((barn, index) => (
               <OppsummeringBarn barn={barn} key={'barn-' + index} />
             ))}
             {søknadState?.søknad?.manuelleBarn?.map((barn) => (
