@@ -78,6 +78,8 @@ test('at alle feilmeldinger skal dukke opp', async ({ page }) => {
   await expect(page).toHaveURL('http://localhost:3000/aap/soknad/1/#ferie.tilDato');
   await page.getByRole('textbox', { name: /fra dato \(dd\.mm\.åååå\)/i }).fill(today);
   await page.getByRole('textbox', { name: /til dato \(dd\.mm\.åååå\)/i }).fill(tomorrow);
+  // Må klikke utenfor datovelgeren ettersom den legger seg over radio valget
+  await page.getByText('Vet du når du skal ta ferie?').click();
   await page.getByLabel('Nei, men jeg vet antall arbeidsdager jeg skal ta ferie').check();
   await page.getByRole('button', { name: 'Neste steg' }).click();
   await page
