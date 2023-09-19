@@ -11,6 +11,7 @@ type Props = {
 const OppsummeringBehandler = ({ behandler }: Props) => {
   const { formatMessage } = useIntl();
 
+  console.log(behandler);
   return (
     <article className={''}>
       <Heading size={'small'} level={'3'}>
@@ -18,9 +19,7 @@ const OppsummeringBehandler = ({ behandler }: Props) => {
       </Heading>
       <BodyShort>{`${behandler?.firstname} ${behandler?.lastname}`}</BodyShort>
       {behandler?.legekontor && <BodyShort>{behandler?.legekontor}</BodyShort>}
-      {behandler?.gateadresse && (
-        <BodyShort>{`${behandler?.gateadresse}, ${behandler?.postnummer} ${behandler?.poststed}`}</BodyShort>
-      )}
+      <BodyShort>{formaterAdresse(behandler)}</BodyShort>
       {behandler?.telefon && (
         <BodyShort>{`${formatMessage({
           id: 'søknad.helseopplysninger.dineBehandlere.telefon',
@@ -29,4 +28,25 @@ const OppsummeringBehandler = ({ behandler }: Props) => {
     </article>
   );
 };
+
+function formaterAdresse(behandler: Behandler): string {
+  let adresse = '';
+  if (behandler.gateadresse) {
+    adresse = behandler.gateadresse;
+
+    if (behandler.poststed || behandler.postnummer) {
+      adresse = adresse + ', ';
+    }
+
+    if (behandler.postnummer) {
+      adresse = adresse + behandler.postnummer;
+    }
+    if (behandler.poststed) {
+      adresse = adresse + ' ' + behandler.poststed;
+    }
+  }
+
+  return adresse;
+}
+
 export default OppsummeringBehandler;
