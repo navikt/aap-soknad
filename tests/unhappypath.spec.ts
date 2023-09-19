@@ -380,7 +380,7 @@ test('at alle feilmeldinger skal dukke opp', async ({ page }) => {
 
   await page.getByLabel('Fødselsdato (dd.mm.åååå)').fill(format(over18years, 'dd.MM.yyyy'));
   await page.getByRole('radio', { name: 'Forelder', exact: true }).check();
-  await page.getByRole('radio', { name: 'Nei' }).check();
+  await page.getByRole('dialog').getByText('Nei').check();
   await page.getByRole('button', { name: 'Lagre' }).click();
   await expect(
     page.getByText(
