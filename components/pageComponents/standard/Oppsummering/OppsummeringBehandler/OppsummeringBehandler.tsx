@@ -11,7 +11,6 @@ type Props = {
 const OppsummeringBehandler = ({ behandler }: Props) => {
   const { formatMessage } = useIntl();
 
-  console.log(behandler);
   return (
     <article className={''}>
       <Heading size={'small'} level={'3'}>
