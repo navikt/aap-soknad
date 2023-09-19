@@ -31,7 +31,7 @@ export const getBehandlerSchema = (formatMessage: IntlFormatters['formatMessage'
   });
 };
 
-export const LeggTilBehandlerModal = ({
+export const EndreEllerLeggTilBehandlerModal = ({
   showModal,
   onCloseClick,
   onSaveClick,
@@ -49,10 +49,12 @@ export const LeggTilBehandlerModal = ({
 
   return (
     <Modal open={showModal} onClose={onCloseClick}>
-      <Modal.Content className={classes?.addBehandlerModalContent}>
+      <Modal.Header>
         <Heading className={classes?.modalHeading} size={'small'} level={'3'}>
           {formatMessage({ id: 'søknad.helseopplysninger.modal.title' })}
         </Heading>
+      </Modal.Header>
+      <Modal.Body className={classes?.addBehandlerModalContent}>
         <form
           onSubmit={async (formEvent) => {
             formEvent.preventDefault();
@@ -153,7 +155,7 @@ export const LeggTilBehandlerModal = ({
             </Button>
           </ModalButtonWrapper>
         </form>
-      </Modal.Content>
+      </Modal.Body>
     </Modal>
   );
 };

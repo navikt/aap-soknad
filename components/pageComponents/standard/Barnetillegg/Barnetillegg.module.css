@@ -25,9 +25,6 @@
   gap: var(--a-spacing-10);
   max-width: 600px;
 }
-.leggTilBarnModalContent > h2 {
-  padding-right: 36px;
-}
 
 .leggTilBarnFnrInput {
   max-width: 14rem;

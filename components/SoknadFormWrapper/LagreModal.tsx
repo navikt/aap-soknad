@@ -12,10 +12,12 @@ const LagreModal = ({ isOpen, onClose }: Props) => {
   const { formatMessage } = useIntl();
   return (
     <Modal open={isOpen} onClose={() => onClose(false)}>
-      <Modal.Content className={classes?.modalContent}>
-        <Heading size={'small'} level={'1'}>
+      <Modal.Header>
+        <Heading size={'small'} level={'2'} spacing>
           {formatMessage({ id: 'lagreModal.heading' })}
         </Heading>
+      </Modal.Header>
+      <Modal.Body className={classes?.modalContent}>
         <BodyShort>{formatMessage({ id: 'lagreModal.text' })}</BodyShort>
         <div className={classes?.buttonWrapper}>
           <Button
@@ -35,7 +37,7 @@ const LagreModal = ({ isOpen, onClose }: Props) => {
             {formatMessage({ id: 'lagreModal.avbrytButtonText' })}
           </Button>
         </div>
-      </Modal.Content>
+      </Modal.Body>
     </Modal>
   );
 };

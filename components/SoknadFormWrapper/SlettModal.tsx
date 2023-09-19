@@ -43,30 +43,35 @@ const SlettModal = ({ isOpen, onClose }: Props) => {
     <Modal
       open={isOpen}
       onClose={() => onClose(false)}
-      closeButton={!slettSøknadSuccess}
-      shouldCloseOnOverlayClick={!slettSøknadSuccess}
+      onCancel={(e) => {
+        if (slettSøknadSuccess) {
+          e.preventDefault();
+        }
+      }}
     >
-      <Modal.Content className={classes?.modalContent}>
+      {!slettSøknadSuccess && (
+        <Modal.Header>
+          <Heading size={'small'} level={'2'} spacing>
+            {formatMessage({ id: 'avbrytOgSlettModal.heading' })}
+          </Heading>
+        </Modal.Header>
+      )}
+      <Modal.Body className={classes?.modalContent}>
         {!slettSøknadSuccess && (
-          <>
-            <Heading className={classes?.modalHeading} size={'small'} level={'1'}>
-              {formatMessage({ id: 'avbrytOgSlettModal.heading' })}
-            </Heading>
-            <div className={classes?.buttonWrapper}>
-              <Button variant="primary" type="button" onClick={() => slettSøknadOgAvbryt()}>
-                {isDeletingSøknad && <Loader />}
-                {!isDeletingSøknad &&
-                  formatMessage({ id: 'avbrytOgSlettModal.avbrytOgSlettButtonText' })}
-              </Button>
-              <Button
-                variant="tertiary"
-                type="button"
-                onClick={() => !isDeletingSøknad && onClose(false)}
-              >
-                {formatMessage({ id: 'avbrytOgSlettModal.avbrytButtonText' })}
-              </Button>
-            </div>
-          </>
+          <div className={classes?.buttonWrapper}>
+            <Button variant="primary" type="button" onClick={() => slettSøknadOgAvbryt()}>
+              {isDeletingSøknad && <Loader />}
+              {!isDeletingSøknad &&
+                formatMessage({ id: 'avbrytOgSlettModal.avbrytOgSlettButtonText' })}
+            </Button>
+            <Button
+              variant="tertiary"
+              type="button"
+              onClick={() => !isDeletingSøknad && onClose(false)}
+            >
+              {formatMessage({ id: 'avbrytOgSlettModal.avbrytButtonText' })}
+            </Button>
+          </div>
         )}
         {slettSøknadSuccess && (
           <>
@@ -100,7 +105,7 @@ const SlettModal = ({ isOpen, onClose }: Props) => {
             </div>
           </>
         )}
-      </Modal.Content>
+      </Modal.Body>
     </Modal>
   );
 };
