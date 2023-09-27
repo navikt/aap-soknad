@@ -1,20 +1,24 @@
-import { useForm } from 'react-hook-form';
 import { Soknad } from 'types/Soknad';
-import { Accordion, Alert, BodyShort, Heading, Label, Switch } from '@navikt/ds-react';
+import {
+  Accordion,
+  Alert,
+  BodyShort,
+  ConfirmationPanel,
+  Heading,
+  Label,
+  Switch,
+} from '@navikt/ds-react';
 import React, { useEffect, useState } from 'react';
-import ConfirmationPanelWrapper from 'components/input/ConfirmationPanelWrapper';
 import AccordianItemOppsummering from './AccordianItemOppsummering/AccordianItemOppsummering';
 import OppsummeringBarn from './OppsummeringBarn/OppsummeringBarn';
 import OppsummeringKontaktinfo from './OppsummeringKontaktinfo/OppsummeringKontaktinfo';
 import OppsummeringUtenlandsopphold from './OppsummeringUtenlandsopphold/OppsummeringUtenlandsopphold';
 import OppsummeringBehandler from './OppsummeringBehandler/OppsummeringBehandler';
-import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
-import SoknadFormWrapper from 'components/SoknadFormWrapper/SoknadFormWrapper';
 import { goToNamedStep, useStepWizard } from 'context/stepWizardContextV2';
 import { StepNames } from 'pages';
 import { LucaGuidePanel } from '@navikt/aap-felles-react';
-import { slettLagretSoknadState } from 'context/soknadContextCommon';
+import { updateSøknadData } from 'context/soknadContextCommon';
 import { useSoknadContextStandard } from 'context/soknadContextStandard';
 import { OppsummeringVedlegg } from './OppsummeringVedlegg/OppsummeringVedlegg';
 import {
@@ -42,16 +46,16 @@ import { getBehandlerSchema } from 'components/pageComponents/standard/Behandler
 import { logSkjemaValideringFeiletEvent } from 'utils/amplitude';
 import { useIntl } from 'react-intl';
 import { getMedlemskapSchema } from '../Medlemskap/medlemskapSchema';
+import SoknadFormWrapperNew from 'components/SoknadFormWrapper/SoknadFormWrapperNew';
+import { validate } from '../../../../lib/utils/validationUtils';
+import { useFormErrors } from '../../../../hooks/useFormErrors';
+import { setFocusOnErrorSummary } from '../../../schema/FormErrorSummary';
 
 interface OppsummeringProps {
   onBackClick: () => void;
   onSubmitSoknad: (data: Soknad) => boolean;
   submitErrorMessageRef: React.MutableRefObject<null>;
   hasSubmitError: boolean;
-}
-
-interface FormFields {
-  søknadBekreft: boolean;
 }
 
 const Oppsummering = ({
@@ -62,21 +66,16 @@ const Oppsummering = ({
 }: OppsummeringProps) => {
   const { formatMessage } = useIntl();
   const [nextIsLoading, setNextIsLoading] = useState<boolean>(false);
+  const { errors, setErrors, clearErrors, findError } = useFormErrors();
 
   const { søknadState, søknadDispatch } = useSoknadContextStandard();
   const { stepWizardDispatch } = useStepWizard();
+
   const schema = yup.object().shape({
     søknadBekreft: yup
       .boolean()
       .required(formatMessage({ id: 'søknad.oppsummering.confirmation.required' }))
       .oneOf([true], formatMessage({ id: 'søknad.oppsummering.confirmation.required' })),
-  });
-  const {
-    control,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<FormFields>({
-    resolver: yupResolver(schema),
   });
 
   const [toggleAll, setToggleAll] = useState<boolean | undefined>(undefined);
@@ -133,21 +132,26 @@ const Oppsummering = ({
   };
   const editStep = (stepName: string) => goToNamedStep(stepWizardDispatch, stepName);
   return (
-    <SoknadFormWrapper
-      onNext={handleSubmit(async (data) => {
-        setNextIsLoading(true);
-        const submitSuccess = await onSubmitSoknad(data);
-        if (!submitSuccess) {
-          setNextIsLoading(false);
+    <SoknadFormWrapperNew
+      onNext={async () => {
+        const errors = await validate(schema, søknadState.søknad);
+        if (errors) {
+          setErrors(errors);
+          setFocusOnErrorSummary();
+          return;
         }
-      })}
-      nextIsLoading={nextIsLoading}
+        if (søknadState.søknad) {
+          setNextIsLoading(true);
+          const submitSuccess = onSubmitSoknad(søknadState.søknad);
+          if (!submitSuccess) {
+            setNextIsLoading(false);
+          }
+        }
+      }}
       onBack={() => onBackClick()}
-      onDelete={() => slettLagretSoknadState<Soknad>(søknadDispatch, søknadState)}
-      nextButtonText={formatMessage({ id: 'navigation.send' })}
-      backButtonText={formatMessage({ id: 'navigation.back' })}
-      cancelButtonText={formatMessage({ id: 'navigation.cancel' })}
       errors={errors}
+      nextIsLoading={nextIsLoading}
+      nextButtonText={formatMessage({ id: 'navigation.send' })}
     >
       <Heading size="large" level="2">
         {formatMessage({ id: 'søknad.oppsummering.title' })}
@@ -385,14 +389,22 @@ const Oppsummering = ({
           />
         </AccordianItemOppsummering>
       </Accordion>
-      <ConfirmationPanelWrapper
+      <ConfirmationPanel
         label={formatMessage({ id: 'søknad.oppsummering.confirmation.text' })}
-        control={control}
         name={'søknadBekreft'}
+        id={'søknadBekreft'}
+        checked={søknadState.søknad?.søknadBekreft || false}
+        error={findError('søknadBekreft')}
+        onChange={(event) => {
+          clearErrors();
+          updateSøknadData(søknadDispatch, {
+            søknadBekreft: event.target.checked,
+          });
+        }}
       >
         <Label>{formatMessage({ id: 'søknad.oppsummering.confirmation.title' })}</Label>
-      </ConfirmationPanelWrapper>
-    </SoknadFormWrapper>
+      </ConfirmationPanel>
+    </SoknadFormWrapperNew>
   );
 };
 export default Oppsummering;
