@@ -95,16 +95,16 @@ export type Ferie = {
 };
 
 // [key: string] brukes for å legge til dynamiske felter for manuelle barn
-export type SoknadVedlegg = {
-  [key: string]: Vedlegg[];
-  LØNN_OG_ANDRE_GODER: Vedlegg[];
-  OMSORGSSTØNAD: Vedlegg[];
-  UTLANDSSTØNAD: Vedlegg[];
-  SYKESTIPEND: Vedlegg[];
-  LÅN: Vedlegg[];
-  AVBRUTT_STUDIE: Vedlegg[];
-  ANNET: Vedlegg[];
-};
+export interface SoknadVedlegg {
+  [key: string]: Vedlegg[] | undefined;
+  LØNN_OG_ANDRE_GODER?: Vedlegg[];
+  OMSORGSSTØNAD?: Vedlegg[];
+  UTLANDSSTØNAD?: Vedlegg[];
+  SYKESTIPEND?: Vedlegg[];
+  LÅN?: Vedlegg[];
+  AVBRUTT_STUDIE?: Vedlegg[];
+  ANNET?: Vedlegg[];
+}
 
 export interface Soknad {
   sykepenger?: JaEllerNei;

@@ -1,11 +1,7 @@
 import PageHeader from 'components/PageHeader';
 import { useRouter } from 'next/router';
 import React, { useEffect, useRef, useState } from 'react';
-import {
-  setSoknadStateFraProps,
-  SoknadActionKeys,
-  updateSøknadData,
-} from 'context/soknadContextCommon';
+import { setSoknadStateFraProps, SoknadActionKeys } from 'context/soknadContextCommon';
 import {
   completeAndGoToNextStep,
   goToPreviousStep,
@@ -45,11 +41,7 @@ import { GetServerSidePropsResult, NextPageContext } from 'next';
 import { getAccessToken } from 'auth/accessToken';
 import { getSøker } from './api/oppslag/soeker';
 import { lesBucket } from './api/buckets/les';
-import {
-  logSkjemaFullførtEvent,
-  logSkjemastegFullførtEvent,
-  logVeiledningVistEvent,
-} from 'utils/amplitude';
+import { logSkjemaFullførtEvent, logVeiledningVistEvent } from 'utils/amplitude';
 import metrics from 'utils/metrics';
 import { scrollRefIntoView } from 'utils/dom';
 import { Steg0 } from 'components/pageComponents/standard/Steg0/Steg0';
@@ -122,8 +114,7 @@ const Steps = ({ søker, mellomlagretSøknad }: PageProps) => {
         søknadState?.søknad,
         sendtTimestamp,
         formatMessage,
-        søknadState?.requiredVedlegg,
-        søker?.søker
+        søknadState?.requiredVedlegg
       );
 
       const postResponse = await postSøknad({ søknad, kvittering: søknadPdf });
@@ -152,12 +143,6 @@ const Steps = ({ søker, mellomlagretSøknad }: PageProps) => {
 
   const onPreviousStep = async () => {
     goToPreviousStep(stepWizardDispatch);
-  };
-
-  const onNextStep = async (data: any) => {
-    logSkjemastegFullførtEvent(currentStep.stepIndex ?? 0);
-    updateSøknadData<Soknad>(søknadDispatch, data);
-    completeAndGoToNextStep(stepWizardDispatch);
   };
 
   return (
@@ -208,15 +193,7 @@ const Steps = ({ søker, mellomlagretSøknad }: PageProps) => {
               {step === '7' && (
                 <AndreUtbetalinger onBackClick={onPreviousStep} defaultValues={søknadState} />
               )}
-              {step === '8' && (
-                <Vedlegg
-                  onBackClick={onPreviousStep}
-                  defaultValues={søknadState}
-                  onNext={(data) => {
-                    onNextStep(data);
-                  }}
-                />
-              )}
+              {step === '8' && <Vedlegg onBackClick={onPreviousStep} defaultValues={søknadState} />}
               {step === '9' && (
                 <Oppsummering
                   onBackClick={onPreviousStep}

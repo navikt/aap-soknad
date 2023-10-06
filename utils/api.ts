@@ -10,8 +10,7 @@ import {
   StønadType,
   stønadTypeToAlternativNøkkel,
 } from 'components/pageComponents/standard/AndreUtbetalinger/AndreUtbetalinger';
-import { Soker } from 'context/sokerOppslagContext';
-import { Soknad, SoknadVedlegg, Vedlegg } from 'types/Soknad';
+import { Soknad, SoknadVedlegg } from 'types/Soknad';
 import { BehandlerBackendState, SøknadBackendState } from 'types/SoknadBackendState';
 import { formatDate } from './date';
 import { formatFullAdresse, formatNavn } from 'utils/StringFormatters';
@@ -131,7 +130,7 @@ export const mapSøknadToBackend = (søknad?: Soknad): SøknadBackendState => {
     studier: {
       erStudent: getJaNeiAvbrutt(søknad?.student?.erStudent),
       kommeTilbake: getJaNeiVetIkke(søknad?.student?.kommeTilbake),
-      vedlegg: søknad?.vedlegg?.[AVBRUTT_STUDIE_VEDLEGG]?.map((vedlegg) => vedlegg.vedleggId) ?? [],
+      vedlegg: søknad?.vedlegg?.[AVBRUTT_STUDIE_VEDLEGG]?.map((vedlegg) => vedlegg.id) ?? [],
     },
     registrerteBehandlere,
     andreBehandlere,
@@ -143,7 +142,7 @@ export const mapSøknadToBackend = (søknad?: Soknad): SøknadBackendState => {
               fraArbeidsgiver: jaNeiToBoolean(søknad?.andreUtbetalinger?.lønn),
               vedlegg:
                 søknad?.vedlegg?.[AttachmentType.LØNN_OG_ANDRE_GODER]?.map(
-                  (vedlegg) => vedlegg.vedleggId
+                  (vedlegg) => vedlegg.id
                 ) ?? [],
             },
           }
@@ -160,31 +159,26 @@ export const mapSøknadToBackend = (søknad?: Soknad): SøknadBackendState => {
               return {
                 type: stønad,
                 vedlegg:
-                  søknad?.vedlegg?.[AttachmentType.OMSORGSSTØNAD]?.map(
-                    (vedlegg) => vedlegg.vedleggId
-                  ) ?? [],
+                  søknad?.vedlegg?.[AttachmentType.OMSORGSSTØNAD]?.map((vedlegg) => vedlegg.id) ??
+                  [],
               };
             case StønadType.LÅN:
               return {
                 type: stønad,
-                vedlegg:
-                  søknad?.vedlegg?.[AttachmentType.LÅN]?.map((vedlegg) => vedlegg.vedleggId) ?? [],
+                vedlegg: søknad?.vedlegg?.[AttachmentType.LÅN]?.map((vedlegg) => vedlegg.id) ?? [],
               };
             case StønadType.STIPEND:
               return {
                 type: stønad,
                 vedlegg:
-                  søknad?.vedlegg?.[AttachmentType.SYKESTIPEND]?.map(
-                    (vedlegg) => vedlegg.vedleggId
-                  ) ?? [],
+                  søknad?.vedlegg?.[AttachmentType.SYKESTIPEND]?.map((vedlegg) => vedlegg.id) ?? [],
               };
             case StønadType.UTLAND:
               return {
                 type: stønad,
                 vedlegg:
-                  søknad?.vedlegg?.[AttachmentType.UTLANDSSTØNAD]?.map(
-                    (vedlegg) => vedlegg.vedleggId
-                  ) ?? [],
+                  søknad?.vedlegg?.[AttachmentType.UTLANDSSTØNAD]?.map((vedlegg) => vedlegg.id) ??
+                  [],
               };
             default:
               return { type: stønad };
@@ -203,14 +197,12 @@ export const mapSøknadToBackend = (søknad?: Soknad): SøknadBackendState => {
         },
         relasjon: barn.relasjon,
         merEnnIG: jaNeiToBoolean(barn.harInntekt),
-        vedlegg: getVedleggForManueltBarn(barn.internId, søknad?.vedlegg).map(
-          (vedlegg) => vedlegg?.vedleggId
+        vedlegg: getVedleggForManueltBarn(barn.internId, søknad?.vedlegg)?.map(
+          (vedlegg) => vedlegg?.id
         ),
       })) ?? [],
     tilleggsopplysninger: søknad?.tilleggsopplysninger,
-    ...(søknad?.vedlegg?.ANNET
-      ? { vedlegg: søknad?.vedlegg?.ANNET?.map((e) => e?.vedleggId) }
-      : {}),
+    ...(søknad?.vedlegg?.ANNET ? { vedlegg: søknad?.vedlegg?.ANNET?.map((e) => e?.id) } : {}),
   };
 };
 
@@ -283,8 +275,7 @@ export const mapSøknadToPdf = (
   søknad?: Soknad,
   sendtTimestamp?: Date,
   formatMessage?: any,
-  requiredVedlegg?: RequiredVedlegg[],
-  søker?: Soker
+  requiredVedlegg?: RequiredVedlegg[]
 ) => {
   const getStartDato = (søknad?: Soknad) => {
     const rows = [
@@ -533,9 +524,7 @@ export const mapSøknadToPdf = (
         (e) => e?.filterType !== Relasjon.FORELDER && e?.filterType !== Relasjon.FOSTERFORELDER
       )
       .map((vedlegg) => {
-        const vedleggListe = søknad?.vedlegg?.[vedlegg?.type as AttachmentType]?.map(
-          (file: Vedlegg) => file?.name
-        );
+        const vedleggListe = søknad?.vedlegg?.[vedlegg?.type]?.map((file) => file?.name);
         return createGruppe(vedlegg?.description, [createListe('', vedleggListe)]);
       });
     const manuelleBarnVedlegg =
@@ -546,7 +535,9 @@ export const mapSøknadToPdf = (
         return createGruppe(label || '', [
           createListe(
             '',
-            getVedleggForManueltBarn(barn.internId, søknad?.vedlegg).map((vedlegg) => vedlegg?.name)
+            getVedleggForManueltBarn(barn.internId, søknad?.vedlegg)?.map(
+              (vedlegg) => vedlegg?.name
+            )
           ),
         ]);
       }) || [];

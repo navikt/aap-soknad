@@ -126,7 +126,7 @@ const FieldArrayFileInput = ({
         setFilename(file?.name);
         setError(`${type}-${inputId}`, { type: 'custom', message });
       } else {
-        append({ name: file?.name, size: file?.size, vedleggId: resData });
+        // append({ name: file?.name, size: file?.size, vedleggId: resData });
       }
       setLoading(false);
     } catch (err: any) {
@@ -160,21 +160,13 @@ const FieldArrayFileInput = ({
                 <FileSuccess color={'var(--a-icon-success)'} />
               </div>
               <div className={classes?.fileInputText}>
-                <Link target={'_blank'} href={`/aap/soknad/vedlegg/${attachment?.vedleggId}`}>
-                  {attachment?.name}
-                </Link>
+                <Link target={'_blank'}>{attachment?.name}</Link>
                 <Detail>{fileSizeString(attachment?.size)}</Detail>
               </div>
             </div>
             <button
               type={'button'}
-              onClick={() =>
-                fetch(`/aap/soknad/api/vedlegg/slett/?uuids=${attachment?.vedleggId}`, {
-                  method: 'DELETE',
-                }).then(() => {
-                  onDelete(index);
-                })
-              }
+              onClick={() => {}}
               tabIndex={0}
               onKeyPress={(event) => {
                 if (event.key === 'Enter') {

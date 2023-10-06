@@ -158,11 +158,9 @@ export const addBehandlerIfMissing = (
 
 export const getVedleggUuidsFromSoknad = (søknad?: Soknad) => {
   const vedlegg = søknad?.vedlegg;
-  return Object.values(vedlegg ?? {})
-    .reduce((acc, v) => {
-      return acc.concat(v);
-    }, [])
-    .map((v) => v.vedleggId);
+  return Object.values(vedlegg || {})
+    .flat()
+    .map((vedlegg) => vedlegg?.id);
 };
 
 export const deleteOpplastedeVedlegg = async (søknad?: Soknad) => {
