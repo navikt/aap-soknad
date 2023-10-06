@@ -14,6 +14,7 @@ import { SøknadValidationError } from '../../../schema/FormErrorSummaryNew';
 import { logSkjemastegFullførtEvent } from '../../../../utils/amplitude';
 import { AttachmentType } from '../AndreUtbetalinger/AndreUtbetalinger';
 import { AVBRUTT_STUDIE_VEDLEGG } from '../Student/Student';
+import { setFocusOnErrorSummary } from '../../../schema/FormErrorSummary';
 
 interface Props {
   onBackClick: () => void;
@@ -67,8 +68,12 @@ const Vedlegg = ({ onBackClick, defaultValues }: Props) => {
   return (
     <SoknadFormWrapperNew
       onNext={() => {
-        logSkjemastegFullførtEvent(currentStepIndex ?? 0);
-        completeAndGoToNextStep(stepWizardDispatch);
+        if (!errors) {
+          logSkjemastegFullførtEvent(currentStepIndex ?? 0);
+          completeAndGoToNextStep(stepWizardDispatch);
+        } else {
+          setFocusOnErrorSummary();
+        }
       }}
       onBack={() => onBackClick()}
       errors={errors}
@@ -275,7 +280,7 @@ const Vedlegg = ({ onBackClick, defaultValues }: Props) => {
         return (
           <FileInput
             key={barn.internId}
-            id={`barn.${index}`}
+            id={barn.internId!}
             heading={formatMessage(
               { id: `søknad.vedlegg.andreBarn.title.${requiredVedlegg?.filterType}` },
               {
@@ -287,7 +292,10 @@ const Vedlegg = ({ onBackClick, defaultValues }: Props) => {
               updateSøknadData<Soknad>(søknadDispatch, {
                 vedlegg: {
                   ...søknadState?.søknad?.vedlegg,
-                  [barn.internId!]: [...(søknadState?.søknad?.vedlegg?.ANNET || []), ...vedlegg],
+                  [barn.internId!]: [
+                    ...(søknadState?.søknad?.vedlegg?.[barn.internId!] || []),
+                    ...vedlegg,
+                  ],
                 },
               });
             }}
