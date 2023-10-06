@@ -13,6 +13,7 @@ import SoknadFormWrapperNew from '../../../SoknadFormWrapper/SoknadFormWrapperNe
 import { SøknadValidationError } from '../../../schema/FormErrorSummaryNew';
 import { logSkjemastegFullførtEvent } from '../../../../utils/amplitude';
 import { AttachmentType } from '../AndreUtbetalinger/AndreUtbetalinger';
+import { AVBRUTT_STUDIE_VEDLEGG } from '../Student/Student';
 
 interface Props {
   onBackClick: () => void;
@@ -116,18 +117,38 @@ const Vedlegg = ({ onBackClick, defaultValues }: Props) => {
         </div>
       </>
 
-      {/*{søknadState?.requiredVedlegg?.find((e) => e.type === AVBRUTT_STUDIE_VEDLEGG) && (*/}
-      {/*  <FieldArrayFileInput*/}
-      {/*    control={control}*/}
-      {/*    name={'avbruttStudie'}*/}
-      {/*    type={AttachmentType.AVBRUTT_STUDIE}*/}
-      {/*    errors={errors}*/}
-      {/*    setError={setError}*/}
-      {/*    clearErrors={clearErrors}*/}
-      {/*    heading={formatMessage({ id: 'søknad.student.vedlegg.name' })}*/}
-      {/*    ingress={formatMessage({ id: 'søknad.student.vedlegg.description' })}*/}
-      {/*  />*/}
-      {/*)}*/}
+      {søknadState?.requiredVedlegg?.find((e) => e.type === AVBRUTT_STUDIE_VEDLEGG) && (
+        <FileInput
+          id={'avbruttStudie'}
+          heading={formatMessage({ id: 'søknad.student.vedlegg.name' })}
+          ingress={formatMessage({ id: 'søknad.student.vedlegg.description' })}
+          onUpload={(vedlegg) => {
+            updateSøknadData<Soknad>(søknadDispatch, {
+              vedlegg: {
+                ...søknadState?.søknad?.vedlegg,
+                AVBRUTT_STUDIE: [
+                  ...(søknadState?.søknad?.vedlegg?.AVBRUTT_STUDIE || []),
+                  ...vedlegg,
+                ],
+              },
+            });
+          }}
+          onDelete={(vedlegg) => {
+            const oppdatertVedlegg = søknadState?.søknad?.vedlegg?.AVBRUTT_STUDIE?.filter(
+              (e) => e.id !== vedlegg.id
+            );
+            updateSøknadData<Soknad>(søknadDispatch, {
+              vedlegg: {
+                ...søknadState?.søknad?.vedlegg,
+                AVBRUTT_STUDIE: oppdatertVedlegg || [],
+              },
+            });
+          }}
+          deleteUrl="/aap/soknad/api/vedlegg/slett/?uuids="
+          uploadUrl="/aap/soknad/api/vedlegg/lagre/"
+          files={søknadState?.søknad?.vedlegg?.AVBRUTT_STUDIE || []}
+        />
+      )}
       {søknadState?.requiredVedlegg?.find((e) => e.type === AttachmentType.LØNN_OG_ANDRE_GODER) && (
         <FileInput
           id={'LØNN_OG_ANDRE_GODER'}
