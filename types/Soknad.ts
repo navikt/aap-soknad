@@ -4,6 +4,7 @@ import { JaEllerNei, JaNeiVetIkke } from './Generic';
 import { JaNeiAvbrutt } from 'components/pageComponents/standard/Student/Student';
 import { OppslagBehandler } from 'context/sokerOppslagContext';
 import { FerieType } from 'components/pageComponents/standard/StartDato/StartDato';
+import { Vedlegg } from '@navikt/aap-felles-react';
 
 export type FieldAndLabel<T> = {
   label?: string;
@@ -91,12 +92,6 @@ export type Ferie = {
   antallDager?: string;
   fraDato?: Date;
   tilDato?: Date;
-};
-
-export type Vedlegg = {
-  name: string;
-  size: number;
-  vedleggId: string;
 };
 
 // [key: string] brukes for å legge til dynamiske felter for manuelle barn

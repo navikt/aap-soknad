@@ -12,7 +12,7 @@ import { useDebounceLagreSoknad } from 'hooks/useDebounceLagreSoknad';
 import FieldArrayFileInput from 'components/input/FileInput/FieldArrayFileInput';
 import { GenericSoknadContextState } from 'types/SoknadContext';
 import { scrollRefIntoView } from 'utils/dom';
-import { LucaGuidePanel, ScanningGuide } from '@navikt/aap-felles-react';
+import { FileInput, LucaGuidePanel, ScanningGuide } from '@navikt/aap-felles-react';
 import { useIntl } from 'react-intl';
 
 interface Props {
@@ -64,10 +64,11 @@ const Vedlegg = ({ onBackClick, onNext, defaultValues }: Props) => {
     debouncedLagre(søknadState, stepList, {});
   }, [søknadState.søknad?.tilleggsopplysninger]);
 
+  console.log(søknadState.søknad);
   return (
     <SoknadFormWrapper
       onNext={handleSubmit((data) => {
-        onNext({ vedlegg: data });
+        onNext({ vedlegg: søknadState?.søknad?.vedlegg });
       })}
       onBack={() => {
         updateSøknadData<Soknad>(søknadDispatch, { ...søknadState.søknad });
@@ -232,6 +233,36 @@ const Vedlegg = ({ onBackClick, onNext, defaultValues }: Props) => {
         ingress={
           'Hvis du har noe annet du ønsker å legge ved kan du laste det opp her (valgfritt).'
         }
+      />
+      <FileInput
+        heading={'Annen dokumentasjon'}
+        ingress={
+          'Hvis du har noe annet du ønsker å legge ved kan du laste det opp her (valgfritt).'
+        }
+        id="ANNET"
+        onUpload={(attachments) => {
+          console.log('attachments', attachments);
+          updateSøknadData<Soknad>(søknadDispatch, {
+            vedlegg: {
+              ...søknadState?.søknad?.vedlegg,
+              ANNET: [...(søknadState?.søknad?.vedlegg?.ANNET || []), ...attachments],
+            },
+          });
+        }}
+        onDelete={(attachment) => {
+          const newAnnet = søknadState?.søknad?.vedlegg?.ANNET?.filter(
+            (e) => e.id !== attachment.id
+          );
+          updateSøknadData<Soknad>(søknadDispatch, {
+            vedlegg: {
+              ...søknadState?.søknad?.vedlegg,
+              ANNET: newAnnet || [],
+            },
+          });
+        }}
+        deleteUrl="/aap/soknad/api/vedlegg/slett/?uuids="
+        uploadUrl="/aap/soknad/api/vedlegg/lagre/"
+        files={søknadState?.søknad?.vedlegg?.ANNET || []}
       />
       <Textarea
         value={søknadState.søknad?.tilleggsopplysninger}
