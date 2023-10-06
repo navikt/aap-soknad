@@ -128,18 +128,38 @@ const Vedlegg = ({ onBackClick, defaultValues }: Props) => {
       {/*    ingress={formatMessage({ id: 'søknad.student.vedlegg.description' })}*/}
       {/*  />*/}
       {/*)}*/}
-      {/*{søknadState?.requiredVedlegg?.find((e) => e.type === AttachmentType.LØNN_OG_ANDRE_GODER) && (*/}
-      {/*  <FieldArrayFileInput*/}
-      {/*    control={control}*/}
-      {/*    name={'LØNN_OG_ANDRE_GODER'}*/}
-      {/*    type={AttachmentType.LØNN_OG_ANDRE_GODER}*/}
-      {/*    errors={errors}*/}
-      {/*    setError={setError}*/}
-      {/*    clearErrors={clearErrors}*/}
-      {/*    heading={'Lønn og andre goder'}*/}
-      {/*    ingress={formatMessage({ id: 'søknad.andreUtbetalinger.vedlegg.andreGoder' })}*/}
-      {/*  />*/}
-      {/*)}*/}
+      {søknadState?.requiredVedlegg?.find((e) => e.type === AttachmentType.LØNN_OG_ANDRE_GODER) && (
+        <FileInput
+          id={'LØNN_OG_ANDRE_GODER'}
+          heading={'Lønn og andre goder'}
+          ingress={formatMessage({ id: 'søknad.andreUtbetalinger.vedlegg.andreGoder' })}
+          onUpload={(vedlegg) => {
+            updateSøknadData<Soknad>(søknadDispatch, {
+              vedlegg: {
+                ...søknadState?.søknad?.vedlegg,
+                LØNN_OG_ANDRE_GODER: [
+                  ...(søknadState?.søknad?.vedlegg?.LØNN_OG_ANDRE_GODER || []),
+                  ...vedlegg,
+                ],
+              },
+            });
+          }}
+          onDelete={(vedlegg) => {
+            const oppdatertVedlegg = søknadState?.søknad?.vedlegg?.LØNN_OG_ANDRE_GODER?.filter(
+              (e) => e.id !== vedlegg.id
+            );
+            updateSøknadData<Soknad>(søknadDispatch, {
+              vedlegg: {
+                ...søknadState?.søknad?.vedlegg,
+                LØNN_OG_ANDRE_GODER: oppdatertVedlegg || [],
+              },
+            });
+          }}
+          deleteUrl="/aap/soknad/api/vedlegg/slett/?uuids="
+          uploadUrl="/aap/soknad/api/vedlegg/lagre/"
+          files={søknadState?.søknad?.vedlegg?.LØNN_OG_ANDRE_GODER || []}
+        />
+      )}
       {søknadState?.requiredVedlegg?.find((e) => e.type === AttachmentType.UTLANDSSTØNAD) && (
         <FileInput
           id={'UTLANDSSTØNAD'}
