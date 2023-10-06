@@ -140,18 +140,35 @@ const Vedlegg = ({ onBackClick, defaultValues }: Props) => {
       {/*    ingress={formatMessage({ id: 'søknad.andreUtbetalinger.vedlegg.andreGoder' })}*/}
       {/*  />*/}
       {/*)}*/}
-      {/*{søknadState?.requiredVedlegg?.find((e) => e.type === AttachmentType.UTLANDSSTØNAD) && (*/}
-      {/*  <FieldArrayFileInput*/}
-      {/*    control={control}*/}
-      {/*    name={'UTLANDSSTØNAD'}*/}
-      {/*    type={AttachmentType.UTLANDSSTØNAD}*/}
-      {/*    errors={errors}*/}
-      {/*    setError={setError}*/}
-      {/*    clearErrors={clearErrors}*/}
-      {/*    heading={formatMessage({ id: 'søknad.andreUtbetalinger.stønad.values.utland' })}*/}
-      {/*    ingress={formatMessage({ id: 'søknad.andreUtbetalinger.vedlegg.utlandsStønad' })}*/}
-      {/*  />*/}
-      {/*)}*/}
+      {søknadState?.requiredVedlegg?.find((e) => e.type === AttachmentType.UTLANDSSTØNAD) && (
+        <FileInput
+          id={'UTLANDSSTØNAD'}
+          heading={formatMessage({ id: 'søknad.andreUtbetalinger.stønad.values.utland' })}
+          ingress={formatMessage({ id: 'søknad.andreUtbetalinger.vedlegg.utlandsStønad' })}
+          onUpload={(vedlegg) => {
+            updateSøknadData<Soknad>(søknadDispatch, {
+              vedlegg: {
+                ...søknadState?.søknad?.vedlegg,
+                UTLANDSSTØNAD: [...(søknadState?.søknad?.vedlegg?.UTLANDSSTØNAD || []), ...vedlegg],
+              },
+            });
+          }}
+          onDelete={(vedlegg) => {
+            const oppdatertVedlegg = søknadState?.søknad?.vedlegg?.UTLANDSSTØNAD?.filter(
+              (e) => e.id !== vedlegg.id
+            );
+            updateSøknadData<Soknad>(søknadDispatch, {
+              vedlegg: {
+                ...søknadState?.søknad?.vedlegg,
+                UTLANDSSTØNAD: oppdatertVedlegg || [],
+              },
+            });
+          }}
+          deleteUrl="/aap/soknad/api/vedlegg/slett/?uuids="
+          uploadUrl="/aap/soknad/api/vedlegg/lagre/"
+          files={søknadState?.søknad?.vedlegg?.UTLANDSSTØNAD || []}
+        />
+      )}
       {søknadState?.requiredVedlegg?.find((e) => e.type === AttachmentType.LÅN) && (
         <FileInput
           id={'LÅN'}
