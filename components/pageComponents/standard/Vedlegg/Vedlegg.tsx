@@ -60,6 +60,7 @@ const Vedlegg = ({ onBackClick, defaultValues }: Props) => {
     .filter((error): error is SøknadValidationError => error !== undefined);
 
   console.log(søknadState.søknad);
+  console.log('errors', errors);
 
   return (
     <SoknadFormWrapperNew
@@ -174,29 +175,49 @@ const Vedlegg = ({ onBackClick, defaultValues }: Props) => {
       {/*    ingress={formatMessage({ id: 'søknad.andreUtbetalinger.vedlegg.sykeStipend' })}*/}
       {/*  />*/}
       {/*)}*/}
-      {/*{søknadState?.søknad?.manuelleBarn?.map((barn, index) => {*/}
-      {/*  const requiredVedlegg = søknadState?.requiredVedlegg.find(*/}
-      {/*    (e) => e?.type === `barn-${barn.internId}`*/}
-      {/*  );*/}
-      {/*  return (*/}
-      {/*    <FieldArrayFileInput*/}
-      {/*      key={barn.internId}*/}
-      {/*      control={control}*/}
-      {/*      name={`${barn.internId}`}*/}
-      {/*      type={`barn-${barn.internId}`}*/}
-      {/*      errors={errors}*/}
-      {/*      setError={setError}*/}
-      {/*      clearErrors={clearErrors}*/}
-      {/*      heading={formatMessage(*/}
-      {/*        { id: `søknad.vedlegg.andreBarn.title.${requiredVedlegg?.filterType}` },*/}
-      {/*        {*/}
-      {/*          navn: `${barn?.navn?.fornavn} ${barn?.navn?.etternavn}`,*/}
-      {/*        }*/}
-      {/*      )}*/}
-      {/*      ingress={requiredVedlegg?.description}*/}
-      {/*    />*/}
-      {/*  );*/}
-      {/*})}*/}
+      {søknadState?.søknad?.manuelleBarn?.map((barn, index) => {
+        const requiredVedlegg = søknadState?.requiredVedlegg.find(
+          (e) => e?.type === `barn-${barn.internId}`
+        );
+        return (
+          <FileInput
+            key={barn.internId}
+            id={`barn.${index}`}
+            heading={formatMessage(
+              { id: `søknad.vedlegg.andreBarn.title.${requiredVedlegg?.filterType}` },
+              {
+                navn: `${barn?.navn?.fornavn} ${barn?.navn?.etternavn}`,
+              }
+            )}
+            ingress={requiredVedlegg?.description}
+            onUpload={(attachments) => {
+              updateSøknadData<Soknad>(søknadDispatch, {
+                vedlegg: {
+                  ...søknadState?.søknad?.vedlegg,
+                  [barn.internId!]: [
+                    ...(søknadState?.søknad?.vedlegg?.ANNET || []),
+                    ...attachments,
+                  ],
+                },
+              });
+            }}
+            onDelete={(attachment) => {
+              const newAnnet = søknadState?.søknad?.vedlegg?.[barn.internId!]?.filter(
+                (e) => e.id !== attachment.id
+              );
+              updateSøknadData<Soknad>(søknadDispatch, {
+                vedlegg: {
+                  ...søknadState?.søknad?.vedlegg,
+                  [barn.internId!]: newAnnet || [],
+                },
+              });
+            }}
+            deleteUrl="/aap/soknad/api/vedlegg/slett/?uuids="
+            uploadUrl="/aap/soknad/api/vedlegg/lagre/"
+            files={søknadState?.søknad?.vedlegg?.[barn.internId!] || []}
+          />
+        );
+      })}
       <FileInput
         heading={'Annen dokumentasjon'}
         ingress={
