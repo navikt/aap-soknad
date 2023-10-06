@@ -152,18 +152,35 @@ const Vedlegg = ({ onBackClick, defaultValues }: Props) => {
       {/*    ingress={formatMessage({ id: 'søknad.andreUtbetalinger.vedlegg.utlandsStønad' })}*/}
       {/*  />*/}
       {/*)}*/}
-      {/*{søknadState?.requiredVedlegg?.find((e) => e.type === AttachmentType.LÅN) && (*/}
-      {/*  <FieldArrayFileInput*/}
-      {/*    control={control}*/}
-      {/*    name={'LÅN'}*/}
-      {/*    type={AttachmentType.LÅN}*/}
-      {/*    errors={errors}*/}
-      {/*    setError={setError}*/}
-      {/*    clearErrors={clearErrors}*/}
-      {/*    heading={formatMessage({ id: 'søknad.andreUtbetalinger.stønad.values.lån' })}*/}
-      {/*    ingress={formatMessage({ id: 'søknad.andreUtbetalinger.vedlegg.lån' })}*/}
-      {/*  />*/}
-      {/*)}*/}
+      {søknadState?.requiredVedlegg?.find((e) => e.type === AttachmentType.LÅN) && (
+        <FileInput
+          id={'LÅN'}
+          heading={formatMessage({ id: 'søknad.andreUtbetalinger.stønad.values.lån' })}
+          ingress={formatMessage({ id: 'søknad.andreUtbetalinger.vedlegg.lån' })}
+          onUpload={(vedlegg) => {
+            updateSøknadData<Soknad>(søknadDispatch, {
+              vedlegg: {
+                ...søknadState?.søknad?.vedlegg,
+                LÅN: [...(søknadState?.søknad?.vedlegg?.LÅN || []), ...vedlegg],
+              },
+            });
+          }}
+          onDelete={(vedlegg) => {
+            const oppdatertVedlegg = søknadState?.søknad?.vedlegg?.LÅN?.filter(
+              (e) => e.id !== vedlegg.id
+            );
+            updateSøknadData<Soknad>(søknadDispatch, {
+              vedlegg: {
+                ...søknadState?.søknad?.vedlegg,
+                LÅN: oppdatertVedlegg || [],
+              },
+            });
+          }}
+          deleteUrl="/aap/soknad/api/vedlegg/slett/?uuids="
+          uploadUrl="/aap/soknad/api/vedlegg/lagre/"
+          files={søknadState?.søknad?.vedlegg?.LÅN || []}
+        />
+      )}
       {søknadState?.requiredVedlegg?.find((e) => e.type === AttachmentType.SYKESTIPEND) && (
         <FileInput
           id={'SYKESTIPEND'}
