@@ -12,6 +12,7 @@ import { useIntl } from 'react-intl';
 import SoknadFormWrapperNew from '../../../SoknadFormWrapper/SoknadFormWrapperNew';
 import { SøknadValidationError } from '../../../schema/FormErrorSummaryNew';
 import { logSkjemastegFullførtEvent } from '../../../../utils/amplitude';
+import { AttachmentType } from '../AndreUtbetalinger/AndreUtbetalinger';
 
 interface Props {
   onBackClick: () => void;
@@ -163,18 +164,35 @@ const Vedlegg = ({ onBackClick, defaultValues }: Props) => {
       {/*    ingress={formatMessage({ id: 'søknad.andreUtbetalinger.vedlegg.lån' })}*/}
       {/*  />*/}
       {/*)}*/}
-      {/*{søknadState?.requiredVedlegg?.find((e) => e.type === AttachmentType.SYKESTIPEND) && (*/}
-      {/*  <FieldArrayFileInput*/}
-      {/*    control={control}*/}
-      {/*    name={'SYKESTIPEND'}*/}
-      {/*    type={AttachmentType.SYKESTIPEND}*/}
-      {/*    errors={errors}*/}
-      {/*    setError={setError}*/}
-      {/*    clearErrors={clearErrors}*/}
-      {/*    heading={formatMessage({ id: 'søknad.andreUtbetalinger.stønad.values.stipend' })}*/}
-      {/*    ingress={formatMessage({ id: 'søknad.andreUtbetalinger.vedlegg.sykeStipend' })}*/}
-      {/*  />*/}
-      {/*)}*/}
+      {søknadState?.requiredVedlegg?.find((e) => e.type === AttachmentType.SYKESTIPEND) && (
+        <FileInput
+          id={'SYKESTIPEND'}
+          heading={formatMessage({ id: 'søknad.andreUtbetalinger.stønad.values.stipend' })}
+          ingress={formatMessage({ id: 'søknad.andreUtbetalinger.vedlegg.sykeStipend' })}
+          onUpload={(vedlegg) => {
+            updateSøknadData<Soknad>(søknadDispatch, {
+              vedlegg: {
+                ...søknadState?.søknad?.vedlegg,
+                SYKESTIPEND: [...(søknadState?.søknad?.vedlegg?.SYKESTIPEND || []), ...vedlegg],
+              },
+            });
+          }}
+          onDelete={(vedlegg) => {
+            const oppdatertVedlegg = søknadState?.søknad?.vedlegg?.SYKESTIPEND?.filter(
+              (e) => e.id !== vedlegg.id
+            );
+            updateSøknadData<Soknad>(søknadDispatch, {
+              vedlegg: {
+                ...søknadState?.søknad?.vedlegg,
+                SYKESTIPEND: oppdatertVedlegg || [],
+              },
+            });
+          }}
+          deleteUrl="/aap/soknad/api/vedlegg/slett/?uuids="
+          uploadUrl="/aap/soknad/api/vedlegg/lagre/"
+          files={søknadState?.søknad?.vedlegg?.SYKESTIPEND || []}
+        />
+      )}
       {søknadState?.søknad?.manuelleBarn?.map((barn, index) => {
         const requiredVedlegg = søknadState?.requiredVedlegg.find(
           (e) => e?.type === `barn-${barn.internId}`
@@ -190,20 +208,17 @@ const Vedlegg = ({ onBackClick, defaultValues }: Props) => {
               }
             )}
             ingress={requiredVedlegg?.description}
-            onUpload={(attachments) => {
+            onUpload={(vedlegg) => {
               updateSøknadData<Soknad>(søknadDispatch, {
                 vedlegg: {
                   ...søknadState?.søknad?.vedlegg,
-                  [barn.internId!]: [
-                    ...(søknadState?.søknad?.vedlegg?.ANNET || []),
-                    ...attachments,
-                  ],
+                  [barn.internId!]: [...(søknadState?.søknad?.vedlegg?.ANNET || []), ...vedlegg],
                 },
               });
             }}
-            onDelete={(attachment) => {
+            onDelete={(vedlegg) => {
               const newAnnet = søknadState?.søknad?.vedlegg?.[barn.internId!]?.filter(
-                (e) => e.id !== attachment.id
+                (e) => e.id !== vedlegg.id
               );
               updateSøknadData<Soknad>(søknadDispatch, {
                 vedlegg: {
@@ -224,19 +239,16 @@ const Vedlegg = ({ onBackClick, defaultValues }: Props) => {
           'Hvis du har noe annet du ønsker å legge ved kan du laste det opp her (valgfritt).'
         }
         id="ANNET"
-        onUpload={(attachments) => {
-          console.log('attachments', attachments);
+        onUpload={(vedlegg) => {
           updateSøknadData<Soknad>(søknadDispatch, {
             vedlegg: {
               ...søknadState?.søknad?.vedlegg,
-              ANNET: [...(søknadState?.søknad?.vedlegg?.ANNET || []), ...attachments],
+              ANNET: [...(søknadState?.søknad?.vedlegg?.ANNET || []), ...vedlegg],
             },
           });
         }}
-        onDelete={(attachment) => {
-          const newAnnet = søknadState?.søknad?.vedlegg?.ANNET?.filter(
-            (e) => e.id !== attachment.id
-          );
+        onDelete={(vedlegg) => {
+          const newAnnet = søknadState?.søknad?.vedlegg?.ANNET?.filter((e) => e.id !== vedlegg.id);
           updateSøknadData<Soknad>(søknadDispatch, {
             vedlegg: {
               ...søknadState?.søknad?.vedlegg,
