@@ -6,10 +6,6 @@ import { OppslagBehandler } from 'context/sokerOppslagContext';
 import { FerieType } from 'components/pageComponents/standard/StartDato/StartDato';
 import { Vedlegg } from '@navikt/aap-felles-react';
 
-export type FieldAndLabel<T> = {
-  label?: string;
-  value?: T;
-};
 export type Navn = {
   fornavn?: string;
   mellomnavn?: string;
@@ -78,11 +74,11 @@ export type Barn = {
 };
 
 export type ManuelleBarn = {
-  navn?: Navn;
-  internId?: string;
-  fødseldato?: Date;
-  harInntekt?: JaEllerNei;
-  relasjon?: Relasjon;
+  navn: Navn;
+  internId: string;
+  fødseldato: Date;
+  harInntekt: JaEllerNei;
+  relasjon: Relasjon;
   vedlegg?: Vedlegg[];
 };
 

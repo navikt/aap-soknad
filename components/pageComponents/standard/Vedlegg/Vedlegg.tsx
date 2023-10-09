@@ -23,29 +23,20 @@ interface Props {
 
 const Vedlegg = ({ onBackClick, defaultValues }: Props) => {
   const { formatMessage } = useIntl();
-  const [scanningGuideOpen, setScanningGuideOpen] = useState(false);
-  const scanningGuideElement = useRef(null);
   const { søknadState, søknadDispatch } = useSoknadContextStandard();
   const { stepWizardDispatch, currentStepIndex } = useStepWizard();
   const { stepList } = useStepWizard();
+  const debouncedLagre = useDebounceLagreSoknad<Soknad>();
   const { locale } = useIntl();
 
-  const onTilleggsopplysningerChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    e.preventDefault();
-    updateSøknadData<Soknad>(søknadDispatch, { tilleggsopplysninger: e.target.value });
-  };
+  const [scanningGuideOpen, setScanningGuideOpen] = useState(false);
+  const scanningGuideElement = useRef(null);
 
   useEffect(() => {
     if (scanningGuideOpen) {
       if (scanningGuideElement?.current != null) scrollRefIntoView(scanningGuideElement);
     }
   }, [scanningGuideOpen]);
-
-  const scanningGuideOnClick = () => {
-    setScanningGuideOpen(!scanningGuideOpen);
-  };
-
-  const debouncedLagre = useDebounceLagreSoknad<Soknad>();
 
   useEffect(() => {
     debouncedLagre(søknadState, stepList, {});
@@ -62,8 +53,7 @@ const Vedlegg = ({ onBackClick, defaultValues }: Props) => {
     )
     .filter((error): error is SøknadValidationError => error !== undefined);
 
-  console.log(søknadState.søknad);
-  console.log('errors', errors);
+  const harPåkrevdeVedlegg = søknadState.requiredVedlegg.length > 0;
 
   return (
     <SoknadFormWrapperNew
@@ -81,13 +71,13 @@ const Vedlegg = ({ onBackClick, defaultValues }: Props) => {
       <Heading size="large" level="2">
         {formatMessage({ id: 'søknad.vedlegg.title' })}
       </Heading>
-      {søknadState.requiredVedlegg.length > 0 && (
+      {harPåkrevdeVedlegg && (
         <LucaGuidePanel>
           <BodyShort spacing>{formatMessage({ id: 'søknad.vedlegg.guide.text1' })}</BodyShort>
           <BodyShort>{formatMessage({ id: 'søknad.vedlegg.guide.text2' })}</BodyShort>
         </LucaGuidePanel>
       )}
-      {søknadState.requiredVedlegg.length > 0 ? (
+      {harPåkrevdeVedlegg ? (
         <div>
           <Label as={'p'}>{formatMessage({ id: 'søknad.vedlegg.harVedlegg.title' })}</Label>
           <ul>
@@ -114,7 +104,7 @@ const Vedlegg = ({ onBackClick, defaultValues }: Props) => {
             header={formatMessage({ id: 'søknad.vedlegg.vedleggPåPapir.readMore.title' })}
             type={'button'}
             open={scanningGuideOpen}
-            onClick={scanningGuideOnClick}
+            onClick={() => setScanningGuideOpen(!scanningGuideOpen)}
             ref={scanningGuideElement}
           >
             <ScanningGuide locale={locale} />
@@ -273,7 +263,7 @@ const Vedlegg = ({ onBackClick, defaultValues }: Props) => {
           files={søknadState?.søknad?.vedlegg?.SYKESTIPEND || []}
         />
       )}
-      {søknadState?.søknad?.manuelleBarn?.map((barn, index) => {
+      {søknadState?.søknad?.manuelleBarn?.map((barn) => {
         const requiredVedlegg = søknadState?.requiredVedlegg.find(
           (e) => e?.type === `barn-${barn.internId}`
         );
@@ -293,26 +283,26 @@ const Vedlegg = ({ onBackClick, defaultValues }: Props) => {
                 vedlegg: {
                   ...søknadState?.søknad?.vedlegg,
                   [barn.internId!]: [
-                    ...(søknadState?.søknad?.vedlegg?.[barn.internId!] || []),
+                    ...(søknadState?.søknad?.vedlegg?.[barn.internId] || []),
                     ...vedlegg,
                   ],
                 },
               });
             }}
             onDelete={(vedlegg) => {
-              const newAnnet = søknadState?.søknad?.vedlegg?.[barn.internId!]?.filter(
+              const newAnnet = søknadState?.søknad?.vedlegg?.[barn.internId]?.filter(
                 (e) => e.id !== vedlegg.id
               );
               updateSøknadData<Soknad>(søknadDispatch, {
                 vedlegg: {
                   ...søknadState?.søknad?.vedlegg,
-                  [barn.internId!]: newAnnet || [],
+                  [barn.internId]: newAnnet || [],
                 },
               });
             }}
             deleteUrl="/aap/soknad/api/vedlegg/slett/?uuids="
             uploadUrl="/aap/soknad/api/vedlegg/lagre/"
-            files={søknadState?.søknad?.vedlegg?.[barn.internId!] || []}
+            files={søknadState?.søknad?.vedlegg?.[barn.internId] || []}
           />
         );
       })}
@@ -346,7 +336,9 @@ const Vedlegg = ({ onBackClick, defaultValues }: Props) => {
       <Textarea
         value={søknadState.søknad?.tilleggsopplysninger}
         name={`tilleggsopplysninger`}
-        onChange={onTilleggsopplysningerChange}
+        onChange={(e) =>
+          updateSøknadData<Soknad>(søknadDispatch, { tilleggsopplysninger: e.target.value })
+        }
         label={formatMessage({ id: `søknad.tilleggsopplysninger.tilleggsopplysninger.label` })}
         description={formatMessage({
           id: `søknad.tilleggsopplysninger.tilleggsopplysninger.description`,

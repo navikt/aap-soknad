@@ -1,18 +1,14 @@
 import { Alert, BodyShort, Button, Heading } from '@navikt/ds-react';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { JaEllerNei } from 'types/Generic';
 import { Barn, ManuelleBarn, Soknad } from 'types/Soknad';
 import * as classes from './Barnetillegg.module.css';
 import { Add } from '@navikt/ds-icons';
 import * as yup from 'yup';
 import { completeAndGoToNextStep, useStepWizard } from 'context/stepWizardContextV2';
-import { AddBarnModal, Relasjon } from './AddBarnModal';
+import { AddBarnModal, CreateOrUpdateManuelleBarn, Relasjon } from './AddBarnModal';
 import { LucaGuidePanel } from '@navikt/aap-felles-react';
-import {
-  addRequiredVedlegg,
-  removeRequiredVedlegg,
-  updateSøknadData,
-} from 'context/soknadContextCommon';
+import { addRequiredVedlegg, updateSøknadData } from 'context/soknadContextCommon';
 import { useSoknadContextStandard } from 'context/soknadContextStandard';
 import { useDebounceLagreSoknad } from 'hooks/useDebounceLagreSoknad';
 import { GenericSoknadContextState } from 'types/SoknadContext';
@@ -25,6 +21,7 @@ import { logSkjemastegFullførtEvent } from '../../../../utils/amplitude';
 import { v4 as uuid4 } from 'uuid';
 import { ManueltBarn } from './ManueltBarn';
 import { Registerbarn } from './Registerbarn';
+
 interface Props {
   onBackClick: () => void;
   defaultValues?: GenericSoknadContextState<Soknad>;
@@ -60,7 +57,7 @@ export const Barnetillegg = ({ onBackClick, defaultValues }: Props) => {
   const { søknadState, søknadDispatch } = useSoknadContextStandard();
   const { currentStepIndex, stepWizardDispatch } = useStepWizard();
   const { stepList } = useStepWizard();
-  const [selectedBarn, setSelectedBarn] = useState<ManuelleBarn>({});
+  const [selectedBarn, setSelectedBarn] = useState<CreateOrUpdateManuelleBarn>({});
   const [showModal, setShowModal] = useState<boolean>(false);
 
   const debouncedLagre = useDebounceLagreSoknad<Soknad>();
@@ -255,16 +252,8 @@ export const Barnetillegg = ({ onBackClick, defaultValues }: Props) => {
           setShowModal(false);
           setSelectedBarn({});
         }}
-        onSaveClick={(barn) => {
-          if (barn.internId === undefined) {
-            appendManuelleBarn({
-              ...barn,
-              internId: uuid4(),
-            });
-          } else {
-            updateManuelleBarn(barn);
-          }
-        }}
+        appendManuelleBarn={appendManuelleBarn}
+        updateManuelleBarn={updateManuelleBarn}
         showModal={showModal}
         barn={selectedBarn}
         setBarn={setSelectedBarn}

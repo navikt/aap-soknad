@@ -12,25 +12,28 @@ import {
 } from '@navikt/ds-react';
 import { JaEllerNei } from 'types/Generic';
 import React, { Dispatch } from 'react';
-import { ManuelleBarn, Soknad } from 'types/Soknad';
+import { ManuelleBarn, Navn, Soknad } from 'types/Soknad';
 
 import * as yup from 'yup';
+import { ValidationError } from 'yup';
 import * as classes from './Barnetillegg.module.css';
 import { ModalButtonWrapper } from 'components/ButtonWrapper/ModalButtonWrapper';
 import { GRUNNBELØP } from './Barnetillegg';
 
 import { add, format, isValid, parse, sub } from 'date-fns';
 import { IntlFormatters, useIntl } from 'react-intl';
-import { validate } from '../../../../lib/utils/validationUtils';
+import { mapValidationErrorToSøknadValidationError } from '../../../../lib/utils/validationUtils';
 import { useFormErrors } from '../../../../hooks/useFormErrors';
+import { v4 as uuid4 } from 'uuid';
 
 interface Props {
   søknad?: Soknad;
   onCloseClick: () => void;
-  onSaveClick: (data: ManuelleBarn) => void;
+  appendManuelleBarn: (barn: ManuelleBarn) => void;
+  updateManuelleBarn: (barn: ManuelleBarn) => void;
   showModal: boolean;
-  barn: ManuelleBarn;
-  setBarn: Dispatch<ManuelleBarn>;
+  barn: CreateOrUpdateManuelleBarn;
+  setBarn: Dispatch<CreateOrUpdateManuelleBarn>;
 }
 
 export enum Relasjon {
@@ -38,10 +41,19 @@ export enum Relasjon {
   FOSTERFORELDER = 'FOSTERFORELDER',
 }
 
+export interface CreateOrUpdateManuelleBarn {
+  internId?: string;
+  navn?: Navn;
+  fødseldato?: Date;
+  harInntekt?: JaEllerNei;
+  relasjon?: Relasjon;
+}
+
 const ALDER_BARN_ÅR = 18;
 
 export const getAddBarnSchema = (formatMessage: IntlFormatters['formatMessage']) => {
   return yup.object().shape({
+    internId: yup.string().optional(),
     navn: yup.object().shape({
       fornavn: yup.string().required(
         formatMessage({
@@ -79,11 +91,9 @@ export const getAddBarnSchema = (formatMessage: IntlFormatters['formatMessage'])
       .required(
         formatMessage({ id: 'søknad.barnetillegg.leggTilBarn.modal.relasjon.validation.required' })
       )
-      .oneOf([Relasjon.FORELDER, Relasjon.FOSTERFORELDER])
-      .nullable(),
+      .oneOf([Relasjon.FORELDER, Relasjon.FOSTERFORELDER]),
     harInntekt: yup
       .string()
-      .nullable()
       .required(
         formatMessage(
           { id: 'søknad.barnetillegg.leggTilBarn.modal.harInntekt.validation.required' },
@@ -92,12 +102,18 @@ export const getAddBarnSchema = (formatMessage: IntlFormatters['formatMessage'])
           }
         )
       )
-      .oneOf([JaEllerNei.JA, JaEllerNei.NEI])
-      .nullable(),
+      .oneOf([JaEllerNei.JA, JaEllerNei.NEI]),
   });
 };
 
-export const AddBarnModal = ({ showModal, onCloseClick, onSaveClick, barn, setBarn }: Props) => {
+export const AddBarnModal = ({
+  showModal,
+  onCloseClick,
+  appendManuelleBarn,
+  updateManuelleBarn,
+  barn,
+  setBarn,
+}: Props) => {
   const { formatMessage } = useIntl();
   const { setErrors, findError, clearErrors } = useFormErrors();
 
@@ -138,13 +154,24 @@ export const AddBarnModal = ({ showModal, onCloseClick, onSaveClick, barn, setBa
             className={classes.modalForm}
             onSubmit={async (formEvent) => {
               formEvent.preventDefault();
-              const errors = await validate(getAddBarnSchema(formatMessage), barn);
-              if (errors) {
-                setErrors(errors);
-              } else {
-                onSaveClick(barn);
+
+              try {
+                const result = await getAddBarnSchema(formatMessage).validate(barn, {
+                  abortEarly: false,
+                });
+
+                if (result?.internId !== undefined) {
+                  updateManuelleBarn({ ...result, internId: result.internId });
+                } else {
+                  appendManuelleBarn({ ...result, internId: uuid4() });
+                }
                 clearErrors();
                 onCloseClick();
+              } catch (e) {
+                if (e instanceof ValidationError) {
+                  const errors = e.inner.map(mapValidationErrorToSøknadValidationError);
+                  setErrors(errors);
+                }
               }
             }}
           >
