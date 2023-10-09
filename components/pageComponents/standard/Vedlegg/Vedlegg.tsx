@@ -71,21 +71,21 @@ const Vedlegg = ({ onBackClick, defaultValues }: Props) => {
       <Heading size="large" level="2">
         {formatMessage({ id: 'søknad.vedlegg.title' })}
       </Heading>
-      {harPåkrevdeVedlegg && (
-        <LucaGuidePanel>
-          <BodyShort spacing>{formatMessage({ id: 'søknad.vedlegg.guide.text1' })}</BodyShort>
-          <BodyShort>{formatMessage({ id: 'søknad.vedlegg.guide.text2' })}</BodyShort>
-        </LucaGuidePanel>
-      )}
       {harPåkrevdeVedlegg ? (
-        <div>
-          <Label as={'p'}>{formatMessage({ id: 'søknad.vedlegg.harVedlegg.title' })}</Label>
-          <ul>
-            {søknadState?.requiredVedlegg?.map((vedlegg, index) => (
-              <li key={index}>{vedlegg?.description}</li>
-            ))}
-          </ul>
-        </div>
+        <>
+          <LucaGuidePanel>
+            <BodyShort spacing>{formatMessage({ id: 'søknad.vedlegg.guide.text1' })}</BodyShort>
+            <BodyShort>{formatMessage({ id: 'søknad.vedlegg.guide.text2' })}</BodyShort>
+          </LucaGuidePanel>
+          <div>
+            <Label as={'p'}>{formatMessage({ id: 'søknad.vedlegg.harVedlegg.title' })}</Label>
+            <ul>
+              {søknadState?.requiredVedlegg?.map((vedlegg, index) => (
+                <li key={index}>{vedlegg?.description}</li>
+              ))}
+            </ul>
+          </div>
+        </>
       ) : (
         <Alert variant={'info'}>
           <BodyLong spacing>
@@ -97,20 +97,18 @@ const Vedlegg = ({ onBackClick, defaultValues }: Props) => {
           <BodyLong>{formatMessage({ id: 'søknad.vedlegg.ingenVedlegg.alert.text3' })}</BodyLong>
         </Alert>
       )}
-      <>
-        <div>
-          <BodyLong>{formatMessage({ id: 'søknad.vedlegg.vedleggPåPapir.text' })}</BodyLong>
-          <ReadMore
-            header={formatMessage({ id: 'søknad.vedlegg.vedleggPåPapir.readMore.title' })}
-            type={'button'}
-            open={scanningGuideOpen}
-            onClick={() => setScanningGuideOpen(!scanningGuideOpen)}
-            ref={scanningGuideElement}
-          >
-            <ScanningGuide locale={locale} />
-          </ReadMore>
-        </div>
-      </>
+      <div>
+        <BodyLong>{formatMessage({ id: 'søknad.vedlegg.vedleggPåPapir.text' })}</BodyLong>
+        <ReadMore
+          header={formatMessage({ id: 'søknad.vedlegg.vedleggPåPapir.readMore.title' })}
+          type={'button'}
+          open={scanningGuideOpen}
+          onClick={() => setScanningGuideOpen(!scanningGuideOpen)}
+          ref={scanningGuideElement}
+        >
+          <ScanningGuide locale={locale} />
+        </ReadMore>
+      </div>
 
       {søknadState?.requiredVedlegg?.find((e) => e.type === AVBRUTT_STUDIE_VEDLEGG) && (
         <FileInput
