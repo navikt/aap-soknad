@@ -120,6 +120,7 @@ export const AddBarnModal = ({ showModal, onCloseClick, onSaveClick, barn, setBa
     <Modal
       open={showModal}
       onClose={() => {
+        clearErrors();
         onCloseClick();
       }}
     >
@@ -142,6 +143,7 @@ export const AddBarnModal = ({ showModal, onCloseClick, onSaveClick, barn, setBa
                 setErrors(errors);
               } else {
                 onSaveClick(barn);
+                clearErrors();
                 onCloseClick();
               }
             }}
@@ -276,6 +278,7 @@ export const AddBarnModal = ({ showModal, onCloseClick, onSaveClick, barn, setBa
                 type="button"
                 variant={'secondary'}
                 onClick={() => {
+                  clearErrors();
                   onCloseClick();
                 }}
               >
@@ -286,7 +289,7 @@ export const AddBarnModal = ({ showModal, onCloseClick, onSaveClick, barn, setBa
               </Button>
             </ModalButtonWrapper>
           </form>
-        )}{' '}
+        )}
       </Modal.Body>
     </Modal>
   );
