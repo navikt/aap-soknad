@@ -114,6 +114,7 @@ const Vedlegg = ({ onBackClick, defaultValues }: Props) => {
 
       {søknadState?.requiredVedlegg?.find((e) => e.type === AVBRUTT_STUDIE_VEDLEGG) && (
         <FileInput
+          locale={locale}
           id={'avbruttStudie'}
           heading={formatMessage({ id: 'søknad.student.vedlegg.name' })}
           ingress={formatMessage({ id: 'søknad.student.vedlegg.description' })}
@@ -146,6 +147,7 @@ const Vedlegg = ({ onBackClick, defaultValues }: Props) => {
       )}
       {søknadState?.requiredVedlegg?.find((e) => e.type === AttachmentType.LØNN_OG_ANDRE_GODER) && (
         <FileInput
+          locale={locale}
           id={'LØNN_OG_ANDRE_GODER'}
           heading={'Lønn og andre goder'}
           ingress={formatMessage({ id: 'søknad.andreUtbetalinger.vedlegg.andreGoder' })}
@@ -178,6 +180,7 @@ const Vedlegg = ({ onBackClick, defaultValues }: Props) => {
       )}
       {søknadState?.requiredVedlegg?.find((e) => e.type === AttachmentType.UTLANDSSTØNAD) && (
         <FileInput
+          locale={locale}
           id={'UTLANDSSTØNAD'}
           heading={formatMessage({ id: 'søknad.andreUtbetalinger.stønad.values.utland' })}
           ingress={formatMessage({ id: 'søknad.andreUtbetalinger.vedlegg.utlandsStønad' })}
@@ -207,6 +210,7 @@ const Vedlegg = ({ onBackClick, defaultValues }: Props) => {
       )}
       {søknadState?.requiredVedlegg?.find((e) => e.type === AttachmentType.LÅN) && (
         <FileInput
+          locale={locale}
           id={'LÅN'}
           heading={formatMessage({ id: 'søknad.andreUtbetalinger.stønad.values.lån' })}
           ingress={formatMessage({ id: 'søknad.andreUtbetalinger.vedlegg.lån' })}
@@ -236,6 +240,7 @@ const Vedlegg = ({ onBackClick, defaultValues }: Props) => {
       )}
       {søknadState?.requiredVedlegg?.find((e) => e.type === AttachmentType.SYKESTIPEND) && (
         <FileInput
+          locale={locale}
           id={'SYKESTIPEND'}
           heading={formatMessage({ id: 'søknad.andreUtbetalinger.stønad.values.stipend' })}
           ingress={formatMessage({ id: 'søknad.andreUtbetalinger.vedlegg.sykeStipend' })}
@@ -269,6 +274,7 @@ const Vedlegg = ({ onBackClick, defaultValues }: Props) => {
         );
         return (
           <FileInput
+            locale={locale}
             key={barn.internId}
             id={barn.internId!}
             heading={formatMessage(
@@ -307,6 +313,7 @@ const Vedlegg = ({ onBackClick, defaultValues }: Props) => {
         );
       })}
       <FileInput
+        locale={locale}
         heading={'Annen dokumentasjon'}
         ingress={
           'Hvis du har noe annet du ønsker å legge ved kan du laste det opp her (valgfritt).'
