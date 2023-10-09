@@ -78,7 +78,7 @@ export function soknadReducerStandard(
         },
       };
     }
-    case SoknadActionKeys.ADD_VEDLEGG: {
+    case SoknadActionKeys.ADD_REQUIRED_VEDLEGG: {
       const vedleggList =
         structuredClone(action?.payload)?.filter(
           (vedlegg) =>
@@ -91,16 +91,7 @@ export function soknadReducerStandard(
         requiredVedlegg: [...state?.requiredVedlegg, ...vedleggList],
       };
     }
-    case SoknadActionKeys.UPDATE_VEDLEGG: {
-      const vedleggCopy = structuredClone(action.payload);
-      const vedleggList = state?.requiredVedlegg.map((requiredVedlegg) => {
-        if (requiredVedlegg.type === vedleggCopy.type)
-          return { ...requiredVedlegg, completed: vedleggCopy.completed };
-        return requiredVedlegg;
-      });
-      return { ...state, requiredVedlegg: [...vedleggList] };
-    }
-    case SoknadActionKeys.REMOVE_VEDLEGG: {
+    case SoknadActionKeys.REMOVE_REQUIRED_VEDLEGG: {
       const newVedleggList = state?.requiredVedlegg?.filter((e) => {
         return !(e?.type === action?.payload);
       });
@@ -115,8 +106,40 @@ export function soknadReducerStandard(
         søknadUrl: action?.payload,
       };
     }
-    default: {
-      throw new Error(`Unhandled action type: ${action.type}`);
+
+    case SoknadActionKeys.ADD_VEDLEGG: {
+      const filesToAdd = [...(state.søknad?.vedlegg?.[action.key] || []), ...action.payload];
+
+      const updatedRequiredVedlegg = state.requiredVedlegg.map((vedleg) => {
+        if (vedleg.type === action.key) {
+          return { ...vedleg, completed: filesToAdd.length > 0 };
+        } else {
+          return vedleg;
+        }
+      });
+
+      return {
+        ...state,
+        requiredVedlegg: updatedRequiredVedlegg,
+        søknad: {
+          ...state.søknad,
+          vedlegg: { ...state.søknad?.vedlegg, [action.key]: filesToAdd || [] },
+        },
+      };
+    }
+
+    case SoknadActionKeys.DELETE_VEDLEGG: {
+      const FilesUtenSpesifikkVedlegg = state?.søknad?.vedlegg?.[action.key]?.filter(
+        (e) => e.id !== action.payload.id
+      );
+
+      return {
+        ...state,
+        søknad: {
+          ...state.søknad,
+          vedlegg: { ...state.søknad?.vedlegg, [action.key]: FilesUtenSpesifikkVedlegg || [] },
+        },
+      };
     }
   }
 }

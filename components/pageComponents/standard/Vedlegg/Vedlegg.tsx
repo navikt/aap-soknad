@@ -2,7 +2,7 @@ import { Soknad } from 'types/Soknad';
 import React, { useEffect, useRef, useState } from 'react';
 import { Alert, BodyLong, BodyShort, Heading, Label, ReadMore, Textarea } from '@navikt/ds-react';
 import { completeAndGoToNextStep, useStepWizard } from 'context/stepWizardContextV2';
-import { updateSøknadData } from 'context/soknadContextCommon';
+import { deleteVedlegg, updateSøknadData, addVedlegg } from 'context/soknadContextCommon';
 import { useSoknadContextStandard } from 'context/soknadContextStandard';
 import { useDebounceLagreSoknad } from 'hooks/useDebounceLagreSoknad';
 import { GenericSoknadContextState } from 'types/SoknadContext';
@@ -54,6 +54,8 @@ const Vedlegg = ({ onBackClick, defaultValues }: Props) => {
     .filter((error): error is SøknadValidationError => error !== undefined);
 
   const harPåkrevdeVedlegg = søknadState.requiredVedlegg.length > 0;
+
+  console.log('requiredVedlegg', søknadState.requiredVedlegg);
 
   return (
     <SoknadFormWrapperNew
@@ -117,26 +119,10 @@ const Vedlegg = ({ onBackClick, defaultValues }: Props) => {
           heading={formatMessage({ id: 'søknad.student.vedlegg.name' })}
           ingress={formatMessage({ id: 'søknad.student.vedlegg.description' })}
           onUpload={(vedlegg) => {
-            updateSøknadData<Soknad>(søknadDispatch, {
-              vedlegg: {
-                ...søknadState?.søknad?.vedlegg,
-                AVBRUTT_STUDIE: [
-                  ...(søknadState?.søknad?.vedlegg?.AVBRUTT_STUDIE || []),
-                  ...vedlegg,
-                ],
-              },
-            });
+            addVedlegg(søknadDispatch, vedlegg, 'AVBRUTT_STUDIE');
           }}
           onDelete={(vedlegg) => {
-            const oppdatertVedlegg = søknadState?.søknad?.vedlegg?.AVBRUTT_STUDIE?.filter(
-              (e) => e.id !== vedlegg.id
-            );
-            updateSøknadData<Soknad>(søknadDispatch, {
-              vedlegg: {
-                ...søknadState?.søknad?.vedlegg,
-                AVBRUTT_STUDIE: oppdatertVedlegg || [],
-              },
-            });
+            deleteVedlegg(søknadDispatch, vedlegg, 'AVBRUTT_STUDIE');
           }}
           deleteUrl="/aap/soknad/api/vedlegg/slett/?uuids="
           uploadUrl="/aap/soknad/api/vedlegg/lagre/"
@@ -150,26 +136,10 @@ const Vedlegg = ({ onBackClick, defaultValues }: Props) => {
           heading={'Lønn og andre goder'}
           ingress={formatMessage({ id: 'søknad.andreUtbetalinger.vedlegg.andreGoder' })}
           onUpload={(vedlegg) => {
-            updateSøknadData<Soknad>(søknadDispatch, {
-              vedlegg: {
-                ...søknadState?.søknad?.vedlegg,
-                LØNN_OG_ANDRE_GODER: [
-                  ...(søknadState?.søknad?.vedlegg?.LØNN_OG_ANDRE_GODER || []),
-                  ...vedlegg,
-                ],
-              },
-            });
+            addVedlegg(søknadDispatch, vedlegg, 'LØNN_OG_ANDRE_GODER');
           }}
           onDelete={(vedlegg) => {
-            const oppdatertVedlegg = søknadState?.søknad?.vedlegg?.LØNN_OG_ANDRE_GODER?.filter(
-              (e) => e.id !== vedlegg.id
-            );
-            updateSøknadData<Soknad>(søknadDispatch, {
-              vedlegg: {
-                ...søknadState?.søknad?.vedlegg,
-                LØNN_OG_ANDRE_GODER: oppdatertVedlegg || [],
-              },
-            });
+            deleteVedlegg(søknadDispatch, vedlegg, 'LØNN_OG_ANDRE_GODER');
           }}
           deleteUrl="/aap/soknad/api/vedlegg/slett/?uuids="
           uploadUrl="/aap/soknad/api/vedlegg/lagre/"
@@ -183,23 +153,10 @@ const Vedlegg = ({ onBackClick, defaultValues }: Props) => {
           heading={formatMessage({ id: 'søknad.andreUtbetalinger.stønad.values.utland' })}
           ingress={formatMessage({ id: 'søknad.andreUtbetalinger.vedlegg.utlandsStønad' })}
           onUpload={(vedlegg) => {
-            updateSøknadData<Soknad>(søknadDispatch, {
-              vedlegg: {
-                ...søknadState?.søknad?.vedlegg,
-                UTLANDSSTØNAD: [...(søknadState?.søknad?.vedlegg?.UTLANDSSTØNAD || []), ...vedlegg],
-              },
-            });
+            addVedlegg(søknadDispatch, vedlegg, 'UTLANDSSTØNAD');
           }}
           onDelete={(vedlegg) => {
-            const oppdatertVedlegg = søknadState?.søknad?.vedlegg?.UTLANDSSTØNAD?.filter(
-              (e) => e.id !== vedlegg.id
-            );
-            updateSøknadData<Soknad>(søknadDispatch, {
-              vedlegg: {
-                ...søknadState?.søknad?.vedlegg,
-                UTLANDSSTØNAD: oppdatertVedlegg || [],
-              },
-            });
+            deleteVedlegg(søknadDispatch, vedlegg, 'UTLANDSSTØNAD');
           }}
           deleteUrl="/aap/soknad/api/vedlegg/slett/?uuids="
           uploadUrl="/aap/soknad/api/vedlegg/lagre/"
@@ -213,23 +170,10 @@ const Vedlegg = ({ onBackClick, defaultValues }: Props) => {
           heading={formatMessage({ id: 'søknad.andreUtbetalinger.stønad.values.lån' })}
           ingress={formatMessage({ id: 'søknad.andreUtbetalinger.vedlegg.lån' })}
           onUpload={(vedlegg) => {
-            updateSøknadData<Soknad>(søknadDispatch, {
-              vedlegg: {
-                ...søknadState?.søknad?.vedlegg,
-                LÅN: [...(søknadState?.søknad?.vedlegg?.LÅN || []), ...vedlegg],
-              },
-            });
+            addVedlegg(søknadDispatch, vedlegg, 'LÅN');
           }}
           onDelete={(vedlegg) => {
-            const oppdatertVedlegg = søknadState?.søknad?.vedlegg?.LÅN?.filter(
-              (e) => e.id !== vedlegg.id
-            );
-            updateSøknadData<Soknad>(søknadDispatch, {
-              vedlegg: {
-                ...søknadState?.søknad?.vedlegg,
-                LÅN: oppdatertVedlegg || [],
-              },
-            });
+            deleteVedlegg(søknadDispatch, vedlegg, 'LÅN');
           }}
           deleteUrl="/aap/soknad/api/vedlegg/slett/?uuids="
           uploadUrl="/aap/soknad/api/vedlegg/lagre/"
@@ -243,23 +187,10 @@ const Vedlegg = ({ onBackClick, defaultValues }: Props) => {
           heading={formatMessage({ id: 'søknad.andreUtbetalinger.stønad.values.stipend' })}
           ingress={formatMessage({ id: 'søknad.andreUtbetalinger.vedlegg.sykeStipend' })}
           onUpload={(vedlegg) => {
-            updateSøknadData<Soknad>(søknadDispatch, {
-              vedlegg: {
-                ...søknadState?.søknad?.vedlegg,
-                SYKESTIPEND: [...(søknadState?.søknad?.vedlegg?.SYKESTIPEND || []), ...vedlegg],
-              },
-            });
+            addVedlegg(søknadDispatch, vedlegg, 'SYKESTIPEND');
           }}
           onDelete={(vedlegg) => {
-            const oppdatertVedlegg = søknadState?.søknad?.vedlegg?.SYKESTIPEND?.filter(
-              (e) => e.id !== vedlegg.id
-            );
-            updateSøknadData<Soknad>(søknadDispatch, {
-              vedlegg: {
-                ...søknadState?.søknad?.vedlegg,
-                SYKESTIPEND: oppdatertVedlegg || [],
-              },
-            });
+            deleteVedlegg(søknadDispatch, vedlegg, 'SYKESTIPEND');
           }}
           deleteUrl="/aap/soknad/api/vedlegg/slett/?uuids="
           uploadUrl="/aap/soknad/api/vedlegg/lagre/"
@@ -283,26 +214,10 @@ const Vedlegg = ({ onBackClick, defaultValues }: Props) => {
             )}
             ingress={requiredVedlegg?.description}
             onUpload={(vedlegg) => {
-              updateSøknadData<Soknad>(søknadDispatch, {
-                vedlegg: {
-                  ...søknadState?.søknad?.vedlegg,
-                  [barn.internId!]: [
-                    ...(søknadState?.søknad?.vedlegg?.[barn.internId] || []),
-                    ...vedlegg,
-                  ],
-                },
-              });
+              addVedlegg(søknadDispatch, vedlegg, barn.internId);
             }}
             onDelete={(vedlegg) => {
-              const newAnnet = søknadState?.søknad?.vedlegg?.[barn.internId]?.filter(
-                (e) => e.id !== vedlegg.id
-              );
-              updateSøknadData<Soknad>(søknadDispatch, {
-                vedlegg: {
-                  ...søknadState?.søknad?.vedlegg,
-                  [barn.internId]: newAnnet || [],
-                },
-              });
+              deleteVedlegg(søknadDispatch, vedlegg, barn.internId);
             }}
             deleteUrl="/aap/soknad/api/vedlegg/slett/?uuids="
             uploadUrl="/aap/soknad/api/vedlegg/lagre/"
@@ -318,21 +233,10 @@ const Vedlegg = ({ onBackClick, defaultValues }: Props) => {
         }
         id="ANNET"
         onUpload={(vedlegg) => {
-          updateSøknadData<Soknad>(søknadDispatch, {
-            vedlegg: {
-              ...søknadState?.søknad?.vedlegg,
-              ANNET: [...(søknadState?.søknad?.vedlegg?.ANNET || []), ...vedlegg],
-            },
-          });
+          addVedlegg(søknadDispatch, vedlegg, 'ANNET');
         }}
         onDelete={(vedlegg) => {
-          const newAnnet = søknadState?.søknad?.vedlegg?.ANNET?.filter((e) => e.id !== vedlegg.id);
-          updateSøknadData<Soknad>(søknadDispatch, {
-            vedlegg: {
-              ...søknadState?.søknad?.vedlegg,
-              ANNET: newAnnet || [],
-            },
-          });
+          deleteVedlegg(søknadDispatch, vedlegg, 'ANNET');
         }}
         deleteUrl="/aap/soknad/api/vedlegg/slett/?uuids="
         uploadUrl="/aap/soknad/api/vedlegg/lagre/"
