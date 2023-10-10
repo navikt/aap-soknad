@@ -227,10 +227,8 @@ const Vedlegg = ({ onBackClick, defaultValues }: Props) => {
       })}
       <FileInput
         locale={locale}
-        heading={'Annen dokumentasjon'}
-        ingress={
-          'Hvis du har noe annet du ønsker å legge ved kan du laste det opp her (valgfritt).'
-        }
+        heading={formatMessage({ id: 'søknad.vedlegg.andreVedlegg.title' })}
+        ingress={formatMessage({ id: 'søknad.vedlegg.andreVedlegg.ingress' })}
         id="ANNET"
         onUpload={(vedlegg) => {
           addVedlegg(søknadDispatch, vedlegg, 'ANNET');
