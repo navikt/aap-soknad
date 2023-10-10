@@ -43,7 +43,7 @@ const Vedlegg = ({ onBackClick }: Props) => {
   const errors: SøknadValidationError[] = Object.entries(søknadState.søknad?.vedlegg || {})
     .flatMap(([key, vedleggArray]) =>
       vedleggArray
-        ?.filter((vedlegg) => vedlegg.errorMessage !== '')
+        ?.filter((vedlegg) => vedlegg.errorMessage)
         .map((vedlegg) => ({
           message: vedlegg.errorMessage || '',
           path: key,
