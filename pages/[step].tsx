@@ -174,26 +174,15 @@ const Steps = ({ søker, mellomlagretSøknad }: PageProps) => {
                     logVeiledningVistEvent();
                     router.push('0');
                   }}
-                  defaultValues={søknadState}
                 />
               )}
-              {step === '2' && (
-                <Medlemskap onBackClick={onPreviousStep} defaultValues={søknadState} />
-              )}
-              {step === '3' && (
-                <Yrkesskade onBackClick={onPreviousStep} defaultValues={søknadState} />
-              )}
-              {step === '4' && (
-                <Behandlere onBackClick={onPreviousStep} defaultValues={søknadState} />
-              )}
-              {step === '5' && (
-                <Barnetillegg onBackClick={onPreviousStep} defaultValues={søknadState} />
-              )}
-              {step === '6' && <Student onBackClick={onPreviousStep} defaultValues={søknadState} />}
-              {step === '7' && (
-                <AndreUtbetalinger onBackClick={onPreviousStep} defaultValues={søknadState} />
-              )}
-              {step === '8' && <Vedlegg onBackClick={onPreviousStep} defaultValues={søknadState} />}
+              {step === '2' && <Medlemskap onBackClick={onPreviousStep} />}
+              {step === '3' && <Yrkesskade onBackClick={onPreviousStep} />}
+              {step === '4' && <Behandlere onBackClick={onPreviousStep} />}
+              {step === '5' && <Barnetillegg onBackClick={onPreviousStep} />}
+              {step === '6' && <Student onBackClick={onPreviousStep} />}
+              {step === '7' && <AndreUtbetalinger onBackClick={onPreviousStep} />}
+              {step === '8' && <Vedlegg onBackClick={onPreviousStep} />}
               {step === '9' && (
                 <Oppsummering
                   onBackClick={onPreviousStep}

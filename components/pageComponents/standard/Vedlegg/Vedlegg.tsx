@@ -2,10 +2,9 @@ import { Soknad } from 'types/Soknad';
 import React, { useEffect, useRef, useState } from 'react';
 import { Alert, BodyLong, BodyShort, Heading, Label, ReadMore, Textarea } from '@navikt/ds-react';
 import { completeAndGoToNextStep, useStepWizard } from 'context/stepWizardContextV2';
-import { deleteVedlegg, updateSøknadData, addVedlegg } from 'context/soknadContextCommon';
+import { addVedlegg, deleteVedlegg, updateSøknadData } from 'context/soknadContextCommon';
 import { useSoknadContextStandard } from 'context/soknadContextStandard';
 import { useDebounceLagreSoknad } from 'hooks/useDebounceLagreSoknad';
-import { GenericSoknadContextState } from 'types/SoknadContext';
 import { scrollRefIntoView } from 'utils/dom';
 import { FileInput, LucaGuidePanel, ScanningGuide } from '@navikt/aap-felles-react';
 import { useIntl } from 'react-intl';
@@ -18,10 +17,9 @@ import { setFocusOnErrorSummary } from '../../../schema/FormErrorSummary';
 
 interface Props {
   onBackClick: () => void;
-  defaultValues?: GenericSoknadContextState<Soknad>;
 }
 
-const Vedlegg = ({ onBackClick, defaultValues }: Props) => {
+const Vedlegg = ({ onBackClick }: Props) => {
   const { formatMessage } = useIntl();
   const { søknadState, søknadDispatch } = useSoknadContextStandard();
   const { stepWizardDispatch, currentStepIndex } = useStepWizard();
@@ -54,8 +52,6 @@ const Vedlegg = ({ onBackClick, defaultValues }: Props) => {
     .filter((error): error is SøknadValidationError => error !== undefined);
 
   const harPåkrevdeVedlegg = søknadState.requiredVedlegg.length > 0;
-
-  console.log('requiredVedlegg', søknadState.requiredVedlegg);
 
   return (
     <SoknadFormWrapperNew
@@ -126,7 +122,7 @@ const Vedlegg = ({ onBackClick, defaultValues }: Props) => {
           }}
           deleteUrl="/aap/soknad/api/vedlegg/slett/?uuids="
           uploadUrl="/aap/soknad/api/vedlegg/lagre/"
-          files={søknadState?.søknad?.vedlegg?.AVBRUTT_STUDIE || []}
+          files={søknadState.søknad?.vedlegg?.AVBRUTT_STUDIE || []}
         />
       )}
       {søknadState?.requiredVedlegg?.find((e) => e.type === AttachmentType.LØNN_OG_ANDRE_GODER) && (
@@ -143,7 +139,7 @@ const Vedlegg = ({ onBackClick, defaultValues }: Props) => {
           }}
           deleteUrl="/aap/soknad/api/vedlegg/slett/?uuids="
           uploadUrl="/aap/soknad/api/vedlegg/lagre/"
-          files={søknadState?.søknad?.vedlegg?.LØNN_OG_ANDRE_GODER || []}
+          files={søknadState.søknad?.vedlegg?.LØNN_OG_ANDRE_GODER || []}
         />
       )}
       {søknadState?.requiredVedlegg?.find((e) => e.type === AttachmentType.UTLANDSSTØNAD) && (
@@ -160,10 +156,10 @@ const Vedlegg = ({ onBackClick, defaultValues }: Props) => {
           }}
           deleteUrl="/aap/soknad/api/vedlegg/slett/?uuids="
           uploadUrl="/aap/soknad/api/vedlegg/lagre/"
-          files={søknadState?.søknad?.vedlegg?.UTLANDSSTØNAD || []}
+          files={søknadState.søknad?.vedlegg?.UTLANDSSTØNAD || []}
         />
       )}
-      {søknadState?.requiredVedlegg?.find((e) => e.type === AttachmentType.LÅN) && (
+      {søknadState.requiredVedlegg?.find((e) => e.type === AttachmentType.LÅN) && (
         <FileInput
           locale={locale}
           id={'LÅN'}
@@ -177,10 +173,10 @@ const Vedlegg = ({ onBackClick, defaultValues }: Props) => {
           }}
           deleteUrl="/aap/soknad/api/vedlegg/slett/?uuids="
           uploadUrl="/aap/soknad/api/vedlegg/lagre/"
-          files={søknadState?.søknad?.vedlegg?.LÅN || []}
+          files={søknadState.søknad?.vedlegg?.LÅN || []}
         />
       )}
-      {søknadState?.requiredVedlegg?.find((e) => e.type === AttachmentType.SYKESTIPEND) && (
+      {søknadState.requiredVedlegg?.find((e) => e.type === AttachmentType.SYKESTIPEND) && (
         <FileInput
           locale={locale}
           id={'SYKESTIPEND'}
@@ -194,7 +190,7 @@ const Vedlegg = ({ onBackClick, defaultValues }: Props) => {
           }}
           deleteUrl="/aap/soknad/api/vedlegg/slett/?uuids="
           uploadUrl="/aap/soknad/api/vedlegg/lagre/"
-          files={søknadState?.søknad?.vedlegg?.SYKESTIPEND || []}
+          files={søknadState.søknad?.vedlegg?.SYKESTIPEND || []}
         />
       )}
       {søknadState?.søknad?.manuelleBarn?.map((barn) => {
@@ -221,7 +217,7 @@ const Vedlegg = ({ onBackClick, defaultValues }: Props) => {
             }}
             deleteUrl="/aap/soknad/api/vedlegg/slett/?uuids="
             uploadUrl="/aap/soknad/api/vedlegg/lagre/"
-            files={søknadState?.søknad?.vedlegg?.[barn.internId] || []}
+            files={søknadState.søknad?.vedlegg?.[barn.internId] || []}
           />
         );
       })}
@@ -238,7 +234,7 @@ const Vedlegg = ({ onBackClick, defaultValues }: Props) => {
         }}
         deleteUrl="/aap/soknad/api/vedlegg/slett/?uuids="
         uploadUrl="/aap/soknad/api/vedlegg/lagre/"
-        files={søknadState?.søknad?.vedlegg?.ANNET || []}
+        files={søknadState.søknad?.vedlegg?.ANNET || []}
       />
       <Textarea
         value={søknadState.søknad?.tilleggsopplysninger}

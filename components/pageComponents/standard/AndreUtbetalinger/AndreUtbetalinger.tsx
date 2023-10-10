@@ -25,7 +25,6 @@ import {
 } from 'context/soknadContextCommon';
 import { useSoknadContextStandard } from 'context/soknadContextStandard';
 import { useDebounceLagreSoknad } from 'hooks/useDebounceLagreSoknad';
-import { GenericSoknadContextState } from 'types/SoknadContext';
 import { setFocusOnErrorSummary } from 'components/schema/FormErrorSummary';
 import { IntlFormatters, useIntl } from 'react-intl';
 import SoknadFormWrapperNew from '../../../SoknadFormWrapper/SoknadFormWrapperNew';
@@ -35,7 +34,6 @@ import { logSkjemastegFullførtEvent } from '../../../../utils/amplitude';
 
 interface Props {
   onBackClick: () => void;
-  defaultValues?: GenericSoknadContextState<Soknad>;
 }
 
 type StønadAlternativer = {
@@ -118,7 +116,7 @@ export const getAndreUtbetalingerSchema = (formatMessage: IntlFormatters['format
       }),
   });
 
-export const AndreUtbetalinger = ({ onBackClick, defaultValues }: Props) => {
+export const AndreUtbetalinger = ({ onBackClick }: Props) => {
   const [errors, setErrors] = useState<SøknadValidationError[] | undefined>();
   const { søknadState, søknadDispatch } = useSoknadContextStandard();
   const { stepList, currentStepIndex, stepWizardDispatch } = useStepWizard();
@@ -233,7 +231,7 @@ export const AndreUtbetalinger = ({ onBackClick, defaultValues }: Props) => {
         legend={formatMessage({ id: 'søknad.andreUtbetalinger.lønn.label' })}
         name={'lønn'}
         id={'lønn'}
-        value={defaultValues?.søknad?.andreUtbetalinger?.lønn || ''}
+        value={søknadState?.søknad?.andreUtbetalinger?.lønn || ''}
         onChange={(value) => {
           setErrors(errors?.filter((error) => error.path != 'lønn'));
           updateSøknadData(søknadDispatch, {
@@ -267,7 +265,7 @@ export const AndreUtbetalinger = ({ onBackClick, defaultValues }: Props) => {
         id={'stønad'}
         size="medium"
         legend={formatMessage({ id: 'søknad.andreUtbetalinger.stønad.label' })}
-        value={defaultValues?.søknad?.andreUtbetalinger?.stønad || []}
+        value={søknadState?.søknad?.andreUtbetalinger?.stønad || []}
         onChange={(value) => {
           setErrors(errors?.filter((error) => error.path != 'stønad'));
           const afpErValgt = value.includes(StønadType.AFP);

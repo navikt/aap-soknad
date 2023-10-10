@@ -9,8 +9,6 @@ import { LucaGuidePanel } from '@navikt/aap-felles-react';
 import { useSoknadContextStandard } from 'context/soknadContextStandard';
 import { updateSøknadData } from 'context/soknadContextCommon';
 import { useDebounceLagreSoknad } from 'hooks/useDebounceLagreSoknad';
-
-import { GenericSoknadContextState } from 'types/SoknadContext';
 import * as classes from './StartDato.module.css';
 import { setFocusOnErrorSummary } from 'components/schema/FormErrorSummary';
 import SoknadFormWrapperNew from '../../../SoknadFormWrapper/SoknadFormWrapperNew';
@@ -37,7 +35,6 @@ export const FerieTypeToMessageKey = (ferieType: FerieType) => {
 
 interface Props {
   onBackClick: () => void;
-  defaultValues?: GenericSoknadContextState<Soknad>;
 }
 
 export const getStartDatoSchema = (formatMessage: IntlFormatters['formatMessage']) => {
@@ -122,7 +119,7 @@ export const getStartDatoSchema = (formatMessage: IntlFormatters['formatMessage'
   });
 };
 
-const StartDato = ({ onBackClick, defaultValues }: Props) => {
+const StartDato = ({ onBackClick }: Props) => {
   const { formatMessage } = useIntl();
   const debouncedLagre = useDebounceLagreSoknad<Soknad>();
   const { currentStepIndex, stepWizardDispatch, stepList } = useStepWizard();
@@ -178,7 +175,7 @@ const StartDato = ({ onBackClick, defaultValues }: Props) => {
         description={formatMessage({ id: 'søknad.startDato.sykepenger.description' })}
         name={'sykepenger'}
         id={'sykepenger'}
-        value={defaultValues?.søknad?.sykepenger || ''}
+        value={søknadState?.søknad?.sykepenger || ''}
         onChange={(value) => {
           clearErrors();
           updateSøknadData(søknadDispatch, { sykepenger: value, ferie: undefined });
@@ -195,7 +192,7 @@ const StartDato = ({ onBackClick, defaultValues }: Props) => {
             description={formatMessage({ id: 'søknad.startDato.skalHaFerie.description' })}
             name={'ferie.skalHaFerie'}
             id={'ferie.skalHaFerie'}
-            value={defaultValues?.søknad?.ferie?.skalHaFerie || ''}
+            value={søknadState?.søknad?.ferie?.skalHaFerie || ''}
             onChange={(value) => {
               clearErrors();
               updateSøknadData(søknadDispatch, {
@@ -212,7 +209,7 @@ const StartDato = ({ onBackClick, defaultValues }: Props) => {
               legend={formatMessage({ id: 'søknad.startDato.ferieType.label' })}
               name={'ferie.ferieType'}
               id={'ferie.ferieType'}
-              value={defaultValues?.søknad?.ferie?.ferieType || ''}
+              value={søknadState?.søknad?.ferie?.ferieType || ''}
               onChange={(value) => {
                 clearErrors();
                 updateSøknadData(søknadDispatch, {
@@ -239,12 +236,12 @@ const StartDato = ({ onBackClick, defaultValues }: Props) => {
                 <FraDato
                   clearErrors={clearErrors}
                   errorMessage={findError('ferie.fraDato')}
-                  defaultValues={defaultValues}
+                  defaultValues={søknadState}
                 />
                 <TilDato
                   clearErrors={clearErrors}
                   errorMessage={findError('ferie.tilDato')}
-                  defaultValues={defaultValues}
+                  defaultValues={søknadState}
                 />
               </div>
             </div>
@@ -255,7 +252,7 @@ const StartDato = ({ onBackClick, defaultValues }: Props) => {
                 className={classes?.antallDagerTekst}
                 name={'ferie.antallDager'}
                 id={'ferie.antallDager'}
-                value={defaultValues?.søknad?.ferie?.antallDager || ''}
+                value={søknadState?.søknad?.ferie?.antallDager || ''}
                 label={formatMessage({ id: 'søknad.startDato.antallDager.label' })}
                 description={formatMessage({ id: 'søknad.startDato.antallDager.description' })}
                 onChange={(value) => {

@@ -17,7 +17,6 @@ import { Soknad, UtenlandsPeriode } from 'types/Soknad';
 import { completeAndGoToNextStep, useStepWizard } from 'context/stepWizardContextV2';
 import ColorPanel from 'components/panel/ColorPanel';
 import { LucaGuidePanel } from '@navikt/aap-felles-react';
-import { GenericSoknadContextState } from 'types/SoknadContext';
 import { setFocusOnErrorSummary } from 'components/schema/FormErrorSummary';
 import { useIntl } from 'react-intl';
 import SoknadFormWrapperNew from 'components/SoknadFormWrapper/SoknadFormWrapperNew';
@@ -39,10 +38,9 @@ import {
 
 interface Props {
   onBackClick: () => void;
-  defaultValues?: GenericSoknadContextState<Soknad>;
 }
 
-export const Medlemskap = ({ onBackClick, defaultValues }: Props) => {
+export const Medlemskap = ({ onBackClick }: Props) => {
   const { formatMessage } = useIntl();
 
   const { currentStepIndex, stepWizardDispatch, stepList } = useStepWizard();
@@ -136,7 +134,7 @@ export const Medlemskap = ({ onBackClick, defaultValues }: Props) => {
           name={`medlemskap.harBoddINorgeSiste5År`}
           id={`medlemskap.harBoddINorgeSiste5År`}
           legend={formatMessage({ id: 'søknad.medlemskap.harBoddINorgeSiste5År.label' })}
-          value={defaultValues?.søknad?.medlemskap?.harBoddINorgeSiste5År || ''}
+          value={søknadState?.søknad?.medlemskap?.harBoddINorgeSiste5År || ''}
           onChange={(value) => {
             clearErrors();
             updateSøknadData(søknadDispatch, { medlemskap: { harBoddINorgeSiste5År: value } });
@@ -162,7 +160,7 @@ export const Medlemskap = ({ onBackClick, defaultValues }: Props) => {
               name={'medlemskap.harArbeidetINorgeSiste5År'}
               id={'medlemskap.harArbeidetINorgeSiste5År'}
               legend={formatMessage({ id: 'søknad.medlemskap.harArbeidetINorgeSiste5År.label' })}
-              value={defaultValues?.søknad?.medlemskap?.harArbeidetINorgeSiste5År || ''}
+              value={søknadState?.søknad?.medlemskap?.harArbeidetINorgeSiste5År || ''}
               onChange={(value) => {
                 clearErrors();
                 updateSøknadData(søknadDispatch, {
@@ -198,7 +196,7 @@ export const Medlemskap = ({ onBackClick, defaultValues }: Props) => {
               name={'medlemskap.arbeidetUtenforNorgeFørSykdom'}
               id={'medlemskap.arbeidetUtenforNorgeFørSykdom'}
               legend={formatMessage({ id: 'søknad.medlemskap.arbeidUtenforNorge.label' })}
-              value={defaultValues?.søknad?.medlemskap?.arbeidetUtenforNorgeFørSykdom || ''}
+              value={søknadState?.søknad?.medlemskap?.arbeidetUtenforNorgeFørSykdom || ''}
               onChange={(value) => {
                 clearErrors();
                 updateSøknadData(søknadDispatch, {
@@ -236,7 +234,7 @@ export const Medlemskap = ({ onBackClick, defaultValues }: Props) => {
               description={formatMessage({
                 id: 'søknad.medlemskap.iTilleggArbeidUtenforNorge.description',
               })}
-              value={defaultValues?.søknad?.medlemskap?.iTilleggArbeidUtenforNorge || ''}
+              value={søknadState?.søknad?.medlemskap?.iTilleggArbeidUtenforNorge || ''}
               onChange={(value) => {
                 clearErrors();
                 updateSøknadData(søknadDispatch, {
@@ -283,10 +281,10 @@ export const Medlemskap = ({ onBackClick, defaultValues }: Props) => {
                 })}
               </BodyShort>
             )}
-            {defaultValues?.søknad?.medlemskap?.utenlandsOpphold &&
-              defaultValues?.søknad.medlemskap.utenlandsOpphold.length > 0 && (
+            {søknadState?.søknad?.medlemskap?.utenlandsOpphold &&
+              søknadState?.søknad.medlemskap.utenlandsOpphold.length > 0 && (
                 <UtenlandsOppholdTabell
-                  utenlandsPerioder={defaultValues?.søknad?.medlemskap.utenlandsOpphold}
+                  utenlandsPerioder={søknadState?.søknad?.medlemskap.utenlandsOpphold}
                   setSelectedUtenlandsPeriode={setSelectedUtenlandsPeriode}
                   setShowUtenlandsPeriodeModal={setShowUtenlandsPeriodeModal}
                   arbeidEllerBodd={arbeidEllerBodd}
