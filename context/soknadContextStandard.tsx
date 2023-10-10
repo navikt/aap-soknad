@@ -130,7 +130,7 @@ export function soknadReducerStandard(
 
     case SoknadActionKeys.DELETE_VEDLEGG: {
       const FilesUtenSpesifikkVedlegg = state?.søknad?.vedlegg?.[action.key]?.filter(
-        (e) => e.id !== action.payload.id
+        (e) => e.vedleggId !== action.payload.vedleggId
       );
 
       return {
@@ -183,7 +183,7 @@ export const getVedleggUuidsFromSoknad = (søknad?: Soknad) => {
   const vedlegg = søknad?.vedlegg;
   return Object.values(vedlegg || {})
     .flat()
-    .map((vedlegg) => vedlegg?.id);
+    .map((vedlegg) => vedlegg?.vedleggId);
 };
 
 export const deleteOpplastedeVedlegg = async (søknad?: Soknad) => {

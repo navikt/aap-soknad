@@ -130,7 +130,7 @@ export const mapSøknadToBackend = (søknad?: Soknad): SøknadBackendState => {
     studier: {
       erStudent: getJaNeiAvbrutt(søknad?.student?.erStudent),
       kommeTilbake: getJaNeiVetIkke(søknad?.student?.kommeTilbake),
-      vedlegg: søknad?.vedlegg?.[AVBRUTT_STUDIE_VEDLEGG]?.map((vedlegg) => vedlegg.id) ?? [],
+      vedlegg: søknad?.vedlegg?.[AVBRUTT_STUDIE_VEDLEGG]?.map((vedlegg) => vedlegg.vedleggId) ?? [],
     },
     registrerteBehandlere,
     andreBehandlere,
@@ -142,7 +142,7 @@ export const mapSøknadToBackend = (søknad?: Soknad): SøknadBackendState => {
               fraArbeidsgiver: jaNeiToBoolean(søknad?.andreUtbetalinger?.lønn),
               vedlegg:
                 søknad?.vedlegg?.[AttachmentType.LØNN_OG_ANDRE_GODER]?.map(
-                  (vedlegg) => vedlegg.id
+                  (vedlegg) => vedlegg.vedleggId
                 ) ?? [],
             },
           }
@@ -159,26 +159,31 @@ export const mapSøknadToBackend = (søknad?: Soknad): SøknadBackendState => {
               return {
                 type: stønad,
                 vedlegg:
-                  søknad?.vedlegg?.[AttachmentType.OMSORGSSTØNAD]?.map((vedlegg) => vedlegg.id) ??
-                  [],
+                  søknad?.vedlegg?.[AttachmentType.OMSORGSSTØNAD]?.map(
+                    (vedlegg) => vedlegg.vedleggId
+                  ) ?? [],
               };
             case StønadType.LÅN:
               return {
                 type: stønad,
-                vedlegg: søknad?.vedlegg?.[AttachmentType.LÅN]?.map((vedlegg) => vedlegg.id) ?? [],
+                vedlegg:
+                  søknad?.vedlegg?.[AttachmentType.LÅN]?.map((vedlegg) => vedlegg.vedleggId) ?? [],
               };
             case StønadType.STIPEND:
               return {
                 type: stønad,
                 vedlegg:
-                  søknad?.vedlegg?.[AttachmentType.SYKESTIPEND]?.map((vedlegg) => vedlegg.id) ?? [],
+                  søknad?.vedlegg?.[AttachmentType.SYKESTIPEND]?.map(
+                    (vedlegg) => vedlegg.vedleggId
+                  ) ?? [],
               };
             case StønadType.UTLAND:
               return {
                 type: stønad,
                 vedlegg:
-                  søknad?.vedlegg?.[AttachmentType.UTLANDSSTØNAD]?.map((vedlegg) => vedlegg.id) ??
-                  [],
+                  søknad?.vedlegg?.[AttachmentType.UTLANDSSTØNAD]?.map(
+                    (vedlegg) => vedlegg.vedleggId
+                  ) ?? [],
               };
             default:
               return { type: stønad };
@@ -198,11 +203,13 @@ export const mapSøknadToBackend = (søknad?: Soknad): SøknadBackendState => {
         relasjon: barn.relasjon,
         merEnnIG: jaNeiToBoolean(barn.harInntekt),
         vedlegg: getVedleggForManueltBarn(barn.internId, søknad?.vedlegg)?.map(
-          (vedlegg) => vedlegg?.id
+          (vedlegg) => vedlegg?.vedleggId
         ),
       })) ?? [],
     tilleggsopplysninger: søknad?.tilleggsopplysninger,
-    ...(søknad?.vedlegg?.ANNET ? { vedlegg: søknad?.vedlegg?.ANNET?.map((e) => e?.id) } : {}),
+    ...(søknad?.vedlegg?.ANNET
+      ? { vedlegg: søknad?.vedlegg?.ANNET?.map((e) => e?.vedleggId) }
+      : {}),
   };
 };
 

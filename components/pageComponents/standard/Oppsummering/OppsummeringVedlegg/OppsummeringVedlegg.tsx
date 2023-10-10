@@ -52,7 +52,7 @@ export const OppsummeringVedlegg = ({ søknadState }: Props) => {
                 <ul>
                   {søknadState?.søknad?.vedlegg?.[vedlegg.type as keyof SoknadVedlegg]?.map(
                     (vedlegg) => (
-                      <li key={vedlegg.id}>{vedlegg?.name}</li>
+                      <li key={vedlegg.vedleggId}>{vedlegg?.name}</li>
                     )
                   )}
                 </ul>
@@ -69,7 +69,7 @@ export const OppsummeringVedlegg = ({ søknadState }: Props) => {
                 <ul>
                   {getVedleggForManueltBarn(barn.internId, søknadState.søknad?.vedlegg)?.map(
                     (vedlegg) => (
-                      <li key={vedlegg.id}>{vedlegg?.name}</li>
+                      <li key={vedlegg.vedleggId}>{vedlegg?.name}</li>
                     )
                   )}
                 </ul>
@@ -84,7 +84,7 @@ export const OppsummeringVedlegg = ({ søknadState }: Props) => {
           <Label>{'Annet:'}</Label>
           <ul>
             {søknadState?.søknad?.vedlegg?.ANNET?.map((vedlegg) => (
-              <li key={vedlegg.id}>{vedlegg?.name}</li>
+              <li key={vedlegg.vedleggId}>{vedlegg?.name}</li>
             ))}
           </ul>
         </div>
