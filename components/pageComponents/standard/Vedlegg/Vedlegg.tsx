@@ -1,12 +1,11 @@
 import { Soknad } from 'types/Soknad';
-import React, { useEffect, useRef, useState } from 'react';
-import { Alert, BodyLong, BodyShort, Heading, Label, ReadMore, Textarea } from '@navikt/ds-react';
+import React, { useEffect } from 'react';
+import { Alert, BodyLong, BodyShort, Heading, Label, Textarea } from '@navikt/ds-react';
 import { completeAndGoToNextStep, useStepWizard } from 'context/stepWizardContextV2';
 import { addVedlegg, deleteVedlegg, updateSøknadData } from 'context/soknadContextCommon';
 import { useSoknadContextStandard } from 'context/soknadContextStandard';
 import { useDebounceLagreSoknad } from 'hooks/useDebounceLagreSoknad';
-import { scrollRefIntoView } from 'utils/dom';
-import { FileInput, LucaGuidePanel, ScanningGuide } from '@navikt/aap-felles-react';
+import { FileInput, LucaGuidePanel } from '@navikt/aap-felles-react';
 import { useIntl } from 'react-intl';
 import SoknadFormWrapperNew from '../../../SoknadFormWrapper/SoknadFormWrapperNew';
 import { SøknadValidationError } from '../../../schema/FormErrorSummaryNew';
@@ -14,27 +13,17 @@ import { logSkjemastegFullførtEvent } from '../../../../utils/amplitude';
 import { AttachmentType } from '../AndreUtbetalinger/AndreUtbetalinger';
 import { AVBRUTT_STUDIE_VEDLEGG } from '../Student/Student';
 import { setFocusOnErrorSummary } from '../../../schema/FormErrorSummary';
+import { ScanningGuide } from './scanningguide/ScanningGuide';
 
 interface Props {
   onBackClick: () => void;
 }
 
 const Vedlegg = ({ onBackClick }: Props) => {
-  const { formatMessage } = useIntl();
+  const { formatMessage, locale } = useIntl();
   const { søknadState, søknadDispatch } = useSoknadContextStandard();
-  const { stepWizardDispatch, currentStepIndex } = useStepWizard();
-  const { stepList } = useStepWizard();
+  const { stepWizardDispatch, currentStepIndex, stepList } = useStepWizard();
   const debouncedLagre = useDebounceLagreSoknad<Soknad>();
-  const { locale } = useIntl();
-
-  const [scanningGuideOpen, setScanningGuideOpen] = useState(false);
-  const scanningGuideElement = useRef(null);
-
-  useEffect(() => {
-    if (scanningGuideOpen) {
-      if (scanningGuideElement?.current != null) scrollRefIntoView(scanningGuideElement);
-    }
-  }, [scanningGuideOpen]);
 
   useEffect(() => {
     debouncedLagre(søknadState, stepList, {});
@@ -56,7 +45,7 @@ const Vedlegg = ({ onBackClick }: Props) => {
   return (
     <SoknadFormWrapperNew
       onNext={() => {
-        if (!errors) {
+        if (errors.length === 0) {
           logSkjemastegFullførtEvent(currentStepIndex ?? 0);
           completeAndGoToNextStep(stepWizardDispatch);
         } else {
@@ -95,18 +84,7 @@ const Vedlegg = ({ onBackClick }: Props) => {
           <BodyLong>{formatMessage({ id: 'søknad.vedlegg.ingenVedlegg.alert.text3' })}</BodyLong>
         </Alert>
       )}
-      <div>
-        <BodyLong>{formatMessage({ id: 'søknad.vedlegg.vedleggPåPapir.text' })}</BodyLong>
-        <ReadMore
-          header={formatMessage({ id: 'søknad.vedlegg.vedleggPåPapir.readMore.title' })}
-          type={'button'}
-          open={scanningGuideOpen}
-          onClick={() => setScanningGuideOpen(!scanningGuideOpen)}
-          ref={scanningGuideElement}
-        >
-          <ScanningGuide locale={locale} />
-        </ReadMore>
-      </div>
+      <ScanningGuide />
 
       {søknadState?.requiredVedlegg?.find((e) => e.type === AVBRUTT_STUDIE_VEDLEGG) && (
         <FileInput
@@ -125,6 +103,7 @@ const Vedlegg = ({ onBackClick }: Props) => {
           files={søknadState.søknad?.vedlegg?.AVBRUTT_STUDIE || []}
         />
       )}
+
       {søknadState?.requiredVedlegg?.find((e) => e.type === AttachmentType.LØNN_OG_ANDRE_GODER) && (
         <FileInput
           locale={locale}
@@ -142,6 +121,7 @@ const Vedlegg = ({ onBackClick }: Props) => {
           files={søknadState.søknad?.vedlegg?.LØNN_OG_ANDRE_GODER || []}
         />
       )}
+
       {søknadState?.requiredVedlegg?.find((e) => e.type === AttachmentType.UTLANDSSTØNAD) && (
         <FileInput
           locale={locale}
@@ -159,6 +139,7 @@ const Vedlegg = ({ onBackClick }: Props) => {
           files={søknadState.søknad?.vedlegg?.UTLANDSSTØNAD || []}
         />
       )}
+
       {søknadState.requiredVedlegg?.find((e) => e.type === AttachmentType.LÅN) && (
         <FileInput
           locale={locale}
@@ -176,6 +157,7 @@ const Vedlegg = ({ onBackClick }: Props) => {
           files={søknadState.søknad?.vedlegg?.LÅN || []}
         />
       )}
+
       {søknadState.requiredVedlegg?.find((e) => e.type === AttachmentType.SYKESTIPEND) && (
         <FileInput
           locale={locale}
@@ -193,6 +175,7 @@ const Vedlegg = ({ onBackClick }: Props) => {
           files={søknadState.søknad?.vedlegg?.SYKESTIPEND || []}
         />
       )}
+
       {søknadState?.søknad?.manuelleBarn?.map((barn) => {
         const requiredVedlegg = søknadState?.requiredVedlegg.find(
           (e) => e?.type === `barn-${barn.internId}`
@@ -221,6 +204,7 @@ const Vedlegg = ({ onBackClick }: Props) => {
           />
         );
       })}
+
       <FileInput
         locale={locale}
         heading={formatMessage({ id: 'søknad.vedlegg.andreVedlegg.title' })}
@@ -236,6 +220,7 @@ const Vedlegg = ({ onBackClick }: Props) => {
         uploadUrl="/aap/soknad/api/vedlegg/lagre/"
         files={søknadState.søknad?.vedlegg?.ANNET || []}
       />
+
       <Textarea
         value={søknadState.søknad?.tilleggsopplysninger}
         name={`tilleggsopplysninger`}
