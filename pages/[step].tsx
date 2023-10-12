@@ -56,7 +56,6 @@ import { Steg0 } from 'components/pageComponents/standard/Steg0/Steg0';
 import * as classes from './step.module.css';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { logger } from '@navikt/aap-felles-utils';
-import { migrerMellomlagretSøknad } from '../lib/utils/migrateMellomlagring';
 
 interface PageProps {
   søker: SokerOppslagState;
@@ -264,9 +263,9 @@ export const getServerSideProps = beskyttetSide(
         },
       };
     }
-    const migrertMellomlagretSøknad = migrerMellomlagretSøknad(mellomlagretSøknad);
+
     return {
-      props: { søker, mellomlagretSøknad: migrertMellomlagretSøknad },
+      props: { søker, mellomlagretSøknad },
     };
   }
 );
