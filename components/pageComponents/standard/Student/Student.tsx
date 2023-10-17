@@ -20,7 +20,6 @@ import { logSkjemastegFullførtEvent } from '../../../../utils/amplitude';
 import { SøknadValidationError } from '../../../schema/FormErrorSummaryNew';
 import SoknadFormWrapperNew from '../../../SoknadFormWrapper/SoknadFormWrapperNew';
 
-export const AVBRUTT_STUDIE_VEDLEGG = 'avbruttStudie';
 export const STUDENT = 'student';
 export const ER_STUDENT = 'erStudent';
 export const KOMME_TILBAKE = 'kommeTilbake';
@@ -107,14 +106,14 @@ const Student = ({ onBackClick }: Props) => {
           addRequiredVedlegg(
             [
               {
-                type: AVBRUTT_STUDIE_VEDLEGG,
+                type: 'AVBRUTT_STUDIE',
                 description: formatMessage({ id: 'søknad.student.vedlegg.description' }),
               },
             ],
             søknadDispatch
           );
         } else {
-          removeRequiredVedlegg(AVBRUTT_STUDIE_VEDLEGG, søknadDispatch);
+          removeRequiredVedlegg('AVBRUTT_STUDIE', søknadDispatch);
         }
 
         logSkjemastegFullførtEvent(currentStepIndex ?? 0);

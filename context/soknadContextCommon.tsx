@@ -1,4 +1,9 @@
-import { GenericSoknadContextState, RequiredVedlegg, SøknadType } from 'types/SoknadContext';
+import {
+  AttachmentType,
+  GenericSoknadContextState,
+  RequiredVedlegg,
+  SøknadType,
+} from 'types/SoknadContext';
 import { Dispatch, ReactNode } from 'react';
 import { OppslagBarn, OppslagBehandler } from 'context/sokerOppslagContext';
 import { Vedlegg } from '@navikt/aap-felles-react';
@@ -60,20 +65,20 @@ type AddBehandlerIfMissing = {
   type: SoknadActionKeys.ADD_BEHANDLER_IF_MISSING;
   payload: OppslagBehandler[];
 };
-type AddVedlegg = {
+type AddRequiredVedlegg = {
   type: SoknadActionKeys.ADD_REQUIRED_VEDLEGG;
   payload: RequiredVedlegg[];
 };
-type RemoveVedlegg = {
+type RemoveRequiredVedlegg = {
   type: SoknadActionKeys.REMOVE_REQUIRED_VEDLEGG;
-  payload?: string;
+  payload?: AttachmentType;
 };
 type AddSøknadUrl = {
   type: SoknadActionKeys.ADD_SØKNAD_URL;
   payload: string;
 };
 
-type UploadVedlegg = {
+type AddVedlegg = {
   type: SoknadActionKeys.ADD_VEDLEGG;
   payload: Vedlegg[];
   key: keyof SoknadVedlegg;
@@ -92,10 +97,10 @@ export type SoknadAction<SoknadStateType> =
   | UpdateSoknad<SoknadStateType>
   | AddBarnIfMissing
   | AddBehandlerIfMissing
-  | AddVedlegg
-  | RemoveVedlegg
+  | AddRequiredVedlegg
+  | RemoveRequiredVedlegg
   | AddSøknadUrl
-  | UploadVedlegg
+  | AddVedlegg
   | DeleteVedlegg;
 
 export function setSoknadStateFraProps<SoknadStateType>(
@@ -150,7 +155,7 @@ export async function addRequiredVedlegg<SoknadStateType>(
 }
 
 export async function removeRequiredVedlegg<SoknadStateType>(
-  vedleggType: string,
+  vedleggType: AttachmentType,
   dispatch: Dispatch<SoknadAction<SoknadStateType>>
 ) {
   if (vedleggType)

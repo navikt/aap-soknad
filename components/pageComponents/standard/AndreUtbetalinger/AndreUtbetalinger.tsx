@@ -31,6 +31,7 @@ import SoknadFormWrapperNew from '../../../SoknadFormWrapper/SoknadFormWrapperNe
 import { validate } from '../../../../lib/utils/validationUtils';
 import { SøknadValidationError } from '../../../schema/FormErrorSummaryNew';
 import { logSkjemastegFullførtEvent } from '../../../../utils/amplitude';
+import { AttachmentType } from '../../../../types/SoknadContext';
 
 interface Props {
   onBackClick: () => void;
@@ -39,16 +40,6 @@ interface Props {
 type StønadAlternativer = {
   [key in StønadType]: string;
 };
-
-export enum AttachmentType {
-  LØNN_OG_ANDRE_GODER = 'LØNN_OG_ANDRE_GODER',
-  OMSORGSSTØNAD = 'OMSORGSSTØNAD',
-  UTLANDSSTØNAD = 'UTLANDSSTØNAD',
-  AVBRUTT_STUDIE = 'avbruttStudie',
-  SYKESTIPEND = 'SYKESTIPEND',
-  LÅN = 'LÅN',
-  ANNET = 'ANNET',
-}
 
 export enum StønadType {
   ØKONOMISK_SOSIALHJELP = 'ØKONOMISK_SOSIALHJELP',
@@ -148,22 +139,19 @@ export const AndreUtbetalinger = ({ onBackClick }: Props) => {
     let attachments: Array<{ type: AttachmentType; description: string }> = [];
 
     if (søknadState.søknad?.andreUtbetalinger?.stønad?.includes(StønadType.OMSORGSSTØNAD)) {
-      addAttachment(AttachmentType.OMSORGSSTØNAD, 'søknad.andreUtbetalinger.vedlegg.omsorgsstønad');
+      addAttachment('OMSORGSSTØNAD', 'søknad.andreUtbetalinger.vedlegg.omsorgsstønad');
     }
     if (søknadState.søknad?.andreUtbetalinger?.stønad?.includes(StønadType.UTLAND)) {
-      addAttachment(AttachmentType.UTLANDSSTØNAD, 'søknad.andreUtbetalinger.vedlegg.utlandsStønad');
+      addAttachment('UTLANDSSTØNAD', 'søknad.andreUtbetalinger.vedlegg.utlandsStønad');
     }
     if (søknadState.søknad?.andreUtbetalinger?.stønad?.includes(StønadType.STIPEND)) {
-      addAttachment(AttachmentType.SYKESTIPEND, 'søknad.andreUtbetalinger.vedlegg.sykeStipend');
+      addAttachment('SYKESTIPEND', 'søknad.andreUtbetalinger.vedlegg.sykeStipend');
     }
     if (søknadState.søknad?.andreUtbetalinger?.stønad?.includes(StønadType.LÅN)) {
-      addAttachment(AttachmentType.LÅN, 'søknad.andreUtbetalinger.vedlegg.lån');
+      addAttachment('LÅN', 'søknad.andreUtbetalinger.vedlegg.lån');
     }
     if (søknadState.søknad?.andreUtbetalinger?.lønn === JaEllerNei.JA) {
-      addAttachment(
-        AttachmentType.LØNN_OG_ANDRE_GODER,
-        'søknad.andreUtbetalinger.vedlegg.andreGoder'
-      );
+      addAttachment('LØNN_OG_ANDRE_GODER', 'søknad.andreUtbetalinger.vedlegg.andreGoder');
     }
     return attachments;
   }, [søknadState.søknad?.andreUtbetalinger?.stønad, søknadState.søknad?.andreUtbetalinger?.lønn]);
@@ -193,11 +181,11 @@ export const AndreUtbetalinger = ({ onBackClick }: Props) => {
   }, [søknadState.søknad?.andreUtbetalinger?.stønad]);
 
   useEffect(() => {
-    removeRequiredVedlegg(AttachmentType.OMSORGSSTØNAD, søknadDispatch);
-    removeRequiredVedlegg(AttachmentType.UTLANDSSTØNAD, søknadDispatch);
-    removeRequiredVedlegg(AttachmentType.SYKESTIPEND, søknadDispatch);
-    removeRequiredVedlegg(AttachmentType.LÅN, søknadDispatch);
-    removeRequiredVedlegg(AttachmentType.LØNN_OG_ANDRE_GODER, søknadDispatch);
+    removeRequiredVedlegg('OMSORGSSTØNAD', søknadDispatch);
+    removeRequiredVedlegg('UTLANDSSTØNAD', søknadDispatch);
+    removeRequiredVedlegg('SYKESTIPEND', søknadDispatch);
+    removeRequiredVedlegg('LÅN', søknadDispatch);
+    removeRequiredVedlegg('LØNN_OG_ANDRE_GODER', søknadDispatch);
     addRequiredVedlegg(attachments, søknadDispatch);
   }, [attachments]);
 

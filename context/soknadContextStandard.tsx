@@ -110,11 +110,11 @@ export function soknadReducerStandard(
     case SoknadActionKeys.ADD_VEDLEGG: {
       const filesToAdd = [...(state.søknad?.vedlegg?.[action.key] || []), ...action.payload];
 
-      const updatedRequiredVedlegg = state.requiredVedlegg.map((vedleg) => {
-        if (vedleg.type === action.key) {
-          return { ...vedleg, completed: filesToAdd.length > 0 };
+      const updatedRequiredVedlegg = state.requiredVedlegg.map((vedlegg) => {
+        if (vedlegg.type === action.key) {
+          return { ...vedlegg, completed: filesToAdd.length > 0 };
         } else {
-          return vedleg;
+          return vedlegg;
         }
       });
 
@@ -129,15 +129,27 @@ export function soknadReducerStandard(
     }
 
     case SoknadActionKeys.DELETE_VEDLEGG: {
-      const FilesUtenSpesifikkVedlegg = state?.søknad?.vedlegg?.[action.key]?.filter(
+      const filesUtenSlettetVedlegg = state?.søknad?.vedlegg?.[action.key]?.filter(
         (e) => e.vedleggId !== action.payload.vedleggId
       );
 
+      const updatedRequiredVedlegg = state.requiredVedlegg.map((vedleg) => {
+        if (vedleg.type === action.key) {
+          return {
+            ...vedleg,
+            completed: filesUtenSlettetVedlegg && filesUtenSlettetVedlegg.length > 0,
+          };
+        } else {
+          return vedleg;
+        }
+      });
+
       return {
         ...state,
+        requiredVedlegg: updatedRequiredVedlegg,
         søknad: {
           ...state.søknad,
-          vedlegg: { ...state.søknad?.vedlegg, [action.key]: FilesUtenSpesifikkVedlegg || [] },
+          vedlegg: { ...state.søknad?.vedlegg, [action.key]: filesUtenSlettetVedlegg || [] },
         },
       };
     }

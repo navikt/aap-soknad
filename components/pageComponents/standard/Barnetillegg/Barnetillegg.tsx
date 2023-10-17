@@ -84,7 +84,7 @@ export const Barnetillegg = ({ onBackClick }: Props) => {
       [
         {
           filterType: barn.relasjon,
-          type: `barn-${barn.internId}`,
+          type: barn.internId,
           description: formatMessage(
             { id: `søknad.vedlegg.andreBarn.description.${barn.relasjon}` },
             {

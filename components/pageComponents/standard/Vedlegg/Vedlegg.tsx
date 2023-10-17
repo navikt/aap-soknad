@@ -10,8 +10,6 @@ import { useIntl } from 'react-intl';
 import SoknadFormWrapperNew from '../../../SoknadFormWrapper/SoknadFormWrapperNew';
 import { SøknadValidationError } from '../../../schema/FormErrorSummaryNew';
 import { logSkjemastegFullførtEvent } from '../../../../utils/amplitude';
-import { AttachmentType } from '../AndreUtbetalinger/AndreUtbetalinger';
-import { AVBRUTT_STUDIE_VEDLEGG } from '../Student/Student';
 import { setFocusOnErrorSummary } from '../../../schema/FormErrorSummary';
 import { ScanningGuide } from './scanningguide/ScanningGuide';
 
@@ -86,7 +84,7 @@ const Vedlegg = ({ onBackClick }: Props) => {
       )}
       <ScanningGuide />
 
-      {søknadState?.requiredVedlegg?.find((e) => e.type === AVBRUTT_STUDIE_VEDLEGG) && (
+      {søknadState?.requiredVedlegg?.find((e) => e.type === 'AVBRUTT_STUDIE') && (
         <FileInput
           locale={locale}
           id={'avbruttStudie'}
@@ -104,7 +102,7 @@ const Vedlegg = ({ onBackClick }: Props) => {
         />
       )}
 
-      {søknadState?.requiredVedlegg?.find((e) => e.type === AttachmentType.LØNN_OG_ANDRE_GODER) && (
+      {søknadState?.requiredVedlegg?.find((e) => e.type === 'LØNN_OG_ANDRE_GODER') && (
         <FileInput
           locale={locale}
           id={'LØNN_OG_ANDRE_GODER'}
@@ -122,7 +120,7 @@ const Vedlegg = ({ onBackClick }: Props) => {
         />
       )}
 
-      {søknadState?.requiredVedlegg?.find((e) => e.type === AttachmentType.UTLANDSSTØNAD) && (
+      {søknadState?.requiredVedlegg?.find((e) => e.type === 'UTLANDSSTØNAD') && (
         <FileInput
           locale={locale}
           id={'UTLANDSSTØNAD'}
@@ -140,7 +138,7 @@ const Vedlegg = ({ onBackClick }: Props) => {
         />
       )}
 
-      {søknadState.requiredVedlegg?.find((e) => e.type === AttachmentType.LÅN) && (
+      {søknadState.requiredVedlegg?.find((e) => e.type === 'LÅN') && (
         <FileInput
           locale={locale}
           id={'LÅN'}
@@ -158,7 +156,7 @@ const Vedlegg = ({ onBackClick }: Props) => {
         />
       )}
 
-      {søknadState.requiredVedlegg?.find((e) => e.type === AttachmentType.SYKESTIPEND) && (
+      {søknadState.requiredVedlegg?.find((e) => e.type === 'SYKESTIPEND') && (
         <FileInput
           locale={locale}
           id={'SYKESTIPEND'}
@@ -177,9 +175,7 @@ const Vedlegg = ({ onBackClick }: Props) => {
       )}
 
       {søknadState?.søknad?.manuelleBarn?.map((barn) => {
-        const requiredVedlegg = søknadState?.requiredVedlegg.find(
-          (e) => e?.type === `barn-${barn.internId}`
-        );
+        const requiredVedlegg = søknadState?.requiredVedlegg.find((e) => e?.type === barn.internId);
         return (
           <FileInput
             locale={locale}
