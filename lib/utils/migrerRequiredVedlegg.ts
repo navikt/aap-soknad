@@ -8,8 +8,10 @@
 import { RequiredVedlegg } from '../../types/SoknadContext';
 import { SoknadVedlegg } from '../../types/Soknad';
 
-export function migrerRequiredVedlegg(requiredVedlegg: RequiredVedlegg[]): RequiredVedlegg[] {
-  return requiredVedlegg.map((vedlegg) => {
+export function migrerRequiredVedlegg(
+  requiredVedlegg?: RequiredVedlegg[]
+): RequiredVedlegg[] | undefined {
+  return requiredVedlegg?.map((vedlegg) => {
     const type = vedlegg.type as string;
     if (type === 'avbruttStudie') {
       return { ...vedlegg, type: 'AVBRUTT_STUDIE' };

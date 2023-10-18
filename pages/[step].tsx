@@ -119,7 +119,7 @@ const Steps = ({ søker, mellomlagretSøknad }: PageProps) => {
 
       const postResponse = await postSøknad({ søknad, kvittering: søknadPdf });
       if (postResponse?.ok) {
-        const harVedlegg = søknadState?.requiredVedlegg?.length > 0;
+        const harVedlegg = søknadState.requiredVedlegg && søknadState?.requiredVedlegg?.length > 0;
         const erIkkeKomplett = !!søknadState?.requiredVedlegg?.find(
           (vedlegg) => !vedlegg.completed
         );
@@ -234,11 +234,21 @@ export const getServerSideProps = beskyttetSide(
     const migrertRequiredVedlegg = migrerRequiredVedlegg(mellomlagretSøknad.requiredVedlegg);
     const migrertVedlegg = migrerVedlegg(mellomlagretSøknad.søknad?.vedlegg);
 
-    const updatedMellomLagretSøknad = {
-      ...mellomlagretSøknad,
-      søknad: { ...mellomlagretSøknad.søknad, vedlegg: migrertVedlegg },
-      requiredVedlegg: migrertRequiredVedlegg,
-    };
+    let updatedMellomLagretSøknad = mellomlagretSøknad;
+
+    if (migrertRequiredVedlegg) {
+      updatedMellomLagretSøknad = {
+        ...updatedMellomLagretSøknad,
+        requiredVedlegg: migrertRequiredVedlegg,
+      };
+    }
+
+    if (migrertVedlegg) {
+      updatedMellomLagretSøknad = {
+        ...updatedMellomLagretSøknad,
+        søknad: { ...mellomlagretSøknad.søknad, vedlegg: migrertVedlegg },
+      };
+    }
 
     return {
       props: { søker, mellomlagretSøknad: updatedMellomLagretSøknad },
