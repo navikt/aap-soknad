@@ -19,7 +19,7 @@ export interface GenericSoknadContextState<SoknadStateType> {
   type?: SøknadType;
   søknad?: SoknadStateType;
   lagretStepList?: Array<StepType>;
-  requiredVedlegg?: RequiredVedlegg[];
+  requiredVedlegg: RequiredVedlegg[];
   søknadUrl?: string;
   sistLagret?: string;
 }
