@@ -13,6 +13,10 @@ import { logSkjemastegFullførtEvent } from '../../../../utils/amplitude';
 import { setFocusOnErrorSummary } from '../../../schema/FormErrorSummary';
 import { ScanningGuide } from './scanningguide/ScanningGuide';
 
+const deleteUrl = '/aap/soknad/api/vedlegg/slett/?uuids=';
+const uploadUrl = '/aap/soknad/api/vedlegg/lagre/';
+const readAttachmentUrl = '/aap/soknad/vedlegg/';
+
 interface Props {
   onBackClick: () => void;
 }
@@ -96,8 +100,9 @@ const Vedlegg = ({ onBackClick }: Props) => {
           onDelete={(vedlegg) => {
             deleteVedlegg(søknadDispatch, vedlegg, 'AVBRUTT_STUDIE');
           }}
-          deleteUrl="/aap/soknad/api/vedlegg/slett/?uuids="
-          uploadUrl="/aap/soknad/api/vedlegg/lagre/"
+          deleteUrl={deleteUrl}
+          uploadUrl={uploadUrl}
+          readAttachmentUrl={readAttachmentUrl}
           files={søknadState.søknad?.vedlegg?.AVBRUTT_STUDIE || []}
         />
       )}
@@ -114,8 +119,9 @@ const Vedlegg = ({ onBackClick }: Props) => {
           onDelete={(vedlegg) => {
             deleteVedlegg(søknadDispatch, vedlegg, 'LØNN_OG_ANDRE_GODER');
           }}
-          deleteUrl="/aap/soknad/api/vedlegg/slett/?uuids="
-          uploadUrl="/aap/soknad/api/vedlegg/lagre/"
+          deleteUrl={deleteUrl}
+          uploadUrl={uploadUrl}
+          readAttachmentUrl={readAttachmentUrl}
           files={søknadState.søknad?.vedlegg?.LØNN_OG_ANDRE_GODER || []}
         />
       )}
@@ -132,8 +138,9 @@ const Vedlegg = ({ onBackClick }: Props) => {
           onDelete={(vedlegg) => {
             deleteVedlegg(søknadDispatch, vedlegg, 'UTLANDSSTØNAD');
           }}
-          deleteUrl="/aap/soknad/api/vedlegg/slett/?uuids="
-          uploadUrl="/aap/soknad/api/vedlegg/lagre/"
+          deleteUrl={deleteUrl}
+          uploadUrl={uploadUrl}
+          readAttachmentUrl={readAttachmentUrl}
           files={søknadState.søknad?.vedlegg?.UTLANDSSTØNAD || []}
         />
       )}
@@ -150,8 +157,9 @@ const Vedlegg = ({ onBackClick }: Props) => {
           onDelete={(vedlegg) => {
             deleteVedlegg(søknadDispatch, vedlegg, 'LÅN');
           }}
-          deleteUrl="/aap/soknad/api/vedlegg/slett/?uuids="
-          uploadUrl="/aap/soknad/api/vedlegg/lagre/"
+          deleteUrl={deleteUrl}
+          uploadUrl={uploadUrl}
+          readAttachmentUrl={readAttachmentUrl}
           files={søknadState.søknad?.vedlegg?.LÅN || []}
         />
       )}
@@ -168,8 +176,9 @@ const Vedlegg = ({ onBackClick }: Props) => {
           onDelete={(vedlegg) => {
             deleteVedlegg(søknadDispatch, vedlegg, 'SYKESTIPEND');
           }}
-          deleteUrl="/aap/soknad/api/vedlegg/slett/?uuids="
-          uploadUrl="/aap/soknad/api/vedlegg/lagre/"
+          deleteUrl={deleteUrl}
+          uploadUrl={uploadUrl}
+          readAttachmentUrl={readAttachmentUrl}
           files={søknadState.søknad?.vedlegg?.SYKESTIPEND || []}
         />
       )}
@@ -194,8 +203,9 @@ const Vedlegg = ({ onBackClick }: Props) => {
             onDelete={(vedlegg) => {
               deleteVedlegg(søknadDispatch, vedlegg, barn.internId);
             }}
-            deleteUrl="/aap/soknad/api/vedlegg/slett/?uuids="
-            uploadUrl="/aap/soknad/api/vedlegg/lagre/"
+            deleteUrl={deleteUrl}
+            uploadUrl={uploadUrl}
+            readAttachmentUrl={readAttachmentUrl}
             files={søknadState.søknad?.vedlegg?.[barn.internId] || []}
           />
         );
@@ -212,8 +222,9 @@ const Vedlegg = ({ onBackClick }: Props) => {
         onDelete={(vedlegg) => {
           deleteVedlegg(søknadDispatch, vedlegg, 'ANNET');
         }}
-        deleteUrl="/aap/soknad/api/vedlegg/slett/?uuids="
-        uploadUrl="/aap/soknad/api/vedlegg/lagre/"
+        deleteUrl={deleteUrl}
+        uploadUrl={uploadUrl}
+        readAttachmentUrl={readAttachmentUrl}
         files={søknadState.søknad?.vedlegg?.ANNET || []}
       />
 
