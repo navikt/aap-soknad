@@ -1,6 +1,5 @@
-import { Label, BodyShort, Alert } from '@navikt/ds-react';
-import { useMemo } from 'react';
-import { Soknad, SoknadVedlegg } from 'types/Soknad';
+import { Alert, Label } from '@navikt/ds-react';
+import { Soknad } from 'types/Soknad';
 import { GenericSoknadContextState } from 'types/SoknadContext';
 import { Relasjon } from '../../Barnetillegg/AddBarnModal';
 import { getVedleggForManueltBarn } from '../../../../../utils/api';
@@ -10,14 +9,12 @@ interface Props {
 }
 
 export const OppsummeringVedlegg = ({ søknadState }: Props) => {
-  const manglendeVedlegg = useMemo(
-    () => søknadState.requiredVedlegg.filter((requiredVedlegg) => !requiredVedlegg.completed),
-    [søknadState]
+  const manglendeVedlegg = søknadState.requiredVedlegg.filter(
+    (requiredVedlegg) => !requiredVedlegg.completed
   );
 
-  const opplastedeVedlegg = useMemo(
-    () => søknadState.requiredVedlegg.filter((requiredVedlegg) => requiredVedlegg.completed),
-    [søknadState]
+  const opplastedeVedlegg = søknadState.requiredVedlegg.filter(
+    (requiredVedlegg) => requiredVedlegg.completed
   );
 
   return (
@@ -50,26 +47,24 @@ export const OppsummeringVedlegg = ({ søknadState }: Props) => {
               <div key={`opplastedevedlegg-${vedlegg.type}`}>
                 <Label>{vedlegg?.description}</Label>
                 <ul>
-                  {søknadState?.søknad?.vedlegg?.[vedlegg.type as keyof SoknadVedlegg]?.map(
-                    (vedleggFile, index) => (
-                      <li key={vedleggFile.vedleggId}>{vedleggFile?.name}</li>
-                    )
-                  )}
+                  {søknadState?.søknad?.vedlegg?.[vedlegg.type]?.map((vedlegg) => (
+                    <li key={vedlegg.vedleggId}>{vedlegg?.name}</li>
+                  ))}
                 </ul>
               </div>
             );
           })}
           {søknadState?.søknad?.manuelleBarn?.map((barn) => {
             const label = søknadState?.requiredVedlegg?.find(
-              (e) => e.type === `barn-${barn.internId}` && e.completed
+              (e) => e.type === barn.internId && e.completed
             )?.description;
             return (
               <div key={`barn-${barn.internId}`}>
                 <Label>{label}</Label>
                 <ul>
-                  {getVedleggForManueltBarn(barn.internId, søknadState.søknad?.vedlegg).map(
+                  {getVedleggForManueltBarn(barn.internId, søknadState.søknad?.vedlegg)?.map(
                     (vedlegg) => (
-                      <li key={vedlegg?.vedleggId}>{vedlegg?.name}</li>
+                      <li key={vedlegg.vedleggId}>{vedlegg?.name}</li>
                     )
                   )}
                 </ul>
@@ -83,8 +78,8 @@ export const OppsummeringVedlegg = ({ søknadState }: Props) => {
         <div>
           <Label>{'Annet:'}</Label>
           <ul>
-            {søknadState?.søknad?.vedlegg?.ANNET?.map((vedleggFile) => (
-              <li key={vedleggFile.vedleggId}>{vedleggFile?.name}</li>
+            {søknadState?.søknad?.vedlegg?.ANNET?.map((vedlegg) => (
+              <li key={vedlegg.vedleggId}>{vedlegg?.name}</li>
             ))}
           </ul>
         </div>

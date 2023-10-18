@@ -12,12 +12,13 @@ export async function validate(
     return undefined;
   } catch (e) {
     if (e instanceof ValidationError) {
-      return e.inner.map((error) => {
-        return {
-          path: error.path || '',
-          message: error.message,
-        };
-      });
+      return e.inner.map(mapValidationErrorToSøknadValidationError);
     }
   }
+}
+
+export function mapValidationErrorToSøknadValidationError(
+  validationError: ValidationError
+): SøknadValidationError {
+  return { path: validationError.path || '', message: validationError.message };
 }

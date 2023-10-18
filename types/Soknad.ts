@@ -4,11 +4,8 @@ import { JaEllerNei, JaNeiVetIkke } from './Generic';
 import { JaNeiAvbrutt } from 'components/pageComponents/standard/Student/Student';
 import { OppslagBehandler } from 'context/sokerOppslagContext';
 import { FerieType } from 'components/pageComponents/standard/StartDato/StartDato';
+import { Vedlegg } from '@navikt/aap-felles-react';
 
-export type FieldAndLabel<T> = {
-  label?: string;
-  value?: T;
-};
 export type Navn = {
   fornavn?: string;
   mellomnavn?: string;
@@ -77,11 +74,11 @@ export type Barn = {
 };
 
 export type ManuelleBarn = {
-  navn?: Navn;
-  internId?: string;
-  fødseldato?: Date;
-  harInntekt?: JaEllerNei;
-  relasjon?: Relasjon;
+  navn: Navn;
+  internId: string;
+  fødseldato: Date;
+  harInntekt: JaEllerNei;
+  relasjon: Relasjon;
   vedlegg?: Vedlegg[];
 };
 
@@ -93,23 +90,17 @@ export type Ferie = {
   tilDato?: Date;
 };
 
-export type Vedlegg = {
-  name: string;
-  size: number;
-  vedleggId: string;
-};
-
 // [key: string] brukes for å legge til dynamiske felter for manuelle barn
-export type SoknadVedlegg = {
-  [key: string]: Vedlegg[];
-  LØNN_OG_ANDRE_GODER: Vedlegg[];
-  OMSORGSSTØNAD: Vedlegg[];
-  UTLANDSSTØNAD: Vedlegg[];
-  SYKESTIPEND: Vedlegg[];
-  LÅN: Vedlegg[];
-  AVBRUTT_STUDIE: Vedlegg[];
-  ANNET: Vedlegg[];
-};
+export interface SoknadVedlegg {
+  [key: string]: Vedlegg[] | undefined;
+  LØNN_OG_ANDRE_GODER?: Vedlegg[];
+  OMSORGSSTØNAD?: Vedlegg[];
+  UTLANDSSTØNAD?: Vedlegg[];
+  SYKESTIPEND?: Vedlegg[];
+  LÅN?: Vedlegg[];
+  AVBRUTT_STUDIE?: Vedlegg[];
+  ANNET?: Vedlegg[];
+}
 
 export interface Soknad {
   sykepenger?: JaEllerNei;
