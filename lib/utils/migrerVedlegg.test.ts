@@ -1,5 +1,6 @@
 import { RequiredVedlegg } from '../../types/SoknadContext';
-import { migrerVedlegg } from './migrerVedlegg';
+import { migrerRequiredVedlegg, migrerVedlegg } from './migrerRequiredVedlegg';
+import { SoknadVedlegg } from '../../types/Soknad';
 
 const ikkeMigrertRequiredVedlegg: RequiredVedlegg[] = [
   { type: 'LØNN_OG_ANDRE_GODER', description: 'Vedlegg for å motta lønn eller andre goder' },
@@ -34,13 +35,13 @@ const migrertRequiredVedlegg: RequiredVedlegg[] = [
 describe('migrering av påkrevde vedlegg', () => {
   it('Skal returnere korrekt type på avbrutt studie ', function () {
     expect(
-      migrerVedlegg([{ type: 'avbruttStudie', description: 'Vedlegg for avbrutt studie' }])
+      migrerRequiredVedlegg([{ type: 'avbruttStudie', description: 'Vedlegg for avbrutt studie' }])
     ).toEqual([{ type: 'AVBRUTT_STUDIE', description: 'Vedlegg for avbrutt studie' }]);
   });
 
   it('Skal returnere korrekt type på manuelle barn', function () {
     expect(
-      migrerVedlegg([
+      migrerRequiredVedlegg([
         {
           type: 'barn-c3c21f06-52ef-4ee8-aee9-23b537e388af',
           description: 'Vedlegg for Iren Panikk',
@@ -52,6 +53,32 @@ describe('migrering av påkrevde vedlegg', () => {
   });
 
   it('Skal returnere korrekt type på resterende felter', function () {
-    expect(migrerVedlegg(ikkeMigrertRequiredVedlegg)).toEqual(migrertRequiredVedlegg);
+    expect(migrerRequiredVedlegg(ikkeMigrertRequiredVedlegg)).toEqual(migrertRequiredVedlegg);
+  });
+});
+
+describe('migrering av vedlegg', () => {
+  it('Skal returnere korrekt key på avbrutt studie', function () {
+    const ikkeMigrertVedlegg: SoknadVedlegg = {
+      avbruttStudie: [],
+      OMSORGSSTØNAD: [],
+      UTLANDSSTØNAD: [],
+      ANNET: [],
+      LÅN: [],
+      SYKESTIPEND: [],
+      LØNN_OG_ANDRE_GODER: [],
+    };
+
+    const migrertVedlegg: SoknadVedlegg = {
+      AVBRUTT_STUDIE: [],
+      OMSORGSSTØNAD: [],
+      UTLANDSSTØNAD: [],
+      ANNET: [],
+      LÅN: [],
+      SYKESTIPEND: [],
+      LØNN_OG_ANDRE_GODER: [],
+    };
+
+    expect(migrerVedlegg(ikkeMigrertVedlegg)).toEqual(migrertVedlegg);
   });
 });

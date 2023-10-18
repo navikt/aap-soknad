@@ -6,8 +6,9 @@
  *
  */
 import { RequiredVedlegg } from '../../types/SoknadContext';
+import { SoknadVedlegg } from '../../types/Soknad';
 
-export function migrerVedlegg(requiredVedlegg: RequiredVedlegg[]): RequiredVedlegg[] {
+export function migrerRequiredVedlegg(requiredVedlegg: RequiredVedlegg[]): RequiredVedlegg[] {
   return requiredVedlegg.map((vedlegg) => {
     const type = vedlegg.type as string;
     if (type === 'avbruttStudie') {
@@ -18,4 +19,13 @@ export function migrerVedlegg(requiredVedlegg: RequiredVedlegg[]): RequiredVedle
     }
     return vedlegg;
   });
+}
+
+export function migrerVedlegg(vedlegg?: SoknadVedlegg): SoknadVedlegg | undefined {
+  if (vedlegg) {
+    let nyeVedlegg = { ...vedlegg, AVBRUTT_STUDIE: vedlegg.avbruttStudie };
+    // @ts-ignore
+    delete nyeVedlegg.avbruttStudie;
+    return nyeVedlegg;
+  }
 }

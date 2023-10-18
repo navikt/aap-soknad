@@ -48,7 +48,7 @@ import { Steg0 } from 'components/pageComponents/standard/Steg0/Steg0';
 import * as classes from './step.module.css';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { logger } from '@navikt/aap-felles-utils';
-import { migrerVedlegg } from '../lib/utils/migrerVedlegg';
+import { migrerRequiredVedlegg, migrerVedlegg } from '../lib/utils/migrerRequiredVedlegg';
 
 interface PageProps {
   søker: SokerOppslagState;
@@ -231,10 +231,12 @@ export const getServerSideProps = beskyttetSide(
       };
     }
 
-    const migrertRequiredVedlegg = migrerVedlegg(mellomlagretSøknad.requiredVedlegg);
+    const migrertRequiredVedlegg = migrerRequiredVedlegg(mellomlagretSøknad.requiredVedlegg);
+    const migrertVedlegg = migrerVedlegg(mellomlagretSøknad.søknad?.vedlegg);
 
     const updatedMellomLagretSøknad = {
       ...mellomlagretSøknad,
+      søknad: { ...mellomlagretSøknad.søknad, vedlegg: migrertVedlegg },
       requiredVedlegg: migrertRequiredVedlegg,
     };
 
