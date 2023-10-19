@@ -13,7 +13,6 @@ import {
 } from 'context/soknadContextCommon';
 import { useSoknadContextStandard } from 'context/soknadContextStandard';
 import { useDebounceLagreSoknad } from 'hooks/useDebounceLagreSoknad';
-import { GenericSoknadContextState } from 'types/SoknadContext';
 import { setFocusOnErrorSummary } from 'components/schema/FormErrorSummary';
 import { IntlFormatters, useIntl } from 'react-intl';
 import { validate } from '../../../../lib/utils/validationUtils';
@@ -21,7 +20,6 @@ import { logSkjemastegFullførtEvent } from '../../../../utils/amplitude';
 import { SøknadValidationError } from '../../../schema/FormErrorSummaryNew';
 import SoknadFormWrapperNew from '../../../SoknadFormWrapper/SoknadFormWrapperNew';
 
-export const AVBRUTT_STUDIE_VEDLEGG = 'avbruttStudie';
 export const STUDENT = 'student';
 export const ER_STUDENT = 'erStudent';
 export const KOMME_TILBAKE = 'kommeTilbake';
@@ -43,7 +41,6 @@ export const jaNeiAvbruttToTekstnøkkel = (jaNeiAvbrutt: JaNeiAvbrutt) => {
 };
 interface Props {
   onBackClick: () => void;
-  defaultValues?: GenericSoknadContextState<Soknad>;
 }
 
 export const getStudentSchema = (formatMessage: IntlFormatters['formatMessage']) =>
@@ -71,7 +68,7 @@ export const getStudentSchema = (formatMessage: IntlFormatters['formatMessage'])
     }),
   });
 
-const Student = ({ onBackClick, defaultValues }: Props) => {
+const Student = ({ onBackClick }: Props) => {
   const { formatMessage } = useIntl();
   const { søknadState, søknadDispatch } = useSoknadContextStandard();
   const { stepList, currentStepIndex, stepWizardDispatch } = useStepWizard();
@@ -109,14 +106,14 @@ const Student = ({ onBackClick, defaultValues }: Props) => {
           addRequiredVedlegg(
             [
               {
-                type: AVBRUTT_STUDIE_VEDLEGG,
+                type: 'AVBRUTT_STUDIE',
                 description: formatMessage({ id: 'søknad.student.vedlegg.description' }),
               },
             ],
             søknadDispatch
           );
         } else {
-          removeRequiredVedlegg(AVBRUTT_STUDIE_VEDLEGG, søknadDispatch);
+          removeRequiredVedlegg('AVBRUTT_STUDIE', søknadDispatch);
         }
 
         logSkjemastegFullførtEvent(currentStepIndex ?? 0);
@@ -137,7 +134,7 @@ const Student = ({ onBackClick, defaultValues }: Props) => {
       <RadioGroup
         name={`${ER_STUDENT}`}
         id={`${ER_STUDENT}`}
-        value={defaultValues?.søknad?.student?.erStudent || ''}
+        value={søknadState?.søknad?.student?.erStudent || ''}
         legend={formatMessage({ id: `søknad.${STUDENT}.${ER_STUDENT}.legend` })}
         onChange={(value) => {
           setErrors(errors?.filter((error) => error.path != 'erStudent'));
@@ -165,7 +162,7 @@ const Student = ({ onBackClick, defaultValues }: Props) => {
           <RadioGroup
             name={`${KOMME_TILBAKE}`}
             id={`${KOMME_TILBAKE}`}
-            value={defaultValues?.søknad?.student?.kommeTilbake || ''}
+            value={søknadState?.søknad?.student?.kommeTilbake || ''}
             legend={formatMessage({ id: `søknad.${STUDENT}.${KOMME_TILBAKE}.legend` })}
             onChange={(value) => {
               setErrors(errors?.filter((error) => error.path != 'kommeTilbake'));

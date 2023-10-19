@@ -48,7 +48,13 @@ export const EndreEllerLeggTilBehandlerModal = ({
   const findError = (path: string) => errors?.find((error) => error.path === path)?.message;
 
   return (
-    <Modal open={showModal} onClose={onCloseClick}>
+    <Modal
+      open={showModal}
+      onClose={() => {
+        clearErrors();
+        onCloseClick();
+      }}
+    >
       <Modal.Header>
         <Heading className={classes?.modalHeading} size={'small'} level={'3'}>
           {formatMessage({ id: 'søknad.helseopplysninger.modal.title' })}
@@ -63,6 +69,7 @@ export const EndreEllerLeggTilBehandlerModal = ({
               setErrors(errors);
             } else {
               onSaveClick(behandler);
+              clearErrors();
               onCloseClick();
             }
           }}
@@ -145,6 +152,7 @@ export const EndreEllerLeggTilBehandlerModal = ({
               type="button"
               variant={'secondary'}
               onClick={() => {
+                clearErrors();
                 onCloseClick();
               }}
             >

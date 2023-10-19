@@ -17,7 +17,6 @@ import { LucaGuidePanel } from '@navikt/aap-felles-react';
 import { updateSøknadData } from 'context/soknadContextCommon';
 import { useSoknadContextStandard } from 'context/soknadContextStandard';
 import { useDebounceLagreSoknad } from 'hooks/useDebounceLagreSoknad';
-import { GenericSoknadContextState } from 'types/SoknadContext';
 import { setFocusOnErrorSummary } from 'components/schema/FormErrorSummary';
 import { FormattedMessage, IntlFormatters, useIntl } from 'react-intl';
 import { logSkjemastegFullførtEvent } from '../../../../utils/amplitude';
@@ -27,7 +26,6 @@ import SoknadFormWrapperNew from '../../../SoknadFormWrapper/SoknadFormWrapperNe
 
 interface Props {
   onBackClick: () => void;
-  defaultValues?: GenericSoknadContextState<Soknad>;
 }
 
 export const getYrkesskadeSchema = (formatMessage: IntlFormatters['formatMessage']) =>
@@ -39,7 +37,7 @@ export const getYrkesskadeSchema = (formatMessage: IntlFormatters['formatMessage
       .nullable(),
   });
 
-export const Yrkesskade = ({ onBackClick, defaultValues }: Props) => {
+export const Yrkesskade = ({ onBackClick }: Props) => {
   const { formatMessage } = useIntl();
 
   const { søknadState, søknadDispatch } = useSoknadContextStandard();
@@ -82,7 +80,7 @@ export const Yrkesskade = ({ onBackClick, defaultValues }: Props) => {
         name={'yrkesskade'}
         id={'yrkesskade'}
         legend={formatMessage({ id: `søknad.yrkesskade.harDuYrkesskade.label` })}
-        value={defaultValues?.søknad?.yrkesskade || ''}
+        value={søknadState?.søknad?.yrkesskade || ''}
         onChange={(value) => {
           setErrors(undefined);
           updateSøknadData(søknadDispatch, { yrkesskade: value });

@@ -10,7 +10,6 @@ import * as classes from './Behandlere.module.css';
 import { useSoknadContextStandard } from 'context/soknadContextStandard';
 import { updateSøknadData } from 'context/soknadContextCommon';
 import { useDebounceLagreSoknad } from 'hooks/useDebounceLagreSoknad';
-import { GenericSoknadContextState } from 'types/SoknadContext';
 import { JaEllerNei } from 'types/Generic';
 import { IntlFormatters, useIntl } from 'react-intl';
 import SoknadFormWrapperNew from '../../../SoknadFormWrapper/SoknadFormWrapperNew';
@@ -24,7 +23,6 @@ import { AnnenBehandler } from './AnnenBehandler';
 
 interface Props {
   onBackClick: () => void;
-  defaultValues?: GenericSoknadContextState<Soknad>;
 }
 
 export const getBehandlerSchema = (formatMessage: IntlFormatters['formatMessage']) =>
@@ -41,7 +39,7 @@ export const getBehandlerSchema = (formatMessage: IntlFormatters['formatMessage'
       })
     ),
   });
-export const Behandlere = ({ onBackClick, defaultValues }: Props) => {
+export const Behandlere = ({ onBackClick }: Props) => {
   const [errors, setErrors] = useState<SøknadValidationError[] | undefined>();
   const [showModal, setShowModal] = useState(false);
   const [selectedBehandler, setSelectedBehandler] = useState<Behandler>({});
@@ -114,12 +112,12 @@ export const Behandlere = ({ onBackClick, defaultValues }: Props) => {
           <Heading size={'small'} level={'3'}>
             {formatMessage({ id: 'søknad.helseopplysninger.registrertFastlege.title' })}
           </Heading>
-          {defaultValues?.søknad?.registrerteBehandlere?.length === 0 && (
+          {søknadState?.søknad?.registrerteBehandlere?.length === 0 && (
             <BodyLong>
               {formatMessage({ id: 'søknad.helseopplysninger.registrertFastlege.ingenFastlege' })}
             </BodyLong>
           )}
-          {defaultValues?.søknad?.registrerteBehandlere?.map((registrertBehandler, index) => (
+          {søknadState?.søknad?.registrerteBehandlere?.map((registrertBehandler, index) => (
             <RegistrertBehandler
               key={registrertBehandler.kontaktinformasjon.behandlerRef}
               index={index}
@@ -136,14 +134,14 @@ export const Behandlere = ({ onBackClick, defaultValues }: Props) => {
           <BodyShort spacing>
             {formatMessage({ id: 'søknad.helseopplysninger.annenBehandler.description' })}
           </BodyShort>
-          {defaultValues?.søknad?.andreBehandlere &&
-            defaultValues?.søknad?.andreBehandlere?.length > 0 && (
+          {søknadState?.søknad?.andreBehandlere &&
+            søknadState?.søknad?.andreBehandlere?.length > 0 && (
               <>
                 <Heading size={'xsmall'} level={'4'} spacing>
                   {formatMessage({ id: 'søknad.helseopplysninger.dineBehandlere.title' })}
                 </Heading>
                 <ul className={classes?.legeList}>
-                  {defaultValues.søknad.andreBehandlere.map((behandler) => (
+                  {søknadState.søknad.andreBehandlere.map((behandler) => (
                     <AnnenBehandler
                       key={behandler.id}
                       behandler={behandler}

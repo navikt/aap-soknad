@@ -21,11 +21,11 @@ const ManueltBarn = ({ barn, setSelectedBarn, setShowModal }: BarnKortProps) => 
   const { formatMessage } = useIntl();
   const { søknadState, søknadDispatch } = useSoknadContextStandard();
 
-  const slettBarn = (barnId?: string) => {
+  const slettBarn = (barnId: string) => {
     updateSøknadData(søknadDispatch, {
       manuelleBarn: søknadState.søknad?.manuelleBarn?.filter((barn) => barnId !== barn.internId),
     });
-    removeRequiredVedlegg(`barn-${barnId}`, søknadDispatch);
+    removeRequiredVedlegg(barnId, søknadDispatch);
   };
 
   return (

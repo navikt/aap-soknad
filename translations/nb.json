@@ -415,6 +415,10 @@
           "FORELDER": "Fødselsattest eller adopsjonsbevis for {navn}",
           "FOSTERFORELDER": "Dokumentasjon på at du er fosterforelder for {navn}, og fra når"
         }
+      },
+      "andreVedlegg": {
+        "title": "Andre vedlegg",
+        "ingress": "Hvis du har noe annet du ønsker å legge ved kan du laste det opp her (valgfritt)."
       }
     },
     "oppsummering": {

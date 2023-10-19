@@ -1,33 +1,27 @@
 import { Alert, BodyShort, Button, Heading } from '@navikt/ds-react';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { JaEllerNei } from 'types/Generic';
 import { Barn, ManuelleBarn, Soknad } from 'types/Soknad';
 import * as classes from './Barnetillegg.module.css';
 import { Add } from '@navikt/ds-icons';
 import * as yup from 'yup';
 import { completeAndGoToNextStep, useStepWizard } from 'context/stepWizardContextV2';
-import { AddBarnModal, Relasjon } from './AddBarnModal';
+import { AddBarnModal, CreateOrUpdateManuelleBarn, Relasjon } from './AddBarnModal';
 import { LucaGuidePanel } from '@navikt/aap-felles-react';
-import {
-  addRequiredVedlegg,
-  removeRequiredVedlegg,
-  updateSøknadData,
-} from 'context/soknadContextCommon';
+import { addRequiredVedlegg, updateSøknadData } from 'context/soknadContextCommon';
 import { useSoknadContextStandard } from 'context/soknadContextStandard';
 import { useDebounceLagreSoknad } from 'hooks/useDebounceLagreSoknad';
-import { GenericSoknadContextState } from 'types/SoknadContext';
 import { setFocusOnErrorSummary } from 'components/schema/FormErrorSummary';
 import { IntlFormatters, useIntl } from 'react-intl';
 import { useFormErrors } from '../../../../hooks/useFormErrors';
 import SoknadFormWrapperNew from '../../../SoknadFormWrapper/SoknadFormWrapperNew';
 import { validate } from '../../../../lib/utils/validationUtils';
 import { logSkjemastegFullførtEvent } from '../../../../utils/amplitude';
-import { v4 as uuid4 } from 'uuid';
 import { ManueltBarn } from './ManueltBarn';
 import { Registerbarn } from './Registerbarn';
+
 interface Props {
   onBackClick: () => void;
-  defaultValues?: GenericSoknadContextState<Soknad>;
 }
 
 export const GRUNNBELØP = '118 620';
@@ -53,14 +47,14 @@ export const getBarnetillegSchema = (formatMessage: IntlFormatters['formatMessag
     ),
   });
 
-export const Barnetillegg = ({ onBackClick, defaultValues }: Props) => {
+export const Barnetillegg = ({ onBackClick }: Props) => {
   const { errors, setErrors, clearErrors, findError } = useFormErrors();
   const { formatMessage } = useIntl();
 
   const { søknadState, søknadDispatch } = useSoknadContextStandard();
   const { currentStepIndex, stepWizardDispatch } = useStepWizard();
   const { stepList } = useStepWizard();
-  const [selectedBarn, setSelectedBarn] = useState<ManuelleBarn>({});
+  const [selectedBarn, setSelectedBarn] = useState<CreateOrUpdateManuelleBarn>({});
   const [showModal, setShowModal] = useState<boolean>(false);
 
   const debouncedLagre = useDebounceLagreSoknad<Soknad>();
@@ -69,18 +63,18 @@ export const Barnetillegg = ({ onBackClick, defaultValues }: Props) => {
   }, [søknadState.søknad?.barn, søknadState.søknad?.manuelleBarn]);
 
   const erForelderTilManueltBarn =
-    defaultValues?.søknad?.manuelleBarn &&
-    defaultValues?.søknad?.manuelleBarn.filter((barn) => barn.relasjon === Relasjon.FORELDER)
-      .length > 0;
+    søknadState?.søknad?.manuelleBarn &&
+    søknadState?.søknad?.manuelleBarn.filter((barn) => barn.relasjon === Relasjon.FORELDER).length >
+      0;
 
   const erFosterforelderTilManueltBarn =
-    defaultValues?.søknad?.manuelleBarn &&
-    defaultValues?.søknad?.manuelleBarn.filter((barn) => barn.relasjon === Relasjon.FOSTERFORELDER)
+    søknadState?.søknad?.manuelleBarn &&
+    søknadState?.søknad?.manuelleBarn.filter((barn) => barn.relasjon === Relasjon.FOSTERFORELDER)
       .length > 0;
 
   const harManuelleBarn =
-    defaultValues?.søknad?.manuelleBarn && defaultValues.søknad.manuelleBarn.length > 0;
-  const harBarn = defaultValues?.søknad?.barn && defaultValues.søknad.barn.length > 0;
+    søknadState?.søknad?.manuelleBarn && søknadState.søknad.manuelleBarn.length > 0;
+  const harBarn = søknadState?.søknad?.barn && søknadState.søknad.barn.length > 0;
 
   const appendManuelleBarn = (barn: ManuelleBarn) => {
     updateSøknadData(søknadDispatch, {
@@ -90,7 +84,7 @@ export const Barnetillegg = ({ onBackClick, defaultValues }: Props) => {
       [
         {
           filterType: barn.relasjon,
-          type: `barn-${barn.internId}`,
+          type: barn.internId,
           description: formatMessage(
             { id: `søknad.vedlegg.andreBarn.description.${barn.relasjon}` },
             {
@@ -157,14 +151,14 @@ export const Barnetillegg = ({ onBackClick, defaultValues }: Props) => {
           <Heading size="small" level="3" spacing>
             {formatMessage({ id: 'søknad.barnetillegg.registrerteBarn.title' })}
           </Heading>
-          {defaultValues?.søknad?.barn?.length === 0 && (
+          {søknadState?.søknad?.barn?.length === 0 && (
             <BodyShort spacing>
               {formatMessage({ id: 'søknad.barnetillegg.registrerteBarn.notfound' })}
             </BodyShort>
           )}
-          {defaultValues?.søknad?.barn && defaultValues?.søknad?.barn?.length > 0 && (
+          {søknadState?.søknad?.barn && søknadState?.søknad?.barn?.length > 0 && (
             <ul className={classes.barnList}>
-              {defaultValues?.søknad?.barn.map((barn, index) => (
+              {søknadState?.søknad?.barn.map((barn, index) => (
                 <Registerbarn
                   barn={barn}
                   index={index}
@@ -181,19 +175,18 @@ export const Barnetillegg = ({ onBackClick, defaultValues }: Props) => {
           <Heading size="small" level="3" spacing>
             {formatMessage({ id: 'søknad.barnetillegg.manuelleBarn.title' })}
           </Heading>
-          {defaultValues?.søknad?.manuelleBarn &&
-            defaultValues?.søknad?.manuelleBarn.length > 0 && (
-              <ul className={classes.barnList}>
-                {defaultValues.søknad.manuelleBarn.map((barn) => (
-                  <ManueltBarn
-                    key={barn.internId}
-                    barn={barn}
-                    setSelectedBarn={setSelectedBarn}
-                    setShowModal={setShowModal}
-                  />
-                ))}
-              </ul>
-            )}
+          {søknadState?.søknad?.manuelleBarn && søknadState?.søknad?.manuelleBarn.length > 0 && (
+            <ul className={classes.barnList}>
+              {søknadState.søknad.manuelleBarn.map((barn) => (
+                <ManueltBarn
+                  key={barn.internId}
+                  barn={barn}
+                  setSelectedBarn={setSelectedBarn}
+                  setShowModal={setShowModal}
+                />
+              ))}
+            </ul>
+          )}
           <BodyShort spacing>
             {formatMessage({ id: 'søknad.barnetillegg.leggTilBarn.description' })}
           </BodyShort>
@@ -255,16 +248,8 @@ export const Barnetillegg = ({ onBackClick, defaultValues }: Props) => {
           setShowModal(false);
           setSelectedBarn({});
         }}
-        onSaveClick={(barn) => {
-          if (barn.internId === undefined) {
-            appendManuelleBarn({
-              ...barn,
-              internId: uuid4(),
-            });
-          } else {
-            updateManuelleBarn(barn);
-          }
-        }}
+        appendManuelleBarn={appendManuelleBarn}
+        updateManuelleBarn={updateManuelleBarn}
         showModal={showModal}
         barn={selectedBarn}
         setBarn={setSelectedBarn}

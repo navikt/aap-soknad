@@ -405,6 +405,10 @@
         "readMore": {
           "title": "Slik tek du eit godt bilete av dokumentet"
         }
+      },
+      "andreVedlegg": {
+        "title": "Annan dokumentasjon",
+        "ingress": "Viss du har noko anna du ønksjer å leggje ved kan du lasta det opp her (valfritt)."
       }
     },
     "tilleggsopplysninger": {

@@ -113,7 +113,13 @@ const UtenlandsPeriodeVelger = ({
   const findError = (path: string) => errors?.find((error) => error.path === path)?.message;
 
   return (
-    <Modal open={isOpen} onClose={closeModal}>
+    <Modal
+      open={isOpen}
+      onClose={() => {
+        clearErrors();
+        closeModal();
+      }}
+    >
       <Modal.Header>
         <Heading size={'medium'} level={'3'} spacing>
           {formatMessage({
@@ -146,6 +152,7 @@ const UtenlandsPeriodeVelger = ({
                 setErrors(validationErrors);
               } else {
                 onSave(utenlandsPeriode);
+                clearErrors();
                 closeModal();
               }
             }}
@@ -243,6 +250,7 @@ const UtenlandsPeriodeVelger = ({
                 type="button"
                 variant={'secondary'}
                 onClick={() => {
+                  clearErrors();
                   closeModal();
                 }}
               >

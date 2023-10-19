@@ -480,7 +480,7 @@ test('at alle feilmeldinger skal dukke opp', async ({ page }) => {
   await expect(
     page.getByRole('heading', { name: 'Fødselsattest eller adopsjonsbevis' })
   ).toBeVisible();
-  await expect(page.getByRole('heading', { name: 'Annen dokumentasjon' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Andre vedlegg' })).toBeVisible();
   await page.getByRole('button', { name: 'Neste steg' }).click();
 
   // Steg 9
