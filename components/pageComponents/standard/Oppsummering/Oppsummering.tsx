@@ -47,9 +47,9 @@ import { logSkjemaValideringFeiletEvent } from 'utils/amplitude';
 import { useIntl } from 'react-intl';
 import { getMedlemskapSchema } from '../Medlemskap/medlemskapSchema';
 import SoknadFormWrapperNew from 'components/SoknadFormWrapper/SoknadFormWrapperNew';
-import { validate } from '../../../../lib/utils/validationUtils';
-import { useFormErrors } from '../../../../hooks/useFormErrors';
-import { setFocusOnErrorSummary } from '../../../schema/FormErrorSummary';
+import { validate } from 'lib/utils/validationUtils';
+import { useFormErrors } from 'hooks/useFormErrors';
+import { setFocusOnErrorSummary } from 'components/schema/FormErrorSummary';
 
 interface OppsummeringProps {
   onBackClick: () => void;
