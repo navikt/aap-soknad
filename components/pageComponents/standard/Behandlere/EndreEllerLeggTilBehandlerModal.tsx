@@ -5,8 +5,8 @@ import { Button, Heading, Modal, TextField } from '@navikt/ds-react';
 import { ModalButtonWrapper } from 'components/ButtonWrapper/ModalButtonWrapper';
 import { IntlFormatters, useIntl } from 'react-intl';
 import { Dispatch, useState } from 'react';
-import { validate } from '../../../../lib/utils/validationUtils';
-import { SøknadValidationError } from '../../../schema/FormErrorSummaryNew';
+import { validate } from 'lib/utils/validationUtils';
+import { SøknadValidationError } from 'components/schema/FormErrorSummary';
 
 interface Props {
   onCloseClick: () => void;

@@ -15,10 +15,10 @@ import { useSoknadContextStandard } from 'context/soknadContextStandard';
 import { useDebounceLagreSoknad } from 'hooks/useDebounceLagreSoknad';
 import { setFocusOnErrorSummary } from 'components/schema/FormErrorSummary';
 import { IntlFormatters, useIntl } from 'react-intl';
-import { validate } from '../../../../lib/utils/validationUtils';
-import { logSkjemastegFullførtEvent } from '../../../../utils/amplitude';
-import { SøknadValidationError } from '../../../schema/FormErrorSummaryNew';
-import SoknadFormWrapperNew from '../../../SoknadFormWrapper/SoknadFormWrapperNew';
+import { validate } from 'lib/utils/validationUtils';
+import { logSkjemastegFullførtEvent } from 'utils/amplitude';
+import { SøknadValidationError } from 'components/schema/FormErrorSummary';
+import SoknadFormWrapperNew from 'components/SoknadFormWrapper/SoknadFormWrapper';
 
 export const STUDENT = 'student';
 export const ER_STUDENT = 'erStudent';

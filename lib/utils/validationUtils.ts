@@ -1,5 +1,5 @@
 import { ObjectSchema, ValidationError } from 'yup';
-import { SøknadValidationError } from '../../components/schema/FormErrorSummaryNew';
+import { SøknadValidationError } from 'components/schema/FormErrorSummary';
 
 export async function validate(
   yupSchema: ObjectSchema<any>,

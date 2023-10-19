@@ -23,7 +23,6 @@ import {
   useSokerOppslag,
 } from 'context/sokerOppslagContext';
 import { Soknad } from 'types/Soknad';
-import { SubmitHandler } from 'react-hook-form';
 import { fetchPOST } from 'api/fetch';
 import { StepNames } from './index';
 import { mapSøknadToBackend, mapSøknadToPdf } from 'utils/api';
@@ -48,7 +47,7 @@ import { Steg0 } from 'components/pageComponents/standard/Steg0/Steg0';
 import * as classes from './step.module.css';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { logger } from '@navikt/aap-felles-utils';
-import { migrerRequiredVedlegg, migrerVedlegg } from '../lib/utils/migrerRequiredVedlegg';
+import { migrerRequiredVedlegg, migrerVedlegg } from 'lib/utils/migrerRequiredVedlegg';
 
 interface PageProps {
   søker: SokerOppslagState;
@@ -102,7 +101,7 @@ const Steps = ({ søker, mellomlagretSøknad }: PageProps) => {
     }
   }, [showFetchErrorMessage]);
 
-  const submitSoknad: SubmitHandler<Soknad> = async () => {
+  const submitSoknad = async () => {
     if (currentStep?.name === StepNames.OPPSUMMERING) {
       setShowFetchErrorMessage(false);
       const sendtTimestamp = new Date();
@@ -186,7 +185,6 @@ const Steps = ({ søker, mellomlagretSøknad }: PageProps) => {
               {step === '9' && (
                 <Oppsummering
                   onBackClick={onPreviousStep}
-                  // @ts-ignore-line TODO: grave i denne
                   onSubmitSoknad={submitSoknad}
                   submitErrorMessageRef={submitErrorMessageRef}
                   hasSubmitError={showFetchErrorMessage}

@@ -1,48 +1,49 @@
 import React, { Ref, useEffect, useMemo, useRef } from 'react';
-import { FieldError, FieldErrors, FieldValues } from 'react-hook-form';
 import { ErrorSummary } from '@navikt/ds-react';
 import * as classes from './FormErrorSummary.module.css';
-import { setFocusHtmlRef } from '../../utils/dom';
+import { setFocusHtmlRef } from 'utils/dom';
 import { useIntl } from 'react-intl';
+
+export interface SøknadValidationError {
+  path: string;
+  message: string;
+}
+
+interface Props {
+  errors: SøknadValidationError[];
+}
 
 export const setFocusOnErrorSummary = () => {
   const errorSummary = document?.getElementById('aap-error-summary');
   errorSummary?.focus();
 };
 
-interface Props<FormFieldValues extends FieldValues> {
-  errors: FieldErrors<FormFieldValues>;
-}
-
-const FormErrorSummary = <FormFieldValues extends FieldValues>(props: Props<FormFieldValues>) => {
+const FormErrorSummary = (props: Props) => {
   const { errors } = props;
   const { formatMessage } = useIntl();
 
   const errorSummaryRef: Ref<HTMLDivElement> = useRef(null);
 
-  const flatErrors = flatObj(errors);
-  const keyList = Object.keys(flatErrors).filter((e) => e);
-
-  const scrollToErrorSummary = useMemo(() => {
-    return keyList.length > 0;
-  }, [keyList]);
+  const isError = useMemo(() => {
+    return errors.length > 0;
+  }, [errors]);
 
   useEffect(() => {
-    if (scrollToErrorSummary) {
+    if (isError) {
       setFocusHtmlRef(errorSummaryRef);
     }
-  }, [scrollToErrorSummary]);
+  }, [isError]);
 
   // Må rendre ErrorSummary selv om det ikke er feil pga UU
-  if (keyList?.length < 1) {
+  if (!isError) {
     return (
       <ErrorSummary
         ref={errorSummaryRef}
         heading={formatMessage({ id: 'errorSummary.title' })}
         role={'alert'}
-        aria-hidden={keyList?.length === 0}
+        aria-hidden={!isError}
         tabIndex={-1}
-        className={keyList?.length === 0 ? classes?.visuallyHidden : ''}
+        className={!isError ? classes?.visuallyHidden : ''}
         {...props}
       >
         {'hidden'}
@@ -56,32 +57,17 @@ const FormErrorSummary = <FormFieldValues extends FieldValues>(props: Props<Form
       ref={errorSummaryRef}
       heading={formatMessage({ id: 'errorSummary.title' })}
       role={'alert'}
-      aria-hidden={keyList?.length === 0}
-      className={keyList?.length === 0 ? classes?.visuallyHidden : ''}
+      aria-hidden={!isError}
+      className={!isError ? classes?.visuallyHidden : ''}
       {...props}
     >
-      {keyList.map((key) => (
-        <ErrorSummary.Item key={key} href={`#${key}`}>
-          {flatErrors[key]}
+      {errors.map((error) => (
+        <ErrorSummary.Item key={error.path} href={`#${error.path}`}>
+          {error.message}
         </ErrorSummary.Item>
       ))}
     </ErrorSummary>
   );
 };
-
-function flatObj(errors: FieldErrors | FieldError, prevKey = ''): Record<string, string> {
-  return Object.entries(errors).reduce((flatted, [key, value]) => {
-    if (value?.message) {
-      if (value?.ref?.name) {
-        return { ...flatted, [value?.ref?.name]: value?.message };
-      } else {
-        const fullKey = prevKey ? `${prevKey}.${key}` : key;
-        return { ...flatted, [fullKey]: value?.message };
-      }
-    } else {
-      return { ...flatted, ...flatObj(value, key) };
-    }
-  }, {});
-}
 
 export { FormErrorSummary };

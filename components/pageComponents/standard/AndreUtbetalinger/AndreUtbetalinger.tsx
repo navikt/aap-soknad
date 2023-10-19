@@ -27,11 +27,11 @@ import { useSoknadContextStandard } from 'context/soknadContextStandard';
 import { useDebounceLagreSoknad } from 'hooks/useDebounceLagreSoknad';
 import { setFocusOnErrorSummary } from 'components/schema/FormErrorSummary';
 import { IntlFormatters, useIntl } from 'react-intl';
-import SoknadFormWrapperNew from '../../../SoknadFormWrapper/SoknadFormWrapperNew';
-import { validate } from '../../../../lib/utils/validationUtils';
-import { SøknadValidationError } from '../../../schema/FormErrorSummaryNew';
-import { logSkjemastegFullførtEvent } from '../../../../utils/amplitude';
-import { AttachmentType } from '../../../../types/SoknadContext';
+import SoknadFormWrapperNew from 'components/SoknadFormWrapper/SoknadFormWrapper';
+import { validate } from 'lib/utils/validationUtils';
+import { SøknadValidationError } from 'components/schema/FormErrorSummary';
+import { logSkjemastegFullførtEvent } from 'utils/amplitude';
+import { AttachmentType } from 'types/SoknadContext';
 
 interface Props {
   onBackClick: () => void;

@@ -1,48 +1,43 @@
-import { FieldErrors } from 'react-hook-form';
 import React, { useState } from 'react';
 import { Button, Detail } from '@navikt/ds-react';
-import { FormErrorSummary } from '../schema/FormErrorSummary';
 import * as classes from './SoknadFormWrapper.module.css';
 import { useAppStateContext } from 'context/appStateContext';
+import { FormErrorSummary, SøknadValidationError } from 'components/schema/FormErrorSummary';
 import { useIntl } from 'react-intl';
-import SlettModal from './SlettModal';
 import LagreModal from './LagreModal';
+import SlettModal from './SlettModal';
 
 interface Props {
-  children?: React.ReactNode;
-  nextButtonText: string;
-  backButtonText?: string;
-  cancelButtonText: string;
-  onNext: (data: any) => void;
+  children: React.ReactNode;
+  onNext: () => void;
   onBack?: () => void;
-  onDelete: () => Promise<any>;
+  nextButtonText?: string;
   nextIsLoading?: boolean;
-  focusOnErrors?: boolean;
-  errors?: FieldErrors;
+  errors?: SøknadValidationError[];
   className?: string;
 }
 
-const SøknadFormWrapper = ({
-  children,
-  nextButtonText,
-  backButtonText,
-  onNext,
-  onBack,
-  errors,
-  nextIsLoading = false,
-  className = '',
-}: Props) => {
+const SøknadFormWrapper = (props: Props) => {
   const { formatMessage } = useIntl();
+  const {
+    children,
+    onNext,
+    onBack,
+    errors,
+    nextButtonText = formatMessage({ id: 'navigation.next' }),
+    nextIsLoading = false,
+    className,
+  } = props;
   const { appState } = useAppStateContext();
-  const [showLagreModal, setShowLagreModal] = useState<boolean>(false);
-  const [showAvbrytModal, setShowAvbrytModal] = useState<boolean>(false);
+  const [visLagreModal, setVisLagreModal] = useState<boolean>(false);
+  const [visAvbrytModal, setVisAvbrytModal] = useState<boolean>(false);
 
   return (
     <>
       <form
         onSubmit={(event) => {
           event.preventDefault();
-          onNext(event);
+          onNext();
         }}
         className={`${classes?.formContent} ${className}`}
       >
@@ -56,7 +51,7 @@ const SøknadFormWrapper = ({
               type="button"
               onClick={onBack}
             >
-              {backButtonText}
+              {formatMessage({ id: 'navigation.back' })}
             </Button>
           )}
           <Button
@@ -79,7 +74,7 @@ const SøknadFormWrapper = ({
             className={classes?.buttonSave}
             variant="tertiary"
             type="button"
-            onClick={() => setShowLagreModal(true)}
+            onClick={() => setVisLagreModal(true)}
           >
             {formatMessage({ id: 'navigation.save' })}
           </Button>
@@ -87,14 +82,14 @@ const SøknadFormWrapper = ({
             className={classes?.buttonCancel}
             variant="tertiary"
             type="button"
-            onClick={() => setShowAvbrytModal(true)}
+            onClick={() => setVisAvbrytModal(true)}
           >
             {formatMessage({ id: 'navigation.cancel' })}
           </Button>
         </div>
       </form>
-      <LagreModal isOpen={showLagreModal} onClose={(value) => setShowLagreModal(value)} />
-      <SlettModal isOpen={showAvbrytModal} onClose={(value) => setShowAvbrytModal(value)} />
+      <LagreModal isOpen={visLagreModal} onClose={(value) => setVisLagreModal(value)} />
+      <SlettModal isOpen={visAvbrytModal} onClose={(value) => setVisAvbrytModal(value)} />
     </>
   );
 };
