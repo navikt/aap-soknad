@@ -1,9 +1,0 @@
-.fieldArrayMainContent {
-  display: flex;
-  flex-direction: column;
-  gap: var(--a-spacing-10);
-  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.14), 0 2px 1px rgba(38, 38, 38, 0.12),
-    0 1px 3px rgba(38, 38, 38, 0.2);
-  border-radius: 4px;
-  padding: var(--a-spacing-10);
-}

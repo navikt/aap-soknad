@@ -19,10 +19,10 @@ import { useSoknadContextStandard } from 'context/soknadContextStandard';
 import { useDebounceLagreSoknad } from 'hooks/useDebounceLagreSoknad';
 import { setFocusOnErrorSummary } from 'components/schema/FormErrorSummary';
 import { FormattedMessage, IntlFormatters, useIntl } from 'react-intl';
-import { logSkjemastegFullførtEvent } from '../../../../utils/amplitude';
-import { validate } from '../../../../lib/utils/validationUtils';
-import { SøknadValidationError } from '../../../schema/FormErrorSummaryNew';
-import SoknadFormWrapperNew from '../../../SoknadFormWrapper/SoknadFormWrapperNew';
+import { logSkjemastegFullførtEvent } from 'utils/amplitude';
+import { validate } from 'lib/utils/validationUtils';
+import { SøknadValidationError } from 'components/schema/FormErrorSummary';
+import SoknadFormWrapperNew from 'components/SoknadFormWrapper/SoknadFormWrapper';
 
 interface Props {
   onBackClick: () => void;

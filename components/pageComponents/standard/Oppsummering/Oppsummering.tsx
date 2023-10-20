@@ -1,4 +1,3 @@
-import { Soknad } from 'types/Soknad';
 import {
   Accordion,
   Alert,
@@ -46,14 +45,14 @@ import { getBehandlerSchema } from 'components/pageComponents/standard/Behandler
 import { logSkjemaValideringFeiletEvent } from 'utils/amplitude';
 import { useIntl } from 'react-intl';
 import { getMedlemskapSchema } from '../Medlemskap/medlemskapSchema';
-import SoknadFormWrapperNew from 'components/SoknadFormWrapper/SoknadFormWrapperNew';
+import SoknadFormWrapperNew from 'components/SoknadFormWrapper/SoknadFormWrapper';
 import { validate } from 'lib/utils/validationUtils';
 import { useFormErrors } from 'hooks/useFormErrors';
 import { setFocusOnErrorSummary } from 'components/schema/FormErrorSummary';
 
 interface OppsummeringProps {
   onBackClick: () => void;
-  onSubmitSoknad: (data: Soknad) => boolean;
+  onSubmitSoknad: () => Promise<boolean>;
   submitErrorMessageRef: React.MutableRefObject<null>;
   hasSubmitError: boolean;
 }
@@ -142,7 +141,7 @@ const Oppsummering = ({
         }
         if (søknadState.søknad) {
           setNextIsLoading(true);
-          const submitSuccess = onSubmitSoknad(søknadState.søknad);
+          const submitSuccess = await onSubmitSoknad();
           if (!submitSuccess) {
             setNextIsLoading(false);
           }

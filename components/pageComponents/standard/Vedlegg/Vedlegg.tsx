@@ -7,9 +7,9 @@ import { useSoknadContextStandard } from 'context/soknadContextStandard';
 import { useDebounceLagreSoknad } from 'hooks/useDebounceLagreSoknad';
 import { FileInput, LucaGuidePanel } from '@navikt/aap-felles-react';
 import { useIntl } from 'react-intl';
-import SoknadFormWrapperNew from '../../../SoknadFormWrapper/SoknadFormWrapperNew';
-import { SøknadValidationError } from '../../../schema/FormErrorSummaryNew';
-import { logSkjemastegFullførtEvent } from '../../../../utils/amplitude';
+import SoknadFormWrapperNew from 'components/SoknadFormWrapper/SoknadFormWrapper';
+import { SøknadValidationError } from 'components/schema/FormErrorSummary';
+import { logSkjemastegFullførtEvent } from 'utils/amplitude';
 import { setFocusOnErrorSummary } from '../../../schema/FormErrorSummary';
 import { ScanningGuide } from './scanningguide/ScanningGuide';
 

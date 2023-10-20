@@ -13,10 +13,10 @@ import { useSoknadContextStandard } from 'context/soknadContextStandard';
 import { useDebounceLagreSoknad } from 'hooks/useDebounceLagreSoknad';
 import { setFocusOnErrorSummary } from 'components/schema/FormErrorSummary';
 import { IntlFormatters, useIntl } from 'react-intl';
-import { useFormErrors } from '../../../../hooks/useFormErrors';
-import SoknadFormWrapperNew from '../../../SoknadFormWrapper/SoknadFormWrapperNew';
-import { validate } from '../../../../lib/utils/validationUtils';
-import { logSkjemastegFullførtEvent } from '../../../../utils/amplitude';
+import { useFormErrors } from 'hooks/useFormErrors';
+import SoknadFormWrapperNew from 'components/SoknadFormWrapper/SoknadFormWrapper';
+import { validate } from 'lib/utils/validationUtils';
+import { logSkjemastegFullførtEvent } from 'utils/amplitude';
 import { ManueltBarn } from './ManueltBarn';
 import { Registerbarn } from './Registerbarn';
 

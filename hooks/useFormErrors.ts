@@ -1,4 +1,4 @@
-import { SøknadValidationError } from 'components/schema/FormErrorSummaryNew';
+import { SøknadValidationError } from 'components/schema/FormErrorSummary';
 import { useState } from 'react';
 
 const useFormErrors = <T>() => {

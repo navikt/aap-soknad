@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { render, screen, waitFor } from 'setupTests';
-import CountrySelector from './CountrySelector';
+import CountrySelector from 'components/input/countryselector/CountrySelector';
 import * as yup from 'yup';
 import { Button } from '@navikt/ds-react';
 import userEvent from '@testing-library/user-event';
-import { validate } from '../../lib/utils/validationUtils';
-import { SøknadValidationError } from '../schema/FormErrorSummaryNew';
+import { validate } from 'lib/utils/validationUtils';
+import { SøknadValidationError } from 'components/schema/FormErrorSummary';
 
 interface Props {
   defaultValue?: string;

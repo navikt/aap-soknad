@@ -14,13 +14,13 @@ import {
   TextField,
 } from '@navikt/ds-react';
 import { JaEllerNei } from 'types/Generic';
-import CountrySelector from 'components/input/CountrySelector';
+import CountrySelector from 'components/input/countryselector/CountrySelector';
 import { ModalButtonWrapper } from 'components/ButtonWrapper/ModalButtonWrapper';
 import { UtenlandsPeriode } from 'types/Soknad';
 import { MonthPickerWrapper } from 'components/input/MonthPickerWrapper/MonthPickerWrapper';
 import { subYears } from 'date-fns';
 import { IntlFormatters, useIntl } from 'react-intl';
-import { SøknadValidationError } from 'components/schema/FormErrorSummaryNew';
+import { SøknadValidationError } from 'components/schema/FormErrorSummary';
 import { validate } from 'lib/utils/validationUtils';
 
 const { eeaMember } = require('is-european');
