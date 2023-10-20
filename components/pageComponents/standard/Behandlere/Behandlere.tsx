@@ -13,13 +13,12 @@ import { useDebounceLagreSoknad } from 'hooks/useDebounceLagreSoknad';
 import { JaEllerNei } from 'types/Generic';
 import { IntlFormatters, useIntl } from 'react-intl';
 import SoknadFormWrapperNew from 'components/SoknadFormWrapper/SoknadFormWrapper';
-import { SøknadValidationError } from 'components/schema/FormErrorSummary';
+import { setFocusOnErrorSummary, SøknadValidationError } from 'components/schema/FormErrorSummary';
 import { v4 as uuid4 } from 'uuid';
 import { logSkjemastegFullførtEvent } from 'utils/amplitude';
 import { validate } from 'lib/utils/validationUtils';
-import { setFocusOnErrorSummary } from '../../../schema/FormErrorSummary';
-import { RegistrertBehandler } from './RegistrertBehandler';
-import { AnnenBehandler } from './AnnenBehandler';
+import { RegistrertBehandler } from 'components/pageComponents/standard/Behandlere/RegistrertBehandler';
+import { AnnenBehandler } from 'components/pageComponents/standard/Behandlere/AnnenBehandler';
 
 interface Props {
   onBackClick: () => void;
