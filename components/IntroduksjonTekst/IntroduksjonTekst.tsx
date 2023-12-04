@@ -76,6 +76,9 @@ export const IntroduksjonTekst = ({ navn }: { navn?: string }) => {
           </BodyShort>
           <ul>
             <li>
+              {formatMessage({ id: 'søknad.veiledning.accordionInformasjon.bulletPointLagring' })}
+            </li>
+            <li>
               {formatMessage({ id: 'søknad.veiledning.accordionInformasjon.bulletPointDeler' })}
             </li>
             <li>
