@@ -1,10 +1,8 @@
-import { RequestOptions } from 'http';
 import fetch from 'cross-fetch';
 
-export const fetchPOST = async (url: string, payload: object, opts: RequestOptions = {}) => {
+export const fetchPOST = async (url: string, payload: object) => {
   const headers = {
     'Content-Type': 'application/json',
-    ...(opts.headers ? opts.headers : {}),
   };
   try {
     const res = await fetch(url, {
