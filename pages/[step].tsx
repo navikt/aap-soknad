@@ -112,14 +112,15 @@ const Steps = ({ søker, mellomlagretSøknad }: PageProps) => {
         søknadState?.søknad,
         sendtTimestamp,
         formatMessage,
-        søknadState?.requiredVedlegg
+        søknadState?.requiredVedlegg,
       );
 
-      const postResponse = await postSøknad({ søknad, kvittering: søknadPdf });
+      const postResponse = await postNySøknad(søknadState?.søknad);
+      //const postResponse = await postSøknad({ søknad, kvittering: søknadPdf });
       if (postResponse?.ok) {
         const harVedlegg = søknadState.requiredVedlegg && søknadState?.requiredVedlegg?.length > 0;
         const erIkkeKomplett = !!søknadState?.requiredVedlegg?.find(
-          (vedlegg) => !vedlegg.completed
+          (vedlegg) => !vedlegg.completed,
         );
         logSkjemaFullførtEvent({ harVedlegg, erIkkeKomplett });
         const url = postResponse?.data?.uri;
@@ -136,6 +137,11 @@ const Steps = ({ søker, mellomlagretSøknad }: PageProps) => {
   };
   const postSøknad = async (data?: any) =>
     fetchPOST('/aap/soknad/api/innsending/soknad', {
+      ...data,
+    });
+
+  const postNySøknad = async (data?: any) =>
+    fetchPOST('/aap/soknad/api/innsending/ny_soknad', {
       ...data,
     });
 
@@ -231,7 +237,7 @@ export const getServerSideProps = beskyttetSide(
     return {
       props: { søker, mellomlagretSøknad },
     };
-  }
+  },
 );
 
 export default StepsWithContextProvider;
