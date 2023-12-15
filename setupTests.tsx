@@ -5,7 +5,7 @@
 import '@testing-library/jest-dom';
 import { render as rtlRender, configure } from '@testing-library/react';
 import { AppStateContext, AppStateContextState } from 'context/appStateContext';
-import { SoknadContextData } from 'context/soknadContextCommon';
+import { SoknadContextData, soknadContextInititalState } from 'context/soknadContextCommon';
 import {
   soknadContextInititalStateStandard,
   SoknadContextStandard,
@@ -15,7 +15,7 @@ import { StepWizardContext, StepWizardContextState } from 'context/stepWizardCon
 import { ReactElement, useReducer } from 'react';
 import { IntlProvider } from 'react-intl';
 import { Soknad } from 'types/Soknad';
-import { SøknadType } from 'types/SoknadContext';
+import { GenericSoknadContextState, SøknadType } from 'types/SoknadContext';
 import { messages, flattenMessages } from 'utils/message';
 import links from 'translations/links.json';
 jest.setTimeout(10 * 1000);
@@ -40,10 +40,12 @@ function render(ui: ReactElement, { locale = 'nb', ...options } = {}) {
 function renderStepSoknadStandard(
   stepName: string,
   ui: ReactElement,
-  { locale = 'nb', ...options } = {}
+  { locale = 'nb', ...options } = {},
+  initialState?: GenericSoknadContextState<Soknad>
 ) {
   function ProvidersWrapper({ children }: { children: ReactElement }): ReactElement {
-    const [state, dispatch] = useReducer(soknadReducerStandard, soknadContextInititalStateStandard);
+    const initialSoknadContext = initialState || soknadContextInititalState;
+    const [state, dispatch] = useReducer(soknadReducerStandard, initialSoknadContext);
     const soknadContext: SoknadContextData<Soknad> = {
       søknadState: state,
       søknadDispatch: dispatch,

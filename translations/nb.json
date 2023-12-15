@@ -324,6 +324,7 @@
         "text": "Hvis du får utbetalinger fra NAV, arbeidsgiver eller andre, kan din AAP bli redusert. Vi spør om dette fordi du ikke alltid har krav på å få flere typer utbetalinger samtidig. Vi prøver å unngå feilutbetalinger."
       },
       "lønn": {
+        "title": "Lønn og andre goder",
         "label": "Har du fått eller skal du få ekstra utbetalinger fra arbeidsgiver?",
         "readMore": {
           "title": "Hva menes med \"ekstra utbetalinger\"?",

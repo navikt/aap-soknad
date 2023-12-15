@@ -43,7 +43,7 @@ const Vedlegg = ({ onBackClick }: Props) => {
     .filter((error): error is SøknadValidationError => error !== undefined);
 
   const harPåkrevdeVedlegg = søknadState.requiredVedlegg.length > 0;
-
+  console.log('manuelle', søknadState?.søknad?.manuelleBarn);
   return (
     <SoknadFormWrapperNew
       onNext={() => {
@@ -106,12 +106,29 @@ const Vedlegg = ({ onBackClick }: Props) => {
           files={søknadState.søknad?.vedlegg?.AVBRUTT_STUDIE || []}
         />
       )}
-
+      {søknadState?.requiredVedlegg?.find((e) => e.type === 'OMSORGSSTØNAD') && (
+        <FileInput
+          locale={locale}
+          id={'OMSORGSSTØNAD'}
+          heading={formatMessage({ id: 'søknad.andreUtbetalinger.stønad.values.omsorgsstønad' })}
+          ingress={formatMessage({ id: 'søknad.andreUtbetalinger.vedlegg.omsorgsstønad' })}
+          onUpload={(vedlegg) => {
+            addVedlegg(søknadDispatch, vedlegg, 'OMSORGSSTØNAD');
+          }}
+          onDelete={(vedlegg) => {
+            deleteVedlegg(søknadDispatch, vedlegg, 'OMSORGSSTØNAD');
+          }}
+          deleteUrl={deleteUrl}
+          uploadUrl={uploadUrl}
+          readAttachmentUrl={readAttachmentUrl}
+          files={søknadState.søknad?.vedlegg?.OMSORGSSTØNAD || []}
+        />
+      )}
       {søknadState?.requiredVedlegg?.find((e) => e.type === 'LØNN_OG_ANDRE_GODER') && (
         <FileInput
           locale={locale}
           id={'LØNN_OG_ANDRE_GODER'}
-          heading={'Lønn og andre goder'}
+          heading={formatMessage({ id: 'søknad.andreUtbetalinger.lønn.title' })}
           ingress={formatMessage({ id: 'søknad.andreUtbetalinger.vedlegg.andreGoder' })}
           onUpload={(vedlegg) => {
             addVedlegg(søknadDispatch, vedlegg, 'LØNN_OG_ANDRE_GODER');
