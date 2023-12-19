@@ -8,7 +8,6 @@ import { getAccessToken } from 'auth/accessToken';
 import { fetchPOST } from 'api/fetch';
 import { lesBucket } from 'pages/api/buckets/les';
 import { StepType } from 'components/StepWizard/Step';
-import { SØKNAD_CONTEXT_VERSION } from 'context/soknadContextCommon';
 import { isLabs } from 'utils/environments';
 import { logSkjemaStartetEvent } from 'utils/amplitude';
 import metrics from 'utils/metrics';
@@ -16,6 +15,7 @@ import { scrollRefIntoView } from 'utils/dom';
 import { getSøkerUtenBarn } from 'pages/api/oppslag/soekerUtenBarn';
 import { logger } from '@navikt/aap-felles-utils';
 import { getFulltNavn } from '../lib/søker';
+import { SØKNAD_CONTEXT_VERSION } from 'context/soknadcontext/soknadContext';
 
 interface PageProps {
   søker: Soker;

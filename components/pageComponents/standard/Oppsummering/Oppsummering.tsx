@@ -17,8 +17,6 @@ import * as yup from 'yup';
 import { goToNamedStep, useStepWizard } from 'context/stepWizardContextV2';
 import { StepNames } from 'pages';
 import { LucaGuidePanel } from '@navikt/aap-felles-react';
-import { updateSøknadData } from 'context/soknadContextCommon';
-import { useSoknadContextStandard } from 'context/soknadContextStandard';
 import { OppsummeringVedlegg } from './OppsummeringVedlegg/OppsummeringVedlegg';
 import {
   getStudentSchema,
@@ -49,6 +47,8 @@ import SoknadFormWrapperNew from 'components/SoknadFormWrapper/SoknadFormWrapper
 import { validate } from 'lib/utils/validationUtils';
 import { useFormErrors } from 'hooks/useFormErrors';
 import { setFocusOnErrorSummary } from 'components/schema/FormErrorSummary';
+import { useSoknadContext } from 'context/soknadcontext/soknadContext';
+import { updateSøknadData } from 'context/soknadcontext/actions';
 
 interface OppsummeringProps {
   onBackClick: () => void;
@@ -67,7 +67,7 @@ const Oppsummering = ({
   const [nextIsLoading, setNextIsLoading] = useState<boolean>(false);
   const { errors, setErrors, clearErrors, findError } = useFormErrors();
 
-  const { søknadState, søknadDispatch } = useSoknadContextStandard();
+  const { søknadState, søknadDispatch } = useSoknadContext();
   const { stepWizardDispatch } = useStepWizard();
 
   const schema = yup.object().shape({

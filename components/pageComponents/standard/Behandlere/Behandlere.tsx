@@ -7,8 +7,6 @@ import { completeAndGoToNextStep, useStepWizard } from 'context/stepWizardContex
 import { EndreEllerLeggTilBehandlerModal } from './EndreEllerLeggTilBehandlerModal';
 import { LucaGuidePanel } from '@navikt/aap-felles-react';
 import * as classes from './Behandlere.module.css';
-import { useSoknadContextStandard } from 'context/soknadContextStandard';
-import { updateSøknadData } from 'context/soknadContextCommon';
 import { useDebounceLagreSoknad } from 'hooks/useDebounceLagreSoknad';
 import { JaEllerNei } from 'types/Generic';
 import { IntlFormatters, useIntl } from 'react-intl';
@@ -19,6 +17,8 @@ import { logSkjemastegFullførtEvent } from 'utils/amplitude';
 import { validate } from 'lib/utils/validationUtils';
 import { RegistrertBehandler } from 'components/pageComponents/standard/Behandlere/RegistrertBehandler';
 import { AnnenBehandler } from 'components/pageComponents/standard/Behandlere/AnnenBehandler';
+import { useSoknadContext } from 'context/soknadcontext/soknadContext';
+import { updateSøknadData } from 'context/soknadcontext/actions';
 
 interface Props {
   onBackClick: () => void;
@@ -44,7 +44,7 @@ export const Behandlere = ({ onBackClick }: Props) => {
   const [selectedBehandler, setSelectedBehandler] = useState<Behandler>({});
 
   const { formatMessage } = useIntl();
-  const { søknadState, søknadDispatch } = useSoknadContextStandard();
+  const { søknadState, søknadDispatch } = useSoknadContext();
   const { currentStepIndex, stepWizardDispatch } = useStepWizard();
   const { stepList } = useStepWizard();
   const debouncedLagre = useDebounceLagreSoknad<Soknad>();
@@ -91,7 +91,7 @@ export const Behandlere = ({ onBackClick }: Props) => {
           }
         }}
         onBack={() => {
-          updateSøknadData<Soknad>(søknadDispatch, { ...søknadState.søknad });
+          updateSøknadData(søknadDispatch, { ...søknadState.søknad });
           onBackClick();
         }}
         errors={errors}

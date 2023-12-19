@@ -8,8 +8,6 @@ import * as yup from 'yup';
 import { completeAndGoToNextStep, useStepWizard } from 'context/stepWizardContextV2';
 import { AddBarnModal, CreateOrUpdateManuelleBarn, Relasjon } from './AddBarnModal';
 import { LucaGuidePanel } from '@navikt/aap-felles-react';
-import { addRequiredVedlegg, updateSøknadData } from 'context/soknadContextCommon';
-import { useSoknadContextStandard } from 'context/soknadContextStandard';
 import { useDebounceLagreSoknad } from 'hooks/useDebounceLagreSoknad';
 import { setFocusOnErrorSummary } from 'components/schema/FormErrorSummary';
 import { IntlFormatters, useIntl } from 'react-intl';
@@ -19,6 +17,8 @@ import { validate } from 'lib/utils/validationUtils';
 import { logSkjemastegFullførtEvent } from 'utils/amplitude';
 import { ManueltBarn } from './ManueltBarn';
 import { Registerbarn } from './Registerbarn';
+import { useSoknadContext } from 'context/soknadcontext/soknadContext';
+import { addRequiredVedlegg, updateSøknadData } from 'context/soknadcontext/actions';
 
 interface Props {
   onBackClick: () => void;
@@ -51,7 +51,7 @@ export const Barnetillegg = ({ onBackClick }: Props) => {
   const { errors, setErrors, clearErrors, findError } = useFormErrors();
   const { formatMessage } = useIntl();
 
-  const { søknadState, søknadDispatch } = useSoknadContextStandard();
+  const { søknadState, søknadDispatch } = useSoknadContext();
   const { currentStepIndex, stepWizardDispatch } = useStepWizard();
   const { stepList } = useStepWizard();
   const [selectedBarn, setSelectedBarn] = useState<CreateOrUpdateManuelleBarn>({});
@@ -135,7 +135,7 @@ export const Barnetillegg = ({ onBackClick }: Props) => {
           }
         }}
         onBack={() => {
-          updateSøknadData<Soknad>(søknadDispatch, { ...søknadState.søknad });
+          updateSøknadData(søknadDispatch, { ...søknadState.søknad });
           onBackClick();
         }}
         errors={errors}

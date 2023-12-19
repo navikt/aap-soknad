@@ -2,8 +2,6 @@ import { Soknad } from 'types/Soknad';
 import React, { useEffect } from 'react';
 import { Alert, BodyLong, BodyShort, Heading, Label, Textarea } from '@navikt/ds-react';
 import { completeAndGoToNextStep, useStepWizard } from 'context/stepWizardContextV2';
-import { addVedlegg, deleteVedlegg, updateSøknadData } from 'context/soknadContextCommon';
-import { useSoknadContextStandard } from 'context/soknadContextStandard';
 import { useDebounceLagreSoknad } from 'hooks/useDebounceLagreSoknad';
 import { FileInput, LucaGuidePanel } from '@navikt/aap-felles-react';
 import { useIntl } from 'react-intl';
@@ -12,6 +10,8 @@ import { SøknadValidationError } from 'components/schema/FormErrorSummary';
 import { logSkjemastegFullførtEvent } from 'utils/amplitude';
 import { setFocusOnErrorSummary } from '../../../schema/FormErrorSummary';
 import { ScanningGuide } from './scanningguide/ScanningGuide';
+import { useSoknadContext } from 'context/soknadcontext/soknadContext';
+import { addVedlegg, deleteVedlegg, updateSøknadData } from 'context/soknadcontext/actions';
 
 const deleteUrl = '/aap/soknad/api/vedlegg/slett/?uuids=';
 const uploadUrl = '/aap/soknad/api/vedlegg/lagre/';
@@ -23,7 +23,7 @@ interface Props {
 
 const Vedlegg = ({ onBackClick }: Props) => {
   const { formatMessage, locale } = useIntl();
-  const { søknadState, søknadDispatch } = useSoknadContextStandard();
+  const { søknadState, søknadDispatch } = useSoknadContext();
   const { stepWizardDispatch, currentStepIndex, stepList } = useStepWizard();
   const debouncedLagre = useDebounceLagreSoknad<Soknad>();
 
@@ -248,9 +248,7 @@ const Vedlegg = ({ onBackClick }: Props) => {
       <Textarea
         value={søknadState.søknad?.tilleggsopplysninger}
         name={`tilleggsopplysninger`}
-        onChange={(e) =>
-          updateSøknadData<Soknad>(søknadDispatch, { tilleggsopplysninger: e.target.value })
-        }
+        onChange={(e) => updateSøknadData(søknadDispatch, { tilleggsopplysninger: e.target.value })}
         label={formatMessage({ id: `søknad.tilleggsopplysninger.tilleggsopplysninger.label` })}
         description={formatMessage({
           id: `søknad.tilleggsopplysninger.tilleggsopplysninger.description`,

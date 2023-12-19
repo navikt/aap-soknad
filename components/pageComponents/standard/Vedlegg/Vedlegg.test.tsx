@@ -5,11 +5,10 @@ import { toHaveNoViolations } from 'jest-axe';
 import messagesNb from 'translations/nb.json';
 import userEvent from '@testing-library/user-event';
 import Vedlegg from './Vedlegg';
-import { SØKNAD_CONTEXT_VERSION } from '../../../../context/soknadContextCommon';
-import { GenericSoknadContextState } from '../../../../types/SoknadContext';
-import { Soknad } from '../../../../types/Soknad';
-import { Relasjon } from '../Barnetillegg/AddBarnModal';
-import { JaEllerNei } from '../../../../types/Generic';
+import { Soknad } from 'types/Soknad';
+import { Relasjon } from 'components/pageComponents/standard/Barnetillegg/AddBarnModal';
+import { JaEllerNei } from 'types/Generic';
+import { SoknadContextState, SØKNAD_CONTEXT_VERSION } from 'context/soknadcontext/soknadContext';
 
 expect.extend(toHaveNoViolations);
 
@@ -50,7 +49,7 @@ const requiredVedlegg = [
     description: 'Bekreftelse fra studiested på hvilken dato studiet ble avbrutt fra.',
   },
 ];
-const soknadContextInitial: GenericSoknadContextState<Soknad> = {
+const soknadContextInitial: SoknadContextState = {
   version: SØKNAD_CONTEXT_VERSION,
   type: undefined,
   søknad: {

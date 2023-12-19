@@ -22,8 +22,6 @@ import { useIntl } from 'react-intl';
 import SoknadFormWrapperNew from 'components/SoknadFormWrapper/SoknadFormWrapper';
 import { logSkjemastegFullførtEvent } from 'utils/amplitude';
 import { SøknadValidationError } from 'components/schema/FormErrorSummary';
-import { useSoknadContextStandard } from 'context/soknadContextStandard';
-import { updateSøknadData } from 'context/soknadContextCommon';
 import { useDebounceLagreSoknad } from 'hooks/useDebounceLagreSoknad';
 import { v4 as uuid4 } from 'uuid';
 import UtenlandsOppholdTabell from './UtenlandsOppholdTabell';
@@ -35,6 +33,8 @@ import {
   validateOgsåArbeidetUtenforNorge,
   validateUtenlandsPeriode,
 } from './medlemskapUtils';
+import { useSoknadContext } from 'context/soknadcontext/soknadContext';
+import { updateSøknadData } from 'context/soknadcontext/actions';
 
 interface Props {
   onBackClick: () => void;
@@ -44,7 +44,7 @@ export const Medlemskap = ({ onBackClick }: Props) => {
   const { formatMessage } = useIntl();
 
   const { currentStepIndex, stepWizardDispatch, stepList } = useStepWizard();
-  const { søknadState, søknadDispatch } = useSoknadContextStandard();
+  const { søknadState, søknadDispatch } = useSoknadContext();
   const [showUtenlandsPeriodeModal, setShowUtenlandsPeriodeModal] = useState<boolean>(false);
   const [selectedUtenlandsPeriode, setSelectedUtenlandsPeriode] = useState<UtenlandsPeriode>({});
   const [errors, setErrors] = useState<SøknadValidationError[] | undefined>();
@@ -121,7 +121,7 @@ export const Medlemskap = ({ onBackClick }: Props) => {
           completeAndGoToNextStep(stepWizardDispatch);
         }}
         onBack={() => {
-          updateSøknadData<Soknad>(søknadDispatch, { ...søknadState.søknad });
+          updateSøknadData(søknadDispatch, { ...søknadState.søknad });
           onBackClick();
         }}
         errors={errors}

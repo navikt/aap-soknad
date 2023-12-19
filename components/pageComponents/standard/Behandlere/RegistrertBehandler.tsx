@@ -1,16 +1,12 @@
 import * as classes from './Behandlere.module.css';
 import { Alert, BodyShort, Label, Radio, RadioGroup } from '@navikt/ds-react';
-import {
-  formatFullAdresse,
-  formatNavn,
-  formatTelefonnummer,
-} from '../../../../utils/StringFormatters';
-import { updateSøknadData } from '../../../../context/soknadContextCommon';
-import { JaEllerNei } from '../../../../types/Generic';
+import { formatFullAdresse, formatNavn, formatTelefonnummer } from 'utils/StringFormatters';
+import { JaEllerNei } from 'types/Generic';
 import React from 'react';
 import { useIntl } from 'react-intl';
-import { RegistrertBehandler as RegistrertBehandlerType } from '../../../../types/Soknad';
-import { useSoknadContextStandard } from '../../../../context/soknadContextStandard';
+import { RegistrertBehandler as RegistrertBehandlerType } from 'types/Soknad';
+import { useSoknadContext } from 'context/soknadcontext/soknadContext';
+import { updateSøknadData } from 'context/soknadcontext/actions';
 
 interface Props {
   registrertBehandler: RegistrertBehandlerType;
@@ -25,7 +21,7 @@ export const RegistrertBehandler = ({
   errorMessage,
 }: Props) => {
   const { formatMessage } = useIntl();
-  const { søknadState, søknadDispatch } = useSoknadContextStandard();
+  const { søknadState, søknadDispatch } = useSoknadContext();
 
   return (
     <div>

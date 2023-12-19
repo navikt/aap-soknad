@@ -1,13 +1,13 @@
 import { Button, Heading, Table } from '@navikt/ds-react';
 import * as styles from './Medlemskap.module.css';
-import { formatDate } from '../../../../utils/date';
+import { formatDate } from 'utils/date';
 import { Delete } from '@navikt/ds-icons';
 import React, { Dispatch } from 'react';
 import { useIntl } from 'react-intl';
-import { UtenlandsPeriode } from '../../../../types/Soknad';
-import { updateSøknadData } from '../../../../context/soknadContextCommon';
-import { useSoknadContextStandard } from '../../../../context/soknadContextStandard';
+import { UtenlandsPeriode } from 'types/Soknad';
 import { ArbeidEllerBodd } from '../UtenlandsPeriodeVelger/UtenlandsPeriodeVelger';
+import { useSoknadContext } from 'context/soknadcontext/soknadContext';
+import { updateSøknadData } from 'context/soknadcontext/actions';
 
 interface Props {
   utenlandsPerioder: UtenlandsPeriode[];
@@ -22,7 +22,7 @@ const UtenlandsOppholdTabell = ({
   arbeidEllerBodd,
 }: Props) => {
   const { formatMessage } = useIntl();
-  const { søknadState, søknadDispatch } = useSoknadContextStandard();
+  const { søknadState, søknadDispatch } = useSoknadContext();
 
   const remove = (id?: string) => {
     updateSøknadData(søknadDispatch, {

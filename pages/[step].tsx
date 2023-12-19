@@ -1,22 +1,14 @@
 import PageHeader from 'components/PageHeader';
 import { useRouter } from 'next/router';
 import React, { useEffect, useRef, useState } from 'react';
-import { setSoknadStateFraProps, SoknadActionKeys } from 'context/soknadContextCommon';
 import {
   completeAndGoToNextStep,
   goToPreviousStep,
   setStepList,
   useStepWizard,
 } from 'context/stepWizardContextV2';
-import { GenericSoknadContextState } from 'types/SoknadContext';
 import { useDebounceLagreSoknad } from 'hooks/useDebounceLagreSoknad';
 import { StepWizard } from 'components/StepWizard';
-import {
-  addBarnIfMissing,
-  addBehandlerIfMissing,
-  SoknadContextProviderStandard,
-  useSoknadContextStandard,
-} from 'context/soknadContextStandard';
 import {
   setSokerOppslagFraProps,
   SokerOppslagState,
@@ -47,10 +39,21 @@ import { Steg0 } from 'components/pageComponents/standard/Steg0/Steg0';
 import * as classes from './step.module.css';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { logger } from '@navikt/aap-felles-utils';
+import {
+  SoknadContextProvider,
+  SoknadContextState,
+  useSoknadContext,
+} from '../context/soknadcontext/soknadContext';
+import {
+  addBarnIfMissing,
+  addBehandlerIfMissing,
+  setSoknadStateFraProps,
+  SoknadActionKeys,
+} from '../context/soknadcontext/actions';
 
 interface PageProps {
   søker: SokerOppslagState;
-  mellomlagretSøknad: GenericSoknadContextState<Soknad>;
+  mellomlagretSøknad: SoknadContextState;
 }
 
 const Steps = ({ søker, mellomlagretSøknad }: PageProps) => {
@@ -59,7 +62,7 @@ const Steps = ({ søker, mellomlagretSøknad }: PageProps) => {
 
   const { formatMessage } = useIntl();
 
-  const { søknadState, søknadDispatch } = useSoknadContextStandard();
+  const { søknadState, søknadDispatch } = useSoknadContext();
   const { oppslagDispatch } = useSokerOppslag();
   const { currentStep, stepList, stepWizardDispatch } = useStepWizard();
   const debouncedLagre = useDebounceLagreSoknad<Soknad>();
@@ -198,9 +201,9 @@ const Steps = ({ søker, mellomlagretSøknad }: PageProps) => {
 };
 
 const StepsWithContextProvider = ({ søker, mellomlagretSøknad }: PageProps) => (
-  <SoknadContextProviderStandard>
+  <SoknadContextProvider>
     <Steps søker={søker} mellomlagretSøknad={mellomlagretSøknad} />
-  </SoknadContextProviderStandard>
+  </SoknadContextProvider>
 );
 
 export const getServerSideProps = beskyttetSide(

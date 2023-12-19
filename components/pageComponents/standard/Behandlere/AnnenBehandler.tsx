@@ -1,12 +1,12 @@
 import * as classes from './Behandlere.module.css';
 import { Button, Label } from '@navikt/ds-react';
-import { formatFullAdresse, formatTelefonnummer } from '../../../../utils/StringFormatters';
+import { formatFullAdresse, formatTelefonnummer } from 'utils/StringFormatters';
 import { Delete } from '@navikt/ds-icons';
 import React, { Dispatch } from 'react';
-import { Behandler } from '../../../../types/Soknad';
+import { Behandler } from 'types/Soknad';
 import { useIntl } from 'react-intl';
-import { updateSøknadData } from '../../../../context/soknadContextCommon';
-import { useSoknadContextStandard } from '../../../../context/soknadContextStandard';
+import { useSoknadContext } from 'context/soknadcontext/soknadContext';
+import { updateSøknadData } from 'context/soknadcontext/actions';
 
 interface Props {
   behandler: Behandler;
@@ -15,7 +15,7 @@ interface Props {
 }
 export const AnnenBehandler = ({ behandler, setSelectedBehandler, setShowModal }: Props) => {
   const { formatMessage } = useIntl();
-  const { søknadDispatch, søknadState } = useSoknadContextStandard();
+  const { søknadDispatch, søknadState } = useSoknadContext();
 
   const slettBehandler = (behandlerId?: string) => {
     updateSøknadData(søknadDispatch, {

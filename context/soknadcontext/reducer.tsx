@@ -1,34 +1,14 @@
-import React, { createContext, Dispatch, useContext, useMemo, useReducer } from 'react';
+import { RegistrertBehandler } from '../../types/Soknad';
 import structuredClone from '@ungap/structured-clone';
-import { GenericSoknadContextState, SøknadType } from 'types/SoknadContext';
-import {
-  ProviderProps,
-  SoknadAction,
-  SoknadActionKeys,
-  SoknadContextData,
-  soknadContextInititalState,
-} from './soknadContextCommon';
-import { RegistrertBehandler, Soknad } from 'types/Soknad';
-import { OppslagBarn, OppslagBehandler } from './sokerOppslagContext';
+import { SoknadContextState } from './soknadContext';
+import { SoknadAction, SoknadActionKeys } from './actions';
 
-export const soknadContextInititalStateStandard = {
-  ...soknadContextInititalState,
-  type: SøknadType.STANDARD,
-};
-export function soknadReducerStandard(
-  state: GenericSoknadContextState<Soknad>,
-  action: SoknadAction<Soknad>
-): GenericSoknadContextState<Soknad> {
+export function soknadReducer(state: SoknadContextState, action: SoknadAction): SoknadContextState {
   switch (action.type) {
     case SoknadActionKeys.SET_STATE_FROM_CACHE:
       return {
         ...state,
         ...structuredClone(action.payload),
-      };
-    case SoknadActionKeys.SET_SOKNAD_TYPE:
-      return {
-        ...state,
-        type: structuredClone(action.payload),
       };
     case SoknadActionKeys.SET_SOKNAD:
       return {
@@ -155,55 +135,3 @@ export function soknadReducerStandard(
     }
   }
 }
-
-export const SoknadContextStandard = createContext<SoknadContextData<Soknad> | undefined>(
-  undefined
-);
-
-export const SoknadContextProviderStandard = ({ children }: ProviderProps) => {
-  const [state, dispatch] = useReducer(soknadReducerStandard, soknadContextInititalStateStandard);
-
-  const contextValue: SoknadContextData<Soknad> = useMemo(() => {
-    return { søknadState: state, søknadDispatch: dispatch };
-  }, [state, dispatch]);
-
-  return (
-    <SoknadContextStandard.Provider value={contextValue}>{children}</SoknadContextStandard.Provider>
-  );
-};
-
-export const useSoknadContextStandard = () => {
-  const context = useContext(SoknadContextStandard);
-  if (context === undefined) {
-    throw new Error('useSoknadContextStandard must be used within a SoknadContextProviderStandard');
-  }
-  return context;
-};
-
-export const addBarnIfMissing = (dispatch: Dispatch<SoknadAction<Soknad>>, data: OppslagBarn[]) => {
-  dispatch({ type: SoknadActionKeys.ADD_BARN_IF_MISSING, payload: data });
-};
-
-export const addBehandlerIfMissing = (
-  dispatch: Dispatch<SoknadAction<Soknad>>,
-  data: OppslagBehandler[]
-) => {
-  dispatch({ type: SoknadActionKeys.ADD_BEHANDLER_IF_MISSING, payload: data });
-};
-
-export const getVedleggUuidsFromSoknad = (søknad?: Soknad) => {
-  const vedlegg = søknad?.vedlegg;
-  return Object.values(vedlegg || {})
-    .flat()
-    .map((vedlegg) => vedlegg?.vedleggId);
-};
-
-export const deleteOpplastedeVedlegg = async (søknad?: Soknad) => {
-  const vedleggUuids = getVedleggUuidsFromSoknad(søknad);
-  if (vedleggUuids.length > 0) {
-    const commaSeparatedUuids = vedleggUuids.join(',');
-    await fetch(`/aap/soknad/api/vedlegg/slett/?uuids=${commaSeparatedUuids}`, {
-      method: 'DELETE',
-    });
-  }
-};

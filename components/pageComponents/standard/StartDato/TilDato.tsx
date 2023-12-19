@@ -1,19 +1,17 @@
 import { DatePicker, useDatepicker } from '@navikt/ds-react';
-import { updateSøknadData } from '../../../../context/soknadContextCommon';
-import { GenericSoknadContextState } from '../../../../types/SoknadContext';
-import { Soknad } from '../../../../types/Soknad';
-import { useSoknadContextStandard } from '../../../../context/soknadContextStandard';
 import React from 'react';
 import { useIntl } from 'react-intl';
+import { SoknadContextState, useSoknadContext } from 'context/soknadcontext/soknadContext';
+import { updateSøknadData } from 'context/soknadcontext/actions';
 
 interface Props {
-  defaultValues?: GenericSoknadContextState<Soknad>;
+  defaultValues?: SoknadContextState;
   clearErrors: () => void;
   errorMessage?: string;
 }
 const TilDato = (props: Props) => {
   const { defaultValues, clearErrors, errorMessage } = props;
-  const { søknadDispatch, søknadState } = useSoknadContextStandard();
+  const { søknadDispatch, søknadState } = useSoknadContext();
   const { formatMessage } = useIntl();
 
   const { datepickerProps: tilDatoProps, inputProps: tilDatoInputProps } = useDatepicker({

@@ -18,12 +18,6 @@ import * as yup from 'yup';
 import { completeAndGoToNextStep, useStepWizard } from 'context/stepWizardContextV2';
 import ColorPanel from 'components/panel/ColorPanel';
 import { LucaGuidePanel } from '@navikt/aap-felles-react';
-import {
-  addRequiredVedlegg,
-  removeRequiredVedlegg,
-  updateSøknadData,
-} from 'context/soknadContextCommon';
-import { useSoknadContextStandard } from 'context/soknadContextStandard';
 import { useDebounceLagreSoknad } from 'hooks/useDebounceLagreSoknad';
 import { setFocusOnErrorSummary } from 'components/schema/FormErrorSummary';
 import { IntlFormatters, useIntl } from 'react-intl';
@@ -32,6 +26,12 @@ import { validate } from 'lib/utils/validationUtils';
 import { SøknadValidationError } from 'components/schema/FormErrorSummary';
 import { logSkjemastegFullførtEvent } from 'utils/amplitude';
 import { AttachmentType } from 'types/SoknadContext';
+import { useSoknadContext } from 'context/soknadcontext/soknadContext';
+import {
+  addRequiredVedlegg,
+  removeRequiredVedlegg,
+  updateSøknadData,
+} from 'context/soknadcontext/actions';
 
 interface Props {
   onBackClick: () => void;
@@ -109,7 +109,7 @@ export const getAndreUtbetalingerSchema = (formatMessage: IntlFormatters['format
 
 export const AndreUtbetalinger = ({ onBackClick }: Props) => {
   const [errors, setErrors] = useState<SøknadValidationError[] | undefined>();
-  const { søknadState, søknadDispatch } = useSoknadContextStandard();
+  const { søknadState, søknadDispatch } = useSoknadContext();
   const { stepList, currentStepIndex, stepWizardDispatch } = useStepWizard();
   const { formatMessage } = useIntl();
   const debouncedLagre = useDebounceLagreSoknad<Soknad>();

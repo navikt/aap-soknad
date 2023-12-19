@@ -6,8 +6,6 @@ import ColorPanel from 'components/panel/ColorPanel';
 import * as yup from 'yup';
 import { completeAndGoToNextStep, useStepWizard } from 'context/stepWizardContextV2';
 import { LucaGuidePanel } from '@navikt/aap-felles-react';
-import { useSoknadContextStandard } from 'context/soknadContextStandard';
-import { updateSøknadData } from 'context/soknadContextCommon';
 import { useDebounceLagreSoknad } from 'hooks/useDebounceLagreSoknad';
 import * as classes from './StartDato.module.css';
 import { setFocusOnErrorSummary } from 'components/schema/FormErrorSummary';
@@ -18,6 +16,8 @@ import { SøknadValidationError } from 'components/schema/FormErrorSummary';
 import { IntlFormatters, useIntl } from 'react-intl';
 import TilDato from './TilDato';
 import FraDato from './FraDato';
+import { useSoknadContext } from 'context/soknadcontext/soknadContext';
+import { updateSøknadData } from 'context/soknadcontext/actions';
 
 export enum FerieType {
   DAGER = 'DAGER',
@@ -125,7 +125,7 @@ const StartDato = ({ onBackClick }: Props) => {
   const { currentStepIndex, stepWizardDispatch, stepList } = useStepWizard();
 
   const [errors, setErrors] = useState<SøknadValidationError[] | undefined>();
-  const { søknadState, søknadDispatch } = useSoknadContextStandard();
+  const { søknadState, søknadDispatch } = useSoknadContext();
 
   useEffect(() => {
     debouncedLagre(søknadState, stepList, {});
