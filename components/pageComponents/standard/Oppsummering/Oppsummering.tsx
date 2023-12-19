@@ -45,7 +45,7 @@ import { useIntl } from 'react-intl';
 import { getMedlemskapSchema } from '../Medlemskap/medlemskapSchema';
 import SoknadFormWrapperNew from 'components/SoknadFormWrapper/SoknadFormWrapper';
 import { validate } from 'lib/utils/validationUtils';
-import { useFormErrors } from 'hooks/useFormErrors';
+import { useFormErrors } from 'hooks/FormErrorHook';
 import { setFocusOnErrorSummary } from 'components/schema/FormErrorSummary';
 import { useSoknad } from 'hooks/SoknadHook';
 import { updateSøknadData } from 'context/soknadcontext/actions';
