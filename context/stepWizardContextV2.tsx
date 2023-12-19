@@ -1,4 +1,4 @@
-import React, { createContext, Dispatch, ReactNode, useContext, useMemo, useReducer } from 'react';
+import React, { createContext, Dispatch, ReactNode, useMemo, useReducer } from 'react';
 import { StepType } from 'components/StepWizard/Step';
 
 interface DispatchStepWizardAction {
@@ -15,6 +15,7 @@ interface DispatchStepWizardAction {
 type StepWizardState = {
   stepList: Array<StepType>;
 };
+
 export type StepWizardContextState = {
   stepList: Array<StepType>;
   currentStepIndex: number;
@@ -109,35 +110,22 @@ export const StepWizardProvider = ({ children }: Props) => {
   }, [state, dispatch]);
   return <StepWizardContext.Provider value={contextValue}>{children}</StepWizardContext.Provider>;
 };
-export const useStepWizard = () => {
-  const context = useContext(StepWizardContext);
-  if (context === undefined) {
-    throw new Error('useStepWizard must be used within a StepWizardProvider');
-  }
-  return context;
-};
 
 export const setStepList = async (
   stepList: StepType[],
-  dispatch: Dispatch<DispatchStepWizardAction>
+  dispatch: Dispatch<DispatchStepWizardAction>,
 ) => {
   dispatch({ type: 'SET_STEP_LIST', payload: stepList });
 };
-export const setCurrentStepIndex = async (
-  index: number,
-  dispatch: Dispatch<DispatchStepWizardAction>
-) => {
-  dispatch({ type: 'SET_ACTIVE_STEP', payload: index });
-};
+
 export const completeAndGoToNextStep = async (dispatch: Dispatch<DispatchStepWizardAction>) => {
   dispatch({ type: 'COMPLETE_AND_GOTO_NEXT_STEP' });
 };
+
 export const goToPreviousStep = async (dispatch: Dispatch<DispatchStepWizardAction>) => {
   dispatch({ type: 'GOTO_PREVIOUS_STEP' });
 };
+
 export const goToNamedStep = async (dispatch: Dispatch<DispatchStepWizardAction>, name: string) => {
   dispatch({ type: 'GOTO_NAMED_STEP', payload: name });
-};
-export const resetStepWizard = async (dispatch: Dispatch<DispatchStepWizardAction>) => {
-  dispatch({ type: 'RESET_STEP_WIZARD' });
 };

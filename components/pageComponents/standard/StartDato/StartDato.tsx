@@ -4,7 +4,8 @@ import { Alert, BodyShort, Heading, Label, Radio, RadioGroup, TextField } from '
 import { JaEllerNei } from 'types/Generic';
 import ColorPanel from 'components/panel/ColorPanel';
 import * as yup from 'yup';
-import { completeAndGoToNextStep, useStepWizard } from 'context/stepWizardContextV2';
+import { completeAndGoToNextStep } from 'context/stepWizardContextV2';
+import { useStepWizard } from 'hooks/StepWizardHook';
 import { LucaGuidePanel } from '@navikt/aap-felles-react';
 import { useDebounceLagreSoknad } from 'hooks/useDebounceLagreSoknad';
 import * as classes from './StartDato.module.css';

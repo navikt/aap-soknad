@@ -15,7 +15,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { JaEllerNei } from 'types/Generic';
 import { Soknad } from 'types/Soknad';
 import * as yup from 'yup';
-import { completeAndGoToNextStep, useStepWizard } from 'context/stepWizardContextV2';
+import { completeAndGoToNextStep } from 'context/stepWizardContextV2';
 import ColorPanel from 'components/panel/ColorPanel';
 import { LucaGuidePanel } from '@navikt/aap-felles-react';
 import { useDebounceLagreSoknad } from 'hooks/useDebounceLagreSoknad';
@@ -33,6 +33,7 @@ import {
   updateSøknadData,
 } from 'context/soknadcontext/actions';
 import { useSoknad } from 'hooks/SoknadHook';
+import { useStepWizard } from 'hooks/StepWizardHook';
 
 interface Props {
   onBackClick: () => void;

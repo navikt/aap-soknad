@@ -12,7 +12,8 @@ import {
 import { Soknad } from 'types/Soknad';
 import { JaEllerNei } from 'types/Generic';
 import * as yup from 'yup';
-import { completeAndGoToNextStep, useStepWizard } from 'context/stepWizardContextV2';
+import { completeAndGoToNextStep } from 'context/stepWizardContextV2';
+import { useStepWizard } from 'hooks/StepWizardHook';
 import { LucaGuidePanel } from '@navikt/aap-felles-react';
 import { useDebounceLagreSoknad } from 'hooks/useDebounceLagreSoknad';
 import { setFocusOnErrorSummary } from 'components/schema/FormErrorSummary';

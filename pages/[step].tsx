@@ -5,8 +5,8 @@ import {
   completeAndGoToNextStep,
   goToPreviousStep,
   setStepList,
-  useStepWizard,
 } from 'context/stepWizardContextV2';
+import { useStepWizard } from 'hooks/StepWizardHook';
 import { useDebounceLagreSoknad } from 'hooks/useDebounceLagreSoknad';
 import { StepWizard } from 'components/StepWizard';
 import {
