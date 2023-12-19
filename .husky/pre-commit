@@ -3,3 +3,4 @@
 
 yarn intl:diff
 yarn lint-staged
+yarn tsc
