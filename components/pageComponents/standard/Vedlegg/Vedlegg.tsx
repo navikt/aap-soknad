@@ -32,18 +32,18 @@ const Vedlegg = ({ onBackClick }: Props) => {
   }, [søknadState.søknad?.vedlegg, søknadState.søknad?.tilleggsopplysninger]);
 
   const errors: SøknadValidationError[] = Object.entries(søknadState.søknad?.vedlegg || {})
-    .flatMap(([key, vedleggArray]) =>
-      vedleggArray
-        ?.filter((vedlegg) => vedlegg.errorMessage)
-        .map((vedlegg) => ({
-          message: vedlegg.errorMessage || '',
-          path: key,
-        }))
+    .flatMap(
+      ([key, vedleggArray]) =>
+        vedleggArray
+          ?.filter((vedlegg) => vedlegg.errorMessage)
+          .map((vedlegg) => ({
+            message: vedlegg.errorMessage || '',
+            path: key,
+          })),
     )
     .filter((error): error is SøknadValidationError => error !== undefined);
 
   const harPåkrevdeVedlegg = søknadState.requiredVedlegg.length > 0;
-  console.log('manuelle', søknadState?.søknad?.manuelleBarn);
   return (
     <SoknadFormWrapperNew
       onNext={() => {
@@ -211,7 +211,7 @@ const Vedlegg = ({ onBackClick }: Props) => {
               { id: `søknad.vedlegg.andreBarn.title.${requiredVedlegg?.filterType}` },
               {
                 navn: `${barn?.navn?.fornavn} ${barn?.navn?.etternavn}`,
-              }
+              },
             )}
             ingress={requiredVedlegg?.description}
             onUpload={(vedlegg) => {
