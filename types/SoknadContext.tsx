@@ -1,4 +1,3 @@
-import { StepType } from 'components/StepWizard/Step';
 import { SoknadVedlegg } from './Soknad';
 
 export enum SøknadType {
