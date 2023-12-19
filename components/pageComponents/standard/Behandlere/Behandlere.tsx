@@ -17,7 +17,7 @@ import { logSkjemastegFullførtEvent } from 'utils/amplitude';
 import { validate } from 'lib/utils/validationUtils';
 import { RegistrertBehandler } from 'components/pageComponents/standard/Behandlere/RegistrertBehandler';
 import { AnnenBehandler } from 'components/pageComponents/standard/Behandlere/AnnenBehandler';
-import { useSoknadContext } from 'context/soknadcontext/soknadContext';
+import { useSoknad } from 'hooks/SoknadHook';
 import { updateSøknadData } from 'context/soknadcontext/actions';
 
 interface Props {
@@ -31,11 +31,11 @@ export const getBehandlerSchema = (formatMessage: IntlFormatters['formatMessage'
         erRegistrertFastlegeRiktig: yup
           .string()
           .required(
-            formatMessage({ id: `søknad.helseopplysninger.erRegistrertFastlegeRiktig.required` })
+            formatMessage({ id: `søknad.helseopplysninger.erRegistrertFastlegeRiktig.required` }),
           )
           .oneOf([JaEllerNei.JA, JaEllerNei.NEI])
           .nullable(),
-      })
+      }),
     ),
   });
 export const Behandlere = ({ onBackClick }: Props) => {
@@ -44,7 +44,7 @@ export const Behandlere = ({ onBackClick }: Props) => {
   const [selectedBehandler, setSelectedBehandler] = useState<Behandler>({});
 
   const { formatMessage } = useIntl();
-  const { søknadState, søknadDispatch } = useSoknadContext();
+  const { søknadState, søknadDispatch } = useSoknad();
   const { currentStepIndex, stepWizardDispatch } = useStepWizard();
   const { stepList } = useStepWizard();
   const debouncedLagre = useDebounceLagreSoknad<Soknad>();

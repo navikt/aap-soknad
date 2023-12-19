@@ -1,6 +1,6 @@
 import { RequiredVedlegg, SøknadType } from 'types/SoknadContext';
 import { Soknad } from 'types/Soknad';
-import React, { createContext, Dispatch, ReactNode, useContext, useMemo, useReducer } from 'react';
+import React, { createContext, Dispatch, ReactNode, useMemo, useReducer } from 'react';
 import { StepType } from 'components/StepWizard/Step';
 import { SoknadAction } from './actions';
 import { soknadReducer } from './reducer';
@@ -37,12 +37,4 @@ export const SoknadContextProvider = ({ children }: { children: ReactNode }) => 
   }, [state, dispatch]);
 
   return <SoknadContext.Provider value={contextValue}>{children}</SoknadContext.Provider>;
-};
-
-export const useSoknadContext = () => {
-  const context = useContext(SoknadContext);
-  if (context === undefined) {
-    throw new Error('useSoknadContext must be used within a SoknadContextProvider');
-  }
-  return context;
 };

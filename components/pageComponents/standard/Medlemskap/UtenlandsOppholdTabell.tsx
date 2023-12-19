@@ -6,7 +6,7 @@ import React, { Dispatch } from 'react';
 import { useIntl } from 'react-intl';
 import { UtenlandsPeriode } from 'types/Soknad';
 import { ArbeidEllerBodd } from '../UtenlandsPeriodeVelger/UtenlandsPeriodeVelger';
-import { useSoknadContext } from 'context/soknadcontext/soknadContext';
+import { useSoknad } from 'hooks/SoknadHook';
 import { updateSøknadData } from 'context/soknadcontext/actions';
 
 interface Props {
@@ -22,14 +22,14 @@ const UtenlandsOppholdTabell = ({
   arbeidEllerBodd,
 }: Props) => {
   const { formatMessage } = useIntl();
-  const { søknadState, søknadDispatch } = useSoknadContext();
+  const { søknadState, søknadDispatch } = useSoknad();
 
   const remove = (id?: string) => {
     updateSøknadData(søknadDispatch, {
       medlemskap: {
         ...søknadState?.søknad?.medlemskap,
         utenlandsOpphold: søknadState?.søknad?.medlemskap?.utenlandsOpphold?.filter(
-          (e) => e.id !== id
+          (e) => e.id !== id,
         ),
       },
     });
@@ -65,7 +65,7 @@ const UtenlandsOppholdTabell = ({
                   <span>
                     {`${formatDate(utenlandsPeriode?.fraDato, 'MMMM yyyy')} - ${formatDate(
                       utenlandsPeriode?.tilDato,
-                      'MMMM yyyy'
+                      'MMMM yyyy',
                     )}${utenlandsPeriode?.iArbeid === 'Ja' ? ' (Jobb)' : ''}`}
                   </span>
                 </div>

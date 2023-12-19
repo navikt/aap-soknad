@@ -5,7 +5,7 @@ import { JaEllerNei } from 'types/Generic';
 import React from 'react';
 import { useIntl } from 'react-intl';
 import { RegistrertBehandler as RegistrertBehandlerType } from 'types/Soknad';
-import { useSoknadContext } from 'context/soknadcontext/soknadContext';
+import { useSoknad } from 'hooks/SoknadHook';
 import { updateSøknadData } from 'context/soknadcontext/actions';
 
 interface Props {
@@ -21,7 +21,7 @@ export const RegistrertBehandler = ({
   errorMessage,
 }: Props) => {
   const { formatMessage } = useIntl();
-  const { søknadState, søknadDispatch } = useSoknadContext();
+  const { søknadState, søknadDispatch } = useSoknad();
 
   return (
     <div>

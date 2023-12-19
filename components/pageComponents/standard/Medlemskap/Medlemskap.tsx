@@ -33,7 +33,7 @@ import {
   validateOgsåArbeidetUtenforNorge,
   validateUtenlandsPeriode,
 } from './medlemskapUtils';
-import { useSoknadContext } from 'context/soknadcontext/soknadContext';
+import { useSoknad } from 'hooks/SoknadHook';
 import { updateSøknadData } from 'context/soknadcontext/actions';
 
 interface Props {
@@ -44,7 +44,7 @@ export const Medlemskap = ({ onBackClick }: Props) => {
   const { formatMessage } = useIntl();
 
   const { currentStepIndex, stepWizardDispatch, stepList } = useStepWizard();
-  const { søknadState, søknadDispatch } = useSoknadContext();
+  const { søknadState, søknadDispatch } = useSoknad();
   const [showUtenlandsPeriodeModal, setShowUtenlandsPeriodeModal] = useState<boolean>(false);
   const [selectedUtenlandsPeriode, setSelectedUtenlandsPeriode] = useState<UtenlandsPeriode>({});
   const [errors, setErrors] = useState<SøknadValidationError[] | undefined>();
@@ -76,23 +76,23 @@ export const Medlemskap = ({ onBackClick }: Props) => {
           (utenlandsPeriode) =>
             utenlandsPeriode.id === updatedUtenlandsPeriode.id
               ? updatedUtenlandsPeriode
-              : utenlandsPeriode
+              : utenlandsPeriode,
         ),
       },
     });
   };
 
   const visArbeidINorge = validateArbeidINorge(
-    søknadState?.søknad?.medlemskap?.harBoddINorgeSiste5År
+    søknadState?.søknad?.medlemskap?.harBoddINorgeSiste5År,
   );
 
   const visArbeidUtenforNorgeFørSykdom = validateArbeidUtenforNorgeFørSykdom(
-    søknadState?.søknad?.medlemskap?.harBoddINorgeSiste5År
+    søknadState?.søknad?.medlemskap?.harBoddINorgeSiste5År,
   );
 
   const visOgsåArbeidetUtenforNorge = validateOgsåArbeidetUtenforNorge(
     søknadState?.søknad?.medlemskap?.harBoddINorgeSiste5År,
-    søknadState?.søknad?.medlemskap?.harArbeidetINorgeSiste5År
+    søknadState?.søknad?.medlemskap?.harArbeidetINorgeSiste5År,
   );
 
   const visLeggTilUtenlandsPeriode = validateUtenlandsPeriode(søknadState.søknad?.medlemskap);

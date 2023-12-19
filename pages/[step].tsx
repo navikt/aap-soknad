@@ -39,17 +39,14 @@ import { Steg0 } from 'components/pageComponents/standard/Steg0/Steg0';
 import * as classes from './step.module.css';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { logger } from '@navikt/aap-felles-utils';
-import {
-  SoknadContextProvider,
-  SoknadContextState,
-  useSoknadContext,
-} from '../context/soknadcontext/soknadContext';
+import { SoknadContextProvider, SoknadContextState } from 'context/soknadcontext/soknadContext';
+import { useSoknad } from 'hooks/SoknadHook';
 import {
   addBarnIfMissing,
   addBehandlerIfMissing,
   setSoknadStateFraProps,
   SoknadActionKeys,
-} from '../context/soknadcontext/actions';
+} from 'context/soknadcontext/actions';
 
 interface PageProps {
   søker: SokerOppslagState;
@@ -62,7 +59,7 @@ const Steps = ({ søker, mellomlagretSøknad }: PageProps) => {
 
   const { formatMessage } = useIntl();
 
-  const { søknadState, søknadDispatch } = useSoknadContext();
+  const { søknadState, søknadDispatch } = useSoknad();
   const { oppslagDispatch } = useSokerOppslag();
   const { currentStep, stepList, stepWizardDispatch } = useStepWizard();
   const debouncedLagre = useDebounceLagreSoknad<Soknad>();
@@ -115,14 +112,14 @@ const Steps = ({ søker, mellomlagretSøknad }: PageProps) => {
         søknadState?.søknad,
         sendtTimestamp,
         formatMessage,
-        søknadState?.requiredVedlegg
+        søknadState?.requiredVedlegg,
       );
 
       const postResponse = await postSøknad({ søknad, kvittering: søknadPdf });
       if (postResponse?.ok) {
         const harVedlegg = søknadState.requiredVedlegg && søknadState?.requiredVedlegg?.length > 0;
         const erIkkeKomplett = !!søknadState?.requiredVedlegg?.find(
-          (vedlegg) => !vedlegg.completed
+          (vedlegg) => !vedlegg.completed,
         );
         logSkjemaFullførtEvent({ harVedlegg, erIkkeKomplett });
         const url = postResponse?.data?.uri;
@@ -234,7 +231,7 @@ export const getServerSideProps = beskyttetSide(
     return {
       props: { søker, mellomlagretSøknad },
     };
-  }
+  },
 );
 
 export default StepsWithContextProvider;

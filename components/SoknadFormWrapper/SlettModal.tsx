@@ -3,14 +3,10 @@ import { useRouter } from 'next/router';
 import { Alert, Button, Heading, Loader, Modal } from '@navikt/ds-react';
 import * as classes from './SoknadFormWrapper.module.css';
 import { SuccessStroke } from '@navikt/ds-icons';
-import { clientSideIsProd } from '../../utils/environments';
+import { clientSideIsProd } from 'utils/environments';
 import React, { useState } from 'react';
-import { Soknad } from '../../types/Soknad';
-import { useSoknadContext } from '../../context/soknadcontext/soknadContext';
-import {
-  deleteOpplastedeVedlegg,
-  slettLagretSoknadState,
-} from '../../context/soknadcontext/actions';
+import { useSoknad } from 'hooks/SoknadHook';
+import { deleteOpplastedeVedlegg, slettLagretSoknadState } from 'context/soknadcontext/actions';
 
 interface Props {
   isOpen: boolean;
@@ -19,7 +15,7 @@ interface Props {
 const SlettModal = ({ isOpen, onClose }: Props) => {
   const [isDeletingSøknad, setIsDeletingSøknad] = useState<boolean>(false);
   const [slettSøknadSuccess, setSlettSøknadSuccess] = useState<boolean>(false);
-  const { søknadState, søknadDispatch } = useSoknadContext();
+  const { søknadState, søknadDispatch } = useSoknad();
   const { formatMessage } = useIntl();
   const router = useRouter();
 

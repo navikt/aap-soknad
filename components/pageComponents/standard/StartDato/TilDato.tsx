@@ -1,7 +1,8 @@
 import { DatePicker, useDatepicker } from '@navikt/ds-react';
 import React from 'react';
 import { useIntl } from 'react-intl';
-import { SoknadContextState, useSoknadContext } from 'context/soknadcontext/soknadContext';
+import { SoknadContextState } from 'context/soknadcontext/soknadContext';
+import { useSoknad } from 'hooks/SoknadHook';
 import { updateSøknadData } from 'context/soknadcontext/actions';
 
 interface Props {
@@ -11,7 +12,7 @@ interface Props {
 }
 const TilDato = (props: Props) => {
   const { defaultValues, clearErrors, errorMessage } = props;
-  const { søknadDispatch, søknadState } = useSoknadContext();
+  const { søknadDispatch, søknadState } = useSoknad();
   const { formatMessage } = useIntl();
 
   const { datepickerProps: tilDatoProps, inputProps: tilDatoInputProps } = useDatepicker({

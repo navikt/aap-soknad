@@ -1,8 +1,8 @@
-import { Soknad } from '../../../../types/Soknad';
 import { useIntl } from 'react-intl';
 import { DatePicker, useDatepicker } from '@navikt/ds-react';
 import React from 'react';
-import { SoknadContextState, useSoknadContext } from 'context/soknadcontext/soknadContext';
+import { SoknadContextState } from 'context/soknadcontext/soknadContext';
+import { useSoknad } from 'hooks/SoknadHook';
 import { updateSøknadData } from 'context/soknadcontext/actions';
 
 interface Props {
@@ -13,7 +13,7 @@ interface Props {
 
 const FraDato = (props: Props) => {
   const { defaultValues, clearErrors, errorMessage } = props;
-  const { søknadDispatch, søknadState } = useSoknadContext();
+  const { søknadDispatch, søknadState } = useSoknad();
   const { formatMessage } = useIntl();
 
   const { datepickerProps: fraDatoProps, inputProps: fraDatoInputProps } = useDatepicker({

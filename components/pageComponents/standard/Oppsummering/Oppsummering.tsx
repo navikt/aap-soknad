@@ -47,7 +47,7 @@ import SoknadFormWrapperNew from 'components/SoknadFormWrapper/SoknadFormWrapper
 import { validate } from 'lib/utils/validationUtils';
 import { useFormErrors } from 'hooks/useFormErrors';
 import { setFocusOnErrorSummary } from 'components/schema/FormErrorSummary';
-import { useSoknadContext } from 'context/soknadcontext/soknadContext';
+import { useSoknad } from 'hooks/SoknadHook';
 import { updateSøknadData } from 'context/soknadcontext/actions';
 
 interface OppsummeringProps {
@@ -67,7 +67,7 @@ const Oppsummering = ({
   const [nextIsLoading, setNextIsLoading] = useState<boolean>(false);
   const { errors, setErrors, clearErrors, findError } = useFormErrors();
 
-  const { søknadState, søknadDispatch } = useSoknadContext();
+  const { søknadState, søknadDispatch } = useSoknad();
   const { stepWizardDispatch } = useStepWizard();
 
   const schema = yup.object().shape({
@@ -82,26 +82,26 @@ const Oppsummering = ({
     !getStartDatoSchema(formatMessage).isValidSync({
       sykepenger: søknadState.søknad?.sykepenger,
       ferie: søknadState.søknad?.ferie,
-    })
+    }),
   );
   const [medlemskapHasErrors] = useState<boolean>(
-    !getMedlemskapSchema(formatMessage).isValidSync(søknadState.søknad)
+    !getMedlemskapSchema(formatMessage).isValidSync(søknadState.søknad),
   );
   const [yrkesskadeHasErrors] = useState<boolean>(
-    !getYrkesskadeSchema(formatMessage).isValidSync(søknadState.søknad)
+    !getYrkesskadeSchema(formatMessage).isValidSync(søknadState.søknad),
   );
   const [behandlereHasErrors] = useState<boolean>(
-    !getBehandlerSchema(formatMessage).isValidSync(søknadState.søknad)
+    !getBehandlerSchema(formatMessage).isValidSync(søknadState.søknad),
   );
   const [barnetilleggHasErrors] = useState<boolean>(
-    !getBarnetillegSchema(formatMessage).isValidSync(søknadState?.søknad)
+    !getBarnetillegSchema(formatMessage).isValidSync(søknadState?.søknad),
   );
   const [studentHasErrors] = useState<boolean>(
-    !getStudentSchema(formatMessage).isValidSync(søknadState?.søknad?.student)
+    !getStudentSchema(formatMessage).isValidSync(søknadState?.søknad?.student),
   );
 
   const [utbetalingerHasErrors] = useState<boolean>(
-    !getAndreUtbetalingerSchema(formatMessage).isValidSync(søknadState?.søknad?.andreUtbetalinger)
+    !getAndreUtbetalingerSchema(formatMessage).isValidSync(søknadState?.søknad?.andreUtbetalinger),
   );
 
   useEffect(() => {
@@ -292,7 +292,7 @@ const Oppsummering = ({
                 <BodyShort>{behandler.kontaktinformasjon.kontor}</BodyShort>
                 <BodyShort>{formatFullAdresse(behandler.kontaktinformasjon.adresse)}</BodyShort>
                 <BodyShort>{`Telefon: ${formatTelefonnummer(
-                  behandler.kontaktinformasjon.telefon
+                  behandler.kontaktinformasjon.telefon,
                 )}`}</BodyShort>
                 <BodyShort>{`${formatMessage({
                   id: 'søknad.oppsummering.helseopplysninger.informasjonOmFastlege',
@@ -368,7 +368,7 @@ const Oppsummering = ({
                         : stønadTekst}
                     </BodyShort>
                   );
-                }
+                },
               )}
             </div>
           ) : (

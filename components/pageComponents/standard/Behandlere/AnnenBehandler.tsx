@@ -5,7 +5,7 @@ import { Delete } from '@navikt/ds-icons';
 import React, { Dispatch } from 'react';
 import { Behandler } from 'types/Soknad';
 import { useIntl } from 'react-intl';
-import { useSoknadContext } from 'context/soknadcontext/soknadContext';
+import { useSoknad } from 'hooks/SoknadHook';
 import { updateSøknadData } from 'context/soknadcontext/actions';
 
 interface Props {
@@ -15,12 +15,12 @@ interface Props {
 }
 export const AnnenBehandler = ({ behandler, setSelectedBehandler, setShowModal }: Props) => {
   const { formatMessage } = useIntl();
-  const { søknadDispatch, søknadState } = useSoknadContext();
+  const { søknadDispatch, søknadState } = useSoknad();
 
   const slettBehandler = (behandlerId?: string) => {
     updateSøknadData(søknadDispatch, {
       andreBehandlere: søknadState.søknad?.andreBehandlere?.filter(
-        (behandler) => behandlerId !== behandler.id
+        (behandler) => behandlerId !== behandler.id,
       ),
     });
   };

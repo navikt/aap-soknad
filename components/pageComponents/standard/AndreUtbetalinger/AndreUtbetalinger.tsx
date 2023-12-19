@@ -26,12 +26,13 @@ import { validate } from 'lib/utils/validationUtils';
 import { SøknadValidationError } from 'components/schema/FormErrorSummary';
 import { logSkjemastegFullførtEvent } from 'utils/amplitude';
 import { AttachmentType } from 'types/SoknadContext';
-import { useSoknadContext } from 'context/soknadcontext/soknadContext';
+
 import {
   addRequiredVedlegg,
   removeRequiredVedlegg,
   updateSøknadData,
 } from 'context/soknadcontext/actions';
+import { useSoknad } from 'hooks/SoknadHook';
 
 interface Props {
   onBackClick: () => void;
@@ -99,7 +100,7 @@ export const getAndreUtbetalingerSchema = (formatMessage: IntlFormatters['format
             hvemBetaler: yup.string().required(
               formatMessage({
                 id: 'søknad.andreUtbetalinger.hvemBetalerAfp.validation.required',
-              })
+              }),
             ),
           });
         }
@@ -109,7 +110,7 @@ export const getAndreUtbetalingerSchema = (formatMessage: IntlFormatters['format
 
 export const AndreUtbetalinger = ({ onBackClick }: Props) => {
   const [errors, setErrors] = useState<SøknadValidationError[] | undefined>();
-  const { søknadState, søknadDispatch } = useSoknadContext();
+  const { søknadState, søknadDispatch } = useSoknad();
   const { stepList, currentStepIndex, stepWizardDispatch } = useStepWizard();
   const { formatMessage } = useIntl();
   const debouncedLagre = useDebounceLagreSoknad<Soknad>();
@@ -169,7 +170,7 @@ export const AndreUtbetalinger = ({ onBackClick }: Props) => {
       }
     } else if (søknadState.søknad?.andreUtbetalinger?.stønad?.includes(StønadType.NEI)) {
       const newList = [...søknadState.søknad?.andreUtbetalinger?.stønad].filter(
-        (e) => e !== StønadType.NEI
+        (e) => e !== StønadType.NEI,
       );
       updateSøknadData(søknadDispatch, {
         andreUtbetalinger: {
@@ -194,7 +195,7 @@ export const AndreUtbetalinger = ({ onBackClick }: Props) => {
       onNext={async () => {
         const errors = await validate(
           getAndreUtbetalingerSchema(formatMessage),
-          søknadState.søknad?.andreUtbetalinger
+          søknadState.søknad?.andreUtbetalinger,
         );
         if (errors) {
           setErrors(errors);

@@ -17,7 +17,7 @@ import { validate } from 'lib/utils/validationUtils';
 import { logSkjemastegFullførtEvent } from 'utils/amplitude';
 import { ManueltBarn } from './ManueltBarn';
 import { Registerbarn } from './Registerbarn';
-import { useSoknadContext } from 'context/soknadcontext/soknadContext';
+import { useSoknad } from 'hooks/SoknadHook';
 import { addRequiredVedlegg, updateSøknadData } from 'context/soknadcontext/actions';
 
 interface Props {
@@ -38,12 +38,12 @@ export const getBarnetillegSchema = (formatMessage: IntlFormatters['formatMessag
               { id: 'søknad.barnetillegg.leggTilBarn.modal.harInntekt.validation.required' },
               {
                 grunnbeløp: GRUNNBELØP,
-              }
-            )
+              },
+            ),
           )
           .oneOf([JaEllerNei.JA, JaEllerNei.NEI])
           .nullable(),
-      })
+      }),
     ),
   });
 
@@ -51,7 +51,7 @@ export const Barnetillegg = ({ onBackClick }: Props) => {
   const { errors, setErrors, clearErrors, findError } = useFormErrors();
   const { formatMessage } = useIntl();
 
-  const { søknadState, søknadDispatch } = useSoknadContext();
+  const { søknadState, søknadDispatch } = useSoknad();
   const { currentStepIndex, stepWizardDispatch } = useStepWizard();
   const { stepList } = useStepWizard();
   const [selectedBarn, setSelectedBarn] = useState<CreateOrUpdateManuelleBarn>({});
@@ -89,11 +89,11 @@ export const Barnetillegg = ({ onBackClick }: Props) => {
             { id: `søknad.vedlegg.andreBarn.description.${barn.relasjon}` },
             {
               navn: `${barn?.navn?.fornavn} ${barn?.navn?.etternavn}`,
-            }
+            },
           ),
         },
       ],
-      søknadDispatch
+      søknadDispatch,
     );
   };
 

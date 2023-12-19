@@ -10,8 +10,8 @@ import { SøknadValidationError } from 'components/schema/FormErrorSummary';
 import { logSkjemastegFullførtEvent } from 'utils/amplitude';
 import { setFocusOnErrorSummary } from '../../../schema/FormErrorSummary';
 import { ScanningGuide } from './scanningguide/ScanningGuide';
-import { useSoknadContext } from 'context/soknadcontext/soknadContext';
 import { addVedlegg, deleteVedlegg, updateSøknadData } from 'context/soknadcontext/actions';
+import { useSoknad } from 'hooks/SoknadHook';
 
 const deleteUrl = '/aap/soknad/api/vedlegg/slett/?uuids=';
 const uploadUrl = '/aap/soknad/api/vedlegg/lagre/';
@@ -23,7 +23,7 @@ interface Props {
 
 const Vedlegg = ({ onBackClick }: Props) => {
   const { formatMessage, locale } = useIntl();
-  const { søknadState, søknadDispatch } = useSoknadContext();
+  const { søknadState, søknadDispatch } = useSoknad();
   const { stepWizardDispatch, currentStepIndex, stepList } = useStepWizard();
   const debouncedLagre = useDebounceLagreSoknad<Soknad>();
 

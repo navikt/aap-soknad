@@ -9,7 +9,7 @@ import React, { Dispatch } from 'react';
 import { GRUNNBELØP } from './Barnetillegg';
 import { ManuelleBarn } from 'types/Soknad';
 import { useIntl } from 'react-intl';
-import { useSoknadContext } from 'context/soknadcontext/soknadContext';
+import { useSoknad } from 'hooks/SoknadHook';
 import { removeRequiredVedlegg, updateSøknadData } from 'context/soknadcontext/actions';
 
 interface BarnKortProps {
@@ -19,7 +19,7 @@ interface BarnKortProps {
 }
 const ManueltBarn = ({ barn, setSelectedBarn, setShowModal }: BarnKortProps) => {
   const { formatMessage } = useIntl();
-  const { søknadState, søknadDispatch } = useSoknadContext();
+  const { søknadState, søknadDispatch } = useSoknad();
 
   const slettBarn = (barnId: string) => {
     updateSøknadData(søknadDispatch, {
@@ -58,7 +58,7 @@ const ManueltBarn = ({ barn, setSelectedBarn, setShowModal }: BarnKortProps) => 
               { id: 'søknad.barnetillegg.manuelleBarn.inntektOver1G' },
               {
                 grunnbeløp: GRUNNBELØP,
-              }
+              },
             )}
           </BodyShort>
         )}
@@ -68,7 +68,7 @@ const ManueltBarn = ({ barn, setSelectedBarn, setShowModal }: BarnKortProps) => 
               { id: 'søknad.barnetillegg.manuelleBarn.inntektIkkeOver1G' },
               {
                 grunnbeløp: GRUNNBELØP,
-              }
+              },
             )}
           </BodyShort>
         )}

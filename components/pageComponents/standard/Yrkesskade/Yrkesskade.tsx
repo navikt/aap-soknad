@@ -21,7 +21,7 @@ import { logSkjemastegFullførtEvent } from 'utils/amplitude';
 import { validate } from 'lib/utils/validationUtils';
 import { SøknadValidationError } from 'components/schema/FormErrorSummary';
 import SoknadFormWrapperNew from 'components/SoknadFormWrapper/SoknadFormWrapper';
-import { useSoknadContext } from 'context/soknadcontext/soknadContext';
+import { useSoknad } from 'hooks/SoknadHook';
 import { updateSøknadData } from 'context/soknadcontext/actions';
 
 interface Props {
@@ -40,7 +40,7 @@ export const getYrkesskadeSchema = (formatMessage: IntlFormatters['formatMessage
 export const Yrkesskade = ({ onBackClick }: Props) => {
   const { formatMessage } = useIntl();
 
-  const { søknadState, søknadDispatch } = useSoknadContext();
+  const { søknadState, søknadDispatch } = useSoknad();
   const { currentStepIndex, stepWizardDispatch, stepList } = useStepWizard();
 
   const debouncedLagre = useDebounceLagreSoknad<Soknad>();

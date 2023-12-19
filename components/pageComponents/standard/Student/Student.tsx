@@ -13,7 +13,7 @@ import { validate } from 'lib/utils/validationUtils';
 import { logSkjemastegFullførtEvent } from 'utils/amplitude';
 import { SøknadValidationError } from 'components/schema/FormErrorSummary';
 import SoknadFormWrapperNew from 'components/SoknadFormWrapper/SoknadFormWrapper';
-import { useSoknadContext } from 'context/soknadcontext/soknadContext';
+import { useSoknad } from 'hooks/SoknadHook';
 import {
   addRequiredVedlegg,
   removeRequiredVedlegg,
@@ -50,7 +50,7 @@ export const getStudentSchema = (formatMessage: IntlFormatters['formatMessage'])
       .required(formatMessage({ id: 'søknad.student.erStudent.required' }))
       .oneOf(
         [JaNeiAvbrutt.JA, JaNeiAvbrutt.NEI, JaNeiAvbrutt.AVBRUTT],
-        formatMessage({ id: 'søknad.student.erStudent.required' })
+        formatMessage({ id: 'søknad.student.erStudent.required' }),
       )
       .typeError(formatMessage({ id: 'søknad.student.erStudent.required' })),
     [KOMME_TILBAKE]: yup.string().when(ER_STUDENT, ([erStudent], schema) => {
@@ -60,7 +60,7 @@ export const getStudentSchema = (formatMessage: IntlFormatters['formatMessage'])
           .required(formatMessage({ id: 'søknad.student.kommeTilbake.required' }))
           .oneOf(
             [JaNeiVetIkke.JA, JaNeiVetIkke.NEI, JaNeiVetIkke.VET_IKKE],
-            formatMessage({ id: 'søknad.student.kommeTilbake.required' })
+            formatMessage({ id: 'søknad.student.kommeTilbake.required' }),
           )
           .typeError(formatMessage({ id: 'søknad.student.kommeTilbake.required' }));
       }
@@ -70,7 +70,7 @@ export const getStudentSchema = (formatMessage: IntlFormatters['formatMessage'])
 
 const Student = ({ onBackClick }: Props) => {
   const { formatMessage } = useIntl();
-  const { søknadState, søknadDispatch } = useSoknadContext();
+  const { søknadState, søknadDispatch } = useSoknad();
   const { stepList, currentStepIndex, stepWizardDispatch } = useStepWizard();
 
   const debouncedLagre = useDebounceLagreSoknad<Soknad>();
@@ -87,7 +87,7 @@ const Student = ({ onBackClick }: Props) => {
         id: jaNeiAvbruttToTekstnøkkel(JaNeiAvbrutt.AVBRUTT),
       }),
     }),
-    [formatMessage]
+    [formatMessage],
   );
 
   const [errors, setErrors] = useState<SøknadValidationError[] | undefined>();
@@ -110,7 +110,7 @@ const Student = ({ onBackClick }: Props) => {
                 description: formatMessage({ id: 'søknad.student.vedlegg.description' }),
               },
             ],
-            søknadDispatch
+            søknadDispatch,
           );
         } else {
           removeRequiredVedlegg('AVBRUTT_STUDIE', søknadDispatch);
