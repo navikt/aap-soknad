@@ -1,11 +1,7 @@
 import PageHeader from 'components/PageHeader';
 import { useRouter } from 'next/router';
 import React, { useEffect, useRef, useState } from 'react';
-import {
-  completeAndGoToNextStep,
-  goToPreviousStep,
-  setStepList,
-} from 'context/stepWizardContextV2';
+import { completeAndGoToNextStep, goToPreviousStep, setStepList } from 'context/stepWizardContext';
 import { useStepWizard } from 'hooks/StepWizardHook';
 import { useDebounceLagreSoknad } from 'hooks/useDebounceLagreSoknad';
 import { StepWizard } from 'components/StepWizard';

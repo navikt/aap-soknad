@@ -5,7 +5,7 @@ import { Barn, ManuelleBarn, Soknad } from 'types/Soknad';
 import * as classes from './Barnetillegg.module.css';
 import { Add } from '@navikt/ds-icons';
 import * as yup from 'yup';
-import { completeAndGoToNextStep } from 'context/stepWizardContextV2';
+import { completeAndGoToNextStep } from 'context/stepWizardContext';
 import { useStepWizard } from 'hooks/StepWizardHook';
 import { AddBarnModal, CreateOrUpdateManuelleBarn, Relasjon } from './AddBarnModal';
 import { LucaGuidePanel } from '@navikt/aap-felles-react';

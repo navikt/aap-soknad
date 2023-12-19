@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { Add } from '@navikt/ds-icons';
 import { Behandler, Soknad } from 'types/Soknad';
 import * as yup from 'yup';
-import { completeAndGoToNextStep } from 'context/stepWizardContextV2';
+import { completeAndGoToNextStep } from 'context/stepWizardContext';
 import { useStepWizard } from 'hooks/StepWizardHook';
 import { EndreEllerLeggTilBehandlerModal } from './EndreEllerLeggTilBehandlerModal';
 import { LucaGuidePanel } from '@navikt/aap-felles-react';

@@ -15,7 +15,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { JaEllerNei } from 'types/Generic';
 import { Soknad } from 'types/Soknad';
 import * as yup from 'yup';
-import { completeAndGoToNextStep } from 'context/stepWizardContextV2';
+import { completeAndGoToNextStep } from 'context/stepWizardContext';
 import ColorPanel from 'components/panel/ColorPanel';
 import { LucaGuidePanel } from '@navikt/aap-felles-react';
 import { useDebounceLagreSoknad } from 'hooks/useDebounceLagreSoknad';

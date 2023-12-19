@@ -3,7 +3,7 @@ import { Alert, BodyShort, Heading, Radio, RadioGroup } from '@navikt/ds-react';
 import { JaNeiVetIkke } from 'types/Generic';
 import React, { useEffect, useMemo, useState } from 'react';
 import * as yup from 'yup';
-import { completeAndGoToNextStep } from 'context/stepWizardContextV2';
+import { completeAndGoToNextStep } from 'context/stepWizardContext';
 import { useStepWizard } from 'hooks/StepWizardHook';
 import ColorPanel from 'components/panel/ColorPanel';
 import { LucaGuidePanel } from '@navikt/aap-felles-react';

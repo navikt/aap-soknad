@@ -14,7 +14,7 @@ import OppsummeringKontaktinfo from './OppsummeringKontaktinfo/OppsummeringKonta
 import OppsummeringUtenlandsopphold from './OppsummeringUtenlandsopphold/OppsummeringUtenlandsopphold';
 import OppsummeringBehandler from './OppsummeringBehandler/OppsummeringBehandler';
 import * as yup from 'yup';
-import { goToNamedStep } from 'context/stepWizardContextV2';
+import { goToNamedStep } from 'context/stepWizardContext';
 import { useStepWizard } from 'hooks/StepWizardHook';
 import { StepNames } from 'pages';
 import { LucaGuidePanel } from '@navikt/aap-felles-react';

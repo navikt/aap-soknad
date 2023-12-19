@@ -1,7 +1,7 @@
 import { Soknad } from 'types/Soknad';
 import React, { useEffect } from 'react';
 import { Alert, BodyLong, BodyShort, Heading, Label, Textarea } from '@navikt/ds-react';
-import { completeAndGoToNextStep } from 'context/stepWizardContextV2';
+import { completeAndGoToNextStep } from 'context/stepWizardContext';
 import { useStepWizard } from 'hooks/StepWizardHook';
 import { useDebounceLagreSoknad } from 'hooks/useDebounceLagreSoknad';
 import { FileInput, LucaGuidePanel } from '@navikt/aap-felles-react';

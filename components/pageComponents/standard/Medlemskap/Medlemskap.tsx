@@ -14,7 +14,7 @@ import { Add } from '@navikt/ds-icons';
 import UtenlandsPeriodeVelger from '..//UtenlandsPeriodeVelger/UtenlandsPeriodeVelger';
 import { validate } from 'lib/utils/validationUtils';
 import { Soknad, UtenlandsPeriode } from 'types/Soknad';
-import { completeAndGoToNextStep } from 'context/stepWizardContextV2';
+import { completeAndGoToNextStep } from 'context/stepWizardContext';
 import { useStepWizard } from 'hooks/StepWizardHook';
 import ColorPanel from 'components/panel/ColorPanel';
 import { LucaGuidePanel } from '@navikt/aap-felles-react';

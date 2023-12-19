@@ -5,7 +5,7 @@
 import '@testing-library/jest-dom';
 import { render as rtlRender, configure } from '@testing-library/react';
 import { AppStateContext, AppStateContextState } from 'context/appStateContext';
-import { StepWizardContext, StepWizardContextState } from 'context/stepWizardContextV2';
+import { StepWizardContext, StepWizardContextState } from 'context/stepWizardContext';
 import { ReactElement, useReducer } from 'react';
 import { IntlProvider } from 'react-intl';
 import { messages, flattenMessages } from 'utils/message';
@@ -40,7 +40,7 @@ function renderStepSoknadStandard(
   stepName: string,
   ui: ReactElement,
   { locale = 'nb', ...options } = {},
-  initialState?: SoknadContextState
+  initialState?: SoknadContextState,
 ) {
   function ProvidersWrapper({ children }: { children: ReactElement }): ReactElement {
     const initialSoknadContext = initialState || soknadContextInititalState;
