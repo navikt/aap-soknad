@@ -1,22 +1,10 @@
 import PageHeader from 'components/PageHeader';
 import { useRouter } from 'next/router';
 import React, { useEffect, useRef, useState } from 'react';
-import { setSoknadStateFraProps, SoknadActionKeys } from 'context/soknadContextCommon';
-import {
-  completeAndGoToNextStep,
-  goToPreviousStep,
-  setStepList,
-  useStepWizard,
-} from 'context/stepWizardContextV2';
-import { GenericSoknadContextState } from 'types/SoknadContext';
+import { completeAndGoToNextStep, goToPreviousStep, setStepList } from 'context/stepWizardContext';
+import { useStepWizard } from 'hooks/StepWizardHook';
 import { useDebounceLagreSoknad } from 'hooks/useDebounceLagreSoknad';
 import { StepWizard } from 'components/StepWizard';
-import {
-  addBarnIfMissing,
-  addBehandlerIfMissing,
-  SoknadContextProviderStandard,
-  useSoknadContextStandard,
-} from 'context/soknadContextStandard';
 import {
   setSokerOppslagFraProps,
   SokerOppslagState,
@@ -47,10 +35,18 @@ import { Steg0 } from 'components/pageComponents/standard/Steg0/Steg0';
 import * as classes from './step.module.css';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { logger } from '@navikt/aap-felles-utils';
+import { SoknadContextProvider, SoknadContextState } from 'context/soknadcontext/soknadContext';
+import { useSoknad } from 'hooks/SoknadHook';
+import {
+  addBarnIfMissing,
+  addBehandlerIfMissing,
+  setSoknadStateFraProps,
+  SoknadActionKeys,
+} from 'context/soknadcontext/actions';
 
 interface PageProps {
   søker: SokerOppslagState;
-  mellomlagretSøknad: GenericSoknadContextState<Soknad>;
+  mellomlagretSøknad: SoknadContextState;
 }
 
 const Steps = ({ søker, mellomlagretSøknad }: PageProps) => {
@@ -59,7 +55,7 @@ const Steps = ({ søker, mellomlagretSøknad }: PageProps) => {
 
   const { formatMessage } = useIntl();
 
-  const { søknadState, søknadDispatch } = useSoknadContextStandard();
+  const { søknadState, søknadDispatch } = useSoknad();
   const { oppslagDispatch } = useSokerOppslag();
   const { currentStep, stepList, stepWizardDispatch } = useStepWizard();
   const debouncedLagre = useDebounceLagreSoknad<Soknad>();
@@ -112,14 +108,14 @@ const Steps = ({ søker, mellomlagretSøknad }: PageProps) => {
         søknadState?.søknad,
         sendtTimestamp,
         formatMessage,
-        søknadState?.requiredVedlegg
+        søknadState?.requiredVedlegg,
       );
 
       const postResponse = await postSøknad({ søknad, kvittering: søknadPdf });
       if (postResponse?.ok) {
         const harVedlegg = søknadState.requiredVedlegg && søknadState?.requiredVedlegg?.length > 0;
         const erIkkeKomplett = !!søknadState?.requiredVedlegg?.find(
-          (vedlegg) => !vedlegg.completed
+          (vedlegg) => !vedlegg.completed,
         );
         logSkjemaFullførtEvent({ harVedlegg, erIkkeKomplett });
         const url = postResponse?.data?.uri;
@@ -198,9 +194,9 @@ const Steps = ({ søker, mellomlagretSøknad }: PageProps) => {
 };
 
 const StepsWithContextProvider = ({ søker, mellomlagretSøknad }: PageProps) => (
-  <SoknadContextProviderStandard>
+  <SoknadContextProvider>
     <Steps søker={søker} mellomlagretSøknad={mellomlagretSøknad} />
-  </SoknadContextProviderStandard>
+  </SoknadContextProvider>
 );
 
 export const getServerSideProps = beskyttetSide(
@@ -231,7 +227,7 @@ export const getServerSideProps = beskyttetSide(
     return {
       props: { søker, mellomlagretSøknad },
     };
-  }
+  },
 );
 
 export default StepsWithContextProvider;

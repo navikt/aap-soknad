@@ -5,19 +5,18 @@
 import '@testing-library/jest-dom';
 import { render as rtlRender, configure } from '@testing-library/react';
 import { AppStateContext, AppStateContextState } from 'context/appStateContext';
-import { SoknadContextData, soknadContextInititalState } from 'context/soknadContextCommon';
-import {
-  soknadContextInititalStateStandard,
-  SoknadContextStandard,
-  soknadReducerStandard,
-} from 'context/soknadContextStandard';
-import { StepWizardContext, StepWizardContextState } from 'context/stepWizardContextV2';
+import { StepWizardContext, StepWizardContextState } from 'context/stepWizardContext';
 import { ReactElement, useReducer } from 'react';
 import { IntlProvider } from 'react-intl';
-import { Soknad } from 'types/Soknad';
-import { GenericSoknadContextState, SøknadType } from 'types/SoknadContext';
 import { messages, flattenMessages } from 'utils/message';
 import links from 'translations/links.json';
+import {
+  SoknadContext,
+  soknadContextInititalState,
+  SoknadContextState,
+  SoknadContextType,
+} from './context/soknadcontext/soknadContext';
+import { soknadReducer } from './context/soknadcontext/reducer';
 jest.setTimeout(10 * 1000);
 configure({ asyncUtilTimeout: 10 * 1000 });
 
@@ -41,12 +40,12 @@ function renderStepSoknadStandard(
   stepName: string,
   ui: ReactElement,
   { locale = 'nb', ...options } = {},
-  initialState?: GenericSoknadContextState<Soknad>
+  initialState?: SoknadContextState,
 ) {
   function ProvidersWrapper({ children }: { children: ReactElement }): ReactElement {
     const initialSoknadContext = initialState || soknadContextInititalState;
-    const [state, dispatch] = useReducer(soknadReducerStandard, initialSoknadContext);
-    const soknadContext: SoknadContextData<Soknad> = {
+    const [state, dispatch] = useReducer(soknadReducer, initialSoknadContext);
+    const soknadContext: SoknadContextType = {
       søknadState: state,
       søknadDispatch: dispatch,
     };
@@ -65,12 +64,12 @@ function renderStepSoknadStandard(
     return (
       <IntlProvider locale={locale} messages={tekster}>
         <AppStateContext.Provider value={{ ...appContext }}>
-          <SoknadContextStandard.Provider value={{ ...soknadContext }}>
+          <SoknadContext.Provider value={{ ...soknadContext }}>
             <StepWizardContext.Provider value={{ ...wizardContext }}>
               {children}
             </StepWizardContext.Provider>
             ,
-          </SoknadContextStandard.Provider>
+          </SoknadContext.Provider>
         </AppStateContext.Provider>
       </IntlProvider>
     );

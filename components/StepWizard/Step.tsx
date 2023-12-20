@@ -1,5 +1,5 @@
 import React from 'react';
-import { useStepWizard } from 'context/stepWizardContextV2';
+import { useStepWizard } from 'hooks/StepWizardHook';
 
 export type StepType = {
   stepIndex?: number;

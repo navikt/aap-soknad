@@ -1,20 +1,19 @@
 import { Alert, Label } from '@navikt/ds-react';
-import { Soknad } from 'types/Soknad';
-import { GenericSoknadContextState } from 'types/SoknadContext';
-import { Relasjon } from '../../Barnetillegg/AddBarnModal';
-import { getVedleggForManueltBarn } from '../../../../../utils/api';
+import { Relasjon } from 'components/pageComponents/standard/Barnetillegg/AddBarnModal';
+import { getVedleggForManueltBarn } from 'utils/api';
+import { SoknadContextState } from 'context/soknadcontext/soknadContext';
 
 interface Props {
-  søknadState: GenericSoknadContextState<Soknad>;
+  søknadState: SoknadContextState;
 }
 
 export const OppsummeringVedlegg = ({ søknadState }: Props) => {
   const manglendeVedlegg = søknadState.requiredVedlegg.filter(
-    (requiredVedlegg) => !requiredVedlegg.completed
+    (requiredVedlegg) => !requiredVedlegg.completed,
   );
 
   const opplastedeVedlegg = søknadState.requiredVedlegg.filter(
-    (requiredVedlegg) => requiredVedlegg.completed
+    (requiredVedlegg) => requiredVedlegg.completed,
   );
 
   return (
@@ -56,16 +55,14 @@ export const OppsummeringVedlegg = ({ søknadState }: Props) => {
           })}
           {søknadState?.søknad?.manuelleBarn?.map((barn) => {
             const label = søknadState?.requiredVedlegg?.find(
-              (e) => e.type === barn.internId && e.completed
+              (e) => e.type === barn.internId && e.completed,
             )?.description;
             return (
               <div key={`barn-${barn.internId}`}>
                 <Label>{label}</Label>
                 <ul>
                   {getVedleggForManueltBarn(barn.internId, søknadState.søknad?.vedlegg)?.map(
-                    (vedlegg) => (
-                      <li key={vedlegg.vedleggId}>{vedlegg?.name}</li>
-                    )
+                    (vedlegg) => <li key={vedlegg.vedleggId}>{vedlegg?.name}</li>,
                   )}
                 </ul>
               </div>

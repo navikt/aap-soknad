@@ -1,18 +1,18 @@
-import { GenericSoknadContextState } from 'types/SoknadContext';
 import { StepType } from 'components/StepWizard/Step';
 import { fetchPOST } from 'api/fetch';
 import { useCallback } from 'react';
 import { formatDateTime } from 'utils/date';
 import { setSistLagret, useAppStateContext } from 'context/appStateContext';
+import { SoknadContextState } from 'context/soknadcontext/soknadContext';
 
 export function useDebounceLagreSoknad<SoknadStateType>() {
   const { appStateDispatch } = useAppStateContext();
   async function lagrePartialSøknad<SoknadStateType>(
-    state: GenericSoknadContextState<SoknadStateType>,
+    state: SoknadContextState,
     stepList: StepType[],
-    partialSøknad: any
+    partialSøknad: any,
   ) {
-    const payload: GenericSoknadContextState<SoknadStateType> = {
+    const payload: SoknadContextState = {
       ...state,
       søknad: { ...state.søknad, ...partialSøknad },
       lagretStepList: stepList,
@@ -23,11 +23,7 @@ export function useDebounceLagreSoknad<SoknadStateType>() {
   }
   const debouncedLagre = () => {
     let timerId: ReturnType<typeof setTimeout> | undefined;
-    return (
-      state: GenericSoknadContextState<SoknadStateType>,
-      stepList: StepType[],
-      partialSøknad: any
-    ) => {
+    return (state: SoknadContextState, stepList: StepType[], partialSøknad: any) => {
       if (timerId) clearTimeout(timerId);
       timerId = setTimeout(() => lagrePartialSøknad(state, stepList, partialSøknad), 2000);
     };

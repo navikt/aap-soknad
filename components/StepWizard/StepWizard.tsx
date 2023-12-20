@@ -1,6 +1,6 @@
 import React from 'react';
 import { Label } from '@navikt/ds-react';
-import { useStepWizard } from 'context/stepWizardContextV2';
+import { useStepWizard } from 'hooks/StepWizardHook';
 import * as classes from './StepWizard.module.css';
 
 type StepWizardProps = {

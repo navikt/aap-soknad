@@ -3,12 +3,11 @@ import React, { useEffect, useState } from 'react';
 import { Add } from '@navikt/ds-icons';
 import { Behandler, Soknad } from 'types/Soknad';
 import * as yup from 'yup';
-import { completeAndGoToNextStep, useStepWizard } from 'context/stepWizardContextV2';
+import { completeAndGoToNextStep } from 'context/stepWizardContext';
+import { useStepWizard } from 'hooks/StepWizardHook';
 import { EndreEllerLeggTilBehandlerModal } from './EndreEllerLeggTilBehandlerModal';
 import { LucaGuidePanel } from '@navikt/aap-felles-react';
 import * as classes from './Behandlere.module.css';
-import { useSoknadContextStandard } from 'context/soknadContextStandard';
-import { updateSøknadData } from 'context/soknadContextCommon';
 import { useDebounceLagreSoknad } from 'hooks/useDebounceLagreSoknad';
 import { JaEllerNei } from 'types/Generic';
 import { IntlFormatters, useIntl } from 'react-intl';
@@ -19,6 +18,8 @@ import { logSkjemastegFullførtEvent } from 'utils/amplitude';
 import { validate } from 'lib/utils/validationUtils';
 import { RegistrertBehandler } from 'components/pageComponents/standard/Behandlere/RegistrertBehandler';
 import { AnnenBehandler } from 'components/pageComponents/standard/Behandlere/AnnenBehandler';
+import { useSoknad } from 'hooks/SoknadHook';
+import { updateSøknadData } from 'context/soknadcontext/actions';
 
 interface Props {
   onBackClick: () => void;
@@ -31,11 +32,11 @@ export const getBehandlerSchema = (formatMessage: IntlFormatters['formatMessage'
         erRegistrertFastlegeRiktig: yup
           .string()
           .required(
-            formatMessage({ id: `søknad.helseopplysninger.erRegistrertFastlegeRiktig.required` })
+            formatMessage({ id: `søknad.helseopplysninger.erRegistrertFastlegeRiktig.required` }),
           )
           .oneOf([JaEllerNei.JA, JaEllerNei.NEI])
           .nullable(),
-      })
+      }),
     ),
   });
 export const Behandlere = ({ onBackClick }: Props) => {
@@ -44,7 +45,7 @@ export const Behandlere = ({ onBackClick }: Props) => {
   const [selectedBehandler, setSelectedBehandler] = useState<Behandler>({});
 
   const { formatMessage } = useIntl();
-  const { søknadState, søknadDispatch } = useSoknadContextStandard();
+  const { søknadState, søknadDispatch } = useSoknad();
   const { currentStepIndex, stepWizardDispatch } = useStepWizard();
   const { stepList } = useStepWizard();
   const debouncedLagre = useDebounceLagreSoknad<Soknad>();
@@ -91,7 +92,7 @@ export const Behandlere = ({ onBackClick }: Props) => {
           }
         }}
         onBack={() => {
-          updateSøknadData<Soknad>(søknadDispatch, { ...søknadState.søknad });
+          updateSøknadData(søknadDispatch, { ...søknadState.søknad });
           onBackClick();
         }}
         errors={errors}

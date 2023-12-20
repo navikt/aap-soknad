@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import { axe, toHaveNoViolations } from 'jest-axe';
 import { Step, StepWizard } from './index';
-import { StepWizardContext, StepWizardContextState } from 'context/stepWizardContextV2';
+import { StepWizardContext, StepWizardContextState } from 'context/stepWizardContext';
 import { BodyShort } from '@navikt/ds-react';
 
 // SET UP DUMMY DATA FOR CONTEXT
@@ -24,7 +24,7 @@ const wizardContext: StepWizardContextState = {
 const renderWithContext = (ui: any, { ...renderOptions }: any) => {
   return render(
     <StepWizardContext.Provider value={{ ...wizardContext }}>{ui}</StepWizardContext.Provider>,
-    renderOptions
+    renderOptions,
   );
 };
 const MyWizard = () => (

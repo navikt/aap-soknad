@@ -4,10 +4,9 @@ import { Alert, BodyShort, Heading, Label, Radio, RadioGroup, TextField } from '
 import { JaEllerNei } from 'types/Generic';
 import ColorPanel from 'components/panel/ColorPanel';
 import * as yup from 'yup';
-import { completeAndGoToNextStep, useStepWizard } from 'context/stepWizardContextV2';
+import { completeAndGoToNextStep } from 'context/stepWizardContext';
+import { useStepWizard } from 'hooks/StepWizardHook';
 import { LucaGuidePanel } from '@navikt/aap-felles-react';
-import { useSoknadContextStandard } from 'context/soknadContextStandard';
-import { updateSøknadData } from 'context/soknadContextCommon';
 import { useDebounceLagreSoknad } from 'hooks/useDebounceLagreSoknad';
 import * as classes from './StartDato.module.css';
 import { setFocusOnErrorSummary } from 'components/schema/FormErrorSummary';
@@ -18,6 +17,8 @@ import { SøknadValidationError } from 'components/schema/FormErrorSummary';
 import { IntlFormatters, useIntl } from 'react-intl';
 import TilDato from './TilDato';
 import FraDato from './FraDato';
+import { useSoknad } from 'hooks/SoknadHook';
+import { updateSøknadData } from 'context/soknadcontext/actions';
 
 export enum FerieType {
   DAGER = 'DAGER',
@@ -73,10 +74,10 @@ export const getStartDatoSchema = (formatMessage: IntlFormatters['formatMessage'
                 return yup
                   .date()
                   .required(
-                    formatMessage({ id: 'søknad.startDato.periode.fraDato.validation.required' })
+                    formatMessage({ id: 'søknad.startDato.periode.fraDato.validation.required' }),
                   )
                   .typeError(
-                    formatMessage({ id: 'søknad.startDato.periode.fraDato.validation.typeError' })
+                    formatMessage({ id: 'søknad.startDato.periode.fraDato.validation.typeError' }),
                   );
               }
               return schema;
@@ -87,16 +88,16 @@ export const getStartDatoSchema = (formatMessage: IntlFormatters['formatMessage'
                 return yup
                   .date()
                   .required(
-                    formatMessage({ id: 'søknad.startDato.periode.tilDato.validation.required' })
+                    formatMessage({ id: 'søknad.startDato.periode.tilDato.validation.required' }),
                   )
                   .typeError(
-                    formatMessage({ id: 'søknad.startDato.periode.tilDato.validation.typeError' })
+                    formatMessage({ id: 'søknad.startDato.periode.tilDato.validation.typeError' }),
                   )
                   .min(
                     yup.ref('fraDato'),
                     formatMessage({
                       id: 'søknad.startDato.periode.tilDato.validation.fraDatoEtterTilDato',
-                    })
+                    }),
                   );
               }
               return schema;
@@ -107,7 +108,7 @@ export const getStartDatoSchema = (formatMessage: IntlFormatters['formatMessage'
                 return yup
                   .string()
                   .required(
-                    formatMessage({ id: 'søknad.startDato.antallDager.validation.required' })
+                    formatMessage({ id: 'søknad.startDato.antallDager.validation.required' }),
                   );
               }
               return schema;
@@ -125,7 +126,7 @@ const StartDato = ({ onBackClick }: Props) => {
   const { currentStepIndex, stepWizardDispatch, stepList } = useStepWizard();
 
   const [errors, setErrors] = useState<SøknadValidationError[] | undefined>();
-  const { søknadState, søknadDispatch } = useSoknadContextStandard();
+  const { søknadState, søknadDispatch } = useSoknad();
 
   useEffect(() => {
     debouncedLagre(søknadState, stepList, {});
@@ -136,7 +137,7 @@ const StartDato = ({ onBackClick }: Props) => {
       [FerieType.PERIODE]: formatMessage({ id: FerieTypeToMessageKey(FerieType.PERIODE) }),
       [FerieType.DAGER]: formatMessage({ id: FerieTypeToMessageKey(FerieType.DAGER) }),
     }),
-    [formatMessage]
+    [formatMessage],
   );
 
   function clearErrors() {

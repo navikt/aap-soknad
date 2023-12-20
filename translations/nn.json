@@ -667,46 +667,6 @@
     },
     "ettersendelseFrist": "Du kan ettersende dette innan 14 dagar per post eller digitalt. Du kan også levere dette på ditt lokale NAV-kontor"
   },
-  "utland": {
-    "title": "Søknad om Arbeidsavklaringspengar (AAP) utland",
-    "veiledning": {
-      "guide": {
-        "text": "Du treng ikkje søkje dersom du er EU/EØS-borgar eller sveitsisk statsborgar og skal opphalde deg innanfor EU/EØS eller Sveits."
-      }
-    },
-    "land": {
-      "guide": {
-        "text": "Du må som hovudregel opphalde deg i Noreg eller eit anna EU/EØS-land for å få AAP. Viss du er statsborgar i eit EU/EØS-land, må du søkje om å få AAP i ein avgrensa periode dersom du oppheld deg utanfor eit EU/EØS-land. Ved utanlandsopphald må du må sørgje for at du kan gjennomføre den aktiviteten du har avtalt med NAV."
-      },
-      "select": {
-        "label": "Landet du skal opphalde deg i",
-        "required": "Vel eit land."
-      }
-    },
-    "periode": {
-      "fraDato": {
-        "label": "Frå-dato",
-        "required": "Vel ein dato."
-      },
-      "tilDato": {
-        "label": "Til-dato",
-        "required": "Vel ein dato.",
-        "afterfromdate": "Til-datoen må vere etter frå-datoen"
-      }
-    },
-    "oppsummering": {
-      "title": "Oppsummering",
-      "bekreftelse": {
-        "label": "Eg stadfestar at utanlandsopphaldet ikkje er til hinder for avtalt aktivitet som behandling, arbeidsretta tiltak eller oppfølging frå NAV",
-        "required": "Kryss av for å stadfeste."
-      }
-    },
-    "kvittering": {
-      "guide": {
-        "text": "Takk, søknaden er motteken. Vi tek oss av resten."
-      }
-    }
-  },
   "fileInputErrors": {
     "unsupportedMediaType": "Filtypen er ikkje støtta. Last opp dokumentet i eit anna format (PDF, PNG, JPG eller heic).",
     "fileTooLarge": "Éi eller fleire av filene du lasta opp, er større enn det som er tillate. Last opp éi eller fleire fil med ein samla storleik på maks 50 MB.",

@@ -1,9 +1,8 @@
 import { Soknad } from 'types/Soknad';
 import React, { useEffect } from 'react';
 import { Alert, BodyLong, BodyShort, Heading, Label, Textarea } from '@navikt/ds-react';
-import { completeAndGoToNextStep, useStepWizard } from 'context/stepWizardContextV2';
-import { addVedlegg, deleteVedlegg, updateSøknadData } from 'context/soknadContextCommon';
-import { useSoknadContextStandard } from 'context/soknadContextStandard';
+import { completeAndGoToNextStep } from 'context/stepWizardContext';
+import { useStepWizard } from 'hooks/StepWizardHook';
 import { useDebounceLagreSoknad } from 'hooks/useDebounceLagreSoknad';
 import { FileInput, LucaGuidePanel } from '@navikt/aap-felles-react';
 import { useIntl } from 'react-intl';
@@ -12,6 +11,8 @@ import { SøknadValidationError } from 'components/schema/FormErrorSummary';
 import { logSkjemastegFullførtEvent } from 'utils/amplitude';
 import { setFocusOnErrorSummary } from '../../../schema/FormErrorSummary';
 import { ScanningGuide } from './scanningguide/ScanningGuide';
+import { addVedlegg, deleteVedlegg, updateSøknadData } from 'context/soknadcontext/actions';
+import { useSoknad } from 'hooks/SoknadHook';
 
 const deleteUrl = '/aap/soknad/api/vedlegg/slett/?uuids=';
 const uploadUrl = '/aap/soknad/api/vedlegg/lagre/';
@@ -23,7 +24,7 @@ interface Props {
 
 const Vedlegg = ({ onBackClick }: Props) => {
   const { formatMessage, locale } = useIntl();
-  const { søknadState, søknadDispatch } = useSoknadContextStandard();
+  const { søknadState, søknadDispatch } = useSoknad();
   const { stepWizardDispatch, currentStepIndex, stepList } = useStepWizard();
   const debouncedLagre = useDebounceLagreSoknad<Soknad>();
 
@@ -32,18 +33,18 @@ const Vedlegg = ({ onBackClick }: Props) => {
   }, [søknadState.søknad?.vedlegg, søknadState.søknad?.tilleggsopplysninger]);
 
   const errors: SøknadValidationError[] = Object.entries(søknadState.søknad?.vedlegg || {})
-    .flatMap(([key, vedleggArray]) =>
-      vedleggArray
-        ?.filter((vedlegg) => vedlegg.errorMessage)
-        .map((vedlegg) => ({
-          message: vedlegg.errorMessage || '',
-          path: key,
-        }))
+    .flatMap(
+      ([key, vedleggArray]) =>
+        vedleggArray
+          ?.filter((vedlegg) => vedlegg.errorMessage)
+          .map((vedlegg) => ({
+            message: vedlegg.errorMessage || '',
+            path: key,
+          })),
     )
     .filter((error): error is SøknadValidationError => error !== undefined);
 
   const harPåkrevdeVedlegg = søknadState.requiredVedlegg.length > 0;
-  console.log('manuelle', søknadState?.søknad?.manuelleBarn);
   return (
     <SoknadFormWrapperNew
       onNext={() => {
@@ -211,7 +212,7 @@ const Vedlegg = ({ onBackClick }: Props) => {
               { id: `søknad.vedlegg.andreBarn.title.${requiredVedlegg?.filterType}` },
               {
                 navn: `${barn?.navn?.fornavn} ${barn?.navn?.etternavn}`,
-              }
+              },
             )}
             ingress={requiredVedlegg?.description}
             onUpload={(vedlegg) => {
@@ -248,9 +249,7 @@ const Vedlegg = ({ onBackClick }: Props) => {
       <Textarea
         value={søknadState.søknad?.tilleggsopplysninger}
         name={`tilleggsopplysninger`}
-        onChange={(e) =>
-          updateSøknadData<Soknad>(søknadDispatch, { tilleggsopplysninger: e.target.value })
-        }
+        onChange={(e) => updateSøknadData(søknadDispatch, { tilleggsopplysninger: e.target.value })}
         label={formatMessage({ id: `søknad.tilleggsopplysninger.tilleggsopplysninger.label` })}
         description={formatMessage({
           id: `søknad.tilleggsopplysninger.tilleggsopplysninger.description`,

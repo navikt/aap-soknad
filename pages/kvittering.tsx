@@ -1,7 +1,6 @@
 import PageHeader from 'components/PageHeader';
 import React, { useEffect, useState } from 'react';
 import { SokerOppslagState, SøkerView } from 'context/sokerOppslagContext';
-import { SoknadContextProviderStandard } from 'context/soknadContextStandard';
 import Kvittering from 'components/pageComponents/standard/Kvittering/Kvittering';
 import * as classes from 'components/pageComponents/standard/standard.module.css';
 import { beskyttetSide } from 'auth/beskyttetSide';
@@ -12,6 +11,7 @@ import { getSøker } from 'pages/api/oppslag/soeker';
 import { logger } from '@navikt/aap-felles-utils';
 import metrics from 'utils/metrics';
 import { FormattedMessage } from 'react-intl';
+import { SoknadContextProvider } from 'context/soknadcontext/soknadContext';
 
 interface PageProps {
   søker: SokerOppslagState;
@@ -33,7 +33,7 @@ const KvitteringPage = ({ søker, søknader }: PageProps) => {
   }, [søker, setSoker]);
 
   return (
-    <SoknadContextProviderStandard>
+    <SoknadContextProvider>
       <PageHeader align="center" className={classes?.pageHeader}>
         <FormattedMessage id={'søknad.pagetitle'} values={{ wbr: () => <>&shy;</> }} />
       </PageHeader>
@@ -42,7 +42,7 @@ const KvitteringPage = ({ søker, søknader }: PageProps) => {
         kontaktinformasjon={søker.kontaktinformasjon}
         søknad={søknader[0]}
       />
-    </SoknadContextProviderStandard>
+    </SoknadContextProvider>
   );
 };
 

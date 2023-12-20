@@ -15,15 +15,9 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { JaEllerNei } from 'types/Generic';
 import { Soknad } from 'types/Soknad';
 import * as yup from 'yup';
-import { completeAndGoToNextStep, useStepWizard } from 'context/stepWizardContextV2';
+import { completeAndGoToNextStep } from 'context/stepWizardContext';
 import ColorPanel from 'components/panel/ColorPanel';
 import { LucaGuidePanel } from '@navikt/aap-felles-react';
-import {
-  addRequiredVedlegg,
-  removeRequiredVedlegg,
-  updateSøknadData,
-} from 'context/soknadContextCommon';
-import { useSoknadContextStandard } from 'context/soknadContextStandard';
 import { useDebounceLagreSoknad } from 'hooks/useDebounceLagreSoknad';
 import { setFocusOnErrorSummary } from 'components/schema/FormErrorSummary';
 import { IntlFormatters, useIntl } from 'react-intl';
@@ -32,6 +26,14 @@ import { validate } from 'lib/utils/validationUtils';
 import { SøknadValidationError } from 'components/schema/FormErrorSummary';
 import { logSkjemastegFullførtEvent } from 'utils/amplitude';
 import { AttachmentType } from 'types/SoknadContext';
+
+import {
+  addRequiredVedlegg,
+  removeRequiredVedlegg,
+  updateSøknadData,
+} from 'context/soknadcontext/actions';
+import { useSoknad } from 'hooks/SoknadHook';
+import { useStepWizard } from 'hooks/StepWizardHook';
 
 interface Props {
   onBackClick: () => void;
@@ -99,7 +101,7 @@ export const getAndreUtbetalingerSchema = (formatMessage: IntlFormatters['format
             hvemBetaler: yup.string().required(
               formatMessage({
                 id: 'søknad.andreUtbetalinger.hvemBetalerAfp.validation.required',
-              })
+              }),
             ),
           });
         }
@@ -109,7 +111,7 @@ export const getAndreUtbetalingerSchema = (formatMessage: IntlFormatters['format
 
 export const AndreUtbetalinger = ({ onBackClick }: Props) => {
   const [errors, setErrors] = useState<SøknadValidationError[] | undefined>();
-  const { søknadState, søknadDispatch } = useSoknadContextStandard();
+  const { søknadState, søknadDispatch } = useSoknad();
   const { stepList, currentStepIndex, stepWizardDispatch } = useStepWizard();
   const { formatMessage } = useIntl();
   const debouncedLagre = useDebounceLagreSoknad<Soknad>();
@@ -169,7 +171,7 @@ export const AndreUtbetalinger = ({ onBackClick }: Props) => {
       }
     } else if (søknadState.søknad?.andreUtbetalinger?.stønad?.includes(StønadType.NEI)) {
       const newList = [...søknadState.søknad?.andreUtbetalinger?.stønad].filter(
-        (e) => e !== StønadType.NEI
+        (e) => e !== StønadType.NEI,
       );
       updateSøknadData(søknadDispatch, {
         andreUtbetalinger: {
@@ -194,7 +196,7 @@ export const AndreUtbetalinger = ({ onBackClick }: Props) => {
       onNext={async () => {
         const errors = await validate(
           getAndreUtbetalingerSchema(formatMessage),
-          søknadState.søknad?.andreUtbetalinger
+          søknadState.søknad?.andreUtbetalinger,
         );
         if (errors) {
           setErrors(errors);

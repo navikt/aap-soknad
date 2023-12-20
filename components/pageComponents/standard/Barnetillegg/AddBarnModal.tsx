@@ -22,8 +22,8 @@ import { GRUNNBELØP } from './Barnetillegg';
 
 import { add, format, isValid, parse, sub } from 'date-fns';
 import { IntlFormatters, useIntl } from 'react-intl';
-import { mapValidationErrorToSøknadValidationError } from '../../../../lib/utils/validationUtils';
-import { useFormErrors } from '../../../../hooks/useFormErrors';
+import { mapValidationErrorToSøknadValidationError } from 'lib/utils/validationUtils';
+import { useFormErrors } from 'hooks/FormErrorHook';
 import { v4 as uuid4 } from 'uuid';
 
 interface Props {
@@ -58,12 +58,12 @@ export const getAddBarnSchema = (formatMessage: IntlFormatters['formatMessage'])
       fornavn: yup.string().required(
         formatMessage({
           id: 'søknad.barnetillegg.leggTilBarn.modal.navn.fornavn.validation.required',
-        })
+        }),
       ),
       etternavn: yup.string().required(
         formatMessage({
           id: 'søknad.barnetillegg.leggTilBarn.modal.navn.etternavn.validation.required',
-        })
+        }),
       ),
     }),
     fødseldato: yup
@@ -71,25 +71,25 @@ export const getAddBarnSchema = (formatMessage: IntlFormatters['formatMessage'])
       .required(
         formatMessage({
           id: 'søknad.barnetillegg.leggTilBarn.modal.fødselsdato.validation.required',
-        })
+        }),
       )
       .min(
         sub(new Date(), { years: ALDER_BARN_ÅR }),
-        formatMessage({ id: 'søknad.barnetillegg.leggTilBarn.modal.fødselsdato.validation.min' })
+        formatMessage({ id: 'søknad.barnetillegg.leggTilBarn.modal.fødselsdato.validation.min' }),
       )
       .max(
         add(new Date(), { days: 1 }),
-        formatMessage({ id: 'søknad.barnetillegg.leggTilBarn.modal.fødselsdato.validation.max' })
+        formatMessage({ id: 'søknad.barnetillegg.leggTilBarn.modal.fødselsdato.validation.max' }),
       )
       .typeError(
         formatMessage({
           id: 'søknad.barnetillegg.leggTilBarn.modal.fødselsdato.validation.typeError',
-        })
+        }),
       ),
     relasjon: yup
       .string()
       .required(
-        formatMessage({ id: 'søknad.barnetillegg.leggTilBarn.modal.relasjon.validation.required' })
+        formatMessage({ id: 'søknad.barnetillegg.leggTilBarn.modal.relasjon.validation.required' }),
       )
       .oneOf([Relasjon.FORELDER, Relasjon.FOSTERFORELDER]),
     harInntekt: yup
@@ -99,8 +99,8 @@ export const getAddBarnSchema = (formatMessage: IntlFormatters['formatMessage'])
           { id: 'søknad.barnetillegg.leggTilBarn.modal.harInntekt.validation.required' },
           {
             grunnbeløp: GRUNNBELØP,
-          }
-        )
+          },
+        ),
       )
       .oneOf([JaEllerNei.JA, JaEllerNei.NEI]),
   });
@@ -242,7 +242,7 @@ export const AddBarnModal = ({
                 { id: 'søknad.barnetillegg.leggTilBarn.modal.harInntekt.label' },
                 {
                   grunnbeløp: GRUNNBELØP,
-                }
+                },
               )}
               name={'harInntekt'}
               onChange={(value) => {
@@ -261,7 +261,7 @@ export const AddBarnModal = ({
                   { id: 'søknad.barnetillegg.leggTilBarn.modal.harInntekt.readMore.text' },
                   {
                     grunnbeløp: GRUNNBELØP,
-                  }
+                  },
                 )}
               </ReadMore>
               <Radio value={JaEllerNei.JA}>

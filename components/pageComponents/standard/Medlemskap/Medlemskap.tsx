@@ -14,7 +14,8 @@ import { Add } from '@navikt/ds-icons';
 import UtenlandsPeriodeVelger from '..//UtenlandsPeriodeVelger/UtenlandsPeriodeVelger';
 import { validate } from 'lib/utils/validationUtils';
 import { Soknad, UtenlandsPeriode } from 'types/Soknad';
-import { completeAndGoToNextStep, useStepWizard } from 'context/stepWizardContextV2';
+import { completeAndGoToNextStep } from 'context/stepWizardContext';
+import { useStepWizard } from 'hooks/StepWizardHook';
 import ColorPanel from 'components/panel/ColorPanel';
 import { LucaGuidePanel } from '@navikt/aap-felles-react';
 import { setFocusOnErrorSummary } from 'components/schema/FormErrorSummary';
@@ -22,8 +23,6 @@ import { useIntl } from 'react-intl';
 import SoknadFormWrapperNew from 'components/SoknadFormWrapper/SoknadFormWrapper';
 import { logSkjemastegFullførtEvent } from 'utils/amplitude';
 import { SøknadValidationError } from 'components/schema/FormErrorSummary';
-import { useSoknadContextStandard } from 'context/soknadContextStandard';
-import { updateSøknadData } from 'context/soknadContextCommon';
 import { useDebounceLagreSoknad } from 'hooks/useDebounceLagreSoknad';
 import { v4 as uuid4 } from 'uuid';
 import UtenlandsOppholdTabell from './UtenlandsOppholdTabell';
@@ -35,6 +34,8 @@ import {
   validateOgsåArbeidetUtenforNorge,
   validateUtenlandsPeriode,
 } from './medlemskapUtils';
+import { useSoknad } from 'hooks/SoknadHook';
+import { updateSøknadData } from 'context/soknadcontext/actions';
 
 interface Props {
   onBackClick: () => void;
@@ -44,7 +45,7 @@ export const Medlemskap = ({ onBackClick }: Props) => {
   const { formatMessage } = useIntl();
 
   const { currentStepIndex, stepWizardDispatch, stepList } = useStepWizard();
-  const { søknadState, søknadDispatch } = useSoknadContextStandard();
+  const { søknadState, søknadDispatch } = useSoknad();
   const [showUtenlandsPeriodeModal, setShowUtenlandsPeriodeModal] = useState<boolean>(false);
   const [selectedUtenlandsPeriode, setSelectedUtenlandsPeriode] = useState<UtenlandsPeriode>({});
   const [errors, setErrors] = useState<SøknadValidationError[] | undefined>();
@@ -76,23 +77,23 @@ export const Medlemskap = ({ onBackClick }: Props) => {
           (utenlandsPeriode) =>
             utenlandsPeriode.id === updatedUtenlandsPeriode.id
               ? updatedUtenlandsPeriode
-              : utenlandsPeriode
+              : utenlandsPeriode,
         ),
       },
     });
   };
 
   const visArbeidINorge = validateArbeidINorge(
-    søknadState?.søknad?.medlemskap?.harBoddINorgeSiste5År
+    søknadState?.søknad?.medlemskap?.harBoddINorgeSiste5År,
   );
 
   const visArbeidUtenforNorgeFørSykdom = validateArbeidUtenforNorgeFørSykdom(
-    søknadState?.søknad?.medlemskap?.harBoddINorgeSiste5År
+    søknadState?.søknad?.medlemskap?.harBoddINorgeSiste5År,
   );
 
   const visOgsåArbeidetUtenforNorge = validateOgsåArbeidetUtenforNorge(
     søknadState?.søknad?.medlemskap?.harBoddINorgeSiste5År,
-    søknadState?.søknad?.medlemskap?.harArbeidetINorgeSiste5År
+    søknadState?.søknad?.medlemskap?.harArbeidetINorgeSiste5År,
   );
 
   const visLeggTilUtenlandsPeriode = validateUtenlandsPeriode(søknadState.søknad?.medlemskap);
@@ -121,7 +122,7 @@ export const Medlemskap = ({ onBackClick }: Props) => {
           completeAndGoToNextStep(stepWizardDispatch);
         }}
         onBack={() => {
-          updateSøknadData<Soknad>(søknadDispatch, { ...søknadState.søknad });
+          updateSøknadData(søknadDispatch, { ...søknadState.søknad });
           onBackClick();
         }}
         errors={errors}

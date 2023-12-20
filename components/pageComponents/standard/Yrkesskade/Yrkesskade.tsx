@@ -12,10 +12,9 @@ import {
 import { Soknad } from 'types/Soknad';
 import { JaEllerNei } from 'types/Generic';
 import * as yup from 'yup';
-import { completeAndGoToNextStep, useStepWizard } from 'context/stepWizardContextV2';
+import { completeAndGoToNextStep } from 'context/stepWizardContext';
+import { useStepWizard } from 'hooks/StepWizardHook';
 import { LucaGuidePanel } from '@navikt/aap-felles-react';
-import { updateSøknadData } from 'context/soknadContextCommon';
-import { useSoknadContextStandard } from 'context/soknadContextStandard';
 import { useDebounceLagreSoknad } from 'hooks/useDebounceLagreSoknad';
 import { setFocusOnErrorSummary } from 'components/schema/FormErrorSummary';
 import { FormattedMessage, IntlFormatters, useIntl } from 'react-intl';
@@ -23,6 +22,8 @@ import { logSkjemastegFullførtEvent } from 'utils/amplitude';
 import { validate } from 'lib/utils/validationUtils';
 import { SøknadValidationError } from 'components/schema/FormErrorSummary';
 import SoknadFormWrapperNew from 'components/SoknadFormWrapper/SoknadFormWrapper';
+import { useSoknad } from 'hooks/SoknadHook';
+import { updateSøknadData } from 'context/soknadcontext/actions';
 
 interface Props {
   onBackClick: () => void;
@@ -40,7 +41,7 @@ export const getYrkesskadeSchema = (formatMessage: IntlFormatters['formatMessage
 export const Yrkesskade = ({ onBackClick }: Props) => {
   const { formatMessage } = useIntl();
 
-  const { søknadState, søknadDispatch } = useSoknadContextStandard();
+  const { søknadState, søknadDispatch } = useSoknad();
   const { currentStepIndex, stepWizardDispatch, stepList } = useStepWizard();
 
   const debouncedLagre = useDebounceLagreSoknad<Soknad>();
@@ -65,7 +66,7 @@ export const Yrkesskade = ({ onBackClick }: Props) => {
         completeAndGoToNextStep(stepWizardDispatch);
       }}
       onBack={() => {
-        updateSøknadData<Soknad>(søknadDispatch, { ...søknadState.søknad });
+        updateSøknadData(søknadDispatch, { ...søknadState.søknad });
         onBackClick();
       }}
       errors={errors}

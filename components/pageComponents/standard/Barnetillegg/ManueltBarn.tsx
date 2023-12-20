@@ -1,16 +1,16 @@
 import * as classes from './Barnetillegg.module.css';
 import { BodyShort, Button, Label } from '@navikt/ds-react';
-import { formatNavn } from '../../../../utils/StringFormatters';
-import { formatDate } from '../../../../utils/date';
+import { formatNavn } from 'utils/StringFormatters';
+import { formatDate } from 'utils/date';
 import { Relasjon } from './AddBarnModal';
-import { JaEllerNei } from '../../../../types/Generic';
+import { JaEllerNei } from 'types/Generic';
 import { Delete } from '@navikt/ds-icons';
 import React, { Dispatch } from 'react';
 import { GRUNNBELØP } from './Barnetillegg';
-import { ManuelleBarn } from '../../../../types/Soknad';
+import { ManuelleBarn } from 'types/Soknad';
 import { useIntl } from 'react-intl';
-import { removeRequiredVedlegg, updateSøknadData } from '../../../../context/soknadContextCommon';
-import { useSoknadContextStandard } from '../../../../context/soknadContextStandard';
+import { useSoknad } from 'hooks/SoknadHook';
+import { removeRequiredVedlegg, updateSøknadData } from 'context/soknadcontext/actions';
 
 interface BarnKortProps {
   barn: ManuelleBarn;
@@ -19,7 +19,7 @@ interface BarnKortProps {
 }
 const ManueltBarn = ({ barn, setSelectedBarn, setShowModal }: BarnKortProps) => {
   const { formatMessage } = useIntl();
-  const { søknadState, søknadDispatch } = useSoknadContextStandard();
+  const { søknadState, søknadDispatch } = useSoknad();
 
   const slettBarn = (barnId: string) => {
     updateSøknadData(søknadDispatch, {
@@ -58,7 +58,7 @@ const ManueltBarn = ({ barn, setSelectedBarn, setShowModal }: BarnKortProps) => 
               { id: 'søknad.barnetillegg.manuelleBarn.inntektOver1G' },
               {
                 grunnbeløp: GRUNNBELØP,
-              }
+              },
             )}
           </BodyShort>
         )}
@@ -68,7 +68,7 @@ const ManueltBarn = ({ barn, setSelectedBarn, setShowModal }: BarnKortProps) => 
               { id: 'søknad.barnetillegg.manuelleBarn.inntektIkkeOver1G' },
               {
                 grunnbeløp: GRUNNBELØP,
-              }
+              },
             )}
           </BodyShort>
         )}

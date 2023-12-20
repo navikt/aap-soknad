@@ -7,7 +7,7 @@ import { AppProps } from 'next/app';
 import links from 'translations/links.json';
 import { messages, flattenMessages } from 'utils/message';
 import { SokerOppslagProvider } from 'context/sokerOppslagContext';
-import { StepWizardProvider } from 'context/stepWizardContextV2';
+import { StepWizardProvider } from 'context/stepWizardContext';
 import { initAmplitude } from 'utils/amplitude';
 import { AppStateContextProvider } from 'context/appStateContext';
 import Head from 'next/head';
@@ -31,7 +31,7 @@ const CustomApp = ({ Component, pageProps }: AppProps) => {
 
   const currentMessages = useMemo(
     () => ({ ...messages[locale as DecoratorLocale], ...flattenMessages({ applinks: links }) }),
-    [locale]
+    [locale],
   );
 
   useEffect(() => {

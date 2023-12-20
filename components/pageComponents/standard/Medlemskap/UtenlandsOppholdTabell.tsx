@@ -1,13 +1,13 @@
 import { Button, Heading, Table } from '@navikt/ds-react';
 import * as styles from './Medlemskap.module.css';
-import { formatDate } from '../../../../utils/date';
+import { formatDate } from 'utils/date';
 import { Delete } from '@navikt/ds-icons';
 import React, { Dispatch } from 'react';
 import { useIntl } from 'react-intl';
-import { UtenlandsPeriode } from '../../../../types/Soknad';
-import { updateSøknadData } from '../../../../context/soknadContextCommon';
-import { useSoknadContextStandard } from '../../../../context/soknadContextStandard';
+import { UtenlandsPeriode } from 'types/Soknad';
 import { ArbeidEllerBodd } from '../UtenlandsPeriodeVelger/UtenlandsPeriodeVelger';
+import { useSoknad } from 'hooks/SoknadHook';
+import { updateSøknadData } from 'context/soknadcontext/actions';
 
 interface Props {
   utenlandsPerioder: UtenlandsPeriode[];
@@ -22,14 +22,14 @@ const UtenlandsOppholdTabell = ({
   arbeidEllerBodd,
 }: Props) => {
   const { formatMessage } = useIntl();
-  const { søknadState, søknadDispatch } = useSoknadContextStandard();
+  const { søknadState, søknadDispatch } = useSoknad();
 
   const remove = (id?: string) => {
     updateSøknadData(søknadDispatch, {
       medlemskap: {
         ...søknadState?.søknad?.medlemskap,
         utenlandsOpphold: søknadState?.søknad?.medlemskap?.utenlandsOpphold?.filter(
-          (e) => e.id !== id
+          (e) => e.id !== id,
         ),
       },
     });
@@ -65,7 +65,7 @@ const UtenlandsOppholdTabell = ({
                   <span>
                     {`${formatDate(utenlandsPeriode?.fraDato, 'MMMM yyyy')} - ${formatDate(
                       utenlandsPeriode?.tilDato,
-                      'MMMM yyyy'
+                      'MMMM yyyy',
                     )}${utenlandsPeriode?.iArbeid === 'Ja' ? ' (Jobb)' : ''}`}
                   </span>
                 </div>
