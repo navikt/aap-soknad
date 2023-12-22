@@ -12,7 +12,6 @@
 # testing
 /coverage
 .eslintcache
-/cypress/videos
 
 # production
 /build
