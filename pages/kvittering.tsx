@@ -24,9 +24,7 @@ const KvitteringPage = ({ søker, søknader }: PageProps) => {
   useEffect(() => {
     if (søker?.søker) {
       const _søker: SøkerView = {
-        fulltNavn: `${søker.søker.navn.fornavn ?? ''} ${søker.søker.navn.mellomnavn ?? ''} ${
-          søker.søker.navn.etternavn ?? ''
-        }`,
+        fulltNavn: søker.søker.navn,
       };
       setSoker(_søker);
     }
@@ -60,7 +58,7 @@ export const getServerSideProps = beskyttetSide(
     return {
       props: { søknader, søker },
     };
-  }
+  },
 );
 
 export default KvitteringPage;

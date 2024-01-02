@@ -37,11 +37,15 @@ export interface OppslagBehandler {
     adresse: Adresse;
   };
 }
-export type Soker = {
-  navn: Navn;
-  fødseldato: string;
-  barn: Array<OppslagBarn>;
-};
+
+export interface Søker {
+  navn: string;
+  fnr: string;
+  erBeskyttet: boolean;
+  fødselsdato: string;
+  adresse: string | null;
+}
+
 export type FastlegeView = {
   fulltNavn?: string;
   originalNavn?: any;
@@ -52,22 +56,26 @@ export type FastlegeView = {
   originalAdresse?: any;
   telefon?: string;
 };
+
 export type SøkerView = {
   fulltNavn?: string;
   fullAdresse?: string;
   fødselsnummer?: string;
 };
+
 export type KontaktInfoView = {
   epost?: string;
   mobil?: string;
 };
+
 export type SokerOppslagState = {
-  søker: Soker;
+  søker: Søker;
   behandlere: Array<OppslagBehandler>;
   kontaktinformasjon?: {
     epost?: string;
     mobil?: string;
   };
+  adresse: Adresse;
 };
 const søkerOppslagInitialValue = {
   barn: [],
@@ -100,14 +108,14 @@ function SokerOppslagProvider({ children }: Props) {
       fullAdresse: state?.søker?.adresse ? formatFullAdresse(state?.søker?.adresse) : '',
       fødselsnummer: state?.søker?.fødselsnummer,
     }),
-    [state]
+    [state],
   );
   const kontaktInfo: KontaktInfoView | undefined = useMemo(
     () => ({
       epost: state?.kontaktinformasjon?.epost,
       mobil: state?.kontaktinformasjon?.mobil,
     }),
-    [state]
+    [state],
   );
   const contextValue = useMemo(() => {
     return {
@@ -123,7 +131,7 @@ function SokerOppslagProvider({ children }: Props) {
 
 export const setSokerOppslagFraProps = (
   oppslag: SokerOppslagState,
-  dispatch: Dispatch<DispatchSokerOppslagAction>
+  dispatch: Dispatch<DispatchSokerOppslagAction>,
 ) => {
   dispatch({ type: 'SET_SOKER_OPPSLAG', payload: oppslag });
   return oppslag;

@@ -1,6 +1,5 @@
 import { IntroduksjonTekst } from 'components/IntroduksjonTekst/IntroduksjonTekst';
 import { SokerOppslagState } from 'context/sokerOppslagContext';
-import { getFulltNavn } from 'lib/søker';
 import * as classes from './Steg0.module.css';
 import { BodyShort, Label } from '@navikt/ds-react';
 import { SuccessColored } from '@navikt/ds-icons';
@@ -21,7 +20,7 @@ export const Steg0 = ({ onNext, søker }: Props) => {
       onNext={onNext}
       nextButtonText={formatMessage({ id: 'navigation.next' })}
     >
-      <IntroduksjonTekst navn={getFulltNavn(søker.søker)} />
+      <IntroduksjonTekst navn={søker.søker.navn} />
 
       <div>
         <Label as="p" spacing>

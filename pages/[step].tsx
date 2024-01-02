@@ -5,11 +5,7 @@ import { completeAndGoToNextStep, goToPreviousStep, setStepList } from 'context/
 import { useStepWizard } from 'hooks/StepWizardHook';
 import { useDebounceLagreSoknad } from 'hooks/useDebounceLagreSoknad';
 import { StepWizard } from 'components/StepWizard';
-import {
-  setSokerOppslagFraProps,
-  SokerOppslagState,
-  useSokerOppslag,
-} from 'context/sokerOppslagContext';
+import { SokerOppslagState } from 'context/sokerOppslagContext';
 import { Soknad } from 'types/Soknad';
 import { fetchPOST } from 'api/fetch';
 import { StepNames } from './index';
@@ -38,7 +34,6 @@ import { logger } from '@navikt/aap-felles-utils';
 import { SoknadContextProvider, SoknadContextState } from 'context/soknadcontext/soknadContext';
 import { useSoknad } from 'hooks/SoknadHook';
 import {
-  addBarnIfMissing,
   addBehandlerIfMissing,
   setSoknadStateFraProps,
   SoknadActionKeys,
@@ -56,7 +51,6 @@ const Steps = ({ søker, mellomlagretSøknad }: PageProps) => {
   const { formatMessage } = useIntl();
 
   const { søknadState, søknadDispatch } = useSoknad();
-  const { oppslagDispatch } = useSokerOppslag();
   const { currentStep, stepList, stepWizardDispatch } = useStepWizard();
   const debouncedLagre = useDebounceLagreSoknad<Soknad>();
 
@@ -69,8 +63,7 @@ const Steps = ({ søker, mellomlagretSøknad }: PageProps) => {
       if (mellomlagretSøknad.lagretStepList && mellomlagretSøknad?.lagretStepList?.length > 0) {
         setStepList([...mellomlagretSøknad.lagretStepList], stepWizardDispatch);
       }
-      const oppslag = setSokerOppslagFraProps(søker, oppslagDispatch);
-      if (oppslag?.søker?.barn) addBarnIfMissing(søknadDispatch, oppslag.søker.barn);
+
       if (søker.behandlere) addBehandlerIfMissing(søknadDispatch, søker.behandlere);
     }
   }, []);

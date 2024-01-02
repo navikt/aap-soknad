@@ -1,16 +1,17 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { getAccessTokenFromRequest } from 'auth/accessToken';
 import { beskyttetApi } from 'auth/beskyttetApi';
-import { tokenXApiProxy, logger } from '@navikt/aap-felles-utils';
-import { mockSøker } from 'mock/søker';
+import { logger, tokenXApiProxy } from '@navikt/aap-felles-utils';
 import { isMock } from 'utils/environments';
 import metrics from 'utils/metrics';
+import { Søker } from 'context/sokerOppslagContext';
+import { mockSøker } from 'mock/søkerUtenBarn';
 
 const handler = beskyttetApi(async (req: NextApiRequest, res: NextApiResponse) => {
   const accessToken = getAccessTokenFromRequest(req);
   res.status(200).json(await getSøker(accessToken));
 });
-export const getSøker = async (accessToken?: string) => {
+export const getSøker = async (accessToken?: string): Promise<Søker> => {
   if (isMock()) return mockSøker;
   const søker = await tokenXApiProxy({
     url: `${process.env.SOKNAD_API_URL}/oppslag/soeker`,

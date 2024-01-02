@@ -1,6 +1,6 @@
 import { Veiledning } from 'components/pageComponents/standard/Veiledning/Veiledning';
 import React, { useEffect, useRef, useState } from 'react';
-import { Soker, SøkerView } from 'context/sokerOppslagContext';
+import { Søker, SøkerView } from 'context/sokerOppslagContext';
 import { useRouter } from 'next/router';
 import { GetServerSidePropsResult, NextPageContext } from 'next/types';
 import { beskyttetSide } from 'auth/beskyttetSide';
@@ -12,13 +12,12 @@ import { isLabs } from 'utils/environments';
 import { logSkjemaStartetEvent } from 'utils/amplitude';
 import metrics from 'utils/metrics';
 import { scrollRefIntoView } from 'utils/dom';
-import { getSøkerUtenBarn } from 'pages/api/oppslag/soekerUtenBarn';
 import { logger } from '@navikt/aap-felles-utils';
-import { getFulltNavn } from '../lib/søker';
 import { SØKNAD_CONTEXT_VERSION } from 'context/soknadcontext/soknadContext';
+import { getSøker } from 'pages/api/oppslag/soeker';
 
 interface PageProps {
-  søker: Soker;
+  søker: Søker;
 }
 
 export enum StepNames {
@@ -26,7 +25,6 @@ export enum StepNames {
   FASTLEGE = 'FASTLEGE',
   MEDLEMSKAP = 'MEDLEMSKAP',
   YRKESSKADE = 'YRKESSKADE',
-  TILLEGGSOPPLYSNINGER = 'TILLEGGSOPPLYSNINGER',
   STUDENT = 'STUDENT',
   ANDRE_UTBETALINGER = 'ANDRE_UTBETALINGER',
   BARNETILLEGG = 'BARNETILLEGG',
@@ -59,7 +57,7 @@ const Introduksjon = ({ søker }: PageProps) => {
   useEffect(() => {
     if (søker?.navn) {
       const _søker: SøkerView = {
-        fulltNavn: getFulltNavn(søker),
+        fulltNavn: søker.navn,
       };
       setSoker(_søker);
     }
@@ -108,7 +106,7 @@ export const getServerSideProps = beskyttetSide(
   async (ctx: NextPageContext): Promise<GetServerSidePropsResult<{}>> => {
     const stopTimer = metrics.getServersidePropsDurationHistogram.startTimer({ path: '/standard' });
     const bearerToken = getAccessToken(ctx);
-    const søker = await getSøkerUtenBarn(bearerToken);
+    const søker = await getSøker(bearerToken);
     const mellomlagretSøknad = await lesBucket('STANDARD', bearerToken);
     const activeStep = mellomlagretSøknad?.lagretStepList?.find((e: StepType) => e.active);
     const activeIndex = activeStep?.stepIndex;
@@ -126,7 +124,7 @@ export const getServerSideProps = beskyttetSide(
     return {
       props: { søker },
     };
-  }
+  },
 );
 
 export default Introduksjon;
