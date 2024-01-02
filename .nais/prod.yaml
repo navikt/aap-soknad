@@ -14,6 +14,6 @@ env:
 - name:  SOKNAD_API_AUDIENCE
   value: "prod-gcp:aap:soknad-api"
 - name: OPPSLAG_URL
-  value: "http://aap-oppslag"
+  value: "http://oppslag"
 externals:
   - "www.nav.no"
