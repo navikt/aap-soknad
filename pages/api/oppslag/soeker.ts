@@ -17,7 +17,7 @@ export const getSøker = async (accessToken?: string): Promise<Søker> => {
     url: `${process.env.OPPSLAG_URL}/pdl/person`,
     prometheusPath: 'oppslag/soeker',
     method: 'GET',
-    audience: process.env.SOKNAD_API_AUDIENCE!,
+    audience: process.env.OPPSLAG_AUDIENCE!,
     bearerToken: accessToken,
     metricsStatusCodeCounter: metrics.backendApiStatusCodeCounter,
     metricsTimer: metrics.backendApiDurationHistogram,
