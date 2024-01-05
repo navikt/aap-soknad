@@ -117,7 +117,10 @@ const Steps = ({ søker, mellomlagretSøknad }: PageProps) => {
         const erIkkeKomplett = !!søknadState?.requiredVedlegg?.find(
           (vedlegg) => !vedlegg.completed,
         );
-        logSkjemaFullførtEvent({ harVedlegg, erIkkeKomplett });
+        const brukerFritekstfelt =
+          søknadState?.søknad?.tilleggsopplysninger !== undefined &&
+          søknadState?.søknad?.tilleggsopplysninger.length > 0;
+        logSkjemaFullførtEvent({ harVedlegg, erIkkeKomplett, brukerFritekstfelt });
         const url = postResponse?.data?.uri;
         søknadDispatch({ type: SoknadActionKeys.ADD_SØKNAD_URL, payload: url });
         router.push('kvittering');
