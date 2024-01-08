@@ -38,6 +38,9 @@ import {
   setSoknadStateFraProps,
   SoknadActionKeys,
 } from 'context/soknadcontext/actions';
+import { getBarn } from 'pages/api/oppslag/barn';
+import { getBehandler } from 'pages/api/oppslag/behandler';
+import { getKrr } from 'pages/api/oppslag/krr';
 
 interface PageProps {
   søker: SokerOppslagState;
@@ -198,7 +201,19 @@ export const getServerSideProps = beskyttetSide(
       path: '/[steg]',
     });
     const bearerToken = getAccessToken(ctx);
-    const søker = await getSøker(bearerToken);
+
+    const oppslag = await Promise.all([
+      getSøker(bearerToken),
+      getBarn(bearerToken),
+      getBehandler(bearerToken),
+      getKrr(bearerToken),
+    ]);
+
+    const søker = oppslag[0];
+    const barn = oppslag[1];
+    const behandler = oppslag[2];
+    const krr = oppslag[3];
+
     const mellomlagretSøknad = await lesBucket('STANDARD', bearerToken);
 
     stopTimer();
