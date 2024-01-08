@@ -125,8 +125,10 @@ const Steps = ({ søker, mellomlagretSøknad }: PageProps) => {
           søknadState?.søknad?.tilleggsopplysninger !== undefined &&
           søknadState?.søknad?.tilleggsopplysninger.length > 0;
         logSkjemaFullførtEvent({ harVedlegg, erIkkeKomplett, brukerFritekstfelt });
-        const url = postResponse?.data?.uri;
-        søknadDispatch({ type: SoknadActionKeys.ADD_SØKNAD_URL, payload: url });
+        if (process.env.NEXT_PUBLIC_NY_INNSENDING !== 'enabled') {
+          const url = postResponse?.data?.uri;
+          søknadDispatch({ type: SoknadActionKeys.ADD_SØKNAD_URL, payload: url });
+        }
         router.push('kvittering');
         return true;
       } else {
