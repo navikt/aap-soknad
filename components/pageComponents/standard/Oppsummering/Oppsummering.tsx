@@ -9,7 +9,6 @@ import {
 } from '@navikt/ds-react';
 import React, { useEffect, useState } from 'react';
 import AccordianItemOppsummering from './AccordianItemOppsummering/AccordianItemOppsummering';
-import OppsummeringBarn from './OppsummeringBarn/OppsummeringBarn';
 import OppsummeringKontaktinfo from './OppsummeringKontaktinfo/OppsummeringKontaktinfo';
 import OppsummeringUtenlandsopphold from './OppsummeringUtenlandsopphold/OppsummeringUtenlandsopphold';
 import OppsummeringBehandler from './OppsummeringBehandler/OppsummeringBehandler';
@@ -50,6 +49,9 @@ import { useFormErrors } from 'hooks/FormErrorHook';
 import { setFocusOnErrorSummary } from 'components/schema/FormErrorSummary';
 import { useSoknad } from 'hooks/SoknadHook';
 import { updateSøknadData } from 'context/soknadcontext/actions';
+// eslint-disable-next-line max-len
+import OppsummeringManuelleBarn from 'components/pageComponents/standard/Oppsummering/OppsummeringBarn/OppsummeringManuelleBarn';
+import { OppsummeringBarn } from 'components/pageComponents/standard/Oppsummering/OppsummeringBarn/OppsummeringBarn';
 
 interface OppsummeringProps {
   onBackClick: () => void;
@@ -83,26 +85,26 @@ const Oppsummering = ({
     !getStartDatoSchema(formatMessage).isValidSync({
       sykepenger: søknadState.søknad?.sykepenger,
       ferie: søknadState.søknad?.ferie,
-    }),
+    })
   );
   const [medlemskapHasErrors] = useState<boolean>(
-    !getMedlemskapSchema(formatMessage).isValidSync(søknadState.søknad),
+    !getMedlemskapSchema(formatMessage).isValidSync(søknadState.søknad)
   );
   const [yrkesskadeHasErrors] = useState<boolean>(
-    !getYrkesskadeSchema(formatMessage).isValidSync(søknadState.søknad),
+    !getYrkesskadeSchema(formatMessage).isValidSync(søknadState.søknad)
   );
   const [behandlereHasErrors] = useState<boolean>(
-    !getBehandlerSchema(formatMessage).isValidSync(søknadState.søknad),
+    !getBehandlerSchema(formatMessage).isValidSync(søknadState.søknad)
   );
   const [barnetilleggHasErrors] = useState<boolean>(
-    !getBarnetillegSchema(formatMessage).isValidSync(søknadState?.søknad),
+    !getBarnetillegSchema(formatMessage).isValidSync(søknadState?.søknad)
   );
   const [studentHasErrors] = useState<boolean>(
-    !getStudentSchema(formatMessage).isValidSync(søknadState?.søknad?.student),
+    !getStudentSchema(formatMessage).isValidSync(søknadState?.søknad?.student)
   );
 
   const [utbetalingerHasErrors] = useState<boolean>(
-    !getAndreUtbetalingerSchema(formatMessage).isValidSync(søknadState?.søknad?.andreUtbetalinger),
+    !getAndreUtbetalingerSchema(formatMessage).isValidSync(søknadState?.søknad?.andreUtbetalinger)
   );
 
   useEffect(() => {
@@ -293,7 +295,7 @@ const Oppsummering = ({
                 <BodyShort>{behandler.kontaktinformasjon.kontor}</BodyShort>
                 <BodyShort>{formatFullAdresse(behandler.kontaktinformasjon.adresse)}</BodyShort>
                 <BodyShort>{`Telefon: ${formatTelefonnummer(
-                  behandler.kontaktinformasjon.telefon,
+                  behandler.kontaktinformasjon.telefon
                 )}`}</BodyShort>
                 <BodyShort>{`${formatMessage({
                   id: 'søknad.oppsummering.helseopplysninger.informasjonOmFastlege',
@@ -318,7 +320,7 @@ const Oppsummering = ({
               <OppsummeringBarn barn={barn} key={'barn-' + index} />
             ))}
             {søknadState?.søknad?.manuelleBarn?.map((barn) => (
-              <OppsummeringBarn key={barn.internId} barn={barn} />
+              <OppsummeringManuelleBarn key={barn.internId} barn={barn} />
             ))}
           </>
         </AccordianItemOppsummering>
@@ -369,7 +371,7 @@ const Oppsummering = ({
                         : stønadTekst}
                     </BodyShort>
                   );
-                },
+                }
               )}
             </div>
           ) : (

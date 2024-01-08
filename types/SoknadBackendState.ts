@@ -37,10 +37,6 @@ export interface SøknadBackendState {
     fraArbeidsgiver?: boolean;
     andreStønader: Array<{ type: StønadType; hvemUtbetalerAFP?: string; vedlegg?: Array<string> }>;
   };
-  registrerteBarn: Array<{
-    merEnnIG?: boolean;
-    barnepensjon?: boolean;
-  }>;
   andreBarn: Array<{
     barn: {
       fødseldato?: string;

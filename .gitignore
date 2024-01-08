@@ -22,6 +22,7 @@
 .vscode/
 
 # misc
+tsconfig.tsbuildinfo
 .bucket.cache
 .DS_Store
 .env.development.local

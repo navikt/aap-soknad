@@ -39,12 +39,12 @@ export const getBarnetillegSchema = (formatMessage: IntlFormatters['formatMessag
               { id: 'søknad.barnetillegg.leggTilBarn.modal.harInntekt.validation.required' },
               {
                 grunnbeløp: GRUNNBELØP,
-              },
-            ),
+              }
+            )
           )
           .oneOf([JaEllerNei.JA, JaEllerNei.NEI])
           .nullable(),
-      }),
+      })
     ),
   });
 
@@ -90,11 +90,11 @@ export const Barnetillegg = ({ onBackClick }: Props) => {
             { id: `søknad.vedlegg.andreBarn.description.${barn.relasjon}` },
             {
               navn: `${barn?.navn?.fornavn} ${barn?.navn?.etternavn}`,
-            },
+            }
           ),
         },
       ],
-      søknadDispatch,
+      søknadDispatch
     );
   };
 
@@ -103,18 +103,6 @@ export const Barnetillegg = ({ onBackClick }: Props) => {
       manuelleBarn: søknadState.søknad?.manuelleBarn?.map((barn) => {
         if (barn.internId === updatedBarn.internId) {
           return updatedBarn;
-        } else {
-          return barn;
-        }
-      }),
-    });
-  };
-
-  const updateRegisterbarn = (updatedBarn: Barn, value: any) => {
-    updateSøknadData(søknadDispatch, {
-      barn: søknadState.søknad?.barn?.map((barn) => {
-        if (updatedBarn.fnr === barn.fnr) {
-          return { ...barn, harInntekt: value };
         } else {
           return barn;
         }
@@ -160,14 +148,7 @@ export const Barnetillegg = ({ onBackClick }: Props) => {
           {søknadState?.søknad?.barn && søknadState?.søknad?.barn?.length > 0 && (
             <ul className={classes.barnList}>
               {søknadState?.søknad?.barn.map((barn, index) => (
-                <Registerbarn
-                  barn={barn}
-                  index={index}
-                  findError={findError}
-                  clearErrors={clearErrors}
-                  updateRegisterbarn={updateRegisterbarn}
-                  key={`${barn.navn.fornavn}-${barn.fødseldato}`}
-                />
+                <Registerbarn key={index} barn={barn} />
               ))}
             </ul>
           )}

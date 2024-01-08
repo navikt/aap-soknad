@@ -5,6 +5,7 @@ import { JaNeiAvbrutt } from 'components/pageComponents/standard/Student/Student
 import { OppslagBehandler } from 'context/sokerOppslagContext';
 import { FerieType } from 'components/pageComponents/standard/StartDato/StartDato';
 import { Vedlegg } from '@navikt/aap-felles-react';
+import { BarnOppslag } from 'pages/api/oppslag/barn';
 
 export type Navn = {
   fornavn?: string;
@@ -65,11 +66,10 @@ type AndreUtbetalinger = {
   };
 };
 export type Barn = {
-  navn: Navn;
+  navn: string;
   fødseldato?: string;
   fnr: string;
   harInntekt?: string;
-  manueltOpprettet?: boolean;
   relasjon?: 'FORELDER' | 'FOSTERFORELDER';
 };
 
@@ -110,7 +110,7 @@ export interface Soknad {
   andreBehandlere?: Behandler[];
   student?: Student;
   andreUtbetalinger?: AndreUtbetalinger;
-  barn?: Barn[];
+  barn?: BarnOppslag[];
   manuelleBarn?: ManuelleBarn[];
   tilleggsopplysninger?: string;
   ferie?: Ferie;

@@ -1,34 +1,20 @@
 import { BodyShort, Label } from '@navikt/ds-react';
 import React from 'react';
-import { Barn, ManuelleBarn } from 'types/Soknad';
 import { formatDate } from 'utils/date';
-import { formatNavn } from 'utils/StringFormatters';
 import * as classes from './OppsummeringBarn.module.css';
+import { BarnOppslag } from 'pages/api/oppslag/barn';
 
 type OppsummeringBarnProps = {
-  barn: Barn | ManuelleBarn;
+  barn: BarnOppslag;
 };
 
-const OppsummeringBarn = ({ barn }: OppsummeringBarnProps) => {
+export const OppsummeringBarn = ({ barn }: OppsummeringBarnProps) => {
   return (
     <article className={classes?.oppsummeringBarn}>
       <Label>{'Navn'}</Label>
-      <BodyShort>{formatNavn(barn?.navn)}</BodyShort>
+      <BodyShort>{barn?.navn}</BodyShort>
       <Label>Fødselsdato</Label>
-      <BodyShort>{formatDate(barn?.fødseldato)}</BodyShort>
-      {barn?.relasjon && (
-        <>
-          <Label>Relasjon til barnet</Label>
-          <BodyShort>{barn?.relasjon}</BodyShort>
-        </>
-      )}
-      {barn?.harInntekt && (
-        <>
-          <Label>{'Har inntekt over 1G:'}</Label>
-          <BodyShort>{barn?.harInntekt}</BodyShort>
-        </>
-      )}
+      <BodyShort>{formatDate(barn?.fødselsdato)}</BodyShort>
     </article>
   );
 };
-export default OppsummeringBarn;

@@ -5,8 +5,8 @@ import { logger, tokenXApiProxy } from '@navikt/aap-felles-utils';
 import { isMock } from 'utils/environments';
 import metrics from 'utils/metrics';
 
-interface Barn {
-  navn?: string;
+export interface BarnOppslag {
+  navn: string;
   fødselsdato?: string;
 }
 
@@ -15,7 +15,7 @@ const handler = beskyttetApi(async (req: NextApiRequest, res: NextApiResponse) =
   res.status(200).json(await getBarn(accessToken));
 });
 
-export const getBarn = async (accessToken?: string): Promise<Array<Barn>> => {
+export const getBarn = async (accessToken?: string): Promise<Array<BarnOppslag>> => {
   if (isMock()) return [{ navn: 'Kjell T. Ringen', fødselsdato: '2020.12.12' }];
   const barn = await tokenXApiProxy({
     url: `${process.env.OPPSLAG_URL}/pdl/barn`,

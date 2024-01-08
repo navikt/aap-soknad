@@ -38,9 +38,10 @@ import {
   setSoknadStateFraProps,
   SoknadActionKeys,
 } from 'context/soknadcontext/actions';
-import { getBarn } from 'pages/api/oppslag/barn';
+import { BarnOppslag, getBarn } from 'pages/api/oppslag/barn';
 import { getBehandler } from 'pages/api/oppslag/behandler';
 import { getKrr } from 'pages/api/oppslag/krr';
+import structuredClone from '@ungap/structured-clone';
 
 interface PageProps {
   søker: SokerOppslagState;
@@ -104,14 +105,14 @@ const Steps = ({ søker, mellomlagretSøknad }: PageProps) => {
         søknadState?.søknad,
         sendtTimestamp,
         formatMessage,
-        søknadState?.requiredVedlegg,
+        søknadState?.requiredVedlegg
       );
 
       const postResponse = await postSøknad({ søknad, kvittering: søknadPdf });
       if (postResponse?.ok) {
         const harVedlegg = søknadState.requiredVedlegg && søknadState?.requiredVedlegg?.length > 0;
         const erIkkeKomplett = !!søknadState?.requiredVedlegg?.find(
-          (vedlegg) => !vedlegg.completed,
+          (vedlegg) => !vedlegg.completed
         );
         logSkjemaFullførtEvent({ harVedlegg, erIkkeKomplett });
         const url = postResponse?.data?.uri;
@@ -210,11 +211,18 @@ export const getServerSideProps = beskyttetSide(
     ]);
 
     const søker = oppslag[0];
-    const barn = oppslag[1];
+    const barn = oppslag[1] || [];
     const behandler = oppslag[2];
     const krr = oppslag[3];
 
     const mellomlagretSøknad = await lesBucket('STANDARD', bearerToken);
+    let søknad = mellomlagretSøknad?.søknad;
+    if (søknad && barn.length) {
+      søknad = {
+        ...søknad,
+        barn,
+      };
+    }
 
     stopTimer();
 
@@ -233,9 +241,9 @@ export const getServerSideProps = beskyttetSide(
     }
 
     return {
-      props: { søker, mellomlagretSøknad },
+      props: { søker, mellomlagretSøknad: { ...mellomlagretSøknad, søknad } },
     };
-  },
+  }
 );
 
 export default StepsWithContextProvider;

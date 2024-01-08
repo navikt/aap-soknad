@@ -24,19 +24,6 @@ export function soknadReducer(state: SoknadContextState, action: SoknadAction): 
         },
       };
     }
-    case SoknadActionKeys.ADD_BARN_IF_MISSING: {
-      const barn = state?.søknad?.barn || [];
-      const newBarn = structuredClone(action.payload)?.filter(
-        (e: any) => !barn.find((a: any) => a?.fnr === e?.fnr)
-      );
-      return {
-        ...state,
-        søknad: {
-          ...state.søknad,
-          barn: [...barn, ...newBarn],
-        },
-      };
-    }
     case SoknadActionKeys.ADD_BEHANDLER_IF_MISSING: {
       const oldRegistrerteBehandlere = state?.søknad?.registrerteBehandlere || [];
       const registrerteBehandlere: RegistrertBehandler[] = structuredClone(action.payload)

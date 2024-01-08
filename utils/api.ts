@@ -176,10 +176,6 @@ export const mapSøknadToBackend = (søknad?: Soknad): SøknadBackendState => {
           }
         }) ?? [],
     },
-    registrerteBarn:
-      søknad?.barn?.map((barn) => ({
-        merEnnIG: jaNeiToBoolean(barn.harInntekt),
-      })) ?? [],
     andreBarn:
       søknad?.manuelleBarn?.map((barn) => ({
         barn: {
@@ -420,18 +416,8 @@ export const mapSøknadToPdf = (
       ? createFritekst('Fant ingen registrerte barn')
       : søknad?.barn?.map((barn) =>
           createFeltgruppe([
-            ...createField('Navn', formatNavn(barn?.navn)),
-            ...createField('Fødselsdato', barn?.fødseldato || ''),
-            ...createField(
-              formatMessage(
-                { id: 'søknad.barnetillegg.registrerteBarn.harInntekt.label' },
-                {
-                  grunnbeløp: GRUNNBELØP,
-                }
-              ),
-              barn?.harInntekt,
-              true
-            ),
+            ...createField('Navn', barn?.navn),
+            ...createField('Fødselsdato', barn?.fødselsdato || ''),
           ])
         ) || [];
     return createTema('Barn fra folkeregisteret', [...registrerteBarn]);

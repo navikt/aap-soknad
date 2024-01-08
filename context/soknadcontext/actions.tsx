@@ -9,7 +9,6 @@ export enum SoknadActionKeys {
   SET_STATE_FROM_CACHE = 'SET_STATE_FROM_CACHE',
   SET_SOKNAD = 'SET_SOKNAD',
   UPDATE_SOKNAD = 'UPDATE_SOKNAD',
-  ADD_BARN_IF_MISSING = 'ADD_BARN_IF_MISSING',
   ADD_BEHANDLER_IF_MISSING = 'ADD_BEHANDLER_IF_MISSING',
   ADD_REQUIRED_VEDLEGG = 'ADD_REQUIRED_VEDLEGG',
   REMOVE_REQUIRED_VEDLEGG = 'REMOVE_REQUIRED_VEDLEGG',
@@ -30,10 +29,6 @@ type UpdateSoknad = {
   payload?: Partial<Soknad>;
 };
 
-type AddBarnIfMissing = {
-  type: SoknadActionKeys.ADD_BARN_IF_MISSING;
-  payload: OppslagBarn[];
-};
 type AddBehandlerIfMissing = {
   type: SoknadActionKeys.ADD_BEHANDLER_IF_MISSING;
   payload: OppslagBehandler[];
@@ -67,7 +62,6 @@ export type SoknadAction =
   | SetStateFromCache
   | SetSoknad
   | UpdateSoknad
-  | AddBarnIfMissing
   | AddBehandlerIfMissing
   | AddRequiredVedlegg
   | RemoveRequiredVedlegg
@@ -136,10 +130,6 @@ export const addBehandlerIfMissing = (
 ) => {
   dispatch({ type: SoknadActionKeys.ADD_BEHANDLER_IF_MISSING, payload: data });
 };
-export const addBarnIfMissing = (dispatch: Dispatch<SoknadAction>, data: OppslagBarn[]) => {
-  dispatch({ type: SoknadActionKeys.ADD_BARN_IF_MISSING, payload: data });
-};
-
 export const getVedleggUuidsFromSoknad = (søknad?: Soknad) => {
   const vedlegg = søknad?.vedlegg;
   return Object.values(vedlegg || {})
