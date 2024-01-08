@@ -26,7 +26,7 @@ export const slettBucket = async (type: SøknadsType, accessToken?: string) => {
   }
   if (process.env.NEXT_PUBLIC_NY_INNSENDING === 'enabled') {
     await tokenXApiProxy({
-      url: `${process.env.INNSENDING_URL}/mellomlagring`,
+      url: `${process.env.INNSENDING_URL}/mellomlagring/søknad`,
       prometheusPath: `mellomlagring`,
       method: 'DELETE',
       noResponse: true,

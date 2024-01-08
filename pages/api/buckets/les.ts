@@ -47,7 +47,7 @@ export const lesBucket = async (
     let mellomlagretSøknad;
     if (process.env.NEXT_PUBLIC_NY_INNSENDING === 'enabled') {
       mellomlagretSøknad = await tokenXApiProxy({
-        url: `${process.env.INNSENDING_URL}/mellomlagring`,
+        url: `${process.env.INNSENDING_URL}/mellomlagring/søknad`,
         prometheusPath: `mellomlagring`,
         method: 'GET',
         audience: process.env.INNSENDING_AUDIENCE!,

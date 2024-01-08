@@ -40,7 +40,7 @@ export const lagreBucket = async (type: SøknadsType, data: string, accessToken?
   if (isMock()) return await lagreCache(JSON.stringify(data));
   if (process.env.NEXT_PUBLIC_NY_INNSENDING === 'enabled') {
     await tokenXApiProxy({
-      url: `${process.env.INNSENDING_URL}/mellomlagring`,
+      url: `${process.env.INNSENDING_URL}/mellomlagring/søknad`,
       prometheusPath: `mellomlagring`,
       method: 'POST',
       data: JSON.stringify(data),
