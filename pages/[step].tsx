@@ -111,10 +111,14 @@ const Steps = ({ søker, mellomlagretSøknad }: PageProps) => {
         søknadState?.requiredVedlegg,
       );
 
-      const postResponse =
-        process.env.NEXT_PUBLIC_NY_INNSENDING === 'enabled'
-          ? await postSøknadInnsending(søknadState?.søknad)
-          : await postSøknad({ søknad, kvittering: søknadPdf });
+      let postResponse;
+      if (process.env.NEXT_PUBLIC_NY_INNSENDING === 'enabled') {
+        postResponse = await postSøknadInnsending(søknadState?.søknad);
+      } else {
+        postResponse = await postSøknad({ søknad, kvittering: søknadPdf });
+      }
+
+      console.log('postResponse', postResponse);
 
       if (postResponse?.ok) {
         const harVedlegg = søknadState.requiredVedlegg && søknadState?.requiredVedlegg?.length > 0;
