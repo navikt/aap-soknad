@@ -69,7 +69,6 @@ export type Barn = {
   navn: string;
   fødseldato?: string;
   fnr: string;
-  harInntekt?: string;
   relasjon?: 'FORELDER' | 'FOSTERFORELDER';
 };
 
@@ -77,7 +76,6 @@ export type ManuelleBarn = {
   navn: Navn;
   internId: string;
   fødseldato: Date;
-  harInntekt: JaEllerNei;
   relasjon: Relasjon;
   vedlegg?: Vedlegg[];
 };

@@ -12,7 +12,6 @@ import { Soknad, SoknadVedlegg } from 'types/Soknad';
 import { BehandlerBackendState, SøknadBackendState } from 'types/SoknadBackendState';
 import { formatDate } from './date';
 import { formatFullAdresse, formatNavn } from 'utils/StringFormatters';
-import { GRUNNBELØP } from 'components/pageComponents/standard/Barnetillegg/Barnetillegg';
 import { RequiredVedlegg } from 'types/SoknadContext';
 import { Relasjon } from 'components/pageComponents/standard/Barnetillegg/AddBarnModal';
 import {
@@ -183,7 +182,6 @@ export const mapSøknadToBackend = (søknad?: Soknad): SøknadBackendState => {
           navn: barn.navn,
         },
         relasjon: barn.relasjon,
-        merEnnIG: jaNeiToBoolean(barn.harInntekt),
         vedlegg: getVedleggForManueltBarn(barn.internId, søknad?.vedlegg)?.map(
           (vedlegg) => vedlegg?.vedleggId
         ),
@@ -432,17 +430,6 @@ export const mapSøknadToPdf = (
             ...createField(
               formatMessage({ id: 'søknad.barnetillegg.leggTilBarn.modal.relasjon.label' }),
               barn?.relasjon
-            ),
-            ...createField(
-              formatMessage(
-                { id: 'søknad.barnetillegg.registrerteBarn.harInntekt.label' },
-                {
-                  grunnbeløp: GRUNNBELØP,
-                },
-                true
-              ),
-              barn?.harInntekt,
-              true
             ),
           ])
         ) || [];

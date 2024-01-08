@@ -25,29 +25,6 @@ interface Props {
   onBackClick: () => void;
 }
 
-export const GRUNNBELØP = '118 620';
-
-export const getBarnetillegSchema = (formatMessage: IntlFormatters['formatMessage']) =>
-  yup.object().shape({
-    barn: yup.array().of(
-      yup.object().shape({
-        harInntekt: yup
-          .string()
-          .nullable()
-          .required(
-            formatMessage(
-              { id: 'søknad.barnetillegg.leggTilBarn.modal.harInntekt.validation.required' },
-              {
-                grunnbeløp: GRUNNBELØP,
-              }
-            )
-          )
-          .oneOf([JaEllerNei.JA, JaEllerNei.NEI])
-          .nullable(),
-      })
-    ),
-  });
-
 export const Barnetillegg = ({ onBackClick }: Props) => {
   const { errors, setErrors, clearErrors, findError } = useFormErrors();
   const { formatMessage } = useIntl();
@@ -113,15 +90,9 @@ export const Barnetillegg = ({ onBackClick }: Props) => {
   return (
     <>
       <SoknadFormWrapperNew
-        onNext={async () => {
-          const errors = await validate(getBarnetillegSchema(formatMessage), søknadState.søknad);
-          if (errors) {
-            setErrors(errors);
-            setFocusOnErrorSummary();
-          } else {
-            logSkjemastegFullførtEvent(currentStepIndex ?? 0);
-            completeAndGoToNextStep(stepWizardDispatch);
-          }
+        onNext={() => {
+          logSkjemastegFullførtEvent(currentStepIndex ?? 0);
+          completeAndGoToNextStep(stepWizardDispatch);
         }}
         onBack={() => {
           updateSøknadData(søknadDispatch, { ...søknadState.søknad });

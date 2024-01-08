@@ -528,14 +528,7 @@
             "text": "Dersom barnet får barnepensjon, har du ikkje rett til barnetillegg for barnet."
           }
         },
-        "notfound": "Fant ingen registrerte barn. Viss dette ikkje stemmer kan du leggja til barna dine under.",
-        "harInntekt": {
-          "label": "Har barnet ei årleg inntekt over {grunnbeløp}kr?",
-          "readMore": {
-            "title": "Kvifor spør vi om dette?",
-            "text": "Dersom barnet har ei årleg inntekt over {grunnbeløp}kr ({grunnbeløp}kr = 1G), har du vanlegvis ikkje rett til barnetillegg for barnet."
-          }
-        }
+        "notfound": "Fant ingen registrerte barn. Viss dette ikkje stemmer kan du leggja til barna dine under."
       },
       "manuelleBarn": {
         "title": "Andre barn",
@@ -590,16 +583,6 @@
             "label": "Kva relasjon har du til barnet?",
             "validation": {
               "required": "Du må svara på kva relasjon du har til barnet."
-            }
-          },
-          "harInntekt": {
-            "label": "Har barnet ei årleg inntekt over {grunnbeløp}kr?",
-            "readMore": {
-              "title": "Kvifor spør vi om dette?",
-              "text": "Dersom barnet har ei årleg inntekt over {grunnbeløp}kr ({grunnbeløp}kr = 1G), har du vanlegvis ikkje rett til barnetillegg for barnet."
-            },
-            "validation": {
-              "required": "Du må svara på om barnet har ei årleg inntekt over {grunnbeløp}kr"
             }
           },
           "buttons": {

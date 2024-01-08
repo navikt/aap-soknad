@@ -61,7 +61,6 @@ const soknadContextInitial: SoknadContextState = {
         },
         fødseldato: new Date(),
         relasjon: Relasjon.FORELDER,
-        harInntekt: JaEllerNei.NEI,
         internId: 'bc68d022-7f2e-43fa-8e83-067d405850b1',
       },
       {
@@ -71,7 +70,6 @@ const soknadContextInitial: SoknadContextState = {
         },
         fødseldato: new Date(),
         relasjon: Relasjon.FOSTERFORELDER,
-        harInntekt: JaEllerNei.NEI,
         internId: '56f7e798-4d50-43bd-9734-27cb4de437b3',
       },
     ],

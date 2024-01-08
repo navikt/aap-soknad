@@ -2,10 +2,7 @@ import * as classes from './Barnetillegg.module.css';
 import { BodyShort, Label, Radio, RadioGroup, ReadMore } from '@navikt/ds-react';
 import { formatNavn } from '../../../../utils/StringFormatters';
 import { formatDate } from '../../../../utils/date';
-import { JaEllerNei } from '../../../../types/Generic';
 import React from 'react';
-import { GRUNNBELØP } from './Barnetillegg';
-import { Barn } from 'types/Soknad';
 import { useIntl } from 'react-intl';
 import { BarnOppslag } from 'pages/api/oppslag/barn';
 

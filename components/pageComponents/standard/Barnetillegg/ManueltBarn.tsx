@@ -6,7 +6,6 @@ import { Relasjon } from './AddBarnModal';
 import { JaEllerNei } from 'types/Generic';
 import { Delete } from '@navikt/ds-icons';
 import React, { Dispatch } from 'react';
-import { GRUNNBELØP } from './Barnetillegg';
 import { ManuelleBarn } from 'types/Soknad';
 import { useIntl } from 'react-intl';
 import { useSoknad } from 'hooks/SoknadHook';
@@ -50,26 +49,6 @@ const ManueltBarn = ({ barn, setSelectedBarn, setShowModal }: BarnKortProps) => 
             {formatMessage({
               id: 'søknad.barnetillegg.manuelleBarn.erFosterforelder',
             })}
-          </BodyShort>
-        )}
-        {barn?.harInntekt === JaEllerNei.JA && (
-          <BodyShort>
-            {formatMessage(
-              { id: 'søknad.barnetillegg.manuelleBarn.inntektOver1G' },
-              {
-                grunnbeløp: GRUNNBELØP,
-              },
-            )}
-          </BodyShort>
-        )}
-        {barn?.harInntekt === JaEllerNei.NEI && (
-          <BodyShort>
-            {formatMessage(
-              { id: 'søknad.barnetillegg.manuelleBarn.inntektIkkeOver1G' },
-              {
-                grunnbeløp: GRUNNBELØP,
-              },
-            )}
           </BodyShort>
         )}
         <div className={classes?.cardButtonWrapper}>
