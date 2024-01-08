@@ -37,7 +37,7 @@ const handler = beskyttetApi(async (req: NextApiRequest, res: NextApiResponse) =
   try {
     const soknadRes = await sendSoknad({ kvittering: søknadPdf, filer: [] }, accessToken);
     metrics.sendSoknadCounter.inc({ type: 'STANDARD' });
-    res.status(201).json(soknadRes);
+    res.status(201).json({});
   } catch (err) {
     throw err;
   }
