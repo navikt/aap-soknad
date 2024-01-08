@@ -24,7 +24,7 @@ const handler = beskyttetApi(async (req: NextApiRequest, res: NextApiResponse) =
 export const lesBucket = async (
   type: SøknadsType,
   accessToken?: string,
-  retryCount = 3
+  retryCount = 3,
 ): Promise<SoknadContextState | undefined> => {
   if (retryCount === 0) {
     logger.info(`RetryCount for å hente mellomlagret søknad er 0. Gir opp.`);
@@ -44,20 +44,34 @@ export const lesBucket = async (
     return result ? JSON.parse(result) : {};
   }
   try {
-    const mellomlagretSøknad = await tokenXApiProxy({
-      url: `${process.env.SOKNAD_API_URL}/buckets/les/${type}`,
-      prometheusPath: `buckets/les/${type}`,
-      method: 'GET',
-      audience: process.env.SOKNAD_API_AUDIENCE!,
-      bearerToken: accessToken,
-      metricsStatusCodeCounter: metrics.backendApiStatusCodeCounter,
-      metricsTimer: metrics.backendApiDurationHistogram,
-      logger: logger,
-    });
+    let mellomlagretSøknad;
+    if (process.env.NEXT_PUBLIC_NY_INNSENDING === 'enabled') {
+      mellomlagretSøknad = await tokenXApiProxy({
+        url: `${process.env.INNSENDING_URL}/mellomlagring`,
+        prometheusPath: `mellomlagring`,
+        method: 'GET',
+        audience: process.env.INNSENDING_AUDIENCE!,
+        bearerToken: accessToken,
+        metricsStatusCodeCounter: metrics.backendApiStatusCodeCounter,
+        metricsTimer: metrics.backendApiDurationHistogram,
+        logger: logger,
+      });
+    } else {
+      mellomlagretSøknad = await tokenXApiProxy({
+        url: `${process.env.SOKNAD_API_URL}/buckets/les/${type}`,
+        prometheusPath: `buckets/les/${type}`,
+        method: 'GET',
+        audience: process.env.SOKNAD_API_AUDIENCE!,
+        bearerToken: accessToken,
+        metricsStatusCodeCounter: metrics.backendApiStatusCodeCounter,
+        metricsTimer: metrics.backendApiDurationHistogram,
+        logger: logger,
+      });
+    }
 
     if (!mellomlagretSøknad) {
       logger.info(
-        `Mellomlagret søknad returnert fra tokenXApiProxy er undefined. Prøver på nytt. RetryCount: ${retryCount}`
+        `Mellomlagret søknad returnert fra tokenXApiProxy er undefined. Prøver på nytt. RetryCount: ${retryCount}`,
       );
 
       await new Promise((resolve) => setTimeout(resolve, 300));
@@ -66,7 +80,7 @@ export const lesBucket = async (
 
     if (mellomlagretSøknad?.version?.toString() !== SØKNAD_CONTEXT_VERSION?.toString()) {
       logger.info(
-        `Cache version: ${mellomlagretSøknad?.version}, SØKNAD_CONTEXT_VERSION: ${SØKNAD_CONTEXT_VERSION}`
+        `Cache version: ${mellomlagretSøknad?.version}, SØKNAD_CONTEXT_VERSION: ${SØKNAD_CONTEXT_VERSION}`,
       );
     }
 
@@ -74,7 +88,7 @@ export const lesBucket = async (
   } catch (error: any) {
     if (error?.status === 503) {
       logger.info(
-        `Mellomlagring ga 'Service is unavailable (503). Prøver på nytt. RetryCount: ${retryCount}`
+        `Mellomlagring ga 'Service is unavailable (503). Prøver på nytt. RetryCount: ${retryCount}`,
       );
       await new Promise((resolve) => setTimeout(resolve, 300));
       return await lesBucket(type, accessToken, retryCount - 1);

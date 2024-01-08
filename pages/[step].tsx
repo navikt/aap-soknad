@@ -111,7 +111,11 @@ const Steps = ({ søker, mellomlagretSøknad }: PageProps) => {
         søknadState?.requiredVedlegg,
       );
 
-      const postResponse = await postSøknad({ søknad, kvittering: søknadPdf });
+      const postResponse =
+        process.env.NEXT_PUBLIC_NY_INNSENDING === 'enabled'
+          ? await postSøknadInnsending(søknadState?.søknad)
+          : await postSøknad({ søknad, kvittering: søknadPdf });
+
       if (postResponse?.ok) {
         const harVedlegg = søknadState.requiredVedlegg && søknadState?.requiredVedlegg?.length > 0;
         const erIkkeKomplett = !!søknadState?.requiredVedlegg?.find(
@@ -137,6 +141,9 @@ const Steps = ({ søker, mellomlagretSøknad }: PageProps) => {
     fetchPOST('/aap/soknad/api/innsending/soknad', {
       ...data,
     });
+
+  const postSøknadInnsending = async (data?: Soknad) =>
+    fetchPOST('/aap/soknad/api/innsending/ny_soknad', { ...data });
 
   const onPreviousStep = async () => {
     goToPreviousStep(stepWizardDispatch);

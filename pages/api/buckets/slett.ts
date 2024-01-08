@@ -24,17 +24,31 @@ export const slettBucket = async (type: SøknadsType, accessToken?: string) => {
     await deleteCache(type);
     return;
   }
-  await tokenXApiProxy({
-    url: `${process.env.SOKNAD_API_URL}/buckets/slett/${type}`,
-    prometheusPath: `buckets/slett/${type}`,
-    method: 'DELETE',
-    noResponse: true,
-    audience: process.env.SOKNAD_API_AUDIENCE!,
-    bearerToken: accessToken,
-    metricsStatusCodeCounter: metrics.backendApiStatusCodeCounter,
-    metricsTimer: metrics.backendApiDurationHistogram,
-    logger: logger,
-  });
+  if (process.env.NEXT_PUBLIC_NY_INNSENDING === 'enabled') {
+    await tokenXApiProxy({
+      url: `${process.env.INNSENDING_URL}/mellomlagring`,
+      prometheusPath: `mellomlagring`,
+      method: 'DELETE',
+      noResponse: true,
+      audience: process.env.INNSENDING_AUDIENCE!,
+      bearerToken: accessToken,
+      metricsStatusCodeCounter: metrics.backendApiStatusCodeCounter,
+      metricsTimer: metrics.backendApiDurationHistogram,
+      logger: logger,
+    });
+  } else {
+    await tokenXApiProxy({
+      url: `${process.env.SOKNAD_API_URL}/buckets/slett/${type}`,
+      prometheusPath: `buckets/slett/${type}`,
+      method: 'DELETE',
+      noResponse: true,
+      audience: process.env.SOKNAD_API_AUDIENCE!,
+      bearerToken: accessToken,
+      metricsStatusCodeCounter: metrics.backendApiStatusCodeCounter,
+      metricsTimer: metrics.backendApiDurationHistogram,
+      logger: logger,
+    });
+  }
 };
 
 export default handler;

@@ -24,12 +24,11 @@ const handler = beskyttetApi(async (req: NextApiRequest, res: NextApiResponse) =
     Object.keys(eksisterendeSøknad.søknad).length > 0 &&
     Object.keys(req.body.søknad).length === 0
   ) {
-    const activeStepIndex = eksisterendeSøknad?.lagretStepList?.find(
-      (e: StepType) => e.active
-    )?.stepIndex;
+    const activeStepIndex = eksisterendeSøknad?.lagretStepList?.find((e: StepType) => e.active)
+      ?.stepIndex;
 
     logger.error(
-      `Overskriver eksisterende søknad med en tom søknad på side ${activeStepIndex ?? 'ukjent'}`
+      `Overskriver eksisterende søknad med en tom søknad på side ${activeStepIndex ?? 'ukjent'}`,
     );
   }
   await lagreBucket(type as SøknadsType, req.body, accessToken);
@@ -39,18 +38,33 @@ const handler = beskyttetApi(async (req: NextApiRequest, res: NextApiResponse) =
 export const lagreBucket = async (type: SøknadsType, data: string, accessToken?: string) => {
   if (isLabs()) return;
   if (isMock()) return await lagreCache(JSON.stringify(data));
-  await tokenXApiProxy({
-    url: `${process.env.SOKNAD_API_URL}/buckets/lagre/${type}`,
-    prometheusPath: `buckets/lagre/${type}`,
-    method: 'POST',
-    data: JSON.stringify(data),
-    audience: process.env.SOKNAD_API_AUDIENCE!,
-    noResponse: true,
-    bearerToken: accessToken,
-    metricsStatusCodeCounter: metrics.backendApiStatusCodeCounter,
-    metricsTimer: metrics.backendApiDurationHistogram,
-    logger: logger,
-  });
+  if (process.env.NEXT_PUBLIC_NY_INNSENDING === 'enabled') {
+    await tokenXApiProxy({
+      url: `${process.env.INNSENDING_URL}/mellomlagring`,
+      prometheusPath: `mellomlagring`,
+      method: 'POST',
+      data: JSON.stringify(data),
+      audience: process.env.INNSENDING_AUDIENCE!,
+      noResponse: true,
+      bearerToken: accessToken,
+      metricsStatusCodeCounter: metrics.backendApiStatusCodeCounter,
+      metricsTimer: metrics.backendApiDurationHistogram,
+      logger: logger,
+    });
+  } else {
+    await tokenXApiProxy({
+      url: `${process.env.SOKNAD_API_URL}/buckets/lagre/${type}`,
+      prometheusPath: `buckets/lagre/${type}`,
+      method: 'POST',
+      data: JSON.stringify(data),
+      audience: process.env.SOKNAD_API_AUDIENCE!,
+      noResponse: true,
+      bearerToken: accessToken,
+      metricsStatusCodeCounter: metrics.backendApiStatusCodeCounter,
+      metricsTimer: metrics.backendApiDurationHistogram,
+      logger: logger,
+    });
+  }
   return;
 };
 
