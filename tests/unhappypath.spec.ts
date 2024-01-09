@@ -329,12 +329,6 @@ test('at alle feilmeldinger skal dukke opp', async ({ page }) => {
   // Steg 5
   await expect(page).toHaveURL('http://localhost:3000/aap/soknad/5/');
   await expect(await page.getByRole('heading', { name: 'Barnetillegg' })).toBeVisible();
-  await page.getByRole('button', { name: 'Neste steg' }).click();
-  await expect(
-    page.getByText(
-      'InformasjonDu får ikke barnetillegg hvis:Barnet mottar barnepensjon.Barnet har e',
-    ),
-  ).toBeVisible();
   await page.getByRole('button', { name: 'Legg til Legg til barn' }).click();
   await page.getByRole('button', { name: 'Lagre' }).click();
   await expect(
@@ -354,7 +348,6 @@ test('at alle feilmeldinger skal dukke opp', async ({ page }) => {
 
   await page.getByLabel('Fødselsdato (dd.mm.åååå)').fill(format(over18years, 'dd.MM.yyyy'));
   await page.getByRole('radio', { name: 'Forelder', exact: true }).check();
-  await page.getByRole('dialog').getByText('Nei').check();
   await page.getByRole('button', { name: 'Lagre' }).click();
   await expect(
     page.getByText(

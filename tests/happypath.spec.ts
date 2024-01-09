@@ -11,7 +11,7 @@ test('at enkel gjennomkjøring av søknaden fungerer', async ({ page }) => {
   await expect(wcagRes.violations).toEqual([]);
 
   await expect(
-    page.getByRole('heading', { name: 'Søknad om arbeidsavklarings­penger (AAP)' })
+    page.getByRole('heading', { name: 'Søknad om arbeidsavklarings­penger (AAP)' }),
   ).toBeVisible();
 
   await page.getByLabel('Jeg vil svare så godt jeg kan på spørsmålene i søknaden.').check();
@@ -51,7 +51,7 @@ test('at enkel gjennomkjøring av søknaden fungerer', async ({ page }) => {
   await expect(page).toHaveURL('http://localhost:3000/aap/soknad/4/');
 
   await expect(
-    page.getByRole('heading', { name: 'Kontaktperson for helseopplysninger' })
+    page.getByRole('heading', { name: 'Kontaktperson for helseopplysninger' }),
   ).toBeVisible();
   wcagRes = await checkWcag(page);
   await expect(wcagRes.violations).toEqual([]);
@@ -64,10 +64,6 @@ test('at enkel gjennomkjøring av søknaden fungerer', async ({ page }) => {
   await expect(page.getByRole('heading', { name: 'Barnetillegg' })).toBeVisible();
   wcagRes = await checkWcag(page);
   await expect(wcagRes.violations).toEqual([]);
-
-  await page.locator('article:has-text("Navn: Embla Bakke Li")').getByLabel('Nei').check();
-
-  await page.locator('article:has-text("Navn: Jonas Li")').getByLabel('Nei').check();
 
   await page.getByRole('button', { name: 'Neste steg' }).click();
   await expect(page).toHaveURL('http://localhost:3000/aap/soknad/6/');
@@ -93,7 +89,7 @@ test('at enkel gjennomkjøring av søknaden fungerer', async ({ page }) => {
   await expect(page).toHaveURL('http://localhost:3000/aap/soknad/8/');
 
   await expect(
-    page.getByRole('heading', { name: 'Vedlegg og tilleggsopplysninger' })
+    page.getByRole('heading', { name: 'Vedlegg og tilleggsopplysninger' }),
   ).toBeVisible();
   wcagRes = await checkWcag(page);
   await expect(wcagRes.violations).toEqual([]);
@@ -116,7 +112,7 @@ test('at enkel gjennomkjøring av søknaden fungerer', async ({ page }) => {
 
   await page
     .getByLabel(
-      'Jeg har lest all informasjonen jeg har fått i søknaden og bekrefter at opplysningene jeg har gitt er korrekte.'
+      'Jeg har lest all informasjonen jeg har fått i søknaden og bekrefter at opplysningene jeg har gitt er korrekte.',
     )
     .check();
 
