@@ -7,10 +7,8 @@ import {
   Modal,
   Radio,
   RadioGroup,
-  ReadMore,
   TextField,
 } from '@navikt/ds-react';
-import { JaEllerNei } from 'types/Generic';
 import React, { Dispatch } from 'react';
 import { ManuelleBarn, Navn, Soknad } from 'types/Soknad';
 
@@ -18,7 +16,6 @@ import * as yup from 'yup';
 import { ValidationError } from 'yup';
 import * as classes from './Barnetillegg.module.css';
 import { ModalButtonWrapper } from 'components/ButtonWrapper/ModalButtonWrapper';
-import { GRUNNBELØP } from './Barnetillegg';
 
 import { add, format, isValid, parse, sub } from 'date-fns';
 import { IntlFormatters, useIntl } from 'react-intl';
@@ -45,7 +42,6 @@ export interface CreateOrUpdateManuelleBarn {
   internId?: string;
   navn?: Navn;
   fødseldato?: Date;
-  harInntekt?: JaEllerNei;
   relasjon?: Relasjon;
 }
 
@@ -92,17 +88,6 @@ export const getAddBarnSchema = (formatMessage: IntlFormatters['formatMessage'])
         formatMessage({ id: 'søknad.barnetillegg.leggTilBarn.modal.relasjon.validation.required' }),
       )
       .oneOf([Relasjon.FORELDER, Relasjon.FOSTERFORELDER]),
-    harInntekt: yup
-      .string()
-      .required(
-        formatMessage(
-          { id: 'søknad.barnetillegg.leggTilBarn.modal.harInntekt.validation.required' },
-          {
-            grunnbeløp: GRUNNBELØP,
-          },
-        ),
-      )
-      .oneOf([JaEllerNei.JA, JaEllerNei.NEI]),
   });
 };
 
@@ -234,44 +219,6 @@ export const AddBarnModal = ({
               <Radio value={Relasjon.FOSTERFORELDER}>
                 <BodyShort>
                   {formatMessage({ id: `answerOptions.relasjon.${Relasjon.FOSTERFORELDER}` })}
-                </BodyShort>
-              </Radio>
-            </RadioGroup>
-            <RadioGroup
-              legend={formatMessage(
-                { id: 'søknad.barnetillegg.leggTilBarn.modal.harInntekt.label' },
-                {
-                  grunnbeløp: GRUNNBELØP,
-                },
-              )}
-              name={'harInntekt'}
-              onChange={(value) => {
-                clearErrors();
-                setBarn({ ...barn, harInntekt: value });
-              }}
-              value={barn.harInntekt || ''}
-              error={findError('harInntekt')}
-            >
-              <ReadMore
-                header={formatMessage({
-                  id: 'søknad.barnetillegg.leggTilBarn.modal.harInntekt.readMore.title',
-                })}
-              >
-                {formatMessage(
-                  { id: 'søknad.barnetillegg.leggTilBarn.modal.harInntekt.readMore.text' },
-                  {
-                    grunnbeløp: GRUNNBELØP,
-                  },
-                )}
-              </ReadMore>
-              <Radio value={JaEllerNei.JA}>
-                <BodyShort>
-                  {formatMessage({ id: `answerOptions.jaEllerNei.${JaEllerNei.JA}` })}
-                </BodyShort>
-              </Radio>
-              <Radio value={JaEllerNei.NEI}>
-                <BodyShort>
-                  {formatMessage({ id: `answerOptions.jaEllerNei.${JaEllerNei.NEI}` })}
                 </BodyShort>
               </Radio>
             </RadioGroup>

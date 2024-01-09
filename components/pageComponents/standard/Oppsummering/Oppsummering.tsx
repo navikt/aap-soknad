@@ -33,7 +33,6 @@ import {
 import { formatFullAdresse, formatNavn, formatTelefonnummer } from 'utils/StringFormatters';
 import OppsummeringPeriode from './OppsummeringPeriode/OppsummeringPeriode';
 import { isNonEmptyPeriode } from 'utils/periode';
-import { getBarnetillegSchema } from 'components/pageComponents/standard/Barnetillegg/Barnetillegg';
 import {
   FerieTypeToMessageKey,
   getStartDatoSchema,
@@ -94,9 +93,6 @@ const Oppsummering = ({
   const [behandlereHasErrors] = useState<boolean>(
     !getBehandlerSchema(formatMessage).isValidSync(søknadState.søknad),
   );
-  const [barnetilleggHasErrors] = useState<boolean>(
-    !getBarnetillegSchema(formatMessage).isValidSync(søknadState?.søknad),
-  );
   const [studentHasErrors] = useState<boolean>(
     !getStudentSchema(formatMessage).isValidSync(søknadState?.søknad?.student),
   );
@@ -111,7 +107,6 @@ const Oppsummering = ({
       ...(medlemskapHasErrors ? ['MEDLEMSKAP'] : []),
       ...(yrkesskadeHasErrors ? ['YRKESSKADE'] : []),
       ...(behandlereHasErrors ? ['BEHANDLERE'] : []),
-      ...(barnetilleggHasErrors ? ['BARNETILLEGG'] : []),
       ...(studentHasErrors ? ['STUDENT'] : []),
       ...(utbetalingerHasErrors ? ['UTBETALINGER'] : []),
     ];
@@ -311,7 +306,6 @@ const Oppsummering = ({
           editText={formatMessage({ id: 'søknad.oppsummering.barnetillegg.editText' })}
           toggleAll={toggleAll}
           onEdit={() => editStep(StepNames.BARNETILLEGG)}
-          hasError={barnetilleggHasErrors}
         >
           <>
             {søknadState?.søknad?.barn?.map((barn, index) => (

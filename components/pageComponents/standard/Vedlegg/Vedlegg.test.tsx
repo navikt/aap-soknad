@@ -3,11 +3,8 @@ import { Step, StepWizard } from 'components/StepWizard';
 import React from 'react';
 import { toHaveNoViolations } from 'jest-axe';
 import messagesNb from 'translations/nb.json';
-import userEvent from '@testing-library/user-event';
 import Vedlegg from './Vedlegg';
-import { Soknad } from 'types/Soknad';
 import { Relasjon } from 'components/pageComponents/standard/Barnetillegg/AddBarnModal';
-import { JaEllerNei } from 'types/Generic';
 import { SoknadContextState, SØKNAD_CONTEXT_VERSION } from 'context/soknadcontext/soknadContext';
 
 expect.extend(toHaveNoViolations);
@@ -61,7 +58,6 @@ const soknadContextInitial: SoknadContextState = {
         },
         fødseldato: new Date(),
         relasjon: Relasjon.FORELDER,
-        harInntekt: JaEllerNei.NEI,
         internId: 'bc68d022-7f2e-43fa-8e83-067d405850b1',
       },
       {
@@ -71,7 +67,6 @@ const soknadContextInitial: SoknadContextState = {
         },
         fødseldato: new Date(),
         relasjon: Relasjon.FOSTERFORELDER,
-        harInntekt: JaEllerNei.NEI,
         internId: '56f7e798-4d50-43bd-9734-27cb4de437b3',
       },
     ],
@@ -81,8 +76,6 @@ const soknadContextInitial: SoknadContextState = {
 };
 
 describe('Vedlegg', () => {
-  const user = userEvent.setup();
-
   const Component = () => {
     return (
       <StepWizard>
