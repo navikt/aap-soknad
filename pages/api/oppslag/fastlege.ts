@@ -26,10 +26,10 @@ interface RegistrertBehandler {
 
 const handler = beskyttetApi(async (req: NextApiRequest, res: NextApiResponse) => {
   const accessToken = getAccessTokenFromRequest(req);
-  res.status(200).json(await getBehandler(accessToken));
+  res.status(200).json(await getFastlege(accessToken));
 });
 
-export const getBehandler = async (accessToken?: string): Promise<RegistrertBehandler> => {
+export const getFastlege = async (accessToken?: string): Promise<RegistrertBehandler> => {
   if (isMock())
     return {
       navn: 'Fast Legen',
@@ -39,7 +39,7 @@ export const getBehandler = async (accessToken?: string): Promise<RegistrertBeha
     };
 
   const registrertBehandler = await tokenXApiProxy({
-    url: `${process.env.OPPSLAG_URL}/behandler`,
+    url: `${process.env.OPPSLAG_URL}/fastlege`,
     prometheusPath: 'oppslag/behandler',
     method: 'GET',
     audience: process.env.OPPSLAG_AUDIENCE!,
