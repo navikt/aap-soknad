@@ -30,7 +30,12 @@ import {
   StønadType,
   stønadTypeToAlternativNøkkel,
 } from 'components/pageComponents/standard/AndreUtbetalinger/AndreUtbetalinger';
-import { formatFullAdresse, formatNavn, formatTelefonnummer } from 'utils/StringFormatters';
+import {
+  formatFullAdresse,
+  formatNavn,
+  formatNyAdresse,
+  formatTelefonnummer,
+} from 'utils/StringFormatters';
 import OppsummeringPeriode from './OppsummeringPeriode/OppsummeringPeriode';
 import { isNonEmptyPeriode } from 'utils/periode';
 import { getBarnetillegSchema } from 'components/pageComponents/standard/Barnetillegg/Barnetillegg';
@@ -83,26 +88,26 @@ const Oppsummering = ({
     !getStartDatoSchema(formatMessage).isValidSync({
       sykepenger: søknadState.søknad?.sykepenger,
       ferie: søknadState.søknad?.ferie,
-    }),
+    })
   );
   const [medlemskapHasErrors] = useState<boolean>(
-    !getMedlemskapSchema(formatMessage).isValidSync(søknadState.søknad),
+    !getMedlemskapSchema(formatMessage).isValidSync(søknadState.søknad)
   );
   const [yrkesskadeHasErrors] = useState<boolean>(
-    !getYrkesskadeSchema(formatMessage).isValidSync(søknadState.søknad),
+    !getYrkesskadeSchema(formatMessage).isValidSync(søknadState.søknad)
   );
   const [behandlereHasErrors] = useState<boolean>(
-    !getBehandlerSchema(formatMessage).isValidSync(søknadState.søknad),
+    !getBehandlerSchema(formatMessage).isValidSync(søknadState.søknad)
   );
   const [barnetilleggHasErrors] = useState<boolean>(
-    !getBarnetillegSchema(formatMessage).isValidSync(søknadState?.søknad),
+    !getBarnetillegSchema(formatMessage).isValidSync(søknadState?.søknad)
   );
   const [studentHasErrors] = useState<boolean>(
-    !getStudentSchema(formatMessage).isValidSync(søknadState?.søknad?.student),
+    !getStudentSchema(formatMessage).isValidSync(søknadState?.søknad?.student)
   );
 
   const [utbetalingerHasErrors] = useState<boolean>(
-    !getAndreUtbetalingerSchema(formatMessage).isValidSync(søknadState?.søknad?.andreUtbetalinger),
+    !getAndreUtbetalingerSchema(formatMessage).isValidSync(søknadState?.søknad?.andreUtbetalinger)
   );
 
   useEffect(() => {
@@ -289,11 +294,11 @@ const Oppsummering = ({
                 <Heading size={'small'} level={'3'}>
                   {formatMessage({ id: 'søknad.oppsummering.helseopplysninger.fastlege' })}
                 </Heading>
-                <BodyShort>{formatNavn(behandler.navn)}</BodyShort>
+                <BodyShort>{behandler.navn}</BodyShort>
                 <BodyShort>{behandler.kontaktinformasjon.kontor}</BodyShort>
-                <BodyShort>{formatFullAdresse(behandler.kontaktinformasjon.adresse)}</BodyShort>
+                <BodyShort>{formatNyAdresse(behandler.kontaktinformasjon.adresse)}</BodyShort>
                 <BodyShort>{`Telefon: ${formatTelefonnummer(
-                  behandler.kontaktinformasjon.telefon,
+                  behandler.kontaktinformasjon.telefon
                 )}`}</BodyShort>
                 <BodyShort>{`${formatMessage({
                   id: 'søknad.oppsummering.helseopplysninger.informasjonOmFastlege',
@@ -369,7 +374,7 @@ const Oppsummering = ({
                         : stønadTekst}
                     </BodyShort>
                   );
-                },
+                }
               )}
             </div>
           ) : (

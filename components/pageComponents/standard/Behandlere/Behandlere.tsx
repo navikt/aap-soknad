@@ -32,11 +32,11 @@ export const getBehandlerSchema = (formatMessage: IntlFormatters['formatMessage'
         erRegistrertFastlegeRiktig: yup
           .string()
           .required(
-            formatMessage({ id: `søknad.helseopplysninger.erRegistrertFastlegeRiktig.required` }),
+            formatMessage({ id: `søknad.helseopplysninger.erRegistrertFastlegeRiktig.required` })
           )
           .oneOf([JaEllerNei.JA, JaEllerNei.NEI])
           .nullable(),
-      }),
+      })
     ),
   });
 export const Behandlere = ({ onBackClick }: Props) => {
@@ -119,7 +119,7 @@ export const Behandlere = ({ onBackClick }: Props) => {
           )}
           {søknadState?.søknad?.registrerteBehandlere?.map((registrertBehandler, index) => (
             <RegistrertBehandler
-              key={registrertBehandler.kontaktinformasjon.behandlerRef}
+              key={registrertBehandler.behandlerRef}
               index={index}
               registrertBehandler={registrertBehandler}
               clearErrors={clearErrors}

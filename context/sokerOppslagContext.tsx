@@ -16,9 +16,16 @@ export type Adresse = {
   husbokstav?: string;
   husnummer?: string;
   postnummer?: {
-    postnr?: string;
     poststed?: string;
+    postnr?: string;
   };
+};
+export type NyAdresse = {
+  adressenavn?: string;
+  husbokstav?: string;
+  husnummer?: string;
+  poststed?: string;
+  postnummer?: string;
 };
 export type OppslagBarn = {
   navn: Navn;
@@ -26,15 +33,13 @@ export type OppslagBarn = {
   fnr: string;
 };
 export interface OppslagBehandler {
+  navn: string;
   type: 'FASTLEGE' | 'SYKMELDER';
-  navn: Navn;
-  kategori: 'LEGE' | 'FYSIOTERAPEUT' | 'KIROPRAKTOR' | 'MANUELLTERAPEUT' | 'TANNLEGE';
+  behandlerRef: string;
   kontaktinformasjon: {
-    behandlerRef: string;
     kontor: string;
-    orgnummer: string;
     telefon: string;
-    adresse: Adresse;
+    adresse: NyAdresse;
   };
 }
 export type Soker = {

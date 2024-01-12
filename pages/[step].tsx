@@ -6,6 +6,7 @@ import { useStepWizard } from 'hooks/StepWizardHook';
 import { useDebounceLagreSoknad } from 'hooks/useDebounceLagreSoknad';
 import { StepWizard } from 'components/StepWizard';
 import {
+  OppslagBehandler,
   setSokerOppslagFraProps,
   SokerOppslagState,
   useSokerOppslag,
@@ -43,13 +44,15 @@ import {
   setSoknadStateFraProps,
   SoknadActionKeys,
 } from 'context/soknadcontext/actions';
+import { getFastlege } from 'pages/api/oppslag/fastlege';
 
 interface PageProps {
   søker: SokerOppslagState;
   mellomlagretSøknad: SoknadContextState;
+  fastlege: OppslagBehandler;
 }
 
-const Steps = ({ søker, mellomlagretSøknad }: PageProps) => {
+const Steps = ({ søker, mellomlagretSøknad, fastlege }: PageProps) => {
   const router = useRouter();
   const { step } = router.query;
 
@@ -71,7 +74,7 @@ const Steps = ({ søker, mellomlagretSøknad }: PageProps) => {
       }
       const oppslag = setSokerOppslagFraProps(søker, oppslagDispatch);
       if (oppslag?.søker?.barn) addBarnIfMissing(søknadDispatch, oppslag.søker.barn);
-      if (søker.behandlere) addBehandlerIfMissing(søknadDispatch, søker.behandlere);
+      if (fastlege) addBehandlerIfMissing(søknadDispatch, [fastlege]);
     }
   }, []);
 
@@ -108,14 +111,14 @@ const Steps = ({ søker, mellomlagretSøknad }: PageProps) => {
         søknadState?.søknad,
         sendtTimestamp,
         formatMessage,
-        søknadState?.requiredVedlegg,
+        søknadState?.requiredVedlegg
       );
 
       const postResponse = await postSøknad({ søknad, kvittering: søknadPdf });
       if (postResponse?.ok) {
         const harVedlegg = søknadState.requiredVedlegg && søknadState?.requiredVedlegg?.length > 0;
         const erIkkeKomplett = !!søknadState?.requiredVedlegg?.find(
-          (vedlegg) => !vedlegg.completed,
+          (vedlegg) => !vedlegg.completed
         );
         const brukerFritekstfelt =
           søknadState?.søknad?.tilleggsopplysninger !== undefined &&
@@ -196,9 +199,9 @@ const Steps = ({ søker, mellomlagretSøknad }: PageProps) => {
   );
 };
 
-const StepsWithContextProvider = ({ søker, mellomlagretSøknad }: PageProps) => (
+const StepsWithContextProvider = ({ søker, mellomlagretSøknad, fastlege }: PageProps) => (
   <SoknadContextProvider>
-    <Steps søker={søker} mellomlagretSøknad={mellomlagretSøknad} />
+    <Steps søker={søker} mellomlagretSøknad={mellomlagretSøknad} fastlege={fastlege} />
   </SoknadContextProvider>
 );
 
@@ -209,6 +212,7 @@ export const getServerSideProps = beskyttetSide(
     });
     const bearerToken = getAccessToken(ctx);
     const søker = await getSøker(bearerToken);
+    const fastlege = await getFastlege(bearerToken);
     const mellomlagretSøknad = await lesBucket('STANDARD', bearerToken);
 
     stopTimer();
@@ -228,9 +232,9 @@ export const getServerSideProps = beskyttetSide(
     }
 
     return {
-      props: { søker, mellomlagretSøknad },
+      props: { søker, mellomlagretSøknad, fastlege },
     };
-  },
+  }
 );
 
 export default StepsWithContextProvider;

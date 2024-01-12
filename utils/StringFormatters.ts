@@ -1,5 +1,5 @@
 import { Navn } from 'types/Soknad';
-import { Adresse } from 'context/sokerOppslagContext';
+import { Adresse, NyAdresse } from 'context/sokerOppslagContext';
 
 export const formatNavn = (navn?: Navn) =>
   `${navn?.fornavn || ''}${navn?.mellomnavn ? ` ${navn?.mellomnavn}` : ''} ${
@@ -14,6 +14,12 @@ export const formatFullAdresse = (adresse?: Adresse) =>
   }${adresse?.husbokstav ? adresse.husbokstav : ''}${
     adresse?.postnummer?.postnr || adresse?.postnummer?.poststed ? ',' : ''
   } ${adresse?.postnummer?.postnr ?? ''} ${adresse?.postnummer?.poststed ?? ''}`;
+export const formatNyAdresse = (adresse?: NyAdresse) =>
+  `${adresse?.adressenavn}${adresse?.husnummer || adresse?.husbokstav ? ' ' : ''}${
+    adresse?.husnummer ?? ''
+  }${adresse?.husbokstav ? adresse.husbokstav : ''}${adresse?.postnummer ? ',' : ''} ${
+    adresse?.postnummer ?? ''
+  } ${adresse?.poststed ?? ''}`;
 
 export const formatTelefonnummer = (telefonnummer?: string) => {
   if (!telefonnummer) {

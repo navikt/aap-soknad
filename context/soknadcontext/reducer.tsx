@@ -43,8 +43,7 @@ export function soknadReducer(state: SoknadContextState, action: SoknadAction): 
         .filter((behandler) => behandler.type === 'FASTLEGE')
         .map((behandler) => {
           const eksisterende = oldRegistrerteBehandlere.find(
-            (e) =>
-              e?.kontaktinformasjon?.behandlerRef === behandler?.kontaktinformasjon?.behandlerRef
+            (e) => e?.behandlerRef === behandler?.behandlerRef
           );
           return eksisterende?.erRegistrertFastlegeRiktig
             ? { ...behandler, erRegistrertFastlegeRiktig: eksisterende.erRegistrertFastlegeRiktig }

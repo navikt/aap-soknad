@@ -11,7 +11,7 @@ import {
 import { Soknad, SoknadVedlegg } from 'types/Soknad';
 import { BehandlerBackendState, SøknadBackendState } from 'types/SoknadBackendState';
 import { formatDate } from './date';
-import { formatFullAdresse, formatNavn } from 'utils/StringFormatters';
+import { formatFullAdresse, formatNavn, formatNyAdresse } from 'utils/StringFormatters';
 import { GRUNNBELØP } from 'components/pageComponents/standard/Barnetillegg/Barnetillegg';
 import { RequiredVedlegg } from 'types/SoknadContext';
 import { Relasjon } from 'components/pageComponents/standard/Barnetillegg/AddBarnModal';
@@ -21,6 +21,7 @@ import {
 } from 'components/pageComponents/standard/StartDato/StartDato';
 import { JaEllerNei } from 'types/Generic';
 import { utenlandsPeriodeArbeidEllerBodd } from '../components/pageComponents/standard/Medlemskap/medlemskapUtils';
+import { Adresse } from 'context/sokerOppslagContext';
 
 export type SøknadsType = 'UTLAND' | 'STANDARD';
 
@@ -68,6 +69,15 @@ export const mapSøknadToBackend = (søknad?: Soknad): SøknadBackendState => {
   const registrerteBehandlere: BehandlerBackendState[] =
     søknad?.registrerteBehandlere?.map((behandler) => ({
       ...behandler,
+      navn: {
+        fornavn: behandler.navn,
+        mellomnavn: behandler.navn,
+        etternavn: behandler.navn,
+      },
+      kontaktinformasjon: {
+        ...behandler.kontaktinformasjon,
+        adresse: behandler?.kontaktinformasjon?.adresse as Adresse,
+      },
       erRegistrertFastlegeRiktig: jaNeiToBoolean(behandler.erRegistrertFastlegeRiktig),
     })) ?? [];
 
@@ -377,10 +387,9 @@ export const mapSøknadToPdf = (
       : søknad?.registrerteBehandlere?.map((behandler) =>
           createFeltgruppe([
             ...createField('Type', behandler?.type),
-            ...createField('Kategori', behandler?.kategori),
-            ...createField('Navn', formatNavn(behandler?.navn)),
+            ...createField('Navn', behandler?.navn),
             ...createField('Kontor', behandler?.kontaktinformasjon?.kontor),
-            ...createField('Adresse', formatFullAdresse(behandler?.kontaktinformasjon?.adresse)),
+            ...createField('Adresse', formatNyAdresse(behandler?.kontaktinformasjon?.adresse)),
             ...createField('Telefon', behandler?.kontaktinformasjon?.telefon),
             ...createField(
               formatMessage({ id: `søknad.helseopplysninger.erRegistrertFastlegeRiktig.label` }),
