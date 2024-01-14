@@ -599,8 +599,6 @@
         "lasteOppVedleggTekst": "Dette laster du opp senere i søknaden. Du kan også ettersende vedlegg.",
         "barneTillegg": {
           "title": "Du får ikke barnetillegg hvis:",
-          "bulletpoint1": "Barnet mottar barnepensjon.",
-          "bulletpoint2": "Barnet har en årlig inntekt som er høyere enn grunnbeløpet i folketrygden.",
           "bulletpoint3": "Barnet oppholder seg utenfor EØS i over 90 dager i løpet av en tolvmånedersperiode.",
           "bulletpoint4": "Barnet er bosatt utenfor EØS."
         }

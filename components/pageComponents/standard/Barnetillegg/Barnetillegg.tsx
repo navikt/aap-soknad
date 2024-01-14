@@ -176,12 +176,6 @@ export const Barnetillegg = ({ onBackClick }: Props) => {
             {formatMessage({ id: 'søknad.barnetillegg.alert.barneTillegg.title' })}
             <ul>
               <li>
-                {formatMessage({ id: 'søknad.barnetillegg.alert.barneTillegg.bulletpoint1' })}
-              </li>
-              <li>
-                {formatMessage({ id: 'søknad.barnetillegg.alert.barneTillegg.bulletpoint2' })}
-              </li>
-              <li>
                 {formatMessage({ id: 'søknad.barnetillegg.alert.barneTillegg.bulletpoint3' })}
               </li>
               <li>
