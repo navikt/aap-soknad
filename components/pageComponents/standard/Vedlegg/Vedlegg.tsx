@@ -13,6 +13,7 @@ import { setFocusOnErrorSummary } from '../../../schema/FormErrorSummary';
 import { ScanningGuide } from './scanningguide/ScanningGuide';
 import { addVedlegg, deleteVedlegg, updateSøknadData } from 'context/soknadcontext/actions';
 import { useSoknad } from 'hooks/SoknadHook';
+import { FileInputWrapper } from 'components/pageComponents/standard/Vedlegg/FileInputWrapper';
 
 const deleteUrl = '/aap/soknad/api/vedlegg/slett/?uuids=';
 const uploadUrl = '/aap/soknad/api/vedlegg/lagre/';
@@ -90,7 +91,7 @@ const Vedlegg = ({ onBackClick }: Props) => {
       <ScanningGuide />
 
       {søknadState?.requiredVedlegg?.find((e) => e.type === 'AVBRUTT_STUDIE') && (
-        <FileInput
+        <FileInputWrapper
           locale={locale}
           id={'avbruttStudie'}
           heading={formatMessage({ id: 'søknad.student.vedlegg.name' })}
@@ -108,7 +109,7 @@ const Vedlegg = ({ onBackClick }: Props) => {
         />
       )}
       {søknadState?.requiredVedlegg?.find((e) => e.type === 'OMSORGSSTØNAD') && (
-        <FileInput
+        <FileInputWrapper
           locale={locale}
           id={'OMSORGSSTØNAD'}
           heading={formatMessage({ id: 'søknad.andreUtbetalinger.stønad.values.omsorgsstønad' })}
@@ -126,7 +127,7 @@ const Vedlegg = ({ onBackClick }: Props) => {
         />
       )}
       {søknadState?.requiredVedlegg?.find((e) => e.type === 'LØNN_OG_ANDRE_GODER') && (
-        <FileInput
+        <FileInputWrapper
           locale={locale}
           id={'LØNN_OG_ANDRE_GODER'}
           heading={formatMessage({ id: 'søknad.andreUtbetalinger.lønn.title' })}
@@ -145,7 +146,7 @@ const Vedlegg = ({ onBackClick }: Props) => {
       )}
 
       {søknadState?.requiredVedlegg?.find((e) => e.type === 'UTLANDSSTØNAD') && (
-        <FileInput
+        <FileInputWrapper
           locale={locale}
           id={'UTLANDSSTØNAD'}
           heading={formatMessage({ id: 'søknad.andreUtbetalinger.stønad.values.utland' })}
@@ -164,7 +165,7 @@ const Vedlegg = ({ onBackClick }: Props) => {
       )}
 
       {søknadState.requiredVedlegg?.find((e) => e.type === 'LÅN') && (
-        <FileInput
+        <FileInputWrapper
           locale={locale}
           id={'LÅN'}
           heading={formatMessage({ id: 'søknad.andreUtbetalinger.stønad.values.lån' })}
@@ -183,7 +184,7 @@ const Vedlegg = ({ onBackClick }: Props) => {
       )}
 
       {søknadState.requiredVedlegg?.find((e) => e.type === 'SYKESTIPEND') && (
-        <FileInput
+        <FileInputWrapper
           locale={locale}
           id={'SYKESTIPEND'}
           heading={formatMessage({ id: 'søknad.andreUtbetalinger.stønad.values.stipend' })}
@@ -204,7 +205,7 @@ const Vedlegg = ({ onBackClick }: Props) => {
       {søknadState?.søknad?.manuelleBarn?.map((barn) => {
         const requiredVedlegg = søknadState?.requiredVedlegg.find((e) => e?.type === barn.internId);
         return (
-          <FileInput
+          <FileInputWrapper
             locale={locale}
             key={barn.internId}
             id={barn.internId!}
@@ -229,7 +230,7 @@ const Vedlegg = ({ onBackClick }: Props) => {
         );
       })}
 
-      <FileInput
+      <FileInputWrapper
         locale={locale}
         heading={formatMessage({ id: 'søknad.vedlegg.andreVedlegg.title' })}
         ingress={formatMessage({ id: 'søknad.vedlegg.andreVedlegg.ingress' })}
