@@ -14,10 +14,12 @@ import links from 'translations/links.json';
 
 interface SoknadInnsendingRequestBody {
   kvittering?: Record<string, unknown>;
-  filer: Array<{
-    id: string;
-    tittel: string;
-  }>;
+  filer: Array<Fil>;
+}
+
+interface Fil {
+  id: string;
+  tittel: string;
 }
 
 function getIntl() {
@@ -32,10 +34,25 @@ const handler = beskyttetApi(async (req: NextApiRequest, res: NextApiResponse) =
 
   const søknad: Soknad = req.body;
 
+  const filer: Fil[] = Object.keys(søknad.vedlegg ?? {})
+    .map((key) => {
+      const vedleggArray = søknad?.vedlegg?.[key];
+      const filerArray: Fil[] =
+        vedleggArray?.map((vedlegg) => {
+          return {
+            id: vedlegg.vedleggId,
+            tittel: vedlegg.type,
+          };
+        }) ?? [];
+
+      return filerArray;
+    })
+    .flat();
+
   const { formatMessage } = getIntl();
   const søknadPdf = mapSøknadToPdf(søknad, new Date(), formatMessage, []);
   try {
-    const soknadRes = await sendSoknad({ kvittering: søknadPdf, filer: [] }, accessToken);
+    const soknadRes = await sendSoknad({ kvittering: søknadPdf, filer: filer }, accessToken);
     metrics.sendSoknadCounter.inc({ type: 'STANDARD' });
     res.status(201).json({});
   } catch (err) {
