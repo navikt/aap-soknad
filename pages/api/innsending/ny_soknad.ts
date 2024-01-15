@@ -41,7 +41,7 @@ const handler = beskyttetApi(async (req: NextApiRequest, res: NextApiResponse) =
         vedleggArray?.map((vedlegg) => {
           return {
             id: vedlegg.vedleggId,
-            tittel: vedlegg.type,
+            tittel: vedlegg.name,
           };
         }) ?? [];
 
