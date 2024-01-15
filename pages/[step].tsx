@@ -6,6 +6,7 @@ import { useStepWizard } from 'hooks/StepWizardHook';
 import { useDebounceLagreSoknad } from 'hooks/useDebounceLagreSoknad';
 import { StepWizard } from 'components/StepWizard';
 import {
+  KontaktInfoView,
   setSokerOppslagFraProps,
   SokerOppslagState,
   useSokerOppslag,
@@ -43,13 +44,15 @@ import {
   setSoknadStateFraProps,
   SoknadActionKeys,
 } from 'context/soknadcontext/actions';
+import { getKrr } from 'pages/api/oppslag/krr';
 
 interface PageProps {
   søker: SokerOppslagState;
   mellomlagretSøknad: SoknadContextState;
+  kontaktinformasjon: KontaktInfoView;
 }
 
-const Steps = ({ søker, mellomlagretSøknad }: PageProps) => {
+const Steps = ({ søker, mellomlagretSøknad, kontaktinformasjon }: PageProps) => {
   const router = useRouter();
   const { step } = router.query;
 
@@ -69,7 +72,7 @@ const Steps = ({ søker, mellomlagretSøknad }: PageProps) => {
       if (mellomlagretSøknad.lagretStepList && mellomlagretSøknad?.lagretStepList?.length > 0) {
         setStepList([...mellomlagretSøknad.lagretStepList], stepWizardDispatch);
       }
-      const oppslag = setSokerOppslagFraProps(søker, oppslagDispatch);
+      const oppslag = setSokerOppslagFraProps(søker, kontaktinformasjon, oppslagDispatch);
       if (oppslag?.søker?.barn) addBarnIfMissing(søknadDispatch, oppslag.søker.barn);
       if (søker.behandlere) addBehandlerIfMissing(søknadDispatch, søker.behandlere);
     }
@@ -196,9 +199,13 @@ const Steps = ({ søker, mellomlagretSøknad }: PageProps) => {
   );
 };
 
-const StepsWithContextProvider = ({ søker, mellomlagretSøknad }: PageProps) => (
+const StepsWithContextProvider = ({ søker, mellomlagretSøknad, kontaktinformasjon }: PageProps) => (
   <SoknadContextProvider>
-    <Steps søker={søker} mellomlagretSøknad={mellomlagretSøknad} />
+    <Steps
+      søker={søker}
+      mellomlagretSøknad={mellomlagretSøknad}
+      kontaktinformasjon={kontaktinformasjon}
+    />
   </SoknadContextProvider>
 );
 
@@ -209,6 +216,7 @@ export const getServerSideProps = beskyttetSide(
     });
     const bearerToken = getAccessToken(ctx);
     const søker = await getSøker(bearerToken);
+    const kontaktinformasjon = await getKrr(bearerToken);
     const mellomlagretSøknad = await lesBucket('STANDARD', bearerToken);
 
     stopTimer();
@@ -228,7 +236,7 @@ export const getServerSideProps = beskyttetSide(
     }
 
     return {
-      props: { søker, mellomlagretSøknad },
+      props: { søker, mellomlagretSøknad, kontaktinformasjon },
     };
   },
 );
