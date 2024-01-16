@@ -14,7 +14,7 @@ const handler = beskyttetApi(async (req: NextApiRequest, res: NextApiResponse) =
 export const getFastlege = async (accessToken?: string) => {
   if (isMock()) return mockFastlege;
   const fastlege: OppslagBehandler = await tokenXApiProxy({
-    url: `${process.env.OPPSLAG_URL}/oppslag/fastlege`,
+    url: `${process.env.OPPSLAG_URL}/fastlege`,
     prometheusPath: 'oppslag/fastlege',
     method: 'GET',
     audience: process.env.OPPSLAG_AUDIENCE!,
