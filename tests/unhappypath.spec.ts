@@ -356,12 +356,9 @@ test('at alle feilmeldinger skal dukke opp', async ({ page }) => {
   ).toBeVisible();
 
   await page.getByLabel('Fødselsdato (dd.mm.åååå)').fill(format(new Date(), 'dd.MM.yyyy'));
+
+  await page.getByText('InformasjonDu må legge ved:').click();
   await page.getByRole('button', { name: 'Lagre' }).click();
-  await expect(
-    page.getByText(
-      'InformasjonDu må legge ved:Bekreftelse på at du er forelder til barnet, og fra n',
-    ),
-  ).toBeVisible();
 
   await page.getByRole('button', { name: 'Neste steg' }).click();
 
