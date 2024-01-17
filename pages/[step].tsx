@@ -72,7 +72,7 @@ const Steps = ({ søker, mellomlagretSøknad, kontaktinformasjon }: PageProps) =
       if (mellomlagretSøknad.lagretStepList && mellomlagretSøknad?.lagretStepList?.length > 0) {
         setStepList([...mellomlagretSøknad.lagretStepList], stepWizardDispatch);
       }
-      const oppslag = setSokerOppslagFraProps(søker, kontaktinformasjon, oppslagDispatch);
+      const oppslag = setSokerOppslagFraProps(søker, oppslagDispatch);
       if (oppslag?.søker?.barn) addBarnIfMissing(søknadDispatch, oppslag.søker.barn);
       if (søker.behandlere) addBehandlerIfMissing(søknadDispatch, søker.behandlere);
     }
@@ -189,6 +189,7 @@ const Steps = ({ søker, mellomlagretSøknad, kontaktinformasjon }: PageProps) =
                   onSubmitSoknad={submitSoknad}
                   submitErrorMessageRef={submitErrorMessageRef}
                   hasSubmitError={showFetchErrorMessage}
+                  kontaktinformasjon={kontaktinformasjon}
                 />
               )}
             </StepWizard>

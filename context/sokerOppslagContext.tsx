@@ -120,12 +120,11 @@ function SokerOppslagProvider({ children }: Props) {
 
 export const setSokerOppslagFraProps = (
   oppslag: SokerOppslagState,
-  kontaktinformasjon: KontaktInfoView,
   dispatch: Dispatch<DispatchSokerOppslagAction>,
 ) => {
   dispatch({
     type: 'SET_SOKER_OPPSLAG',
-    payload: { ...oppslag, kontaktinformasjon: kontaktinformasjon },
+    payload: oppslag,
   });
   return oppslag;
 };
