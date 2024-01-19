@@ -8,7 +8,7 @@ metadata:
     app: soknad
 spec:
   groups:
-    - name: 'alerts'
+    - name: 'aap-soknad-alerts'
       rules:
         - alert: Søknad - app nede
           expr: kube_deployment_status_replicas_unavailable{deployment="soknad",job="kubernetes-service-endpoints"} > 0
