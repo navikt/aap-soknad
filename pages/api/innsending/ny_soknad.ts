@@ -14,6 +14,7 @@ import links from 'translations/links.json';
 
 interface SoknadInnsendingRequestBody {
   kvittering?: Record<string, unknown>;
+  soknad: Soknad;
   filer: Array<Fil>;
 }
 
@@ -32,7 +33,7 @@ function getIntl() {
 const handler = beskyttetApi(async (req: NextApiRequest, res: NextApiResponse) => {
   const accessToken = getAccessTokenFromRequest(req);
 
-  const søknad: Soknad = req.body;
+  const søknad = req.body as Soknad;
 
   const filer: Fil[] = Object.keys(søknad.vedlegg ?? {})
     .map((key) => {
@@ -52,7 +53,10 @@ const handler = beskyttetApi(async (req: NextApiRequest, res: NextApiResponse) =
   const { formatMessage } = getIntl();
   const søknadPdf = mapSøknadToPdf(søknad, new Date(), formatMessage, []);
   try {
-    const soknadRes = await sendSoknad({ kvittering: søknadPdf, filer: filer }, accessToken);
+    const soknadRes = await sendSoknad(
+      { kvittering: søknadPdf, soknad: søknad, filer: filer },
+      accessToken,
+    );
     metrics.sendSoknadCounter.inc({ type: 'STANDARD' });
     res.status(201).json({});
   } catch (err) {
