@@ -114,5 +114,11 @@ jobs:
           IMAGE: ${{needs.build.outputs.image}}
           APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
           CLUSTER: prod-gcp
-          RESOURCE: .nais/nais.yaml,.nais/prod-alerts.yaml
+          RESOURCE: .nais/nais.yaml
           VARS: .nais/prod.yaml
+      - name: Deploy alerts
+        uses: nais/deploy/actions/deploy@v1
+        env:
+          APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
+          CLUSTER: prod-gcp
+          RESOURCE: .nais/prod-alerts.yaml

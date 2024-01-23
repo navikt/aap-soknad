@@ -57,6 +57,7 @@ spec:
       rules:
         - application: soknad-api
         - application: innsending
+        - application: oppslag
         - application: nav-dekoratoren
           namespace: personbruker
       external:
