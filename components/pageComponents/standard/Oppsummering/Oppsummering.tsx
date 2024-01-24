@@ -50,12 +50,14 @@ import { useFormErrors } from 'hooks/FormErrorHook';
 import { setFocusOnErrorSummary } from 'components/schema/FormErrorSummary';
 import { useSoknad } from 'hooks/SoknadHook';
 import { updateSøknadData } from 'context/soknadcontext/actions';
+import { KontaktInfoView } from 'context/sokerOppslagContext';
 
 interface OppsummeringProps {
   onBackClick: () => void;
   onSubmitSoknad: () => Promise<boolean>;
   submitErrorMessageRef: React.MutableRefObject<null>;
   hasSubmitError: boolean;
+  kontaktinformasjon: KontaktInfoView;
 }
 
 const Oppsummering = ({
@@ -63,6 +65,7 @@ const Oppsummering = ({
   onSubmitSoknad,
   submitErrorMessageRef,
   hasSubmitError,
+  kontaktinformasjon,
 }: OppsummeringProps) => {
   const { formatMessage } = useIntl();
   const [nextIsLoading, setNextIsLoading] = useState<boolean>(false);
@@ -181,7 +184,7 @@ const Oppsummering = ({
           showEdit={false}
           toggleAll={toggleAll}
         >
-          <OppsummeringKontaktinfo />
+          <OppsummeringKontaktinfo kontaktinformasjon={kontaktinformasjon} />
         </AccordianItemOppsummering>
         <AccordianItemOppsummering
           title={formatMessage({ id: 'søknad.oppsummering.startDato.title' })}
