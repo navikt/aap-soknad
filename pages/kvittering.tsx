@@ -57,9 +57,9 @@ export const getServerSideProps = beskyttetSide(
 
     try {
       kontaktinformasjon = await getKrr(bearerToken);
-      logger.info('Kontaktinformasjon fra AAP-oppslag gikk fint på kvittering siden.');
     } catch (e) {
       kontaktinformasjon = søker.kontaktinformasjon;
+      logger.error('Oppslag mot KKR feilet i kvittering:' + e);
     }
 
     logger.info(`søkeroppslag fra API: ${JSON.stringify(søknader)}`);
