@@ -227,8 +227,6 @@ export const getServerSideProps = beskyttetSide(
       logger.error('Oppslag mot KKR feilet i [step]:' + e);
     }
 
-    console.log('kontaktinformasjon', kontaktinformasjon);
-
     stopTimer();
 
     if (mellomlagretSøknad && !mellomlagretSøknad.lagretStepList) {
