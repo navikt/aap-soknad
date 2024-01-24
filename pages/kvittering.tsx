@@ -52,14 +52,19 @@ export const getServerSideProps = beskyttetSide(
     const bearerToken = getAccessToken(ctx);
     const søknader = await getSøknader(bearerToken);
     const søker = await getSøker(bearerToken);
-    const kontaktinformasjon = await getKrr(bearerToken);
+    let kontaktinformasjon: KontaktInfoView = {};
+    try {
+      kontaktinformasjon = await getKrr(bearerToken);
+    } catch (e) {
+      logger.error('Oppslag mot KKR feilet i kvittering:' + e);
+    }
     logger.info(`søkeroppslag fra API: ${JSON.stringify(søknader)}`);
 
     stopTimer();
     return {
       props: { søknader, søker, kontaktinformasjon },
     };
-  }
+  },
 );
 
 export default KvitteringPage;

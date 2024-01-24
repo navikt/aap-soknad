@@ -1,7 +1,7 @@
 import { Alert, BodyLong, BodyShort, Button, Heading, Link } from '@navikt/ds-react';
 import React from 'react';
 import * as classes from './Kvittering.module.css';
-import { SøkerView } from 'context/sokerOppslagContext';
+import { KontaktInfoView, SøkerView } from 'context/sokerOppslagContext';
 import { Download, SuccessStroke } from '@navikt/ds-icons';
 import { SøknadApiType } from 'pages/api/oppslag/soeknader';
 import { clientSideIsLabs, clientSideIsProd } from 'utils/environments';
@@ -9,7 +9,7 @@ import { FormattedMessage, useIntl } from 'react-intl';
 
 interface StudentProps {
   søker: SøkerView;
-  kontaktinformasjon?: { epost?: string; mobil?: string };
+  kontaktinformasjon?: KontaktInfoView;
   søknad?: SøknadApiType;
 }
 
@@ -27,8 +27,8 @@ const Kvittering = ({ søker, kontaktinformasjon, søknad }: StudentProps) => {
   const mineAapUrl = clientSideIsLabs()
     ? process.env.NEXT_PUBLIC_MINE_AAP_URL
     : clientSideIsProd()
-    ? 'https://nav.no/aap/mine-aap'
-    : 'https://aap-mine-aap.intern.dev.nav.no/aap/mine-aap';
+      ? 'https://nav.no/aap/mine-aap'
+      : 'https://aap-mine-aap.intern.dev.nav.no/aap/mine-aap';
   const dittNavUrl = clientSideIsProd()
     ? 'https://www.nav.no/person/dittnav/'
     : 'https://www.dev.nav.no/person/dittnav/';
