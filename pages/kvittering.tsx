@@ -13,7 +13,6 @@ import metrics from 'utils/metrics';
 import { FormattedMessage } from 'react-intl';
 import { SoknadContextProvider } from 'context/soknadcontext/soknadContext';
 import { getKrr } from 'pages/api/oppslag/krr';
-import { ca } from 'date-fns/locale';
 
 interface PageProps {
   søker: SokerOppslagState;
