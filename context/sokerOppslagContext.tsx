@@ -64,10 +64,7 @@ export type KontaktInfoView = {
 export type SokerOppslagState = {
   søker: Soker;
   behandlere: Array<OppslagBehandler>;
-  kontaktinformasjon?: {
-    epost?: string;
-    mobil?: string;
-  };
+  kontaktinformasjon?: KontaktInfoView;
 };
 const søkerOppslagInitialValue = {
   barn: [],
@@ -100,14 +97,14 @@ function SokerOppslagProvider({ children }: Props) {
       fullAdresse: state?.søker?.adresse ? formatFullAdresse(state?.søker?.adresse) : '',
       fødselsnummer: state?.søker?.fødselsnummer,
     }),
-    [state]
+    [state],
   );
   const kontaktInfo: KontaktInfoView | undefined = useMemo(
     () => ({
       epost: state?.kontaktinformasjon?.epost,
       mobil: state?.kontaktinformasjon?.mobil,
     }),
-    [state]
+    [state],
   );
   const contextValue = useMemo(() => {
     return {
@@ -123,9 +120,12 @@ function SokerOppslagProvider({ children }: Props) {
 
 export const setSokerOppslagFraProps = (
   oppslag: SokerOppslagState,
-  dispatch: Dispatch<DispatchSokerOppslagAction>
+  dispatch: Dispatch<DispatchSokerOppslagAction>,
 ) => {
-  dispatch({ type: 'SET_SOKER_OPPSLAG', payload: oppslag });
+  dispatch({
+    type: 'SET_SOKER_OPPSLAG',
+    payload: oppslag,
+  });
   return oppslag;
 };
 
