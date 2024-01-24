@@ -13,6 +13,7 @@ import metrics from 'utils/metrics';
 import { FormattedMessage } from 'react-intl';
 import { SoknadContextProvider } from 'context/soknadcontext/soknadContext';
 import { getKrr } from 'pages/api/oppslag/krr';
+import { ca } from 'date-fns/locale';
 
 interface PageProps {
   søker: SokerOppslagState;
@@ -52,12 +53,16 @@ export const getServerSideProps = beskyttetSide(
     const bearerToken = getAccessToken(ctx);
     const søknader = await getSøknader(bearerToken);
     const søker = await getSøker(bearerToken);
-    let kontaktinformasjon: KontaktInfoView = {};
+
+    let kontaktinformasjon = {};
+
     try {
       kontaktinformasjon = await getKrr(bearerToken);
+      logger.info('Kontaktinformasjon fra AAP-oppslag gikk fint på kvittering siden.');
     } catch (e) {
-      logger.error('Oppslag mot KKR feilet i kvittering:' + e);
+      kontaktinformasjon = søker.kontaktinformasjon;
     }
+
     logger.info(`søkeroppslag fra API: ${JSON.stringify(søknader)}`);
 
     stopTimer();

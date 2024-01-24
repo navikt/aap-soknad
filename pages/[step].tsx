@@ -217,13 +217,15 @@ export const getServerSideProps = beskyttetSide(
     });
     const bearerToken = getAccessToken(ctx);
     const søker = await getSøker(bearerToken);
-    let kontaktinformasjon: KontaktInfoView = {};
+    const mellomlagretSøknad = await lesBucket('STANDARD', bearerToken);
+
+    let kontaktinformasjon = {};
     try {
       kontaktinformasjon = await getKrr(bearerToken);
+      logger.info('Kontaktinformasjon fra AAP-oppslag gikk fint på step siden.');
     } catch (e) {
-      logger.error('Oppslag mot KKR feilet i [step]:' + e);
+      kontaktinformasjon = søker.kontaktinformasjon;
     }
-    const mellomlagretSøknad = await lesBucket('STANDARD', bearerToken);
 
     stopTimer();
 
