@@ -14,10 +14,10 @@ const handler = beskyttetApi(async (req: NextApiRequest, res: NextApiResponse) =
 export const getKrr = async (accessToken?: string) => {
   if (isMock()) return mockKrr();
   const krr: KontaktInfoView = await tokenXApiProxy({
-    url: `${process.env.OPPSLAG_API_URL}/krr`,
+    url: `${process.env.OPPSLAG_URL}/krr`,
     prometheusPath: 'oppslag/krr',
     method: 'GET',
-    audience: process.env.OPPSLAG_API_AUDIENCE!,
+    audience: process.env.OPPSLAG_AUDIENCE!,
     bearerToken: accessToken,
     metricsStatusCodeCounter: metrics.backendApiStatusCodeCounter,
     metricsTimer: metrics.backendApiDurationHistogram,
