@@ -1,6 +1,6 @@
 import PageHeader from 'components/PageHeader';
 import React, { useEffect, useState } from 'react';
-import { SokerOppslagState, SøkerView } from 'context/sokerOppslagContext';
+import { KontaktInfoView, SokerOppslagState, SøkerView } from 'context/sokerOppslagContext';
 import Kvittering from 'components/pageComponents/standard/Kvittering/Kvittering';
 import * as classes from 'components/pageComponents/standard/standard.module.css';
 import { beskyttetSide } from 'auth/beskyttetSide';
@@ -12,13 +12,15 @@ import { logger } from '@navikt/aap-felles-utils';
 import metrics from 'utils/metrics';
 import { FormattedMessage } from 'react-intl';
 import { SoknadContextProvider } from 'context/soknadcontext/soknadContext';
+import { getKrr } from 'pages/api/oppslag/krr';
 
 interface PageProps {
   søker: SokerOppslagState;
   søknader: SøknadApiType[];
+  kontaktinformasjon: KontaktInfoView;
 }
 
-const KvitteringPage = ({ søker, søknader }: PageProps) => {
+const KvitteringPage = ({ søker, søknader, kontaktinformasjon }: PageProps) => {
   const [soker, setSoker] = useState({});
 
   useEffect(() => {
@@ -37,11 +39,7 @@ const KvitteringPage = ({ søker, søknader }: PageProps) => {
       <PageHeader align="center" className={classes?.pageHeader}>
         <FormattedMessage id={'søknad.pagetitle'} values={{ wbr: () => <>&shy;</> }} />
       </PageHeader>
-      <Kvittering
-        søker={soker}
-        kontaktinformasjon={søker.kontaktinformasjon}
-        søknad={søknader[0]}
-      />
+      <Kvittering søker={soker} kontaktinformasjon={kontaktinformasjon} søknad={søknader[0]} />
     </SoknadContextProvider>
   );
 };
@@ -54,13 +52,23 @@ export const getServerSideProps = beskyttetSide(
     const bearerToken = getAccessToken(ctx);
     const søknader = await getSøknader(bearerToken);
     const søker = await getSøker(bearerToken);
+
+    let kontaktinformasjon = {};
+
+    try {
+      kontaktinformasjon = await getKrr(bearerToken);
+    } catch (e) {
+      kontaktinformasjon = søker.kontaktinformasjon;
+      logger.error('Oppslag mot KKR feilet i kvittering:' + e);
+    }
+
     logger.info(`søkeroppslag fra API: ${JSON.stringify(søknader)}`);
 
     stopTimer();
     return {
-      props: { søknader, søker },
+      props: { søknader, søker, kontaktinformasjon },
     };
-  }
+  },
 );
 
 export default KvitteringPage;

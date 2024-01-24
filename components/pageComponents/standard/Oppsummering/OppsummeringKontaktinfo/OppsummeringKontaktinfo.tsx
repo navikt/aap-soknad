@@ -1,13 +1,16 @@
 import React from 'react';
 import { BodyShort, Label, Link, ReadMore } from '@navikt/ds-react';
-import { useSokerOppslag } from 'context/sokerOppslagContext';
+import { KontaktInfoView, useSokerOppslag } from 'context/sokerOppslagContext';
 import { formatTelefonnummer } from 'utils/StringFormatters';
 import { FormattedMessage, useIntl } from 'react-intl';
 
-const OppsummeringKontaktinfo = () => {
+type Props = {
+  kontaktinformasjon: KontaktInfoView;
+};
+const OppsummeringKontaktinfo = ({ kontaktinformasjon }: Props) => {
   const { formatMessage } = useIntl();
 
-  const { søker, kontaktInfo } = useSokerOppslag();
+  const { søker } = useSokerOppslag();
   return (
     <>
       <div>
@@ -49,7 +52,7 @@ const OppsummeringKontaktinfo = () => {
         <Label>
           {formatMessage({ id: 'søknad.oppsummering.contactInformation.telefonnummer.label' })}
         </Label>
-        <BodyShort>{formatTelefonnummer(kontaktInfo?.mobil)}</BodyShort>
+        <BodyShort>{formatTelefonnummer(kontaktinformasjon?.mobil)}</BodyShort>
         <ReadMore
           header={formatMessage({
             id: 'søknad.oppsummering.contactInformation.telefonnummer.readMore.title',
@@ -73,7 +76,7 @@ const OppsummeringKontaktinfo = () => {
       </div>
       <div>
         <Label>{formatMessage({ id: 'søknad.oppsummering.contactInformation.epost.label' })}</Label>
-        <BodyShort>{kontaktInfo?.epost}</BodyShort>
+        <BodyShort>{kontaktinformasjon?.epost}</BodyShort>
         <ReadMore
           header={formatMessage({
             id: 'søknad.oppsummering.contactInformation.epost.readMore.title',

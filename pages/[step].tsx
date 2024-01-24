@@ -6,6 +6,7 @@ import { useStepWizard } from 'hooks/StepWizardHook';
 import { useDebounceLagreSoknad } from 'hooks/useDebounceLagreSoknad';
 import { StepWizard } from 'components/StepWizard';
 import {
+  KontaktInfoView,
   setSokerOppslagFraProps,
   SokerOppslagState,
   useSokerOppslag,
@@ -43,13 +44,15 @@ import {
   setSoknadStateFraProps,
   SoknadActionKeys,
 } from 'context/soknadcontext/actions';
+import { getKrr } from 'pages/api/oppslag/krr';
 
 interface PageProps {
   søker: SokerOppslagState;
   mellomlagretSøknad: SoknadContextState;
+  kontaktinformasjon: KontaktInfoView;
 }
 
-const Steps = ({ søker, mellomlagretSøknad }: PageProps) => {
+const Steps = ({ søker, mellomlagretSøknad, kontaktinformasjon }: PageProps) => {
   const router = useRouter();
   const { step } = router.query;
 
@@ -186,6 +189,7 @@ const Steps = ({ søker, mellomlagretSøknad }: PageProps) => {
                   onSubmitSoknad={submitSoknad}
                   submitErrorMessageRef={submitErrorMessageRef}
                   hasSubmitError={showFetchErrorMessage}
+                  kontaktinformasjon={kontaktinformasjon}
                 />
               )}
             </StepWizard>
@@ -196,9 +200,13 @@ const Steps = ({ søker, mellomlagretSøknad }: PageProps) => {
   );
 };
 
-const StepsWithContextProvider = ({ søker, mellomlagretSøknad }: PageProps) => (
+const StepsWithContextProvider = ({ søker, mellomlagretSøknad, kontaktinformasjon }: PageProps) => (
   <SoknadContextProvider>
-    <Steps søker={søker} mellomlagretSøknad={mellomlagretSøknad} />
+    <Steps
+      søker={søker}
+      mellomlagretSøknad={mellomlagretSøknad}
+      kontaktinformasjon={kontaktinformasjon}
+    />
   </SoknadContextProvider>
 );
 
@@ -210,6 +218,14 @@ export const getServerSideProps = beskyttetSide(
     const bearerToken = getAccessToken(ctx);
     const søker = await getSøker(bearerToken);
     const mellomlagretSøknad = await lesBucket('STANDARD', bearerToken);
+
+    let kontaktinformasjon = {};
+    try {
+      kontaktinformasjon = await getKrr(bearerToken);
+    } catch (e) {
+      kontaktinformasjon = søker.kontaktinformasjon;
+      logger.error('Oppslag mot KKR feilet i [step]:' + e);
+    }
 
     stopTimer();
 
@@ -228,7 +244,7 @@ export const getServerSideProps = beskyttetSide(
     }
 
     return {
-      props: { søker, mellomlagretSøknad },
+      props: { søker, mellomlagretSøknad, kontaktinformasjon },
     };
   },
 );
