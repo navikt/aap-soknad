@@ -421,7 +421,6 @@ export const mapSøknadToPdf = (
           createFeltgruppe([
             ...createField('Navn', formatNavn(barn?.navn)),
             ...createField('Fødselsdato', barn?.fødseldato || ''),
-            ,
           ]),
         ) || [];
     return createTema('Barn fra folkeregisteret', [...registrerteBarn]);
