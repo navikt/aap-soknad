@@ -218,14 +218,7 @@ export const getServerSideProps = beskyttetSide(
     const bearerToken = getAccessToken(ctx);
     const søker = await getSøker(bearerToken);
     const mellomlagretSøknad = await lesBucket('STANDARD', bearerToken);
-
-    let kontaktinformasjon = {};
-    try {
-      kontaktinformasjon = await getKrr(bearerToken);
-    } catch (e) {
-      kontaktinformasjon = søker.kontaktinformasjon;
-      logger.error('Oppslag mot KKR feilet i [step]:' + e);
-    }
+    const kontaktinformasjon = await getKrr(bearerToken);
 
     stopTimer();
 
