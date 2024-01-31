@@ -1,20 +1,15 @@
 import { Alert, BodyShort, Button, Heading } from '@navikt/ds-react';
 import React, { useEffect, useState } from 'react';
-import { JaEllerNei } from 'types/Generic';
-import { Barn, ManuelleBarn, Soknad } from 'types/Soknad';
+import { ManuelleBarn, Soknad } from 'types/Soknad';
 import * as classes from './Barnetillegg.module.css';
 import { Add } from '@navikt/ds-icons';
-import * as yup from 'yup';
 import { completeAndGoToNextStep } from 'context/stepWizardContext';
 import { useStepWizard } from 'hooks/StepWizardHook';
 import { AddBarnModal, CreateOrUpdateManuelleBarn, Relasjon } from './AddBarnModal';
 import { LucaGuidePanel } from '@navikt/aap-felles-react';
 import { useDebounceLagreSoknad } from 'hooks/useDebounceLagreSoknad';
-import { setFocusOnErrorSummary } from 'components/schema/FormErrorSummary';
-import { IntlFormatters, useIntl } from 'react-intl';
-import { useFormErrors } from 'hooks/FormErrorHook';
+import { useIntl } from 'react-intl';
 import SoknadFormWrapperNew from 'components/SoknadFormWrapper/SoknadFormWrapper';
-import { validate } from 'lib/utils/validationUtils';
 import { logSkjemastegFullførtEvent } from 'utils/amplitude';
 import { ManueltBarn } from './ManueltBarn';
 import { Registerbarn } from './Registerbarn';
@@ -27,29 +22,7 @@ interface Props {
 
 export const GRUNNBELØP = '118 620';
 
-export const getBarnetillegSchema = (formatMessage: IntlFormatters['formatMessage']) =>
-  yup.object().shape({
-    barn: yup.array().of(
-      yup.object().shape({
-        harInntekt: yup
-          .string()
-          .nullable()
-          .required(
-            formatMessage(
-              { id: 'søknad.barnetillegg.leggTilBarn.modal.harInntekt.validation.required' },
-              {
-                grunnbeløp: GRUNNBELØP,
-              },
-            ),
-          )
-          .oneOf([JaEllerNei.JA, JaEllerNei.NEI])
-          .nullable(),
-      }),
-    ),
-  });
-
 export const Barnetillegg = ({ onBackClick }: Props) => {
-  const { errors, setErrors, clearErrors, findError } = useFormErrors();
   const { formatMessage } = useIntl();
 
   const { søknadState, søknadDispatch } = useSoknad();
@@ -110,36 +83,17 @@ export const Barnetillegg = ({ onBackClick }: Props) => {
     });
   };
 
-  const updateRegisterbarn = (updatedBarn: Barn, value: any) => {
-    updateSøknadData(søknadDispatch, {
-      barn: søknadState.søknad?.barn?.map((barn) => {
-        if (updatedBarn.fnr === barn.fnr) {
-          return { ...barn, harInntekt: value };
-        } else {
-          return barn;
-        }
-      }),
-    });
-  };
-
   return (
     <>
       <SoknadFormWrapperNew
-        onNext={async () => {
-          const errors = await validate(getBarnetillegSchema(formatMessage), søknadState.søknad);
-          if (errors) {
-            setErrors(errors);
-            setFocusOnErrorSummary();
-          } else {
-            logSkjemastegFullførtEvent(currentStepIndex ?? 0);
-            completeAndGoToNextStep(stepWizardDispatch);
-          }
+        onNext={() => {
+          logSkjemastegFullførtEvent(currentStepIndex ?? 0);
+          completeAndGoToNextStep(stepWizardDispatch);
         }}
         onBack={() => {
           updateSøknadData(søknadDispatch, { ...søknadState.søknad });
           onBackClick();
         }}
-        errors={errors}
       >
         <Heading size="large" level="2">
           {formatMessage({ id: 'søknad.barnetillegg.title' })}
@@ -160,14 +114,7 @@ export const Barnetillegg = ({ onBackClick }: Props) => {
           {søknadState?.søknad?.barn && søknadState?.søknad?.barn?.length > 0 && (
             <ul className={classes.barnList}>
               {søknadState?.søknad?.barn.map((barn, index) => (
-                <Registerbarn
-                  barn={barn}
-                  index={index}
-                  findError={findError}
-                  clearErrors={clearErrors}
-                  updateRegisterbarn={updateRegisterbarn}
-                  key={`${barn.navn.fornavn}-${barn.fødseldato}`}
-                />
+                <Registerbarn barn={barn} key={index} />
               ))}
             </ul>
           )}
@@ -228,12 +175,6 @@ export const Barnetillegg = ({ onBackClick }: Props) => {
           <Alert variant="info">
             {formatMessage({ id: 'søknad.barnetillegg.alert.barneTillegg.title' })}
             <ul>
-              <li>
-                {formatMessage({ id: 'søknad.barnetillegg.alert.barneTillegg.bulletpoint1' })}
-              </li>
-              <li>
-                {formatMessage({ id: 'søknad.barnetillegg.alert.barneTillegg.bulletpoint2' })}
-              </li>
               <li>
                 {formatMessage({ id: 'søknad.barnetillegg.alert.barneTillegg.bulletpoint3' })}
               </li>
