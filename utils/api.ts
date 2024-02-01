@@ -420,7 +420,7 @@ export const mapSøknadToPdf = (
       : søknad?.barn?.map((barn) =>
           createFeltgruppe([
             ...createField('Navn', barn?.navn),
-            ...createField('Fødselsdato', barn?.fødselsdato || ''),
+            ...createField('Fødselsdato', formatDate(barn?.fødselsdato) || ''),
           ]),
         ) || [];
     return createTema('Barn fra folkeregisteret', [...registrerteBarn]);
