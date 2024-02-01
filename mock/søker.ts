@@ -10,6 +10,15 @@ export const mockSøker: SokerOppslagState = {
       etternavn: 'Li',
     },
     fødseldato: formatDate(sub(new Date(), { years: 30 }), 'yyyy-MM-dd')!,
+    adresse: {
+      adressenavn: 'Tulleveien',
+      husbokstav: 'A',
+      husnummer: '239',
+      postnummer: {
+        postnr: '0472',
+        poststed: 'Oslo',
+      },
+    },
     barn: [
       {
         fnr: '123',

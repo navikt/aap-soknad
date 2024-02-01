@@ -44,6 +44,7 @@ export interface OppslagBehandler {
 export type Soker = {
   navn: Navn;
   fødseldato: string;
+  adresse: Adresse;
   barn: Array<OppslagBarn>;
 };
 
