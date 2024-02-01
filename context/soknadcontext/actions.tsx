@@ -1,7 +1,7 @@
-import { AttachmentType, RequiredVedlegg, SøknadType } from 'types/SoknadContext';
-import { OppslagBarn, OppslagBehandler } from '../sokerOppslagContext';
+import { AttachmentType, RequiredVedlegg } from 'types/SoknadContext';
+import { OppslagBehandler } from '../sokerOppslagContext';
 import { Vedlegg } from '@navikt/aap-felles-react';
-import { Soknad, SoknadVedlegg } from 'types/Soknad';
+import { Barn, Soknad, SoknadVedlegg } from 'types/Soknad';
 import { Dispatch } from 'react';
 import { SoknadContextState } from './soknadContext';
 
@@ -32,7 +32,7 @@ type UpdateSoknad = {
 
 type AddBarnIfMissing = {
   type: SoknadActionKeys.ADD_BARN_IF_MISSING;
-  payload: OppslagBarn[];
+  payload: Barn[];
 };
 type AddBehandlerIfMissing = {
   type: SoknadActionKeys.ADD_BEHANDLER_IF_MISSING;
@@ -77,7 +77,7 @@ export type SoknadAction =
 
 export function setSoknadStateFraProps(
   props: SoknadContextState,
-  dispatch: Dispatch<SoknadAction>
+  dispatch: Dispatch<SoknadAction>,
 ) {
   dispatch({
     type: SoknadActionKeys.SET_STATE_FROM_CACHE,
@@ -88,7 +88,7 @@ export function setSoknadStateFraProps(
 
 export async function slettLagretSoknadState(
   dispatch: Dispatch<SoknadAction>,
-  state: SoknadContextState
+  state: SoknadContextState,
 ) {
   const deleteResponse = await fetch(`/aap/soknad/api/buckets/slett/?type=${state.type}`, {
     method: 'DELETE',
@@ -103,7 +103,7 @@ export function updateSøknadData(dispatch: Dispatch<SoknadAction>, data: Partia
 export function addVedlegg(
   dispatch: Dispatch<SoknadAction>,
   data: Vedlegg[],
-  key: keyof SoknadVedlegg
+  key: keyof SoknadVedlegg,
 ) {
   dispatch({ type: SoknadActionKeys.ADD_VEDLEGG, payload: data, key });
 }
@@ -111,32 +111,32 @@ export function addVedlegg(
 export function deleteVedlegg(
   dispatch: Dispatch<SoknadAction>,
   data: Vedlegg,
-  key: keyof SoknadVedlegg
+  key: keyof SoknadVedlegg,
 ) {
   dispatch({ type: SoknadActionKeys.DELETE_VEDLEGG, payload: data, key });
 }
 
 export async function addRequiredVedlegg(
   vedlegg: RequiredVedlegg[],
-  dispatch: Dispatch<SoknadAction>
+  dispatch: Dispatch<SoknadAction>,
 ) {
   if (vedlegg) dispatch({ type: SoknadActionKeys.ADD_REQUIRED_VEDLEGG, payload: vedlegg });
 }
 
 export async function removeRequiredVedlegg(
   vedleggType: AttachmentType,
-  dispatch: Dispatch<SoknadAction>
+  dispatch: Dispatch<SoknadAction>,
 ) {
   if (vedleggType)
     dispatch({ type: SoknadActionKeys.REMOVE_REQUIRED_VEDLEGG, payload: vedleggType });
 }
 export const addBehandlerIfMissing = (
   dispatch: Dispatch<SoknadAction>,
-  data: OppslagBehandler[]
+  data: OppslagBehandler[],
 ) => {
   dispatch({ type: SoknadActionKeys.ADD_BEHANDLER_IF_MISSING, payload: data });
 };
-export const addBarnIfMissing = (dispatch: Dispatch<SoknadAction>, data: OppslagBarn[]) => {
+export const addBarnIfMissing = (dispatch: Dispatch<SoknadAction>, data: Barn[]) => {
   dispatch({ type: SoknadActionKeys.ADD_BARN_IF_MISSING, payload: data });
 };
 

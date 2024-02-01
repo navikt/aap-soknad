@@ -1,4 +1,4 @@
-import { RegistrertBehandler } from '../../types/Soknad';
+import { RegistrertBehandler } from 'types/Soknad';
 import structuredClone from '@ungap/structured-clone';
 import { SoknadContextState } from './soknadContext';
 import { SoknadAction, SoknadActionKeys } from './actions';
@@ -25,15 +25,11 @@ export function soknadReducer(state: SoknadContextState, action: SoknadAction): 
       };
     }
     case SoknadActionKeys.ADD_BARN_IF_MISSING: {
-      const barn = state?.søknad?.barn || [];
-      const newBarn = structuredClone(action.payload)?.filter(
-        (e: any) => !barn.find((a: any) => a?.fnr === e?.fnr)
-      );
       return {
         ...state,
         søknad: {
           ...state.søknad,
-          barn: [...barn, ...newBarn],
+          barn: structuredClone(action.payload),
         },
       };
     }
@@ -44,7 +40,7 @@ export function soknadReducer(state: SoknadContextState, action: SoknadAction): 
         .map((behandler) => {
           const eksisterende = oldRegistrerteBehandlere.find(
             (e) =>
-              e?.kontaktinformasjon?.behandlerRef === behandler?.kontaktinformasjon?.behandlerRef
+              e?.kontaktinformasjon?.behandlerRef === behandler?.kontaktinformasjon?.behandlerRef,
           );
           return eksisterende?.erRegistrertFastlegeRiktig
             ? { ...behandler, erRegistrertFastlegeRiktig: eksisterende.erRegistrertFastlegeRiktig }
@@ -64,7 +60,7 @@ export function soknadReducer(state: SoknadContextState, action: SoknadAction): 
           (vedlegg) =>
             !state?.requiredVedlegg?.find((e) => {
               return e?.type === vedlegg?.type;
-            })
+            }),
         ) || [];
       return {
         ...state,
@@ -110,7 +106,7 @@ export function soknadReducer(state: SoknadContextState, action: SoknadAction): 
 
     case SoknadActionKeys.DELETE_VEDLEGG: {
       const filesUtenSlettetVedlegg = state?.søknad?.vedlegg?.[action.key]?.filter(
-        (e) => e.vedleggId !== action.payload.vedleggId
+        (e) => e.vedleggId !== action.payload.vedleggId,
       );
 
       const updatedRequiredVedlegg = state.requiredVedlegg.map((vedleg) => {
