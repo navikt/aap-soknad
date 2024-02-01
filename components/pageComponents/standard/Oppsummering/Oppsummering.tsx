@@ -9,7 +9,6 @@ import {
 } from '@navikt/ds-react';
 import React, { useEffect, useState } from 'react';
 import AccordianItemOppsummering from './AccordianItemOppsummering/AccordianItemOppsummering';
-import OppsummeringBarn from './OppsummeringBarn/OppsummeringBarn';
 import OppsummeringKontaktinfo from './OppsummeringKontaktinfo/OppsummeringKontaktinfo';
 import OppsummeringUtenlandsopphold from './OppsummeringUtenlandsopphold/OppsummeringUtenlandsopphold';
 import OppsummeringBehandler from './OppsummeringBehandler/OppsummeringBehandler';
@@ -50,6 +49,9 @@ import { setFocusOnErrorSummary } from 'components/schema/FormErrorSummary';
 import { useSoknad } from 'hooks/SoknadHook';
 import { updateSøknadData } from 'context/soknadcontext/actions';
 import { KontaktInfoView } from 'context/sokerOppslagContext';
+import { OppsummeringBarn } from 'components/pageComponents/standard/Oppsummering/OppsummeringBarn/OppsummeringBarn';
+// eslint-disable-next-line max-len
+import { OppsummeringManuelleBarn } from 'components/pageComponents/standard/Oppsummering/OppsummeringBarn/OppsummeringManuelleBarn';
 
 interface OppsummeringProps {
   onBackClick: () => void;
@@ -315,7 +317,7 @@ const Oppsummering = ({
               <OppsummeringBarn barn={barn} key={'barn-' + index} />
             ))}
             {søknadState?.søknad?.manuelleBarn?.map((barn) => (
-              <OppsummeringBarn key={barn.internId} barn={barn} />
+              <OppsummeringManuelleBarn key={barn.internId} barn={barn} />
             ))}
           </>
         </AccordianItemOppsummering>

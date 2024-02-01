@@ -419,8 +419,8 @@ export const mapSøknadToPdf = (
       ? createFritekst('Fant ingen registrerte barn')
       : søknad?.barn?.map((barn) =>
           createFeltgruppe([
-            ...createField('Navn', formatNavn(barn?.navn)),
-            ...createField('Fødselsdato', barn?.fødseldato || ''),
+            ...createField('Navn', barn?.navn),
+            ...createField('Fødselsdato', barn?.fødselsdato || ''),
           ]),
         ) || [];
     return createTema('Barn fra folkeregisteret', [...registrerteBarn]);

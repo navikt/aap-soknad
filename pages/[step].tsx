@@ -11,7 +11,7 @@ import {
   SokerOppslagState,
   useSokerOppslag,
 } from 'context/sokerOppslagContext';
-import { Soknad } from 'types/Soknad';
+import { Barn, Soknad } from 'types/Soknad';
 import { fetchPOST } from 'api/fetch';
 import { StepNames } from './index';
 import { mapSøknadToBackend, mapSøknadToPdf } from 'utils/api';
@@ -45,14 +45,17 @@ import {
   SoknadActionKeys,
 } from 'context/soknadcontext/actions';
 import { getKrr } from 'pages/api/oppslag/krr';
+import { getBarn } from 'pages/api/oppslag/barn';
+import { formatNavn } from 'utils/StringFormatters';
 
 interface PageProps {
   søker: SokerOppslagState;
   mellomlagretSøknad: SoknadContextState;
   kontaktinformasjon: KontaktInfoView;
+  barn: Barn[] | null;
 }
 
-const Steps = ({ søker, mellomlagretSøknad, kontaktinformasjon }: PageProps) => {
+const Steps = ({ søker, mellomlagretSøknad, kontaktinformasjon, barn }: PageProps) => {
   const router = useRouter();
   const { step } = router.query;
 
@@ -72,8 +75,9 @@ const Steps = ({ søker, mellomlagretSøknad, kontaktinformasjon }: PageProps) =
       if (mellomlagretSøknad.lagretStepList && mellomlagretSøknad?.lagretStepList?.length > 0) {
         setStepList([...mellomlagretSøknad.lagretStepList], stepWizardDispatch);
       }
-      const oppslag = setSokerOppslagFraProps(søker, oppslagDispatch);
-      if (oppslag?.søker?.barn) addBarnIfMissing(søknadDispatch, oppslag.søker.barn);
+      setSokerOppslagFraProps(søker, oppslagDispatch);
+
+      if (barn) addBarnIfMissing(søknadDispatch, barn);
       if (søker.behandlere) addBehandlerIfMissing(søknadDispatch, søker.behandlere);
     }
   }, []);
@@ -200,18 +204,24 @@ const Steps = ({ søker, mellomlagretSøknad, kontaktinformasjon }: PageProps) =
   );
 };
 
-const StepsWithContextProvider = ({ søker, mellomlagretSøknad, kontaktinformasjon }: PageProps) => (
+const StepsWithContextProvider = ({
+  søker,
+  mellomlagretSøknad,
+  kontaktinformasjon,
+  barn,
+}: PageProps) => (
   <SoknadContextProvider>
     <Steps
       søker={søker}
       mellomlagretSøknad={mellomlagretSøknad}
       kontaktinformasjon={kontaktinformasjon}
+      barn={barn}
     />
   </SoknadContextProvider>
 );
 
 export const getServerSideProps = beskyttetSide(
-  async (ctx: NextPageContext): Promise<GetServerSidePropsResult<{}>> => {
+  async (ctx: NextPageContext): Promise<GetServerSidePropsResult<PageProps>> => {
     const stopTimer = metrics.getServersidePropsDurationHistogram.startTimer({
       path: '/[steg]',
     });
@@ -219,6 +229,16 @@ export const getServerSideProps = beskyttetSide(
     const søker = await getSøker(bearerToken);
     const mellomlagretSøknad = await lesBucket('STANDARD', bearerToken);
     const kontaktinformasjon = await getKrr(bearerToken);
+
+    let barn: Barn[] = søker.søker.barn.map((barn) => {
+      return { navn: formatNavn(barn.navn), fødselsdato: barn.fødselsdato };
+    });
+
+    try {
+      barn = await getBarn(bearerToken);
+    } catch (e) {
+      logger.error('Noe gikk galt i kallet mot barn fra aap-oppslag', e);
+    }
 
     stopTimer();
 
@@ -237,7 +257,7 @@ export const getServerSideProps = beskyttetSide(
     }
 
     return {
-      props: { søker, mellomlagretSøknad, kontaktinformasjon },
+      props: { søker, mellomlagretSøknad, kontaktinformasjon, barn },
     };
   },
 );
