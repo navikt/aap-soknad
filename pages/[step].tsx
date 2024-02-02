@@ -230,7 +230,7 @@ export const getServerSideProps = beskyttetSide(
     const mellomlagretSøknad = await lesBucket('STANDARD', bearerToken);
     const kontaktinformasjon = await getKrr(bearerToken);
 
-    let barn: Barn[] = søker.søker.barn.map((barn) => {
+    let barn: Barn[] = søker?.søker?.barn?.map((barn) => {
       return { navn: formatNavn(barn.navn), fødselsdato: barn.fødselsdato };
     });
 
