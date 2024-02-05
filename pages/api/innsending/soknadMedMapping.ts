@@ -43,7 +43,7 @@ interface SoknadInnsendingRequestBody {
 
 interface SoknadApiInnsendingRequestBody {
   kvittering?: Record<string, unknown>;
-  soknad: SøknadBackendState;
+  søknad: SøknadBackendState;
 }
 
 interface Fil {
@@ -61,10 +61,15 @@ const søknadIsValid = (søknad: Soknad) => {
     }),
     getMedlemskapSchema(formatMessage).isValidSync(søknad),
     getYrkesskadeSchema(formatMessage).isValidSync(søknad),
-    getBehandlerSchema(formatMessage).isValidSync(søknad),
     getStudentSchema(formatMessage).isValidSync(søknad.student),
     getAndreUtbetalingerSchema(formatMessage).isValidSync(søknad.andreUtbetalinger),
   ];
+
+  if (søknad.andreBehandlere) {
+    søknad.andreBehandlere.forEach((behandler) => {
+      validationResults.push(getBehandlerSchema(formatMessage).isValidSync(behandler));
+    });
+  }
 
   return validationResults.filter((result) => !result).length === 0;
 };
@@ -101,7 +106,7 @@ const handler = beskyttetApi(async (req: NextApiRequest, res: NextApiResponse) =
   const søknadJson = mapSøknadToBackend(søknad);
 
   try {
-    const soknadRes = await sendSoknad({ soknad: søknadJson, kvittering: søknadPdf }, accessToken);
+    const soknadRes = await sendSoknad({ søknad: søknadJson, kvittering: søknadPdf }, accessToken);
     metrics.sendSoknadCounter.inc({ type: 'STANDARD' });
     res.status(201).json(soknadRes);
   } catch (err) {
