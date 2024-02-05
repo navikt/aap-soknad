@@ -5,6 +5,7 @@ import { JaNeiAvbrutt } from 'components/pageComponents/standard/Student/Student
 import { OppslagBehandler } from 'context/sokerOppslagContext';
 import { FerieType } from 'components/pageComponents/standard/StartDato/StartDato';
 import { Vedlegg } from '@navikt/aap-felles-react';
+import { Fastlege } from 'pages/api/oppslag/fastlege';
 
 export type Navn = {
   fornavn?: string;
@@ -50,6 +51,11 @@ export type Behandler = {
 export interface RegistrertBehandler extends OppslagBehandler {
   erRegistrertFastlegeRiktig?: JaEllerNei;
 }
+
+interface RegistrertFastlege extends Fastlege {
+  erRegistrertFastlegeRiktig?: JaEllerNei;
+}
+
 type Student = {
   erStudent?: JaNeiAvbrutt;
   kommeTilbake?: JaNeiVetIkke;
@@ -103,6 +109,7 @@ export interface Soknad {
   yrkesskade?: JaEllerNei;
   medlemskap?: Medlemskap;
   registrerteBehandlere?: RegistrertBehandler[];
+  fastlege?: RegistrertFastlege;
   andreBehandlere?: Behandler[];
   student?: Student;
   andreUtbetalinger?: AndreUtbetalinger;

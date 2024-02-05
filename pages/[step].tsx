@@ -47,6 +47,7 @@ import {
 import { getKrr } from 'pages/api/oppslag/krr';
 import { getBarn } from 'pages/api/oppslag/barn';
 import { formatNavn } from 'utils/StringFormatters';
+import { getFastlege } from 'pages/api/oppslag/fastlege';
 
 interface PageProps {
   søker: SokerOppslagState;
@@ -213,19 +214,9 @@ const Steps = ({ søker, mellomlagretSøknad, kontaktinformasjon, barn }: PagePr
   );
 };
 
-const StepsWithContextProvider = ({
-  søker,
-  mellomlagretSøknad,
-  kontaktinformasjon,
-  barn,
-}: PageProps) => (
+const StepsWithContextProvider = (props: PageProps) => (
   <SoknadContextProvider>
-    <Steps
-      søker={søker}
-      mellomlagretSøknad={mellomlagretSøknad}
-      kontaktinformasjon={kontaktinformasjon}
-      barn={barn}
-    />
+    <Steps {...props} />
   </SoknadContextProvider>
 );
 
@@ -236,7 +227,7 @@ export const getServerSideProps = beskyttetSide(
     });
     const bearerToken = getAccessToken(ctx);
     const søker = await getSøker(bearerToken);
-    const mellomlagretSøknad = await lesBucket('STANDARD', bearerToken);
+    let mellomlagretSøknad = await lesBucket('STANDARD', bearerToken);
     const kontaktinformasjon = await getKrr(bearerToken);
 
     let barn: Barn[] = søker?.søker?.barn?.map((barn) => {
@@ -247,6 +238,18 @@ export const getServerSideProps = beskyttetSide(
       barn = await getBarn(bearerToken);
     } catch (e) {
       logger.error('Noe gikk galt i kallet mot barn fra aap-oppslag', e);
+    }
+
+    try {
+      const fastlege = await getFastlege(bearerToken);
+      if (fastlege.length > 0 && mellomlagretSøknad) {
+        mellomlagretSøknad = {
+          ...mellomlagretSøknad,
+          søknad: { ...mellomlagretSøknad?.søknad, fastlege: fastlege[0] },
+        };
+      }
+    } catch (e) {
+      logger.error('Noe gikk galt i kallet mot fastlege fra aap-oppslag', e);
     }
 
     stopTimer();
