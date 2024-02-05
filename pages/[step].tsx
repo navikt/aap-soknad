@@ -118,6 +118,8 @@ const Steps = ({ søker, mellomlagretSøknad, kontaktinformasjon, barn }: PagePr
         søknadState?.requiredVedlegg,
       );
 
+      console.log('andreBehandlere', søknadState?.søknad?.andreBehandlere);
+
       const postResponse =
         process.env.NEXT_PUBLIC_MAP_BACKEND === 'enabled'
           ? await postSøknadMapBackend(søknadState.søknad)

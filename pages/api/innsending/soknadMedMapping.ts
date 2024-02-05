@@ -61,10 +61,15 @@ const søknadIsValid = (søknad: Soknad) => {
     }),
     getMedlemskapSchema(formatMessage).isValidSync(søknad),
     getYrkesskadeSchema(formatMessage).isValidSync(søknad),
-    getBehandlerSchema(formatMessage).isValidSync(søknad),
     getStudentSchema(formatMessage).isValidSync(søknad.student),
     getAndreUtbetalingerSchema(formatMessage).isValidSync(søknad.andreUtbetalinger),
   ];
+
+  if (søknad.andreBehandlere) {
+    søknad.andreBehandlere.forEach((behandler) => {
+      validationResults.push(getBehandlerSchema(formatMessage).isValidSync(behandler));
+    });
+  }
 
   return validationResults.filter((result) => !result).length === 0;
 };
