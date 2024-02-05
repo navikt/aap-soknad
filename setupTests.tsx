@@ -3,20 +3,21 @@
 // expect(element).toHaveTextContent(/react/i)
 // learn more: https://github.com/testing-library/jest-dom
 import '@testing-library/jest-dom';
-import { render as rtlRender, configure } from '@testing-library/react';
+import { configure, render as rtlRender } from '@testing-library/react';
 import { AppStateContext, AppStateContextState } from 'context/appStateContext';
 import { StepWizardContext, StepWizardContextState } from 'context/stepWizardContext';
-import { ReactElement, useReducer } from 'react';
+import { ReactElement, ReactNode, useReducer } from 'react';
 import { IntlProvider } from 'react-intl';
-import { messages, flattenMessages } from 'utils/message';
+import { flattenMessages, messages } from 'utils/message';
 import links from 'translations/links.json';
 import {
   SoknadContext,
   soknadContextInititalState,
   SoknadContextState,
   SoknadContextType,
-} from './context/soknadcontext/soknadContext';
-import { soknadReducer } from './context/soknadcontext/reducer';
+} from 'context/soknadcontext/soknadContext';
+import { soknadReducer } from 'context/soknadcontext/reducer';
+
 jest.setTimeout(10 * 1000);
 configure({ asyncUtilTimeout: 10 * 1000 });
 
@@ -26,13 +27,14 @@ jest.mock('next/router', () => ({
 
 const tekster = { ...messages['nb'], ...flattenMessages({ applinks: links }) };
 function render(ui: ReactElement, { locale = 'nb', ...options } = {}) {
-  function Wrapper({ children }: { children: ReactElement }): ReactElement {
+  function Wrapper({ children }: { children: ReactNode }) {
     return (
       <IntlProvider locale={locale} messages={tekster}>
         {children}
       </IntlProvider>
     );
   }
+
   return rtlRender(ui, { wrapper: Wrapper, ...options });
 }
 
@@ -42,7 +44,7 @@ function renderStepSoknadStandard(
   { locale = 'nb', ...options } = {},
   initialState?: SoknadContextState,
 ) {
-  function ProvidersWrapper({ children }: { children: ReactElement }): ReactElement {
+  function ProvidersWrapper({ children }: { children: ReactNode }) {
     const initialSoknadContext = initialState || soknadContextInititalState;
     const [state, dispatch] = useReducer(soknadReducer, initialSoknadContext);
     const soknadContext: SoknadContextType = {
