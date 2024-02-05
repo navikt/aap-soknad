@@ -71,6 +71,8 @@ const søknadIsValid = (søknad: Soknad) => {
     });
   }
 
+  logger.info('Resultater fra validering av søknad' + validationResults.join(', '));
+
   return validationResults.filter((result) => !result).length === 0;
 };
 
