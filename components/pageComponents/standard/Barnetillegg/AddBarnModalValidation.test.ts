@@ -1,5 +1,4 @@
 import { add, sub } from 'date-fns';
-import { JaEllerNei } from 'types/Generic';
 import { getAddBarnSchema, Relasjon } from './AddBarnModal';
 
 describe('AddBarnModal validation', () => {
@@ -17,7 +16,6 @@ describe('AddBarnModal validation', () => {
       },
       fødseldato: sub(new Date(), { years: 1 }),
       relasjon: Relasjon.FORELDER,
-      harInntekt: JaEllerNei.JA,
     };
     const result = await schema.validate(barn, { abortEarly: false }).catch((err) => err);
     expect(result).toStrictEqual(barn);
@@ -31,7 +29,6 @@ describe('AddBarnModal validation', () => {
       },
       fødseldato: add(new Date(), { years: 1 }),
       relasjon: Relasjon.FORELDER,
-      harInntekt: JaEllerNei.JA,
     };
     const result = await schema.validate(barn, { abortEarly: false }).catch((err) => err);
     expect(result.errors.length).toBe(1);

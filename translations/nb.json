@@ -528,14 +528,7 @@
             "text": "Hvis barnet mottar barnepensjon, får du ikke barnetillegg for barnet."
           }
         },
-        "notfound": "Fant ingen registrerte barn. Hvis dette ikke stemmer kan du legge til dine barn under.",
-        "harInntekt": {
-          "label": "Har barnet årlig inntekt over {grunnbeløp}kr?",
-          "readMore": {
-            "title": "Hvorfor spør vi om dette?",
-            "text": "Hvis barnet har en årlig inntekt over {grunnbeløp}kr ({grunnbeløp}kr = 1G), får du vanligvis ikke barnetillegg for barnet."
-          }
-        }
+        "notfound": "Fant ingen registrerte barn. Hvis dette ikke stemmer kan du legge til dine barn under."
       },
       "manuelleBarn": {
         "title": "Andre barn",
@@ -592,16 +585,6 @@
               "required": "Du må svare på hvilken relasjon du har til barnet."
             }
           },
-          "harInntekt": {
-            "label": "Har barnet årlig inntekt over {grunnbeløp}kr?",
-            "readMore": {
-              "title": "Hvorfor spør vi om dette?",
-              "text": "Hvis barnet har en årlig inntekt over {grunnbeløp}kr ({grunnbeløp}kr = 1G), får du vanligvis ikke barnetillegg for barnet."
-            },
-            "validation": {
-              "required": "Du må svare på om barnet har en årlig inntekt over {grunnbeløp}kr"
-            }
-          },
           "buttons": {
             "lagre": "Lagre",
             "avbryt": "Avbryt",
@@ -616,8 +599,6 @@
         "lasteOppVedleggTekst": "Dette laster du opp senere i søknaden. Du kan også ettersende vedlegg.",
         "barneTillegg": {
           "title": "Du får ikke barnetillegg hvis:",
-          "bulletpoint1": "Barnet mottar barnepensjon.",
-          "bulletpoint2": "Barnet har en årlig inntekt som er høyere enn grunnbeløpet i folketrygden.",
           "bulletpoint3": "Barnet oppholder seg utenfor EØS i over 90 dager i løpet av en tolvmånedersperiode.",
           "bulletpoint4": "Barnet er bosatt utenfor EØS."
         }

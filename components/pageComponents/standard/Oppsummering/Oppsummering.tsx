@@ -9,7 +9,6 @@ import {
 } from '@navikt/ds-react';
 import React, { useEffect, useState } from 'react';
 import AccordianItemOppsummering from './AccordianItemOppsummering/AccordianItemOppsummering';
-import OppsummeringBarn from './OppsummeringBarn/OppsummeringBarn';
 import OppsummeringKontaktinfo from './OppsummeringKontaktinfo/OppsummeringKontaktinfo';
 import OppsummeringUtenlandsopphold from './OppsummeringUtenlandsopphold/OppsummeringUtenlandsopphold';
 import OppsummeringBehandler from './OppsummeringBehandler/OppsummeringBehandler';
@@ -33,7 +32,6 @@ import {
 import { formatFullAdresse, formatNavn, formatTelefonnummer } from 'utils/StringFormatters';
 import OppsummeringPeriode from './OppsummeringPeriode/OppsummeringPeriode';
 import { isNonEmptyPeriode } from 'utils/periode';
-import { getBarnetillegSchema } from 'components/pageComponents/standard/Barnetillegg/Barnetillegg';
 import {
   FerieTypeToMessageKey,
   getStartDatoSchema,
@@ -51,6 +49,9 @@ import { setFocusOnErrorSummary } from 'components/schema/FormErrorSummary';
 import { useSoknad } from 'hooks/SoknadHook';
 import { updateSøknadData } from 'context/soknadcontext/actions';
 import { KontaktInfoView } from 'context/sokerOppslagContext';
+import { OppsummeringBarn } from 'components/pageComponents/standard/Oppsummering/OppsummeringBarn/OppsummeringBarn';
+// eslint-disable-next-line max-len
+import { OppsummeringManuelleBarn } from 'components/pageComponents/standard/Oppsummering/OppsummeringBarn/OppsummeringManuelleBarn';
 
 interface OppsummeringProps {
   onBackClick: () => void;
@@ -97,9 +98,6 @@ const Oppsummering = ({
   const [behandlereHasErrors] = useState<boolean>(
     !getBehandlerSchema(formatMessage).isValidSync(søknadState.søknad),
   );
-  const [barnetilleggHasErrors] = useState<boolean>(
-    !getBarnetillegSchema(formatMessage).isValidSync(søknadState?.søknad),
-  );
   const [studentHasErrors] = useState<boolean>(
     !getStudentSchema(formatMessage).isValidSync(søknadState?.søknad?.student),
   );
@@ -114,7 +112,6 @@ const Oppsummering = ({
       ...(medlemskapHasErrors ? ['MEDLEMSKAP'] : []),
       ...(yrkesskadeHasErrors ? ['YRKESSKADE'] : []),
       ...(behandlereHasErrors ? ['BEHANDLERE'] : []),
-      ...(barnetilleggHasErrors ? ['BARNETILLEGG'] : []),
       ...(studentHasErrors ? ['STUDENT'] : []),
       ...(utbetalingerHasErrors ? ['UTBETALINGER'] : []),
     ];
@@ -314,14 +311,13 @@ const Oppsummering = ({
           editText={formatMessage({ id: 'søknad.oppsummering.barnetillegg.editText' })}
           toggleAll={toggleAll}
           onEdit={() => editStep(StepNames.BARNETILLEGG)}
-          hasError={barnetilleggHasErrors}
         >
           <>
             {søknadState?.søknad?.barn?.map((barn, index) => (
               <OppsummeringBarn barn={barn} key={'barn-' + index} />
             ))}
             {søknadState?.søknad?.manuelleBarn?.map((barn) => (
-              <OppsummeringBarn key={barn.internId} barn={barn} />
+              <OppsummeringManuelleBarn key={barn.internId} barn={barn} />
             ))}
           </>
         </AccordianItemOppsummering>

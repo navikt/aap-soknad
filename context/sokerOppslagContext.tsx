@@ -6,11 +6,14 @@ interface DispatchSokerOppslagAction {
   error?: any;
   type: 'SET_SOKER_OPPSLAG';
 }
+
+/** @deprecated Backend sender fult navn som string */
 export type Navn = {
   fornavn: string;
   mellomnavn: string;
   etternavn: string;
 };
+
 export type Adresse = {
   adressenavn?: string;
   husbokstav?: string;
@@ -20,6 +23,7 @@ export type Adresse = {
     poststed?: string;
   };
 };
+
 export type OppslagBarn = {
   navn: Navn;
   fødselsdato: string;
@@ -40,18 +44,10 @@ export interface OppslagBehandler {
 export type Soker = {
   navn: Navn;
   fødseldato: string;
+  adresse: Adresse;
   barn: Array<OppslagBarn>;
 };
-export type FastlegeView = {
-  fulltNavn?: string;
-  originalNavn?: any;
-  orgnummer?: string;
-  behandlerRef?: string;
-  legekontor?: string;
-  adresse?: string;
-  originalAdresse?: any;
-  telefon?: string;
-};
+
 export type SøkerView = {
   fulltNavn?: string;
   fullAdresse?: string;

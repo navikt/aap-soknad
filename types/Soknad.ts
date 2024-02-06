@@ -16,6 +16,11 @@ export type Periode = {
   tilDato?: Date;
 };
 
+export type Barn = {
+  navn?: string;
+  fødselsdato?: string;
+};
+
 export type UtenlandsPeriode = {
   id?: string;
   land?: string;
@@ -64,20 +69,11 @@ type AndreUtbetalinger = {
     };
   };
 };
-export type Barn = {
-  navn: Navn;
-  fødseldato?: string;
-  fnr: string;
-  harInntekt?: string;
-  manueltOpprettet?: boolean;
-  relasjon?: 'FORELDER' | 'FOSTERFORELDER';
-};
 
 export type ManuelleBarn = {
   navn: Navn;
   internId: string;
   fødseldato: Date;
-  harInntekt: JaEllerNei;
   relasjon: Relasjon;
   vedlegg?: Vedlegg[];
 };

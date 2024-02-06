@@ -38,7 +38,7 @@ export interface SøknadBackendState {
     andreStønader: Array<{ type: StønadType; hvemUtbetalerAFP?: string; vedlegg?: Array<string> }>;
   };
   registrerteBarn: Array<{
-    merEnnIG?: boolean;
+    merEnnIG?: null;
     barnepensjon?: boolean;
   }>;
   andreBarn: Array<{
@@ -51,7 +51,7 @@ export interface SøknadBackendState {
       };
     };
     relasjon?: 'FORELDER' | 'FOSTERFORELDER';
-    merEnnIG?: boolean;
+    merEnnIG?: null;
     barnepensjon?: boolean;
   }>;
   tilleggsopplysninger?: string;

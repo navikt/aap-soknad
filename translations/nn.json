@@ -528,14 +528,7 @@
             "text": "Dersom barnet får barnepensjon, har du ikkje rett til barnetillegg for barnet."
           }
         },
-        "notfound": "Fant ingen registrerte barn. Viss dette ikkje stemmer kan du leggja til barna dine under.",
-        "harInntekt": {
-          "label": "Har barnet ei årleg inntekt over {grunnbeløp}kr?",
-          "readMore": {
-            "title": "Kvifor spør vi om dette?",
-            "text": "Dersom barnet har ei årleg inntekt over {grunnbeløp}kr ({grunnbeløp}kr = 1G), har du vanlegvis ikkje rett til barnetillegg for barnet."
-          }
-        }
+        "notfound": "Fant ingen registrerte barn. Viss dette ikkje stemmer kan du leggja til barna dine under."
       },
       "manuelleBarn": {
         "title": "Andre barn",
@@ -592,16 +585,6 @@
               "required": "Du må svara på kva relasjon du har til barnet."
             }
           },
-          "harInntekt": {
-            "label": "Har barnet ei årleg inntekt over {grunnbeløp}kr?",
-            "readMore": {
-              "title": "Kvifor spør vi om dette?",
-              "text": "Dersom barnet har ei årleg inntekt over {grunnbeløp}kr ({grunnbeløp}kr = 1G), har du vanlegvis ikkje rett til barnetillegg for barnet."
-            },
-            "validation": {
-              "required": "Du må svara på om barnet har ei årleg inntekt over {grunnbeløp}kr"
-            }
-          },
           "buttons": {
             "lagre": "Lagre",
             "avbryt": "Avbryt",
@@ -616,8 +599,6 @@
         "lasteOppVedleggTekst": "Dette lastar du opp seinare i søknaden. Du kan også ettersende vedlegg.",
         "barneTillegg": {
           "title": "I følgjande tilfelle har du ikkje rett til barnetillegg:",
-          "bulletpoint1": "Barnet får barnepensjon.",
-          "bulletpoint2": "Barnet har ei årleg inntekt som er høgare enn grunnbeløpet i folketrygda.",
           "bulletpoint3": "Barnet oppheld seg utanfor EØS i over 90 dagar i løpet av ein periode på 12 månader.",
           "bulletpoint4": "Barnet er busett utanfor EØS."
         }

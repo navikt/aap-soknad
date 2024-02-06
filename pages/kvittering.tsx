@@ -52,15 +52,7 @@ export const getServerSideProps = beskyttetSide(
     const bearerToken = getAccessToken(ctx);
     const søknader = await getSøknader(bearerToken);
     const søker = await getSøker(bearerToken);
-
-    let kontaktinformasjon = {};
-
-    try {
-      kontaktinformasjon = await getKrr(bearerToken);
-    } catch (e) {
-      kontaktinformasjon = søker.kontaktinformasjon;
-      logger.error('Oppslag mot KKR feilet i kvittering:' + e);
-    }
+    const kontaktinformasjon = await getKrr(bearerToken);
 
     logger.info(`søkeroppslag fra API: ${JSON.stringify(søknader)}`);
 

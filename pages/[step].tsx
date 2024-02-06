@@ -11,7 +11,7 @@ import {
   SokerOppslagState,
   useSokerOppslag,
 } from 'context/sokerOppslagContext';
-import { Soknad } from 'types/Soknad';
+import { Barn, Soknad } from 'types/Soknad';
 import { fetchPOST } from 'api/fetch';
 import { StepNames } from './index';
 import { mapSøknadToBackend, mapSøknadToPdf } from 'utils/api';
@@ -45,14 +45,17 @@ import {
   SoknadActionKeys,
 } from 'context/soknadcontext/actions';
 import { getKrr } from 'pages/api/oppslag/krr';
+import { getBarn } from 'pages/api/oppslag/barn';
+import { formatNavn } from 'utils/StringFormatters';
 
 interface PageProps {
   søker: SokerOppslagState;
   mellomlagretSøknad: SoknadContextState;
   kontaktinformasjon: KontaktInfoView;
+  barn: Barn[] | null;
 }
 
-const Steps = ({ søker, mellomlagretSøknad, kontaktinformasjon }: PageProps) => {
+const Steps = ({ søker, mellomlagretSøknad, kontaktinformasjon, barn }: PageProps) => {
   const router = useRouter();
   const { step } = router.query;
 
@@ -72,8 +75,9 @@ const Steps = ({ søker, mellomlagretSøknad, kontaktinformasjon }: PageProps) =
       if (mellomlagretSøknad.lagretStepList && mellomlagretSøknad?.lagretStepList?.length > 0) {
         setStepList([...mellomlagretSøknad.lagretStepList], stepWizardDispatch);
       }
-      const oppslag = setSokerOppslagFraProps(søker, oppslagDispatch);
-      if (oppslag?.søker?.barn) addBarnIfMissing(søknadDispatch, oppslag.søker.barn);
+      setSokerOppslagFraProps(søker, oppslagDispatch);
+
+      if (barn) addBarnIfMissing(søknadDispatch, barn);
       if (søker.behandlere) addBehandlerIfMissing(søknadDispatch, søker.behandlere);
     }
   }, []);
@@ -118,11 +122,13 @@ const Steps = ({ søker, mellomlagretSøknad, kontaktinformasjon }: PageProps) =
       if (process.env.NEXT_PUBLIC_NY_INNSENDING === 'enabled') {
         postResponse = await postSøknadInnsending(søknadState?.søknad);
       } else {
-        postResponse = await postSøknad({ søknad, kvittering: søknadPdf });
+        postResponse =
+          process.env.NEXT_PUBLIC_MAP_BACKEND === 'enabled'
+            ? await postSøknadMapBackend(søknadState.søknad)
+            : await postSøknad({ søknad, kvittering: søknadPdf });
       }
 
       console.log('postResponse', postResponse);
-
       if (postResponse?.ok) {
         const harVedlegg = søknadState.requiredVedlegg && søknadState?.requiredVedlegg?.length > 0;
         const erIkkeKomplett = !!søknadState?.requiredVedlegg?.find(
@@ -153,6 +159,11 @@ const Steps = ({ søker, mellomlagretSøknad, kontaktinformasjon }: PageProps) =
 
   const postSøknadInnsending = async (data?: Soknad) =>
     fetchPOST('/aap/soknad/api/innsending/ny_soknad', { ...data });
+
+  const postSøknadMapBackend = async (data?: Soknad) =>
+    fetchPOST('/aap/soknad/api/innsending/soknadMedMapping/', {
+      ...data,
+    });
 
   const onPreviousStep = async () => {
     goToPreviousStep(stepWizardDispatch);
@@ -213,31 +224,40 @@ const Steps = ({ søker, mellomlagretSøknad, kontaktinformasjon }: PageProps) =
   );
 };
 
-const StepsWithContextProvider = ({ søker, mellomlagretSøknad, kontaktinformasjon }: PageProps) => (
+const StepsWithContextProvider = ({
+  søker,
+  mellomlagretSøknad,
+  kontaktinformasjon,
+  barn,
+}: PageProps) => (
   <SoknadContextProvider>
     <Steps
       søker={søker}
       mellomlagretSøknad={mellomlagretSøknad}
       kontaktinformasjon={kontaktinformasjon}
+      barn={barn}
     />
   </SoknadContextProvider>
 );
 
 export const getServerSideProps = beskyttetSide(
-  async (ctx: NextPageContext): Promise<GetServerSidePropsResult<{}>> => {
+  async (ctx: NextPageContext): Promise<GetServerSidePropsResult<PageProps>> => {
     const stopTimer = metrics.getServersidePropsDurationHistogram.startTimer({
       path: '/[steg]',
     });
     const bearerToken = getAccessToken(ctx);
     const søker = await getSøker(bearerToken);
     const mellomlagretSøknad = await lesBucket('STANDARD', bearerToken);
+    const kontaktinformasjon = await getKrr(bearerToken);
 
-    let kontaktinformasjon = {};
+    let barn: Barn[] = søker?.søker?.barn?.map((barn) => {
+      return { navn: formatNavn(barn.navn), fødselsdato: barn.fødselsdato };
+    });
+
     try {
-      kontaktinformasjon = await getKrr(bearerToken);
+      barn = await getBarn(bearerToken);
     } catch (e) {
-      kontaktinformasjon = søker.kontaktinformasjon;
-      logger.error('Oppslag mot KKR feilet i [step]:' + e);
+      logger.error('Noe gikk galt i kallet mot barn fra aap-oppslag', e);
     }
 
     stopTimer();
@@ -257,7 +277,7 @@ export const getServerSideProps = beskyttetSide(
     }
 
     return {
-      props: { søker, mellomlagretSøknad, kontaktinformasjon },
+      props: { søker, mellomlagretSøknad, kontaktinformasjon, barn },
     };
   },
 );
