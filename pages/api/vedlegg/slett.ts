@@ -12,9 +12,8 @@ const handler = beskyttetApi(async (req, res) => {
   if (!uuids) {
     res.status(400).json({ error: 'uuid må være en string' });
   }
-  const accessToken = getAccessTokenFromRequest(req);
+  const accessToken = getAccessTokenFromRequest(req)?.substring('Bearer '.length)!;
   if (process.env.NEXT_PUBLIC_NY_INNSENDING === 'enabled') {
-    // @ts-ignore-line TODO: Feil med type for NextApiResponse vi henter fra felleslib
     return await slettVedleggInnsending(uuids as string, accessToken!, req, res);
   }
   await slettVedlegg(uuids, accessToken);

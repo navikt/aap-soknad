@@ -1,7 +1,6 @@
-import { NextApiRequest, NextApiResponse } from 'next';
 import { beskyttetApi } from 'auth/beskyttetApi';
 import { getStringFromPossiblyArrayQuery } from 'utils/string';
-import { tokenXProxy } from '../../../lib/utils/TokenxProxy';
+import { tokenXProxy } from 'lib/utils/TokenxProxy';
 import { getAccessTokenFromRequest, getTokenX } from '@navikt/aap-felles-utils';
 import { proxyApiRouteRequest } from '@navikt/next-api-proxy';
 
@@ -22,13 +21,11 @@ const handler = beskyttetApi(async (req, res) => {
       hostname: 'innsending',
       path: `/mellomlagring/fil/${uuid}`,
       req: req,
-      /* @ts-ignore: TODO */
       res: res,
       bearerToken: tokenxToken,
       https: false,
     });
   }
-  /* @ts-ignore: TODO: Følge opp med tokenXproxy repo for å fikse type */
   return await tokenXProxy(req, res, `/vedlegg/les/${uuid}`, '/vedlegg/les');
 });
 
