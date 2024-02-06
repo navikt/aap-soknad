@@ -79,7 +79,6 @@ const handler = beskyttetApi(async (req: NextApiRequest, res: NextApiResponse) =
 
   const søknad = req.body as Soknad;
 
-  /* TODO: Dette må vi mappe når vi tar i bruk ny innsending
   const filer: Fil[] = Object.keys(søknad.vedlegg ?? {})
     .map((key) => {
       const vedleggArray = søknad?.vedlegg?.[key];
@@ -94,7 +93,6 @@ const handler = beskyttetApi(async (req: NextApiRequest, res: NextApiResponse) =
       return filerArray;
     })
     .flat();
- */
 
   if (!søknadIsValid(søknad)) {
     res.status(400).json({ errorMessage: 'Søknaden er ikke gyldig' });
@@ -103,12 +101,24 @@ const handler = beskyttetApi(async (req: NextApiRequest, res: NextApiResponse) =
 
   const { formatMessage } = getIntl();
   const søknadPdf = mapSøknadToPdf(søknad, new Date(), formatMessage, []);
+
+  // TODO Denne går bort når vi bare sender søknader inn til aap-innsending
   const søknadJson = mapSøknadToBackend(søknad);
 
+  // Dersom mellomlagringen er fra aap-innsending så skal vi bruke aap-innsending, ellers soknad-api
+  const mellomlagringFraAAPInnsending = false;
+
   try {
-    const soknadRes = await sendSoknad({ søknad: søknadJson, kvittering: søknadPdf }, accessToken);
+    const res = mellomlagringFraAAPInnsending
+      ? await sendSoknadViaAapInnsending({
+          soknad: { ...søknad, version: SOKNAD_VERSION },
+          kvittering: søknadPdf,
+          filer,
+        })
+      : await sendSoknadViaSoknadApi({ søknad: søknadJson, kvittering: søknadPdf }, accessToken);
+
     metrics.sendSoknadCounter.inc({ type: 'STANDARD' });
-    res.status(201).json(soknadRes);
+    res.status(201).json(res);
   } catch (err) {
     if (err instanceof ErrorMedStatus) {
       res.status(err.status).json({ navCallId: err.navCallId });
@@ -118,7 +128,36 @@ const handler = beskyttetApi(async (req: NextApiRequest, res: NextApiResponse) =
   }
 });
 
-export const sendSoknad = async (data: SoknadApiInnsendingRequestBody, accessToken?: string) => {
+export const sendSoknadViaAapInnsending = async (
+  innsending: SoknadInnsendingRequestBody,
+  accessToken?: string,
+) => {
+  if (isLabs()) {
+    return { uri: `https://localhost:3000/aap/soknad/api/vedlegg/les?uuid=${randomUUID()}` };
+  }
+  if (isMock()) {
+    await slettBucket('STANDARD', accessToken);
+    return { uri: `https://localhost:3000/aap/soknad/api/vedlegg/les?uuid=${randomUUID()}` };
+  }
+  const søknad = await tokenXApiProxy({
+    url: `${process.env.INNSENDING_URL}/innsending`,
+    prometheusPath: 'innsending/soknad',
+    method: 'POST',
+    data: JSON.stringify(innsending),
+    audience: process.env.INNSENDING_AUDIENCE!,
+    bearerToken: accessToken,
+    metricsStatusCodeCounter: metrics.backendApiStatusCodeCounter,
+    metricsTimer: metrics.backendApiDurationHistogram,
+    logger: logger,
+    noResponse: true,
+  });
+  return søknad;
+};
+
+export const sendSoknadViaSoknadApi = async (
+  data: SoknadApiInnsendingRequestBody,
+  accessToken?: string,
+) => {
   // TODO: Denne brukes av playwright. Se om vi skal gjøre endringer her på sikt
   if (isLabs()) {
     return { uri: `https://localhost:3000/aap/soknad/api/vedlegg/les?uuid=${randomUUID()}` };

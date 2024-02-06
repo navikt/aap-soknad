@@ -118,15 +118,10 @@ const Steps = ({ søker, mellomlagretSøknad, kontaktinformasjon, barn }: PagePr
         søknadState?.requiredVedlegg,
       );
 
-      let postResponse;
-      if (process.env.NEXT_PUBLIC_NY_INNSENDING === 'enabled') {
-        postResponse = await postSøknadInnsending(søknadState?.søknad);
-      } else {
-        postResponse =
-          process.env.NEXT_PUBLIC_MAP_BACKEND === 'enabled'
-            ? await postSøknadMapBackend(søknadState.søknad)
-            : await postSøknad({ søknad, kvittering: søknadPdf });
-      }
+      const postResponse =
+        process.env.NEXT_PUBLIC_MAP_BACKEND === 'enabled'
+          ? await postSøknadMapBackend(søknadState.søknad)
+          : await postSøknad({ søknad, kvittering: søknadPdf });
 
       console.log('postResponse', postResponse);
       if (postResponse?.ok) {
@@ -156,9 +151,6 @@ const Steps = ({ søker, mellomlagretSøknad, kontaktinformasjon, barn }: PagePr
     fetchPOST('/aap/soknad/api/innsending/soknad', {
       ...data,
     });
-
-  const postSøknadInnsending = async (data?: Soknad) =>
-    fetchPOST('/aap/soknad/api/innsending/ny_soknad', { ...data });
 
   const postSøknadMapBackend = async (data?: Soknad) =>
     fetchPOST('/aap/soknad/api/innsending/soknadMedMapping/', {
@@ -224,19 +216,9 @@ const Steps = ({ søker, mellomlagretSøknad, kontaktinformasjon, barn }: PagePr
   );
 };
 
-const StepsWithContextProvider = ({
-  søker,
-  mellomlagretSøknad,
-  kontaktinformasjon,
-  barn,
-}: PageProps) => (
+const StepsWithContextProvider = (props: PageProps) => (
   <SoknadContextProvider>
-    <Steps
-      søker={søker}
-      mellomlagretSøknad={mellomlagretSøknad}
-      kontaktinformasjon={kontaktinformasjon}
-      barn={barn}
-    />
+    <Steps {...props} />
   </SoknadContextProvider>
 );
 
