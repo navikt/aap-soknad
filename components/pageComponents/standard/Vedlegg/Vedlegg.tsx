@@ -15,7 +15,7 @@ import { addVedlegg, deleteVedlegg, updateSøknadData } from 'context/soknadcont
 import { useSoknad } from 'hooks/SoknadHook';
 import { FileInputWrapper } from 'components/pageComponents/standard/Vedlegg/FileInputWrapper';
 
-const deleteUrl = '/aap/soknad/api/vedlegg/slett/?uuids=';
+const deleteUrl = '/aap/soknad/api/vedlegg/slett/?uuid=';
 const uploadUrl = '/aap/soknad/api/vedlegg/lagre/';
 const readAttachmentUrl = '/aap/soknad/vedlegg/';
 
@@ -34,14 +34,13 @@ const Vedlegg = ({ onBackClick }: Props) => {
   }, [søknadState.søknad?.vedlegg, søknadState.søknad?.tilleggsopplysninger]);
 
   const errors: SøknadValidationError[] = Object.entries(søknadState.søknad?.vedlegg || {})
-    .flatMap(
-      ([key, vedleggArray]) =>
-        vedleggArray
-          ?.filter((vedlegg) => vedlegg.errorMessage)
-          .map((vedlegg) => ({
-            message: vedlegg.errorMessage || '',
-            path: key,
-          })),
+    .flatMap(([key, vedleggArray]) =>
+      vedleggArray
+        ?.filter((vedlegg) => vedlegg.errorMessage)
+        .map((vedlegg) => ({
+          message: vedlegg.errorMessage || '',
+          path: key,
+        })),
     )
     .filter((error): error is SøknadValidationError => error !== undefined);
 
