@@ -8,16 +8,17 @@ import { getCommaSeparatedStringFromStringOrArray } from 'utils/string';
 import { proxyApiRouteRequest } from '@navikt/next-api-proxy';
 
 const handler = beskyttetApi(async (req, res) => {
-  const uuids = req.query.uuid ?? [];
-  if (!uuids) {
+  const uuid = req.query.uuid ?? [];
+  console.log('uuid', uuid);
+  if (!uuid) {
     res.status(400).json({ error: 'uuid må være en string' });
   }
-  const accessToken = getAccessTokenFromRequest(req)?.substring('Bearer '.length)!;
+  const accessToken = getAccessTokenFromRequest(req);
   if (process.env.NEXT_PUBLIC_NY_INNSENDING === 'enabled') {
-    return await slettVedleggInnsending(uuids as string, accessToken!, req, res);
+    return await slettVedleggInnsending(uuid as string, accessToken!, req, res);
   }
-  await slettVedlegg(uuids, accessToken);
-  res.status(204).json({});
+  await slettVedlegg(uuid, accessToken);
+  res.status(204).end();
 });
 
 export const slettVedleggInnsending = async (
