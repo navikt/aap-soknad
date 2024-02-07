@@ -9,29 +9,28 @@ import { proxyApiRouteRequest } from '@navikt/next-api-proxy';
 
 const handler = beskyttetApi(async (req, res) => {
   const uuid = req.query.uuid ?? [];
-  console.log('uuid', uuid);
   if (!uuid) {
     res.status(400).json({ error: 'uuid må være en string' });
   }
   const accessToken = getAccessTokenFromRequest(req);
   if (process.env.NEXT_PUBLIC_NY_INNSENDING === 'enabled') {
-    return await slettVedleggInnsending(uuid as string, accessToken!, req, res);
+    return await slettVedleggInnsending(uuid, accessToken!, req, res);
   }
   await slettVedlegg(uuid, accessToken);
   res.status(204).end();
 });
 
 export const slettVedleggInnsending = async (
-  uuid: string,
+  uuid: string | string[],
   accessToken: string,
   req: NextApiRequest,
   res: NextApiResponse,
 ) => {
   if (isMock()) return;
-
+  const idportenToken = accessToken.split(' ')[1];
   let tokenXToken;
   try {
-    tokenXToken = await getTokenX(accessToken, process.env.INNSENDING_AUDIENCE!);
+    tokenXToken = await getTokenX(idportenToken, process.env.INNSENDING_AUDIENCE!);
   } catch (error) {
     logger.error('Kunne ikke hente tokenXToken', error);
     throw error;
