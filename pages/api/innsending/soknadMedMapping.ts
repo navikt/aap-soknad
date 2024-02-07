@@ -111,11 +111,14 @@ const handler = beskyttetApi(async (req: NextApiRequest, res: NextApiResponse) =
   try {
     const res =
       process.env.NEXT_PUBLIC_NY_INNSENDING === 'enabled'
-        ? await sendSoknadViaAapInnsending({
-            soknad: { ...søknad, version: SOKNAD_VERSION },
-            kvittering: søknadPdf,
-            filer,
-          })
+        ? await sendSoknadViaAapInnsending(
+            {
+              soknad: { ...søknad, version: SOKNAD_VERSION },
+              kvittering: søknadPdf,
+              filer,
+            },
+            accessToken,
+          )
         : await sendSoknadViaSoknadApi({ søknad: søknadJson, kvittering: søknadPdf }, accessToken);
 
     metrics.sendSoknadCounter.inc({ type: 'STANDARD' });
