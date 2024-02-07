@@ -109,7 +109,7 @@ const handler = beskyttetApi(async (req: NextApiRequest, res: NextApiResponse) =
   const mellomlagringFraAAPInnsending = false;
 
   try {
-    const res =
+    const responseFromBackend =
       process.env.NEXT_PUBLIC_NY_INNSENDING === 'enabled'
         ? await sendSoknadViaAapInnsending(
             {
@@ -122,7 +122,7 @@ const handler = beskyttetApi(async (req: NextApiRequest, res: NextApiResponse) =
         : await sendSoknadViaSoknadApi({ søknad: søknadJson, kvittering: søknadPdf }, accessToken);
 
     metrics.sendSoknadCounter.inc({ type: 'STANDARD' });
-    res.status(201).json(res);
+    res.status(201).json(responseFromBackend);
   } catch (err) {
     logger.error('Noe gikk galt ved innsending av søknad', err);
     if (err instanceof ErrorMedStatus) {
