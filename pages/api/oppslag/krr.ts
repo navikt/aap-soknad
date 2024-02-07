@@ -30,7 +30,8 @@ export const getKrr = async (accessToken?: string) => {
         metricsTimer: metrics.backendApiDurationHistogram,
         logger: logger,
       });
-  const validatedResponse = KrrInfo.safeParse(krr);
+  const dummyKrrInvalid = { epost: ['hei'], mobil: { navn: 'ole' } };
+  const validatedResponse = KrrInfo.safeParse(dummyKrrInvalid);
   if (!validatedResponse.success) {
     logger.error({ path: 'oppslag/krr', issues: validatedResponse.error.issues });
     return {};
