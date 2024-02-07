@@ -4,7 +4,7 @@ import { Alert, BodyLong, BodyShort, Heading, Label, Textarea } from '@navikt/ds
 import { completeAndGoToNextStep } from 'context/stepWizardContext';
 import { useStepWizard } from 'hooks/StepWizardHook';
 import { useDebounceLagreSoknad } from 'hooks/useDebounceLagreSoknad';
-import { FileInput, LucaGuidePanel } from '@navikt/aap-felles-react';
+import { LucaGuidePanel } from '@navikt/aap-felles-react';
 import { useIntl } from 'react-intl';
 import SoknadFormWrapperNew from 'components/SoknadFormWrapper/SoknadFormWrapper';
 import { SøknadValidationError } from 'components/schema/FormErrorSummary';
@@ -15,9 +15,15 @@ import { addVedlegg, deleteVedlegg, updateSøknadData } from 'context/soknadcont
 import { useSoknad } from 'hooks/SoknadHook';
 import { FileInputWrapper } from 'components/pageComponents/standard/Vedlegg/FileInputWrapper';
 
-const deleteUrl = '/aap/soknad/api/vedlegg/slett/?uuid=';
-const uploadUrl = '/aap/soknad/api/vedlegg/lagre/';
-const readAttachmentUrl = '/aap/soknad/vedlegg/';
+const deleteUrl = process.env.NEXT_PUBLIC_NY_INNSENDING
+  ? '/aap/soknad/api/vedlegginnsending/slett/?uuid='
+  : '/aap/soknad/api/vedlegg/slett/?uuid=';
+const uploadUrl = process.env.NEXT_PUBLIC_NY_INNSENDING
+  ? '/aap/soknad/api/vedlegginnsending/lagre/'
+  : '/aap/soknad/api/vedlegg/lagre/';
+const readAttachmentUrl = process.env.NEXT_PUBLIC_NY_INNSENDING
+  ? '/aap/soknad/vedlegginnsending/'
+  : '/aap/soknad/vedlegg/';
 
 interface Props {
   onBackClick: () => void;
@@ -45,6 +51,7 @@ const Vedlegg = ({ onBackClick }: Props) => {
     .filter((error): error is SøknadValidationError => error !== undefined);
 
   const harPåkrevdeVedlegg = søknadState.requiredVedlegg.length > 0;
+
   return (
     <SoknadFormWrapperNew
       onNext={() => {
