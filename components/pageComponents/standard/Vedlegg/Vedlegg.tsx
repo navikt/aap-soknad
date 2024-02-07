@@ -21,9 +21,7 @@ const deleteUrl = process.env.NEXT_PUBLIC_NY_INNSENDING
 const uploadUrl = process.env.NEXT_PUBLIC_NY_INNSENDING
   ? '/aap/soknad/api/vedlegginnsending/lagre/'
   : '/aap/soknad/api/vedlegg/lagre/';
-const readAttachmentUrl = process.env.NEXT_PUBLIC_NY_INNSENDING
-  ? '/aap/soknad/vedlegginnsending/'
-  : '/aap/soknad/vedlegg/';
+const readAttachmentUrl = '/aap/soknad/vedlegg/';
 
 interface Props {
   onBackClick: () => void;
