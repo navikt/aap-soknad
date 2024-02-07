@@ -124,10 +124,10 @@ const handler = beskyttetApi(async (req: NextApiRequest, res: NextApiResponse) =
     metrics.sendSoknadCounter.inc({ type: 'STANDARD' });
     res.status(201).json(res);
   } catch (err) {
+    logger.error('Noe gikk galt ved innsending av søknad', err);
     if (err instanceof ErrorMedStatus) {
       res.status(err.status).json({ navCallId: err.navCallId });
     } else {
-      logger.error('Noe gikk galt ved innsending av søknad', err);
       throw err;
     }
   }
