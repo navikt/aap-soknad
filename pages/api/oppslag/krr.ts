@@ -33,13 +33,7 @@ export const getKrr = async (accessToken?: string) => {
   const dummyKrrInvalid = { epost: ['hei'], mobil: { navn: 'ole' } };
   const validatedResponse = KrrInfo.safeParse(dummyKrrInvalid);
   if (!validatedResponse.success) {
-    let issuesString = '';
-    try {
-      issuesString = JSON.stringify(validatedResponse.error.issues);
-    } catch (err) {
-      logger.error({ message: `Feil ved JSON.stringify av zod issues: ${err?.toString()}` });
-    }
-    logger.error({ message: `oppslag/krr valideringsfeil: ${issuesString}` });
+    logger.error({ message: `oppslag/krr valideringsfeil: ${validatedResponse.error.message}` });
     return {};
   }
   return validatedResponse.data;
