@@ -58,7 +58,7 @@ interface OppsummeringProps {
   onSubmitSoknad: () => Promise<boolean>;
   submitErrorMessageRef: React.MutableRefObject<null>;
   hasSubmitError: boolean;
-  kontaktinformasjon: KontaktInfoView;
+  kontaktinformasjon: KontaktInfoView | null;
 }
 
 const Oppsummering = ({

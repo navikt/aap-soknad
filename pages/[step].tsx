@@ -11,7 +11,7 @@ import {
   SokerOppslagState,
   useSokerOppslag,
 } from 'context/sokerOppslagContext';
-import { Barn, Soknad } from 'types/Soknad';
+import { Soknad } from 'types/Soknad';
 import { fetchPOST } from 'api/fetch';
 import { StepNames } from './index';
 import { mapSøknadToBackend, mapSøknadToPdf } from 'utils/api';
@@ -45,14 +45,14 @@ import {
   SoknadActionKeys,
 } from 'context/soknadcontext/actions';
 import { getKrr } from 'pages/api/oppslag/krr';
-import { getBarn } from 'pages/api/oppslag/barn';
+import { Barn, getBarn } from 'pages/api/oppslag/barn';
 import { formatNavn } from 'utils/StringFormatters';
 
 interface PageProps {
   søker: SokerOppslagState;
   mellomlagretSøknad: SoknadContextState;
-  kontaktinformasjon: KontaktInfoView;
-  barn: Barn[] | null;
+  kontaktinformasjon: KontaktInfoView | null;
+  barn: Barn[];
 }
 
 const Steps = ({ søker, mellomlagretSøknad, kontaktinformasjon, barn }: PageProps) => {
@@ -237,7 +237,12 @@ export const getServerSideProps = beskyttetSide(
     const bearerToken = getAccessToken(ctx);
     const søker = await getSøker(bearerToken);
     const mellomlagretSøknad = await lesBucket('STANDARD', bearerToken);
-    const kontaktinformasjon = await getKrr(bearerToken);
+    let kontaktinformasjon = null;
+    try {
+      kontaktinformasjon = await getKrr(bearerToken);
+    } catch (e) {
+      logger.error({ message: `Noe gikk galt i kallet mot oppslag/krr: ${e?.toString()}` });
+    }
 
     let barn: Barn[] = søker?.søker?.barn?.map((barn) => {
       return { navn: formatNavn(barn.navn), fødselsdato: barn.fødselsdato };

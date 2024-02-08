@@ -5,7 +5,7 @@ import { formatTelefonnummer } from 'utils/StringFormatters';
 import { FormattedMessage, useIntl } from 'react-intl';
 
 type Props = {
-  kontaktinformasjon: KontaktInfoView;
+  kontaktinformasjon: KontaktInfoView | null;
 };
 const OppsummeringKontaktinfo = ({ kontaktinformasjon }: Props) => {
   const { formatMessage } = useIntl();
