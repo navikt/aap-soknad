@@ -1,9 +1,9 @@
 import * as classes from './Barnetillegg.module.css';
 import { BodyShort, Label } from '@navikt/ds-react';
 import React from 'react';
-import { Barn } from 'types/Soknad';
 import { useIntl } from 'react-intl';
 import { formatDate } from 'utils/date';
+import { Barn } from 'pages/api/oppslag/barn';
 
 interface Props {
   barn: Barn;
