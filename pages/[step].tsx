@@ -51,7 +51,7 @@ import { formatNavn } from 'utils/StringFormatters';
 interface PageProps {
   søker: SokerOppslagState;
   mellomlagretSøknad: SoknadContextState;
-  kontaktinformasjon: KontaktInfoView;
+  kontaktinformasjon: KontaktInfoView | null;
   barn: Barn[];
 }
 
@@ -237,7 +237,12 @@ export const getServerSideProps = beskyttetSide(
     const bearerToken = getAccessToken(ctx);
     const søker = await getSøker(bearerToken);
     const mellomlagretSøknad = await lesBucket('STANDARD', bearerToken);
-    const kontaktinformasjon = await getKrr(bearerToken);
+    let kontaktinformasjon = null;
+    try {
+      kontaktinformasjon = await getKrr(bearerToken);
+    } catch (e) {
+      logger.error({ message: `Noe gikk galt i kallet mot oppslag/krr: ${e?.toString()}` });
+    }
 
     let barn: Barn[] = søker?.søker?.barn?.map((barn) => {
       return { navn: formatNavn(barn.navn), fødselsdato: barn.fødselsdato };
