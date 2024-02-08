@@ -12,9 +12,9 @@ const SøknadApiType = z.object({
   innsendtDato: z.string(),
   søknadId: z.string(),
   journalpostId: z.string().optional(),
-  manglendeVedlegg: z.array(
-    z.enum(['ARBEIDSGIVER', 'STUDIER', 'ANDREBARN', 'OMSORG', 'UTLAND', 'ANNET']),
-  ),
+  manglendeVedlegg: z
+    .array(z.enum(['ARBEIDSGIVER', 'STUDIER', 'ANDREBARN', 'OMSORG', 'UTLAND', 'ANNET']))
+    .optional(),
 });
 export type SøknadApiType = z.infer<typeof SøknadApiType>;
 
