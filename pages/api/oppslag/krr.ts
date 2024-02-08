@@ -9,8 +9,8 @@ import { mockKrr } from 'mock/krr';
 import { z } from 'zod';
 
 const KrrInfo = z.object({
-  epost: z.string().optional(),
-  mobil: z.string().optional(),
+  epost: z.string().nullable(),
+  mobil: z.string().nullable(),
 });
 
 const handler = beskyttetApi(async (req: NextApiRequest, res: NextApiResponse) => {
