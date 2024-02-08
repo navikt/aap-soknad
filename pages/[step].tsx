@@ -119,10 +119,9 @@ const Steps = ({ søker, mellomlagretSøknad, kontaktinformasjon, barn }: PagePr
         søknadState?.requiredVedlegg,
       );
 
-      const postResponse =
-        process.env.NEXT_PUBLIC_MAP_BACKEND === 'enabled'
-          ? await postSøknadMedAAPInnsending(søknadState.søknad)
-          : await postSøknadMedSoknadApi({ søknad, kvittering: søknadPdf });
+      const postResponse = søknadState.brukerMellomLagretSøknadFraAApInnsending
+        ? await postSøknadMedAAPInnsending(søknadState.søknad)
+        : await postSøknadMedSoknadApi({ søknad, kvittering: søknadPdf });
 
       console.log('postResponse', postResponse);
       if (postResponse?.ok) {
@@ -134,7 +133,7 @@ const Steps = ({ søker, mellomlagretSøknad, kontaktinformasjon, barn }: PagePr
           søknadState?.søknad?.tilleggsopplysninger !== undefined &&
           søknadState?.søknad?.tilleggsopplysninger.length > 0;
         logSkjemaFullførtEvent({ harVedlegg, erIkkeKomplett, brukerFritekstfelt });
-        if (process.env.NEXT_PUBLIC_NY_INNSENDING !== 'enabled') {
+        if (søknadState.brukerMellomLagretSøknadFraAApInnsending) {
           const url = postResponse?.data?.uri;
           søknadDispatch({ type: SoknadActionKeys.ADD_SØKNAD_URL, payload: url });
         }

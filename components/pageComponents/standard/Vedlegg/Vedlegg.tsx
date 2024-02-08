@@ -15,14 +15,6 @@ import { addVedlegg, deleteVedlegg, updateSøknadData } from 'context/soknadcont
 import { useSoknad } from 'hooks/SoknadHook';
 import { FileInputWrapper } from 'components/pageComponents/standard/Vedlegg/FileInputWrapper';
 
-const deleteUrl = process.env.NEXT_PUBLIC_NY_INNSENDING
-  ? '/aap/soknad/api/vedlegginnsending/slett/?uuid='
-  : '/aap/soknad/api/vedlegg/slett/?uuid=';
-const uploadUrl = process.env.NEXT_PUBLIC_NY_INNSENDING
-  ? '/aap/soknad/api/vedlegginnsending/lagre/'
-  : '/aap/soknad/api/vedlegg/lagre/';
-const readAttachmentUrl = '/aap/soknad/vedlegg/';
-
 interface Props {
   onBackClick: () => void;
 }
@@ -49,6 +41,14 @@ const Vedlegg = ({ onBackClick }: Props) => {
     .filter((error): error is SøknadValidationError => error !== undefined);
 
   const harPåkrevdeVedlegg = søknadState.requiredVedlegg.length > 0;
+
+  const deleteUrl = søknadState.brukerMellomLagretSøknadFraAApInnsending
+    ? '/aap/soknad/api/vedlegginnsending/slett/?uuid='
+    : '/aap/soknad/api/vedlegg/slett/?uuid=';
+  const uploadUrl = søknadState.brukerMellomLagretSøknadFraAApInnsending
+    ? '/aap/soknad/api/vedlegginnsending/lagre/'
+    : '/aap/soknad/api/vedlegg/lagre/';
+  const readAttachmentUrl = '/aap/soknad/vedlegg/';
 
   return (
     <SoknadFormWrapperNew
@@ -110,6 +110,7 @@ const Vedlegg = ({ onBackClick }: Props) => {
           uploadUrl={uploadUrl}
           readAttachmentUrl={readAttachmentUrl}
           files={søknadState.søknad?.vedlegg?.AVBRUTT_STUDIE || []}
+          brukFileInputInnsending={søknadState.brukerMellomLagretSøknadFraAApInnsending}
         />
       )}
       {søknadState?.requiredVedlegg?.find((e) => e.type === 'OMSORGSSTØNAD') && (
@@ -128,6 +129,7 @@ const Vedlegg = ({ onBackClick }: Props) => {
           uploadUrl={uploadUrl}
           readAttachmentUrl={readAttachmentUrl}
           files={søknadState.søknad?.vedlegg?.OMSORGSSTØNAD || []}
+          brukFileInputInnsending={søknadState.brukerMellomLagretSøknadFraAApInnsending}
         />
       )}
       {søknadState?.requiredVedlegg?.find((e) => e.type === 'LØNN_OG_ANDRE_GODER') && (
@@ -146,6 +148,7 @@ const Vedlegg = ({ onBackClick }: Props) => {
           uploadUrl={uploadUrl}
           readAttachmentUrl={readAttachmentUrl}
           files={søknadState.søknad?.vedlegg?.LØNN_OG_ANDRE_GODER || []}
+          brukFileInputInnsending={søknadState.brukerMellomLagretSøknadFraAApInnsending}
         />
       )}
 
@@ -165,6 +168,7 @@ const Vedlegg = ({ onBackClick }: Props) => {
           uploadUrl={uploadUrl}
           readAttachmentUrl={readAttachmentUrl}
           files={søknadState.søknad?.vedlegg?.UTLANDSSTØNAD || []}
+          brukFileInputInnsending={søknadState.brukerMellomLagretSøknadFraAApInnsending}
         />
       )}
 
@@ -184,6 +188,7 @@ const Vedlegg = ({ onBackClick }: Props) => {
           uploadUrl={uploadUrl}
           readAttachmentUrl={readAttachmentUrl}
           files={søknadState.søknad?.vedlegg?.LÅN || []}
+          brukFileInputInnsending={søknadState.brukerMellomLagretSøknadFraAApInnsending}
         />
       )}
 
@@ -203,6 +208,7 @@ const Vedlegg = ({ onBackClick }: Props) => {
           uploadUrl={uploadUrl}
           readAttachmentUrl={readAttachmentUrl}
           files={søknadState.søknad?.vedlegg?.SYKESTIPEND || []}
+          brukFileInputInnsending={søknadState.brukerMellomLagretSøknadFraAApInnsending}
         />
       )}
 
@@ -230,6 +236,7 @@ const Vedlegg = ({ onBackClick }: Props) => {
             uploadUrl={uploadUrl}
             readAttachmentUrl={readAttachmentUrl}
             files={søknadState.søknad?.vedlegg?.[barn.internId] || []}
+            brukFileInputInnsending={søknadState.brukerMellomLagretSøknadFraAApInnsending}
           />
         );
       })}
@@ -249,6 +256,7 @@ const Vedlegg = ({ onBackClick }: Props) => {
         uploadUrl={uploadUrl}
         readAttachmentUrl={readAttachmentUrl}
         files={søknadState.søknad?.vedlegg?.ANNET || []}
+        brukFileInputInnsending={søknadState.brukerMellomLagretSøknadFraAApInnsending}
       />
 
       <Textarea

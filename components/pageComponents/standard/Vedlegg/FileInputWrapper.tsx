@@ -11,6 +11,7 @@ export const FileInputWrapper = ({
   uploadUrl,
   onUpload,
   onDelete,
+  brukFileInputInnsending,
 }: {
   locale: string;
   heading: string;
@@ -22,8 +23,9 @@ export const FileInputWrapper = ({
   uploadUrl: string;
   onUpload: (vedlegg: Vedlegg[]) => void;
   onDelete: (vedlegg: Vedlegg) => void;
+  brukFileInputInnsending: boolean;
 }) => {
-  if (process.env.NEXT_PUBLIC_NY_INNSENDING === 'enabled') {
+  if (brukFileInputInnsending) {
     return (
       <FileInputInnsending
         locale={locale}
