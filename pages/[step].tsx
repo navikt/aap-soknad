@@ -120,8 +120,8 @@ const Steps = ({ søker, mellomlagretSøknad, kontaktinformasjon, barn }: PagePr
 
       const postResponse =
         process.env.NEXT_PUBLIC_MAP_BACKEND === 'enabled'
-          ? await postSøknadMapBackend(søknadState.søknad)
-          : await postSøknad({ søknad, kvittering: søknadPdf });
+          ? await postSøknadMedAAPInnsending(søknadState.søknad)
+          : await postSøknadMedSoknadApi({ søknad, kvittering: søknadPdf });
 
       console.log('postResponse', postResponse);
       if (postResponse?.ok) {
@@ -147,12 +147,12 @@ const Steps = ({ søker, mellomlagretSøknad, kontaktinformasjon, barn }: PagePr
     }
     return false;
   };
-  const postSøknad = async (data?: any) =>
+  const postSøknadMedSoknadApi = async (data?: any) =>
     fetchPOST('/aap/soknad/api/innsending/soknad', {
       ...data,
     });
 
-  const postSøknadMapBackend = async (data?: Soknad) =>
+  const postSøknadMedAAPInnsending = async (data?: Soknad) =>
     fetchPOST('/aap/soknad/api/innsending/soknadMedMapping/', {
       ...data,
     });
