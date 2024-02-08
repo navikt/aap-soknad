@@ -7,8 +7,9 @@ import { erGyldigSøknadsType, GYLDIGE_SØKNADS_TYPER, SøknadsType } from 'util
 import { isLabs, isMock } from 'utils/environments';
 import { getStringFromPossiblyArrayQuery } from 'utils/string';
 import metrics from 'utils/metrics';
-import { lesBucket } from './les';
+
 import { StepType } from 'components/StepWizard/Step';
+import { hentMellomlagring } from 'pages/api/mellomlagring/les';
 
 const handler = beskyttetApi(async (req: NextApiRequest, res: NextApiResponse) => {
   const type = getStringFromPossiblyArrayQuery(req.query.type);
@@ -17,7 +18,7 @@ const handler = beskyttetApi(async (req: NextApiRequest, res: NextApiResponse) =
   }
   const accessToken = getAccessTokenFromRequest(req);
 
-  const eksisterendeSøknad = await lesBucket(type as SøknadsType, accessToken);
+  const eksisterendeSøknad = await hentMellomlagring(type as SøknadsType, accessToken);
   if (
     eksisterendeSøknad &&
     eksisterendeSøknad.søknad &&
@@ -40,11 +41,11 @@ export const lagreBucket = async (type: SøknadsType, data: string, accessToken?
   if (isLabs()) return;
   if (isMock()) return await lagreCache(JSON.stringify(data));
   await tokenXApiProxy({
-    url: `${process.env.SOKNAD_API_URL}/buckets/lagre/${type}`,
-    prometheusPath: `buckets/lagre/${type}`,
+    url: `${process.env.INNSENDING_URL}/mellomlagring/søknad`,
+    prometheusPath: `mellomlagring`,
     method: 'POST',
     data: JSON.stringify(data),
-    audience: process.env.SOKNAD_API_AUDIENCE!,
+    audience: process.env.INNSENDING_AUDIENCE!,
     noResponse: true,
     bearerToken: accessToken,
     metricsStatusCodeCounter: metrics.backendApiStatusCodeCounter,

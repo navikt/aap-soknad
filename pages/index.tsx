@@ -69,12 +69,13 @@ const Introduksjon = ({ søker }: PageProps) => {
     setIsLoading(true);
     setHasError(false);
     logSkjemaStartetEvent();
-    const result = await fetchPOST('/aap/soknad/api/buckets/lagre/?type=STANDARD', {
+    const result = await fetchPOST('/aap/soknad/api/mellomlagring/lagre/?type=STANDARD', {
       type: 'STANDARD',
       version: SØKNAD_CONTEXT_VERSION,
       søknad: {},
       lagretStepList: defaultStepList,
     });
+
     if (!result.ok) {
       setIsLoading(false);
       setHasError(true);
@@ -126,7 +127,7 @@ export const getServerSideProps = beskyttetSide(
     return {
       props: { søker },
     };
-  }
+  },
 );
 
 export default Introduksjon;

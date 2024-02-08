@@ -17,11 +17,11 @@ const handler = beskyttetApi(async (req: NextApiRequest, res: NextApiResponse) =
     res.status(400).json({ error: 'type må være en av ' + GYLDIGE_SØKNADS_TYPER.join(', ') });
   }
   const accessToken = getAccessTokenFromRequest(req);
-  const result = await lesBucket(type as SøknadsType, accessToken);
+  const result = await hentMellomlagring(type as SøknadsType, accessToken);
   res.status(200).json(result);
 });
 
-export const lesBucket = async (
+export const hentMellomlagring = async (
   type: SøknadsType,
   accessToken?: string,
   retryCount = 3,
@@ -46,10 +46,10 @@ export const lesBucket = async (
   }
   try {
     const mellomlagretSøknad = await tokenXApiProxy({
-      url: `${process.env.SOKNAD_API_URL}/buckets/les/${type}`,
-      prometheusPath: `buckets/les/${type}`,
+      url: `${process.env.INNSENDING_URL}/mellomlagring/søknad`,
+      prometheusPath: `mellomlagring`,
       method: 'GET',
-      audience: process.env.SOKNAD_API_AUDIENCE!,
+      audience: process.env.INNSENDING_AUDIENCE!,
       bearerToken: accessToken,
       metricsStatusCodeCounter: metrics.backendApiStatusCodeCounter,
       metricsTimer: metrics.backendApiDurationHistogram,
@@ -62,7 +62,7 @@ export const lesBucket = async (
       );
 
       await new Promise((resolve) => setTimeout(resolve, 300));
-      return await lesBucket(type, accessToken, retryCount - 1);
+      return await hentMellomlagring(type, accessToken, retryCount - 1);
     }
 
     if (mellomlagretSøknad?.version?.toString() !== SØKNAD_CONTEXT_VERSION?.toString()) {
@@ -78,7 +78,7 @@ export const lesBucket = async (
         `Mellomlagring ga 'Service is unavailable (503). Prøver på nytt. RetryCount: ${retryCount}`,
       );
       await new Promise((resolve) => setTimeout(resolve, 300));
-      return await lesBucket(type, accessToken, retryCount - 1);
+      return await hentMellomlagring(type, accessToken, retryCount - 1);
     }
     logger.info('Fant ingen mellomlagret søknad');
     return undefined;

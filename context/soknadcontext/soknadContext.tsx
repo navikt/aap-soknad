@@ -9,6 +9,7 @@ export interface SoknadContextState {
   version: number;
   type?: SøknadType;
   søknad?: Soknad;
+  brukerMellomLagretSøknadFraAApInnsending: boolean;
   lagretStepList?: Array<StepType>;
   requiredVedlegg: RequiredVedlegg[];
   søknadUrl?: string;
@@ -18,6 +19,7 @@ export const SØKNAD_CONTEXT_VERSION = 1;
 export const soknadContextInititalState: SoknadContextState = {
   version: SØKNAD_CONTEXT_VERSION,
   søknad: undefined,
+  brukerMellomLagretSøknadFraAApInnsending: true,
   requiredVedlegg: [],
   søknadUrl: undefined,
   type: SøknadType.STANDARD,

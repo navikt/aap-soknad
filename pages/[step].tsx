@@ -47,6 +47,7 @@ import {
 import { getKrr } from 'pages/api/oppslag/krr';
 import { getBarn } from 'pages/api/oppslag/barn';
 import { formatNavn } from 'utils/StringFormatters';
+import { hentMellomlagring } from 'pages/api/mellomlagring/les';
 
 interface PageProps {
   søker: SokerOppslagState;
@@ -229,8 +230,28 @@ export const getServerSideProps = beskyttetSide(
     });
     const bearerToken = getAccessToken(ctx);
     const søker = await getSøker(bearerToken);
-    const mellomlagretSøknad = await lesBucket('STANDARD', bearerToken);
     const kontaktinformasjon = await getKrr(bearerToken);
+
+    let mellomlagretSøknad: SoknadContextState | undefined;
+
+    try {
+      const [mellomlagretSøknadFraSoknadApi, mellomlagretSøknadFraAapInnsending] =
+        await Promise.all([
+          lesBucket('STANDARD', bearerToken),
+          hentMellomlagring('STANDARD', bearerToken),
+        ]);
+
+      if (mellomlagretSøknadFraAapInnsending && !mellomlagretSøknadFraSoknadApi) {
+        mellomlagretSøknad = {
+          ...mellomlagretSøknadFraAapInnsending,
+          brukerMellomLagretSøknadFraAApInnsending: true,
+        };
+      } else {
+        mellomlagretSøknad = mellomlagretSøknadFraSoknadApi;
+      }
+    } catch (e) {
+      logger.error('Noe gikk galt i innhenting av mellomlagret søknad', e);
+    }
 
     let barn: Barn[] = søker?.søker?.barn?.map((barn) => {
       return { navn: formatNavn(barn.navn), fødselsdato: barn.fødselsdato };
