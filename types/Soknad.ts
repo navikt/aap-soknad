@@ -5,6 +5,7 @@ import { JaNeiAvbrutt } from 'components/pageComponents/standard/Student/Student
 import { OppslagBehandler } from 'context/sokerOppslagContext';
 import { FerieType } from 'components/pageComponents/standard/StartDato/StartDato';
 import { Vedlegg } from '@navikt/aap-felles-react';
+import { Barn } from 'pages/api/oppslag/barn';
 
 export type Navn = {
   fornavn?: string;
@@ -14,11 +15,6 @@ export type Navn = {
 export type Periode = {
   fraDato?: Date;
   tilDato?: Date;
-};
-
-export type Barn = {
-  navn?: string;
-  fødselsdato?: string;
 };
 
 export type UtenlandsPeriode = {

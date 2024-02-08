@@ -3,7 +3,13 @@ import { getAccessTokenFromRequest } from 'auth/accessToken';
 import { beskyttetApi } from 'auth/beskyttetApi';
 import { logger, tokenXApiProxy } from '@navikt/aap-felles-utils';
 import metrics from 'utils/metrics';
-import { Barn } from 'types/Soknad';
+import { z } from 'zod';
+
+const Barn = z.object({
+  navn: z.string(),
+  fødselsdato: z.string(),
+});
+export type Barn = z.infer<typeof Barn>;
 
 const handler = beskyttetApi(async (req: NextApiRequest, res: NextApiResponse) => {
   const accessToken = getAccessTokenFromRequest(req);
@@ -22,7 +28,12 @@ export const getBarn = async (accessToken?: string): Promise<Array<Barn>> => {
     logger: logger,
   });
 
-  return barn;
+  const validatedResponse = z.array(Barn).safeParse(barn);
+  if (!validatedResponse.success) {
+    logger.error({ message: `oppslag/barn valideringsfeil: ${validatedResponse.error.message}` });
+    return [];
+  }
+  return validatedResponse.data;
 };
 
 export default handler;

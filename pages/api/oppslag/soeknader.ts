@@ -5,6 +5,18 @@ import { tokenXApiProxy, logger } from '@navikt/aap-felles-utils';
 import metrics from 'utils/metrics';
 import { isMock } from 'utils/environments';
 import { mockSøknader } from 'mock/søknader';
+import { z } from 'zod';
+import { Barn } from 'pages/api/oppslag/barn';
+
+const SøknadApiType = z.object({
+  innsendtDato: z.string(),
+  søknadId: z.string(),
+  journalpostId: z.string().optional(),
+  manglendeVedlegg: z
+    .array(z.enum(['ARBEIDSGIVER', 'STUDIER', 'ANDREBARN', 'OMSORG', 'UTLAND', 'ANNET']))
+    .optional(),
+});
+export type SøknadApiType = z.infer<typeof SøknadApiType>;
 
 const handler = beskyttetApi(async (req: NextApiRequest, res: NextApiResponse) => {
   const accessToken = getAccessTokenFromRequest(req);
@@ -13,7 +25,7 @@ const handler = beskyttetApi(async (req: NextApiRequest, res: NextApiResponse) =
 
 export const getSøknader = async (accessToken?: string): Promise<SøknadApiType[]> => {
   if (isMock()) return mockSøknader;
-  const søker = await tokenXApiProxy({
+  const søknader = await tokenXApiProxy({
     url: `${process.env.SOKNAD_API_URL}/oppslag/soeknader`,
     prometheusPath: 'oppslag/soeknader',
     method: 'GET',
@@ -23,14 +35,14 @@ export const getSøknader = async (accessToken?: string): Promise<SøknadApiType
     metricsTimer: metrics.backendApiDurationHistogram,
     logger: logger,
   });
-  return søker;
+  const validatedResponse = z.array(SøknadApiType).safeParse(søknader);
+  if (!validatedResponse.success) {
+    logger.error({
+      message: `oppslag/soeknader valideringsfeil: ${validatedResponse.error.message}`,
+    });
+    return [];
+  }
+  return validatedResponse.data;
 };
-
-export interface SøknadApiType {
-  innsendtDato: string;
-  søknadId: string;
-  journalpostId?: string;
-  manglendeVedlegg: ['ARBEIDSGIVER' | 'STUDIER' | 'ANDREBARN' | 'OMSORG' | 'UTLAND' | 'ANNET'];
-}
 
 export default handler;
