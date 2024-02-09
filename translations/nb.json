@@ -18,7 +18,7 @@
         "guide1": "Hvis du er student, gjelder det ulike regler avhengig av om du fortsetter på studiet, eller avbryter helt."
       },
       "vedlegg": {
-        "title": "Du må legge ved:",
+        "title": "Du kan legge ved:",
         "name": "Bekreftelse på avbrutt studium",
         "description": "Bekreftelse fra studiested på hvilken dato studiet ble avbrutt fra.",
         "lastOppSenere": "Dokumentene laster du opp senere i søknaden. Du kan også ettersende vedlegg."
@@ -367,7 +367,7 @@
         "lån": "Dokumentasjon på studielån fra Lånekassen"
       },
       "alert": {
-        "leggeVedTekst": "Du må legge ved:",
+        "leggeVedTekst": "Du kan legge ved:",
         "lasteOppVedleggTekst": "Dette laster du opp senere i søknaden. Du kan også ettersende vedlegg."
       }
     },
@@ -385,7 +385,7 @@
       "title": "Vedlegg og tilleggsopplysninger",
       "guide": {
         "text1": "Du kan tidligst få AAP fra og med den dagen vi mottar søknaden din. Det kan derfor være lurt å sende søknaden selv om du ikke har alle vedlegg vi ber om nå.",
-        "text2": "Hvis du skal ettersende vedlegg, må du sende disse innen 14 dager. Du kan ettersende enten digitalt eller per post. Trenger du mer tid, kan du be om lenger frist. Dette kan du gjøre via nav.no eller ringe oss etter at søknaden er sendt inn."
+        "text2": "Du kan ettersende enten digitalt eller per post."
       },
       "ingenVedlegg": {
         "title": "Ut fra dine svar trenger du ikke laste opp noen vedlegg til søknaden. Hvis du likevel har  dokumenter du mener har betydning for din søknad, kan du laste opp disse her. Dette er helt valgfritt.",
@@ -400,7 +400,7 @@
         }
       },
       "harVedlegg": {
-        "title": "Ut fra det du har svart i søknaden, må du legge ved dette:"
+        "title": "Ut fra det du har svart i søknaden, kan du legge ved dette:"
       },
       "vedleggPåPapir": {
         "text": "Har du vedlegg på papir, kan du skanne det inn og laste det opp. Hvis du ikke har skanner, kan du i stedet ta bilde av dokumentet med for eksempel mobiltelefonen din.",
@@ -593,7 +593,7 @@
         }
       },
       "alert": {
-        "leggeVedTekst": "Du må legge ved:",
+        "leggeVedTekst": "Du kan legge ved:",
         "bulletPointVedleggForelder": "Bekreftelse på at du er forelder til barnet, og fra når (fødselstidspunkt eller adoptivtidspunkt). Dette kan for eksempel være fødselsattest eller adopsjonsdokumenter.",
         "bulletPointVedleggFosterforelder": "Dokumentasjon på at du er fosterforelder til barnet, og fra når. For eksempel en bekreftelse fra barneverntjenesten.",
         "lasteOppVedleggTekst": "Dette laster du opp senere i søknaden. Du kan også ettersende vedlegg.",
@@ -629,13 +629,12 @@
     "kvittering": {
       "title": "Takk for søknaden, {navn}",
       "alert": {
-        "text": "Vi har nå mottatt søknaden din om AAP. Saken din er nå til behandling hos NAV."
+        "text": "Vi har nå mottatt søknaden din om AAP. Saken din er nå til behandling hos NAV. Vi vil ta kontakt med deg hvis vi trenger mer informasjon eller dokumentasjon fra deg."
       },
       "ingenManglendeVedlegg": "Vi vil ta kontakt med deg hvis vi trenger mer informasjon eller dokumentasjon fra deg.",
       "manglendeVedlegg": {
-        "tekst1": "Vi mangler dokumentasjon fra deg for å kunne behandle søknaden. Ettersend dette til oss så raskt du kan.",
-        "tekst2": "Du kan også <a>ettersende per post (åpnes i ny fane)</a>, eller levere dokumentasjon på ditt lokale NAV-kontor.",
-        "ettersendelseLink": "Her kan du ettersende dokumentasjon digitalt (åpnes i ny fane)"
+        "tekst1": "Du kan også <a>ettersende per post (åpnes i ny fane)</a>, eller levere dokumentasjon på ditt lokale NAV-kontor.",
+        "ettersendelseLink": "Hvis du skal ettersende dokumentasjon digitalt kan du gjøre det her (åpnes i ny fane)"
       },
       "saksbehandlingstid": "<a>Du kan se forventet saksbehandlingstid på nav.no/saksbehandlingstid.</a>",
       "bekreftelse": {

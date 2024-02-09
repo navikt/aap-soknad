@@ -20,15 +20,15 @@ export const OppsummeringVedlegg = ({ søknadState }: Props) => {
     <>
       {manglendeVedlegg.length > 0 && (
         <div>
-          <Label>Dokumenter du må legge ved søknaden eller ettersende</Label>
+          <Label>Dokumenter du kan legge ved søknaden eller ettersende</Label>
           <ul>
             {manglendeVedlegg.map((manglendeVedlegg, index) => (
               <li key={`${manglendeVedlegg.type}-${index}`}>{manglendeVedlegg.description}</li>
             ))}
           </ul>
           <Alert variant="info">
-            Du kan ettersende dette innen 14 dager per post eller digitalt. Du kan også levere dette
-            på ditt lokale NAV kontor
+            Du kan ettersende dette per post eller digitalt. Du kan også levere dette på ditt lokale
+            NAV kontor
           </Alert>
         </div>
       )}
