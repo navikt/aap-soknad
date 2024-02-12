@@ -17,6 +17,7 @@ import { getStartDatoSchema } from 'components/pageComponents/standard/StartDato
 import { getStudentSchema } from 'components/pageComponents/standard/Student/Student';
 import { getYrkesskadeSchema } from 'components/pageComponents/standard/Yrkesskade/Yrkesskade';
 import { getAccessTokenFromRequest } from 'auth/accessToken';
+import { AttachmentType, RequiredVedlegg } from 'types/SoknadContext';
 
 const SOKNAD_VERSION = 0;
 
@@ -30,7 +31,7 @@ function getIntl() {
 
 interface SoknadInnsendingRequestBody {
   kvittering?: Record<string, unknown>;
-  soknad: Soknad & { version: number };
+  soknad: Soknad & { version: number; etterspurtDokumentasjon: AttachmentType[] };
   filer: Array<Fil>;
 }
 
@@ -65,7 +66,10 @@ const søknadIsValid = (søknad: Soknad) => {
 const handler = beskyttetApi(async (req: NextApiRequest, res: NextApiResponse) => {
   const accessToken = getAccessTokenFromRequest(req);
 
-  const søknad = req.body as Soknad;
+  const { søknad, requiredVedlegg } = req.body as {
+    søknad: Soknad;
+    requiredVedlegg: RequiredVedlegg[];
+  };
 
   const filer: Fil[] = Object.keys(søknad.vedlegg ?? {})
     .map((key) => {
@@ -82,6 +86,8 @@ const handler = beskyttetApi(async (req: NextApiRequest, res: NextApiResponse) =
     })
     .flat();
 
+  const etterspurtDokumentasjon = requiredVedlegg.map((vedlegg) => vedlegg.type);
+
   if (!søknadIsValid(søknad)) {
     res.status(400).json({ errorMessage: 'Søknaden er ikke gyldig' });
     return;
@@ -93,7 +99,7 @@ const handler = beskyttetApi(async (req: NextApiRequest, res: NextApiResponse) =
   try {
     await sendSoknadViaAapInnsending(
       {
-        soknad: { ...søknad, version: SOKNAD_VERSION },
+        soknad: { ...søknad, version: SOKNAD_VERSION, etterspurtDokumentasjon },
         kvittering: søknadPdf,
         filer,
       },
