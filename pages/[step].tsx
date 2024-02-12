@@ -123,7 +123,6 @@ const Steps = ({ søker, mellomlagretSøknad, kontaktinformasjon, barn }: PagePr
         ? await postSøknadMedAAPInnsending(søknadState.søknad)
         : await postSøknadMedSoknadApi({ søknad, kvittering: søknadPdf });
 
-      console.log('postResponse', postResponse);
       if (postResponse?.ok) {
         const harVedlegg = søknadState.requiredVedlegg && søknadState?.requiredVedlegg?.length > 0;
         const erIkkeKomplett = !!søknadState?.requiredVedlegg?.find(
@@ -149,12 +148,12 @@ const Steps = ({ søker, mellomlagretSøknad, kontaktinformasjon, barn }: PagePr
     return false;
   };
   const postSøknadMedSoknadApi = async (data?: any) =>
-    fetchPOST('/aap/soknad/api/innsending/soknad', {
+    fetchPOST('/aap/soknad/api/innsending/soknadapi', {
       ...data,
     });
 
   const postSøknadMedAAPInnsending = async (data?: Soknad) =>
-    fetchPOST('/aap/soknad/api/innsending/soknadMedMapping/', {
+    fetchPOST('/aap/soknad/api/innsending/soknadinnsending/', {
       ...data,
     });
 
@@ -241,10 +240,7 @@ export const getServerSideProps = beskyttetSide(
 
     try {
       const [mellomlagretSøknadFraSoknadApi, mellomlagretSøknadFraAapInnsending] =
-        await Promise.all([
-          lesBucket('STANDARD', bearerToken),
-          hentMellomlagring('STANDARD', bearerToken),
-        ]);
+        await Promise.all([lesBucket('STANDARD', bearerToken), hentMellomlagring(bearerToken)]);
 
       if (mellomlagretSøknadFraAapInnsending && !mellomlagretSøknadFraSoknadApi) {
         mellomlagretSøknad = {

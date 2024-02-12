@@ -4,25 +4,18 @@ import { beskyttetApi } from 'auth/beskyttetApi';
 import { logger, tokenXApiProxy } from '@navikt/aap-felles-utils';
 import metrics from 'utils/metrics';
 import { lesCache } from 'mock/mellomlagringsCache';
-import { erGyldigSøknadsType, GYLDIGE_SØKNADS_TYPER, SøknadsType } from 'utils/api';
 import { isLabs, isMock } from 'utils/environments';
-import { getStringFromPossiblyArrayQuery } from 'utils/string';
 import { defaultStepList } from 'pages';
 import { SoknadContextState, SØKNAD_CONTEXT_VERSION } from 'context/soknadcontext/soknadContext';
 import { SøknadType } from 'types/SoknadContext';
 
 const handler = beskyttetApi(async (req: NextApiRequest, res: NextApiResponse) => {
-  const type = getStringFromPossiblyArrayQuery(req.query.type);
-  if (erGyldigSøknadsType(type)) {
-    res.status(400).json({ error: 'type må være en av ' + GYLDIGE_SØKNADS_TYPER.join(', ') });
-  }
   const accessToken = getAccessTokenFromRequest(req);
-  const result = await hentMellomlagring(type as SøknadsType, accessToken);
+  const result = await hentMellomlagring(accessToken);
   res.status(200).json(result);
 });
 
 export const hentMellomlagring = async (
-  type: SøknadsType,
   accessToken?: string,
   retryCount = 3,
 ): Promise<SoknadContextState | undefined> => {
@@ -62,7 +55,7 @@ export const hentMellomlagring = async (
       );
 
       await new Promise((resolve) => setTimeout(resolve, 300));
-      return await hentMellomlagring(type, accessToken, retryCount - 1);
+      return await hentMellomlagring(accessToken, retryCount - 1);
     }
 
     if (mellomlagretSøknad?.version?.toString() !== SØKNAD_CONTEXT_VERSION?.toString()) {
@@ -78,7 +71,7 @@ export const hentMellomlagring = async (
         `Mellomlagring ga 'Service is unavailable (503). Prøver på nytt. RetryCount: ${retryCount}`,
       );
       await new Promise((resolve) => setTimeout(resolve, 300));
-      return await hentMellomlagring(type, accessToken, retryCount - 1);
+      return await hentMellomlagring(accessToken, retryCount - 1);
     }
     logger.info('Fant ingen mellomlagret søknad');
     return undefined;
