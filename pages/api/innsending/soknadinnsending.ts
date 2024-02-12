@@ -18,8 +18,7 @@ import { getStudentSchema } from 'components/pageComponents/standard/Student/Stu
 import { getYrkesskadeSchema } from 'components/pageComponents/standard/Yrkesskade/Yrkesskade';
 import { getAccessTokenFromRequest } from 'auth/accessToken';
 import { AttachmentType, RequiredVedlegg } from 'types/SoknadContext';
-
-const SOKNAD_VERSION = 0;
+import { SOKNAD_VERSION } from 'context/soknadcontext/soknadContext';
 
 // TODO: Sjekke om vi må generere pdf på samme språk som bruker har valgt når de fyller ut søknaden
 function getIntl() {

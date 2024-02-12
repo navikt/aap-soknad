@@ -14,8 +14,8 @@ import metrics from 'utils/metrics';
 import { scrollRefIntoView } from 'utils/dom';
 import { getSøkerUtenBarn } from 'pages/api/oppslag/soekerUtenBarn';
 import { logger } from '@navikt/aap-felles-utils';
-import { getFulltNavn } from '../lib/søker';
-import { SØKNAD_CONTEXT_VERSION } from 'context/soknadcontext/soknadContext';
+import { getFulltNavn } from 'lib/søker';
+import { SOKNAD_VERSION } from 'context/soknadcontext/soknadContext';
 
 interface PageProps {
   søker: Soker;
@@ -69,9 +69,8 @@ const Introduksjon = ({ søker }: PageProps) => {
     setIsLoading(true);
     setHasError(false);
     logSkjemaStartetEvent();
-    const result = await fetchPOST('/aap/soknad/api/mellomlagring/lagre/?type=STANDARD', {
-      type: 'STANDARD',
-      version: SØKNAD_CONTEXT_VERSION,
+    const result = await fetchPOST('/aap/soknad/api/mellomlagring/lagre', {
+      version: SOKNAD_VERSION,
       søknad: {},
       lagretStepList: defaultStepList,
     });

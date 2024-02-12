@@ -6,8 +6,7 @@ import metrics from 'utils/metrics';
 import { lesCache } from 'mock/mellomlagringsCache';
 import { isLabs, isMock } from 'utils/environments';
 import { defaultStepList } from 'pages';
-import { SoknadContextState, SØKNAD_CONTEXT_VERSION } from 'context/soknadcontext/soknadContext';
-import { SøknadType } from 'types/SoknadContext';
+import { SOKNAD_VERSION, SoknadContextState } from 'context/soknadcontext/soknadContext';
 
 const handler = beskyttetApi(async (req: NextApiRequest, res: NextApiResponse) => {
   const accessToken = getAccessTokenFromRequest(req);
@@ -25,8 +24,7 @@ export const hentMellomlagring = async (
   }
   if (isLabs()) {
     return {
-      type: SøknadType.STANDARD,
-      version: SØKNAD_CONTEXT_VERSION,
+      version: SOKNAD_VERSION,
       brukerMellomLagretSøknadFraAApInnsending: true,
       søknad: {},
       lagretStepList: defaultStepList,
@@ -58,9 +56,9 @@ export const hentMellomlagring = async (
       return await hentMellomlagring(accessToken, retryCount - 1);
     }
 
-    if (mellomlagretSøknad?.version?.toString() !== SØKNAD_CONTEXT_VERSION?.toString()) {
+    if (mellomlagretSøknad?.version?.toString() !== SOKNAD_VERSION?.toString()) {
       logger.info(
-        `Cache version: ${mellomlagretSøknad?.version}, SØKNAD_CONTEXT_VERSION: ${SØKNAD_CONTEXT_VERSION}`,
+        `Cache version: ${mellomlagretSøknad?.version}, SØKNAD_CONTEXT_VERSION: ${SOKNAD_VERSION}`,
       );
     }
 
