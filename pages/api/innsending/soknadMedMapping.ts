@@ -101,6 +101,8 @@ const handler = beskyttetApi(async (req: NextApiRequest, res: NextApiResponse) =
       accessToken,
     );
 
+    logger.error('Respons fra backend i soknadMedMapping', responseFromBackend);
+
     metrics.sendSoknadCounter.inc({ type: 'STANDARD' });
     res.status(201).json(responseFromBackend);
   } catch (err) {
