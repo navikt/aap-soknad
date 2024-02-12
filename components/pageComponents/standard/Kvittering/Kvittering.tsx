@@ -104,14 +104,16 @@ const Kvittering = ({ søker, kontaktinformasjon, søknad }: StudentProps) => {
           </ul>
         </div>
       )}
-      <Link
-        target={'_blank'}
-        href={getDownloadUrl(søknad?.journalpostId)}
-        className={classes?.linkButton}
-      >
-        <Download title="Last ned søknad" />
-        {formatMessage({ id: 'søknad.kvittering.lastNedSøknad' })}
-      </Link>
+      {søknad?.journalpostId && (
+        <Link
+          target={'_blank'}
+          href={getDownloadUrl(søknad?.journalpostId)}
+          className={classes?.linkButton}
+        >
+          <Download title="Last ned søknad" />
+          {formatMessage({ id: 'søknad.kvittering.lastNedSøknad' })}
+        </Link>
+      )}
       <form action={dittNavUrl}>
         <Button as={'a'} variant={'primary'} href={mineAapUrl}>
           {formatMessage({ id: 'søknad.kvittering.dittNavKnapp' })}
