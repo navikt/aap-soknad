@@ -251,8 +251,11 @@ export const getServerSideProps = beskyttetSide(
           ...mellomlagretSøknadFraAapInnsending,
           brukerMellomLagretSøknadFraAApInnsending: true,
         };
-      } else {
-        mellomlagretSøknad = mellomlagretSøknadFraSoknadApi;
+      } else if (mellomlagretSøknadFraSoknadApi && !mellomlagretSøknadFraAapInnsending) {
+        mellomlagretSøknad = {
+          ...mellomlagretSøknadFraSoknadApi,
+          brukerMellomLagretSøknadFraAApInnsending: false,
+        };
       }
     } catch (e) {
       logger.error('Noe gikk galt i innhenting av mellomlagret søknad', e);

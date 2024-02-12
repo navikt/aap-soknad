@@ -5,7 +5,6 @@ import metrics from 'utils/metrics';
 import { ErrorMedStatus } from 'auth/ErrorMedStatus';
 import { isLabs, isMock } from 'utils/environments';
 import { slettBucket } from 'pages/api/buckets/slett';
-import { randomUUID } from 'crypto';
 import { createIntl } from 'react-intl';
 import { flattenMessages, messages } from 'utils/message';
 import links from 'translations/links.json';
@@ -92,7 +91,7 @@ const handler = beskyttetApi(async (req: NextApiRequest, res: NextApiResponse) =
   const søknadPdf = mapSøknadToPdf(søknad, new Date(), formatMessage, []);
 
   try {
-    const responseFromBackend = await sendSoknadViaAapInnsending(
+    await sendSoknadViaAapInnsending(
       {
         soknad: { ...søknad, version: SOKNAD_VERSION },
         kvittering: søknadPdf,
@@ -101,10 +100,8 @@ const handler = beskyttetApi(async (req: NextApiRequest, res: NextApiResponse) =
       accessToken,
     );
 
-    logger.error('Respons fra backend i soknadMedMapping', responseFromBackend);
-
     metrics.sendSoknadCounter.inc({ type: 'STANDARD' });
-    res.status(201).json(responseFromBackend);
+    res.status(201).send('Vi har mottat søknaden');
   } catch (err) {
     logger.error(`Noe gikk galt ved innsending av søknad: ${err?.toString()}`);
 
@@ -121,11 +118,11 @@ export const sendSoknadViaAapInnsending = async (
   accessToken?: string,
 ) => {
   if (isLabs()) {
-    return { uri: `https://localhost:3000/aap/soknad/api/vedlegg/les?uuid=${randomUUID()}` };
+    return 'Vi har mottat søknaden din.';
   }
   if (isMock()) {
     await slettBucket('STANDARD', accessToken);
-    return { uri: `https://localhost:3000/aap/soknad/api/vedlegg/les?uuid=${randomUUID()}` };
+    return 'Vi har mottat søknaden din.';
   }
   const søknad = await tokenXApiProxy({
     url: `${process.env.INNSENDING_URL}/innsending`,
