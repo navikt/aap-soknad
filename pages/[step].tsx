@@ -133,7 +133,8 @@ const Steps = ({ søker, mellomlagretSøknad, kontaktinformasjon, barn }: PagePr
           søknadState?.søknad?.tilleggsopplysninger !== undefined &&
           søknadState?.søknad?.tilleggsopplysninger.length > 0;
         logSkjemaFullførtEvent({ harVedlegg, erIkkeKomplett, brukerFritekstfelt });
-        if (søknadState.brukerMellomLagretSøknadFraAApInnsending) {
+
+        if (!søknadState.brukerMellomLagretSøknadFraAApInnsending) {
           const url = postResponse?.data?.uri;
           søknadDispatch({ type: SoknadActionKeys.ADD_SØKNAD_URL, payload: url });
         }
