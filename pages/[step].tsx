@@ -48,6 +48,7 @@ import { getKrr } from 'pages/api/oppslag/krr';
 import { Barn, getBarn } from 'pages/api/oppslag/barn';
 import { formatNavn } from 'utils/StringFormatters';
 import { hentMellomlagring } from 'pages/api/mellomlagring/les';
+import { RequiredVedlegg } from 'types/SoknadContext';
 
 interface PageProps {
   søker: SokerOppslagState;
@@ -120,7 +121,7 @@ const Steps = ({ søker, mellomlagretSøknad, kontaktinformasjon, barn }: PagePr
       );
 
       const postResponse = søknadState.brukerMellomLagretSøknadFraAApInnsending
-        ? await postSøknadMedAAPInnsending(søknadState.søknad)
+        ? await postSøknadMedAAPInnsending(søknadState.søknad, søknadState.requiredVedlegg)
         : await postSøknadMedSoknadApi({ søknad, kvittering: søknadPdf });
 
       if (postResponse?.ok) {
@@ -152,9 +153,10 @@ const Steps = ({ søker, mellomlagretSøknad, kontaktinformasjon, barn }: PagePr
       ...data,
     });
 
-  const postSøknadMedAAPInnsending = async (data?: Soknad) =>
+  const postSøknadMedAAPInnsending = async (søknad?: Soknad, requiredVedlegg?: RequiredVedlegg[]) =>
     fetchPOST('/aap/soknad/api/innsending/soknadinnsending/', {
-      ...data,
+      søknad,
+      requiredVedlegg,
     });
 
   const onPreviousStep = async () => {

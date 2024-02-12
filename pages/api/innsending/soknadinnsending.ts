@@ -29,9 +29,14 @@ function getIntl() {
   });
 }
 
+interface SoknadInnsending extends Soknad {
+  version: number;
+  etterspurtDokumentasjon: AttachmentType[];
+}
+
 interface SoknadInnsendingRequestBody {
   kvittering?: Record<string, unknown>;
-  soknad: Soknad & { version: number; etterspurtDokumentasjon: AttachmentType[] };
+  soknad: SoknadInnsending;
   filer: Array<Fil>;
 }
 
@@ -86,7 +91,7 @@ const handler = beskyttetApi(async (req: NextApiRequest, res: NextApiResponse) =
     })
     .flat();
 
-  const etterspurtDokumentasjon = requiredVedlegg.map((vedlegg) => vedlegg.type);
+  const etterspurtDokumentasjon = requiredVedlegg?.map((vedlegg) => vedlegg.type);
 
   if (!søknadIsValid(søknad)) {
     res.status(400).json({ errorMessage: 'Søknaden er ikke gyldig' });
