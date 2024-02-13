@@ -244,12 +244,19 @@ export const getServerSideProps = beskyttetSide(
       const [mellomlagretSøknadFraSoknadApi, mellomlagretSøknadFraAapInnsending] =
         await Promise.all([lesBucket('STANDARD', bearerToken), hentMellomlagring(bearerToken)]);
 
+      logger.info({ message: 'mellomlagring /soknad-api:', stack: mellomlagretSøknadFraSoknadApi });
+      logger.info({
+        message: 'mellomlagring /innsending:',
+        stack: mellomlagretSøknadFraAapInnsending,
+      });
       if (mellomlagretSøknadFraAapInnsending && !mellomlagretSøknadFraSoknadApi) {
+        logger.info('velger mellomlagring fra innsending');
         mellomlagretSøknad = {
           ...mellomlagretSøknadFraAapInnsending,
           brukerMellomLagretSøknadFraAApInnsending: true,
         };
       } else if (mellomlagretSøknadFraSoknadApi && !mellomlagretSøknadFraAapInnsending) {
+        logger.info('velger mellomlagring fra søknad-api');
         mellomlagretSøknad = {
           ...mellomlagretSøknadFraSoknadApi,
           brukerMellomLagretSøknadFraAApInnsending: false,
@@ -258,6 +265,7 @@ export const getServerSideProps = beskyttetSide(
     } catch (e) {
       logger.error('Noe gikk galt i innhenting av mellomlagret søknad', e);
     }
+    logger.info({ message: 'mellomlagretSøknad', stack: mellomlagretSøknad });
 
     let barn: Barn[] = søker?.søker?.barn?.map((barn) => {
       return { navn: formatNavn(barn.navn), fødselsdato: barn.fødselsdato };
