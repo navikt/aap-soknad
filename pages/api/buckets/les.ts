@@ -24,7 +24,6 @@ export const lesBucket = async (
   retryCount = 3,
 ): Promise<SoknadContextState | undefined> => {
   if (retryCount === 0) {
-    logger.info(`RetryCount for å hente mellomlagret søknad er 0. Gir opp.`);
     return undefined;
   }
 
@@ -45,28 +44,17 @@ export const lesBucket = async (
     });
 
     if (!mellomlagretSøknad) {
-      logger.info(
-        `Mellomlagret søknad returnert fra tokenXApiProxy er undefined. Prøver på nytt. RetryCount: ${retryCount}`,
-      );
-
       await new Promise((resolve) => setTimeout(resolve, 300));
       return await lesBucket(type, accessToken, retryCount - 1);
-    }
-
-    if (mellomlagretSøknad?.version?.toString() !== (1)?.toString()) {
-      logger.info(`Cache version: ${mellomlagretSøknad?.version}, SØKNAD_CONTEXT_VERSION: ${1}`);
     }
 
     return mellomlagretSøknad;
   } catch (error: any) {
     if (error?.status === 503) {
-      logger.info(
-        `Mellomlagring ga 'Service is unavailable (503). Prøver på nytt. RetryCount: ${retryCount}`,
-      );
       await new Promise((resolve) => setTimeout(resolve, 300));
       return await lesBucket(type, accessToken, retryCount - 1);
     }
-    logger.info('Fant ingen mellomlagret søknad');
+    logger.info('Fant ingen mellomlagret søknad hos soknad-api');
     return undefined;
   }
 };

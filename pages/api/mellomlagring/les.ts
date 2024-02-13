@@ -16,12 +16,7 @@ const handler = beskyttetApi(async (req: NextApiRequest, res: NextApiResponse) =
 
 export const hentMellomlagring = async (
   accessToken?: string,
-  retryCount = 3,
 ): Promise<SoknadContextState | undefined> => {
-  if (retryCount === 0) {
-    logger.info(`RetryCount for å hente mellomlagret søknad er 0. Gir opp.`);
-    return undefined;
-  }
   if (isLabs()) {
     return {
       version: SOKNAD_VERSION,
@@ -47,31 +42,9 @@ export const hentMellomlagring = async (
       logger: logger,
     });
 
-    if (!mellomlagretSøknad) {
-      logger.info(
-        `Mellomlagret søknad returnert fra tokenXApiProxy er undefined. Prøver på nytt. RetryCount: ${retryCount}`,
-      );
-
-      await new Promise((resolve) => setTimeout(resolve, 300));
-      return await hentMellomlagring(accessToken, retryCount - 1);
-    }
-
-    if (mellomlagretSøknad?.version?.toString() !== SOKNAD_VERSION?.toString()) {
-      logger.info(
-        `Cache version: ${mellomlagretSøknad?.version}, SØKNAD_CONTEXT_VERSION: ${SOKNAD_VERSION}`,
-      );
-    }
-
     return mellomlagretSøknad;
   } catch (error: any) {
-    if (error?.status === 503) {
-      logger.info(
-        `Mellomlagring ga 'Service is unavailable (503). Prøver på nytt. RetryCount: ${retryCount}`,
-      );
-      await new Promise((resolve) => setTimeout(resolve, 300));
-      return await hentMellomlagring(accessToken, retryCount - 1);
-    }
-    logger.info('Fant ingen mellomlagret søknad');
+    logger.error('Noe gikk galt i henting av mellomlagring fra aap-innsending', error);
     return undefined;
   }
 };
