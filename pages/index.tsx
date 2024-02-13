@@ -15,7 +15,8 @@ import { scrollRefIntoView } from 'utils/dom';
 import { getSøkerUtenBarn } from 'pages/api/oppslag/soekerUtenBarn';
 import { logger } from '@navikt/aap-felles-utils';
 import { getFulltNavn } from 'lib/søker';
-import { SOKNAD_VERSION } from 'context/soknadcontext/soknadContext';
+import { SOKNAD_VERSION, SoknadContextState } from 'context/soknadcontext/soknadContext';
+import { hentMellomlagring } from 'pages/api/mellomlagring/les';
 
 interface PageProps {
   søker: Soker;
@@ -109,7 +110,36 @@ export const getServerSideProps = beskyttetSide(
     const stopTimer = metrics.getServersidePropsDurationHistogram.startTimer({ path: '/standard' });
     const bearerToken = getAccessToken(ctx);
     const søker = await getSøkerUtenBarn(bearerToken);
-    const mellomlagretSøknad = await lesBucket('STANDARD', bearerToken);
+
+    let mellomlagretSøknad: SoknadContextState | undefined;
+
+    try {
+      const [mellomlagretSøknadFraSoknadApi, mellomlagretSøknadFraAapInnsending] =
+        await Promise.all([lesBucket('STANDARD', bearerToken), hentMellomlagring(bearerToken)]);
+
+      logger.info(
+        `/soknad-api: ${mellomlagretSøknadFraSoknadApi ? JSON.stringify(mellomlagretSøknadFraSoknadApi) : ''}`,
+      );
+      logger.info(
+        `/innsending: ${mellomlagretSøknadFraAapInnsending ? JSON.stringify(mellomlagretSøknadFraAapInnsending) : ''}`,
+      );
+      if (mellomlagretSøknadFraSoknadApi) {
+        logger.info('velger mellomlagring fra søknad-api');
+        mellomlagretSøknad = {
+          ...mellomlagretSøknadFraSoknadApi,
+          brukerMellomLagretSøknadFraAApInnsending: false,
+        };
+      } else if (mellomlagretSøknadFraAapInnsending) {
+        logger.info('velger mellomlagring fra innsending');
+        mellomlagretSøknad = {
+          ...mellomlagretSøknadFraAapInnsending,
+          brukerMellomLagretSøknadFraAApInnsending: true,
+        };
+      }
+    } catch (e) {
+      logger.error('Noe gikk galt i innhenting av mellomlagret søknad', e);
+    }
+
     const activeStep = mellomlagretSøknad?.lagretStepList?.find((e: StepType) => e.active);
     const activeIndex = activeStep?.stepIndex;
 

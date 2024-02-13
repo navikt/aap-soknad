@@ -250,17 +250,17 @@ export const getServerSideProps = beskyttetSide(
       logger.info(
         `/innsending: ${mellomlagretSøknadFraAapInnsending ? JSON.stringify(mellomlagretSøknadFraAapInnsending) : ''}`,
       );
-      if (mellomlagretSøknadFraAapInnsending && !mellomlagretSøknadFraSoknadApi) {
-        logger.info('velger mellomlagring fra innsending');
-        mellomlagretSøknad = {
-          ...mellomlagretSøknadFraAapInnsending,
-          brukerMellomLagretSøknadFraAApInnsending: true,
-        };
-      } else if (mellomlagretSøknadFraSoknadApi && !mellomlagretSøknadFraAapInnsending) {
+      if (mellomlagretSøknadFraSoknadApi) {
         logger.info('velger mellomlagring fra søknad-api');
         mellomlagretSøknad = {
           ...mellomlagretSøknadFraSoknadApi,
           brukerMellomLagretSøknadFraAApInnsending: false,
+        };
+      } else if (mellomlagretSøknadFraAapInnsending) {
+        logger.info('velger mellomlagring fra innsending');
+        mellomlagretSøknad = {
+          ...mellomlagretSøknadFraAapInnsending,
+          brukerMellomLagretSøknadFraAApInnsending: true,
         };
       }
     } catch (e) {
