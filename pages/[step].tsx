@@ -244,20 +244,17 @@ export const getServerSideProps = beskyttetSide(
       const [mellomlagretSøknadFraSoknadApi, mellomlagretSøknadFraAapInnsending] =
         await Promise.all([lesBucket('STANDARD', bearerToken), hentMellomlagring(bearerToken)]);
 
-      logger.info(
-        `/soknad-api: ${mellomlagretSøknadFraSoknadApi ? JSON.stringify(mellomlagretSøknadFraSoknadApi) : ''}`,
-      );
-      logger.info(
-        `/innsending: ${mellomlagretSøknadFraAapInnsending ? JSON.stringify(mellomlagretSøknadFraAapInnsending) : ''}`,
-      );
+      if (mellomlagretSøknadFraAapInnsending && mellomlagretSøknadFraSoknadApi) {
+        logger.error('pages/step: finner mellomlagring fra begge kilder');
+      }
       if (mellomlagretSøknadFraSoknadApi) {
-        logger.info('velger mellomlagring fra søknad-api');
+        logger.info('pages/step: velger mellomlagring fra søknad-api');
         mellomlagretSøknad = {
           ...mellomlagretSøknadFraSoknadApi,
           brukerMellomLagretSøknadFraAApInnsending: false,
         };
       } else if (mellomlagretSøknadFraAapInnsending) {
-        logger.info('velger mellomlagring fra innsending');
+        logger.info('pages/step: velger mellomlagring fra innsending');
         mellomlagretSøknad = {
           ...mellomlagretSøknadFraAapInnsending,
           brukerMellomLagretSøknadFraAApInnsending: true,
