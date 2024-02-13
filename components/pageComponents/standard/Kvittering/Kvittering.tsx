@@ -2,7 +2,7 @@ import { Alert, BodyLong, BodyShort, Button, Heading, Link } from '@navikt/ds-re
 import React from 'react';
 import * as classes from './Kvittering.module.css';
 import { KontaktInfoView, SøkerView } from 'context/sokerOppslagContext';
-import { Download, SuccessStroke } from '@navikt/ds-icons';
+import { SuccessStroke } from '@navikt/ds-icons';
 import { SøknadApiType } from 'pages/api/oppslag/soeknader';
 import { clientSideIsLabs, clientSideIsProd } from 'utils/environments';
 import { FormattedMessage, useIntl } from 'react-intl';
@@ -12,14 +12,6 @@ interface StudentProps {
   kontaktinformasjon?: KontaktInfoView;
   søknad?: SøknadApiType;
 }
-
-const getDownloadUrl = (journalpostId?: string) => {
-  const filopplastingUrl = '/aap/soknad/api/oppslag/journalpost/?journalpostId=';
-  if (journalpostId) {
-    return `${filopplastingUrl}${journalpostId}`;
-  }
-  return journalpostId;
-};
 
 const Kvittering = ({ søker, kontaktinformasjon, søknad }: StudentProps) => {
   const { formatMessage } = useIntl();
@@ -103,16 +95,6 @@ const Kvittering = ({ søker, kontaktinformasjon, søknad }: StudentProps) => {
             )}
           </ul>
         </div>
-      )}
-      {søknad?.journalpostId && (
-        <Link
-          target={'_blank'}
-          href={getDownloadUrl(søknad?.journalpostId)}
-          className={classes?.linkButton}
-        >
-          <Download title="Last ned søknad" />
-          {formatMessage({ id: 'søknad.kvittering.lastNedSøknad' })}
-        </Link>
       )}
       <form action={dittNavUrl}>
         <Button as={'a'} variant={'primary'} href={mineAapUrl}>
