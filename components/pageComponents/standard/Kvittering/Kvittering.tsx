@@ -47,16 +47,15 @@ const Kvittering = ({ søker, kontaktinformasjon, søknad }: StudentProps) => {
         </BodyLong>
       </Alert>
       {(søknad?.manglendeVedlegg?.length ?? 0) > 0 && (
-        <Alert variant="warning">
+        <Alert variant="info">
           <BodyShort spacing>
-            {formatMessage({ id: 'søknad.kvittering.manglendeVedlegg.tekst1' })}
             <Link target="_blank" href={`${mineAapUrl}/${søknad?.søknadId}/ettersendelse/`}>
               {formatMessage({ id: 'søknad.kvittering.manglendeVedlegg.ettersendelseLink' })}
             </Link>
           </BodyShort>
           <BodyShort spacing>
             <FormattedMessage
-              id={'søknad.kvittering.manglendeVedlegg.tekst2'}
+              id={'søknad.kvittering.manglendeVedlegg.tekst1'}
               values={{
                 a: (chunks) => (
                   <Link target="_blank" href={formatMessage({ id: 'applinks.ettersending' })}>

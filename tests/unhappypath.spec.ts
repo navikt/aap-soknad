@@ -357,7 +357,7 @@ test('at alle feilmeldinger skal dukke opp', async ({ page }) => {
 
   await page.getByLabel('Fødselsdato (dd.mm.åååå)').fill(format(new Date(), 'dd.MM.yyyy'));
 
-  await page.getByText('InformasjonDu må legge ved:').click();
+  await page.getByText('InformasjonDu kan legge ved:').click();
   await page.getByRole('button', { name: 'Lagre' }).click();
 
   await page.getByRole('button', { name: 'Neste steg' }).click();
@@ -384,7 +384,7 @@ test('at alle feilmeldinger skal dukke opp', async ({ page }) => {
     .check();
   await expect(
     page.getByText(
-      'InformasjonDu må legge ved:Bekreftelse fra studiested på hvilken dato studiet bl',
+      'InformasjonDu kan legge ved:Bekreftelse fra studiested på hvilken dato studiet bl',
     ),
   ).toBeVisible();
   await page

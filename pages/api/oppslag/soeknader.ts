@@ -13,7 +13,19 @@ const SøknadApiType = z.object({
   søknadId: z.string(),
   journalpostId: z.string().optional(),
   manglendeVedlegg: z
-    .array(z.enum(['ARBEIDSGIVER', 'STUDIER', 'ANDREBARN', 'OMSORG', 'UTLAND', 'ANNET']))
+    .array(
+      z.enum([
+        'ARBEIDSGIVER',
+        'STUDIER',
+        'ANDREBARN',
+        'OMSORG',
+        'UTLAND',
+        'ANNET',
+        'LÅNEKASSEN_STIPEND',
+        'LÅNEKASSEN_LÅN',
+        'UTENLANDSKE',
+      ]),
+    )
     .optional(),
 });
 export type SøknadApiType = z.infer<typeof SøknadApiType>;
@@ -40,9 +52,8 @@ export const getSøknader = async (accessToken?: string): Promise<SøknadApiType
     logger.error({
       message: `oppslag/soeknader valideringsfeil: ${validatedResponse.error.message}`,
     });
-    return [];
   }
-  return validatedResponse.data;
+  return søknader;
 };
 
 export default handler;

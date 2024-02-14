@@ -18,7 +18,7 @@
         "guide1": "Dersom du er student, gjeld det ulike reglar avhengig av om du held fram på studiet eller avbryt det heilt."
       },
       "vedlegg": {
-        "title": "Du må leggje ved følgjande:",
+        "title": "Du kan leggje ved følgjande:",
         "name": "Stadfesting av avbrote studie",
         "description": "Stadfesting frå studiestaden på kva dato studiet blei avbrote.",
         "lastOppSenere": "Dokumenta lastar du opp seinare i søknaden. Du kan også ettersende vedlegg."
@@ -367,7 +367,7 @@
         "lån": "Dokumentasjon på studielån frå Lånekassa"
       },
       "alert": {
-        "leggeVedTekst": "Du må leggje ved følgjande:",
+        "leggeVedTekst": "Du kan leggje ved følgjande:",
         "lasteOppVedleggTekst": "Dette lastar du opp seinare i søknaden. Du kan også ettersende vedlegg."
       }
     },
@@ -375,7 +375,7 @@
       "title": "Vedlegg og tilleggsopplysninger",
       "guide": {
         "text1": "Du kan tidlegast få AAP frå og med den dagen vi får søknaden din. Det kan difor vere lurt å sende søknaden sjølv om du på noverande tidspunkt ikkje har alle vedlegga vi ber om.",
-        "text2": "Dersom du skal ettersende vedlegg, må du sende desse innan 14 dagar. Du kan ettersende anten digitalt eller per post. Treng du meir tid, kan du be om å få forlenga fristen. Dette kan du gjere via nav.no eller ved å ringje oss etter at søknaden er send inn."
+        "text2": "Du kan ettersenda enten digitalt eller per post"
       },
       "ingenVedlegg": {
         "title": "Ut frå svara dine har vi ikkje registrert vedlegg som må lastast opp. Viss du likevel har  dokument du meiner har noko å seia for søknaden din, kan du lasta opp desse her. Dette er heilt valfritt.",
@@ -390,7 +390,7 @@
         }
       },
       "harVedlegg": {
-        "title": "Ut frå det du har svart i søknaden, må du leggje ved følgjande:"
+        "title": "Ut frå det du har svart i søknaden, kan du leggje ved følgjande:"
       },
       "andreBarn": {
         "title": {
@@ -593,7 +593,7 @@
         }
       },
       "alert": {
-        "leggeVedTekst": "Du må leggje ved følgjande",
+        "leggeVedTekst": "Du kan leggje ved følgjande",
         "bulletPointVedleggForelder": "Stadfesting på at du er forelder til barnet, og frå når (fødselstidspunkt eller tidspunkt for adopsjon). Dette kan til dømes vere fødselsattest eller adopsjonsdokument.",
         "bulletPointVedleggFosterforelder": "Dokumentasjon på at du er fosterforelder til barnet, og frå når. Dette kan til dømes vere ei stadfesting frå barneverntenesta.",
         "lasteOppVedleggTekst": "Dette lastar du opp seinare i søknaden. Du kan også ettersende vedlegg.",
@@ -633,9 +633,8 @@
       },
       "ingenManglendeVedlegg": "Me vil ta kontakt med deg viss me treng meir informasjon eller dokumentasjon frå deg.",
       "manglendeVedlegg": {
-        "tekst1": "Me manglar dokumentasjon frå deg for å kunna behandla søknaden. Ettersend dette til oss så raskt du kan.",
-        "tekst2": "Du kan også <a>ettersenda per post (blir opna i ny fane)</a>, eller levera dokumentasjon på det lokale Nav-kontoret ditt.",
-        "ettersendelseLink": "Her kan du ettersenda dokumentasjon digitalt (blir opna i ny fane)"
+        "tekst1": "Du kan også <a>ettersenda per post (blir opna i ny fane)</a>, eller levera dokumentasjon på det lokale Nav-kontoret ditt.",
+        "ettersendelseLink": "Viss du skal ettersenda dokumentasjon digitalt kan du gjere det her (blir opna i ny fane)"
       },
       "saksbehandlingstid": "<a>Du kan sjekke forventa saksbehandlingstid på nav.no/saksbehandlingstid.</a>",
       "bekreftelse": {
