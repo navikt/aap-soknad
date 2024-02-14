@@ -82,7 +82,7 @@ const handler = beskyttetApi(async (req: NextApiRequest, res: NextApiResponse) =
         vedleggArray?.map((vedlegg) => {
           return {
             id: vedlegg.vedleggId,
-            tittel: vedlegg.name,
+            tittel: mapVedleggTypeTilVedleggTeks(vedlegg.type),
           };
         }) ?? [];
 
@@ -122,6 +122,27 @@ const handler = beskyttetApi(async (req: NextApiRequest, res: NextApiResponse) =
     }
   }
 });
+
+function mapVedleggTypeTilVedleggTeks(vedleggType: AttachmentType): string {
+  switch (vedleggType) {
+    case 'LØNN_OG_ANDRE_GODER':
+      return 'Dokumentasjon om lønn og andre goder';
+    case 'OMSORGSSTØNAD':
+      return 'Dokumentasjon om omsorgsstønad';
+    case 'UTLANDSSTØNAD':
+      return 'Dokumentasjon om utenlandsstønad';
+    case 'SYKESTIPEND':
+      return 'Dokumentasjon om sykestipend';
+    case 'LÅN':
+      return 'Dokumentasjon om lån';
+    case 'AVBRUTT_STUDIE':
+      return 'Dokumentasjon om avbrutt studie';
+    case 'ANNET':
+      return 'Annen dokumentasjon';
+    default:
+      return 'Dokumentasjon om barn eller fosterbarn';
+  }
+}
 
 export const sendSoknadViaAapInnsending = async (
   innsending: SoknadInnsendingRequestBody,
