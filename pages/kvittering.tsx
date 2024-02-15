@@ -8,7 +8,6 @@ import { GetServerSidePropsResult, NextPageContext } from 'next';
 import { getAccessToken } from 'auth/accessToken';
 import { getSøknader, SøknadApiType } from 'pages/api/oppslag/soeknader';
 import { getSøker } from 'pages/api/oppslag/soeker';
-import { logger } from '@navikt/aap-felles-utils';
 import metrics from 'utils/metrics';
 import { FormattedMessage } from 'react-intl';
 import { SoknadContextProvider } from 'context/soknadcontext/soknadContext';
@@ -53,8 +52,6 @@ export const getServerSideProps = beskyttetSide(
     const søknader = await getSøknader(bearerToken);
     const søker = await getSøker(bearerToken);
     const kontaktinformasjon = await getKrr(bearerToken);
-
-    logger.info(`søkeroppslag fra API: ${JSON.stringify(søknader)}`);
 
     stopTimer();
     return {
