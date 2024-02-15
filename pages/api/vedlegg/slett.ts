@@ -1,19 +1,18 @@
-import { NextApiRequest, NextApiResponse } from 'next';
 import { getAccessTokenFromRequest } from 'auth/accessToken';
 import { beskyttetApi } from 'auth/beskyttetApi';
-import { tokenXApiProxy, logger } from '@navikt/aap-felles-utils';
+import { logger, tokenXApiProxy } from '@navikt/aap-felles-utils';
 import metrics from 'utils/metrics';
 import { isMock } from 'utils/environments';
 import { getCommaSeparatedStringFromStringOrArray } from 'utils/string';
 
-const handler = beskyttetApi(async (req: NextApiRequest, res: NextApiResponse) => {
-  const uuids = req.query.uuids ?? [];
-  if (!uuids) {
+const handler = beskyttetApi(async (req, res) => {
+  const uuid = req.query.uuid ?? [];
+  if (!uuid) {
     res.status(400).json({ error: 'uuid må være en string' });
   }
   const accessToken = getAccessTokenFromRequest(req);
-  await slettVedlegg(uuids, accessToken);
-  res.status(204).json({});
+  await slettVedlegg(uuid, accessToken);
+  res.status(204).end();
 });
 
 export const slettVedlegg = async (uuids: string | string[], accessToken?: string) => {
@@ -21,15 +20,22 @@ export const slettVedlegg = async (uuids: string | string[], accessToken?: strin
   const commaSeparatedUuids = getCommaSeparatedStringFromStringOrArray(uuids);
   await tokenXApiProxy({
     url: `${process.env.SOKNAD_API_URL}/vedlegg/slett?uuids=${commaSeparatedUuids}`,
-    prometheusPath: 'vedlegg/slett',
+    prometheusPath: '/vedlegg/slett',
     method: 'DELETE',
     noResponse: true,
     audience: process.env.SOKNAD_API_AUDIENCE!,
     bearerToken: accessToken,
+    logger: logger,
     metricsStatusCodeCounter: metrics.backendApiStatusCodeCounter,
     metricsTimer: metrics.backendApiDurationHistogram,
-    logger: logger,
   });
+};
+
+export const config = {
+  api: {
+    bodyParser: false,
+    externalResolver: true,
+  },
 };
 
 export default handler;

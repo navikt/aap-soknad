@@ -14,13 +14,35 @@ const Vedlegg = ({}: PageProps) => {
 
   useEffect(() => {
     const getFile = async () => {
-      const file = await fetch(`/aap/soknad/api/vedlegg/les/?uuid=${uuid}`).then((res) =>
-        res.blob()
-      );
-      file && setFile(file);
+      const [fileFromSoknadApi, fileFromInnsending] = await Promise.all([
+        fetch(`/aap/soknad/api/vedlegg/les/?uuid=${uuid}`)
+          .then((res) => {
+            if (res.ok) {
+              return res.blob();
+            }
+            return undefined;
+          })
+          .catch(() => undefined),
+        fetch(`/aap/soknad/api/vedlegginnsending/les/?uuid=${uuid}`)
+          .then((res) => {
+            if (res.ok) {
+              return res.blob();
+            }
+            return undefined;
+          })
+          .catch(() => undefined),
+      ]);
+
+      if (fileFromInnsending) {
+        setFile(fileFromInnsending);
+      } else if (fileFromSoknadApi) {
+        setFile(fileFromSoknadApi);
+      }
     };
+
     getFile();
   }, [uuid]);
+
   if (file === undefined) {
     return <h1>Loading...</h1>;
   }
@@ -32,7 +54,7 @@ export const getServerSideProps = beskyttetSide(
     return {
       props: {},
     };
-  }
+  },
 );
 
 export default Vedlegg;

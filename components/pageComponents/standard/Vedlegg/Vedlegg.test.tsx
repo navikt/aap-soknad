@@ -5,7 +5,7 @@ import { toHaveNoViolations } from 'jest-axe';
 import messagesNb from 'translations/nb.json';
 import Vedlegg from './Vedlegg';
 import { Relasjon } from 'components/pageComponents/standard/Barnetillegg/AddBarnModal';
-import { SoknadContextState, SØKNAD_CONTEXT_VERSION } from 'context/soknadcontext/soknadContext';
+import { SoknadContextState } from 'context/soknadcontext/soknadContext';
 
 expect.extend(toHaveNoViolations);
 
@@ -47,8 +47,9 @@ const requiredVedlegg = [
   },
 ];
 const soknadContextInitial: SoknadContextState = {
-  version: SØKNAD_CONTEXT_VERSION,
+  version: 0,
   type: undefined,
+  brukerMellomLagretSøknadFraAApInnsending: true,
   søknad: {
     manuelleBarn: [
       {

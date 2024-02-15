@@ -18,7 +18,9 @@ export function useDebounceLagreSoknad<SoknadStateType>() {
       lagretStepList: stepList,
       sistLagret: formatDateTime(new Date()),
     };
-    const res = await fetchPOST(`/aap/soknad/api/buckets/lagre/?type=${payload.type}`, payload);
+    const res = state.brukerMellomLagretSøknadFraAApInnsending
+      ? await fetchPOST(`/aap/soknad/api/mellomlagring/lagre`, payload)
+      : await fetchPOST(`/aap/soknad/api/buckets/lagre/?type=${payload.type}`, payload);
     if (res.ok) setSistLagret(formatDateTime(new Date()), appStateDispatch);
   }
   const debouncedLagre = () => {

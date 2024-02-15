@@ -3,13 +3,10 @@ import { getAccessTokenFromRequest } from 'auth/accessToken';
 import { beskyttetApi } from 'auth/beskyttetApi';
 import { logger, tokenXApiProxy } from '@navikt/aap-felles-utils';
 import metrics from 'utils/metrics';
-import { lesCache } from 'mock/mellomlagringsCache';
 import { erGyldigSøknadsType, GYLDIGE_SØKNADS_TYPER, SøknadsType } from 'utils/api';
 import { isLabs, isMock } from 'utils/environments';
 import { getStringFromPossiblyArrayQuery } from 'utils/string';
-import { defaultStepList } from 'pages';
-import { SoknadContextState, SØKNAD_CONTEXT_VERSION } from 'context/soknadcontext/soknadContext';
-import { SøknadType } from 'types/SoknadContext';
+import { SoknadContextState } from 'context/soknadcontext/soknadContext';
 
 const handler = beskyttetApi(async (req: NextApiRequest, res: NextApiResponse) => {
   const type = getStringFromPossiblyArrayQuery(req.query.type);
@@ -24,24 +21,15 @@ const handler = beskyttetApi(async (req: NextApiRequest, res: NextApiResponse) =
 export const lesBucket = async (
   type: SøknadsType,
   accessToken?: string,
-  retryCount = 3
+  retryCount = 3,
 ): Promise<SoknadContextState | undefined> => {
   if (retryCount === 0) {
-    logger.info(`RetryCount for å hente mellomlagret søknad er 0. Gir opp.`);
     return undefined;
   }
-  if (isLabs()) {
-    return {
-      type: SøknadType.STANDARD,
-      version: SØKNAD_CONTEXT_VERSION,
-      søknad: {},
-      lagretStepList: defaultStepList,
-      requiredVedlegg: [],
-    };
-  }
-  if (isMock()) {
-    const result = await lesCache();
-    return result ? JSON.parse(result) : {};
+
+  // Returnerer undefined ettersom vi heller bruker mellomlagring fra innsending lokalt
+  if (isLabs() || isMock()) {
+    return;
   }
   try {
     const mellomlagretSøknad = await tokenXApiProxy({
@@ -56,30 +44,17 @@ export const lesBucket = async (
     });
 
     if (!mellomlagretSøknad) {
-      logger.info(
-        `Mellomlagret søknad returnert fra tokenXApiProxy er undefined. Prøver på nytt. RetryCount: ${retryCount}`
-      );
-
       await new Promise((resolve) => setTimeout(resolve, 300));
       return await lesBucket(type, accessToken, retryCount - 1);
-    }
-
-    if (mellomlagretSøknad?.version?.toString() !== SØKNAD_CONTEXT_VERSION?.toString()) {
-      logger.info(
-        `Cache version: ${mellomlagretSøknad?.version}, SØKNAD_CONTEXT_VERSION: ${SØKNAD_CONTEXT_VERSION}`
-      );
     }
 
     return mellomlagretSøknad;
   } catch (error: any) {
     if (error?.status === 503) {
-      logger.info(
-        `Mellomlagring ga 'Service is unavailable (503). Prøver på nytt. RetryCount: ${retryCount}`
-      );
       await new Promise((resolve) => setTimeout(resolve, 300));
       return await lesBucket(type, accessToken, retryCount - 1);
     }
-    logger.info('Fant ingen mellomlagret søknad');
+    logger.info('Fant ingen mellomlagret søknad hos soknad-api');
     return undefined;
   }
 };

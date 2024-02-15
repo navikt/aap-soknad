@@ -14,8 +14,9 @@ import metrics from 'utils/metrics';
 import { scrollRefIntoView } from 'utils/dom';
 import { getSøkerUtenBarn } from 'pages/api/oppslag/soekerUtenBarn';
 import { logger } from '@navikt/aap-felles-utils';
-import { getFulltNavn } from '../lib/søker';
-import { SØKNAD_CONTEXT_VERSION } from 'context/soknadcontext/soknadContext';
+import { getFulltNavn } from 'lib/søker';
+import { SOKNAD_VERSION, SoknadContextState } from 'context/soknadcontext/soknadContext';
+import { hentMellomlagring } from 'pages/api/mellomlagring/les';
 
 interface PageProps {
   søker: Soker;
@@ -69,12 +70,12 @@ const Introduksjon = ({ søker }: PageProps) => {
     setIsLoading(true);
     setHasError(false);
     logSkjemaStartetEvent();
-    const result = await fetchPOST('/aap/soknad/api/buckets/lagre/?type=STANDARD', {
-      type: 'STANDARD',
-      version: SØKNAD_CONTEXT_VERSION,
+    const result = await fetchPOST('/aap/soknad/api/mellomlagring/lagre', {
+      version: SOKNAD_VERSION,
       søknad: {},
       lagretStepList: defaultStepList,
     });
+
     if (!result.ok) {
       setIsLoading(false);
       setHasError(true);
@@ -109,7 +110,33 @@ export const getServerSideProps = beskyttetSide(
     const stopTimer = metrics.getServersidePropsDurationHistogram.startTimer({ path: '/standard' });
     const bearerToken = getAccessToken(ctx);
     const søker = await getSøkerUtenBarn(bearerToken);
-    const mellomlagretSøknad = await lesBucket('STANDARD', bearerToken);
+
+    let mellomlagretSøknad: SoknadContextState | undefined;
+
+    try {
+      const [mellomlagretSøknadFraSoknadApi, mellomlagretSøknadFraAapInnsending] =
+        await Promise.all([lesBucket('STANDARD', bearerToken), hentMellomlagring(bearerToken)]);
+
+      if (mellomlagretSøknadFraAapInnsending && mellomlagretSøknadFraSoknadApi) {
+        logger.error('pages/index: finner mellomlagring fra begge kilder');
+      }
+      if (mellomlagretSøknadFraSoknadApi) {
+        logger.info('pages/index: velger mellomlagring fra søknad-api');
+        mellomlagretSøknad = {
+          ...mellomlagretSøknadFraSoknadApi,
+          brukerMellomLagretSøknadFraAApInnsending: false,
+        };
+      } else if (mellomlagretSøknadFraAapInnsending) {
+        logger.info('pages/index: velger mellomlagring fra innsending');
+        mellomlagretSøknad = {
+          ...mellomlagretSøknadFraAapInnsending,
+          brukerMellomLagretSøknadFraAApInnsending: true,
+        };
+      }
+    } catch (e) {
+      logger.error('Noe gikk galt i innhenting av mellomlagret søknad', e);
+    }
+
     const activeStep = mellomlagretSøknad?.lagretStepList?.find((e: StepType) => e.active);
     const activeIndex = activeStep?.stepIndex;
 
@@ -126,7 +153,7 @@ export const getServerSideProps = beskyttetSide(
     return {
       props: { søker },
     };
-  }
+  },
 );
 
 export default Introduksjon;

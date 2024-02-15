@@ -47,6 +47,8 @@ import {
 import { getKrr } from 'pages/api/oppslag/krr';
 import { Barn, getBarn } from 'pages/api/oppslag/barn';
 import { formatNavn } from 'utils/StringFormatters';
+import { hentMellomlagring } from 'pages/api/mellomlagring/les';
+import { RequiredVedlegg } from 'types/SoknadContext';
 
 interface PageProps {
   søker: SokerOppslagState;
@@ -118,10 +120,9 @@ const Steps = ({ søker, mellomlagretSøknad, kontaktinformasjon, barn }: PagePr
         søknadState?.requiredVedlegg,
       );
 
-      const postResponse =
-        process.env.NEXT_PUBLIC_MAP_BACKEND === 'enabled'
-          ? await postSøknadMapBackend(søknadState.søknad)
-          : await postSøknad({ søknad, kvittering: søknadPdf });
+      const postResponse = søknadState.brukerMellomLagretSøknadFraAApInnsending
+        ? await postSøknadMedAAPInnsending(søknadState.søknad, søknadState.requiredVedlegg)
+        : await postSøknadMedSoknadApi({ søknad, kvittering: søknadPdf });
 
       if (postResponse?.ok) {
         const harVedlegg = søknadState.requiredVedlegg && søknadState?.requiredVedlegg?.length > 0;
@@ -132,8 +133,11 @@ const Steps = ({ søker, mellomlagretSøknad, kontaktinformasjon, barn }: PagePr
           søknadState?.søknad?.tilleggsopplysninger !== undefined &&
           søknadState?.søknad?.tilleggsopplysninger.length > 0;
         logSkjemaFullførtEvent({ harVedlegg, erIkkeKomplett, brukerFritekstfelt });
-        const url = postResponse?.data?.uri;
-        søknadDispatch({ type: SoknadActionKeys.ADD_SØKNAD_URL, payload: url });
+
+        if (!søknadState.brukerMellomLagretSøknadFraAApInnsending) {
+          const url = postResponse?.data?.uri;
+          søknadDispatch({ type: SoknadActionKeys.ADD_SØKNAD_URL, payload: url });
+        }
         router.push('kvittering');
         return true;
       } else {
@@ -144,14 +148,15 @@ const Steps = ({ søker, mellomlagretSøknad, kontaktinformasjon, barn }: PagePr
     }
     return false;
   };
-  const postSøknad = async (data?: any) =>
-    fetchPOST('/aap/soknad/api/innsending/soknad', {
+  const postSøknadMedSoknadApi = async (data?: any) =>
+    fetchPOST('/aap/soknad/api/innsending/soknadapi', {
       ...data,
     });
 
-  const postSøknadMapBackend = async (data?: Soknad) =>
-    fetchPOST('/aap/soknad/api/innsending/soknadMedMapping/', {
-      ...data,
+  const postSøknadMedAAPInnsending = async (søknad?: Soknad, requiredVedlegg?: RequiredVedlegg[]) =>
+    fetchPOST('/aap/soknad/api/innsending/soknadinnsending/', {
+      søknad,
+      requiredVedlegg,
     });
 
   const onPreviousStep = async () => {
@@ -213,19 +218,9 @@ const Steps = ({ søker, mellomlagretSøknad, kontaktinformasjon, barn }: PagePr
   );
 };
 
-const StepsWithContextProvider = ({
-  søker,
-  mellomlagretSøknad,
-  kontaktinformasjon,
-  barn,
-}: PageProps) => (
+const StepsWithContextProvider = (props: PageProps) => (
   <SoknadContextProvider>
-    <Steps
-      søker={søker}
-      mellomlagretSøknad={mellomlagretSøknad}
-      kontaktinformasjon={kontaktinformasjon}
-      barn={barn}
-    />
+    <Steps {...props} />
   </SoknadContextProvider>
 );
 
@@ -236,13 +231,39 @@ export const getServerSideProps = beskyttetSide(
     });
     const bearerToken = getAccessToken(ctx);
     const søker = await getSøker(bearerToken);
-    const mellomlagretSøknad = await lesBucket('STANDARD', bearerToken);
     let kontaktinformasjon = null;
     try {
       kontaktinformasjon = await getKrr(bearerToken);
     } catch (e) {
       logger.error({ message: `Noe gikk galt i kallet mot oppslag/krr: ${e?.toString()}` });
     }
+
+    let mellomlagretSøknad: SoknadContextState | undefined;
+
+    try {
+      const [mellomlagretSøknadFraSoknadApi, mellomlagretSøknadFraAapInnsending] =
+        await Promise.all([lesBucket('STANDARD', bearerToken), hentMellomlagring(bearerToken)]);
+
+      if (mellomlagretSøknadFraAapInnsending && mellomlagretSøknadFraSoknadApi) {
+        logger.error('pages/step: finner mellomlagring fra begge kilder');
+      }
+      if (mellomlagretSøknadFraSoknadApi) {
+        logger.info('pages/step: velger mellomlagring fra søknad-api');
+        mellomlagretSøknad = {
+          ...mellomlagretSøknadFraSoknadApi,
+          brukerMellomLagretSøknadFraAApInnsending: false,
+        };
+      } else if (mellomlagretSøknadFraAapInnsending) {
+        logger.info('pages/step: velger mellomlagring fra innsending');
+        mellomlagretSøknad = {
+          ...mellomlagretSøknadFraAapInnsending,
+          brukerMellomLagretSøknadFraAApInnsending: true,
+        };
+      }
+    } catch (e) {
+      logger.error('Noe gikk galt i innhenting av mellomlagret søknad', e);
+    }
+    logger.info({ message: 'mellomlagretSøknad', stack: mellomlagretSøknad });
 
     let barn: Barn[] = søker?.søker?.barn?.map((barn) => {
       return { navn: formatNavn(barn.navn), fødselsdato: barn.fødselsdato };

@@ -500,8 +500,9 @@ export const mapSøknadToPdf = (
       });
     const manuelleBarnVedlegg =
       søknad?.manuelleBarn?.map((barn) => {
-        const label = requiredVedlegg?.find((e) => e.type === barn.internId && e.completed)
-          ?.description;
+        const label = requiredVedlegg?.find(
+          (e) => e.type === barn.internId && e.completed,
+        )?.description;
         return createGruppe(label || '', [
           createListe(
             '',
@@ -515,7 +516,10 @@ export const mapSøknadToPdf = (
       søknad?.vedlegg?.ANNET && søknad?.vedlegg?.ANNET?.length > 0
         ? [
             createGruppe('Annet', [
-              createListe('', søknad?.vedlegg?.ANNET?.map((vedleggFile) => vedleggFile?.name)),
+              createListe(
+                '',
+                søknad?.vedlegg?.ANNET?.map((vedleggFile) => vedleggFile?.name),
+              ),
             ]),
           ]
         : [];

@@ -1,12 +1,11 @@
 import { randomUUID } from 'crypto';
-import { NextApiRequest, NextApiResponse } from 'next';
 import { getAccessTokenFromRequest } from 'auth/accessToken';
 import { beskyttetApi } from 'auth/beskyttetApi';
 import { tokenXApiStreamProxy, logger } from '@navikt/aap-felles-utils';
 import metrics from 'utils/metrics';
 import { isMock } from 'utils/environments';
 
-const handler = beskyttetApi(async (req: NextApiRequest, res: NextApiResponse) => {
+const handler = beskyttetApi(async (req, res) => {
   logger.info('Har mottatt request om filopplasting');
   const accessToken = getAccessTokenFromRequest(req);
   if (isMock()) {
@@ -14,14 +13,14 @@ const handler = beskyttetApi(async (req: NextApiRequest, res: NextApiResponse) =
   } else {
     await tokenXApiStreamProxy({
       url: `${process.env.SOKNAD_API_URL}/vedlegg/lagre`,
-      prometheusPath: 'vedlegg/lagre',
+      prometheusPath: '/vedlegg/lagre',
       req,
       res,
       audience: process.env.SOKNAD_API_AUDIENCE!,
       bearerToken: accessToken,
+      logger: logger,
       metricsStatusCodeCounter: metrics.backendApiStatusCodeCounter,
       metricsTimer: metrics.backendApiDurationHistogram,
-      logger: logger,
     });
   }
 });

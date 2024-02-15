@@ -1,30 +1,24 @@
 import { beskyttetApi } from 'auth/beskyttetApi';
-import {
-  getAccessTokenFromRequest,
-  isMock,
-  logger,
-  tokenXApiProxy,
-} from '@navikt/aap-felles-utils';
+import { logger, tokenXApiProxy } from '@navikt/aap-felles-utils';
 import { NextApiRequest, NextApiResponse } from 'next';
 import metrics from 'utils/metrics';
 import { ErrorMedStatus } from 'auth/ErrorMedStatus';
-import { isLabs } from 'utils/environments';
+import { isLabs, isMock } from 'utils/environments';
 import { slettBucket } from 'pages/api/buckets/slett';
-import { randomUUID } from 'crypto';
 import { createIntl } from 'react-intl';
 import { flattenMessages, messages } from 'utils/message';
 import links from 'translations/links.json';
 import { Soknad } from 'types/Soknad';
-import { mapSøknadToBackend, mapSøknadToPdf } from 'utils/api';
-import { SøknadBackendState } from 'types/SoknadBackendState';
+import { mapSøknadToPdf } from 'utils/api';
 import { getAndreUtbetalingerSchema } from 'components/pageComponents/standard/AndreUtbetalinger/AndreUtbetalinger';
 import { getBehandlerSchema } from 'components/pageComponents/standard/Behandlere/EndreEllerLeggTilBehandlerModal';
 import { getMedlemskapSchema } from 'components/pageComponents/standard/Medlemskap/medlemskapSchema';
 import { getStartDatoSchema } from 'components/pageComponents/standard/StartDato/StartDato';
 import { getStudentSchema } from 'components/pageComponents/standard/Student/Student';
 import { getYrkesskadeSchema } from 'components/pageComponents/standard/Yrkesskade/Yrkesskade';
-
-const SOKNAD_VERSION = 0;
+import { getAccessTokenFromRequest } from 'auth/accessToken';
+import { AttachmentType, RequiredVedlegg } from 'types/SoknadContext';
+import { SOKNAD_VERSION } from 'context/soknadcontext/soknadContext';
 
 // TODO: Sjekke om vi må generere pdf på samme språk som bruker har valgt når de fyller ut søknaden
 function getIntl() {
@@ -34,16 +28,15 @@ function getIntl() {
   });
 }
 
-// TODO: Denne tar vi i bruk når vi går live med ny innsending
-interface SoknadInnsendingRequestBody {
-  kvittering?: Record<string, unknown>;
-  soknad: Soknad & { version: number };
-  filer: Array<Fil>;
+interface SoknadInnsending extends Soknad {
+  version: number;
+  etterspurtDokumentasjon: AttachmentType[];
 }
 
-interface SoknadApiInnsendingRequestBody {
+interface SoknadInnsendingRequestBody {
   kvittering?: Record<string, unknown>;
-  søknad: SøknadBackendState;
+  soknad: SoknadInnsending;
+  filer: Array<Fil>;
 }
 
 interface Fil {
@@ -77,9 +70,11 @@ const søknadIsValid = (søknad: Soknad) => {
 const handler = beskyttetApi(async (req: NextApiRequest, res: NextApiResponse) => {
   const accessToken = getAccessTokenFromRequest(req);
 
-  const søknad = req.body as Soknad;
+  const { søknad, requiredVedlegg } = req.body as {
+    søknad: Soknad;
+    requiredVedlegg: RequiredVedlegg[];
+  };
 
-  /* TODO: Dette må vi mappe når vi tar i bruk ny innsending
   const filer: Fil[] = Object.keys(søknad.vedlegg ?? {})
     .map((key) => {
       const vedleggArray = søknad?.vedlegg?.[key];
@@ -87,14 +82,15 @@ const handler = beskyttetApi(async (req: NextApiRequest, res: NextApiResponse) =
         vedleggArray?.map((vedlegg) => {
           return {
             id: vedlegg.vedleggId,
-            tittel: vedlegg.name,
+            tittel: mapVedleggTypeTilVedleggTekst(key),
           };
         }) ?? [];
 
       return filerArray;
     })
     .flat();
- */
+
+  const etterspurtDokumentasjon = requiredVedlegg?.map((vedlegg) => vedlegg.type);
 
   if (!søknadIsValid(søknad)) {
     res.status(400).json({ errorMessage: 'Søknaden er ikke gyldig' });
@@ -103,13 +99,22 @@ const handler = beskyttetApi(async (req: NextApiRequest, res: NextApiResponse) =
 
   const { formatMessage } = getIntl();
   const søknadPdf = mapSøknadToPdf(søknad, new Date(), formatMessage, []);
-  const søknadJson = mapSøknadToBackend(søknad);
 
   try {
-    const soknadRes = await sendSoknad({ søknad: søknadJson, kvittering: søknadPdf }, accessToken);
+    await sendSoknadViaAapInnsending(
+      {
+        soknad: { ...søknad, version: SOKNAD_VERSION, etterspurtDokumentasjon },
+        kvittering: søknadPdf,
+        filer,
+      },
+      accessToken,
+    );
+
     metrics.sendSoknadCounter.inc({ type: 'STANDARD' });
-    res.status(201).json(soknadRes);
+    res.status(201).send('Vi har mottat søknaden');
   } catch (err) {
+    logger.error(`Noe gikk galt ved innsending av søknad: ${err?.toString()}`);
+
     if (err instanceof ErrorMedStatus) {
       res.status(err.status).json({ navCallId: err.navCallId });
     } else {
@@ -118,25 +123,49 @@ const handler = beskyttetApi(async (req: NextApiRequest, res: NextApiResponse) =
   }
 });
 
-export const sendSoknad = async (data: SoknadApiInnsendingRequestBody, accessToken?: string) => {
-  // TODO: Denne brukes av playwright. Se om vi skal gjøre endringer her på sikt
+function mapVedleggTypeTilVedleggTekst(vedleggType: AttachmentType): string {
+  switch (vedleggType) {
+    case 'LØNN_OG_ANDRE_GODER':
+      return 'Dokumentasjon om lønn og andre goder';
+    case 'OMSORGSSTØNAD':
+      return 'Dokumentasjon om omsorgsstønad';
+    case 'UTLANDSSTØNAD':
+      return 'Dokumentasjon om utenlandsstønad';
+    case 'SYKESTIPEND':
+      return 'Dokumentasjon om sykestipend';
+    case 'LÅN':
+      return 'Dokumentasjon om lån';
+    case 'AVBRUTT_STUDIE':
+      return 'Dokumentasjon om avbrutt studie';
+    case 'ANNET':
+      return 'Annen dokumentasjon';
+    default:
+      return 'Dokumentasjon om barn eller fosterbarn';
+  }
+}
+
+export const sendSoknadViaAapInnsending = async (
+  innsending: SoknadInnsendingRequestBody,
+  accessToken?: string,
+) => {
   if (isLabs()) {
-    return { uri: `https://localhost:3000/aap/soknad/api/vedlegg/les?uuid=${randomUUID()}` };
+    return 'Vi har mottat søknaden din.';
   }
   if (isMock()) {
     await slettBucket('STANDARD', accessToken);
-    return { uri: `https://localhost:3000/aap/soknad/api/vedlegg/les?uuid=${randomUUID()}` };
+    return 'Vi har mottat søknaden din.';
   }
   const søknad = await tokenXApiProxy({
-    url: `${process.env.SOKNAD_API_URL}/innsending/soknad`,
+    url: `${process.env.INNSENDING_URL}/innsending`,
     prometheusPath: 'innsending/soknad',
     method: 'POST',
-    data: JSON.stringify(data),
-    audience: process.env.SOKNAD_API_AUDIENCE!,
+    data: JSON.stringify(innsending),
+    audience: process.env.INNSENDING_AUDIENCE!,
     bearerToken: accessToken,
     metricsStatusCodeCounter: metrics.backendApiStatusCodeCounter,
     metricsTimer: metrics.backendApiDurationHistogram,
     logger: logger,
+    noResponse: true,
   });
   return søknad;
 };
