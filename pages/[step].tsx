@@ -263,7 +263,6 @@ export const getServerSideProps = beskyttetSide(
     } catch (e) {
       logger.error('Noe gikk galt i innhenting av mellomlagret søknad', e);
     }
-    logger.info({ message: 'mellomlagretSøknad', stack: mellomlagretSøknad });
 
     let barn: Barn[] = søker?.søker?.barn?.map((barn) => {
       return { navn: formatNavn(barn.navn), fødselsdato: barn.fødselsdato };
