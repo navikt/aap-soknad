@@ -4,7 +4,6 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import metrics from 'utils/metrics';
 import { ErrorMedStatus } from 'auth/ErrorMedStatus';
 import { isLabs, isMock } from 'utils/environments';
-import { slettBucket } from 'pages/api/buckets/slett';
 import { createIntl } from 'react-intl';
 import { flattenMessages, messages } from 'utils/message';
 import links from 'translations/links.json';
@@ -19,6 +18,7 @@ import { getYrkesskadeSchema } from 'components/pageComponents/standard/Yrkesska
 import { getAccessTokenFromRequest } from 'auth/accessToken';
 import { AttachmentType, RequiredVedlegg } from 'types/SoknadContext';
 import { SOKNAD_VERSION } from 'context/soknadcontext/soknadContext';
+import { slettBucket } from 'pages/api/mellomlagring/slett';
 
 // TODO: Sjekke om vi må generere pdf på samme språk som bruker har valgt når de fyller ut søknaden
 function getIntl() {
