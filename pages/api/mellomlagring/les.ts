@@ -20,7 +20,6 @@ export const hentMellomlagring = async (
   if (isLabs()) {
     return {
       version: SOKNAD_VERSION,
-      brukerMellomLagretSøknadFraAApInnsending: true,
       søknad: {},
       lagretStepList: defaultStepList,
       requiredVedlegg: [],
