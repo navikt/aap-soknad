@@ -3,17 +3,15 @@ import React from 'react';
 import * as classes from './Kvittering.module.css';
 import { KontaktInfoView, SøkerView } from 'context/sokerOppslagContext';
 import { SuccessStroke } from '@navikt/ds-icons';
-import { SøknadApiType } from 'pages/api/oppslag/soeknader';
 import { clientSideIsLabs, clientSideIsProd } from 'utils/environments';
 import { FormattedMessage, useIntl } from 'react-intl';
 
 interface StudentProps {
   søker: SøkerView;
   kontaktinformasjon?: KontaktInfoView;
-  søknad?: SøknadApiType;
 }
 
-const Kvittering = ({ søker, kontaktinformasjon, søknad }: StudentProps) => {
+const Kvittering = ({ søker, kontaktinformasjon }: StudentProps) => {
   const { formatMessage } = useIntl();
 
   const mineAapUrl = clientSideIsLabs()
@@ -43,7 +41,7 @@ const Kvittering = ({ søker, kontaktinformasjon, søknad }: StudentProps) => {
       </Alert>
       <Alert variant="info">
         <BodyShort spacing>
-          <Link target="_blank" href={`${mineAapUrl}/${søknad?.søknadId}/ettersendelse/`}>
+          <Link target="_blank" href={`${mineAapUrl}/ettersendelse/`}>
             {formatMessage({ id: 'søknad.kvittering.vedlegg.ettersendelseLink' })}
           </Link>
         </BodyShort>
