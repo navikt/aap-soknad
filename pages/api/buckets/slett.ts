@@ -21,7 +21,7 @@ const handler = beskyttetApi(async (req: NextApiRequest, res: NextApiResponse) =
 
 export const slettBucket = async (type: SøknadsType, accessToken?: string) => {
   if (isMock()) {
-    await deleteCache(type);
+    await deleteCache();
     return;
   }
 
