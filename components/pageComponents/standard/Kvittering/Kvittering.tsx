@@ -39,34 +39,27 @@ const Kvittering = ({ søker, kontaktinformasjon, søknad }: StudentProps) => {
         <FormattedMessage id={'søknad.kvittering.title'} values={{ navn: søker?.fulltNavn }} />
       </Heading>
       <Alert variant={'success'}>
-        <BodyLong>
-          {formatMessage({ id: 'søknad.kvittering.alert.text' })}
-          {(søknad?.manglendeVedlegg?.length ?? 0) === 0 && (
-            <> {formatMessage({ id: 'søknad.kvittering.ingenManglendeVedlegg' })}</>
-          )}
-        </BodyLong>
+        <BodyLong>{formatMessage({ id: 'søknad.kvittering.alert.text' })}</BodyLong>
       </Alert>
-      {(søknad?.manglendeVedlegg?.length ?? 0) > 0 && (
-        <Alert variant="info">
-          <BodyShort spacing>
-            <Link target="_blank" href={`${mineAapUrl}/${søknad?.søknadId}/ettersendelse/`}>
-              {formatMessage({ id: 'søknad.kvittering.manglendeVedlegg.ettersendelseLink' })}
-            </Link>
-          </BodyShort>
-          <BodyShort spacing>
-            <FormattedMessage
-              id={'søknad.kvittering.manglendeVedlegg.tekst1'}
-              values={{
-                a: (chunks) => (
-                  <Link target="_blank" href={formatMessage({ id: 'applinks.ettersending' })}>
-                    {chunks}
-                  </Link>
-                ),
-              }}
-            />
-          </BodyShort>
-        </Alert>
-      )}
+      <Alert variant="info">
+        <BodyShort spacing>
+          <Link target="_blank" href={`${mineAapUrl}/${søknad?.søknadId}/ettersendelse/`}>
+            {formatMessage({ id: 'søknad.kvittering.vedlegg.ettersendelseLink' })}
+          </Link>
+        </BodyShort>
+        <BodyShort spacing>
+          <FormattedMessage
+            id={'søknad.kvittering.vedlegg.tekst1'}
+            values={{
+              a: (chunks) => (
+                <Link target="_blank" href={formatMessage({ id: 'applinks.ettersending' })}>
+                  {chunks}
+                </Link>
+              ),
+            }}
+          />
+        </BodyShort>
+      </Alert>
 
       <FormattedMessage
         id={'søknad.kvittering.saksbehandlingstid'}

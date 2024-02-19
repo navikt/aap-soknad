@@ -631,8 +631,7 @@
       "alert": {
         "text": "Vi har nå mottatt søknaden din om AAP. Saken din er nå til behandling hos NAV. Vi vil ta kontakt med deg hvis vi trenger mer informasjon eller dokumentasjon fra deg."
       },
-      "ingenManglendeVedlegg": "Vi vil ta kontakt med deg hvis vi trenger mer informasjon eller dokumentasjon fra deg.",
-      "manglendeVedlegg": {
+      "vedlegg": {
         "tekst1": "Du kan også <a>ettersende per post (åpnes i ny fane)</a>, eller levere dokumentasjon på ditt lokale NAV-kontor.",
         "ettersendelseLink": "Hvis du skal ettersende dokumentasjon digitalt kan du gjøre det her (åpnes i ny fane)"
       },

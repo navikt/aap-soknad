@@ -629,10 +629,9 @@
     "kvittering": {
       "title": "Takk for søknaden, {navn}",
       "alert": {
-        "text": "Vi har nå fått søknaden din om AAP. Saka din ligg inne til behandling hos NAV."
+        "text": "Vi har nå fått søknaden din om AAP. Saka din ligg inne til behandling hos NAV. Me vil ta kontakt med deg viss me treng meir informasjon eller dokumentasjon frå deg."
       },
-      "ingenManglendeVedlegg": "Me vil ta kontakt med deg viss me treng meir informasjon eller dokumentasjon frå deg.",
-      "manglendeVedlegg": {
+      "vedlegg": {
         "tekst1": "Du kan også <a>ettersenda per post (blir opna i ny fane)</a>, eller levera dokumentasjon på det lokale Nav-kontoret ditt.",
         "ettersendelseLink": "Viss du skal ettersenda dokumentasjon digitalt kan du gjere det her (blir opna i ny fane)"
       },
