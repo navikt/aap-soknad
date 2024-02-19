@@ -11,7 +11,6 @@ import { deleteOpplastedeVedlegg, slettLagretSoknadState } from 'context/soknadc
 interface Props {
   isOpen: boolean;
   onClose: (value: boolean) => void;
-  brukerMellomLagretSøknadFraAApInnsending: boolean;
 }
 const SlettModal = ({ isOpen, onClose }: Props) => {
   const [isDeletingSøknad, setIsDeletingSøknad] = useState<boolean>(false);
