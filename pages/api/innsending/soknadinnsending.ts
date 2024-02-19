@@ -155,7 +155,7 @@ export const sendSoknadViaAapInnsending = async (
     await slettBucket(accessToken);
     return 'Vi har mottat søknaden din.';
   }
-  const søknad = await tokenXApiProxy({
+  return await tokenXApiProxy({
     url: `${process.env.INNSENDING_URL}/innsending`,
     prometheusPath: 'innsending/soknad',
     method: 'POST',
@@ -167,7 +167,6 @@ export const sendSoknadViaAapInnsending = async (
     logger: logger,
     noResponse: true,
   });
-  return søknad;
 };
 
 export default handler;

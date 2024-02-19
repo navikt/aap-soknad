@@ -15,7 +15,7 @@ interface Props {
 const SlettModal = ({ isOpen, onClose }: Props) => {
   const [isDeletingSøknad, setIsDeletingSøknad] = useState<boolean>(false);
   const [slettSøknadSuccess, setSlettSøknadSuccess] = useState<boolean>(false);
-  const { søknadState, søknadDispatch } = useSoknad();
+  const { søknadState } = useSoknad();
   const { formatMessage } = useIntl();
   const router = useRouter();
 
