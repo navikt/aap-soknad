@@ -6,6 +6,7 @@ import { FormErrorSummary, SøknadValidationError } from 'components/schema/Form
 import { useIntl } from 'react-intl';
 import LagreModal from './LagreModal';
 import SlettModal from './SlettModal';
+import { useSoknad } from 'hooks/SoknadHook';
 
 interface Props {
   children: React.ReactNode;
@@ -31,6 +32,8 @@ const SøknadFormWrapper = (props: Props) => {
   const { appState } = useAppStateContext();
   const [visLagreModal, setVisLagreModal] = useState<boolean>(false);
   const [visAvbrytModal, setVisAvbrytModal] = useState<boolean>(false);
+
+  const { søknadState } = useSoknad();
 
   return (
     <>
@@ -89,7 +92,13 @@ const SøknadFormWrapper = (props: Props) => {
         </div>
       </form>
       <LagreModal isOpen={visLagreModal} onClose={(value) => setVisLagreModal(value)} />
-      <SlettModal isOpen={visAvbrytModal} onClose={(value) => setVisAvbrytModal(value)} />
+      <SlettModal
+        isOpen={visAvbrytModal}
+        onClose={(value) => setVisAvbrytModal(value)}
+        brukerMellomLagretSøknadFraAApInnsending={
+          søknadState.brukerMellomLagretSøknadFraAApInnsending
+        }
+      />
     </>
   );
 };

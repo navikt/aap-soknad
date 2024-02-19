@@ -11,6 +11,7 @@ import { deleteOpplastedeVedlegg, slettLagretSoknadState } from 'context/soknadc
 interface Props {
   isOpen: boolean;
   onClose: (value: boolean) => void;
+  brukerMellomLagretSøknadFraAApInnsending: boolean;
 }
 const SlettModal = ({ isOpen, onClose }: Props) => {
   const [isDeletingSøknad, setIsDeletingSøknad] = useState<boolean>(false);
@@ -20,8 +21,15 @@ const SlettModal = ({ isOpen, onClose }: Props) => {
   const router = useRouter();
 
   async function onDelete() {
-    await deleteOpplastedeVedlegg(søknadState.søknad);
-    await slettLagretSoknadState(søknadDispatch, søknadState);
+    await deleteOpplastedeVedlegg(
+      søknadState.brukerMellomLagretSøknadFraAApInnsending,
+      søknadState.søknad,
+    );
+    await slettLagretSoknadState(
+      søknadDispatch,
+      søknadState,
+      søknadState.brukerMellomLagretSøknadFraAApInnsending,
+    );
   }
 
   const slettSøknadOgAvbryt = async () => {
