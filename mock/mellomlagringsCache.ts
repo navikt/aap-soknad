@@ -15,7 +15,7 @@ export const lagreCache = async (data: string) => {
   return true;
 };
 
-export const deleteCache = async (type: SøknadsType) => {
+export const deleteCache = async () => {
   await fs.unlink('.bucket.cache');
   return;
 };

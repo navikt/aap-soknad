@@ -152,7 +152,7 @@ export const sendSoknadViaAapInnsending = async (
     return 'Vi har mottat søknaden din.';
   }
   if (isMock()) {
-    await slettBucket('STANDARD', accessToken);
+    await slettBucket(accessToken);
     return 'Vi har mottat søknaden din.';
   }
   const søknad = await tokenXApiProxy({

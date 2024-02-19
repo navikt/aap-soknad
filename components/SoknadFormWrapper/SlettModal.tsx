@@ -21,7 +21,7 @@ const SlettModal = ({ isOpen, onClose }: Props) => {
 
   async function onDelete() {
     await deleteOpplastedeVedlegg(søknadState.søknad);
-    await slettLagretSoknadState(søknadDispatch, søknadState);
+    await slettLagretSoknadState();
   }
 
   const slettSøknadOgAvbryt = async () => {
