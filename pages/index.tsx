@@ -6,7 +6,6 @@ import { GetServerSidePropsResult, NextPageContext } from 'next/types';
 import { beskyttetSide } from 'auth/beskyttetSide';
 import { getAccessToken } from 'auth/accessToken';
 import { fetchPOST } from 'api/fetch';
-import { lesBucket } from 'pages/api/buckets/les';
 import { StepType } from 'components/StepWizard/Step';
 import { isLabs } from 'utils/environments';
 import { logSkjemaStartetEvent } from 'utils/amplitude';
@@ -15,7 +14,7 @@ import { scrollRefIntoView } from 'utils/dom';
 import { getSøkerUtenBarn } from 'pages/api/oppslag/soekerUtenBarn';
 import { logger } from '@navikt/aap-felles-utils';
 import { getFulltNavn } from 'lib/søker';
-import { SOKNAD_VERSION, SoknadContextState } from 'context/soknadcontext/soknadContext';
+import { SOKNAD_VERSION } from 'context/soknadcontext/soknadContext';
 import { hentMellomlagring } from 'pages/api/mellomlagring/les';
 
 interface PageProps {
@@ -27,7 +26,6 @@ export enum StepNames {
   FASTLEGE = 'FASTLEGE',
   MEDLEMSKAP = 'MEDLEMSKAP',
   YRKESSKADE = 'YRKESSKADE',
-  TILLEGGSOPPLYSNINGER = 'TILLEGGSOPPLYSNINGER',
   STUDENT = 'STUDENT',
   ANDRE_UTBETALINGER = 'ANDRE_UTBETALINGER',
   BARNETILLEGG = 'BARNETILLEGG',
@@ -110,32 +108,7 @@ export const getServerSideProps = beskyttetSide(
     const stopTimer = metrics.getServersidePropsDurationHistogram.startTimer({ path: '/standard' });
     const bearerToken = getAccessToken(ctx);
     const søker = await getSøkerUtenBarn(bearerToken);
-
-    let mellomlagretSøknad: SoknadContextState | undefined;
-
-    try {
-      const [mellomlagretSøknadFraSoknadApi, mellomlagretSøknadFraAapInnsending] =
-        await Promise.all([lesBucket('STANDARD', bearerToken), hentMellomlagring(bearerToken)]);
-
-      if (mellomlagretSøknadFraAapInnsending && mellomlagretSøknadFraSoknadApi) {
-        logger.error('pages/index: finner mellomlagring fra begge kilder');
-      }
-      if (mellomlagretSøknadFraSoknadApi) {
-        logger.info('pages/index: velger mellomlagring fra søknad-api');
-        mellomlagretSøknad = {
-          ...mellomlagretSøknadFraSoknadApi,
-          brukerMellomLagretSøknadFraAApInnsending: false,
-        };
-      } else if (mellomlagretSøknadFraAapInnsending) {
-        logger.info('pages/index: velger mellomlagring fra innsending');
-        mellomlagretSøknad = {
-          ...mellomlagretSøknadFraAapInnsending,
-          brukerMellomLagretSøknadFraAApInnsending: true,
-        };
-      }
-    } catch (e) {
-      logger.error('Noe gikk galt i innhenting av mellomlagret søknad', e);
-    }
+    const mellomlagretSøknad = await hentMellomlagring(bearerToken);
 
     const activeStep = mellomlagretSøknad?.lagretStepList?.find((e: StepType) => e.active);
     const activeIndex = activeStep?.stepIndex;
