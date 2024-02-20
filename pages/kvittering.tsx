@@ -6,7 +6,6 @@ import * as classes from 'components/pageComponents/standard/standard.module.css
 import { beskyttetSide } from 'auth/beskyttetSide';
 import { GetServerSidePropsResult, NextPageContext } from 'next';
 import { getAccessToken } from 'auth/accessToken';
-import { getSøknader, SøknadApiType } from 'pages/api/oppslag/soeknader';
 import { getSøker } from 'pages/api/oppslag/soeker';
 import metrics from 'utils/metrics';
 import { FormattedMessage } from 'react-intl';
@@ -15,11 +14,10 @@ import { getKrr } from 'pages/api/oppslag/krr';
 
 interface PageProps {
   søker: SokerOppslagState;
-  søknader: SøknadApiType[];
   kontaktinformasjon: KontaktInfoView;
 }
 
-const KvitteringPage = ({ søker, søknader, kontaktinformasjon }: PageProps) => {
+const KvitteringPage = ({ søker, kontaktinformasjon }: PageProps) => {
   const [soker, setSoker] = useState({});
 
   useEffect(() => {
@@ -38,7 +36,7 @@ const KvitteringPage = ({ søker, søknader, kontaktinformasjon }: PageProps) =>
       <PageHeader align="center" className={classes?.pageHeader}>
         <FormattedMessage id={'søknad.pagetitle'} values={{ wbr: () => <>&shy;</> }} />
       </PageHeader>
-      <Kvittering søker={soker} kontaktinformasjon={kontaktinformasjon} søknad={søknader[0]} />
+      <Kvittering søker={soker} kontaktinformasjon={kontaktinformasjon} />
     </SoknadContextProvider>
   );
 };
@@ -49,13 +47,12 @@ export const getServerSideProps = beskyttetSide(
       path: '/kvittering',
     });
     const bearerToken = getAccessToken(ctx);
-    const søknader = await getSøknader(bearerToken);
     const søker = await getSøker(bearerToken);
     const kontaktinformasjon = await getKrr(bearerToken);
 
     stopTimer();
     return {
-      props: { søknader, søker, kontaktinformasjon },
+      props: { søker, kontaktinformasjon },
     };
   },
 );
