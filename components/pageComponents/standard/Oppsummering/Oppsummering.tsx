@@ -29,7 +29,7 @@ import {
   StønadType,
   stønadTypeToAlternativNøkkel,
 } from 'components/pageComponents/standard/AndreUtbetalinger/AndreUtbetalinger';
-import { formatFullAdresse, formatNavn, formatTelefonnummer } from 'utils/StringFormatters';
+import { formatTelefonnummer } from 'utils/StringFormatters';
 import OppsummeringPeriode from './OppsummeringPeriode/OppsummeringPeriode';
 import { isNonEmptyPeriode } from 'utils/periode';
 import {
@@ -289,9 +289,9 @@ const Oppsummering = ({
                 <Heading size={'small'} level={'3'}>
                   {formatMessage({ id: 'søknad.oppsummering.helseopplysninger.fastlege' })}
                 </Heading>
-                <BodyShort>{formatNavn(behandler.navn)}</BodyShort>
+                <BodyShort>{behandler.navn}</BodyShort>
                 <BodyShort>{behandler.kontaktinformasjon.kontor}</BodyShort>
-                <BodyShort>{formatFullAdresse(behandler.kontaktinformasjon.adresse)}</BodyShort>
+                <BodyShort>{behandler.kontaktinformasjon.adresse}</BodyShort>
                 <BodyShort>{`Telefon: ${formatTelefonnummer(
                   behandler.kontaktinformasjon.telefon,
                 )}`}</BodyShort>

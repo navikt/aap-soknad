@@ -2,10 +2,10 @@ import { StønadType } from 'components/pageComponents/standard/AndreUtbetalinge
 import { Relasjon } from 'components/pageComponents/standard/Barnetillegg/AddBarnModal';
 import { JaEllerNei, JaNeiVetIkke } from './Generic';
 import { JaNeiAvbrutt } from 'components/pageComponents/standard/Student/Student';
-import { OppslagBehandler } from 'context/sokerOppslagContext';
 import { FerieType } from 'components/pageComponents/standard/StartDato/StartDato';
 import { Vedlegg } from '@navikt/aap-felles-react';
 import { Barn } from 'pages/api/oppslag/barn';
+import { Fastlege } from 'pages/api/oppslag/fastlege';
 
 export type Navn = {
   fornavn?: string;
@@ -43,7 +43,7 @@ export type Behandler = {
   telefon?: string;
   id?: string;
 };
-export interface RegistrertBehandler extends OppslagBehandler {
+export interface RegistrertBehandler extends Fastlege {
   erRegistrertFastlegeRiktig?: JaEllerNei;
 }
 type Student = {

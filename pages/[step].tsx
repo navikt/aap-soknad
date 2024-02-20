@@ -46,15 +46,18 @@ import { Barn, getBarn } from 'pages/api/oppslag/barn';
 import { formatNavn } from 'utils/StringFormatters';
 import { hentMellomlagring } from 'pages/api/mellomlagring/les';
 import { RequiredVedlegg } from 'types/SoknadContext';
+import { Fastlege, getFastlege } from 'pages/api/oppslag/fastlege';
+import { migrerMellomlagretBehandler } from 'lib/utils/migrerMellomlagretBehandler';
 
 interface PageProps {
   søker: SokerOppslagState;
   mellomlagretSøknad: SoknadContextState;
   kontaktinformasjon: KontaktInfoView | null;
   barn: Barn[];
+  fastlege: Fastlege[];
 }
 
-const Steps = ({ søker, mellomlagretSøknad, kontaktinformasjon, barn }: PageProps) => {
+const Steps = ({ søker, mellomlagretSøknad, kontaktinformasjon, barn, fastlege }: PageProps) => {
   const router = useRouter();
   const { step } = router.query;
 
@@ -75,7 +78,7 @@ const Steps = ({ søker, mellomlagretSøknad, kontaktinformasjon, barn }: PagePr
       setSokerOppslagFraProps(søker, oppslagDispatch);
 
       if (barn) addBarnIfMissing(søknadDispatch, barn);
-      if (søker.behandlere) addBehandlerIfMissing(søknadDispatch, søker.behandlere);
+      if (fastlege) addBehandlerIfMissing(søknadDispatch, fastlege);
     }
   }, []);
 
@@ -200,6 +203,15 @@ const StepsWithContextProvider = (props: PageProps) => (
   </SoknadContextProvider>
 );
 
+const hentFastlege = async (bearerToken?: string) => {
+  try {
+    return await getFastlege(bearerToken);
+  } catch (e) {
+    logger.error('Noe gikk galt i kallet mot oppslag/fastlege', e);
+    return [];
+  }
+};
+
 export const getServerSideProps = beskyttetSide(
   async (ctx: NextPageContext): Promise<GetServerSidePropsResult<PageProps>> => {
     const stopTimer = metrics.getServersidePropsDurationHistogram.startTimer({
@@ -214,7 +226,13 @@ export const getServerSideProps = beskyttetSide(
       logger.error({ message: `Noe gikk galt i kallet mot oppslag/krr: ${e?.toString()}` });
     }
 
-    const mellomlagretSøknad = await hentMellomlagring(bearerToken);
+    const fastlege = await hentFastlege(bearerToken);
+
+    let mellomlagretSøknad = await hentMellomlagring(bearerToken);
+
+    if (mellomlagretSøknad) {
+      mellomlagretSøknad = migrerMellomlagretBehandler(mellomlagretSøknad);
+    }
 
     let barn: Barn[] = søker?.søker?.barn?.map((barn) => {
       return { navn: formatNavn(barn.navn), fødselsdato: barn.fødselsdato };
@@ -243,7 +261,7 @@ export const getServerSideProps = beskyttetSide(
     }
 
     return {
-      props: { søker, mellomlagretSøknad, kontaktinformasjon, barn },
+      props: { søker, mellomlagretSøknad, kontaktinformasjon, barn, fastlege },
     };
   },
 );

@@ -119,7 +119,7 @@ export const Behandlere = ({ onBackClick }: Props) => {
           )}
           {søknadState?.søknad?.registrerteBehandlere?.map((registrertBehandler, index) => (
             <RegistrertBehandler
-              key={registrertBehandler.kontaktinformasjon.behandlerRef}
+              key={registrertBehandler.behandlerRef}
               index={index}
               registrertBehandler={registrertBehandler}
               clearErrors={clearErrors}

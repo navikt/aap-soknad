@@ -1,10 +1,10 @@
 import { AttachmentType, RequiredVedlegg } from 'types/SoknadContext';
-import { OppslagBehandler } from '../sokerOppslagContext';
 import { Vedlegg } from '@navikt/aap-felles-react';
 import { Soknad, SoknadVedlegg } from 'types/Soknad';
 import { Dispatch } from 'react';
 import { SoknadContextState } from './soknadContext';
 import { Barn } from 'pages/api/oppslag/barn';
+import { Fastlege } from 'pages/api/oppslag/fastlege';
 
 export enum SoknadActionKeys {
   SET_STATE_FROM_CACHE = 'SET_STATE_FROM_CACHE',
@@ -37,7 +37,7 @@ type AddBarnIfMissing = {
 };
 type AddBehandlerIfMissing = {
   type: SoknadActionKeys.ADD_BEHANDLER_IF_MISSING;
-  payload: OppslagBehandler[];
+  payload: Fastlege[];
 };
 type AddRequiredVedlegg = {
   type: SoknadActionKeys.ADD_REQUIRED_VEDLEGG;
@@ -126,10 +126,7 @@ export async function removeRequiredVedlegg(
   if (vedleggType)
     dispatch({ type: SoknadActionKeys.REMOVE_REQUIRED_VEDLEGG, payload: vedleggType });
 }
-export const addBehandlerIfMissing = (
-  dispatch: Dispatch<SoknadAction>,
-  data: OppslagBehandler[],
-) => {
+export const addBehandlerIfMissing = (dispatch: Dispatch<SoknadAction>, data: Fastlege[]) => {
   dispatch({ type: SoknadActionKeys.ADD_BEHANDLER_IF_MISSING, payload: data });
 };
 export const addBarnIfMissing = (dispatch: Dispatch<SoknadAction>, data: Barn[]) => {

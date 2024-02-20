@@ -1,6 +1,6 @@
 import * as classes from './Behandlere.module.css';
 import { Alert, BodyShort, Label, Radio, RadioGroup } from '@navikt/ds-react';
-import { formatFullAdresse, formatNavn, formatTelefonnummer } from 'utils/StringFormatters';
+import { formatTelefonnummer } from 'utils/StringFormatters';
 import { JaEllerNei } from 'types/Generic';
 import React from 'react';
 import { useIntl } from 'react-intl';
@@ -31,7 +31,7 @@ export const RegistrertBehandler = ({
             {formatMessage({ id: 'søknad.helseopplysninger.registrertFastlege.navn' })}
           </Label>
         </dt>
-        <dd>{formatNavn(registrertBehandler.navn)}</dd>
+        <dd>{registrertBehandler.navn}</dd>
         <dt>
           <Label as={'span'}>
             {formatMessage({
@@ -47,7 +47,7 @@ export const RegistrertBehandler = ({
           </Label>
         </dt>
 
-        <dd>{formatFullAdresse(registrertBehandler.kontaktinformasjon.adresse)}</dd>
+        <dd>{registrertBehandler.kontaktinformasjon.adresse}</dd>
         <dt>
           <Label as={'span'}>
             {formatMessage({ id: 'søknad.helseopplysninger.registrertFastlege.telefon' })}
@@ -67,10 +67,7 @@ export const RegistrertBehandler = ({
           clearErrors();
           updateSøknadData(søknadDispatch, {
             registrerteBehandlere: søknadState.søknad?.registrerteBehandlere?.map((behandler) => {
-              if (
-                behandler.kontaktinformasjon.behandlerRef ===
-                registrertBehandler.kontaktinformasjon.behandlerRef
-              ) {
+              if (behandler.behandlerRef === registrertBehandler.behandlerRef) {
                 return { ...behandler, erRegistrertFastlegeRiktig: value };
               } else {
                 return behandler;

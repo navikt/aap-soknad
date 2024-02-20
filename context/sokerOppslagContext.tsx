@@ -1,5 +1,6 @@
 import React, { createContext, Dispatch, ReactNode, useReducer, useContext, useMemo } from 'react';
 import { formatNavn, formatFullAdresse } from 'utils/StringFormatters';
+import { Fastlege } from 'pages/api/oppslag/fastlege';
 
 interface DispatchSokerOppslagAction {
   payload?: any;
@@ -29,6 +30,10 @@ export type OppslagBarn = {
   fødselsdato: string;
   fnr: string;
 };
+
+/**
+ * @deprecated - erstattet av Fastlege
+ */
 export interface OppslagBehandler {
   type: 'FASTLEGE' | 'SYKMELDER';
   navn: Navn;
@@ -59,7 +64,7 @@ export type KontaktInfoView = {
 };
 export type SokerOppslagState = {
   søker: Soker;
-  behandlere: Array<OppslagBehandler>;
+  behandlere: Fastlege[];
   kontaktinformasjon?: KontaktInfoView;
 };
 const søkerOppslagInitialValue = {

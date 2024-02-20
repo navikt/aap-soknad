@@ -200,11 +200,9 @@ export const mapSøknadToPdf = (
       ? createFritekst('Fant ingen registrert fastlege')
       : søknad?.registrerteBehandlere?.map((behandler) =>
           createFeltgruppe([
-            ...createField('Type', behandler?.type),
-            ...createField('Kategori', behandler?.kategori),
-            ...createField('Navn', formatNavn(behandler?.navn)),
+            ...createField('Navn', behandler?.navn),
             ...createField('Kontor', behandler?.kontaktinformasjon?.kontor),
-            ...createField('Adresse', formatFullAdresse(behandler?.kontaktinformasjon?.adresse)),
+            ...createField('Adresse', behandler?.kontaktinformasjon?.adresse),
             ...createField('Telefon', behandler?.kontaktinformasjon?.telefon),
             ...createField(
               formatMessage({ id: `søknad.helseopplysninger.erRegistrertFastlegeRiktig.label` }),
