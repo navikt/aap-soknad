@@ -38,7 +38,7 @@ import { SoknadContextProvider, SoknadContextState } from 'context/soknadcontext
 import { useSoknad } from 'hooks/SoknadHook';
 import {
   addBarnIfMissing,
-  addBehandlerIfMissing,
+  addFastlegeIfMissing,
   setSoknadStateFraProps,
 } from 'context/soknadcontext/actions';
 import { getKrr } from 'pages/api/oppslag/krr';
@@ -78,7 +78,7 @@ const Steps = ({ søker, mellomlagretSøknad, kontaktinformasjon, barn, fastlege
       setSokerOppslagFraProps(søker, oppslagDispatch);
 
       if (barn) addBarnIfMissing(søknadDispatch, barn);
-      if (fastlege) addBehandlerIfMissing(søknadDispatch, fastlege);
+      if (fastlege) addFastlegeIfMissing(søknadDispatch, fastlege);
     }
   }, []);
 

@@ -194,11 +194,11 @@ export const mapSøknadToPdf = (
     ]);
   };
   const getRegistrerteBehandlere = (søknad?: Soknad) => {
-    if (!søknad?.registrerteBehandlere?.length) {
+    if (!søknad?.fastlege?.length) {
     }
-    const registrerteBehandlere = !søknad?.registrerteBehandlere?.length
+    const fastleger = !søknad?.fastlege?.length
       ? createFritekst('Fant ingen registrert fastlege')
-      : søknad?.registrerteBehandlere?.map((behandler) =>
+      : søknad?.fastlege?.map((behandler) =>
           createFeltgruppe([
             ...createField('Navn', behandler?.navn),
             ...createField('Kontor', behandler?.kontaktinformasjon?.kontor),
@@ -210,7 +210,7 @@ export const mapSøknadToPdf = (
             ),
           ]),
         ) || [];
-    return createTema('Registrerte behandlere', registrerteBehandlere);
+    return createTema('Registrerte behandlere', fastleger);
   };
   const getAndreBehandlere = (søknad?: Soknad) => {
     const andreBehandlere = !søknad?.andreBehandlere?.length

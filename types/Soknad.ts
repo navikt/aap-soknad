@@ -6,6 +6,7 @@ import { FerieType } from 'components/pageComponents/standard/StartDato/StartDat
 import { Vedlegg } from '@navikt/aap-felles-react';
 import { Barn } from 'pages/api/oppslag/barn';
 import { Fastlege } from 'pages/api/oppslag/fastlege';
+import { OppslagBehandler } from 'context/sokerOppslagContext';
 
 export type Navn = {
   fornavn?: string;
@@ -43,9 +44,14 @@ export type Behandler = {
   telefon?: string;
   id?: string;
 };
-export interface RegistrertBehandler extends Fastlege {
+export interface RegistrertBehandler extends OppslagBehandler {
   erRegistrertFastlegeRiktig?: JaEllerNei;
 }
+
+export interface RegistrertFastlege extends Fastlege {
+  erRegistrertFastlegeRiktig?: JaEllerNei;
+}
+
 type Student = {
   erStudent?: JaNeiAvbrutt;
   kommeTilbake?: JaNeiVetIkke;
@@ -98,7 +104,11 @@ export interface Soknad {
   sykepenger?: JaEllerNei;
   yrkesskade?: JaEllerNei;
   medlemskap?: Medlemskap;
+  /**
+   * @Deprecated
+   */
   registrerteBehandlere?: RegistrertBehandler[];
+  fastlege?: RegistrertFastlege[];
   andreBehandlere?: Behandler[];
   student?: Student;
   andreUtbetalinger?: AndreUtbetalinger;

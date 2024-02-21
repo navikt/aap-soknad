@@ -1,4 +1,3 @@
-import { OppslagBehandler } from 'context/sokerOppslagContext';
 import { formatFullAdresse, formatNavn } from 'utils/StringFormatters';
 import { SoknadContextState } from 'context/soknadcontext/soknadContext';
 
@@ -14,28 +13,21 @@ export const migrerMellomlagretBehandler = (
     mellomlagretSøknad.søknad?.registrerteBehandlere &&
     mellomlagretSøknad.søknad?.registrerteBehandlere.length > 0
   ) {
-    // @ts-ignore Dersom behandler er fra soknad-api er den av type OppslagBehandler
-    const behandler: OppslagBehandler = mellomlagretSøknad?.søknad?.registrerteBehandlere[0];
+    const behandler = mellomlagretSøknad?.søknad?.registrerteBehandlere[0];
 
-    // @ts-ignore - feltet ligger på RegistrertBehandler, som tidligere utvidet OppslagBehandler
     const behandlerErKorrektErBesvart = behandler.erRegistrertFastlegeRiktig !== undefined;
-
-    // @ts-ignore -- for behandlere fra søknad-api ligger behandlerRef på kontaktinformasjon
-    const behandlerErFraSoknadAPI = !!behandler.kontaktinformasjon.behandlerRef;
 
     // trenger ikke migrere hvis spørsmålet om behandler ikke er besvart enda. Behandler vil da bli satt
     // i addBehandlerIfMissing som kalles fra [step].tsx
-    if (behandlerErKorrektErBesvart && behandlerErFraSoknadAPI) {
-      // @ts-ignore
-      const erFastlegeKorrekt = behandler.erRegistrertFastlegeRiktig ?? undefined;
-
+    if (behandlerErKorrektErBesvart) {
+      delete mellomlagretSøknad.søknad.registrerteBehandlere;
       return {
         ...mellomlagretSøknad,
         søknad: {
           ...mellomlagretSøknad.søknad,
-          registrerteBehandlere: [
+          fastlege: [
             {
-              erRegistrertFastlegeRiktig: erFastlegeKorrekt,
+              erRegistrertFastlegeRiktig: behandler?.erRegistrertFastlegeRiktig,
               navn: formatNavn(behandler.navn),
               behandlerRef: behandler.kontaktinformasjon.behandlerRef,
               kontaktinformasjon: {

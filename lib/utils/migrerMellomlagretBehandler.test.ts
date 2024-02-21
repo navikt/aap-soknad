@@ -2,11 +2,11 @@ import { JaEllerNei } from 'types/Generic';
 import { migrerMellomlagretBehandler } from 'lib/utils/migrerMellomlagretBehandler';
 import { SoknadContextState } from 'context/soknadcontext/soknadContext';
 
-const mellomlagretSøknad: SoknadContextState = {
+const mellomlagretSøknadBehandlerFraOppslag: SoknadContextState = {
   version: 1,
   requiredVedlegg: [],
   søknad: {
-    registrerteBehandlere: [
+    fastlege: [
       {
         navn: 'Sonja Paracet Plastersen',
         erRegistrertFastlegeRiktig: JaEllerNei.JA,
@@ -21,7 +21,9 @@ const mellomlagretSøknad: SoknadContextState = {
   },
 };
 
-const mellomlagretSøknadFraSøknadAPI: any = {
+const mellomlagretSøknadBehandlerFraSøknadAPI: SoknadContextState = {
+  requiredVedlegg: [],
+  version: 1,
   søknad: {
     registrerteBehandlere: [
       {
@@ -51,23 +53,27 @@ const mellomlagretSøknadFraSøknadAPI: any = {
 describe('migrer mellomlagret behandler', () => {
   describe('migrerer når', () => {
     test('behandler kommer fra gammel struktur og spørsmål om behandler er korrekt er besvart', () => {
-      const res = migrerMellomlagretBehandler(mellomlagretSøknadFraSøknadAPI);
-      expect(res.søknad?.registrerteBehandlere).toHaveLength(1);
+      const migrertMellomlagring = migrerMellomlagretBehandler(
+        mellomlagretSøknadBehandlerFraSøknadAPI,
+      );
 
-      const migrertBehandler =
-        res.søknad?.registrerteBehandlere && res.søknad.registrerteBehandlere[0];
-      expect(migrertBehandler).not.toBeUndefined();
+      expect(migrertMellomlagring.søknad?.fastlege).toHaveLength(1);
+
+      const migrertFastlege =
+        migrertMellomlagring.søknad?.fastlege && migrertMellomlagring.søknad.fastlege[0];
+      expect(migrertFastlege).not.toBeUndefined();
 
       // @ts-ignore - Typen sier den kan være undef, men den er ikke det her.
-      const forventetBehandler = mellomlagretSøknad.søknad.registrerteBehandlere[0];
-      expect(migrertBehandler).toEqual(forventetBehandler);
+      const forventetBehandler = mellomlagretSøknadBehandlerFraOppslag.søknad?.fastlege[0];
+      expect(migrertMellomlagring).toEqual(mellomlagretSøknadBehandlerFraOppslag);
+      expect(migrertFastlege).toEqual(forventetBehandler);
     });
   });
 
   describe('migrerer ikke når', () => {
     test('mellomlagret behandler kommer fra oppslag', () => {
-      const res = migrerMellomlagretBehandler(mellomlagretSøknad);
-      expect(res).toEqual(mellomlagretSøknad);
+      const res = migrerMellomlagretBehandler(mellomlagretSøknadBehandlerFraOppslag);
+      expect(res).toEqual(mellomlagretSøknadBehandlerFraOppslag);
     });
 
     test('mellomlagret søknad ikke inneholder noen behandlere', () => {

@@ -27,7 +27,7 @@ interface Props {
 
 export const getBehandlerSchema = (formatMessage: IntlFormatters['formatMessage']) =>
   yup.object().shape({
-    registrerteBehandlere: yup.array().of(
+    fastlege: yup.array().of(
       yup.object().shape({
         erRegistrertFastlegeRiktig: yup
           .string()
@@ -52,7 +52,7 @@ export const Behandlere = ({ onBackClick }: Props) => {
 
   useEffect(() => {
     debouncedLagre(søknadState, stepList, {});
-  }, [søknadState.søknad?.andreBehandlere, søknadState.søknad?.registrerteBehandlere]);
+  }, [søknadState.søknad?.andreBehandlere, søknadState.søknad?.fastlege]);
 
   function clearErrors() {
     setErrors(undefined);
@@ -112,18 +112,18 @@ export const Behandlere = ({ onBackClick }: Props) => {
           <Heading size={'small'} level={'3'}>
             {formatMessage({ id: 'søknad.helseopplysninger.registrertFastlege.title' })}
           </Heading>
-          {søknadState?.søknad?.registrerteBehandlere?.length === 0 && (
+          {søknadState?.søknad?.fastlege?.length === 0 && (
             <BodyLong>
               {formatMessage({ id: 'søknad.helseopplysninger.registrertFastlege.ingenFastlege' })}
             </BodyLong>
           )}
-          {søknadState?.søknad?.registrerteBehandlere?.map((registrertBehandler, index) => (
+          {søknadState?.søknad?.fastlege?.map((fastlege, index) => (
             <RegistrertBehandler
-              key={registrertBehandler.behandlerRef}
+              key={fastlege.behandlerRef}
               index={index}
-              registrertBehandler={registrertBehandler}
+              fastlege={fastlege}
               clearErrors={clearErrors}
-              errorMessage={findError(`registrerteBehandlere[${index}].erRegistrertFastlegeRiktig`)}
+              errorMessage={findError(`fastlege[${index}].erRegistrertFastlegeRiktig`)}
             />
           ))}
         </div>

@@ -11,7 +11,7 @@ export enum SoknadActionKeys {
   SET_SOKNAD = 'SET_SOKNAD',
   UPDATE_SOKNAD = 'UPDATE_SOKNAD',
   ADD_BARN_IF_MISSING = 'ADD_BARN_IF_MISSING',
-  ADD_BEHANDLER_IF_MISSING = 'ADD_BEHANDLER_IF_MISSING',
+  ADD_FASTLEGE_IF_MISSING = 'ADD_FASTLEGE_IF_MISSING',
   ADD_REQUIRED_VEDLEGG = 'ADD_REQUIRED_VEDLEGG',
   REMOVE_REQUIRED_VEDLEGG = 'REMOVE_REQUIRED_VEDLEGG',
   ADD_SØKNAD_URL = 'ADD_SØKNAD_URL',
@@ -35,8 +35,8 @@ type AddBarnIfMissing = {
   type: SoknadActionKeys.ADD_BARN_IF_MISSING;
   payload: Barn[];
 };
-type AddBehandlerIfMissing = {
-  type: SoknadActionKeys.ADD_BEHANDLER_IF_MISSING;
+type AddFastlegeIfMissing = {
+  type: SoknadActionKeys.ADD_FASTLEGE_IF_MISSING;
   payload: Fastlege[];
 };
 type AddRequiredVedlegg = {
@@ -69,7 +69,7 @@ export type SoknadAction =
   | SetSoknad
   | UpdateSoknad
   | AddBarnIfMissing
-  | AddBehandlerIfMissing
+  | AddFastlegeIfMissing
   | AddRequiredVedlegg
   | RemoveRequiredVedlegg
   | AddSøknadUrl
@@ -126,8 +126,8 @@ export async function removeRequiredVedlegg(
   if (vedleggType)
     dispatch({ type: SoknadActionKeys.REMOVE_REQUIRED_VEDLEGG, payload: vedleggType });
 }
-export const addBehandlerIfMissing = (dispatch: Dispatch<SoknadAction>, data: Fastlege[]) => {
-  dispatch({ type: SoknadActionKeys.ADD_BEHANDLER_IF_MISSING, payload: data });
+export const addFastlegeIfMissing = (dispatch: Dispatch<SoknadAction>, data: Fastlege[]) => {
+  dispatch({ type: SoknadActionKeys.ADD_FASTLEGE_IF_MISSING, payload: data });
 };
 export const addBarnIfMissing = (dispatch: Dispatch<SoknadAction>, data: Barn[]) => {
   dispatch({ type: SoknadActionKeys.ADD_BARN_IF_MISSING, payload: data });
