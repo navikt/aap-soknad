@@ -1,7 +1,6 @@
 import { OppslagBehandler } from 'context/sokerOppslagContext';
 import { formatFullAdresse, formatNavn } from 'utils/StringFormatters';
 import { SoknadContextState } from 'context/soknadcontext/soknadContext';
-import { logger } from '@navikt/aap-felles-utils';
 
 /**
  * Migrerer behandlere som er mellomlagret på struktur fra soknad-api
@@ -27,7 +26,6 @@ export const migrerMellomlagretBehandler = (
     // trenger ikke migrere hvis spørsmålet om behandler ikke er besvart enda. Behandler vil da bli satt
     // i addBehandlerIfMissing som kalles fra [step].tsx
     if (behandlerErKorrektErBesvart && behandlerErFraSoknadAPI) {
-      logger.info({ message: 'Skal migrere behandler' });
       // @ts-ignore
       const erFastlegeKorrekt = behandler.erRegistrertFastlegeRiktig ?? undefined;
 
@@ -51,6 +49,5 @@ export const migrerMellomlagretBehandler = (
       };
     }
   }
-  logger.info({ message: 'Migrerer ikke behandler' });
   return mellomlagretSøknad;
 };
