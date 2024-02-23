@@ -4,7 +4,7 @@ import { beskyttetApi } from 'auth/beskyttetApi';
 import { logger, tokenXApiProxy } from '@navikt/aap-felles-utils';
 import metrics from 'utils/metrics';
 import { z } from 'zod';
-import { isMock } from 'utils/environments';
+import { isDev, isMock } from 'utils/environments';
 import { mockFastlege } from 'mock/fastlege';
 
 const Fastlege = z.object({
@@ -24,7 +24,7 @@ const handler = beskyttetApi(async (req: NextApiRequest, res: NextApiResponse) =
   res.status(200).json(await getFastlege(accessToken));
 });
 export const getFastlege = async (accessToken?: string): Promise<Fastlege[]> => {
-  if (isMock()) return mockFastlege;
+  if (isMock() || isDev()) return mockFastlege;
 
   const fastlege: Fastlege = await tokenXApiProxy({
     url: `${process.env.OPPSLAG_URL}/fastlege`,
@@ -39,7 +39,9 @@ export const getFastlege = async (accessToken?: string): Promise<Fastlege[]> => 
 
   const validatedResponse = z.array(Fastlege).safeParse(fastlege);
   if (!validatedResponse.success) {
-    logger.error({ message: `oppslag/person valideringsfeil: ${validatedResponse.error.message}` });
+    logger.error({
+      message: `oppslag/fastlege valideringsfeil: ${validatedResponse.error.message}`,
+    });
     return [];
   }
   return validatedResponse.data;
