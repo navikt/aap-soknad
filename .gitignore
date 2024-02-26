@@ -3,8 +3,10 @@
 # local env file
 .env.local
 
+#yarn berry
+.yarn/install-state.gz
+
 # dependencies
-.yarn/
 /node_modules
 /.pnp
 .pnp.js
