@@ -21,17 +21,15 @@ jobs:
       appname: 'aap-soknad'
       playwright: false
       cdn: true
-  deployAppToDev:
-    name: Deploy app to dev
+  deployDev:
     needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - name: Deploy to DEV
-        uses: nais/deploy/actions/deploy@v1
-        env:
-          IMAGE: ${{needs.build.outputs.image}}
-          APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
-          CLUSTER: dev-gcp
-          RESOURCE: .nais/nais.yaml
-          VARS: .nais/dev.yaml
+    uses: navikt/aap-workflows/.github/workflows/deploy.yml@main
+    permissions:
+      contents: read
+      id-token: write
+    secrets: inherit
+    with:
+      cluster: dev-gcp
+      manifest: .nais/nais.yaml
+      imageSuffix: -dev-gcp
+      vars: .nais/dev.yaml
