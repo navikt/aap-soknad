@@ -1,4 +1,4 @@
-name: Build and deploy aap-soknad to dev
+name: Bygg og deploy AAP Søknad
 on:
   workflow_dispatch:
   push:
@@ -19,6 +19,19 @@ jobs:
     with:
       cluster: dev-gcp
       appname: 'aap-soknad'
+      playwright: false
+      cdn: true
+  buildProd:
+    uses: navikt/aap-workflows/.github/workflows/frontend-next-build.yml@node-20
+    permissions:
+      contents: read
+      id-token: write
+      packages: write
+    secrets: inherit
+    if: github.ref == 'refs/heads/main'
+    with:
+      cluster: prod-gcp
+      appname: 'aap-soknad'
       playwright: true
       cdn: true
   deployDev:
@@ -33,3 +46,29 @@ jobs:
       manifest: .nais/nais.yaml
       imageSuffix: -dev-gcp
       vars: .nais/dev.yaml
+  deployProd:
+    needs: buildProd
+    uses: navikt/aap-workflows/.github/workflows/deploy.yml@main
+    permissions:
+      contents: read
+      id-token: write
+    if: github.ref == 'refs/heads/main'
+    secrets: inherit
+    with:
+      cluster: prod-gcp
+      manifest: .nais/nais.yaml,.nais/prod-alerts.yaml
+      imageSuffix: -prod-gcp
+      vars: .nais/prod.yaml
+  deployAppToProd:
+    name: Deploy alerts to prod
+    needs: buildProd
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - uses: actions/checkout@v4
+      - name: Deploy alerts
+        uses: nais/deploy/actions/deploy@v1
+        env:
+          APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
+          CLUSTER: prod-gcp
+          RESOURCE: .nais/prod-alerts.yaml
