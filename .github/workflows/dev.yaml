@@ -21,18 +21,6 @@ jobs:
       appname: 'aap-soknad'
       playwright: false
       cdn: true
-  deployDev:
-    needs: build
-    uses: navikt/aap-workflows/.github/workflows/deploy.yml@main
-    permissions:
-      contents: read
-      id-token: write
-    secrets: inherit
-    with:
-      cluster: dev-gcp
-      manifest: .nais/nais.yaml
-      imageSuffix: -dev-gcp
-      vars: .nais/dev.yaml
   deployAppToDev:
     name: Deploy app to dev
     needs: build
