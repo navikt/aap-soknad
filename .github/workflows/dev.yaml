@@ -9,7 +9,7 @@ on:
 env:
   IMAGE_BASE: europe-north1-docker.pkg.dev/${{ vars.NAIS_MANAGEMENT_PROJECT_ID }}/aap/${{ github.event.repository.name }}
 jobs:
-  build:
+  buildDev:
     uses: navikt/aap-workflows/.github/workflows/frontend-next-build.yml@node-20
     permissions:
       contents: read
@@ -19,10 +19,10 @@ jobs:
     with:
       cluster: dev-gcp
       appname: 'aap-soknad'
-      playwright: false
+      playwright: true
       cdn: true
   deployDev:
-    needs: build
+    needs: buildDev
     uses: navikt/aap-workflows/.github/workflows/deploy.yml@main
     permissions:
       contents: read
