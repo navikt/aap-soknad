@@ -1,0 +1,57 @@
+name: Build and deploy mocket versjon av aap-soknad
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - '**.md'
+env:
+  IMAGE_SUFFIX: dev-gcp-mock
+jobs:
+  buildMock:
+    name: build
+    runs-on: ubuntu-latest
+    env:
+      NPM_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
+      SKIP_YARN_COREPACK_CHECK: true
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          registry-url: https://npm.pkg.github.com
+          cache: yarn
+      - name: Enable Corepack
+        run: corepack enable
+      - name: Cache client node_modules
+        id: cache-node-modules
+        uses: actions/cache@v4
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-modules-${{ hashFiles('yarn.lock') }}
+      - name: install dependencies Yarn
+        if: steps.cache-node-modules.outputs.cache-hit != 'true'
+        run: yarn install --immutable
+      - name: Copy env-file # TODO: Se om vi kan finne en bedre løsning her på sikt
+        run: cp .nais/dev-mock.env .env
+      - name: run build
+        run: yarn run build
+      - uses: nais/docker-build-push@v0
+        with:
+          team: aap
+          identity_provider: ${{ secrets.NAIS_WORKLOAD_IDENTITY_PROVIDER }}
+          project_id: ${{ vars.NAIS_MANAGEMENT_PROJECT_ID }}
+          image_suffix: -dev-gcp-mock
+          tag: ${{ github.sha }}
+  deployMock:
+    needs: buildMock
+    uses: navikt/aap-workflows/.github/workflows/deploy.yml@main
+    permissions:
+      contents: read
+      id-token: write
+    secrets: inherit
+    with:
+      cluster: dev-gcp
+      manifest: .nais/dev-mock.yaml
+      imageSuffix: -dev-gcp-mock

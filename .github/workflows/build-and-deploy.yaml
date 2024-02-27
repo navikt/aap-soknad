@@ -6,8 +6,6 @@ on:
       - main
     paths-ignore:
       - '**.md'
-env:
-  IMAGE_BASE: europe-north1-docker.pkg.dev/${{ vars.NAIS_MANAGEMENT_PROJECT_ID }}/aap/${{ github.event.repository.name }}
 jobs:
   buildDev:
     uses: navikt/aap-workflows/.github/workflows/frontend-next-build.yml@frontend-next-build-yarnberry
