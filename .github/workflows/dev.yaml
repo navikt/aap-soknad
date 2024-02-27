@@ -10,7 +10,7 @@ env:
   IMAGE_BASE: europe-north1-docker.pkg.dev/${{ vars.NAIS_MANAGEMENT_PROJECT_ID }}/aap/${{ github.event.repository.name }}
 jobs:
   buildDev:
-    uses: navikt/aap-workflows/.github/workflows/frontend-next-build.yml@node-20
+    uses: navikt/aap-workflows/.github/workflows/frontend-next-build.yml@frontend-next-build-yarnberry
     permissions:
       contents: read
       id-token: write
@@ -22,7 +22,7 @@ jobs:
       playwright: false
       cdn: true
   buildProd:
-    uses: navikt/aap-workflows/.github/workflows/frontend-next-build.yml@node-20
+    uses: navikt/aap-workflows/.github/workflows/frontend-next-build.yml@frontend-next-build-yarnberry
     permissions:
       contents: read
       id-token: write
@@ -59,7 +59,7 @@ jobs:
       manifest: .nais/nais.yaml,.nais/prod-alerts.yaml
       imageSuffix: -prod-gcp
       vars: .nais/prod.yaml
-  deployAppToProd:
+  deployAlertsProd:
     name: Deploy alerts to prod
     needs: buildProd
     runs-on: ubuntu-latest
