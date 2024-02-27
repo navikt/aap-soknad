@@ -3,7 +3,7 @@ import { getAccessTokenFromRequest } from 'auth/accessToken';
 import { beskyttetApi } from 'auth/beskyttetApi';
 import { logger, tokenXApiProxy } from '@navikt/aap-felles-utils';
 import { lagreCache } from 'mock/mellomlagringsCache';
-import { isLabs, isMock } from 'utils/environments';
+import { isFunctionalTest, isMock } from 'utils/environments';
 import metrics from 'utils/metrics';
 
 import { StepType } from 'components/StepWizard/Step';
@@ -32,7 +32,7 @@ const handler = beskyttetApi(async (req: NextApiRequest, res: NextApiResponse) =
 });
 
 export const lagreBucket = async (data: string, accessToken?: string) => {
-  if (isLabs()) return;
+  if (isFunctionalTest()) return;
   if (isMock()) return await lagreCache(JSON.stringify(data));
   await tokenXApiProxy({
     url: `${process.env.INNSENDING_URL}/mellomlagring/søknad`,

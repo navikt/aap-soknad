@@ -3,7 +3,7 @@ import { logger, tokenXApiProxy } from '@navikt/aap-felles-utils';
 import { NextApiRequest, NextApiResponse } from 'next';
 import metrics from 'utils/metrics';
 import { ErrorMedStatus } from 'auth/ErrorMedStatus';
-import { isLabs, isMock } from 'utils/environments';
+import { isFunctionalTest, isMock } from 'utils/environments';
 import { slettBucket } from 'pages/api/buckets/slett';
 import { createIntl } from 'react-intl';
 import { flattenMessages, messages } from 'utils/message';
@@ -148,7 +148,7 @@ export const sendSoknadViaAapInnsending = async (
   innsending: SoknadInnsendingRequestBody,
   accessToken?: string,
 ) => {
-  if (isLabs()) {
+  if (isFunctionalTest()) {
     return 'Vi har mottat søknaden din.';
   }
   if (isMock()) {

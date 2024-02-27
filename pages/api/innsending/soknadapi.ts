@@ -3,7 +3,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import { getAccessTokenFromRequest } from 'auth/accessToken';
 import { beskyttetApi } from 'auth/beskyttetApi';
 import { tokenXApiProxy, logger } from '@navikt/aap-felles-utils';
-import { isMock, isLabs } from 'utils/environments';
+import { isFunctionalTest, isMock } from 'utils/environments';
 import { slettBucket } from '../buckets/slett';
 import { ErrorMedStatus } from 'auth/ErrorMedStatus';
 import metrics from 'utils/metrics';
@@ -24,7 +24,7 @@ const handler = beskyttetApi(async (req: NextApiRequest, res: NextApiResponse) =
 });
 
 export const sendSoknad = async (data: string, accessToken?: string) => {
-  if (isLabs()) {
+  if (isFunctionalTest()) {
     return { uri: `https://localhost:3000/aap/soknad/api/vedlegg/les?uuid=${randomUUID()}` };
   }
   if (isMock()) {

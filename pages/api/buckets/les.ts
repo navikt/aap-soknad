@@ -4,7 +4,7 @@ import { beskyttetApi } from 'auth/beskyttetApi';
 import { logger, tokenXApiProxy } from '@navikt/aap-felles-utils';
 import metrics from 'utils/metrics';
 import { erGyldigSøknadsType, GYLDIGE_SØKNADS_TYPER, SøknadsType } from 'utils/api';
-import { isLabs, isMock } from 'utils/environments';
+import { isMock } from 'utils/environments';
 import { getStringFromPossiblyArrayQuery } from 'utils/string';
 import { SoknadContextState } from 'context/soknadcontext/soknadContext';
 
@@ -28,7 +28,7 @@ export const lesBucket = async (
   }
 
   // Returnerer undefined ettersom vi heller bruker mellomlagring fra innsending lokalt
-  if (isLabs() || isMock()) {
+  if (isMock()) {
     return;
   }
   try {

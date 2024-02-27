@@ -4,7 +4,7 @@ import { beskyttetApi } from 'auth/beskyttetApi';
 import { tokenXApiProxy, logger } from '@navikt/aap-felles-utils';
 import { lagreCache } from 'mock/mellomlagringsCache';
 import { erGyldigSøknadsType, GYLDIGE_SØKNADS_TYPER, SøknadsType } from 'utils/api';
-import { isLabs, isMock } from 'utils/environments';
+import { isFunctionalTest, isMock } from 'utils/environments';
 import { getStringFromPossiblyArrayQuery } from 'utils/string';
 import metrics from 'utils/metrics';
 import { lesBucket } from './les';
@@ -37,7 +37,7 @@ const handler = beskyttetApi(async (req: NextApiRequest, res: NextApiResponse) =
 });
 
 export const lagreBucket = async (type: SøknadsType, data: string, accessToken?: string) => {
-  if (isLabs()) return;
+  if (isFunctionalTest()) return;
   if (isMock()) return await lagreCache(JSON.stringify(data));
   await tokenXApiProxy({
     url: `${process.env.SOKNAD_API_URL}/buckets/lagre/${type}`,

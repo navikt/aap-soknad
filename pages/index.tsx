@@ -8,7 +8,6 @@ import { getAccessToken } from 'auth/accessToken';
 import { fetchPOST } from 'api/fetch';
 import { lesBucket } from 'pages/api/buckets/les';
 import { StepType } from 'components/StepWizard/Step';
-import { isLabs } from 'utils/environments';
 import { logSkjemaStartetEvent } from 'utils/amplitude';
 import metrics from 'utils/metrics';
 import { scrollRefIntoView } from 'utils/dom';
@@ -17,6 +16,7 @@ import { logger } from '@navikt/aap-felles-utils';
 import { getFulltNavn } from 'lib/søker';
 import { SOKNAD_VERSION, SoknadContextState } from 'context/soknadcontext/soknadContext';
 import { hentMellomlagring } from 'pages/api/mellomlagring/les';
+import { isFunctionalTest } from 'utils/environments';
 
 interface PageProps {
   søker: Soker;
@@ -141,7 +141,7 @@ export const getServerSideProps = beskyttetSide(
     const activeIndex = activeStep?.stepIndex;
 
     stopTimer();
-    if (activeIndex && !isLabs()) {
+    if (activeIndex && !isFunctionalTest()) {
       logger.info('Starter påbegynt søknad');
       return {
         redirect: {

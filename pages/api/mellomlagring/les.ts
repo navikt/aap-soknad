@@ -4,7 +4,7 @@ import { beskyttetApi } from 'auth/beskyttetApi';
 import { logger, tokenXApiProxy } from '@navikt/aap-felles-utils';
 import metrics from 'utils/metrics';
 import { lesCache } from 'mock/mellomlagringsCache';
-import { isLabs, isMock } from 'utils/environments';
+import { isFunctionalTest, isMock } from 'utils/environments';
 import { defaultStepList } from 'pages';
 import { SOKNAD_VERSION, SoknadContextState } from 'context/soknadcontext/soknadContext';
 
@@ -17,7 +17,7 @@ const handler = beskyttetApi(async (req: NextApiRequest, res: NextApiResponse) =
 export const hentMellomlagring = async (
   accessToken?: string,
 ): Promise<SoknadContextState | undefined> => {
-  if (isLabs()) {
+  if (isFunctionalTest()) {
     return {
       version: SOKNAD_VERSION,
       brukerMellomLagretSøknadFraAApInnsending: true,
