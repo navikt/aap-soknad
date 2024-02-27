@@ -1,5 +1,4 @@
 import fs from 'fs/promises';
-import { SøknadsType } from 'utils/api';
 
 export const lesCache = async () => {
   try {

@@ -14,7 +14,6 @@ import {
 import { Soknad } from 'types/Soknad';
 import { fetchPOST } from 'api/fetch';
 import { StepNames } from './index';
-import { mapSøknadToBackend, mapSøknadToPdf } from 'utils/api';
 import StartDato from 'components/pageComponents/standard/StartDato/StartDato';
 import { Medlemskap } from 'components/pageComponents/standard/Medlemskap/Medlemskap';
 import { Yrkesskade } from 'components/pageComponents/standard/Yrkesskade/Yrkesskade';
@@ -28,40 +27,39 @@ import { beskyttetSide } from 'auth/beskyttetSide';
 import { GetServerSidePropsResult, NextPageContext } from 'next';
 import { getAccessToken } from 'auth/accessToken';
 import { getSøker } from './api/oppslag/soeker';
-import { lesBucket } from './api/buckets/les';
 import { logSkjemaFullførtEvent, logVeiledningVistEvent } from 'utils/amplitude';
 import metrics from 'utils/metrics';
 import { scrollRefIntoView } from 'utils/dom';
 import { Steg0 } from 'components/pageComponents/standard/Steg0/Steg0';
 import * as classes from './step.module.css';
-import { FormattedMessage, useIntl } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import { logger } from '@navikt/aap-felles-utils';
 import { SoknadContextProvider, SoknadContextState } from 'context/soknadcontext/soknadContext';
 import { useSoknad } from 'hooks/SoknadHook';
 import {
   addBarnIfMissing,
-  addBehandlerIfMissing,
+  addFastlegeIfMissing,
   setSoknadStateFraProps,
-  SoknadActionKeys,
 } from 'context/soknadcontext/actions';
 import { getKrr } from 'pages/api/oppslag/krr';
 import { Barn, getBarn } from 'pages/api/oppslag/barn';
 import { formatNavn } from 'utils/StringFormatters';
 import { hentMellomlagring } from 'pages/api/mellomlagring/les';
 import { RequiredVedlegg } from 'types/SoknadContext';
+import { Fastlege, getFastlege } from 'pages/api/oppslag/fastlege';
+import { migrerMellomlagretBehandler } from 'lib/utils/migrerMellomlagretBehandler';
 
 interface PageProps {
   søker: SokerOppslagState;
   mellomlagretSøknad: SoknadContextState;
   kontaktinformasjon: KontaktInfoView | null;
   barn: Barn[];
+  fastlege: Fastlege[];
 }
 
-const Steps = ({ søker, mellomlagretSøknad, kontaktinformasjon, barn }: PageProps) => {
+const Steps = ({ søker, mellomlagretSøknad, kontaktinformasjon, barn, fastlege }: PageProps) => {
   const router = useRouter();
   const { step } = router.query;
-
-  const { formatMessage } = useIntl();
 
   const { søknadState, søknadDispatch } = useSoknad();
   const { oppslagDispatch } = useSokerOppslag();
@@ -80,7 +78,7 @@ const Steps = ({ søker, mellomlagretSøknad, kontaktinformasjon, barn }: PagePr
       setSokerOppslagFraProps(søker, oppslagDispatch);
 
       if (barn) addBarnIfMissing(søknadDispatch, barn);
-      if (søker.behandlere) addBehandlerIfMissing(søknadDispatch, søker.behandlere);
+      if (fastlege) addFastlegeIfMissing(søknadDispatch, fastlege);
     }
   }, []);
 
@@ -108,21 +106,10 @@ const Steps = ({ søker, mellomlagretSøknad, kontaktinformasjon, barn }: PagePr
   const submitSoknad = async () => {
     if (currentStep?.name === StepNames.OPPSUMMERING) {
       setShowFetchErrorMessage(false);
-      const sendtTimestamp = new Date();
-
-      // Må massere dataene litt før vi sender de inn
-      const søknad = mapSøknadToBackend(søknadState?.søknad);
-
-      const søknadPdf = mapSøknadToPdf(
-        søknadState?.søknad,
-        sendtTimestamp,
-        formatMessage,
-        søknadState?.requiredVedlegg,
+      const postResponse = await postSøknadMedAAPInnsending(
+        søknadState.søknad,
+        søknadState.requiredVedlegg,
       );
-
-      const postResponse = søknadState.brukerMellomLagretSøknadFraAApInnsending
-        ? await postSøknadMedAAPInnsending(søknadState.søknad, søknadState.requiredVedlegg)
-        : await postSøknadMedSoknadApi({ søknad, kvittering: søknadPdf });
 
       if (postResponse?.ok) {
         const harVedlegg = søknadState.requiredVedlegg && søknadState?.requiredVedlegg?.length > 0;
@@ -134,10 +121,6 @@ const Steps = ({ søker, mellomlagretSøknad, kontaktinformasjon, barn }: PagePr
           søknadState?.søknad?.tilleggsopplysninger.length > 0;
         logSkjemaFullførtEvent({ harVedlegg, erIkkeKomplett, brukerFritekstfelt });
 
-        if (!søknadState.brukerMellomLagretSøknadFraAApInnsending) {
-          const url = postResponse?.data?.uri;
-          søknadDispatch({ type: SoknadActionKeys.ADD_SØKNAD_URL, payload: url });
-        }
         router.push('kvittering');
         return true;
       } else {
@@ -148,10 +131,6 @@ const Steps = ({ søker, mellomlagretSøknad, kontaktinformasjon, barn }: PagePr
     }
     return false;
   };
-  const postSøknadMedSoknadApi = async (data?: any) =>
-    fetchPOST('/aap/soknad/api/innsending/soknadapi', {
-      ...data,
-    });
 
   const postSøknadMedAAPInnsending = async (søknad?: Soknad, requiredVedlegg?: RequiredVedlegg[]) =>
     fetchPOST('/aap/soknad/api/innsending/soknadinnsending/', {
@@ -224,6 +203,15 @@ const StepsWithContextProvider = (props: PageProps) => (
   </SoknadContextProvider>
 );
 
+const hentFastlege = async (bearerToken?: string) => {
+  try {
+    return await getFastlege(bearerToken);
+  } catch (e) {
+    logger.error('Noe gikk galt i kallet mot oppslag/fastlege', e);
+    return [];
+  }
+};
+
 export const getServerSideProps = beskyttetSide(
   async (ctx: NextPageContext): Promise<GetServerSidePropsResult<PageProps>> => {
     const stopTimer = metrics.getServersidePropsDurationHistogram.startTimer({
@@ -238,30 +226,12 @@ export const getServerSideProps = beskyttetSide(
       logger.error({ message: `Noe gikk galt i kallet mot oppslag/krr: ${e?.toString()}` });
     }
 
-    let mellomlagretSøknad: SoknadContextState | undefined;
+    const fastlege = await hentFastlege(bearerToken);
 
-    try {
-      const [mellomlagretSøknadFraSoknadApi, mellomlagretSøknadFraAapInnsending] =
-        await Promise.all([lesBucket('STANDARD', bearerToken), hentMellomlagring(bearerToken)]);
+    let mellomlagretSøknad = await hentMellomlagring(bearerToken);
 
-      if (mellomlagretSøknadFraAapInnsending && mellomlagretSøknadFraSoknadApi) {
-        logger.error('pages/step: finner mellomlagring fra begge kilder');
-      }
-      if (mellomlagretSøknadFraSoknadApi) {
-        logger.info('pages/step: velger mellomlagring fra søknad-api');
-        mellomlagretSøknad = {
-          ...mellomlagretSøknadFraSoknadApi,
-          brukerMellomLagretSøknadFraAApInnsending: false,
-        };
-      } else if (mellomlagretSøknadFraAapInnsending) {
-        logger.info('pages/step: velger mellomlagring fra innsending');
-        mellomlagretSøknad = {
-          ...mellomlagretSøknadFraAapInnsending,
-          brukerMellomLagretSøknadFraAApInnsending: true,
-        };
-      }
-    } catch (e) {
-      logger.error('Noe gikk galt i innhenting av mellomlagret søknad', e);
+    if (mellomlagretSøknad) {
+      mellomlagretSøknad = migrerMellomlagretBehandler(mellomlagretSøknad);
     }
 
     let barn: Barn[] = søker?.søker?.barn?.map((barn) => {
@@ -291,7 +261,7 @@ export const getServerSideProps = beskyttetSide(
     }
 
     return {
-      props: { søker, mellomlagretSøknad, kontaktinformasjon, barn },
+      props: { søker, mellomlagretSøknad, kontaktinformasjon, barn, fastlege },
     };
   },
 );

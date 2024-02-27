@@ -9,16 +9,11 @@ import {
   stønadTypeToAlternativNøkkel,
 } from 'components/pageComponents/standard/AndreUtbetalinger/AndreUtbetalinger';
 import { Soknad, SoknadVedlegg } from 'types/Soknad';
-import { BehandlerBackendState, SøknadBackendState } from 'types/SoknadBackendState';
 import { formatDate } from './date';
 import { formatFullAdresse, formatNavn } from 'utils/StringFormatters';
 import { RequiredVedlegg } from 'types/SoknadContext';
 import { Relasjon } from 'components/pageComponents/standard/Barnetillegg/AddBarnModal';
-import {
-  FerieType,
-  FerieTypeToMessageKey,
-} from 'components/pageComponents/standard/StartDato/StartDato';
-import { JaEllerNei } from 'types/Generic';
+import { FerieTypeToMessageKey } from 'components/pageComponents/standard/StartDato/StartDato';
 import { utenlandsPeriodeArbeidEllerBodd } from 'components/pageComponents/standard/Medlemskap/medlemskapUtils';
 
 export type SøknadsType = 'UTLAND' | 'STANDARD';
@@ -27,176 +22,6 @@ export const GYLDIGE_SØKNADS_TYPER = ['UTLAND', 'STANDARD'];
 
 export const erGyldigSøknadsType = (type?: string) =>
   typeof type === 'undefined' || !GYLDIGE_SØKNADS_TYPER.includes(type);
-
-const getFerieType = (skalHaFerie?: string, ferieType?: FerieType) => {
-  if (skalHaFerie === 'Nei') {
-    return 'NEI';
-  } else {
-    return ferieType;
-  }
-};
-
-const getJaNeiVetIkke = (value?: string) => {
-  if (value === 'Ja') return 'JA';
-  if (value === 'Nei') return 'NEI';
-  if (value === 'Vet ikke') return 'VET_IKKE';
-  return undefined;
-};
-
-const getJaNeiAvbrutt = (value?: string) => {
-  if (value === 'Ja') return 'JA';
-  if (value === 'Nei') return 'NEI';
-  if (value === 'Avbrutt') return 'AVBRUTT';
-  return undefined;
-};
-
-const jaNeiToBoolean = (value?: string) => {
-  if (value === 'Ja') return true;
-  if (value === 'Nei') return false;
-  return undefined;
-};
-
-const getJaEllerNei = (value?: string) => {
-  if (value === 'Ja') return 'JA';
-  if (value === 'Nei') return 'NEI';
-  return undefined;
-};
-
-export const mapSøknadToBackend = (søknad?: Soknad): SøknadBackendState => {
-  const ferieType = getFerieType(søknad?.ferie?.skalHaFerie, søknad?.ferie?.ferieType);
-  const registrerteBehandlere: BehandlerBackendState[] =
-    søknad?.registrerteBehandlere?.map((behandler) => ({
-      ...behandler,
-      erRegistrertFastlegeRiktig: jaNeiToBoolean(behandler.erRegistrertFastlegeRiktig),
-    })) ?? [];
-
-  const andreBehandlere: BehandlerBackendState[] =
-    søknad?.andreBehandlere?.map((behandler) => {
-      return {
-        type: 'SYKMELDER',
-        navn: {
-          fornavn: behandler.firstname,
-          etternavn: behandler.lastname,
-        },
-        kontaktinformasjon: {
-          kontor: behandler.legekontor,
-          telefon: behandler.telefon,
-          adresse: {
-            adressenavn: behandler.gateadresse,
-            postnummer: {
-              postnr: behandler.postnummer,
-              poststed: behandler.poststed,
-            },
-          },
-        },
-      };
-    }) ?? [];
-
-  return {
-    sykepenger: jaNeiToBoolean(søknad?.sykepenger),
-    ...(søknad?.sykepenger === JaEllerNei.JA && {
-      ferie: {
-        ferieType,
-        ...(ferieType === FerieType.PERIODE && {
-          periode: {
-            fom: formatDate(søknad?.ferie?.fraDato, 'yyyy-MM-dd'),
-            tom: formatDate(søknad?.ferie?.tilDato, 'yyyy-MM-dd'),
-          },
-        }),
-        ...(ferieType === FerieType.DAGER && { dager: søknad?.ferie?.antallDager }),
-      },
-    }),
-    medlemsskap: {
-      boddINorgeSammenhengendeSiste5: jaNeiToBoolean(søknad?.medlemskap?.harBoddINorgeSiste5År),
-      jobbetUtenforNorgeFørSyk: jaNeiToBoolean(søknad?.medlemskap?.arbeidetUtenforNorgeFørSykdom),
-      jobbetSammenhengendeINorgeSiste5: jaNeiToBoolean(
-        søknad?.medlemskap?.harArbeidetINorgeSiste5År,
-      ),
-      iTilleggArbeidUtenforNorge: jaNeiToBoolean(søknad?.medlemskap?.iTilleggArbeidUtenforNorge),
-      utenlandsopphold:
-        søknad?.medlemskap?.utenlandsOpphold?.map((utenlandsopphold) => ({
-          land: utenlandsopphold.land ? utenlandsopphold.land.split(':')[0] : undefined,
-          periode: {
-            fom: formatDate(utenlandsopphold.fraDato, 'yyyy-MM-dd'),
-            tom: formatDate(utenlandsopphold.tilDato, 'yyyy-MM-dd'),
-          },
-          arbeidet: jaNeiToBoolean(utenlandsopphold.iArbeid),
-          id: utenlandsopphold.utenlandsId,
-        })) ?? [],
-    },
-    studier: {
-      erStudent: getJaNeiAvbrutt(søknad?.student?.erStudent),
-      kommeTilbake: getJaNeiVetIkke(søknad?.student?.kommeTilbake),
-      vedlegg: søknad?.vedlegg?.AVBRUTT_STUDIE?.map((vedlegg) => vedlegg.vedleggId) ?? [],
-    },
-    registrerteBehandlere,
-    andreBehandlere,
-    yrkesskadeType: getJaEllerNei(søknad?.yrkesskade),
-    utbetalinger: {
-      ...(søknad?.andreUtbetalinger?.lønn
-        ? {
-            ekstraFraArbeidsgiver: {
-              fraArbeidsgiver: jaNeiToBoolean(søknad?.andreUtbetalinger?.lønn),
-              vedlegg:
-                søknad?.vedlegg?.LØNN_OG_ANDRE_GODER?.map((vedlegg) => vedlegg.vedleggId) ?? [],
-            },
-          }
-        : {}),
-      andreStønader:
-        søknad?.andreUtbetalinger?.stønad?.map((stønad) => {
-          switch (stønad) {
-            case StønadType.AFP:
-              return {
-                type: stønad,
-                hvemUtbetalerAFP: søknad?.andreUtbetalinger?.afp?.hvemBetaler,
-              };
-            case StønadType.OMSORGSSTØNAD:
-              return {
-                type: stønad,
-                vedlegg: søknad?.vedlegg?.OMSORGSSTØNAD?.map((vedlegg) => vedlegg.vedleggId) ?? [],
-              };
-            case StønadType.LÅN:
-              return {
-                type: stønad,
-                vedlegg: søknad?.vedlegg?.LÅN?.map((vedlegg) => vedlegg.vedleggId) ?? [],
-              };
-            case StønadType.STIPEND:
-              return {
-                type: stønad,
-                vedlegg: søknad?.vedlegg?.SYKESTIPEND?.map((vedlegg) => vedlegg.vedleggId) ?? [],
-              };
-            case StønadType.UTLAND:
-              return {
-                type: stønad,
-                vedlegg: søknad?.vedlegg?.UTLANDSSTØNAD?.map((vedlegg) => vedlegg.vedleggId) ?? [],
-              };
-            default:
-              return { type: stønad };
-          }
-        }) ?? [],
-    },
-    registrerteBarn:
-      søknad?.barn?.map(() => ({
-        merEnnIG: null,
-      })) ?? [],
-    andreBarn:
-      søknad?.manuelleBarn?.map((barn) => ({
-        barn: {
-          fødseldato: formatDate(barn.fødseldato, 'yyyy-MM-dd'),
-          navn: barn.navn,
-        },
-        relasjon: barn.relasjon,
-        merEnnIG: null,
-        vedlegg: getVedleggForManueltBarn(barn.internId, søknad?.vedlegg)?.map(
-          (vedlegg) => vedlegg?.vedleggId,
-        ),
-      })) ?? [],
-    tilleggsopplysninger: søknad?.tilleggsopplysninger,
-    ...(søknad?.vedlegg?.ANNET
-      ? { vedlegg: søknad?.vedlegg?.ANNET?.map((e) => e?.vedleggId) }
-      : {}),
-  };
-};
 
 export function getVedleggForManueltBarn(internId?: string, vedlegg?: SoknadVedlegg) {
   const keys = vedlegg ? Object.keys(vedlegg) : [];
@@ -369,17 +194,15 @@ export const mapSøknadToPdf = (
     ]);
   };
   const getRegistrerteBehandlere = (søknad?: Soknad) => {
-    if (!søknad?.registrerteBehandlere?.length) {
+    if (!søknad?.fastlege?.length) {
     }
-    const registrerteBehandlere = !søknad?.registrerteBehandlere?.length
+    const fastleger = !søknad?.fastlege?.length
       ? createFritekst('Fant ingen registrert fastlege')
-      : søknad?.registrerteBehandlere?.map((behandler) =>
+      : søknad?.fastlege?.map((behandler) =>
           createFeltgruppe([
-            ...createField('Type', behandler?.type),
-            ...createField('Kategori', behandler?.kategori),
-            ...createField('Navn', formatNavn(behandler?.navn)),
+            ...createField('Navn', behandler?.navn),
             ...createField('Kontor', behandler?.kontaktinformasjon?.kontor),
-            ...createField('Adresse', formatFullAdresse(behandler?.kontaktinformasjon?.adresse)),
+            ...createField('Adresse', behandler?.kontaktinformasjon?.adresse),
             ...createField('Telefon', behandler?.kontaktinformasjon?.telefon),
             ...createField(
               formatMessage({ id: `søknad.helseopplysninger.erRegistrertFastlegeRiktig.label` }),
@@ -387,7 +210,7 @@ export const mapSøknadToPdf = (
             ),
           ]),
         ) || [];
-    return createTema('Registrerte behandlere', registrerteBehandlere);
+    return createTema('Registrerte behandlere', fastleger);
   };
   const getAndreBehandlere = (søknad?: Soknad) => {
     const andreBehandlere = !søknad?.andreBehandlere?.length

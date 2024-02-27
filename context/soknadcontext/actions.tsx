@@ -1,17 +1,17 @@
 import { AttachmentType, RequiredVedlegg } from 'types/SoknadContext';
-import { OppslagBehandler } from '../sokerOppslagContext';
 import { Vedlegg } from '@navikt/aap-felles-react';
 import { Soknad, SoknadVedlegg } from 'types/Soknad';
 import { Dispatch } from 'react';
 import { SoknadContextState } from './soknadContext';
 import { Barn } from 'pages/api/oppslag/barn';
+import { Fastlege } from 'pages/api/oppslag/fastlege';
 
 export enum SoknadActionKeys {
   SET_STATE_FROM_CACHE = 'SET_STATE_FROM_CACHE',
   SET_SOKNAD = 'SET_SOKNAD',
   UPDATE_SOKNAD = 'UPDATE_SOKNAD',
   ADD_BARN_IF_MISSING = 'ADD_BARN_IF_MISSING',
-  ADD_BEHANDLER_IF_MISSING = 'ADD_BEHANDLER_IF_MISSING',
+  ADD_FASTLEGE_IF_MISSING = 'ADD_FASTLEGE_IF_MISSING',
   ADD_REQUIRED_VEDLEGG = 'ADD_REQUIRED_VEDLEGG',
   REMOVE_REQUIRED_VEDLEGG = 'REMOVE_REQUIRED_VEDLEGG',
   ADD_SØKNAD_URL = 'ADD_SØKNAD_URL',
@@ -35,9 +35,9 @@ type AddBarnIfMissing = {
   type: SoknadActionKeys.ADD_BARN_IF_MISSING;
   payload: Barn[];
 };
-type AddBehandlerIfMissing = {
-  type: SoknadActionKeys.ADD_BEHANDLER_IF_MISSING;
-  payload: OppslagBehandler[];
+type AddFastlegeIfMissing = {
+  type: SoknadActionKeys.ADD_FASTLEGE_IF_MISSING;
+  payload: Fastlege[];
 };
 type AddRequiredVedlegg = {
   type: SoknadActionKeys.ADD_REQUIRED_VEDLEGG;
@@ -69,7 +69,7 @@ export type SoknadAction =
   | SetSoknad
   | UpdateSoknad
   | AddBarnIfMissing
-  | AddBehandlerIfMissing
+  | AddFastlegeIfMissing
   | AddRequiredVedlegg
   | RemoveRequiredVedlegg
   | AddSøknadUrl
@@ -87,16 +87,8 @@ export function setSoknadStateFraProps(
   return props;
 }
 
-export async function slettLagretSoknadState(
-  dispatch: Dispatch<SoknadAction>,
-  state: SoknadContextState,
-  brukerMellomLagretSøknadFraAApInnsending: boolean,
-) {
-  const deleteResponse = brukerMellomLagretSøknadFraAApInnsending
-    ? await fetch('/aap/soknad/api/mellomlagring/slett')
-    : await fetch(`/aap/soknad/api/buckets/slett/?type=${state.type}`, {
-        method: 'DELETE',
-      });
+export async function slettLagretSoknadState() {
+  const deleteResponse = await fetch(`/aap/soknad/api/mellomlagring/slett`);
   return !!deleteResponse?.ok;
 }
 
@@ -134,11 +126,8 @@ export async function removeRequiredVedlegg(
   if (vedleggType)
     dispatch({ type: SoknadActionKeys.REMOVE_REQUIRED_VEDLEGG, payload: vedleggType });
 }
-export const addBehandlerIfMissing = (
-  dispatch: Dispatch<SoknadAction>,
-  data: OppslagBehandler[],
-) => {
-  dispatch({ type: SoknadActionKeys.ADD_BEHANDLER_IF_MISSING, payload: data });
+export const addFastlegeIfMissing = (dispatch: Dispatch<SoknadAction>, data: Fastlege[]) => {
+  dispatch({ type: SoknadActionKeys.ADD_FASTLEGE_IF_MISSING, payload: data });
 };
 export const addBarnIfMissing = (dispatch: Dispatch<SoknadAction>, data: Barn[]) => {
   dispatch({ type: SoknadActionKeys.ADD_BARN_IF_MISSING, payload: data });
@@ -151,21 +140,11 @@ export const getVedleggUuidsFromSoknad = (søknad?: Soknad) => {
     .map((vedlegg) => vedlegg?.vedleggId);
 };
 
-export const deleteOpplastedeVedlegg = async (
-  brukMellomlagretSøknadFraInnsending: boolean,
-  søknad?: Soknad,
-) => {
+export const deleteOpplastedeVedlegg = async (søknad?: Soknad) => {
   const vedleggUuids = getVedleggUuidsFromSoknad(søknad);
   if (vedleggUuids.length > 0) {
-    if (brukMellomlagretSøknadFraInnsending) {
-      for (const vedlegg of vedleggUuids) {
-        await fetch(`/aap/soknad/api/vedlegginnsending/slett/?uuid=${vedlegg}`);
-      }
-    } else {
-      const commaSeparatedUuids = vedleggUuids.join(',');
-      await fetch(`/aap/soknad/api/vedlegg/slett/?uuids=${commaSeparatedUuids}`, {
-        method: 'DELETE',
-      });
+    for (const vedlegg of vedleggUuids) {
+      await fetch(`/aap/soknad/api/vedlegginnsending/slett/?uuid=${vedlegg}`);
     }
   }
 };

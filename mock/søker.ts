@@ -1,8 +1,7 @@
 import { sub } from 'date-fns';
 import { formatDate } from 'utils/date';
-import { SokerOppslagState } from 'context/sokerOppslagContext';
 
-export const mockSøker: SokerOppslagState = {
+export const mockSøker: any = {
   søker: {
     navn: {
       fornavn: 'Jackie',

@@ -1,4 +1,4 @@
-import { RegistrertBehandler } from 'types/Soknad';
+import { RegistrertFastlege } from 'types/Soknad';
 import structuredClone from '@ungap/structured-clone';
 import { SoknadContextState } from './soknadContext';
 import { SoknadAction, SoknadActionKeys } from './actions';
@@ -33,24 +33,23 @@ export function soknadReducer(state: SoknadContextState, action: SoknadAction): 
         },
       };
     }
-    case SoknadActionKeys.ADD_BEHANDLER_IF_MISSING: {
-      const oldRegistrerteBehandlere = state?.søknad?.registrerteBehandlere || [];
-      const registrerteBehandlere: RegistrertBehandler[] = structuredClone(action.payload)
-        .filter((behandler) => behandler.type === 'FASTLEGE')
-        .map((behandler) => {
-          const eksisterende = oldRegistrerteBehandlere.find(
-            (e) =>
-              e?.kontaktinformasjon?.behandlerRef === behandler?.kontaktinformasjon?.behandlerRef,
+    case SoknadActionKeys.ADD_FASTLEGE_IF_MISSING: {
+      const oldRegistrertFastlege = state?.søknad?.fastlege || [];
+      const registrerteFastleger: RegistrertFastlege[] = structuredClone(action.payload).map(
+        (fastlege) => {
+          const eksisterende = oldRegistrertFastlege.find(
+            (e) => e?.behandlerRef === fastlege?.behandlerRef,
           );
           return eksisterende?.erRegistrertFastlegeRiktig
-            ? { ...behandler, erRegistrertFastlegeRiktig: eksisterende.erRegistrertFastlegeRiktig }
-            : behandler;
-        });
+            ? { ...fastlege, erRegistrertFastlegeRiktig: eksisterende.erRegistrertFastlegeRiktig }
+            : fastlege;
+        },
+      );
       return {
         ...state,
         søknad: {
           ...state.søknad,
-          registrerteBehandlere: registrerteBehandlere,
+          fastlege: registrerteFastleger,
         },
       };
     }

@@ -8,6 +8,8 @@ export const isMock = () =>
   MOCK_ENVIRONMENTS.includes(process.env.RUNTIME_ENVIRONMENT ?? '') ||
   process.env.FUNCTIONAL_TESTS === 'enabled';
 
+export const isDev = () => process.env.RUNTIME_ENVIRONMENT === 'dev';
+
 export const clientSideIsProd = () =>
   typeof window !== 'undefined' && window.location.href.includes('www.nav.no');
 
