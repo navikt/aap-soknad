@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { getAccessTokenFromRequest } from 'auth/accessToken';
 import { beskyttetApi } from 'auth/beskyttetApi';
-import { tokenXApiProxy, logger } from '@navikt/aap-felles-utils';
+import { tokenXApiProxy } from '@navikt/aap-felles-utils';
 import metrics from 'utils/metrics';
 import { isMock } from 'utils/environments';
 import { mockSøkerUtenBarn } from 'mock/søkerUtenBarn';
@@ -21,7 +21,6 @@ export const getSøkerUtenBarn = async (accessToken?: string) => {
     bearerToken: accessToken,
     metricsStatusCodeCounter: metrics.backendApiStatusCodeCounter,
     metricsTimer: metrics.backendApiDurationHistogram,
-    logger: logger,
   });
   return søker;
 };

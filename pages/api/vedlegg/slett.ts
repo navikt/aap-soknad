@@ -1,6 +1,6 @@
 import { getAccessTokenFromRequest } from 'auth/accessToken';
 import { beskyttetApi } from 'auth/beskyttetApi';
-import { logger, tokenXApiProxy } from '@navikt/aap-felles-utils';
+import { tokenXApiProxy } from '@navikt/aap-felles-utils';
 import metrics from 'utils/metrics';
 import { isMock } from 'utils/environments';
 import { getCommaSeparatedStringFromStringOrArray } from 'utils/string';
@@ -25,7 +25,6 @@ export const slettVedlegg = async (uuids: string | string[], accessToken?: strin
     noResponse: true,
     audience: process.env.SOKNAD_API_AUDIENCE!,
     bearerToken: accessToken,
-    logger: logger,
     metricsStatusCodeCounter: metrics.backendApiStatusCodeCounter,
     metricsTimer: metrics.backendApiDurationHistogram,
   });

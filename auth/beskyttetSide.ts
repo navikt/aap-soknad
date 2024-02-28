@@ -1,8 +1,8 @@
 import { NextPageContext, GetServerSidePropsResult } from 'next';
-import { isMock } from '../utils/environments';
+import { isMock } from 'utils/environments';
 import { getAccessToken } from './accessToken';
 import { verifyIdportenAccessToken } from './verifyIdPortenAccessToken';
-import { logger } from '@navikt/aap-felles-utils';
+import { logError } from '@navikt/aap-felles-utils';
 
 type PageHandler = (context: NextPageContext) => void | Promise<GetServerSidePropsResult<{}>>;
 
@@ -15,7 +15,7 @@ const wonderwallRedirect = {
 
 export function beskyttetSide(handler: PageHandler) {
   return async function withBearerTokenHandler(
-    context: NextPageContext
+    context: NextPageContext,
   ): Promise<ReturnType<typeof handler>> {
     if (isMock()) {
       return handler(context);
@@ -30,7 +30,7 @@ export function beskyttetSide(handler: PageHandler) {
     try {
       await verifyIdportenAccessToken(bearerToken);
     } catch (e) {
-      logger.error(e, 'kunne ikke validere idportentoken i beskyttetSide');
+      logError('kunne ikke validere idportentoken i beskyttetSide', e);
       return wonderwallRedirect;
     }
     return handler(context);
@@ -42,5 +42,5 @@ export const beskyttetSideUtenProps = beskyttetSide(
     return {
       props: {},
     };
-  }
+  },
 );

@@ -1,5 +1,5 @@
 import { beskyttetApi } from 'auth/beskyttetApi';
-import { logger, tokenXApiProxy } from '@navikt/aap-felles-utils';
+import { logError, tokenXApiProxy } from '@navikt/aap-felles-utils';
 import { NextApiRequest, NextApiResponse } from 'next';
 import metrics from 'utils/metrics';
 import { ErrorMedStatus } from 'auth/ErrorMedStatus';
@@ -113,7 +113,7 @@ const handler = beskyttetApi(async (req: NextApiRequest, res: NextApiResponse) =
     metrics.sendSoknadCounter.inc({ type: 'STANDARD' });
     res.status(201).send('Vi har mottat søknaden');
   } catch (err) {
-    logger.error(`Noe gikk galt ved innsending av søknad: ${err?.toString()}`);
+    logError(`Noe gikk galt ved innsending av søknad`, err);
 
     if (err instanceof ErrorMedStatus) {
       res.status(err.status).json({ navCallId: err.navCallId });
@@ -164,7 +164,6 @@ export const sendSoknadViaAapInnsending = async (
     bearerToken: accessToken,
     metricsStatusCodeCounter: metrics.backendApiStatusCodeCounter,
     metricsTimer: metrics.backendApiDurationHistogram,
-    logger: logger,
     noResponse: true,
   });
   return søknad;

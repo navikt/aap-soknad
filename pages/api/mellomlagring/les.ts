@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { getAccessTokenFromRequest } from 'auth/accessToken';
 import { beskyttetApi } from 'auth/beskyttetApi';
-import { logger, tokenXApiProxy } from '@navikt/aap-felles-utils';
+import { logError, tokenXApiProxy } from '@navikt/aap-felles-utils';
 import metrics from 'utils/metrics';
 import { lesCache } from 'mock/mellomlagringsCache';
 import { isFunctionalTest, isMock } from 'utils/environments';
@@ -39,12 +39,11 @@ export const hentMellomlagring = async (
       bearerToken: accessToken,
       metricsStatusCodeCounter: metrics.backendApiStatusCodeCounter,
       metricsTimer: metrics.backendApiDurationHistogram,
-      logger: logger,
     });
 
     return mellomlagretSøknad;
   } catch (error: any) {
-    logger.error('Noe gikk galt i henting av mellomlagring fra aap-innsending', error);
+    logError('Noe gikk galt i henting av mellomlagring fra aap-innsending', error);
     return undefined;
   }
 };

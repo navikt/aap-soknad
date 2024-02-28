@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { getAccessTokenFromRequest } from 'auth/accessToken';
 import { beskyttetApi } from 'auth/beskyttetApi';
-import { logger, tokenXApiProxy } from '@navikt/aap-felles-utils';
+import { tokenXApiProxy } from '@navikt/aap-felles-utils';
 import metrics from 'utils/metrics';
 import { deleteCache } from 'mock/mellomlagringsCache';
 import { isMock } from 'utils/environments';
@@ -27,7 +27,6 @@ export const slettBucket = async (accessToken?: string) => {
     bearerToken: accessToken,
     metricsStatusCodeCounter: metrics.backendApiStatusCodeCounter,
     metricsTimer: metrics.backendApiDurationHistogram,
-    logger: logger,
   });
 };
 

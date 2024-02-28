@@ -2,7 +2,7 @@ import { randomUUID } from 'crypto';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { getAccessTokenFromRequest } from 'auth/accessToken';
 import { beskyttetApi } from 'auth/beskyttetApi';
-import { tokenXApiProxy, logger } from '@navikt/aap-felles-utils';
+import { tokenXApiProxy } from '@navikt/aap-felles-utils';
 import { isFunctionalTest, isMock } from 'utils/environments';
 import { slettBucket } from '../buckets/slett';
 import { ErrorMedStatus } from 'auth/ErrorMedStatus';
@@ -40,7 +40,6 @@ export const sendSoknad = async (data: string, accessToken?: string) => {
     bearerToken: accessToken,
     metricsStatusCodeCounter: metrics.backendApiStatusCodeCounter,
     metricsTimer: metrics.backendApiDurationHistogram,
-    logger: logger,
   });
   return søknad;
 };

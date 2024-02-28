@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { getAccessTokenFromRequest } from 'auth/accessToken';
 import { beskyttetApi } from 'auth/beskyttetApi';
-import { logger, tokenXApiProxy } from '@navikt/aap-felles-utils';
+import { logError, tokenXApiProxy } from '@navikt/aap-felles-utils';
 import { lagreCache } from 'mock/mellomlagringsCache';
 import { isFunctionalTest, isMock } from 'utils/environments';
 import metrics from 'utils/metrics';
@@ -23,7 +23,7 @@ const handler = beskyttetApi(async (req: NextApiRequest, res: NextApiResponse) =
       (e: StepType) => e.active,
     )?.stepIndex;
 
-    logger.error(
+    logError(
       `Overskriver eksisterende søknad med en tom søknad på side ${activeStepIndex ?? 'ukjent'}`,
     );
   }
@@ -44,7 +44,6 @@ export const lagreBucket = async (data: string, accessToken?: string) => {
     bearerToken: accessToken,
     metricsStatusCodeCounter: metrics.backendApiStatusCodeCounter,
     metricsTimer: metrics.backendApiDurationHistogram,
-    logger: logger,
   });
   return;
 };

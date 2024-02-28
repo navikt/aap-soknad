@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { getAccessTokenFromRequest } from 'auth/accessToken';
 import { beskyttetApi } from 'auth/beskyttetApi';
-import { logger, tokenXApiProxy } from '@navikt/aap-felles-utils';
+import { logError, tokenXApiProxy } from '@navikt/aap-felles-utils';
 import metrics from 'utils/metrics';
 import { z } from 'zod';
 
@@ -27,11 +27,10 @@ export const getPerson = async (accessToken?: string) => {
     bearerToken: accessToken,
     metricsStatusCodeCounter: metrics.backendApiStatusCodeCounter,
     metricsTimer: metrics.backendApiDurationHistogram,
-    logger: logger,
   });
   const validatedResponse = Person.safeParse(person);
   if (!validatedResponse.success) {
-    logger.error({ message: `oppslag/person valideringsfeil: ${validatedResponse.error.message}` });
+    logError(`oppslag/person valideringsfeil: ${validatedResponse.error.message}`);
     return {};
   }
   return validatedResponse.data;
