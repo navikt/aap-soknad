@@ -8,7 +8,7 @@ on:
       - '**.md'
 jobs:
   buildDev:
-    uses: navikt/aap-workflows/.github/workflows/frontend-next-build.yml@frontend-next-build-yarnberry
+    uses: navikt/aap-workflows/.github/workflows/frontend-next-build.yml@next-cache-test
     permissions:
       contents: read
       id-token: write
