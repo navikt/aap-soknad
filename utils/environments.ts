@@ -1,6 +1,7 @@
 const MOCK_ENVIRONMENTS = ['localhost'];
 
-export const isMock = () => MOCK_ENVIRONMENTS.includes(process.env.RUNTIME_ENVIRONMENT ?? '');
+export const isMock = () =>
+  MOCK_ENVIRONMENTS.includes(process.env.RUNTIME_ENVIRONMENT ?? '') || isFunctionalTest();
 
 export const isFunctionalTest = () => process.env.FUNCTIONAL_TESTS === 'enabled';
 
