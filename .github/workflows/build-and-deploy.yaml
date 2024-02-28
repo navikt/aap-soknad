@@ -17,7 +17,7 @@ jobs:
     with:
       cluster: dev-gcp
       appname: 'aap-soknad'
-      playwright: false
+      playwright: true
       cdn: true
   buildProd:
     uses: navikt/aap-workflows/.github/workflows/frontend-next-build.yml@frontend-next-build-yarnberry
