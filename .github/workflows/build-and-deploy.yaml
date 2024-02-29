@@ -8,7 +8,7 @@ on:
       - '**.md'
 jobs:
   buildDev:
-    uses: navikt/aap-workflows/.github/workflows/frontend-next-build.yml@next-cache-test
+    uses: navikt/aap-workflows/.github/workflows/frontend-next-build.yml@main
     permissions:
       contents: read
       id-token: write
@@ -17,10 +17,10 @@ jobs:
     with:
       cluster: dev-gcp
       appname: 'aap-soknad'
-      playwright: true
+      playwright: false
       cdn: true
   buildProd:
-    uses: navikt/aap-workflows/.github/workflows/frontend-next-build.yml@frontend-next-build-yarnberry
+    uses: navikt/aap-workflows/.github/workflows/frontend-next-build.yml@main
     permissions:
       contents: read
       id-token: write
