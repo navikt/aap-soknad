@@ -12,11 +12,11 @@ import { logSkjemaStartetEvent } from 'utils/amplitude';
 import metrics from 'utils/metrics';
 import { scrollRefIntoView } from 'utils/dom';
 import { getSøkerUtenBarn } from 'pages/api/oppslag/soekerUtenBarn';
-import { logger } from '@navikt/aap-felles-utils';
 import { getFulltNavn } from 'lib/søker';
 import { SOKNAD_VERSION, SoknadContextState } from 'context/soknadcontext/soknadContext';
 import { hentMellomlagring } from 'pages/api/mellomlagring/les';
 import { isFunctionalTest } from 'utils/environments';
+import { logError, logInfo } from '@navikt/aap-felles-utils';
 
 interface PageProps {
   søker: Soker;
@@ -118,23 +118,23 @@ export const getServerSideProps = beskyttetSide(
         await Promise.all([lesBucket('STANDARD', bearerToken), hentMellomlagring(bearerToken)]);
 
       if (mellomlagretSøknadFraAapInnsending && mellomlagretSøknadFraSoknadApi) {
-        logger.error('pages/index: finner mellomlagring fra begge kilder');
+        logError('pages/index: finner mellomlagring fra begge kilder');
       }
       if (mellomlagretSøknadFraSoknadApi) {
-        logger.info('pages/index: velger mellomlagring fra søknad-api');
+        logInfo('pages/index: velger mellomlagring fra søknad-api');
         mellomlagretSøknad = {
           ...mellomlagretSøknadFraSoknadApi,
           brukerMellomLagretSøknadFraAApInnsending: false,
         };
       } else if (mellomlagretSøknadFraAapInnsending) {
-        logger.info('pages/index: velger mellomlagring fra innsending');
+        logInfo('pages/index: velger mellomlagring fra innsending');
         mellomlagretSøknad = {
           ...mellomlagretSøknadFraAapInnsending,
           brukerMellomLagretSøknadFraAApInnsending: true,
         };
       }
     } catch (e) {
-      logger.error('Noe gikk galt i innhenting av mellomlagret søknad', e);
+      logError('Noe gikk galt i innhenting av mellomlagret søknad', e);
     }
 
     const activeStep = mellomlagretSøknad?.lagretStepList?.find((e: StepType) => e.active);
@@ -142,7 +142,7 @@ export const getServerSideProps = beskyttetSide(
 
     stopTimer();
     if (activeIndex && !isFunctionalTest()) {
-      logger.info('Starter påbegynt søknad');
+      logInfo('Starter påbegynt søknad');
       return {
         redirect: {
           destination: `/${activeIndex}`,

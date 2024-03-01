@@ -35,7 +35,6 @@ import { scrollRefIntoView } from 'utils/dom';
 import { Steg0 } from 'components/pageComponents/standard/Steg0/Steg0';
 import * as classes from './step.module.css';
 import { FormattedMessage, useIntl } from 'react-intl';
-import { logger } from '@navikt/aap-felles-utils';
 import { SoknadContextProvider, SoknadContextState } from 'context/soknadcontext/soknadContext';
 import { useSoknad } from 'hooks/SoknadHook';
 import {
@@ -49,6 +48,7 @@ import { Barn, getBarn } from 'pages/api/oppslag/barn';
 import { formatNavn } from 'utils/StringFormatters';
 import { hentMellomlagring } from 'pages/api/mellomlagring/les';
 import { RequiredVedlegg } from 'types/SoknadContext';
+import { logError, logInfo, logWarning } from '@navikt/aap-felles-utils';
 
 interface PageProps {
   søker: SokerOppslagState;
@@ -235,7 +235,7 @@ export const getServerSideProps = beskyttetSide(
     try {
       kontaktinformasjon = await getKrr(bearerToken);
     } catch (e) {
-      logger.error({ message: `Noe gikk galt i kallet mot oppslag/krr: ${e?.toString()}` });
+      logError(`Noe gikk galt i kallet mot oppslag/krr`, e);
     }
 
     let mellomlagretSøknad: SoknadContextState | undefined;
@@ -245,23 +245,23 @@ export const getServerSideProps = beskyttetSide(
         await Promise.all([lesBucket('STANDARD', bearerToken), hentMellomlagring(bearerToken)]);
 
       if (mellomlagretSøknadFraAapInnsending && mellomlagretSøknadFraSoknadApi) {
-        logger.error('pages/step: finner mellomlagring fra begge kilder');
+        logError('pages/step: finner mellomlagring fra begge kilder');
       }
       if (mellomlagretSøknadFraSoknadApi) {
-        logger.info('pages/step: velger mellomlagring fra søknad-api');
+        logInfo('pages/step: velger mellomlagring fra søknad-api');
         mellomlagretSøknad = {
           ...mellomlagretSøknadFraSoknadApi,
           brukerMellomLagretSøknadFraAApInnsending: false,
         };
       } else if (mellomlagretSøknadFraAapInnsending) {
-        logger.info('pages/step: velger mellomlagring fra innsending');
+        logInfo('pages/step: velger mellomlagring fra innsending');
         mellomlagretSøknad = {
           ...mellomlagretSøknadFraAapInnsending,
           brukerMellomLagretSøknadFraAApInnsending: true,
         };
       }
     } catch (e) {
-      logger.error('Noe gikk galt i innhenting av mellomlagret søknad', e);
+      logError('Noe gikk galt i innhenting av mellomlagret søknad', e);
     }
 
     let barn: Barn[] = søker?.søker?.barn?.map((barn) => {
@@ -271,17 +271,17 @@ export const getServerSideProps = beskyttetSide(
     try {
       barn = await getBarn(bearerToken);
     } catch (e) {
-      logger.error('Noe gikk galt i kallet mot barn fra aap-oppslag', e);
+      logError('Noe gikk galt i kallet mot barn fra aap-oppslag', e);
     }
 
     stopTimer();
 
     if (mellomlagretSøknad && !mellomlagretSøknad.lagretStepList) {
-      logger.error('Mellomlagret søknad finnes, men mangler stepList');
+      logError('Mellomlagret søknad finnes, men mangler stepList');
     }
 
     if (!mellomlagretSøknad?.lagretStepList) {
-      logger.warn('lagretStepList mangler i mellomlagret søknad, redirecter til startsiden');
+      logWarning('lagretStepList mangler i mellomlagret søknad, redirecter til startsiden');
       return {
         redirect: {
           destination: '/',

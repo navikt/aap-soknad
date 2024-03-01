@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { getAccessTokenFromRequest } from 'auth/accessToken';
 import { beskyttetApi } from 'auth/beskyttetApi';
-import { logger, tokenXApiProxy } from '@navikt/aap-felles-utils';
+import { logInfo, tokenXApiProxy } from '@navikt/aap-felles-utils';
 import metrics from 'utils/metrics';
 import { erGyldigSøknadsType, GYLDIGE_SØKNADS_TYPER, SøknadsType } from 'utils/api';
 import { isMock } from 'utils/environments';
@@ -40,7 +40,6 @@ export const lesBucket = async (
       bearerToken: accessToken,
       metricsStatusCodeCounter: metrics.backendApiStatusCodeCounter,
       metricsTimer: metrics.backendApiDurationHistogram,
-      logger: logger,
     });
 
     if (!mellomlagretSøknad) {
@@ -54,7 +53,7 @@ export const lesBucket = async (
       await new Promise((resolve) => setTimeout(resolve, 300));
       return await lesBucket(type, accessToken, retryCount - 1);
     }
-    logger.info('Fant ingen mellomlagret søknad hos soknad-api');
+    logInfo('Fant ingen mellomlagret søknad hos soknad-api');
     return undefined;
   }
 };
