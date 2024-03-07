@@ -129,10 +129,11 @@ const Steps = ({ søker, mellomlagretSøknad, kontaktinformasjon, barn }: PagePr
         const erIkkeKomplett = !!søknadState?.requiredVedlegg?.find(
           (vedlegg) => !vedlegg.completed,
         );
+        const yrkesskade = søknadState?.søknad?.yrkesskade;
         const brukerFritekstfelt =
           søknadState?.søknad?.tilleggsopplysninger !== undefined &&
           søknadState?.søknad?.tilleggsopplysninger.length > 0;
-        logSkjemaFullførtEvent({ harVedlegg, erIkkeKomplett, brukerFritekstfelt });
+        logSkjemaFullførtEvent({ harVedlegg, erIkkeKomplett, brukerFritekstfelt, yrkesskade });
 
         if (!søknadState.brukerMellomLagretSøknadFraAApInnsending) {
           const url = postResponse?.data?.uri;
