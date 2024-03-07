@@ -7,15 +7,16 @@ import { lesCache } from 'mock/mellomlagringsCache';
 import { isFunctionalTest, isMock } from 'utils/environments';
 import { defaultStepList } from 'pages';
 import { SOKNAD_VERSION, SoknadContextState } from 'context/soknadcontext/soknadContext';
+import { IncomingMessage } from 'http';
+import { simpleTokenXProxy } from 'lib/api/simpleTokenXProxy';
 
 const handler = beskyttetApi(async (req: NextApiRequest, res: NextApiResponse) => {
-  const accessToken = getAccessTokenFromRequest(req);
-  const result = await hentMellomlagring(accessToken);
+  const result = await hentMellomlagring(req);
   res.status(200).json(result);
 });
 
 export const hentMellomlagring = async (
-  accessToken?: string,
+  req?: IncomingMessage,
 ): Promise<SoknadContextState | undefined> => {
   if (isFunctionalTest()) {
     return {
@@ -31,14 +32,10 @@ export const hentMellomlagring = async (
     return result ? JSON.parse(result) : {};
   }
   try {
-    const mellomlagretSøknad = await tokenXApiProxy({
+    const mellomlagretSøknad = await simpleTokenXProxy<SoknadContextState>({
       url: `${process.env.INNSENDING_URL}/mellomlagring/søknad`,
-      prometheusPath: `mellomlagring`,
-      method: 'GET',
       audience: process.env.INNSENDING_AUDIENCE!,
-      bearerToken: accessToken,
-      metricsStatusCodeCounter: metrics.backendApiStatusCodeCounter,
-      metricsTimer: metrics.backendApiDurationHistogram,
+      req,
     });
 
     return mellomlagretSøknad;

@@ -1,5 +1,5 @@
 import { beskyttetApi } from 'auth/beskyttetApi';
-import { logError, tokenXApiProxy } from '@navikt/aap-felles-utils';
+import { logError } from '@navikt/aap-felles-utils';
 import { NextApiRequest, NextApiResponse } from 'next';
 import metrics from 'utils/metrics';
 import { ErrorMedStatus } from 'auth/ErrorMedStatus';
@@ -19,6 +19,8 @@ import { getYrkesskadeSchema } from 'components/pageComponents/standard/Yrkesska
 import { getAccessTokenFromRequest } from 'auth/accessToken';
 import { AttachmentType, RequiredVedlegg } from 'types/SoknadContext';
 import { SOKNAD_VERSION } from 'context/soknadcontext/soknadContext';
+import { simpleTokenXProxy } from 'lib/api/simpleTokenXProxy';
+import { IncomingMessage } from 'http';
 
 // TODO: Sjekke om vi må generere pdf på samme språk som bruker har valgt når de fyller ut søknaden
 function getIntl() {
@@ -107,7 +109,7 @@ const handler = beskyttetApi(async (req: NextApiRequest, res: NextApiResponse) =
         kvittering: søknadPdf,
         filer,
       },
-      accessToken,
+      req,
     );
 
     metrics.sendSoknadCounter.inc({ type: 'STANDARD' });
@@ -146,27 +148,28 @@ function mapVedleggTypeTilVedleggTekst(vedleggType: AttachmentType): string {
 
 export const sendSoknadViaAapInnsending = async (
   innsending: SoknadInnsendingRequestBody,
-  accessToken?: string,
+  req?: IncomingMessage,
 ) => {
   if (isFunctionalTest()) {
     return 'Vi har mottat søknaden din.';
   }
   if (isMock()) {
-    await slettBucket('STANDARD', accessToken);
+    await slettBucket('STANDARD', 'mock-token');
     return 'Vi har mottat søknaden din.';
   }
-  const søknad = await tokenXApiProxy({
-    url: `${process.env.INNSENDING_URL}/innsending`,
-    prometheusPath: 'innsending/soknad',
-    method: 'POST',
-    data: JSON.stringify(innsending),
-    audience: process.env.INNSENDING_AUDIENCE!,
-    bearerToken: accessToken,
-    metricsStatusCodeCounter: metrics.backendApiStatusCodeCounter,
-    metricsTimer: metrics.backendApiDurationHistogram,
-    noResponse: true,
-  });
-  return søknad;
+  try {
+    const søknad = await simpleTokenXProxy({
+      url: `${process.env.INNSENDING_URL}/innsending`,
+      audience: process.env.INNSENDING_AUDIENCE!,
+      method: 'POST',
+      req,
+      body: innsending,
+    });
+    return søknad;
+  } catch (error) {
+    logError('Feil ved innsending av søknad', error);
+    throw new Error('Feil ved innsending av søknad');
+  }
 };
 
 export default handler;

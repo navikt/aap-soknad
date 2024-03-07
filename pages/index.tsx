@@ -115,7 +115,7 @@ export const getServerSideProps = beskyttetSide(
 
     try {
       const [mellomlagretSøknadFraSoknadApi, mellomlagretSøknadFraAapInnsending] =
-        await Promise.all([lesBucket('STANDARD', bearerToken), hentMellomlagring(bearerToken)]);
+        await Promise.all([lesBucket('STANDARD', bearerToken), hentMellomlagring(ctx.req)]);
 
       if (mellomlagretSøknadFraAapInnsending && mellomlagretSøknadFraSoknadApi) {
         logError('pages/index: finner mellomlagring fra begge kilder');

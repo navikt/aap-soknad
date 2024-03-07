@@ -46,9 +46,9 @@ import {
 import { getKrr } from 'pages/api/oppslag/krr';
 import { Barn, getBarn } from 'pages/api/oppslag/barn';
 import { formatNavn } from 'utils/StringFormatters';
-import { hentMellomlagring } from 'pages/api/mellomlagring/les';
 import { RequiredVedlegg } from 'types/SoknadContext';
 import { logError, logInfo, logWarning } from '@navikt/aap-felles-utils';
+import { hentMellomlagring } from 'pages/api/mellomlagring/les';
 
 interface PageProps {
   søker: SokerOppslagState;
@@ -242,7 +242,7 @@ export const getServerSideProps = beskyttetSide(
 
     try {
       const [mellomlagretSøknadFraSoknadApi, mellomlagretSøknadFraAapInnsending] =
-        await Promise.all([lesBucket('STANDARD', bearerToken), hentMellomlagring(bearerToken)]);
+        await Promise.all([lesBucket('STANDARD', bearerToken), hentMellomlagring(ctx.req)]);
 
       if (mellomlagretSøknadFraAapInnsending && mellomlagretSøknadFraSoknadApi) {
         logError('pages/step: finner mellomlagring fra begge kilder');

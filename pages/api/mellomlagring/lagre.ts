@@ -1,51 +1,33 @@
-import { NextApiRequest, NextApiResponse } from 'next';
-import { getAccessTokenFromRequest } from 'auth/accessToken';
-import { beskyttetApi } from 'auth/beskyttetApi';
-import { logError, tokenXApiProxy } from '@navikt/aap-felles-utils';
+import { beskyttetApi } from '@navikt/aap-felles-utils';
 import { lagreCache } from 'mock/mellomlagringsCache';
 import { isFunctionalTest, isMock } from 'utils/environments';
-import metrics from 'utils/metrics';
 
-import { StepType } from 'components/StepWizard/Step';
-import { hentMellomlagring } from 'pages/api/mellomlagring/les';
+import { getOnBefalfOfToken } from 'lib/api/simpleTokenXProxy';
+import { proxyApiRouteRequest } from '@navikt/next-api-proxy';
 
-const handler = beskyttetApi(async (req: NextApiRequest, res: NextApiResponse) => {
-  const accessToken = getAccessTokenFromRequest(req);
+const handler = beskyttetApi(async (req, res) => {
+  if (isFunctionalTest()) return;
+  if (isMock()) return await lagreCache(JSON.stringify(req.body));
 
-  const eksisterendeSøknad = await hentMellomlagring(accessToken);
-  if (
-    eksisterendeSøknad &&
-    eksisterendeSøknad.søknad &&
-    Object.keys(eksisterendeSøknad.søknad).length > 0 &&
-    Object.keys(req.body.søknad).length === 0
-  ) {
-    const activeStepIndex = eksisterendeSøknad?.lagretStepList?.find(
-      (e: StepType) => e.active,
-    )?.stepIndex;
+  const url = `/mellomlagring/søknad`;
+  const onBehalfOfToken = await getOnBefalfOfToken(process.env.INNSENDING_AUDIENCE!, url, req);
 
-    logError(
-      `Overskriver eksisterende søknad med en tom søknad på side ${activeStepIndex ?? 'ukjent'}`,
-    );
-  }
-  await lagreBucket(req.body, accessToken);
-  res.status(201).json({});
+  return await proxyApiRouteRequest({
+    hostname: 'innsending',
+    path: url,
+    req: req,
+    res: res,
+    bearerToken: onBehalfOfToken,
+    https: false,
+  });
 });
 
-export const lagreBucket = async (data: string, accessToken?: string) => {
-  if (isFunctionalTest()) return;
-  if (isMock()) return await lagreCache(JSON.stringify(data));
-  await tokenXApiProxy({
-    url: `${process.env.INNSENDING_URL}/mellomlagring/søknad`,
-    prometheusPath: `mellomlagring`,
-    method: 'POST',
-    data: JSON.stringify(data),
-    audience: process.env.INNSENDING_AUDIENCE!,
-    noResponse: true,
-    bearerToken: accessToken,
-    metricsStatusCodeCounter: metrics.backendApiStatusCodeCounter,
-    metricsTimer: metrics.backendApiDurationHistogram,
-  });
-  return;
+export const config = {
+  api: {
+    responseLimit: '50mb',
+    bodyParser: false,
+    externalResolver: true,
+  },
 };
 
 export default handler;
