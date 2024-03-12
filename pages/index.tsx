@@ -114,25 +114,7 @@ export const getServerSideProps = beskyttetSide(
     let mellomlagretSøknad: SoknadContextState | undefined;
 
     try {
-      const [mellomlagretSøknadFraSoknadApi, mellomlagretSøknadFraAapInnsending] =
-        await Promise.all([lesBucket('STANDARD', bearerToken), hentMellomlagring(bearerToken)]);
-
-      if (mellomlagretSøknadFraAapInnsending && mellomlagretSøknadFraSoknadApi) {
-        logError('pages/index: finner mellomlagring fra begge kilder');
-      }
-      if (mellomlagretSøknadFraSoknadApi) {
-        logInfo('pages/index: velger mellomlagring fra søknad-api');
-        mellomlagretSøknad = {
-          ...mellomlagretSøknadFraSoknadApi,
-          brukerMellomLagretSøknadFraAApInnsending: false,
-        };
-      } else if (mellomlagretSøknadFraAapInnsending) {
-        logInfo('pages/index: velger mellomlagring fra innsending');
-        mellomlagretSøknad = {
-          ...mellomlagretSøknadFraAapInnsending,
-          brukerMellomLagretSøknadFraAApInnsending: true,
-        };
-      }
+      mellomlagretSøknad = await hentMellomlagring(bearerToken);
     } catch (e) {
       logError('Noe gikk galt i innhenting av mellomlagret søknad', e);
     }

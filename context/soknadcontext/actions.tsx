@@ -14,7 +14,6 @@ export enum SoknadActionKeys {
   ADD_BEHANDLER_IF_MISSING = 'ADD_BEHANDLER_IF_MISSING',
   ADD_REQUIRED_VEDLEGG = 'ADD_REQUIRED_VEDLEGG',
   REMOVE_REQUIRED_VEDLEGG = 'REMOVE_REQUIRED_VEDLEGG',
-  ADD_SØKNAD_URL = 'ADD_SØKNAD_URL',
   ADD_VEDLEGG = 'ADD_VEDLEGG',
   DELETE_VEDLEGG = 'DELETE_VEDLEGG',
 }
@@ -47,10 +46,6 @@ type RemoveRequiredVedlegg = {
   type: SoknadActionKeys.REMOVE_REQUIRED_VEDLEGG;
   payload?: AttachmentType;
 };
-type AddSøknadUrl = {
-  type: SoknadActionKeys.ADD_SØKNAD_URL;
-  payload: string;
-};
 
 type AddVedlegg = {
   type: SoknadActionKeys.ADD_VEDLEGG;
@@ -72,7 +67,6 @@ export type SoknadAction =
   | AddBehandlerIfMissing
   | AddRequiredVedlegg
   | RemoveRequiredVedlegg
-  | AddSøknadUrl
   | AddVedlegg
   | DeleteVedlegg;
 
@@ -87,16 +81,9 @@ export function setSoknadStateFraProps(
   return props;
 }
 
-export async function slettLagretSoknadState(
-  dispatch: Dispatch<SoknadAction>,
-  state: SoknadContextState,
-  brukerMellomLagretSøknadFraAApInnsending: boolean,
-) {
-  const deleteResponse = brukerMellomLagretSøknadFraAApInnsending
-    ? await fetch('/aap/soknad/api/mellomlagring/slett')
-    : await fetch(`/aap/soknad/api/buckets/slett/?type=${state.type}`, {
-        method: 'DELETE',
-      });
+export async function slettLagretSoknadState() {
+  const deleteResponse = await fetch('/aap/soknad/api/mellomlagring/slett');
+
   return !!deleteResponse?.ok;
 }
 
@@ -151,21 +138,11 @@ export const getVedleggUuidsFromSoknad = (søknad?: Soknad) => {
     .map((vedlegg) => vedlegg?.vedleggId);
 };
 
-export const deleteOpplastedeVedlegg = async (
-  brukMellomlagretSøknadFraInnsending: boolean,
-  søknad?: Soknad,
-) => {
+export const deleteOpplastedeVedlegg = async (søknad?: Soknad) => {
   const vedleggUuids = getVedleggUuidsFromSoknad(søknad);
   if (vedleggUuids.length > 0) {
-    if (brukMellomlagretSøknadFraInnsending) {
-      for (const vedlegg of vedleggUuids) {
-        await fetch(`/aap/soknad/api/vedlegginnsending/slett/?uuid=${vedlegg}`);
-      }
-    } else {
-      const commaSeparatedUuids = vedleggUuids.join(',');
-      await fetch(`/aap/soknad/api/vedlegg/slett/?uuids=${commaSeparatedUuids}`, {
-        method: 'DELETE',
-      });
+    for (const vedlegg of vedleggUuids) {
+      await fetch(`/aap/soknad/api/vedlegginnsending/slett/?uuid=${vedlegg}`);
     }
   }
 };

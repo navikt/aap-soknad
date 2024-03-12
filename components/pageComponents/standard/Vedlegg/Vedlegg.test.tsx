@@ -49,7 +49,6 @@ const requiredVedlegg = [
 const soknadContextInitial: SoknadContextState = {
   version: 0,
   type: undefined,
-  brukerMellomLagretSøknadFraAApInnsending: true,
   søknad: {
     manuelleBarn: [
       {
