@@ -120,9 +120,10 @@ const Steps = ({ søker, mellomlagretSøknad, kontaktinformasjon, barn }: PagePr
         søknadState?.requiredVedlegg,
       );
 
-      const postResponse = søknadState.brukerMellomLagretSøknadFraAApInnsending
-        ? await postSøknadMedAAPInnsending(søknadState.søknad, søknadState.requiredVedlegg)
-        : await postSøknadMedSoknadApi({ søknad, kvittering: søknadPdf });
+      const postResponse = await postSøknadMedAAPInnsending(
+        søknadState.søknad,
+        søknadState.requiredVedlegg,
+      );
 
       if (postResponse?.ok) {
         const harVedlegg = søknadState.requiredVedlegg && søknadState?.requiredVedlegg?.length > 0;
@@ -135,10 +136,6 @@ const Steps = ({ søker, mellomlagretSøknad, kontaktinformasjon, barn }: PagePr
           søknadState?.søknad?.tilleggsopplysninger.length > 0;
         logSkjemaFullførtEvent({ harVedlegg, erIkkeKomplett, brukerFritekstfelt, yrkesskade });
 
-        if (!søknadState.brukerMellomLagretSøknadFraAApInnsending) {
-          const url = postResponse?.data?.uri;
-          søknadDispatch({ type: SoknadActionKeys.ADD_SØKNAD_URL, payload: url });
-        }
         router.push('kvittering');
         return true;
       } else {
@@ -242,25 +239,7 @@ export const getServerSideProps = beskyttetSide(
     let mellomlagretSøknad: SoknadContextState | undefined;
 
     try {
-      const [mellomlagretSøknadFraSoknadApi, mellomlagretSøknadFraAapInnsending] =
-        await Promise.all([lesBucket('STANDARD', bearerToken), hentMellomlagring(bearerToken)]);
-
-      if (mellomlagretSøknadFraAapInnsending && mellomlagretSøknadFraSoknadApi) {
-        logError('pages/step: finner mellomlagring fra begge kilder');
-      }
-      if (mellomlagretSøknadFraSoknadApi) {
-        logInfo('pages/step: velger mellomlagring fra søknad-api');
-        mellomlagretSøknad = {
-          ...mellomlagretSøknadFraSoknadApi,
-          brukerMellomLagretSøknadFraAApInnsending: false,
-        };
-      } else if (mellomlagretSøknadFraAapInnsending) {
-        logInfo('pages/step: velger mellomlagring fra innsending');
-        mellomlagretSøknad = {
-          ...mellomlagretSøknadFraAapInnsending,
-          brukerMellomLagretSøknadFraAApInnsending: true,
-        };
-      }
+      mellomlagretSøknad = await hentMellomlagring(bearerToken);
     } catch (e) {
       logError('Noe gikk galt i innhenting av mellomlagret søknad', e);
     }
