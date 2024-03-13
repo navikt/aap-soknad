@@ -37,6 +37,10 @@ export const hentMellomlagring = async (
       audience: process.env.INNSENDING_AUDIENCE!,
       req,
     });
+    if (typeof mellomlagretSøknad === 'string') {
+      logInfo('Mellomlagret søknad er en string??, parser til Json før den returneres');
+      return JSON.parse(mellomlagretSøknad);
+    }
     logInfo('Mellomlagret søknad hentet fra aap-innsending', mellomlagretSøknad);
     return mellomlagretSøknad;
   } catch (error: any) {
