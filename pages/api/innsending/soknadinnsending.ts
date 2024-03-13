@@ -4,7 +4,6 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import metrics from 'utils/metrics';
 import { ErrorMedStatus } from 'auth/ErrorMedStatus';
 import { isFunctionalTest, isMock } from 'utils/environments';
-import { slettBucket } from 'pages/api/buckets/slett';
 import { createIntl } from 'react-intl';
 import { flattenMessages, messages } from 'utils/message';
 import links from 'translations/links.json';
@@ -152,7 +151,6 @@ export const sendSoknadViaAapInnsending = async (
     return 'Vi har mottat søknaden din.';
   }
   if (isMock()) {
-    await slettBucket('STANDARD', accessToken);
     return 'Vi har mottat søknaden din.';
   }
   const søknad = await tokenXApiProxy({

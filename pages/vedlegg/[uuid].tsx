@@ -14,30 +14,15 @@ const Vedlegg = ({}: PageProps) => {
 
   useEffect(() => {
     const getFile = async () => {
-      const [fileFromSoknadApi, fileFromInnsending] = await Promise.all([
-        fetch(`/aap/soknad/api/vedlegg/les/?uuid=${uuid}`)
-          .then((res) => {
-            if (res.ok) {
-              return res.blob();
-            }
-            return undefined;
-          })
-          .catch(() => undefined),
-        fetch(`/aap/soknad/api/vedlegginnsending/les/?uuid=${uuid}`)
-          .then((res) => {
-            if (res.ok) {
-              return res.blob();
-            }
-            return undefined;
-          })
-          .catch(() => undefined),
-      ]);
-
-      if (fileFromInnsending) {
-        setFile(fileFromInnsending);
-      } else if (fileFromSoknadApi) {
-        setFile(fileFromSoknadApi);
-      }
+      const fileFromInnsending = await fetch(`/aap/soknad/api/vedlegginnsending/les/?uuid=${uuid}`)
+        .then((res) => {
+          if (res.ok) {
+            return res.blob();
+          }
+          return undefined;
+        })
+        .catch(() => undefined);
+      setFile(fileFromInnsending);
     };
 
     getFile();

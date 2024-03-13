@@ -28,7 +28,6 @@ import { beskyttetSide } from 'auth/beskyttetSide';
 import { GetServerSidePropsResult, NextPageContext } from 'next';
 import { getAccessToken } from 'auth/accessToken';
 import { getSøker } from './api/oppslag/soeker';
-import { lesBucket } from './api/buckets/les';
 import { logSkjemaFullførtEvent, logVeiledningVistEvent } from 'utils/amplitude';
 import metrics from 'utils/metrics';
 import { scrollRefIntoView } from 'utils/dom';
@@ -146,10 +145,6 @@ const Steps = ({ søker, mellomlagretSøknad, kontaktinformasjon, barn }: PagePr
     }
     return false;
   };
-  const postSøknadMedSoknadApi = async (data?: any) =>
-    fetchPOST('/aap/soknad/api/innsending/soknadapi', {
-      ...data,
-    });
 
   const postSøknadMedAAPInnsending = async (søknad?: Soknad, requiredVedlegg?: RequiredVedlegg[]) =>
     fetchPOST('/aap/soknad/api/innsending/soknadinnsending/', {
