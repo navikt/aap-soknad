@@ -113,7 +113,7 @@ export const getServerSideProps = beskyttetSide(
     let mellomlagretSøknad: SoknadContextState | undefined;
 
     try {
-      mellomlagretSøknad = await hentMellomlagring(bearerToken);
+      mellomlagretSøknad = await hentMellomlagring(ctx.req);
     } catch (e) {
       logError('Noe gikk galt i innhenting av mellomlagret søknad', e);
     }
