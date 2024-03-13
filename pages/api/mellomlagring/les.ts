@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { getAccessTokenFromRequest } from 'auth/accessToken';
 import { beskyttetApi } from 'auth/beskyttetApi';
-import { logError, tokenXApiProxy } from '@navikt/aap-felles-utils';
+import { logError, logInfo, tokenXApiProxy } from '@navikt/aap-felles-utils';
 import metrics from 'utils/metrics';
 import { lesCache } from 'mock/mellomlagringsCache';
 import { isFunctionalTest, isMock } from 'utils/environments';
@@ -37,7 +37,7 @@ export const hentMellomlagring = async (
       audience: process.env.INNSENDING_AUDIENCE!,
       req,
     });
-
+    logInfo('Mellomlagret søknad hentet fra aap-innsending', mellomlagretSøknad);
     return mellomlagretSøknad;
   } catch (error: any) {
     logError('Noe gikk galt i henting av mellomlagring fra aap-innsending', error);

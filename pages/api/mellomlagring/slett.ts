@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { getAccessTokenFromRequest } from 'auth/accessToken';
 import { beskyttetApi } from 'auth/beskyttetApi';
-import { logError, tokenXApiProxy } from '@navikt/aap-felles-utils';
+import { logError, logInfo, tokenXApiProxy } from '@navikt/aap-felles-utils';
 import metrics from 'utils/metrics';
 import { deleteCache } from 'mock/mellomlagringsCache';
 import { isMock } from 'utils/environments';
@@ -21,13 +21,14 @@ export const slettBucket = async (req: IncomingMessage) => {
   }
 
   try {
-    await simpleTokenXProxy({
+    const result = await simpleTokenXProxy({
       url: `${process.env.INNSENDING_URL}/mellomlagring/søknad`,
       method: 'DELETE',
       audience: process.env.INNSENDING_AUDIENCE!,
       req,
     });
-    return;
+    logInfo('Søknad slettet via aap-innsending', result);
+    return result;
   } catch (error) {
     logError('Noe gikk galt ved sletting av søknad', error);
     throw new Error('Error deleting søknad via aap-innsending');
