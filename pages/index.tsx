@@ -6,7 +6,6 @@ import { GetServerSidePropsResult, NextPageContext } from 'next/types';
 import { beskyttetSide } from 'auth/beskyttetSide';
 import { getAccessToken } from 'auth/accessToken';
 import { fetchPOST } from 'api/fetch';
-import { lesBucket } from 'pages/api/buckets/les';
 import { StepType } from 'components/StepWizard/Step';
 import { logSkjemaStartetEvent } from 'utils/amplitude';
 import metrics from 'utils/metrics';
