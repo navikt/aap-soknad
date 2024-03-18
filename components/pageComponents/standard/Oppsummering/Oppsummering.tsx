@@ -82,7 +82,7 @@ const Oppsummering = ({
       .oneOf([true], formatMessage({ id: 'søknad.oppsummering.confirmation.required' })),
   });
 
-  const [toggleAll, setToggleAll] = useState<boolean | undefined>(undefined);
+  const [toggleAll, setToggleAll] = useState<boolean | undefined>(true);
   const [startDatoHasErrors] = useState<boolean>(
     !getStartDatoSchema(formatMessage).isValidSync({
       sykepenger: søknadState.søknad?.sykepenger,
