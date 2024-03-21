@@ -44,6 +44,7 @@ const SlettModal = ({ isOpen, onClose }: Props) => {
           e.preventDefault();
         }
       }}
+      aria-label={formatMessage({ id: 'avbrytOgSlettModal.heading' })}
     >
       {!slettSøknadSuccess && (
         <Modal.Header>

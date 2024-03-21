@@ -1,10 +1,9 @@
 import {
   Alert,
   BodyShort,
-  Cell,
   Checkbox,
   CheckboxGroup,
-  Grid,
+  HGrid,
   Heading,
   Radio,
   RadioGroup,
@@ -288,26 +287,24 @@ export const AndreUtbetalinger = ({ onBackClick }: Props) => {
         <Checkbox value={StønadType.AFP}>{StønadAlternativer.AFP}</Checkbox>
         {søknadState.søknad?.andreUtbetalinger?.stønad?.includes(StønadType.AFP) && (
           <ColorPanel color="grey">
-            <Grid>
-              <Cell xs={7}>
-                <TextField
-                  name={'afp.hvemBetaler'}
-                  id={'afp.hvemBetaler'}
-                  onChange={(e) =>
-                    updateSøknadData(søknadDispatch, {
-                      andreUtbetalinger: {
-                        ...søknadState.søknad?.andreUtbetalinger,
-                        afp: {
-                          hvemBetaler: e.target.value,
-                        },
+            <HGrid columns={{ xs: 1, md: 2 }}>
+              <TextField
+                name={'afp.hvemBetaler'}
+                id={'afp.hvemBetaler'}
+                onChange={(e) =>
+                  updateSøknadData(søknadDispatch, {
+                    andreUtbetalinger: {
+                      ...søknadState.søknad?.andreUtbetalinger,
+                      afp: {
+                        hvemBetaler: e.target.value,
                       },
-                    })
-                  }
-                  label={formatMessage({ id: 'søknad.andreUtbetalinger.hvemBetalerAfp.label' })}
-                  error={errors?.find((e) => e.path === 'afp.hvemBetaler')?.message}
-                />
-              </Cell>
-            </Grid>
+                    },
+                  })
+                }
+                label={formatMessage({ id: 'søknad.andreUtbetalinger.hvemBetalerAfp.label' })}
+                error={errors?.find((e) => e.path === 'afp.hvemBetaler')?.message}
+              />
+            </HGrid>
           </ColorPanel>
         )}
         <Checkbox value={StønadType.LÅN}>{StønadAlternativer.LÅN}</Checkbox>

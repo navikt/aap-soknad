@@ -41,24 +41,24 @@ export interface UtenlandsPeriodeProps {
 
 export const getUtenlandsPeriodeSchema = (
   formatMessage: IntlFormatters['formatMessage'],
-  arbeidEllerBodd = ArbeidEllerBodd.BODD
+  arbeidEllerBodd = ArbeidEllerBodd.BODD,
 ) => {
   return yup.object().shape({
     land: yup
       .string()
       .required(
-        formatMessage({ id: 'søknad.medlemskap.utenlandsperiode.modal.land.validation.required' })
+        formatMessage({ id: 'søknad.medlemskap.utenlandsperiode.modal.land.validation.required' }),
       )
       .notOneOf(
         ['none'],
-        formatMessage({ id: 'søknad.medlemskap.utenlandsperiode.modal.land.validation.required' })
+        formatMessage({ id: 'søknad.medlemskap.utenlandsperiode.modal.land.validation.required' }),
       ),
     fraDato: yup
       .date()
       .required(
         formatMessage({
           id: 'søknad.medlemskap.utenlandsperiode.modal.periode.fraDato.validation.required',
-        })
+        }),
       )
       .nullable(),
     tilDato: yup
@@ -66,13 +66,13 @@ export const getUtenlandsPeriodeSchema = (
       .required(
         formatMessage({
           id: 'søknad.medlemskap.utenlandsperiode.modal.periode.tilDato.validation.required',
-        })
+        }),
       )
       .min(
         yup.ref('fraDato'),
         formatMessage({
           id: 'søknad.medlemskap.utenlandsperiode.modal.periode.tilDato.validation.fraDatoEtterTilDato',
-        })
+        }),
       )
       .nullable(),
     iArbeid: yup.string().when('arbeidEllerBodd', ([], schema) => {
@@ -82,7 +82,7 @@ export const getUtenlandsPeriodeSchema = (
           .required(
             formatMessage({
               id: 'søknad.medlemskap.utenlandsperiode.modal.iArbeid.validation.required',
-            })
+            }),
           )
           .oneOf([JaEllerNei.JA, JaEllerNei.NEI])
           .nullable();
@@ -119,6 +119,9 @@ const UtenlandsPeriodeVelger = ({
         clearErrors();
         closeModal();
       }}
+      aria-label={formatMessage({
+        id: `søknad.medlemskap.utenlandsperiode.modal.title.${arbeidEllerBodd}`,
+      })}
     >
       <Modal.Header>
         <Heading size={'medium'} level={'3'} spacing>
@@ -176,7 +179,7 @@ const UtenlandsPeriodeVelger = ({
                   id: `søknad.medlemskap.utenlandsperiode.modal.periode.label.${arbeidEllerBodd}`,
                 })}
               </Label>
-              <HGrid columns={2}>
+              <HGrid columns={{ xs: 1, md: 2 }} gap="4">
                 <MonthPickerWrapper
                   id="fraDato"
                   selectedDate={utenlandsPeriode.fraDato}

@@ -124,6 +124,7 @@ export const AddBarnModal = ({
         clearErrors();
         onCloseClick();
       }}
+      aria-label={formatMessage({ id: 'søknad.barnetillegg.leggTilBarn.modal.title' })}
     >
       <Modal.Header>
         <Heading size={'medium'} level={'2'}>
