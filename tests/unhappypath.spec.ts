@@ -238,7 +238,7 @@ test('at alle feilmeldinger skal dukke opp', async ({ page }) => {
   await page
     .getByRole('button', { name: 'Legg til Registrer periode med jobb utenfor Norge' })
     .click();
-  await page.getByRole('button', { name: 'Lukk modalvindu' }).click();
+  await page.getByRole('button', { name: 'Lukk' }).click();
   await page
     .getByRole('group', {
       name: 'Har du i tillegg til jobb i Norge, også jobbet i et annet land de fem siste årene?',
@@ -251,7 +251,7 @@ test('at alle feilmeldinger skal dukke opp', async ({ page }) => {
     .check();
   await page.getByRole('button', { name: 'Neste steg' }).click();
   await page.getByRole('button', { name: 'Legg til Registrer utenlandsopphold' }).click();
-  await page.getByRole('button', { name: 'Lukk modalvindu' }).click();
+  await page.getByRole('button', { name: 'Lukk' }).click();
   await page
     .getByRole('group', { name: 'Har du bodd sammenhengende i Norge de fem siste årene?' })
     .getByLabel('Ja')

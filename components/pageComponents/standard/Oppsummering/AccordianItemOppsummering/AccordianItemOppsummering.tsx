@@ -1,8 +1,7 @@
 import { Accordion, Alert, BodyShort, HGrid, Link } from '@navikt/ds-react';
-import React, { useState } from 'react';
+import React, { ReactNode, useEffect, useState } from 'react';
 import * as classes from './AccordianItemOppsummering.module.css';
 import { Back } from '@navikt/ds-icons';
-import { useEffect } from 'react';
 
 type SummaryAccordianItemProps = {
   title: string;
@@ -11,7 +10,7 @@ type SummaryAccordianItemProps = {
   toggleAll: boolean | undefined;
   showEdit?: boolean;
   editText?: string;
-  children?: React.ReactChild | React.ReactChild[];
+  children?: ReactNode;
   hasError?: boolean;
 };
 const AccordianItemOppsummering = ({
@@ -54,7 +53,7 @@ const AccordianItemOppsummering = ({
           {showEdit && (
             <HGrid columns={{ xs: 1 }}>
               <Link href="#" onClick={onEdit}>
-                <Back />
+                <Back aria-label={'tilbake'} />
                 {editText}
               </Link>
             </HGrid>
