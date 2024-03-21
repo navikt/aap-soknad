@@ -16,8 +16,7 @@ import { logError, logInfo } from '@navikt/aap-felles-utils';
 import { Person, getPerson } from 'pages/api/oppslagapi/person';
 
 interface PageProps {
-  person?: Person;
-  oppslagFeilet: boolean;
+  person: Person;
 }
 
 export enum StepNames {
@@ -45,7 +44,7 @@ export const defaultStepList = [
   { stepIndex: 9, name: StepNames.OPPSUMMERING },
 ];
 
-const Introduksjon = ({ person, oppslagFeilet }: PageProps) => {
+const Introduksjon = ({ person }: PageProps) => {
   const router = useRouter();
 
   const [isLoading, setIsLoading] = useState(false);
@@ -56,7 +55,7 @@ const Introduksjon = ({ person, oppslagFeilet }: PageProps) => {
   const [soker, setSoker] = useState({});
 
   useEffect(() => {
-    if (person?.navn) {
+    if (person.navn) {
       const _søker: SøkerView = {
         fulltNavn: person.navn,
       };
@@ -88,9 +87,6 @@ const Introduksjon = ({ person, oppslagFeilet }: PageProps) => {
     }
   }, [hasError]);
 
-  if (oppslagFeilet) {
-    return <div>Det er rusk i navet :(</div>;
-  }
   return (
     <>
       <Veiledning
@@ -110,18 +106,7 @@ export const getServerSideProps = beskyttetSide(
   async (ctx: NextPageContext): Promise<GetServerSidePropsResult<{}>> => {
     const stopTimer = metrics.getServersidePropsDurationHistogram.startTimer({ path: '/standard' });
 
-    let person: Person;
-
-    try {
-      person = await getPerson(ctx.req);
-    } catch (e) {
-      logError('Noe gikk galt i kallet mot oppslag/person', e);
-      return {
-        props: {
-          oppslagFeilet: true,
-        },
-      };
-    }
+    const person: Person = await getPerson(ctx.req);
 
     let mellomlagretSøknad: SoknadContextState | undefined;
 
@@ -145,7 +130,7 @@ export const getServerSideProps = beskyttetSide(
       };
     }
     return {
-      props: { person, oppslagFeilet: false },
+      props: { person },
     };
   },
 );
