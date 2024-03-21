@@ -25,7 +25,7 @@ export const getBehandlerSchema = (formatMessage: IntlFormatters['formatMessage'
     lastname: yup
       .string()
       .required(
-        formatMessage({ id: 'søknad.helseopplysninger.modal.etternavn.validation.required' })
+        formatMessage({ id: 'søknad.helseopplysninger.modal.etternavn.validation.required' }),
       )
       .nullable(),
   });
@@ -54,6 +54,7 @@ export const EndreEllerLeggTilBehandlerModal = ({
         clearErrors();
         onCloseClick();
       }}
+      aria-label={formatMessage({ id: 'søknad.helseopplysninger.modal.title' })}
     >
       <Modal.Header>
         <Heading className={classes?.modalHeading} size={'small'} level={'3'}>

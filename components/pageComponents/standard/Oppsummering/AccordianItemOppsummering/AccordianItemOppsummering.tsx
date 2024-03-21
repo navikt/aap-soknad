@@ -1,4 +1,4 @@
-import { Accordion, Alert, BodyShort, Cell, Grid, Link } from '@navikt/ds-react';
+import { Accordion, Alert, BodyShort, HGrid, Link } from '@navikt/ds-react';
 import React, { useState } from 'react';
 import * as classes from './AccordianItemOppsummering.module.css';
 import { Back } from '@navikt/ds-icons';
@@ -52,14 +52,12 @@ const AccordianItemOppsummering = ({
             </Alert>
           )}
           {showEdit && (
-            <Grid>
-              <Cell xs={12}>
-                <Link href="#" onClick={onEdit}>
-                  <Back />
-                  {editText}
-                </Link>
-              </Cell>
-            </Grid>
+            <HGrid columns={{ xs: 1 }}>
+              <Link href="#" onClick={onEdit}>
+                <Back />
+                {editText}
+              </Link>
+            </HGrid>
           )}
         </div>
       </Accordion.Content>

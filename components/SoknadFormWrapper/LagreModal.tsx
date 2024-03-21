@@ -11,7 +11,11 @@ interface Props {
 const LagreModal = ({ isOpen, onClose }: Props) => {
   const { formatMessage } = useIntl();
   return (
-    <Modal open={isOpen} onClose={() => onClose(false)}>
+    <Modal
+      open={isOpen}
+      onClose={() => onClose(false)}
+      aria-label={formatMessage({ id: 'lagreModal.heading' })}
+    >
       <Modal.Header>
         <Heading size={'small'} level={'2'} spacing>
           {formatMessage({ id: 'lagreModal.heading' })}
