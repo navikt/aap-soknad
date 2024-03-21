@@ -18,8 +18,7 @@ const ErrorPage = () => {
                   </Heading>
                   {/* Tekster bør tilpasses den aktuelle 500-feilen. Teksten under er for en generisk 500-feil. */}
                   <BodyShort spacing>
-                    En teknisk feil på våre servere gjør at søknaden er utilgjengelig. Dette skyldes
-                    ikke noe du gjorde.
+                    En teknisk feil på våre servere gjør at søknaden er utilgjengelig.
                   </BodyShort>
                   <BodyShort>Du kan prøve å</BodyShort>
                   <List>
@@ -49,9 +48,7 @@ const ErrorPage = () => {
                 <Heading level="1" size="large" spacing>
                   Something went wrong
                 </Heading>
-                <BodyShort spacing>
-                  This was caused by a technical fault on our servers. It was not your fault.
-                </BodyShort>
+                <BodyShort spacing>This was caused by a technical fault on our servers.</BodyShort>
                 <BodyShort>You can try to</BodyShort>
                 <List>
                   <List.Item>
