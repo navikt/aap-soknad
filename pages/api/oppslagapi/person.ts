@@ -10,7 +10,6 @@ import { MockPerson } from 'mock/person';
 const Person = z.object({
   navn: z.string(),
   fnr: z.string(),
-  erBeskyttet: z.boolean(),
   adresse: z.string().optional(),
   fødseldato: z.string().optional(),
 });
@@ -21,8 +20,7 @@ const handler = beskyttetApi(async (req: NextApiRequest, res: NextApiResponse) =
 });
 export const getPerson = async (req?: IncomingMessage) => {
   if (isMock()) {
-    throw new Error('Mock is not implemented');
-    //return MockPerson;
+    return MockPerson;
   }
   try {
     const person = await simpleTokenXProxy({

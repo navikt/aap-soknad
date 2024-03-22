@@ -5,7 +5,6 @@ import { formatDate } from 'utils/date';
 export const MockPerson: Person = {
   navn: 'Jackie Li',
   fnr: '12345678910',
-  erBeskyttet: false,
   adresse: 'Oslo',
   fødseldato: formatDate(sub(new Date(), { years: 30 }), 'yyyy-MM-dd')!,
 };
