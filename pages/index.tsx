@@ -1,24 +1,22 @@
 import { Veiledning } from 'components/pageComponents/standard/Veiledning/Veiledning';
 import React, { useEffect, useRef, useState } from 'react';
-import { Soker, SøkerView } from 'context/sokerOppslagContext';
+import { SøkerView } from 'context/sokerOppslagContext';
 import { useRouter } from 'next/router';
 import { GetServerSidePropsResult, NextPageContext } from 'next/types';
 import { beskyttetSide } from 'auth/beskyttetSide';
-import { getAccessToken } from 'auth/accessToken';
 import { fetchPOST } from 'api/fetch';
 import { StepType } from 'components/StepWizard/Step';
 import { logSkjemaStartetEvent } from 'utils/amplitude';
 import metrics from 'utils/metrics';
 import { scrollRefIntoView } from 'utils/dom';
-import { getSøkerUtenBarn } from 'pages/api/oppslag/soekerUtenBarn';
-import { getFulltNavn } from 'lib/søker';
 import { SOKNAD_VERSION, SoknadContextState } from 'context/soknadcontext/soknadContext';
 import { hentMellomlagring } from 'pages/api/mellomlagring/les';
 import { isFunctionalTest } from 'utils/environments';
 import { logError, logInfo } from '@navikt/aap-felles-utils';
+import { Person, getPerson } from 'pages/api/oppslagapi/person';
 
 interface PageProps {
-  søker: Soker;
+  person: Person;
 }
 
 export enum StepNames {
@@ -46,7 +44,7 @@ export const defaultStepList = [
   { stepIndex: 9, name: StepNames.OPPSUMMERING },
 ];
 
-const Introduksjon = ({ søker }: PageProps) => {
+const Introduksjon = ({ person }: PageProps) => {
   const router = useRouter();
 
   const [isLoading, setIsLoading] = useState(false);
@@ -57,13 +55,13 @@ const Introduksjon = ({ søker }: PageProps) => {
   const [soker, setSoker] = useState({});
 
   useEffect(() => {
-    if (søker?.navn) {
+    if (person.navn) {
       const _søker: SøkerView = {
-        fulltNavn: getFulltNavn(søker),
+        fulltNavn: person.navn,
       };
       setSoker(_søker);
     }
-  }, [søker, setSoker]);
+  }, [person, setSoker]);
 
   const startSoknad = async () => {
     setIsLoading(true);
@@ -107,8 +105,8 @@ const Introduksjon = ({ søker }: PageProps) => {
 export const getServerSideProps = beskyttetSide(
   async (ctx: NextPageContext): Promise<GetServerSidePropsResult<{}>> => {
     const stopTimer = metrics.getServersidePropsDurationHistogram.startTimer({ path: '/standard' });
-    const bearerToken = getAccessToken(ctx);
-    const søker = await getSøkerUtenBarn(bearerToken);
+
+    const person: Person = await getPerson(ctx.req);
 
     let mellomlagretSøknad: SoknadContextState | undefined;
 
@@ -132,7 +130,7 @@ export const getServerSideProps = beskyttetSide(
       };
     }
     return {
-      props: { søker },
+      props: { person },
     };
   },
 );
