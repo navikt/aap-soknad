@@ -3,7 +3,7 @@ import React from 'react';
 import * as classes from './Kvittering.module.css';
 import { KontaktInfoView, SøkerView } from 'context/sokerOppslagContext';
 import { SuccessStroke } from '@navikt/ds-icons';
-import { clientSideIsProd } from 'utils/environments';
+import { clientSideIsProd, isFunctionalTest } from 'utils/environments';
 import { FormattedMessage, useIntl } from 'react-intl';
 
 interface StudentProps {
@@ -14,9 +14,16 @@ interface StudentProps {
 const Kvittering = ({ søker, kontaktinformasjon }: StudentProps) => {
   const { formatMessage } = useIntl();
 
-  const mineAapUrl = clientSideIsProd()
-    ? 'https://nav.no/aap/mine-aap'
-    : 'https://aap-mine-aap.intern.dev.nav.no/aap/mine-aap';
+  const mineAapUrl = () => {
+    if (clientSideIsProd()) {
+      return 'https://nav.no/aap/mine-aap';
+    }
+    if (isFunctionalTest()) {
+      return process.env.NEXT_PUBLIC_MINE_AAP_URL;
+    }
+    return 'https://aap-mine-aap.intern.dev.nav.no/aap/mine-aap';
+  };
+
   const dittNavUrl = clientSideIsProd()
     ? 'https://www.nav.no/person/dittnav/'
     : 'https://www.dev.nav.no/person/dittnav/';
@@ -85,7 +92,7 @@ const Kvittering = ({ søker, kontaktinformasjon }: StudentProps) => {
         </div>
       )}
       <form action={dittNavUrl}>
-        <Button as={'a'} variant={'primary'} href={mineAapUrl}>
+        <Button as={'a'} variant={'primary'} href={mineAapUrl()}>
           {formatMessage({ id: 'søknad.kvittering.dittNavKnapp' })}
         </Button>
       </form>
