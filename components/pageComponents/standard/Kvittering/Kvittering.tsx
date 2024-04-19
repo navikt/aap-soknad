@@ -46,7 +46,7 @@ const Kvittering = ({ søker, kontaktinformasjon }: StudentProps) => {
       </Alert>
       <Alert variant="info">
         <BodyShort spacing>
-          <Link target="_blank" href={`${mineAapUrl}/ettersendelse/`}>
+          <Link target="_blank" href={`${mineAapUrl()}/ettersendelse/`}>
             {formatMessage({ id: 'søknad.kvittering.vedlegg.ettersendelseLink' })}
           </Link>
         </BodyShort>
