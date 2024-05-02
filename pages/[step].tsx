@@ -48,6 +48,7 @@ import { formatNavn } from 'utils/StringFormatters';
 import { hentMellomlagring } from 'pages/api/mellomlagring/les';
 import { RequiredVedlegg } from 'types/SoknadContext';
 import { logError, logInfo, logWarning } from '@navikt/aap-felles-utils';
+import { parse } from 'date-fns';
 
 interface PageProps {
   søker: SokerOppslagState;
@@ -248,6 +249,11 @@ export const getServerSideProps = beskyttetSide(
     } catch (e) {
       logError('Noe gikk galt i kallet mot barn fra aap-oppslag', e);
     }
+    barn.sort((barnA, barnB) => {
+      const a = parse(barnA.fødselsdato, 'yyyy-MM-dd', new Date() as any);
+      const b = parse(barnB.fødselsdato, 'yyyy-MM-dd', new Date() as any);
+      return a - b;
+    });
 
     stopTimer();
 
