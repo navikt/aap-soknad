@@ -489,15 +489,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/runtime@npm:^7.21.0":
-  version: 7.23.1
-  resolution: "@babel/runtime@npm:7.23.1"
-  dependencies:
-    regenerator-runtime: "npm:^0.14.0"
-  checksum: 10c0/e57ab1436d4845efe67c3f76d578508bb584173690ecfeac105bc4e09d64b2aa6a53c1e03bca3c97cc238e5390a804e5a4ded211e6350243b735905ca45a4822
-  languageName: node
-  linkType: hard
-
 "@babel/runtime@npm:^7.23.2":
   version: 7.23.6
   resolution: "@babel/runtime@npm:7.23.6"
@@ -625,12 +616,31 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@floating-ui/core@npm:^1.0.0":
+  version: 1.6.1
+  resolution: "@floating-ui/core@npm:1.6.1"
+  dependencies:
+    "@floating-ui/utils": "npm:^0.2.0"
+  checksum: 10c0/7d78b3788d438807d3c1a52477ee1693a29b8a4416dd6e13761427925d9fba1d45c849527752d8fd9776842182d919fddf7ecbc34f3bf2de3bafa1717619a56f
+  languageName: node
+  linkType: hard
+
 "@floating-ui/core@npm:^1.4.2":
   version: 1.5.0
   resolution: "@floating-ui/core@npm:1.5.0"
   dependencies:
     "@floating-ui/utils": "npm:^0.1.3"
   checksum: 10c0/bca811cefd09c3f56c4cf58c3e94826c1ce4a0b40124e9030ddca2ef1cc68b4ddc5ba5b4d7cc94c9555aea6876d2428a77a2ae261fe5b39c79df247a9518b053
+  languageName: node
+  linkType: hard
+
+"@floating-ui/dom@npm:^1.0.0":
+  version: 1.6.5
+  resolution: "@floating-ui/dom@npm:1.6.5"
+  dependencies:
+    "@floating-ui/core": "npm:^1.0.0"
+    "@floating-ui/utils": "npm:^0.2.0"
+  checksum: 10c0/ebdc14806f786e60df8e7cc2c30bf9cd4d75fe734f06d755588bbdef2f60d0a0f21dffb14abdc58dea96e5577e2e366feca6d66ba962018efd1bc91a3ece4526
   languageName: node
   linkType: hard
 
@@ -656,6 +666,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@floating-ui/react-dom@npm:^2.0.9":
+  version: 2.0.9
+  resolution: "@floating-ui/react-dom@npm:2.0.9"
+  dependencies:
+    "@floating-ui/dom": "npm:^1.0.0"
+  peerDependencies:
+    react: ">=16.8.0"
+    react-dom: ">=16.8.0"
+  checksum: 10c0/d8cd1fb2b8a5012ca692d6f677a0af923ef81131f69accea8ce8b5413202ab4c3c79e6eda1446f4dad06a2dfd596ece748c562ba28c289678a856755db4f528f
+  languageName: node
+  linkType: hard
+
 "@floating-ui/react@npm:0.25.4":
   version: 0.25.4
   resolution: "@floating-ui/react@npm:0.25.4"
@@ -674,6 +696,13 @@ __metadata:
   version: 0.1.6
   resolution: "@floating-ui/utils@npm:0.1.6"
   checksum: 10c0/0a089db0e0526b89e83cb0a773a903517db5c9067cd473febfd8fa91a3a2ccbc3a835234796c1bb528def21dbb67be50e28d9c473cb58a6d90679d7e549b9c0c
+  languageName: node
+  linkType: hard
+
+"@floating-ui/utils@npm:^0.2.0":
+  version: 0.2.2
+  resolution: "@floating-ui/utils@npm:0.2.2"
+  checksum: 10c0/b2becdcafdf395af1641348da0031ff1eaad2bc60c22e14bd3abad4acfe2c8401e03097173d89a2f646a99b75819a78ef21ebb2572cab0042a56dd654b0065cd
   languageName: node
   linkType: hard
 
@@ -1176,61 +1205,47 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@navikt/aap-felles-css@npm:^0.0.97":
-  version: 0.0.97
-  resolution: "@navikt/aap-felles-css@npm:0.0.97::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faap-felles-css%2F0.0.97%2Fdd5e06805adc3c96cd8a6ce88223233e791a8ea2"
-  checksum: 10c0/26d235cf502a68da5f556ba1a2f8982cee0169ce111a5adc02ec09e03ebc07c56f5c67b51d1e6f71ebd40985543af5b598660b085b53997acfe4f744a55dba7c
+"@navikt/aap-felles-css@npm:^1.0.1":
+  version: 1.0.1
+  resolution: "@navikt/aap-felles-css@npm:1.0.1::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faap-felles-css%2F1.0.1%2Fc928e2c3a39f4e05e45acf385f69637d7d6ef6fe"
+  checksum: 10c0/4637df9a7be338464c773578d42abca34ec31b2ac1fd7991625e89538506b4006c3fcd03e14307f6eb33d68e193fc95be29e0681d949a191cf1dcd0eacebff0a
   languageName: node
   linkType: hard
 
-"@navikt/aap-felles-react@npm:^0.0.97":
-  version: 0.0.97
-  resolution: "@navikt/aap-felles-react@npm:0.0.97::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faap-felles-react%2F0.0.97%2Fa67c15a05b97b73afe8da85721cdb6316ecc9181"
+"@navikt/aap-felles-react@npm:^1.0.1":
+  version: 1.0.1
+  resolution: "@navikt/aap-felles-react@npm:1.0.1::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faap-felles-react%2F1.0.1%2F9bf7a656b10c460ff42378f2b6b54671e739c13b"
   dependencies:
-    "@navikt/aksel-icons": "npm:^5.4.1"
-    "@navikt/ds-css": "npm:^5.4.1"
-    "@navikt/ds-react": "npm:^5.4.1"
+    "@navikt/aksel-icons": "npm:^6.6.1"
+    "@navikt/ds-css": "npm:^6.6.1"
+    "@navikt/ds-react": "npm:^6.6.1"
     prop-types: "npm:^15.8.1"
     react: "npm:^18.2.0"
     uuid: "npm:^9.0.1"
-  checksum: 10c0/53f1332b2673151a1a9f7af4cf091de4593626d6e90fca70eb646b136eff381aba0723c277ed905699d170566d9aa4f1e55a6d24d4d01be53a95a6e934359fd0
+  checksum: 10c0/03adb481c2ab89862c0aecefa553f33b12a6c676136ceffa86a2e123c1911ea8c53392b83d2d08d775081821d8b20a18a1bae4afb5931d9ebb483384a0b5275f
   languageName: node
   linkType: hard
 
-"@navikt/aap-felles-utils-client@npm:^0.0.97":
-  version: 0.0.97
-  resolution: "@navikt/aap-felles-utils-client@npm:0.0.97::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faap-felles-utils-client%2F0.0.97%2F6ad59f49e97f9f53746c8e4d721b51182e82bf24"
+"@navikt/aap-felles-utils-client@npm:^1.0.1":
+  version: 1.0.1
+  resolution: "@navikt/aap-felles-utils-client@npm:1.0.1::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faap-felles-utils-client%2F1.0.1%2Ffd8e5d281cca60f444709a1b0d4bf64a3b6c24a8"
   dependencies:
-    date-fns: "npm:^2.30.0"
-  checksum: 10c0/97c87ea94fa1720330e400d7e209de4252fe8420d2b38d9f9964d2efb8ee0ac34aa1a14d86420fbf476821db8488533167fa9b6d52f230d773912683f0797dc7
+    date-fns: "npm:^3.6.0"
+  checksum: 10c0/68f4b376e76863c44fed6ee15eb81c7694e6c95b16b0ad7b0d7e3e2144de3225fd3c5988599a0ba0089ad68d355b2252f20f7b5ecf900b18f5aa03a050809170
   languageName: node
   linkType: hard
 
-"@navikt/aap-felles-utils@npm:^0.0.97":
-  version: 0.0.97
-  resolution: "@navikt/aap-felles-utils@npm:0.0.97::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faap-felles-utils%2F0.0.97%2Fb0f0ced925e86f382d9815189d41a03bbba6fb66"
+"@navikt/aap-felles-utils@npm:^1.0.1":
+  version: 1.0.1
+  resolution: "@navikt/aap-felles-utils@npm:1.0.1::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faap-felles-utils%2F1.0.1%2F245672c9091c7f791731c3576306efac17f53065"
   dependencies:
-    axios: "npm:^1.2.1"
-    jose: "npm:^4.11.1"
-    next: "npm:14.1.0"
-    openid-client: "npm:^5.3.1"
-    pino: "npm:^8.8.0"
-    prom-client: "npm:^14.1.0"
-  checksum: 10c0/e3521875305edac6dcaa8d0ec44b370b15307c6d3090b1bfc6acf1f0962c7a6782c6c8af3deb096977c12d088b1616b40ce6e9c1b4c861412d5763234781bb0c
-  languageName: node
-  linkType: hard
-
-"@navikt/aksel-icons@npm:^5.4.1":
-  version: 5.4.1
-  resolution: "@navikt/aksel-icons@npm:5.4.1::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faksel-icons%2F5.4.1%2Fff7b887a287ef24a443bccef0471a04f4c299387"
-  checksum: 10c0/a9ca37ae14bd610442c75e20384e87ab8b72dc96acdb75db8a8ba4ea83140aea21292e786d15925406bfb1586c47e9db1b40a8fda1c6cad8d973ce5fd82b5053
-  languageName: node
-  linkType: hard
-
-"@navikt/aksel-icons@npm:^5.6.3":
-  version: 5.6.3
-  resolution: "@navikt/aksel-icons@npm:5.6.3::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faksel-icons%2F5.6.3%2F5270b4d69ced1fd5d071a9cbb79a19f034adc125"
-  checksum: 10c0/141f56898d07877a2773e8caed48f38f125534bc65a2c92c92e1b0b8b5276b61ef9e72fdb95d37a7c4e86e82b1e8f6648af080dda0c96f07c9f9453afac570ce
+    axios: "npm:^1.6.8"
+    jose: "npm:^5.2.4"
+    next: "npm:14.2.3"
+    openid-client: "npm:^5.6.5"
+    pino: "npm:^9.0.0"
+    prom-client: "npm:^15.1.2"
+  checksum: 10c0/311d9fdda051b05d85fd9393af3acfa5bbc4e8425a1c75287cb9b36f565c6b8d49ada1edb4ffeee360f7365ef6611954906e42fa9d03dc0cf246c617c158a1f0
   languageName: node
   linkType: hard
 
@@ -1241,10 +1256,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@navikt/ds-css@npm:^5.4.1":
-  version: 5.6.3
-  resolution: "@navikt/ds-css@npm:5.6.3::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Fds-css%2F5.6.3%2Faa618ef975c8361f06874c3c12a05e145e0146ba"
-  checksum: 10c0/3e4eac110309205cd4b8946eac93653828641b677eb28b9f4cd8ca3228344b29611d80d09e0175d58cbff5c412f77f62966ed07026a59a27b0aa68f76bbceb17
+"@navikt/aksel-icons@npm:^6.6.1, @navikt/aksel-icons@npm:^6.7.1":
+  version: 6.7.1
+  resolution: "@navikt/aksel-icons@npm:6.7.1::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faksel-icons%2F6.7.1%2F6c93069e7c03eba1ffe25634ad0188ddef34853b"
+  checksum: 10c0/8be658d568b5f211a53b0ec51656fc7a6fc53aa6a92fd77981dd2ba4d7ab622e30c7d5870cf9b592c314ad4a829ac035c478023c72ba72aa0279badddd7a157e
   languageName: node
   linkType: hard
 
@@ -1255,6 +1270,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@navikt/ds-css@npm:^6.6.1":
+  version: 6.7.1
+  resolution: "@navikt/ds-css@npm:6.7.1::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Fds-css%2F6.7.1%2F339abde646df6131551b6e960df6e03faf152967"
+  checksum: 10c0/92417d9438ae0ab6f1b9a5d19b8a4a1ec0e3f1ba7cb9765f8fd80654015a8501bb2942d8dd995e4f0861c935eae4699b564b01fa6de74fffc7303349bc432ff3
+  languageName: node
+  linkType: hard
+
 "@navikt/ds-icons@npm:^3.4.3":
   version: 3.4.3
   resolution: "@navikt/ds-icons@npm:3.4.3::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Fds-icons%2F3.4.3%2Feaa8fc38f6d184806d3405a5efbc9d137c2b8d27"
@@ -1262,25 +1284,6 @@ __metadata:
     "@types/react": ^17.0.30 || ^18.0.0
     react: ^17.0.0 || ^18.0.0
   checksum: 10c0/959b68c3f2947aa6a8ddba1827d22e7071934790b001f24833823150f90cde6e6eaf08ca2215427a99b6e52a81ac9e82ecc3bb50dda36eefe6d1cd10d41436f1
-  languageName: node
-  linkType: hard
-
-"@navikt/ds-react@npm:^5.4.1":
-  version: 5.6.3
-  resolution: "@navikt/ds-react@npm:5.6.3::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Fds-react%2F5.6.3%2Fd9e45a4994a4a06e861fe1da7cecdbe3d44a3cc5"
-  dependencies:
-    "@floating-ui/react": "npm:0.25.4"
-    "@navikt/aksel-icons": "npm:^5.6.3"
-    "@navikt/ds-tokens": "npm:^5.6.3"
-    "@radix-ui/react-tabs": "npm:1.0.0"
-    "@radix-ui/react-toggle-group": "npm:1.0.0"
-    clsx: "npm:^1.2.1"
-    date-fns: "npm:2.29.3"
-    react-day-picker: "npm:8.3.4"
-  peerDependencies:
-    "@types/react": ^17.0.30 || ^18.0.0
-    react: ^17.0.0 || ^18.0.0
-  checksum: 10c0/6118e7a46f0a7b7128b6dbb3938f23fa4afe8664be42b1c6c1adac7ee6690508a521936ded582a7527bda28213d14fda9def74679bbef98f1894d5076baec1ff
   languageName: node
   linkType: hard
 
@@ -1303,10 +1306,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@navikt/ds-tokens@npm:^5.6.3":
-  version: 5.6.3
-  resolution: "@navikt/ds-tokens@npm:5.6.3::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Fds-tokens%2F5.6.3%2F4a8a1619a6815d55226077deb858991d6a7cd5f6"
-  checksum: 10c0/9bd224e5fb616dd35b86be289ab976f6ed27e053c46db73b3a419acbf33949ef900d582cfa649bb0e35f627b8c2b96f800d6bd8d066566640b0a5d910cb5be9e
+"@navikt/ds-react@npm:^6.6.1":
+  version: 6.7.1
+  resolution: "@navikt/ds-react@npm:6.7.1::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Fds-react%2F6.7.1%2F21374db1bf332e80b8724b2e23e59cfbf6610dd8"
+  dependencies:
+    "@floating-ui/react": "npm:0.25.4"
+    "@floating-ui/react-dom": "npm:^2.0.9"
+    "@navikt/aksel-icons": "npm:^6.7.1"
+    "@navikt/ds-tokens": "npm:^6.7.1"
+    clsx: "npm:^2.1.0"
+    date-fns: "npm:^3.0.0"
+    react-day-picker: "npm:8.10.0"
+  peerDependencies:
+    "@types/react": ^17.0.30 || ^18.0.0
+    react: ^17.0.0 || ^18.0.0
+  checksum: 10c0/183ec9cfc3e95109ef870d2b21083c304a8d2f766cd9c278438cf49580c42ae56a98a9dc0b41b5c09f946bd681688c9509efc57f9319883507a359daebfd59a5
   languageName: node
   linkType: hard
 
@@ -1314,6 +1328,13 @@ __metadata:
   version: 6.3.3
   resolution: "@navikt/ds-tokens@npm:6.3.3::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Fds-tokens%2F6.3.3%2Fd6403f08c3aa389e917b6fbb962ded0c5ce6f603"
   checksum: 10c0/16312c851ae07c23a2a4e312eb6e9dd03902c5131e8eaccf54adaad2e40a29a0a7d9154ed3279d4e2f002c257f32fdc2b529917596c7f86bebe6351ae3105bfa
+  languageName: node
+  linkType: hard
+
+"@navikt/ds-tokens@npm:^6.7.1":
+  version: 6.7.1
+  resolution: "@navikt/ds-tokens@npm:6.7.1::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Fds-tokens%2F6.7.1%2Fbe99a17023a95d99199f904e9e631ae0f3518c4f"
+  checksum: 10c0/52f23220049cc257e81dfc47ed0c17f8ff8271fa1729af67d92a3d3b6326d05fdee62425c07a373e709b3471e90d916ce9280bd9fb5836d0726bc8ac2a90b7e8
   languageName: node
   linkType: hard
 
@@ -1358,9 +1379,23 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@next/env@npm:14.2.3":
+  version: 14.2.3
+  resolution: "@next/env@npm:14.2.3"
+  checksum: 10c0/25ab3ac2739c8e5ce35e1f50373238c5c428ab6b01d448ba78a6068dcdef88978b64f9a92790c324b2926ccc41390a67107154a0b0fee32fe980a485f4ef20d8
+  languageName: node
+  linkType: hard
+
 "@next/swc-darwin-arm64@npm:14.1.0":
   version: 14.1.0
   resolution: "@next/swc-darwin-arm64@npm:14.1.0"
+  conditions: os=darwin & cpu=arm64
+  languageName: node
+  linkType: hard
+
+"@next/swc-darwin-arm64@npm:14.2.3":
+  version: 14.2.3
+  resolution: "@next/swc-darwin-arm64@npm:14.2.3"
   conditions: os=darwin & cpu=arm64
   languageName: node
   linkType: hard
@@ -1372,9 +1407,23 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@next/swc-darwin-x64@npm:14.2.3":
+  version: 14.2.3
+  resolution: "@next/swc-darwin-x64@npm:14.2.3"
+  conditions: os=darwin & cpu=x64
+  languageName: node
+  linkType: hard
+
 "@next/swc-linux-arm64-gnu@npm:14.1.0":
   version: 14.1.0
   resolution: "@next/swc-linux-arm64-gnu@npm:14.1.0"
+  conditions: os=linux & cpu=arm64 & libc=glibc
+  languageName: node
+  linkType: hard
+
+"@next/swc-linux-arm64-gnu@npm:14.2.3":
+  version: 14.2.3
+  resolution: "@next/swc-linux-arm64-gnu@npm:14.2.3"
   conditions: os=linux & cpu=arm64 & libc=glibc
   languageName: node
   linkType: hard
@@ -1386,9 +1435,23 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@next/swc-linux-arm64-musl@npm:14.2.3":
+  version: 14.2.3
+  resolution: "@next/swc-linux-arm64-musl@npm:14.2.3"
+  conditions: os=linux & cpu=arm64 & libc=musl
+  languageName: node
+  linkType: hard
+
 "@next/swc-linux-x64-gnu@npm:14.1.0":
   version: 14.1.0
   resolution: "@next/swc-linux-x64-gnu@npm:14.1.0"
+  conditions: os=linux & cpu=x64 & libc=glibc
+  languageName: node
+  linkType: hard
+
+"@next/swc-linux-x64-gnu@npm:14.2.3":
+  version: 14.2.3
+  resolution: "@next/swc-linux-x64-gnu@npm:14.2.3"
   conditions: os=linux & cpu=x64 & libc=glibc
   languageName: node
   linkType: hard
@@ -1400,9 +1463,23 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@next/swc-linux-x64-musl@npm:14.2.3":
+  version: 14.2.3
+  resolution: "@next/swc-linux-x64-musl@npm:14.2.3"
+  conditions: os=linux & cpu=x64 & libc=musl
+  languageName: node
+  linkType: hard
+
 "@next/swc-win32-arm64-msvc@npm:14.1.0":
   version: 14.1.0
   resolution: "@next/swc-win32-arm64-msvc@npm:14.1.0"
+  conditions: os=win32 & cpu=arm64
+  languageName: node
+  linkType: hard
+
+"@next/swc-win32-arm64-msvc@npm:14.2.3":
+  version: 14.2.3
+  resolution: "@next/swc-win32-arm64-msvc@npm:14.2.3"
   conditions: os=win32 & cpu=arm64
   languageName: node
   linkType: hard
@@ -1414,9 +1491,23 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@next/swc-win32-ia32-msvc@npm:14.2.3":
+  version: 14.2.3
+  resolution: "@next/swc-win32-ia32-msvc@npm:14.2.3"
+  conditions: os=win32 & cpu=ia32
+  languageName: node
+  linkType: hard
+
 "@next/swc-win32-x64-msvc@npm:14.1.0":
   version: 14.1.0
   resolution: "@next/swc-win32-x64-msvc@npm:14.1.0"
+  conditions: os=win32 & cpu=x64
+  languageName: node
+  linkType: hard
+
+"@next/swc-win32-x64-msvc@npm:14.2.3":
+  version: 14.2.3
+  resolution: "@next/swc-win32-x64-msvc@npm:14.2.3"
   conditions: os=win32 & cpu=x64
   languageName: node
   linkType: hard
@@ -1853,12 +1944,29 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@swc/counter@npm:^0.1.3":
+  version: 0.1.3
+  resolution: "@swc/counter@npm:0.1.3"
+  checksum: 10c0/8424f60f6bf8694cfd2a9bca45845bce29f26105cda8cf19cdb9fd3e78dc6338699e4db77a89ae449260bafa1cc6bec307e81e7fb96dbf7dcfce0eea55151356
+  languageName: node
+  linkType: hard
+
 "@swc/helpers@npm:0.5.2":
   version: 0.5.2
   resolution: "@swc/helpers@npm:0.5.2"
   dependencies:
     tslib: "npm:^2.4.0"
   checksum: 10c0/b6fa49bcf6c00571d0eb7837b163f8609960d4d77538160585e27ed167361e9776bd6e5eb9646ffac2fb4d43c58df9ca50dab9d96ab097e6591bc82a75fd1164
+  languageName: node
+  linkType: hard
+
+"@swc/helpers@npm:0.5.5":
+  version: 0.5.5
+  resolution: "@swc/helpers@npm:0.5.5"
+  dependencies:
+    "@swc/counter": "npm:^0.1.3"
+    tslib: "npm:^2.4.0"
+  checksum: 10c0/21a9b9cfe7e00865f9c9f3eb4c1cc5b397143464f7abee76a2c5366e591e06b0155b5aac93fe8269ef8d548df253f6fd931e9ddfc0fd12efd405f90f45506e7d
   languageName: node
   linkType: hard
 
@@ -2373,10 +2481,10 @@ __metadata:
     "@amplitude/analytics-browser": "npm:^2.7.2"
     "@axe-core/playwright": "npm:^4.8.4"
     "@grafana/faro-web-sdk": "npm:^1.7.2"
-    "@navikt/aap-felles-css": "npm:^0.0.97"
-    "@navikt/aap-felles-react": "npm:^0.0.97"
-    "@navikt/aap-felles-utils": "npm:^0.0.97"
-    "@navikt/aap-felles-utils-client": "npm:^0.0.97"
+    "@navikt/aap-felles-css": "npm:^1.0.1"
+    "@navikt/aap-felles-react": "npm:^1.0.1"
+    "@navikt/aap-felles-utils": "npm:^1.0.1"
+    "@navikt/aap-felles-utils-client": "npm:^1.0.1"
     "@navikt/ds-css": "npm:^6.3.3"
     "@navikt/ds-icons": "npm:^3.4.3"
     "@navikt/ds-react": "npm:^6.3.3"
@@ -2827,14 +2935,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"axios@npm:^1.2.1":
-  version: 1.3.4
-  resolution: "axios@npm:1.3.4"
+"axios@npm:^1.6.8":
+  version: 1.6.8
+  resolution: "axios@npm:1.6.8"
   dependencies:
-    follow-redirects: "npm:^1.15.0"
+    follow-redirects: "npm:^1.15.6"
     form-data: "npm:^4.0.0"
     proxy-from-env: "npm:^1.1.0"
-  checksum: 10c0/39f03d83a9ed5760094f92a677af2533ab159448c8e22bfba98d8957bdef2babe142e117a0a7d9a5aff1d5f28f8ced28eb0471b6a91d33410375c89e49032193
+  checksum: 10c0/0f22da6f490335479a89878bc7d5a1419484fbb437b564a80c34888fc36759ae4f56ea28d55a191695e5ed327f0bad56e7ff60fb6770c14d1be6501505d47ab9
   languageName: node
   linkType: hard
 
@@ -3206,13 +3314,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"clsx@npm:^1.2.1":
-  version: 1.2.1
-  resolution: "clsx@npm:1.2.1"
-  checksum: 10c0/34dead8bee24f5e96f6e7937d711978380647e936a22e76380290e35486afd8634966ce300fc4b74a32f3762c7d4c0303f442c3e259f4ce02374eb0c82834f27
-  languageName: node
-  linkType: hard
-
 "clsx@npm:^2.1.0":
   version: 2.1.0
   resolution: "clsx@npm:2.1.0"
@@ -3437,23 +3538,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"date-fns@npm:2.29.3":
-  version: 2.29.3
-  resolution: "date-fns@npm:2.29.3"
-  checksum: 10c0/aa9128c876ef69a05988029d6aa3d7e5c47a1e978f18b77b48126683d1a2e6605a16c3f5293ca9f4ca790d0755b5061fcea5b469f097871cd53f6590a5c1adc4
-  languageName: node
-  linkType: hard
-
-"date-fns@npm:^2.30.0":
-  version: 2.30.0
-  resolution: "date-fns@npm:2.30.0"
-  dependencies:
-    "@babel/runtime": "npm:^7.21.0"
-  checksum: 10c0/e4b521fbf22bc8c3db332bbfb7b094fd3e7627de0259a9d17c7551e2d2702608a7307a449206065916538e384f37b181565447ce2637ae09828427aed9cb5581
-  languageName: node
-  linkType: hard
-
-"date-fns@npm:^3.0.0":
+"date-fns@npm:^3.0.0, date-fns@npm:^3.6.0":
   version: 3.6.0
   resolution: "date-fns@npm:3.6.0"
   checksum: 10c0/0b5fb981590ef2f8e5a3ba6cd6d77faece0ea7f7158948f2eaae7bbb7c80a8f63ae30b01236c2923cf89bb3719c33aeb150c715ea4fe4e86e37dcf06bed42fb6
@@ -4380,13 +4465,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"follow-redirects@npm:^1.15.0":
-  version: 1.15.2
-  resolution: "follow-redirects@npm:1.15.2"
+"follow-redirects@npm:^1.15.6":
+  version: 1.15.6
+  resolution: "follow-redirects@npm:1.15.6"
   peerDependenciesMeta:
     debug:
       optional: true
-  checksum: 10c0/da5932b70e63944d38eecaa16954bac4347036f08303c913d166eda74809d8797d38386e3a0eb1d2fe37d2aaff2764cce8e9dbd99459d860cf2cdfa237923b5f
+  checksum: 10c0/9ff767f0d7be6aa6870c82ac79cf0368cd73e01bbc00e9eb1c2a16fbb198ec105e3c9b6628bb98e9f3ac66fe29a957b9645bcb9a490bb7aa0d35f908b6b85071
   languageName: node
   linkType: hard
 
@@ -6045,13 +6130,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jose@npm:^4.10.0, jose@npm:^4.11.1":
-  version: 4.13.1
-  resolution: "jose@npm:4.13.1"
-  checksum: 10c0/b517a38ca06601aaadcdce0ab5231b0a5969bbb9f99f37f4120e608aafb34e1a941179893d4ecedd295d122f37dac74e08f73fc723c523d7a2530928f10d3a2d
-  languageName: node
-  linkType: hard
-
 "jose@npm:^4.15.5":
   version: 4.15.5
   resolution: "jose@npm:4.15.5"
@@ -6063,6 +6141,13 @@ __metadata:
   version: 5.2.3
   resolution: "jose@npm:5.2.3"
   checksum: 10c0/7cf02e1d1d6226b6ee136fb6c53fd4dde9cfdaf1613ceaab3a5629803eaa80cbfd77cddc38a54c55c82b8f63428677660c93fc87493818a07adc9c0c77ef16ff
+  languageName: node
+  linkType: hard
+
+"jose@npm:^5.2.4":
+  version: 5.3.0
+  resolution: "jose@npm:5.3.0"
+  checksum: 10c0/cff511159736fc118c6189a3d44d3e0f3b1ee524941acc44f03826771e2a53aa13db876400b39bf185a11079017b1e783ca64b80ac66959db5a309a426fb7c69
   languageName: node
   linkType: hard
 
@@ -6714,7 +6799,65 @@ __metadata:
   languageName: node
   linkType: hard
 
-"next@npm:14.1.0, next@npm:^14.1.0":
+"next@npm:14.2.3":
+  version: 14.2.3
+  resolution: "next@npm:14.2.3"
+  dependencies:
+    "@next/env": "npm:14.2.3"
+    "@next/swc-darwin-arm64": "npm:14.2.3"
+    "@next/swc-darwin-x64": "npm:14.2.3"
+    "@next/swc-linux-arm64-gnu": "npm:14.2.3"
+    "@next/swc-linux-arm64-musl": "npm:14.2.3"
+    "@next/swc-linux-x64-gnu": "npm:14.2.3"
+    "@next/swc-linux-x64-musl": "npm:14.2.3"
+    "@next/swc-win32-arm64-msvc": "npm:14.2.3"
+    "@next/swc-win32-ia32-msvc": "npm:14.2.3"
+    "@next/swc-win32-x64-msvc": "npm:14.2.3"
+    "@swc/helpers": "npm:0.5.5"
+    busboy: "npm:1.6.0"
+    caniuse-lite: "npm:^1.0.30001579"
+    graceful-fs: "npm:^4.2.11"
+    postcss: "npm:8.4.31"
+    styled-jsx: "npm:5.1.1"
+  peerDependencies:
+    "@opentelemetry/api": ^1.1.0
+    "@playwright/test": ^1.41.2
+    react: ^18.2.0
+    react-dom: ^18.2.0
+    sass: ^1.3.0
+  dependenciesMeta:
+    "@next/swc-darwin-arm64":
+      optional: true
+    "@next/swc-darwin-x64":
+      optional: true
+    "@next/swc-linux-arm64-gnu":
+      optional: true
+    "@next/swc-linux-arm64-musl":
+      optional: true
+    "@next/swc-linux-x64-gnu":
+      optional: true
+    "@next/swc-linux-x64-musl":
+      optional: true
+    "@next/swc-win32-arm64-msvc":
+      optional: true
+    "@next/swc-win32-ia32-msvc":
+      optional: true
+    "@next/swc-win32-x64-msvc":
+      optional: true
+  peerDependenciesMeta:
+    "@opentelemetry/api":
+      optional: true
+    "@playwright/test":
+      optional: true
+    sass:
+      optional: true
+  bin:
+    next: dist/bin/next
+  checksum: 10c0/2c409154720846d07a7a995cc3bfba24b9ee73c87360ce3266528c8a217f5f1ab6f916cffbe1be83509b4e8d7b1d713921bb5c69338b4ecaa57df3212f79a8c5
+  languageName: node
+  linkType: hard
+
+"next@npm:^14.1.0":
   version: 14.1.0
   resolution: "next@npm:14.1.0"
   dependencies:
@@ -6876,7 +7019,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"object-hash@npm:^2.0.1, object-hash@npm:^2.2.0":
+"object-hash@npm:^2.2.0":
   version: 2.2.0
   resolution: "object-hash@npm:2.2.0"
   checksum: 10c0/1527de843926c5442ed61f8bdddfc7dc181b6497f725b0e89fcf50a55d9c803088763ed447cac85a5aa65345f1e99c2469ba679a54349ef3c4c0aeaa396a3eb9
@@ -6991,13 +7134,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"oidc-token-hash@npm:^5.0.1":
-  version: 5.0.1
-  resolution: "oidc-token-hash@npm:5.0.1"
-  checksum: 10c0/9b2120aafa2cede2e81614421864eb26fb5ed3708697d9172e85e7f744384b08439a940eeb403f86338026c7faa664e358795b2d2f8f255f7a4283c7dc7be339
-  languageName: node
-  linkType: hard
-
 "oidc-token-hash@npm:^5.0.3":
   version: 5.0.3
   resolution: "oidc-token-hash@npm:5.0.3"
@@ -7049,19 +7185,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"openid-client@npm:^5.3.1":
-  version: 5.4.0
-  resolution: "openid-client@npm:5.4.0"
-  dependencies:
-    jose: "npm:^4.10.0"
-    lru-cache: "npm:^6.0.0"
-    object-hash: "npm:^2.0.1"
-    oidc-token-hash: "npm:^5.0.1"
-  checksum: 10c0/696de9fa48b875c91b56c96dc7b8d8f54dbc97834361fe1a3ad24e8e4908d79136b18d23262729b5feda270d712ce317f6bdbd53567738ec9aac2cfcb910b813
-  languageName: node
-  linkType: hard
-
-"openid-client@npm:^5.6.4":
+"openid-client@npm:^5.6.4, openid-client@npm:^5.6.5":
   version: 5.6.5
   resolution: "openid-client@npm:5.6.5"
   dependencies:
@@ -7290,13 +7414,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"pino-abstract-transport@npm:v1.0.0":
-  version: 1.0.0
-  resolution: "pino-abstract-transport@npm:1.0.0"
+"pino-abstract-transport@npm:^1.2.0":
+  version: 1.2.0
+  resolution: "pino-abstract-transport@npm:1.2.0"
   dependencies:
     readable-stream: "npm:^4.0.0"
     split2: "npm:^4.0.0"
-  checksum: 10c0/c7a68e4f77f47565d39fdc33ba23f388ad2594b26a12ccce3060fef833cd7803db73a0c6e4fa7129616f22eb762119ed6107450e0f8ca1e3745d4993017725f7
+  checksum: 10c0/b4ab59529b7a91f488440147fc58ee0827a6c1c5ca3627292339354b1381072c1a6bfa9b46d03ad27872589e8477ecf74da12cf286e1e6b665ac64a3b806bf07
   languageName: node
   linkType: hard
 
@@ -7307,24 +7431,24 @@ __metadata:
   languageName: node
   linkType: hard
 
-"pino@npm:^8.8.0":
-  version: 8.11.0
-  resolution: "pino@npm:8.11.0"
+"pino@npm:^9.0.0":
+  version: 9.0.0
+  resolution: "pino@npm:9.0.0"
   dependencies:
     atomic-sleep: "npm:^1.0.0"
     fast-redact: "npm:^3.1.1"
     on-exit-leak-free: "npm:^2.1.0"
-    pino-abstract-transport: "npm:v1.0.0"
+    pino-abstract-transport: "npm:^1.2.0"
     pino-std-serializers: "npm:^6.0.0"
-    process-warning: "npm:^2.0.0"
+    process-warning: "npm:^3.0.0"
     quick-format-unescaped: "npm:^4.0.3"
     real-require: "npm:^0.2.0"
     safe-stable-stringify: "npm:^2.3.1"
-    sonic-boom: "npm:^3.1.0"
-    thread-stream: "npm:^2.0.0"
+    sonic-boom: "npm:^3.7.0"
+    thread-stream: "npm:^2.6.0"
   bin:
     pino: bin.js
-  checksum: 10c0/456694c935008b0ad3df75991a3b494c0325806cb5378ef672828554e67e5bcedc7a8fbfc3e513d098e585e1c6f7489415eaa9d7b9a95453278bfe2ce5f68bc6
+  checksum: 10c0/10ef10aee0cf80af8ed83468cff2e29d642b6794b53cf641e1abcaf9e9958d8bcbc6e09d62757054aef3b4415c45d66a5018da11d43b81a23ba299ef5dc4e8b1
   languageName: node
   linkType: hard
 
@@ -7474,10 +7598,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"process-warning@npm:^2.0.0":
-  version: 2.0.0
-  resolution: "process-warning@npm:2.0.0"
-  checksum: 10c0/b3afebd724b6a78f2c229ad0d32367b6980ac81055d9b43818b99e09486158028cea7d5442d337721f702329af4a96af7696f6d1b76eee52f388734fdb04311f
+"process-warning@npm:^3.0.0":
+  version: 3.0.0
+  resolution: "process-warning@npm:3.0.0"
+  checksum: 10c0/60f3c8ddee586f0706c1e6cb5aa9c86df05774b9330d792d7c8851cf0031afd759d665404d07037e0b4901b55c44a423f07bdc465c63de07d8d23196bb403622
   languageName: node
   linkType: hard
 
@@ -7488,15 +7612,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prom-client@npm:^14.1.0":
-  version: 14.1.0
-  resolution: "prom-client@npm:14.1.0"
-  dependencies:
-    tdigest: "npm:^0.1.1"
-  checksum: 10c0/59161e7d8064bf2616852afed58d3fd228195d12e882c38edb03c0371eadbeedfdd0baa067c7570ec60f9adc0c36a65098cda04fe4c1cbbbc5a4bf9ae2ac37e9
-  languageName: node
-  linkType: hard
-
 "prom-client@npm:^15.1.0":
   version: 15.1.0
   resolution: "prom-client@npm:15.1.0"
@@ -7504,6 +7619,16 @@ __metadata:
     "@opentelemetry/api": "npm:^1.4.0"
     tdigest: "npm:^0.1.1"
   checksum: 10c0/c10781adbf49225298e44da5396a51a0bd4d0cddc3c7e237ba50e888e12ead26a8f98261f362a442f1bbcdaddd6e7302d5675b37beac67ea9b6f82e4d39fb3cc
+  languageName: node
+  linkType: hard
+
+"prom-client@npm:^15.1.2":
+  version: 15.1.2
+  resolution: "prom-client@npm:15.1.2"
+  dependencies:
+    "@opentelemetry/api": "npm:^1.4.0"
+    tdigest: "npm:^0.1.1"
+  checksum: 10c0/a221db148fa64e29dfd4c6cdcaaae14635495a4272b68917e2b44fcfd988bc57027d275b04489ceeea4d0c4d64d058af842c1300966d2c1ffa255f1fa6af1277
   languageName: node
   linkType: hard
 
@@ -7601,16 +7726,6 @@ __metadata:
     date-fns: ^2.28.0 || ^3.0.0
     react: ^16.8.0 || ^17.0.0 || ^18.0.0
   checksum: 10c0/e9868aced1e40b4cb7d6cf8d50e250226b38ec7ebea944b65aa9db20a0f36d0581b8a501297d09dcbf2d812de852168952b3fb27990915381629d6e314c2a4d8
-  languageName: node
-  linkType: hard
-
-"react-day-picker@npm:8.3.4":
-  version: 8.3.4
-  resolution: "react-day-picker@npm:8.3.4"
-  peerDependencies:
-    date-fns: ^2.28.0
-    react: ^16.8.0 || ^17.0.0 || ^18.0.0
-  checksum: 10c0/ae8b9fd2dc59bd00224bd20339ace2017b8eb550687bb06627c9d781507aa2398bbd67cf9926ad3c2748be7098276c7b9b78dbc8a0619ee551e42e5861fad78f
   languageName: node
   linkType: hard
 
@@ -8160,12 +8275,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"sonic-boom@npm:^3.1.0":
-  version: 3.2.0
-  resolution: "sonic-boom@npm:3.2.0"
+"sonic-boom@npm:^3.7.0":
+  version: 3.8.1
+  resolution: "sonic-boom@npm:3.8.1"
   dependencies:
     atomic-sleep: "npm:^1.0.0"
-  checksum: 10c0/8d4934e68f306cf334360282bb009cd20f15bac9795782c7b249112e3b46c6592caee624b8903345abc9b5c9e37f7ff33c378c190832b00c8c6c85ac8743a732
+  checksum: 10c0/9bf338f86147db50e116484f74f2e29a321a12733e0cefab3087c80dd32bf4df3d7407dbcafc13bc39ac269d9dd61dd6ef952354b9503392d4e1e7414f8e360e
   languageName: node
   linkType: hard
 
@@ -8549,12 +8664,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"thread-stream@npm:^2.0.0":
-  version: 2.0.1
-  resolution: "thread-stream@npm:2.0.1"
+"thread-stream@npm:^2.6.0":
+  version: 2.7.0
+  resolution: "thread-stream@npm:2.7.0"
   dependencies:
     real-require: "npm:^0.2.0"
-  checksum: 10c0/9523978137f1257b1ea388f45b8f5f7ee725917e4af6d6a9c03c7c57592584f784dc55b5544643bf5bd3122dbeb96700a58443ce3410106be8582e1722639456
+  checksum: 10c0/d45f0cd1d7cea3986594d9c46ecc89c6912d1b44de80dfb718de4422658f4bc996b1cc8e3461bce2d3410899762a72c44daf48f7a943b6c6801a7b348d1c3b7c
   languageName: node
   linkType: hard
 
