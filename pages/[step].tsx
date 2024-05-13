@@ -240,20 +240,17 @@ export const getServerSideProps = beskyttetSide(
       logError('Noe gikk galt i innhenting av mellomlagret søknad', e);
     }
 
-    let barn: Barn[] = søker?.søker?.barn?.map((barn) => {
-      return { navn: formatNavn(barn.navn), fødselsdato: barn.fødselsdato };
-    });
-
+    let barn: Barn[] = [];
     try {
       barn = await getBarn(bearerToken);
+      barn.sort((barnA, barnB) => {
+        const a = parse(barnA.fødselsdato, 'yyyy-MM-dd', new Date() as any);
+        const b = parse(barnB.fødselsdato, 'yyyy-MM-dd', new Date() as any);
+        return a - b;
+      });
     } catch (e) {
       logError('Noe gikk galt i kallet mot barn fra aap-oppslag', e);
     }
-    barn.sort((barnA, barnB) => {
-      const a = parse(barnA.fødselsdato, 'yyyy-MM-dd', new Date() as any);
-      const b = parse(barnB.fødselsdato, 'yyyy-MM-dd', new Date() as any);
-      return a - b;
-    });
 
     stopTimer();
 
