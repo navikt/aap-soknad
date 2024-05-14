@@ -768,23 +768,23 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@formatjs/intl@npm:2.10.0":
-  version: 2.10.0
-  resolution: "@formatjs/intl@npm:2.10.0"
+"@formatjs/intl@npm:2.10.2":
+  version: 2.10.2
+  resolution: "@formatjs/intl@npm:2.10.2"
   dependencies:
     "@formatjs/ecma402-abstract": "npm:1.18.2"
     "@formatjs/fast-memoize": "npm:2.2.0"
     "@formatjs/icu-messageformat-parser": "npm:2.7.6"
     "@formatjs/intl-displaynames": "npm:6.6.6"
     "@formatjs/intl-listformat": "npm:7.5.5"
-    intl-messageformat: "npm:10.5.11"
+    intl-messageformat: "npm:10.5.12"
     tslib: "npm:^2.4.0"
   peerDependencies:
     typescript: ^4.7 || 5
   peerDependenciesMeta:
     typescript:
       optional: true
-  checksum: 10c0/7566038b011116cee7069165a25836b3fb687948e61b041809a9d978ac6c0882ae8d81a624a415cfb8e43852d097cd1cbc3c6707e717928e39b75c252491a712
+  checksum: 10c0/20df407e141055e8c7b2605c06e952b643be7ea01d992862e13fc623ca2db034069744eae2be16655bf7888b3add1bfc2653fd0a08bcfdb67fb9b72a306f7718
   languageName: node
   linkType: hard
 
@@ -2265,9 +2265,9 @@ __metadata:
     react: "npm:^18.0.0"
     react-dom: "npm:^18.0.0"
     react-error-boundary: "npm:^4.0.12"
-    react-intl: "npm:6.6.2"
+    react-intl: "npm:6.6.6"
     ts-jest: "npm:^29.1.2"
-    typescript: "npm:^5.3.3"
+    typescript: "npm:^5.4.5"
     uuid: "npm:9.0.1"
     yup: "npm:^1.4.0"
     zod: "npm:^3.23.8"
@@ -4829,15 +4829,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"intl-messageformat@npm:10.5.11":
-  version: 10.5.11
-  resolution: "intl-messageformat@npm:10.5.11"
+"intl-messageformat@npm:10.5.12":
+  version: 10.5.12
+  resolution: "intl-messageformat@npm:10.5.12"
   dependencies:
     "@formatjs/ecma402-abstract": "npm:1.18.2"
     "@formatjs/fast-memoize": "npm:2.2.0"
     "@formatjs/icu-messageformat-parser": "npm:2.7.6"
     tslib: "npm:^2.4.0"
-  checksum: 10c0/423f1c879ce2d0e7b9e0b4c1787a81ead7fe4d1734e0366a20fef56b06c09146e7ca3618e2e78b4f8b8f2b59cafe6237ceed21530fe0c16cfb47d915fc80222d
+  checksum: 10c0/f95734e98a05ef7f51de0c27904d3a994528e3a174963bd1b3a6db9416b5fd84bbd8f7d26d84fc547d51af69ccf46dd3f73a3f4f20a2ccef5c9cd90e946ad82c
   languageName: node
   linkType: hard
 
@@ -7471,19 +7471,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-intl@npm:6.6.2":
-  version: 6.6.2
-  resolution: "react-intl@npm:6.6.2"
+"react-intl@npm:6.6.6":
+  version: 6.6.6
+  resolution: "react-intl@npm:6.6.6"
   dependencies:
     "@formatjs/ecma402-abstract": "npm:1.18.2"
     "@formatjs/icu-messageformat-parser": "npm:2.7.6"
-    "@formatjs/intl": "npm:2.10.0"
+    "@formatjs/intl": "npm:2.10.2"
     "@formatjs/intl-displaynames": "npm:6.6.6"
     "@formatjs/intl-listformat": "npm:7.5.5"
     "@types/hoist-non-react-statics": "npm:^3.3.1"
     "@types/react": "npm:16 || 17 || 18"
     hoist-non-react-statics: "npm:^3.3.2"
-    intl-messageformat: "npm:10.5.11"
+    intl-messageformat: "npm:10.5.12"
     tslib: "npm:^2.4.0"
   peerDependencies:
     react: ^16.6.0 || 17 || 18
@@ -7491,7 +7491,7 @@ __metadata:
   peerDependenciesMeta:
     typescript:
       optional: true
-  checksum: 10c0/78288a0fded816735812dca6dcfee3eaa8bb3af7e963ba47639b51cc700a102a526859ff647ca79a5ebcdc69d6d78da90daeeed15cc0b819c7a20a74b2e1469c
+  checksum: 10c0/04c1d1ca783f2a5e605544290c93e57629500be6811d7c2c3342903bf9f9a720d2e4c9cf3924133bf84e510ee879bf3d870a3ff269f5b197f894a49047bd089d
   languageName: node
   linkType: hard
 
@@ -8622,23 +8622,23 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@npm:^5.3.3":
-  version: 5.3.3
-  resolution: "typescript@npm:5.3.3"
+"typescript@npm:^5.4.5":
+  version: 5.4.5
+  resolution: "typescript@npm:5.4.5"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: 10c0/e33cef99d82573624fc0f854a2980322714986bc35b9cb4d1ce736ed182aeab78e2cb32b385efa493b2a976ef52c53e20d6c6918312353a91850e2b76f1ea44f
+  checksum: 10c0/2954022ada340fd3d6a9e2b8e534f65d57c92d5f3989a263754a78aba549f7e6529acc1921913560a4b816c46dce7df4a4d29f9f11a3dc0d4213bb76d043251e
   languageName: node
   linkType: hard
 
-"typescript@patch:typescript@npm%3A^5.3.3#optional!builtin<compat/typescript>":
-  version: 5.3.3
-  resolution: "typescript@patch:typescript@npm%3A5.3.3#optional!builtin<compat/typescript>::version=5.3.3&hash=e012d7"
+"typescript@patch:typescript@npm%3A^5.4.5#optional!builtin<compat/typescript>":
+  version: 5.4.5
+  resolution: "typescript@patch:typescript@npm%3A5.4.5#optional!builtin<compat/typescript>::version=5.4.5&hash=d69c25"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: 10c0/1d0a5f4ce496c42caa9a30e659c467c5686eae15d54b027ee7866744952547f1be1262f2d40de911618c242b510029d51d43ff605dba8fb740ec85ca2d3f9500
+  checksum: 10c0/9cf4c053893bcf327d101b6c024a55baf05430dc30263f9adb1bf354aeffc11306fe1f23ba2f9a0209674359f16219b5b7d229e923477b94831d07d5a33a4217
   languageName: node
   linkType: hard
 
