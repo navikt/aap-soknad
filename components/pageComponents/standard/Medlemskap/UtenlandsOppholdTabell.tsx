@@ -81,14 +81,7 @@ const UtenlandsOppholdTabell = ({
                   }
                 }}
                 onClick={() => remove(utenlandsPeriode.id)}
-                icon={
-                  <Delete
-                    className={styles.deleteIcon}
-                    title={'Slett utenlandsopphold'}
-                    role={'button'}
-                    tabIndex={0}
-                  />
-                }
+                icon={<Delete className={styles.deleteIcon} aria-hidden />}
                 iconPosition={'left'}
               >
                 Fjern
