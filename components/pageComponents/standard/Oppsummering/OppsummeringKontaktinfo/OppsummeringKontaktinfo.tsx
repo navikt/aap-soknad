@@ -17,12 +17,6 @@ const OppsummeringKontaktinfo = ({ kontaktinformasjon }: Props) => {
         <Label>{formatMessage({ id: 'søknad.oppsummering.contactInformation.navn' })}</Label>
         <BodyShort>{søker?.fulltNavn}</BodyShort>
       </div>
-      <div>
-        <Label>
-          {formatMessage({ id: 'søknad.oppsummering.contactInformation.personnummer' })}
-        </Label>
-        <BodyShort>{søker?.fødselsnummer}</BodyShort>
-      </div>
       {søker?.fullAdresse && (
         <div>
           <Label>
