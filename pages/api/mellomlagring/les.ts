@@ -31,7 +31,7 @@ export const hentMellomlagring = async (
     return result ? JSON.parse(result) : {};
   }
   try {
-    const mellomlagretSøknad = await simpleTokenXProxy<SoknadContextState>({
+    const mellomlagretSøknad = await simpleTokenXProxy<SoknadContextState | string>({
       url: `${process.env.INNSENDING_URL}/mellomlagring/søknad`,
       method: 'GET',
       audience: process.env.INNSENDING_AUDIENCE!,
