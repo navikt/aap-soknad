@@ -10,8 +10,8 @@ import { MockPerson } from 'mock/person';
 const Person = z.object({
   navn: z.string(),
   fnr: z.string(),
-  adresse: z.string().optional(),
-  fødseldato: z.string().optional(),
+  adresse: z.string().optional().nullable(),
+  fødseldato: z.string().optional().nullable(),
 });
 export type Person = z.infer<typeof Person>;
 
