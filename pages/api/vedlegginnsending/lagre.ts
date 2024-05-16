@@ -1,7 +1,7 @@
 import { randomUUID } from 'crypto';
 import { getAccessTokenFromRequest } from 'auth/accessToken';
 import { beskyttetApi } from 'auth/beskyttetApi';
-import { tokenXApiStreamProxy, logger } from '@navikt/aap-felles-utils';
+import { tokenXApiStreamProxy } from '@navikt/aap-felles-utils';
 import metrics from 'utils/metrics';
 import { isMock } from 'utils/environments';
 
@@ -15,7 +15,6 @@ const handler = beskyttetApi(async (req, res) => {
     res,
     audience: process.env.INNSENDING_AUDIENCE!,
     bearerToken: accessToken,
-    logger: logger,
     metricsStatusCodeCounter: metrics.backendApiStatusCodeCounter,
     metricsTimer: metrics.backendApiDurationHistogram,
   });

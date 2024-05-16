@@ -4,7 +4,7 @@ import { Alert, BodyLong, BodyShort, Heading, Label, Textarea } from '@navikt/ds
 import { completeAndGoToNextStep } from 'context/stepWizardContext';
 import { useStepWizard } from 'hooks/StepWizardHook';
 import { useDebounceLagreSoknad } from 'hooks/useDebounceLagreSoknad';
-import { FileInputInnsending, LucaGuidePanel } from '@navikt/aap-felles-react';
+import { LucaGuidePanel } from '@navikt/aap-felles-react';
 import { useIntl } from 'react-intl';
 import SoknadFormWrapperNew from 'components/SoknadFormWrapper/SoknadFormWrapper';
 import { SøknadValidationError } from 'components/schema/FormErrorSummary';
@@ -13,14 +13,11 @@ import { setFocusOnErrorSummary } from '../../../schema/FormErrorSummary';
 import { ScanningGuide } from './scanningguide/ScanningGuide';
 import { addVedlegg, deleteVedlegg, updateSøknadData } from 'context/soknadcontext/actions';
 import { useSoknad } from 'hooks/SoknadHook';
+import { FileInputWrapper } from 'components/pageComponents/standard/Vedlegg/FileInputWrapper';
 
 interface Props {
   onBackClick: () => void;
 }
-
-const deleteUrl = '/aap/soknad/api/vedlegginnsending/slett/?uuid=';
-const uploadUrl = '/aap/soknad/api/vedlegginnsending/lagre/';
-const readAttachmentUrl = '/aap/soknad/vedlegg/';
 
 const Vedlegg = ({ onBackClick }: Props) => {
   const { formatMessage, locale } = useIntl();
@@ -44,6 +41,11 @@ const Vedlegg = ({ onBackClick }: Props) => {
     .filter((error): error is SøknadValidationError => error !== undefined);
 
   const harPåkrevdeVedlegg = søknadState.requiredVedlegg.length > 0;
+
+  const deleteUrl = '/aap/soknad/api/vedlegginnsending/slett/?uuid=';
+  const uploadUrl = '/aap/soknad/api/vedlegginnsending/lagre/';
+
+  const readAttachmentUrl = '/aap/soknad/vedlegg/';
 
   return (
     <SoknadFormWrapperNew
@@ -90,7 +92,7 @@ const Vedlegg = ({ onBackClick }: Props) => {
       <ScanningGuide />
 
       {søknadState?.requiredVedlegg?.find((e) => e.type === 'AVBRUTT_STUDIE') && (
-        <FileInputInnsending
+        <FileInputWrapper
           locale={locale}
           id={'avbruttStudie'}
           heading={formatMessage({ id: 'søknad.student.vedlegg.name' })}
@@ -105,10 +107,11 @@ const Vedlegg = ({ onBackClick }: Props) => {
           uploadUrl={uploadUrl}
           readAttachmentUrl={readAttachmentUrl}
           files={søknadState.søknad?.vedlegg?.AVBRUTT_STUDIE || []}
+          brukFileInputInnsending={true}
         />
       )}
       {søknadState?.requiredVedlegg?.find((e) => e.type === 'OMSORGSSTØNAD') && (
-        <FileInputInnsending
+        <FileInputWrapper
           locale={locale}
           id={'OMSORGSSTØNAD'}
           heading={formatMessage({ id: 'søknad.andreUtbetalinger.stønad.values.omsorgsstønad' })}
@@ -123,10 +126,11 @@ const Vedlegg = ({ onBackClick }: Props) => {
           uploadUrl={uploadUrl}
           readAttachmentUrl={readAttachmentUrl}
           files={søknadState.søknad?.vedlegg?.OMSORGSSTØNAD || []}
+          brukFileInputInnsending={true}
         />
       )}
       {søknadState?.requiredVedlegg?.find((e) => e.type === 'LØNN_OG_ANDRE_GODER') && (
-        <FileInputInnsending
+        <FileInputWrapper
           locale={locale}
           id={'LØNN_OG_ANDRE_GODER'}
           heading={formatMessage({ id: 'søknad.andreUtbetalinger.lønn.title' })}
@@ -141,11 +145,12 @@ const Vedlegg = ({ onBackClick }: Props) => {
           uploadUrl={uploadUrl}
           readAttachmentUrl={readAttachmentUrl}
           files={søknadState.søknad?.vedlegg?.LØNN_OG_ANDRE_GODER || []}
+          brukFileInputInnsending={true}
         />
       )}
 
       {søknadState?.requiredVedlegg?.find((e) => e.type === 'UTLANDSSTØNAD') && (
-        <FileInputInnsending
+        <FileInputWrapper
           locale={locale}
           id={'UTLANDSSTØNAD'}
           heading={formatMessage({ id: 'søknad.andreUtbetalinger.stønad.values.utland' })}
@@ -160,11 +165,12 @@ const Vedlegg = ({ onBackClick }: Props) => {
           uploadUrl={uploadUrl}
           readAttachmentUrl={readAttachmentUrl}
           files={søknadState.søknad?.vedlegg?.UTLANDSSTØNAD || []}
+          brukFileInputInnsending={true}
         />
       )}
 
       {søknadState.requiredVedlegg?.find((e) => e.type === 'LÅN') && (
-        <FileInputInnsending
+        <FileInputWrapper
           locale={locale}
           id={'LÅN'}
           heading={formatMessage({ id: 'søknad.andreUtbetalinger.stønad.values.lån' })}
@@ -179,11 +185,12 @@ const Vedlegg = ({ onBackClick }: Props) => {
           uploadUrl={uploadUrl}
           readAttachmentUrl={readAttachmentUrl}
           files={søknadState.søknad?.vedlegg?.LÅN || []}
+          brukFileInputInnsending={true}
         />
       )}
 
       {søknadState.requiredVedlegg?.find((e) => e.type === 'SYKESTIPEND') && (
-        <FileInputInnsending
+        <FileInputWrapper
           locale={locale}
           id={'SYKESTIPEND'}
           heading={formatMessage({ id: 'søknad.andreUtbetalinger.stønad.values.stipend' })}
@@ -198,13 +205,14 @@ const Vedlegg = ({ onBackClick }: Props) => {
           uploadUrl={uploadUrl}
           readAttachmentUrl={readAttachmentUrl}
           files={søknadState.søknad?.vedlegg?.SYKESTIPEND || []}
+          brukFileInputInnsending={true}
         />
       )}
 
       {søknadState?.søknad?.manuelleBarn?.map((barn) => {
         const requiredVedlegg = søknadState?.requiredVedlegg.find((e) => e?.type === barn.internId);
         return (
-          <FileInputInnsending
+          <FileInputWrapper
             locale={locale}
             key={barn.internId}
             id={barn.internId!}
@@ -225,11 +233,12 @@ const Vedlegg = ({ onBackClick }: Props) => {
             uploadUrl={uploadUrl}
             readAttachmentUrl={readAttachmentUrl}
             files={søknadState.søknad?.vedlegg?.[barn.internId] || []}
+            brukFileInputInnsending={true}
           />
         );
       })}
 
-      <FileInputInnsending
+      <FileInputWrapper
         locale={locale}
         heading={formatMessage({ id: 'søknad.vedlegg.andreVedlegg.title' })}
         ingress={formatMessage({ id: 'søknad.vedlegg.andreVedlegg.ingress' })}
@@ -244,6 +253,7 @@ const Vedlegg = ({ onBackClick }: Props) => {
         uploadUrl={uploadUrl}
         readAttachmentUrl={readAttachmentUrl}
         files={søknadState.søknad?.vedlegg?.ANNET || []}
+        brukFileInputInnsending={true}
       />
 
       <Textarea

@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { getAccessTokenFromRequest } from 'auth/accessToken';
 import { beskyttetApi } from 'auth/beskyttetApi';
-import { logger, tokenXApiProxy } from '@navikt/aap-felles-utils';
+import { logError, tokenXApiProxy } from '@navikt/aap-felles-utils';
 import metrics from 'utils/metrics';
 import { z } from 'zod';
 import { isDev, isMock } from 'utils/environments';
@@ -34,14 +34,11 @@ export const getFastlege = async (accessToken?: string): Promise<Fastlege[]> => 
     bearerToken: accessToken,
     metricsStatusCodeCounter: metrics.backendApiStatusCodeCounter,
     metricsTimer: metrics.backendApiDurationHistogram,
-    logger: logger,
   });
 
   const validatedResponse = z.array(Fastlege).safeParse(fastlege);
   if (!validatedResponse.success) {
-    logger.error({
-      message: `oppslag/fastlege valideringsfeil: ${validatedResponse.error.message}`,
-    });
+    logError(`oppslag/person valideringsfeil: ${validatedResponse.error.message}`);
     return [];
   }
   return validatedResponse.data;

@@ -1,9 +1,9 @@
 import { beskyttetApi } from 'auth/beskyttetApi';
-import { logger, tokenXApiProxy } from '@navikt/aap-felles-utils';
+import { logError, tokenXApiProxy } from '@navikt/aap-felles-utils';
 import { NextApiRequest, NextApiResponse } from 'next';
 import metrics from 'utils/metrics';
 import { ErrorMedStatus } from 'auth/ErrorMedStatus';
-import { isLabs, isMock } from 'utils/environments';
+import { isFunctionalTest, isMock } from 'utils/environments';
 import { createIntl } from 'react-intl';
 import { flattenMessages, messages } from 'utils/message';
 import links from 'translations/links.json';
@@ -15,10 +15,11 @@ import { getMedlemskapSchema } from 'components/pageComponents/standard/Medlemsk
 import { getStartDatoSchema } from 'components/pageComponents/standard/StartDato/StartDato';
 import { getStudentSchema } from 'components/pageComponents/standard/Student/Student';
 import { getYrkesskadeSchema } from 'components/pageComponents/standard/Yrkesskade/Yrkesskade';
-import { getAccessTokenFromRequest } from 'auth/accessToken';
 import { AttachmentType, RequiredVedlegg } from 'types/SoknadContext';
 import { SOKNAD_VERSION } from 'context/soknadcontext/soknadContext';
-import { slettBucket } from 'pages/api/mellomlagring/slett';
+import { deleteCache } from 'mock/mellomlagringsCache';
+import { simpleTokenXProxy } from 'lib/utils/api/simpleTokenXProxy';
+import { IncomingMessage } from 'http';
 
 // TODO: Sjekke om vi må generere pdf på samme språk som bruker har valgt når de fyller ut søknaden
 function getIntl() {
@@ -68,8 +69,6 @@ const søknadIsValid = (søknad: Soknad) => {
 };
 
 const handler = beskyttetApi(async (req: NextApiRequest, res: NextApiResponse) => {
-  const accessToken = getAccessTokenFromRequest(req);
-
   const { søknad, requiredVedlegg } = req.body as {
     søknad: Soknad;
     requiredVedlegg: RequiredVedlegg[];
@@ -107,13 +106,13 @@ const handler = beskyttetApi(async (req: NextApiRequest, res: NextApiResponse) =
         kvittering: søknadPdf,
         filer,
       },
-      accessToken,
+      req,
     );
 
     metrics.sendSoknadCounter.inc({ type: 'STANDARD' });
     res.status(201).send('Vi har mottat søknaden');
   } catch (err) {
-    logger.error(`Noe gikk galt ved innsending av søknad: ${err?.toString()}`);
+    logError(`Noe gikk galt ved innsending av søknad`, err);
 
     if (err instanceof ErrorMedStatus) {
       res.status(err.status).json({ navCallId: err.navCallId });
@@ -146,27 +145,28 @@ function mapVedleggTypeTilVedleggTekst(vedleggType: AttachmentType): string {
 
 export const sendSoknadViaAapInnsending = async (
   innsending: SoknadInnsendingRequestBody,
-  accessToken?: string,
+  req: IncomingMessage,
 ) => {
-  if (isLabs()) {
+  if (isFunctionalTest()) {
     return 'Vi har mottat søknaden din.';
   }
   if (isMock()) {
-    await slettBucket(accessToken);
+    await deleteCache();
     return 'Vi har mottat søknaden din.';
   }
-  return await tokenXApiProxy({
-    url: `${process.env.INNSENDING_URL}/innsending`,
-    prometheusPath: 'innsending/soknad',
-    method: 'POST',
-    data: JSON.stringify(innsending),
-    audience: process.env.INNSENDING_AUDIENCE!,
-    bearerToken: accessToken,
-    metricsStatusCodeCounter: metrics.backendApiStatusCodeCounter,
-    metricsTimer: metrics.backendApiDurationHistogram,
-    logger: logger,
-    noResponse: true,
-  });
+  try {
+    const søknad = await simpleTokenXProxy({
+      url: `${process.env.INNSENDING_URL}/innsending`,
+      audience: process.env.INNSENDING_AUDIENCE!,
+      method: 'POST',
+      body: innsending,
+      req,
+    });
+    return søknad;
+  } catch (error) {
+    logError('Noe gikk galt ved innsending av søknad', error);
+    throw new Error('Error sending søknad via aap-innsending');
+  }
 };
 
 export default handler;

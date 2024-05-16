@@ -1,13 +1,4 @@
-import {
-  BodyShort,
-  Button,
-  Cell,
-  Grid,
-  Heading,
-  Radio,
-  RadioGroup,
-  ReadMore,
-} from '@navikt/ds-react';
+import { BodyShort, Button, HGrid, Heading, Radio, RadioGroup, ReadMore } from '@navikt/ds-react';
 import React, { useEffect, useState } from 'react';
 import { JaEllerNei } from 'types/Generic';
 import { Add } from '@navikt/ds-icons';
@@ -291,25 +282,23 @@ export const Medlemskap = ({ onBackClick }: Props) => {
                   arbeidEllerBodd={arbeidEllerBodd}
                 />
               )}
-            <Grid>
-              <Cell xs={12}>
-                <Button
-                  id="medlemskap.utenlandsOpphold"
-                  variant="secondary"
-                  type="button"
-                  icon={<Add title={'Legg til'} />}
-                  iconPosition={'left'}
-                  onClick={() => {
-                    setSelectedUtenlandsPeriode({});
-                    setShowUtenlandsPeriodeModal(true);
-                  }}
-                >
-                  {søknadState?.søknad?.medlemskap?.harArbeidetINorgeSiste5År === JaEllerNei.NEI
-                    ? 'Registrer utenlandsopphold'
-                    : 'Registrer periode med jobb utenfor Norge'}
-                </Button>
-              </Cell>
-            </Grid>
+            <HGrid columns={{ xs: 1, md: 2 }}>
+              <Button
+                id="medlemskap.utenlandsOpphold"
+                variant="secondary"
+                type="button"
+                icon={<Add title={'Legg til'} />}
+                iconPosition={'left'}
+                onClick={() => {
+                  setSelectedUtenlandsPeriode({});
+                  setShowUtenlandsPeriodeModal(true);
+                }}
+              >
+                {søknadState?.søknad?.medlemskap?.harArbeidetINorgeSiste5År === JaEllerNei.NEI
+                  ? 'Registrer utenlandsopphold'
+                  : 'Registrer periode med jobb utenfor Norge'}
+              </Button>
+            </HGrid>
 
             {utenlandsOppholdErrorMessage && (
               <div className={'navds-error-message navds-error-message--medium navds-label'}>

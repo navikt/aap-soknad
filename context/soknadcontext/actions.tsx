@@ -14,7 +14,6 @@ export enum SoknadActionKeys {
   ADD_FASTLEGE_IF_MISSING = 'ADD_FASTLEGE_IF_MISSING',
   ADD_REQUIRED_VEDLEGG = 'ADD_REQUIRED_VEDLEGG',
   REMOVE_REQUIRED_VEDLEGG = 'REMOVE_REQUIRED_VEDLEGG',
-  ADD_SØKNAD_URL = 'ADD_SØKNAD_URL',
   ADD_VEDLEGG = 'ADD_VEDLEGG',
   DELETE_VEDLEGG = 'DELETE_VEDLEGG',
 }
@@ -47,10 +46,6 @@ type RemoveRequiredVedlegg = {
   type: SoknadActionKeys.REMOVE_REQUIRED_VEDLEGG;
   payload?: AttachmentType;
 };
-type AddSøknadUrl = {
-  type: SoknadActionKeys.ADD_SØKNAD_URL;
-  payload: string;
-};
 
 type AddVedlegg = {
   type: SoknadActionKeys.ADD_VEDLEGG;
@@ -72,7 +67,6 @@ export type SoknadAction =
   | AddFastlegeIfMissing
   | AddRequiredVedlegg
   | RemoveRequiredVedlegg
-  | AddSøknadUrl
   | AddVedlegg
   | DeleteVedlegg;
 
@@ -88,7 +82,8 @@ export function setSoknadStateFraProps(
 }
 
 export async function slettLagretSoknadState() {
-  const deleteResponse = await fetch(`/aap/soknad/api/mellomlagring/slett`);
+  const deleteResponse = await fetch('/aap/soknad/api/mellomlagring/slett');
+
   return !!deleteResponse?.ok;
 }
 

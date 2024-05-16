@@ -1,18 +1,16 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { getAccessTokenFromRequest } from 'auth/accessToken';
 import { beskyttetApi } from 'auth/beskyttetApi';
-import { logger, tokenXApiProxy } from '@navikt/aap-felles-utils';
+import { logError, logInfo } from '@navikt/aap-felles-utils';
 import { lagreCache } from 'mock/mellomlagringsCache';
-import { isLabs, isMock } from 'utils/environments';
-import metrics from 'utils/metrics';
+import { isFunctionalTest, isMock } from 'utils/environments';
 
 import { StepType } from 'components/StepWizard/Step';
 import { hentMellomlagring } from 'pages/api/mellomlagring/les';
+import { simpleTokenXProxy } from 'lib/utils/api/simpleTokenXProxy';
+import { IncomingMessage } from 'http';
 
 const handler = beskyttetApi(async (req: NextApiRequest, res: NextApiResponse) => {
-  const accessToken = getAccessTokenFromRequest(req);
-
-  const eksisterendeSøknad = await hentMellomlagring(accessToken);
+  const eksisterendeSøknad = await hentMellomlagring(req);
   if (
     eksisterendeSøknad &&
     eksisterendeSøknad.søknad &&
@@ -23,30 +21,31 @@ const handler = beskyttetApi(async (req: NextApiRequest, res: NextApiResponse) =
       (e: StepType) => e.active,
     )?.stepIndex;
 
-    logger.error(
+    logError(
       `Overskriver eksisterende søknad med en tom søknad på side ${activeStepIndex ?? 'ukjent'}`,
     );
   }
-  await lagreBucket(req.body, accessToken);
+  await mellomlagreSøknad(req.body, req);
   res.status(201).json({});
 });
 
-export const lagreBucket = async (data: string, accessToken?: string) => {
-  if (isLabs()) return;
+export const mellomlagreSøknad = async (data: object, req: IncomingMessage) => {
+  if (isFunctionalTest()) return;
   if (isMock()) return await lagreCache(JSON.stringify(data));
-  await tokenXApiProxy({
-    url: `${process.env.INNSENDING_URL}/mellomlagring/søknad`,
-    prometheusPath: `mellomlagring`,
-    method: 'POST',
-    data: JSON.stringify(data),
-    audience: process.env.INNSENDING_AUDIENCE!,
-    noResponse: true,
-    bearerToken: accessToken,
-    metricsStatusCodeCounter: metrics.backendApiStatusCodeCounter,
-    metricsTimer: metrics.backendApiDurationHistogram,
-    logger: logger,
-  });
-  return;
+  try {
+    const result = await simpleTokenXProxy({
+      url: `${process.env.INNSENDING_URL}/mellomlagring/søknad`,
+      method: 'POST',
+      audience: process.env.INNSENDING_AUDIENCE!,
+      body: data,
+      req,
+    });
+    logInfo('Søknad lagret via aap-innsending', result);
+    return result;
+  } catch (error) {
+    logError('Noe gikk galt ved mellomlagring av søknad', error);
+    throw new Error('Error saving søknad via aap-innsending');
+  }
 };
 
 export default handler;

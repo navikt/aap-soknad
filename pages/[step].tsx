@@ -32,8 +32,7 @@ import metrics from 'utils/metrics';
 import { scrollRefIntoView } from 'utils/dom';
 import { Steg0 } from 'components/pageComponents/standard/Steg0/Steg0';
 import * as classes from './step.module.css';
-import { FormattedMessage } from 'react-intl';
-import { logger } from '@navikt/aap-felles-utils';
+import { FormattedMessage, useIntl } from 'react-intl';
 import { SoknadContextProvider, SoknadContextState } from 'context/soknadcontext/soknadContext';
 import { useSoknad } from 'hooks/SoknadHook';
 import {
@@ -46,6 +45,8 @@ import { Barn, getBarn } from 'pages/api/oppslag/barn';
 import { formatNavn } from 'utils/StringFormatters';
 import { hentMellomlagring } from 'pages/api/mellomlagring/les';
 import { RequiredVedlegg } from 'types/SoknadContext';
+import { logError, logInfo, logWarning } from '@navikt/aap-felles-utils';
+import { parse } from 'date-fns';
 import { Fastlege, getFastlege } from 'pages/api/oppslag/fastlege';
 import { migrerMellomlagretBehandler } from 'lib/utils/migrerMellomlagretBehandler';
 
@@ -106,6 +107,7 @@ const Steps = ({ søker, mellomlagretSøknad, kontaktinformasjon, barn, fastlege
   const submitSoknad = async () => {
     if (currentStep?.name === StepNames.OPPSUMMERING) {
       setShowFetchErrorMessage(false);
+
       const postResponse = await postSøknadMedAAPInnsending(
         søknadState.søknad,
         søknadState.requiredVedlegg,
@@ -116,10 +118,11 @@ const Steps = ({ søker, mellomlagretSøknad, kontaktinformasjon, barn, fastlege
         const erIkkeKomplett = !!søknadState?.requiredVedlegg?.find(
           (vedlegg) => !vedlegg.completed,
         );
+        const yrkesskade = søknadState?.søknad?.yrkesskade;
         const brukerFritekstfelt =
           søknadState?.søknad?.tilleggsopplysninger !== undefined &&
           søknadState?.søknad?.tilleggsopplysninger.length > 0;
-        logSkjemaFullførtEvent({ harVedlegg, erIkkeKomplett, brukerFritekstfelt });
+        logSkjemaFullførtEvent({ harVedlegg, erIkkeKomplett, brukerFritekstfelt, yrkesskade });
 
         router.push('kvittering');
         return true;
@@ -207,7 +210,7 @@ const hentFastlege = async (bearerToken?: string) => {
   try {
     return await getFastlege(bearerToken);
   } catch (e) {
-    logger.error('Noe gikk galt i kallet mot oppslag/fastlege', e);
+    logError('Noe gikk galt i kallet mot oppslag/fastlege', e);
     return [];
   }
 };
@@ -223,35 +226,42 @@ export const getServerSideProps = beskyttetSide(
     try {
       kontaktinformasjon = await getKrr(bearerToken);
     } catch (e) {
-      logger.error({ message: `Noe gikk galt i kallet mot oppslag/krr: ${e?.toString()}` });
+      logError(`Noe gikk galt i kallet mot oppslag/krr`, e);
     }
 
     const fastlege = await hentFastlege(bearerToken);
 
-    let mellomlagretSøknad = await hentMellomlagring(bearerToken);
+    let mellomlagretSøknad: SoknadContextState | undefined;
+    try {
+      mellomlagretSøknad = await hentMellomlagring(ctx.req);
+    } catch (e) {
+      logError('Noe gikk galt i innhenting av mellomlagret søknad', e);
+    }
 
     if (mellomlagretSøknad) {
       mellomlagretSøknad = migrerMellomlagretBehandler(mellomlagretSøknad);
     }
 
-    let barn: Barn[] = søker?.søker?.barn?.map((barn) => {
-      return { navn: formatNavn(barn.navn), fødselsdato: barn.fødselsdato };
-    });
-
+    let barn: Barn[] = [];
     try {
       barn = await getBarn(bearerToken);
+      barn.sort((barnA, barnB) => {
+        const a = parse(barnA.fødselsdato, 'yyyy-MM-dd', new Date() as any);
+        const b = parse(barnB.fødselsdato, 'yyyy-MM-dd', new Date() as any);
+        return a - b;
+      });
     } catch (e) {
-      logger.error('Noe gikk galt i kallet mot barn fra aap-oppslag', e);
+      logError('Noe gikk galt i kallet mot barn fra aap-oppslag', e);
     }
 
     stopTimer();
 
     if (mellomlagretSøknad && !mellomlagretSøknad.lagretStepList) {
-      logger.error('Mellomlagret søknad finnes, men mangler stepList');
+      logError('Mellomlagret søknad finnes, men mangler stepList');
     }
 
     if (!mellomlagretSøknad?.lagretStepList) {
-      logger.warn('lagretStepList mangler i mellomlagret søknad, redirecter til startsiden');
+      logWarning('lagretStepList mangler i mellomlagret søknad, redirecter til startsiden');
       return {
         redirect: {
           destination: '/',

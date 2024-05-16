@@ -1,9 +1,11 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { getAccessTokenFromRequest } from 'auth/accessToken';
 import { beskyttetApi } from 'auth/beskyttetApi';
-import { logger, tokenXApiProxy } from '@navikt/aap-felles-utils';
+import { logError, tokenXApiProxy } from '@navikt/aap-felles-utils';
 import metrics from 'utils/metrics';
 import { z } from 'zod';
+import { mockBarn } from 'mock/barn';
+import { isMock } from 'utils/environments';
 
 const Barn = z.object({
   navn: z.string(),
@@ -17,20 +19,21 @@ const handler = beskyttetApi(async (req: NextApiRequest, res: NextApiResponse) =
 });
 
 export const getBarn = async (accessToken?: string): Promise<Array<Barn>> => {
-  const barn = await tokenXApiProxy({
-    url: `${process.env.OPPSLAG_URL}/person/barn`,
-    prometheusPath: 'oppslag/barn',
-    method: 'GET',
-    audience: process.env.OPPSLAG_AUDIENCE!,
-    bearerToken: accessToken,
-    metricsStatusCodeCounter: metrics.backendApiStatusCodeCounter,
-    metricsTimer: metrics.backendApiDurationHistogram,
-    logger: logger,
-  });
+  const barn = isMock()
+    ? mockBarn()
+    : await tokenXApiProxy({
+        url: `${process.env.OPPSLAG_URL}/person/barn`,
+        prometheusPath: 'oppslag/barn',
+        method: 'GET',
+        audience: process.env.OPPSLAG_AUDIENCE!,
+        bearerToken: accessToken,
+        metricsStatusCodeCounter: metrics.backendApiStatusCodeCounter,
+        metricsTimer: metrics.backendApiDurationHistogram,
+      });
 
   const validatedResponse = z.array(Barn).safeParse(barn);
   if (!validatedResponse.success) {
-    logger.error({ message: `oppslag/barn valideringsfeil: ${validatedResponse.error.message}` });
+    logError(`oppslag/barn valideringsfeil: ${validatedResponse.error.message}`);
     return [];
   }
   return validatedResponse.data;

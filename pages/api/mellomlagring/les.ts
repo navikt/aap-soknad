@@ -1,23 +1,24 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { getAccessTokenFromRequest } from 'auth/accessToken';
 import { beskyttetApi } from 'auth/beskyttetApi';
-import { logger, tokenXApiProxy } from '@navikt/aap-felles-utils';
+import { logError, logInfo, tokenXApiProxy } from '@navikt/aap-felles-utils';
 import metrics from 'utils/metrics';
 import { lesCache } from 'mock/mellomlagringsCache';
-import { isLabs, isMock } from 'utils/environments';
+import { isFunctionalTest, isMock } from 'utils/environments';
 import { defaultStepList } from 'pages';
 import { SOKNAD_VERSION, SoknadContextState } from 'context/soknadcontext/soknadContext';
+import { simpleTokenXProxy } from 'lib/utils/api/simpleTokenXProxy';
+import { IncomingMessage } from 'http';
 
 const handler = beskyttetApi(async (req: NextApiRequest, res: NextApiResponse) => {
-  const accessToken = getAccessTokenFromRequest(req);
-  const result = await hentMellomlagring(accessToken);
+  const result = await hentMellomlagring(req);
   res.status(200).json(result);
 });
 
 export const hentMellomlagring = async (
-  accessToken?: string,
+  req?: IncomingMessage,
 ): Promise<SoknadContextState | undefined> => {
-  if (isLabs()) {
+  if (isFunctionalTest()) {
     return {
       version: SOKNAD_VERSION,
       søknad: {},
@@ -30,20 +31,20 @@ export const hentMellomlagring = async (
     return result ? JSON.parse(result) : {};
   }
   try {
-    const mellomlagretSøknad = await tokenXApiProxy({
+    const mellomlagretSøknad = await simpleTokenXProxy<SoknadContextState | string>({
       url: `${process.env.INNSENDING_URL}/mellomlagring/søknad`,
-      prometheusPath: `mellomlagring`,
       method: 'GET',
       audience: process.env.INNSENDING_AUDIENCE!,
-      bearerToken: accessToken,
-      metricsStatusCodeCounter: metrics.backendApiStatusCodeCounter,
-      metricsTimer: metrics.backendApiDurationHistogram,
-      logger: logger,
+      req,
     });
-
+    if (typeof mellomlagretSøknad === 'string') {
+      logInfo('Mellomlagret søknad er en string??, parser til Json før den returneres');
+      return JSON.parse(mellomlagretSøknad);
+    }
+    logInfo('Mellomlagret søknad hentet fra aap-innsending', mellomlagretSøknad);
     return mellomlagretSøknad;
   } catch (error: any) {
-    logger.error('Noe gikk galt i henting av mellomlagring fra aap-innsending', error);
+    logError('Noe gikk galt i henting av mellomlagring fra aap-innsending', error);
     return undefined;
   }
 };

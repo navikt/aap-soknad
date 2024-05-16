@@ -29,6 +29,15 @@ export const mockSøker: any = {
         fødselsdato: formatDate(sub(new Date(), { years: 1 }), 'yyyy-MM-dd')!,
       },
       {
+        fnr: '789',
+        navn: {
+          fornavn: 'Jørgen',
+          mellomnavn: 'Hatt',
+          etternavn: 'Emaker',
+        },
+        fødselsdato: formatDate(sub(new Date(), { years: 4 }), 'yyyy-MM-dd')!,
+      },
+      {
         fnr: '456',
         navn: {
           fornavn: 'Jonas',

@@ -1,4 +1,4 @@
-import { getTokenX, logger } from '@navikt/aap-felles-utils';
+import { getTokenX, logError } from '@navikt/aap-felles-utils';
 import { proxyApiRouteRequest } from '@navikt/next-api-proxy';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { beskyttetApi } from 'auth/beskyttetApi';
@@ -28,7 +28,7 @@ export const slettVedleggInnsending = async (
   try {
     tokenXToken = await getTokenX(idportenToken, process.env.INNSENDING_AUDIENCE!);
   } catch (error) {
-    logger.error('Kunne ikke hente tokenXToken i sletting av vedlegg i ny innsending', error);
+    logError('Kunne ikke hente tokenXToken i sletting av vedlegg i ny innsending', error);
     throw error;
   }
 

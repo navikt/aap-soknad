@@ -75,12 +75,6 @@ export function soknadReducer(state: SoknadContextState, action: SoknadAction): 
         requiredVedlegg: [...newVedleggList],
       };
     }
-    case SoknadActionKeys.ADD_SØKNAD_URL: {
-      return {
-        ...state,
-        søknadUrl: action?.payload,
-      };
-    }
 
     case SoknadActionKeys.ADD_VEDLEGG: {
       const filesToAdd = [...(state.søknad?.vedlegg?.[action.key] || []), ...action.payload];
