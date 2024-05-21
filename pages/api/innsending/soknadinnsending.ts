@@ -15,7 +15,6 @@ import { getMedlemskapSchema } from 'components/pageComponents/standard/Medlemsk
 import { getStartDatoSchema } from 'components/pageComponents/standard/StartDato/StartDato';
 import { getStudentSchema } from 'components/pageComponents/standard/Student/Student';
 import { getYrkesskadeSchema } from 'components/pageComponents/standard/Yrkesskade/Yrkesskade';
-import { getAccessTokenFromRequest } from 'auth/accessToken';
 import { AttachmentType, RequiredVedlegg } from 'types/SoknadContext';
 import { SOKNAD_VERSION } from 'context/soknadcontext/soknadContext';
 import { deleteCache } from 'mock/mellomlagringsCache';

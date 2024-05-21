@@ -3,8 +3,9 @@ import { getAccessTokenFromRequest } from 'auth/accessToken';
 import { beskyttetApi } from 'auth/beskyttetApi';
 import { logError, tokenXApiProxy } from '@navikt/aap-felles-utils';
 import metrics from 'utils/metrics';
-import { OppslagBehandler } from 'context/sokerOppslagContext';
 import { z } from 'zod';
+import { isDev, isMock } from 'utils/environments';
+import { mockFastlege } from 'mock/fastlege';
 
 const Fastlege = z.object({
   navn: z.string(),
@@ -15,13 +16,16 @@ const Fastlege = z.object({
     telefon: z.string().optional(),
   }),
 });
+
 export type Fastlege = z.infer<typeof Fastlege>;
 
 const handler = beskyttetApi(async (req: NextApiRequest, res: NextApiResponse) => {
   const accessToken = getAccessTokenFromRequest(req);
   res.status(200).json(await getFastlege(accessToken));
 });
-export const getFastlege = async (accessToken?: string) => {
+export const getFastlege = async (accessToken?: string): Promise<Fastlege[]> => {
+  if (isMock() || isDev()) return mockFastlege;
+
   const fastlege: Fastlege = await tokenXApiProxy({
     url: `${process.env.OPPSLAG_URL}/fastlege`,
     prometheusPath: 'oppslag/fastlege',
@@ -35,7 +39,7 @@ export const getFastlege = async (accessToken?: string) => {
   const validatedResponse = z.array(Fastlege).safeParse(fastlege);
   if (!validatedResponse.success) {
     logError(`oppslag/person valideringsfeil: ${validatedResponse.error.message}`);
-    return {};
+    return [];
   }
   return validatedResponse.data;
 };

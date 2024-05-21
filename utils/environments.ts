@@ -5,5 +5,7 @@ export const isMock = () =>
 
 export const isFunctionalTest = () => process.env.FUNCTIONAL_TESTS === 'enabled';
 
+export const isDev = () => process.env.RUNTIME_ENVIRONMENT === 'dev';
+
 export const clientSideIsProd = () =>
   typeof window !== 'undefined' && window.location.href.includes('www.nav.no');

@@ -14,7 +14,6 @@ import {
 import { Soknad } from 'types/Soknad';
 import { fetchPOST } from 'api/fetch';
 import { StepNames } from './index';
-import { mapSøknadToBackend, mapSøknadToPdf } from 'utils/api';
 import StartDato from 'components/pageComponents/standard/StartDato/StartDato';
 import { Medlemskap } from 'components/pageComponents/standard/Medlemskap/Medlemskap';
 import { Yrkesskade } from 'components/pageComponents/standard/Yrkesskade/Yrkesskade';
@@ -38,9 +37,8 @@ import { SoknadContextProvider, SoknadContextState } from 'context/soknadcontext
 import { useSoknad } from 'hooks/SoknadHook';
 import {
   addBarnIfMissing,
-  addBehandlerIfMissing,
+  addFastlegeIfMissing,
   setSoknadStateFraProps,
-  SoknadActionKeys,
 } from 'context/soknadcontext/actions';
 import { getKrr } from 'pages/api/oppslag/krr';
 import { Barn, getBarn } from 'pages/api/oppslag/barn';
@@ -49,19 +47,20 @@ import { hentMellomlagring } from 'pages/api/mellomlagring/les';
 import { RequiredVedlegg } from 'types/SoknadContext';
 import { logError, logInfo, logWarning } from '@navikt/aap-felles-utils';
 import { parse } from 'date-fns';
+import { Fastlege, getFastlege } from 'pages/api/oppslag/fastlege';
+import { migrerMellomlagretBehandler } from 'lib/utils/migrerMellomlagretBehandler';
 
 interface PageProps {
   søker: SokerOppslagState;
   mellomlagretSøknad: SoknadContextState;
   kontaktinformasjon: KontaktInfoView | null;
   barn: Barn[];
+  fastlege: Fastlege[];
 }
 
-const Steps = ({ søker, mellomlagretSøknad, kontaktinformasjon, barn }: PageProps) => {
+const Steps = ({ søker, mellomlagretSøknad, kontaktinformasjon, barn, fastlege }: PageProps) => {
   const router = useRouter();
   const { step } = router.query;
-
-  const { formatMessage } = useIntl();
 
   const { søknadState, søknadDispatch } = useSoknad();
   const { oppslagDispatch } = useSokerOppslag();
@@ -80,7 +79,7 @@ const Steps = ({ søker, mellomlagretSøknad, kontaktinformasjon, barn }: PagePr
       setSokerOppslagFraProps(søker, oppslagDispatch);
 
       if (barn) addBarnIfMissing(søknadDispatch, barn);
-      if (søker.behandlere) addBehandlerIfMissing(søknadDispatch, søker.behandlere);
+      if (fastlege) addFastlegeIfMissing(søknadDispatch, fastlege);
     }
   }, []);
 
@@ -108,17 +107,6 @@ const Steps = ({ søker, mellomlagretSøknad, kontaktinformasjon, barn }: PagePr
   const submitSoknad = async () => {
     if (currentStep?.name === StepNames.OPPSUMMERING) {
       setShowFetchErrorMessage(false);
-      const sendtTimestamp = new Date();
-
-      // Må massere dataene litt før vi sender de inn
-      const søknad = mapSøknadToBackend(søknadState?.søknad);
-
-      const søknadPdf = mapSøknadToPdf(
-        søknadState?.søknad,
-        sendtTimestamp,
-        formatMessage,
-        søknadState?.requiredVedlegg,
-      );
 
       const postResponse = await postSøknadMedAAPInnsending(
         søknadState.søknad,
@@ -218,6 +206,15 @@ const StepsWithContextProvider = (props: PageProps) => (
   </SoknadContextProvider>
 );
 
+const hentFastlege = async (bearerToken?: string) => {
+  try {
+    return await getFastlege(bearerToken);
+  } catch (e) {
+    logError('Noe gikk galt i kallet mot oppslag/fastlege', e);
+    return [];
+  }
+};
+
 export const getServerSideProps = beskyttetSide(
   async (ctx: NextPageContext): Promise<GetServerSidePropsResult<PageProps>> => {
     const stopTimer = metrics.getServersidePropsDurationHistogram.startTimer({
@@ -232,12 +229,17 @@ export const getServerSideProps = beskyttetSide(
       logError(`Noe gikk galt i kallet mot oppslag/krr`, e);
     }
 
-    let mellomlagretSøknad: SoknadContextState | undefined;
+    const fastlege = await hentFastlege(bearerToken);
 
+    let mellomlagretSøknad: SoknadContextState | undefined;
     try {
       mellomlagretSøknad = await hentMellomlagring(ctx.req);
     } catch (e) {
       logError('Noe gikk galt i innhenting av mellomlagret søknad', e);
+    }
+
+    if (mellomlagretSøknad) {
+      mellomlagretSøknad = migrerMellomlagretBehandler(mellomlagretSøknad);
     }
 
     let barn: Barn[] = [];
@@ -269,7 +271,7 @@ export const getServerSideProps = beskyttetSide(
     }
 
     return {
-      props: { søker, mellomlagretSøknad, kontaktinformasjon, barn },
+      props: { søker, mellomlagretSøknad, kontaktinformasjon, barn, fastlege },
     };
   },
 );

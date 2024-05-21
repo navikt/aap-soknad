@@ -1,39 +1,30 @@
 import { JaEllerNei } from 'types/Generic';
 import { getBehandlerSchema } from './Behandlere';
+import { Fastlege } from 'pages/api/oppslag/fastlege';
 
 describe('Behandlere validation', () => {
   const schema = getBehandlerSchema(jest.fn());
-  const registrertBehandler = {
-    type: 'FASTLEGE',
-    navn: { fornavn: 'Lise', etternavn: 'Legesen' },
-    kategori: 'LEGE',
+  const fastlege: Fastlege = {
+    navn: 'Lise Legesen',
+    behandlerRef: 'd182f24b-ebca-4f44-bf86-65901ec6141b',
     kontaktinformasjon: {
-      behandlerRef: 'd182f24b-ebca-4f44-bf86-65901ec6141b',
       kontor: 'ASKØY KOMMUNE SAMFUNNSMEDISINSK AVD ALMENNLEGETJENESTEN',
-      orgnummer: '976673867',
-      adresse: {
-        adressenavn: 'Kleppeveien',
-        husnummer: '17',
-        postnummer: {
-          postnr: '5300',
-          poststed: 'KLEPPESTØ',
-        },
-      },
+      adresse: 'Kleppeveien 17, 5300 KLEPPESTØ',
       telefon: '99 99 99 99',
     },
   };
   it('ingenting registrerte behandlere', async () => {
     const form = {
-      registrerteBehandlere: [],
+      fastlege: [],
     };
     const result = await schema.validate(form, { abortEarly: false }).catch((err) => err);
     expect(result).toStrictEqual(form);
   });
   it('har registrert behandler, info er riktig', async () => {
     const form = {
-      registrerteBehandlere: [
+      fastlege: [
         {
-          ...registrertBehandler,
+          ...fastlege,
           erRegistrertFastlegeRiktig: JaEllerNei.JA,
         },
       ],
@@ -43,9 +34,9 @@ describe('Behandlere validation', () => {
   });
   it('har registrert behandler, info er feil', async () => {
     const form = {
-      registrerteBehandlere: [
+      fastlege: [
         {
-          ...registrertBehandler,
+          ...fastlege,
           erRegistrertFastlegeRiktig: JaEllerNei.NEI,
         },
       ],
@@ -55,9 +46,9 @@ describe('Behandlere validation', () => {
   });
   it('har registrert behandler, må svare om info er riktig', async () => {
     const form = {
-      registrerteBehandlere: [
+      fastlege: [
         {
-          ...registrertBehandler,
+          ...fastlege,
         },
       ],
     };
