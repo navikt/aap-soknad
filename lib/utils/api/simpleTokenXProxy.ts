@@ -66,6 +66,11 @@ export const simpleTokenXProxy = async <T>({
 
   if (response.ok) {
     logInfo(`OK ${url}, status ${response.status}, callId ${navCallId}`);
+
+    if (response.status === 204) {
+      return 'request gikk fint' as T;
+    }
+
     const headers = response.headers.get('content-type');
     const isJson = headers?.includes('application/json');
 
