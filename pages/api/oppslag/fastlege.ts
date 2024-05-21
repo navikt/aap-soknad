@@ -38,7 +38,7 @@ export const getFastlege = async (accessToken?: string): Promise<Fastlege[]> => 
 
   const validatedResponse = z.array(Fastlege).safeParse(fastlege);
   if (!validatedResponse.success) {
-    logError(`oppslag/person valideringsfeil: ${validatedResponse.error.message}`);
+    logError(`oppslag/fastlege valideringsfeil: ${validatedResponse.error.message}`);
     return [];
   }
   return validatedResponse.data;
