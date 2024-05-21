@@ -15,7 +15,7 @@ export const formatFullAdresse = (adresse?: Adresse) =>
     adresse?.postnummer?.postnr || adresse?.postnummer?.poststed ? ',' : ''
   } ${adresse?.postnummer?.postnr ?? ''} ${adresse?.postnummer?.poststed ?? ''}`;
 
-export const formatTelefonnummer = (telefonnummer?: string) => {
+export const formatTelefonnummer = (telefonnummer?: string | null) => {
   if (!telefonnummer) {
     return '';
   }

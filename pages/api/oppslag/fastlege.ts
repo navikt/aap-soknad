@@ -11,9 +11,9 @@ const Fastlege = z.object({
   navn: z.string(),
   behandlerRef: z.string(),
   kontaktinformasjon: z.object({
-    kontor: z.string().optional(),
-    adresse: z.string().optional(),
-    telefon: z.string().optional(),
+    kontor: z.string().nullish(),
+    adresse: z.string().nullish(),
+    telefon: z.string().nullish(),
   }),
 });
 

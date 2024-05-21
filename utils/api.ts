@@ -41,14 +41,14 @@ enum Types {
 type Felt = {
   type: Types.FELT;
   felt?: string;
-  verdi?: string;
+  verdi?: string | null;
 };
 type Fritekst = {
   type: Types.FRITEKST;
   tekst?: string;
   indent?: boolean;
 };
-const createField = (felt: string, verdi: string | undefined, skipIfFalsy = false) => {
+const createField = (felt: string, verdi: string | undefined | null, skipIfFalsy = false) => {
   if (skipIfFalsy && !verdi) return [];
   const res: Felt = {
     type: Types.FELT,
