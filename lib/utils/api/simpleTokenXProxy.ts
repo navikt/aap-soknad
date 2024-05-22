@@ -1,5 +1,5 @@
-import { validateToken, requestOboToken, getToken } from '@navikt/oasis';
-import { logError, logInfo } from '@navikt/aap-felles-utils';
+import { getToken, requestOboToken, validateToken } from '@navikt/oasis';
+import { logError, logInfo, logWarning } from '@navikt/aap-felles-utils';
 import { randomUUID } from 'crypto';
 import { IncomingMessage } from 'http';
 import { ErrorMedStatus } from 'lib/utils/api/ErrorMedStatus';
@@ -64,21 +64,27 @@ export const simpleTokenXProxy = async <T>({
     body: method === 'POST' ? JSON.stringify(body) : undefined,
   });
 
-  try {
-    if (response.ok) {
-      logInfo(`OK ${url}, status ${response.status}, callId ${navCallId}`);
-      const headers = response.headers.get('content-type');
-      const isJson = headers?.includes('application/json');
+  if (response.ok) {
+    logInfo(`OK ${url}, status ${response.status}, callId ${navCallId}`);
 
-      // TODO: Midlertidig, til innsending returnerer json på alle OK-responser
-      if (!isJson) {
-        return (await response.text()) as T;
-      }
-      return await response.json();
+    if (response.status === 204) {
+      return {} as T;
     }
-  } catch (error) {
-    logError(`Unable to parse response for ${url}`, error);
+
+    const headers = response.headers.get('content-type');
+    const isJson = headers?.includes('application/json');
+
+    if (isJson) {
+      try {
+        return await response.json();
+      } catch (e) {
+        logWarning(`Kunne ikke parse json i simpleTokenXProxy for ${url}`);
+      }
+    }
+
+    return (await response.text()) as T;
   }
+
   logError(
     `Error fetching simpleTokenXProxy. Fikk responskode ${response.status} fra ${url} med navCallId: ${navCallId}`,
   );
