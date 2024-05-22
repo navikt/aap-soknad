@@ -5,12 +5,6 @@ import { completeAndGoToNextStep, goToPreviousStep, setStepList } from 'context/
 import { useStepWizard } from 'hooks/StepWizardHook';
 import { useDebounceLagreSoknad } from 'hooks/useDebounceLagreSoknad';
 import { StepWizard } from 'components/StepWizard';
-import {
-  KontaktInfoView,
-  setSokerOppslagFraProps,
-  SokerOppslagState,
-  useSokerOppslag,
-} from 'context/sokerOppslagContext';
 import { Soknad } from 'types/Soknad';
 import { fetchPOST } from 'api/fetch';
 import { StepNames } from './index';
@@ -26,7 +20,6 @@ import Oppsummering from 'components/pageComponents/standard/Oppsummering/Oppsum
 import { beskyttetSide } from 'auth/beskyttetSide';
 import { GetServerSidePropsResult, NextPageContext } from 'next';
 import { getAccessToken } from 'auth/accessToken';
-import { getSøker } from './api/oppslag/soeker';
 import { logSkjemaFullførtEvent, logVeiledningVistEvent } from 'utils/amplitude';
 import metrics from 'utils/metrics';
 import { scrollRefIntoView } from 'utils/dom';
@@ -40,30 +33,29 @@ import {
   addFastlegeIfMissing,
   setSoknadStateFraProps,
 } from 'context/soknadcontext/actions';
-import { getKrr } from 'pages/api/oppslag/krr';
+import { getKrr, KrrKontaktInfo } from 'pages/api/oppslag/krr';
 import { Barn, getBarn } from 'pages/api/oppslag/barn';
-import { formatNavn } from 'utils/StringFormatters';
 import { hentMellomlagring } from 'pages/api/mellomlagring/les';
 import { RequiredVedlegg } from 'types/SoknadContext';
 import { logError, logInfo, logWarning } from '@navikt/aap-felles-utils';
 import { parse } from 'date-fns';
 import { Fastlege, getFastlege } from 'pages/api/oppslag/fastlege';
 import { migrerMellomlagretBehandler } from 'lib/utils/migrerMellomlagretBehandler';
+import { getPerson, Person } from 'pages/api/oppslagapi/person';
 
 interface PageProps {
-  søker: SokerOppslagState;
   mellomlagretSøknad: SoknadContextState;
-  kontaktinformasjon: KontaktInfoView | null;
+  kontaktinformasjon: KrrKontaktInfo | null;
+  person: Person;
   barn: Barn[];
   fastlege: Fastlege[];
 }
 
-const Steps = ({ søker, mellomlagretSøknad, kontaktinformasjon, barn, fastlege }: PageProps) => {
+const Steps = ({ person, mellomlagretSøknad, kontaktinformasjon, barn, fastlege }: PageProps) => {
   const router = useRouter();
   const { step } = router.query;
 
   const { søknadState, søknadDispatch } = useSoknad();
-  const { oppslagDispatch } = useSokerOppslag();
   const { currentStep, stepList, stepWizardDispatch } = useStepWizard();
   const debouncedLagre = useDebounceLagreSoknad<Soknad>();
 
@@ -76,7 +68,6 @@ const Steps = ({ søker, mellomlagretSøknad, kontaktinformasjon, barn, fastlege
       if (mellomlagretSøknad.lagretStepList && mellomlagretSøknad?.lagretStepList?.length > 0) {
         setStepList([...mellomlagretSøknad.lagretStepList], stepWizardDispatch);
       }
-      setSokerOppslagFraProps(søker, oppslagDispatch);
 
       if (barn) addBarnIfMissing(søknadDispatch, barn);
       if (fastlege) addFastlegeIfMissing(søknadDispatch, fastlege);
@@ -161,7 +152,7 @@ const Steps = ({ søker, mellomlagretSøknad, kontaktinformasjon, barn, fastlege
         <main className={classes?.main}>
           {step === '0' ? (
             <Steg0
-              søker={søker}
+              person={person}
               onNext={() => {
                 router.push('1', undefined, { scroll: true });
               }}
@@ -190,6 +181,7 @@ const Steps = ({ søker, mellomlagretSøknad, kontaktinformasjon, barn, fastlege
                   submitErrorMessageRef={submitErrorMessageRef}
                   hasSubmitError={showFetchErrorMessage}
                   kontaktinformasjon={kontaktinformasjon}
+                  person={person}
                 />
               )}
             </StepWizard>
@@ -221,8 +213,8 @@ export const getServerSideProps = beskyttetSide(
       path: '/[steg]',
     });
     const bearerToken = getAccessToken(ctx);
-    const søker = await getSøker(bearerToken);
-    let kontaktinformasjon = null;
+    const person = await getPerson(ctx.req);
+    let kontaktinformasjon: KrrKontaktInfo | null = null;
     try {
       kontaktinformasjon = await getKrr(bearerToken);
     } catch (e) {
@@ -271,7 +263,7 @@ export const getServerSideProps = beskyttetSide(
     }
 
     return {
-      props: { søker, mellomlagretSøknad, kontaktinformasjon, barn, fastlege },
+      props: { person, mellomlagretSøknad, kontaktinformasjon, barn, fastlege },
     };
   },
 );

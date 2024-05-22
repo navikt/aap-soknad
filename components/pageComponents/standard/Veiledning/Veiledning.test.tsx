@@ -11,7 +11,6 @@ describe('Veiledning', () => {
       <>
         <Veiledning
           onSubmit={jest.fn()}
-          søker={{}}
           errorMessageRef={dummyRef}
           hasError={false}
           isLoading={false}
@@ -29,7 +28,7 @@ describe('Veiledning', () => {
       },
     });
     expect(
-      screen.queryByText('Du må bekrefte at du vil gi så riktige opplysninger som mulig.')
+      screen.queryByText('Du må bekrefte at du vil gi så riktige opplysninger som mulig.'),
     ).toBeNull();
   });
   it('UU', async () => {

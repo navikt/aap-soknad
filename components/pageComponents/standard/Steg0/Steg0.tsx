@@ -1,18 +1,17 @@
 import { IntroduksjonTekst } from 'components/IntroduksjonTekst/IntroduksjonTekst';
-import { SokerOppslagState } from 'context/sokerOppslagContext';
-import { getFulltNavn } from 'lib/søker';
 import * as classes from './Steg0.module.css';
 import { BodyShort, Label } from '@navikt/ds-react';
 import { SuccessColored } from '@navikt/ds-icons';
 import { useIntl } from 'react-intl';
 import SøknadFormWrapper from 'components/SoknadFormWrapper/SoknadFormWrapper';
+import { Person } from 'pages/api/oppslagapi/person';
 
 interface Props {
   onNext: () => void;
-  søker: SokerOppslagState;
+  person: Person;
 }
 
-export const Steg0 = ({ onNext, søker }: Props) => {
+export const Steg0 = ({ onNext, person }: Props) => {
   const { formatMessage } = useIntl();
 
   return (
@@ -21,7 +20,7 @@ export const Steg0 = ({ onNext, søker }: Props) => {
       onNext={onNext}
       nextButtonText={formatMessage({ id: 'navigation.next' })}
     >
-      <IntroduksjonTekst navn={getFulltNavn(søker.søker)} />
+      <IntroduksjonTekst navn={person?.navn} />
 
       <div>
         <Label as="p" spacing>
