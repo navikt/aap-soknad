@@ -48,17 +48,19 @@ import { useFormErrors } from 'hooks/FormErrorHook';
 import { setFocusOnErrorSummary } from 'components/schema/FormErrorSummary';
 import { useSoknad } from 'hooks/SoknadHook';
 import { updateSøknadData } from 'context/soknadcontext/actions';
-import { KontaktInfoView } from 'context/sokerOppslagContext';
 import { OppsummeringBarn } from 'components/pageComponents/standard/Oppsummering/OppsummeringBarn/OppsummeringBarn';
 // eslint-disable-next-line max-len
 import { OppsummeringManuelleBarn } from 'components/pageComponents/standard/Oppsummering/OppsummeringBarn/OppsummeringManuelleBarn';
+import { Person } from 'pages/api/oppslagapi/person';
+import { KrrKontaktInfo } from 'pages/api/oppslag/krr';
 
 interface OppsummeringProps {
   onBackClick: () => void;
   onSubmitSoknad: () => Promise<boolean>;
   submitErrorMessageRef: React.MutableRefObject<null>;
   hasSubmitError: boolean;
-  kontaktinformasjon: KontaktInfoView | null;
+  kontaktinformasjon: KrrKontaktInfo | null;
+  person: Person;
 }
 
 const Oppsummering = ({
@@ -67,6 +69,7 @@ const Oppsummering = ({
   submitErrorMessageRef,
   hasSubmitError,
   kontaktinformasjon,
+  person,
 }: OppsummeringProps) => {
   const { formatMessage } = useIntl();
   const [nextIsLoading, setNextIsLoading] = useState<boolean>(false);
@@ -181,7 +184,7 @@ const Oppsummering = ({
           showEdit={false}
           toggleAll={toggleAll}
         >
-          <OppsummeringKontaktinfo kontaktinformasjon={kontaktinformasjon} />
+          <OppsummeringKontaktinfo kontaktinformasjon={kontaktinformasjon} person={person} />
         </AccordianItemOppsummering>
         <AccordianItemOppsummering
           title={formatMessage({ id: 'søknad.oppsummering.startDato.title' })}

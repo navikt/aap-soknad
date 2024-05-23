@@ -1,17 +1,18 @@
 import { Alert, BodyLong, BodyShort, Button, Heading, Link } from '@navikt/ds-react';
 import React from 'react';
 import * as classes from './Kvittering.module.css';
-import { KontaktInfoView, SøkerView } from 'context/sokerOppslagContext';
 import { SuccessStroke } from '@navikt/ds-icons';
 import { clientSideIsProd, isFunctionalTest } from 'utils/environments';
 import { FormattedMessage, useIntl } from 'react-intl';
+import { KrrKontaktInfo } from 'pages/api/oppslag/krr';
+import { Person } from 'pages/api/oppslagapi/person';
 
-interface StudentProps {
-  søker: SøkerView;
-  kontaktinformasjon?: KontaktInfoView;
+interface Props {
+  person: Person;
+  kontaktinformasjon?: KrrKontaktInfo;
 }
 
-const Kvittering = ({ søker, kontaktinformasjon }: StudentProps) => {
+const Kvittering = ({ person, kontaktinformasjon }: Props) => {
   const { formatMessage } = useIntl();
 
   const mineAapUrl = () => {
@@ -39,7 +40,7 @@ const Kvittering = ({ søker, kontaktinformasjon }: StudentProps) => {
         aria-hidden={true}
       />
       <Heading size={'large'} level={'2'}>
-        <FormattedMessage id={'søknad.kvittering.title'} values={{ navn: søker?.fulltNavn }} />
+        <FormattedMessage id={'søknad.kvittering.title'} values={{ navn: person?.navn }} />
       </Heading>
       <Alert variant={'success'}>
         <BodyLong>{formatMessage({ id: 'søknad.kvittering.alert.text' })}</BodyLong>

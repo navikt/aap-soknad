@@ -1,6 +1,5 @@
 import { Veiledning } from 'components/pageComponents/standard/Veiledning/Veiledning';
 import React, { useEffect, useRef, useState } from 'react';
-import { SøkerView } from 'context/sokerOppslagContext';
 import { useRouter } from 'next/router';
 import { GetServerSidePropsResult, NextPageContext } from 'next/types';
 import { beskyttetSide } from 'auth/beskyttetSide';
@@ -51,17 +50,6 @@ const Introduksjon = ({ person }: PageProps) => {
 
   const errorMessageRef = useRef(null);
 
-  const [soker, setSoker] = useState({});
-
-  useEffect(() => {
-    if (person.navn) {
-      const _søker: SøkerView = {
-        fulltNavn: person.navn,
-      };
-      setSoker(_søker);
-    }
-  }, [person, setSoker]);
-
   const startSoknad = async () => {
     setIsLoading(true);
     setHasError(false);
@@ -89,7 +77,7 @@ const Introduksjon = ({ person }: PageProps) => {
   return (
     <>
       <Veiledning
-        søker={soker}
+        person={person}
         isLoading={isLoading}
         hasError={hasError}
         errorMessageRef={errorMessageRef}

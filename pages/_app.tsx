@@ -6,7 +6,6 @@ import { IntlProvider } from 'react-intl';
 import { AppProps } from 'next/app';
 import links from 'translations/links.json';
 import { messages, flattenMessages } from 'utils/message';
-import { SokerOppslagProvider } from 'context/sokerOppslagContext';
 import { StepWizardProvider } from 'context/stepWizardContext';
 import { initAmplitude } from 'utils/amplitude';
 import { AppStateContextProvider } from 'context/appStateContext';
@@ -53,16 +52,14 @@ const CustomApp = ({ Component, pageProps }: AppProps) => {
   return (
     <IntlProvider locale={locale} messages={currentMessages}>
       <AppStateContextProvider>
-        <SokerOppslagProvider>
-          <NavDecorator>
-            <StepWizardProvider>
-              <Head>
-                <title>Søknad om arbeidsavklaringspenger (AAP)</title>
-              </Head>
-              <Component {...pageProps} />
-            </StepWizardProvider>
-          </NavDecorator>
-        </SokerOppslagProvider>
+        <NavDecorator>
+          <StepWizardProvider>
+            <Head>
+              <title>Søknad om arbeidsavklaringspenger (AAP)</title>
+            </Head>
+            <Component {...pageProps} />
+          </StepWizardProvider>
+        </NavDecorator>
       </AppStateContextProvider>
     </IntlProvider>
   );

@@ -1,19 +1,19 @@
 import { Alert, Button, ConfirmationPanel, Heading, Label } from '@navikt/ds-react';
-import { SøkerView } from 'context/sokerOppslagContext';
 import * as classes from './Veiledning.module.css';
 import { IntroduksjonTekst } from '../../../IntroduksjonTekst/IntroduksjonTekst';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { FormEvent, useRef, useState } from 'react';
+import { Person } from 'pages/api/oppslagapi/person';
 
 interface VeiledningProps {
-  søker: SøkerView;
+  person?: Person;
   isLoading: boolean;
   hasError: boolean;
   errorMessageRef: React.MutableRefObject<HTMLDivElement | null>;
   onSubmit: () => void;
 }
 export const Veiledning = ({
-  søker,
+  person,
   isLoading,
   hasError,
   errorMessageRef,
@@ -27,7 +27,7 @@ export const Veiledning = ({
     event.preventDefault();
     if (!confirmRef.current?.checked) {
       setErrorMessage(
-        formatMessage({ id: 'søknad.veiledning.veiledningConfirm.validation.required' })
+        formatMessage({ id: 'søknad.veiledning.veiledningConfirm.validation.required' }),
       );
       return;
     }
@@ -56,7 +56,7 @@ export const Veiledning = ({
           )}
         </div>
 
-        <IntroduksjonTekst navn={søker.fulltNavn} />
+        <IntroduksjonTekst navn={person?.navn} />
 
         <form onSubmit={(event) => handleSubmit(event)} autoComplete="off">
           <ConfirmationPanel
