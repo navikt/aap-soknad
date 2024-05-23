@@ -16,7 +16,6 @@ import { logSkjemastegFullførtEvent } from 'utils/amplitude';
 import { SøknadValidationError } from 'components/schema/FormErrorSummary';
 import { useDebounceLagreSoknad } from 'hooks/useDebounceLagreSoknad';
 import { v4 as uuid4 } from 'uuid';
-import UtenlandsOppholdTabell from './UtenlandsOppholdTabell';
 import { getMedlemskapSchema } from './medlemskapSchema';
 import {
   utenlandsPeriodeArbeidEllerBodd,
@@ -27,6 +26,7 @@ import {
 } from './medlemskapUtils';
 import { useSoknad } from 'hooks/SoknadHook';
 import { updateSøknadData } from 'context/soknadcontext/actions';
+import { UtenlandsOppholdListe } from 'components/pageComponents/standard/Medlemskap/UtenlandsOppholdListe';
 
 interface Props {
   onBackClick: () => void;
@@ -47,15 +47,21 @@ export const Medlemskap = ({ onBackClick }: Props) => {
   }, [søknadState.søknad?.medlemskap]);
 
   const append = (utenlandsPeriode: UtenlandsPeriode) => {
+    const newList = [
+      ...(søknadState?.søknad?.medlemskap?.utenlandsOpphold || []),
+      {
+        ...utenlandsPeriode,
+      },
+    ];
+    newList.sort((periodeA, periodeB) => {
+      const a = periodeA.tilDato as any;
+      const b = periodeB.fraDato as any;
+      return b - a;
+    });
     updateSøknadData(søknadDispatch, {
       medlemskap: {
         ...søknadState?.søknad?.medlemskap,
-        utenlandsOpphold: [
-          ...(søknadState?.søknad?.medlemskap?.utenlandsOpphold || []),
-          {
-            ...utenlandsPeriode,
-          },
-        ],
+        utenlandsOpphold: newList,
       },
     });
   };
@@ -275,7 +281,7 @@ export const Medlemskap = ({ onBackClick }: Props) => {
             )}
             {søknadState?.søknad?.medlemskap?.utenlandsOpphold &&
               søknadState?.søknad.medlemskap.utenlandsOpphold.length > 0 && (
-                <UtenlandsOppholdTabell
+                <UtenlandsOppholdListe
                   utenlandsPerioder={søknadState?.søknad?.medlemskap.utenlandsOpphold}
                   setSelectedUtenlandsPeriode={setSelectedUtenlandsPeriode}
                   setShowUtenlandsPeriodeModal={setShowUtenlandsPeriodeModal}

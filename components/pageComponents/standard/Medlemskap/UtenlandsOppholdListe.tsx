@@ -1,4 +1,4 @@
-import { Button, Heading, Table } from '@navikt/ds-react';
+import { Button, Heading, HGrid, List, Table } from '@navikt/ds-react';
 import * as styles from './Medlemskap.module.css';
 import { formatDate } from 'utils/date';
 import { Delete } from '@navikt/ds-icons';
@@ -15,7 +15,7 @@ interface Props {
   setShowUtenlandsPeriodeModal: Dispatch<boolean>;
   arbeidEllerBodd: ArbeidEllerBodd;
 }
-const UtenlandsOppholdTabell = ({
+export const UtenlandsOppholdListe = ({
   utenlandsPerioder,
   setSelectedUtenlandsPeriode,
   setShowUtenlandsPeriodeModal,
@@ -36,22 +36,16 @@ const UtenlandsOppholdTabell = ({
   };
 
   return (
-    <Table size="medium">
-      <Table.Header>
-        <Table.Row>
-          <Table.HeaderCell colSpan={2}>
-            <Heading size="xsmall" level="3">
-              {formatMessage({
-                id: `søknad.medlemskap.utenlandsperiode.perioder.title.${arbeidEllerBodd}`,
-              })}
-            </Heading>
-          </Table.HeaderCell>
-        </Table.Row>
-      </Table.Header>
-      <Table.Body>
+    <div>
+      <Heading size="xsmall" level="3">
+        {formatMessage({
+          id: `søknad.medlemskap.utenlandsperiode.perioder.title.${arbeidEllerBodd}`,
+        })}
+      </Heading>
+      <ul className={styles.utenlandsoppholdListe}>
         {utenlandsPerioder.map((utenlandsPeriode) => (
-          <Table.Row key={utenlandsPeriode.id}>
-            <Table.DataCell className={styles.dataCell}>
+          <li>
+            <HGrid gap={'5'} columns={'3fr 1fr'}>
               <Button
                 variant="tertiary"
                 type="button"
@@ -59,6 +53,7 @@ const UtenlandsOppholdTabell = ({
                   setSelectedUtenlandsPeriode(utenlandsPeriode);
                   setShowUtenlandsPeriodeModal(true);
                 }}
+                className={styles.editPeriodeButton}
               >
                 <div className={styles.tableRowButtonContainer}>
                   <span>{`${utenlandsPeriode?.land?.split(':')?.[1]} `}</span>
@@ -70,12 +65,10 @@ const UtenlandsOppholdTabell = ({
                   </span>
                 </div>
               </Button>
-            </Table.DataCell>
-            <Table.DataCell>
               <Button
                 type={'button'}
                 variant={'tertiary'}
-                onKeyPress={(event) => {
+                onKeyDown={(event) => {
                   if (event.key === 'Enter') {
                     remove(utenlandsPeriode.id);
                   }
@@ -86,12 +79,10 @@ const UtenlandsOppholdTabell = ({
               >
                 Fjern
               </Button>
-            </Table.DataCell>
-          </Table.Row>
+            </HGrid>
+          </li>
         ))}
-      </Table.Body>
-    </Table>
+      </ul>
+    </div>
   );
 };
-
-export default UtenlandsOppholdTabell;
