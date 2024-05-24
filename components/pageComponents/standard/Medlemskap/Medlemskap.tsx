@@ -288,7 +288,7 @@ export const Medlemskap = ({ onBackClick }: Props) => {
                   arbeidEllerBodd={arbeidEllerBodd}
                 />
               )}
-            <HGrid columns={{ xs: 1, md: 2 }}>
+            <HGrid columns={{ xs: 1, md: '3fr 1fr' }}>
               <Button
                 id="medlemskap.utenlandsOpphold"
                 variant="secondary"
