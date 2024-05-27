@@ -12,3 +12,10 @@
   flex-direction: row;
   justify-content: flex-start;
 }
+.feilmelding:before {
+  content: '•';
+}
+.feilmelding {
+  display: flex;
+  gap: var(--a-spacing-2);
+}

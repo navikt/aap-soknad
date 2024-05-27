@@ -27,6 +27,7 @@ import {
 import { useSoknad } from 'hooks/SoknadHook';
 import { updateSøknadData } from 'context/soknadcontext/actions';
 import { UtenlandsOppholdListe } from 'components/pageComponents/standard/Medlemskap/UtenlandsOppholdListe';
+import styles from './Medlemskap.module.css';
 
 interface Props {
   onBackClick: () => void;
@@ -308,7 +309,7 @@ export const Medlemskap = ({ onBackClick }: Props) => {
 
             {utenlandsOppholdErrorMessage && (
               <div className={'navds-error-message navds-error-message--medium navds-label'}>
-                {utenlandsOppholdErrorMessage}
+                <p className={styles.feilmelding}>{utenlandsOppholdErrorMessage}</p>
               </div>
             )}
           </ColorPanel>
