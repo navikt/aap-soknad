@@ -19,13 +19,13 @@ const CountrySelector = ({ name, label, className, onChange, value, error }: Pro
     return Object.entries(countries.getNames('nb', { select: 'official' }))
       .filter((country) => country[0] !== 'NO' && country[0] !== 'SJ')
       .sort(
-        (a, b) => (a[1] > b[1] ? 1 : -1) // Sorterer alfabetisk på navn i stedet for landkode
+        (a, b) => (a[1] > b[1] ? 1 : -1), // Sorterer alfabetisk på navn i stedet for landkode
       );
   }, [countries]);
 
   return (
     <div className={className}>
-      <Select name={name} label={label} onChange={onChange} value={value} error={error}>
+      <Select id={name} name={name} label={label} onChange={onChange} value={value} error={error}>
         {[
           <option key="none" value="none">
             Velg land

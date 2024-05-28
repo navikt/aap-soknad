@@ -35,7 +35,7 @@ export const MonthPickerWrapper = ({
       dropdownCaption={dropdownCaption}
       defaultSelected={selectedDate}
     >
-      <MonthPicker.Input {...inputProps} label={label} error={error} />
+      <MonthPicker.Input {...inputProps} id={id} label={label} error={error} />
     </MonthPicker>
   );
 };
