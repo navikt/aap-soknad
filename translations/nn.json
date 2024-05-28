@@ -518,7 +518,7 @@
       },
       "registrerteBarn": {
         "navn": "Namn",
-        "title": "Barn du er registrert med",
+        "title": "Barn under 18 år me har funne som er registrerte på deg",
         "fødselsnummer": "Fødselsnummer/D-nummer",
         "fødselsdato": "Fødselsdato",
         "barnepensjon": {
@@ -528,7 +528,7 @@
             "text": "Dersom barnet får barnepensjon, har du ikkje rett til barnetillegg for barnet."
           }
         },
-        "notfound": "Fant ingen registrerte barn. Viss dette ikkje stemmer kan du leggja til barna dine under."
+        "notfound": "Fant ingen registrerte barn under 18 år. Viss dette ikkje stemmer kan du leggja til barna dine under."
       },
       "manuelleBarn": {
         "title": "Andre barn",
