@@ -146,9 +146,9 @@ test('at alle feilmeldinger skal dukke opp', async ({ page }) => {
     .getByRole('button', { name: 'Legg til Registrer periode med jobb utenfor Norge' })
     .click();
   await page.getByRole('button', { name: 'Lagre' }).click();
-  await expect(page.getByText('Vennligst oppgi land')).toBeVisible();
-  await expect(page.getByText('Vennligst oppgi fra dato')).toBeVisible();
-  await expect(page.getByText('Vennligst oppgi til dato')).toBeVisible();
+  await expect(page.getByRole('link', { name: 'Vennligst oppgi land' })).toBeVisible();
+  await expect(page.getByRole('link', { name: 'Vennligst oppgi fra dato' })).toBeVisible();
+  await expect(page.getByRole('link', { name: 'Vennligst oppgi til dato' })).toBeVisible();
   await page
     .getByRole('combobox', { name: 'Hvilket land jobbet du i?' })
     .selectOption('AL:Albania');
@@ -165,7 +165,9 @@ test('at alle feilmeldinger skal dukke opp', async ({ page }) => {
 
   await page.getByRole('button', { name: 'Lagre' }).click();
   await expect(
-    await page.getByText('Fra-dato må være eldre enn til-dato. Fyll inn slik: mm.åååå.'),
+    await page.getByRole('link', {
+      name: 'Fra-dato må være eldre enn til-dato. Fyll inn slik: mm.åååå.',
+    }),
   ).toBeVisible();
   await page
     .getByRole('textbox', { name: /fra og med måned \(mm\.åååå\)/i })
