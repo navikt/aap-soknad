@@ -34,7 +34,7 @@ export const mellomlagreSøknad = async (data: object, req: IncomingMessage) => 
   if (isMock()) return await lagreCache(JSON.stringify(data));
   try {
     const result = await simpleTokenXProxy({
-      url: `${process.env.INNSENDING_URL}/mellomlagring/søknad`,
+      url: `${process.env.INNSENDING_URL}/mellomlagring/søknad/v2`,
       method: 'POST',
       audience: process.env.INNSENDING_AUDIENCE!,
       body: data,

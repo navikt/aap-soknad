@@ -3,7 +3,6 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/router';
 import { GetServerSidePropsResult, NextPageContext } from 'next/types';
 import { beskyttetSide } from 'auth/beskyttetSide';
-import { fetchPOST } from 'api/fetch';
 import { StepType } from 'components/StepWizard/Step';
 import { logSkjemaStartetEvent } from 'utils/amplitude';
 import metrics from 'utils/metrics';
@@ -13,6 +12,7 @@ import { hentMellomlagring } from 'pages/api/mellomlagring/les';
 import { isFunctionalTest } from 'utils/environments';
 import { logError, logInfo } from '@navikt/aap-felles-utils';
 import { Person, getPerson } from 'pages/api/oppslagapi/person';
+import { mellomLagreSøknad } from 'hooks/useDebounceLagreSoknad';
 
 interface PageProps {
   person: Person;
@@ -54,13 +54,15 @@ const Introduksjon = ({ person }: PageProps) => {
     setIsLoading(true);
     setHasError(false);
     logSkjemaStartetEvent();
-    const result = await fetchPOST('/aap/soknad/api/mellomlagring/lagre', {
+    const initState: SoknadContextState = {
       version: SOKNAD_VERSION,
-      søknad: {},
+      søknad: { vedlegg: {} },
       lagretStepList: defaultStepList,
-    });
+      requiredVedlegg: [],
+    };
+    const result = await mellomLagreSøknad(initState);
 
-    if (!result.ok) {
+    if (!result?.ok) {
       setIsLoading(false);
       setHasError(true);
     } else {

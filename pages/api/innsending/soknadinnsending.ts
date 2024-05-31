@@ -20,6 +20,7 @@ import { SOKNAD_VERSION } from 'context/soknadcontext/soknadContext';
 import { deleteCache } from 'mock/mellomlagringsCache';
 import { simpleTokenXProxy } from 'lib/utils/api/simpleTokenXProxy';
 import { IncomingMessage } from 'http';
+import { søknadVedleggStateTilFilArray } from 'utils/vedlegg';
 
 // TODO: Sjekke om vi må generere pdf på samme språk som bruker har valgt når de fyller ut søknaden
 function getIntl() {
@@ -73,21 +74,7 @@ const handler = beskyttetApi(async (req: NextApiRequest, res: NextApiResponse) =
     søknad: Soknad;
     requiredVedlegg: RequiredVedlegg[];
   };
-
-  const filer: Fil[] = Object.keys(søknad.vedlegg ?? {})
-    .map((key) => {
-      const vedleggArray = søknad?.vedlegg?.[key];
-      const filerArray: Fil[] =
-        vedleggArray?.map((vedlegg) => {
-          return {
-            id: vedlegg.vedleggId,
-            tittel: mapVedleggTypeTilVedleggTekst(key),
-          };
-        }) ?? [];
-
-      return filerArray;
-    })
-    .flat();
+  const filer: Fil[] = søknadVedleggStateTilFilArray(søknad);
 
   const etterspurtDokumentasjon = requiredVedlegg?.map((vedlegg) => vedlegg.type);
 
@@ -121,27 +108,6 @@ const handler = beskyttetApi(async (req: NextApiRequest, res: NextApiResponse) =
     }
   }
 });
-
-function mapVedleggTypeTilVedleggTekst(vedleggType: AttachmentType): string {
-  switch (vedleggType) {
-    case 'LØNN_OG_ANDRE_GODER':
-      return 'Dokumentasjon om lønn og andre goder';
-    case 'OMSORGSSTØNAD':
-      return 'Dokumentasjon om omsorgsstønad';
-    case 'UTLANDSSTØNAD':
-      return 'Dokumentasjon om utenlandsstønad';
-    case 'SYKESTIPEND':
-      return 'Dokumentasjon om sykestipend';
-    case 'LÅN':
-      return 'Dokumentasjon om lån';
-    case 'AVBRUTT_STUDIE':
-      return 'Dokumentasjon om avbrutt studie';
-    case 'ANNET':
-      return 'Annen dokumentasjon';
-    default:
-      return 'Dokumentasjon om barn eller fosterbarn';
-  }
-}
 
 export const sendSoknadViaAapInnsending = async (
   innsending: SoknadInnsendingRequestBody,

@@ -72,7 +72,6 @@ const soknadContextInitial: SoknadContextState = {
     ],
   },
   requiredVedlegg,
-  søknadUrl: undefined,
 };
 
 describe('Vedlegg', () => {

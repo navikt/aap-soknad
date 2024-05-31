@@ -19,3 +19,6 @@
 .pidInput input {
   max-width: 8rem;
 }
+.visuallyHidden {
+  composes: visuallyHidden from '/styles/visibility.module.css';
+}

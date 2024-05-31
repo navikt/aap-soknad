@@ -5,6 +5,7 @@ import {
   BodyLong,
   BodyShort,
   Button,
+  ErrorSummary,
   Heading,
   HGrid,
   Label,
@@ -160,6 +161,20 @@ const UtenlandsPeriodeVelger = ({
               }
             }}
           >
+            <ErrorSummary
+              heading={formatMessage({ id: 'errorSummary.title' })}
+              aria-hidden={!errors?.length}
+              className={errors?.length ? '' : classes?.visuallyHidden}
+              tabIndex={0}
+            >
+              {errors?.length
+                ? errors.map((error) => (
+                  <ErrorSummary.Item key={error.path} href={`#${error.path}`}>
+                    {error.message}
+                  </ErrorSummary.Item>
+                  ))
+                : 'hidden'}
+            </ErrorSummary>
             <CountrySelector
               className={classes.countrySelector}
               name={'land'}
