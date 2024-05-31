@@ -11,7 +11,6 @@ export interface SoknadContextState {
   søknad?: Soknad;
   lagretStepList?: Array<StepType>;
   requiredVedlegg: RequiredVedlegg[];
-  søknadUrl?: string;
   sistLagret?: string;
 }
 
@@ -20,7 +19,6 @@ export const soknadContextInititalState: SoknadContextState = {
   version: SOKNAD_VERSION,
   søknad: undefined,
   requiredVedlegg: [],
-  søknadUrl: undefined,
   type: SøknadType.STANDARD,
 };
 

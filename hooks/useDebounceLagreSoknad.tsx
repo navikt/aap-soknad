@@ -4,6 +4,7 @@ import { useCallback } from 'react';
 import { formatDateTime } from 'utils/date';
 import { setSistLagret, useAppStateContext } from 'context/appStateContext';
 import { SoknadContextState } from 'context/soknadcontext/soknadContext';
+import { søknadVedleggStateTilFilArray } from 'utils/vedlegg';
 
 export function useDebounceLagreSoknad<SoknadStateType>() {
   const { appStateDispatch } = useAppStateContext();
@@ -19,8 +20,8 @@ export function useDebounceLagreSoknad<SoknadStateType>() {
       lagretStepList: stepList,
       sistLagret: formatDateTime(new Date()),
     };
-    const res = await fetchPOST(`/aap/soknad/api/mellomlagring/lagre`, payload);
-    if (res.ok) setSistLagret(formatDateTime(new Date()), appStateDispatch);
+    const res = await mellomLagreSøknad(payload);
+    if (res?.ok) setSistLagret(formatDateTime(new Date()), appStateDispatch);
   }
 
   const debouncedLagre = () => {
@@ -31,4 +32,13 @@ export function useDebounceLagreSoknad<SoknadStateType>() {
     };
   };
   return useCallback(debouncedLagre(), []);
+}
+export async function mellomLagreSøknad(contextState: SoknadContextState) {
+  if (contextState.søknad) {
+    const vedlegg = søknadVedleggStateTilFilArray(contextState.søknad);
+    return await fetchPOST(`/aap/soknad/api/mellomlagring/lagre`, {
+      soknad: contextState,
+      vedlegg,
+    });
+  }
 }
