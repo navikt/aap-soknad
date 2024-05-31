@@ -22,6 +22,12 @@ export const søknadVedleggStateTilFilArray = (søknad: Soknad) => {
     .flat();
   return filer;
 };
+
+export const søknadVedleggStateTilFilIdString = (søknad: Soknad) => {
+  return søknadVedleggStateTilFilArray(søknad)
+    .map((fil) => fil.id)
+    .join(',');
+};
 function mapVedleggTypeTilVedleggTekst(vedleggType: AttachmentType): string {
   switch (vedleggType) {
     case 'LØNN_OG_ANDRE_GODER':

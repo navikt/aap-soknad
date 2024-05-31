@@ -28,8 +28,7 @@ export const hentMellomlagring = async (
   }
   if (isMock()) {
     const result = await lesCache();
-    const parsedResult = result ? JSON.parse(result) : {};
-    return parsedResult?.soknad || {};
+    return result ? JSON.parse(result) : {};
   }
   try {
     const mellomlagretSøknad = await simpleTokenXProxy<SoknadContextState | string>({

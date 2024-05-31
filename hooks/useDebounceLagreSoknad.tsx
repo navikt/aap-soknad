@@ -4,7 +4,7 @@ import { useCallback } from 'react';
 import { formatDateTime } from 'utils/date';
 import { setSistLagret, useAppStateContext } from 'context/appStateContext';
 import { SoknadContextState } from 'context/soknadcontext/soknadContext';
-import { søknadVedleggStateTilFilArray } from 'utils/vedlegg';
+import { søknadVedleggStateTilFilIdString } from 'utils/vedlegg';
 
 export function useDebounceLagreSoknad<SoknadStateType>() {
   const { appStateDispatch } = useAppStateContext();
@@ -35,10 +35,11 @@ export function useDebounceLagreSoknad<SoknadStateType>() {
 }
 export async function mellomLagreSøknad(contextState: SoknadContextState) {
   if (contextState.søknad) {
-    const vedlegg = søknadVedleggStateTilFilArray(contextState.søknad);
-    return await fetchPOST(`/aap/soknad/api/mellomlagring/lagre`, {
-      soknad: contextState,
-      vedlegg,
+    const vedleggString = søknadVedleggStateTilFilIdString(contextState.søknad);
+    return await fetchPOST(`/aap/soknad/api/mellomlagring/lagre`, contextState, {
+      headers: {
+        vedlegg: vedleggString,
+      },
     });
   }
 }
