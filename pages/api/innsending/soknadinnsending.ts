@@ -135,6 +135,9 @@ export const sendSoknadViaAapInnsending = async (
     return søknad;
   } catch (error) {
     logError('Noe gikk galt ved innsending av søknad', error);
+    if (error instanceof ErrorMedStatus) {
+      throw error;
+    }
     throw new Error('Error sending søknad via aap-innsending');
   }
 };
