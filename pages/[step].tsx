@@ -206,9 +206,9 @@ const Steps = ({ person, mellomlagretSøknad, kontaktinformasjon, barn, fastlege
           )}
           <SoknadUtenVedleggModal
             showModal={showVedleggErrorMessage}
-            onSendSoknad={() => {
+            onSendSoknad={async () => {
+              await removeAllVedleggFromSoknadAndSubmit();
               setShowVedleggErrorMessage(false);
-              removeAllVedleggFromSoknadAndSubmit();
             }}
             onClose={() => {
               setShowVedleggErrorMessage(false);
