@@ -117,7 +117,11 @@ export const sendSoknadViaAapInnsending = async (
     return 'Vi har mottat søknaden din.';
   }
   if (isMock()) {
-    await deleteCache();
+    try {
+      await deleteCache();
+    } catch (e) {
+      console.error(e);
+    }
     return 'Vi har mottat søknaden din.';
   }
   try {

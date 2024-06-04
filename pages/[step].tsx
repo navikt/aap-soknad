@@ -5,7 +5,7 @@ import { completeAndGoToNextStep, goToPreviousStep, setStepList } from 'context/
 import { useStepWizard } from 'hooks/StepWizardHook';
 import { useDebounceLagreSoknad } from 'hooks/useDebounceLagreSoknad';
 import { StepWizard } from 'components/StepWizard';
-import { Soknad } from 'types/Soknad';
+import { Soknad, SoknadVedlegg } from 'types/Soknad';
 import { fetchPOST } from 'api/fetch';
 import { StepNames } from './index';
 import StartDato from 'components/pageComponents/standard/StartDato/StartDato';
@@ -31,6 +31,7 @@ import { useSoknad } from 'hooks/SoknadHook';
 import {
   addBarnIfMissing,
   addFastlegeIfMissing,
+  deleteVedlegg,
   setSoknadStateFraProps,
 } from 'context/soknadcontext/actions';
 import { getKrr, KrrKontaktInfo } from 'pages/api/oppslag/krr';
@@ -42,6 +43,8 @@ import { parse } from 'date-fns';
 import { Fastlege, getFastlege } from 'pages/api/oppslag/fastlege';
 import { migrerMellomlagretBehandler } from 'lib/utils/migrerMellomlagretBehandler';
 import { getPerson, Person } from 'pages/api/oppslagapi/person';
+import { SoknadUtenVedleggModal } from 'components/pageComponents/standard/Oppsummering/SoknadUtenVedleggModal';
+import { isDev, isMock } from 'utils/environments';
 
 interface PageProps {
   mellomlagretSøknad: SoknadContextState;
@@ -60,6 +63,7 @@ const Steps = ({ person, mellomlagretSøknad, kontaktinformasjon, barn, fastlege
   const debouncedLagre = useDebounceLagreSoknad<Soknad>();
 
   const [showFetchErrorMessage, setShowFetchErrorMessage] = useState(false);
+  const [showVedleggErrorMessage, setShowVedleggErrorMessage] = useState(false);
   const submitErrorMessageRef = useRef(null);
 
   useEffect(() => {
@@ -98,6 +102,7 @@ const Steps = ({ person, mellomlagretSøknad, kontaktinformasjon, barn, fastlege
   const submitSoknad = async () => {
     if (currentStep?.name === StepNames.OPPSUMMERING) {
       setShowFetchErrorMessage(false);
+      setShowVedleggErrorMessage(false);
 
       const postResponse = await postSøknadMedAAPInnsending(
         søknadState.søknad,
@@ -117,6 +122,8 @@ const Steps = ({ person, mellomlagretSøknad, kontaktinformasjon, barn, fastlege
 
         router.push('kvittering');
         return true;
+      } else if (postResponse?.status === 412) {
+        setShowVedleggErrorMessage(true);
       } else {
         setShowFetchErrorMessage(true);
       }
@@ -124,6 +131,17 @@ const Steps = ({ person, mellomlagretSøknad, kontaktinformasjon, barn, fastlege
       completeAndGoToNextStep(stepWizardDispatch);
     }
     return false;
+  };
+
+  const removeAllVedleggFromSoknadAndSubmit = async () => {
+    const alleVedlegg = søknadState?.søknad?.vedlegg;
+    Object.keys(alleVedlegg ?? {}).forEach((key) => {
+      const vedlegg = alleVedlegg?.[key];
+      vedlegg?.forEach((vedlegg) => {
+        deleteVedlegg(søknadDispatch, vedlegg, key);
+      });
+    });
+    await submitSoknad();
   };
 
   const postSøknadMedAAPInnsending = async (søknad?: Soknad, requiredVedlegg?: RequiredVedlegg[]) =>
@@ -186,6 +204,16 @@ const Steps = ({ person, mellomlagretSøknad, kontaktinformasjon, barn, fastlege
               )}
             </StepWizard>
           )}
+          <SoknadUtenVedleggModal
+            showModal={showVedleggErrorMessage}
+            onSendSoknad={() => {
+              setShowVedleggErrorMessage(false);
+              removeAllVedleggFromSoknadAndSubmit();
+            }}
+            onClose={() => {
+              setShowVedleggErrorMessage(false);
+            }}
+          />
         </main>
       )}
     </>
@@ -232,6 +260,19 @@ export const getServerSideProps = beskyttetSide(
 
     if (mellomlagretSøknad) {
       mellomlagretSøknad = migrerMellomlagretBehandler(mellomlagretSøknad);
+    }
+
+    if ((isDev() || isMock()) && mellomlagretSøknad) {
+      mellomlagretSøknad = {
+        ...mellomlagretSøknad,
+        søknad: {
+          ...mellomlagretSøknad?.søknad,
+          vedlegg: {
+            ...mellomlagretSøknad?.søknad?.vedlegg,
+            ANNET: [{ vedleggId: '1', name: 'test.pdf', size: 2, type: 'application/pdf' }],
+          },
+        },
+      };
     }
 
     let barn: Barn[] = [];
