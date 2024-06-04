@@ -2,7 +2,7 @@ import { beskyttetApi } from 'auth/beskyttetApi';
 import { logError, tokenXApiProxy } from '@navikt/aap-felles-utils';
 import { NextApiRequest, NextApiResponse } from 'next';
 import metrics from 'utils/metrics';
-import { ErrorMedStatus } from 'auth/ErrorMedStatus';
+import { ErrorMedStatus } from 'lib/utils/api/ErrorMedStatus';
 import { isFunctionalTest, isMock } from 'utils/environments';
 import { createIntl } from 'react-intl';
 import { flattenMessages, messages } from 'utils/message';
