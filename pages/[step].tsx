@@ -261,20 +261,6 @@ export const getServerSideProps = beskyttetSide(
       mellomlagretSøknad = migrerMellomlagretBehandler(mellomlagretSøknad);
     }
 
-    // Kun brukt for å trigge modal i dev. Faker et vedlegg som ikke finnes i redis.
-    if ((isDev() || isMock()) && mellomlagretSøknad) {
-      mellomlagretSøknad = {
-        ...mellomlagretSøknad,
-        søknad: {
-          ...mellomlagretSøknad?.søknad,
-          vedlegg: {
-            ...mellomlagretSøknad?.søknad?.vedlegg,
-            ANNET: [{ vedleggId: '1', name: 'test.pdf', size: 2, type: 'application/pdf' }],
-          },
-        },
-      };
-    }
-
     let barn: Barn[] = [];
     try {
       barn = await getBarn(bearerToken);
