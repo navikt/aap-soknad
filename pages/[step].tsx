@@ -133,7 +133,7 @@ const Steps = ({ person, mellomlagretSøknad, kontaktinformasjon, barn, fastlege
     return false;
   };
 
-  const removeAllVedleggFromSoknadAndSubmit = async () => {
+  const removeAllVedleggFromSoknadAndSubmit = () => {
     const alleVedlegg = søknadState?.søknad?.vedlegg;
     Object.keys(alleVedlegg ?? {}).forEach((key) => {
       const vedlegg = alleVedlegg?.[key];
@@ -141,7 +141,6 @@ const Steps = ({ person, mellomlagretSøknad, kontaktinformasjon, barn, fastlege
         deleteVedlegg(søknadDispatch, vedlegg, key);
       });
     });
-    await submitSoknad();
   };
 
   const postSøknadMedAAPInnsending = async (søknad?: Soknad, requiredVedlegg?: RequiredVedlegg[]) =>
@@ -206,8 +205,8 @@ const Steps = ({ person, mellomlagretSøknad, kontaktinformasjon, barn, fastlege
           )}
           <SoknadUtenVedleggModal
             showModal={showVedleggErrorMessage}
-            onSendSoknad={async () => {
-              await removeAllVedleggFromSoknadAndSubmit();
+            onSendSoknad={() => {
+              removeAllVedleggFromSoknadAndSubmit();
               setShowVedleggErrorMessage(false);
             }}
             onClose={() => {
