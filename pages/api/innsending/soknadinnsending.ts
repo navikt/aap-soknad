@@ -2,7 +2,7 @@ import { beskyttetApi } from 'auth/beskyttetApi';
 import { logError, tokenXApiProxy } from '@navikt/aap-felles-utils';
 import { NextApiRequest, NextApiResponse } from 'next';
 import metrics from 'utils/metrics';
-import { ErrorMedStatus } from 'auth/ErrorMedStatus';
+import { ErrorMedStatus } from 'lib/utils/api/ErrorMedStatus';
 import { isFunctionalTest, isMock } from 'utils/environments';
 import { createIntl } from 'react-intl';
 import { flattenMessages, messages } from 'utils/message';
@@ -117,7 +117,11 @@ export const sendSoknadViaAapInnsending = async (
     return 'Vi har mottat søknaden din.';
   }
   if (isMock()) {
-    await deleteCache();
+    try {
+      await deleteCache();
+    } catch (e) {
+      console.error(e);
+    }
     return 'Vi har mottat søknaden din.';
   }
   try {
@@ -131,6 +135,9 @@ export const sendSoknadViaAapInnsending = async (
     return søknad;
   } catch (error) {
     logError('Noe gikk galt ved innsending av søknad', error);
+    if (error instanceof ErrorMedStatus) {
+      throw error;
+    }
     throw new Error('Error sending søknad via aap-innsending');
   }
 };
