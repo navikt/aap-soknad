@@ -395,7 +395,7 @@ const Oppsummering = ({
         </AccordianItemOppsummering>
       </Accordion>
       {vedleggErrorFjernet && (
-        <Alert variant={'warning'}>
+        <Alert variant={'info'}>
           <BodyLong spacing>
             {formatMessage({ id: 'søknad.vedleggErFjernetFraSøknadWarning' })}
           </BodyLong>
