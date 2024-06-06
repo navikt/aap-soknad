@@ -64,6 +64,7 @@ const Steps = ({ person, mellomlagretSøknad, kontaktinformasjon, barn, fastlege
 
   const [showFetchErrorMessage, setShowFetchErrorMessage] = useState(false);
   const [showVedleggErrorMessage, setShowVedleggErrorMessage] = useState(false);
+  const [vedleggErrorFjernet, setVedleggErrorFjernet] = useState(false);
   const submitErrorMessageRef = useRef(null);
 
   useEffect(() => {
@@ -195,6 +196,7 @@ const Steps = ({ person, mellomlagretSøknad, kontaktinformasjon, barn, fastlege
                 <Oppsummering
                   onBackClick={onPreviousStep}
                   onSubmitSoknad={submitSoknad}
+                  vedleggErrorFjernet={vedleggErrorFjernet}
                   submitErrorMessageRef={submitErrorMessageRef}
                   hasSubmitError={showFetchErrorMessage}
                   kontaktinformasjon={kontaktinformasjon}
@@ -207,6 +209,7 @@ const Steps = ({ person, mellomlagretSøknad, kontaktinformasjon, barn, fastlege
             showModal={showVedleggErrorMessage}
             onSendSoknad={() => {
               removeAllVedleggFromSoknadAndSubmit();
+              setVedleggErrorFjernet(true);
               setShowVedleggErrorMessage(false);
             }}
             onClose={() => {
@@ -285,6 +288,15 @@ export const getServerSideProps = beskyttetSide(
         redirect: {
           destination: '/',
           permanent: false,
+        },
+      };
+    }
+    if (mellomlagretSøknad) {
+      mellomlagretSøknad = {
+        ...mellomlagretSøknad,
+        søknad: {
+          ...mellomlagretSøknad.søknad,
+          vedlegg: { ANNET: [{ name: 'heihei', vedleggId: 'kljfs', type: 'png', size: 2900 }] },
         },
       };
     }

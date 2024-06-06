@@ -1,5 +1,11 @@
 {
   "søknad": {
+    "soknadUtenVedleggModal": {
+      "heading": "Klarte ikkje senda inn søknad med vedlegg",
+      "paragrafEn": "Me klarte ikkje senda inn søknaden din med vedlegg. Du kan prøva å senda inn søknaden utan vedlegg, eller prøve igjen seinare.",
+      "paragrafTo": "Du kan alltid ettersenda vedlegg til søknaden din seinare"
+    },
+    "vedleggErFjernetFraSøknadWarning": "Du kan no senda inn søknaden utan vedlegg. Etter at søknaden er send kan du gå vidare til side for ettersending",
     "student": {
       "title": "Student",
       "erStudent": {

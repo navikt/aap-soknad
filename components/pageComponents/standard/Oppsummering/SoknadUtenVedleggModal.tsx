@@ -1,4 +1,5 @@
 import { BodyLong, Button, Heading, Modal } from '@navikt/ds-react';
+import { useIntl } from 'react-intl';
 
 export const SoknadUtenVedleggModal = ({
   showModal,
@@ -9,19 +10,21 @@ export const SoknadUtenVedleggModal = ({
   onSendSoknad: () => void;
   onClose: () => void;
 }) => {
+  const { formatMessage } = useIntl();
   return (
     <Modal open={showModal} onClose={onClose} aria-label="Klarte ikke sende inn søknad med vedlegg">
       <Modal.Header>
         <Heading size={'medium'} level={'2'}>
-          Klarte ikke sende inn søknad med vedlegg
+          {formatMessage({ id: 'søknad.soknadUtenVedleggModal.heading' })}
         </Heading>
       </Modal.Header>
       <Modal.Body>
         <BodyLong spacing>
-          Vi klarte ikke sende inn søknaden din med vedlegg. Du kan prøve å sende inn søknaden uten
-          vedlegg, eller prøve igjen senere.
+          {formatMessage({ id: 'søknad.soknadUtenVedleggModal.paragrafEn' })}
         </BodyLong>
-        <BodyLong spacing>Du kan alltid ettersende vedlegg til søknaden din senere.</BodyLong>
+        <BodyLong spacing>
+          {formatMessage({ id: 'søknad.soknadUtenVedleggModal.paragrafTo' })}
+        </BodyLong>
       </Modal.Body>
       <Modal.Footer>
         <Button variant="primary" onClick={onSendSoknad}>

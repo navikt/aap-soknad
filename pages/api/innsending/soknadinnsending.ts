@@ -97,7 +97,7 @@ const handler = beskyttetApi(async (req: NextApiRequest, res: NextApiResponse) =
     );
 
     metrics.sendSoknadCounter.inc({ type: 'STANDARD' });
-    res.status(201).send('Vi har mottat søknaden');
+    res.status(412).send('Vi har mottat søknaden');
   } catch (err) {
     logError(`Noe gikk galt ved innsending av søknad`, err);
 

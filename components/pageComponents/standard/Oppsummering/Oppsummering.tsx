@@ -1,6 +1,7 @@
 import {
   Accordion,
   Alert,
+  BodyLong,
   BodyShort,
   ConfirmationPanel,
   Heading,
@@ -61,6 +62,7 @@ interface OppsummeringProps {
   hasSubmitError: boolean;
   kontaktinformasjon: KrrKontaktInfo | null;
   person: Person;
+  vedleggErrorFjernet: boolean;
 }
 
 const Oppsummering = ({
@@ -70,6 +72,7 @@ const Oppsummering = ({
   hasSubmitError,
   kontaktinformasjon,
   person,
+  vedleggErrorFjernet,
 }: OppsummeringProps) => {
   const { formatMessage } = useIntl();
   const [nextIsLoading, setNextIsLoading] = useState<boolean>(false);
@@ -391,6 +394,13 @@ const Oppsummering = ({
           />
         </AccordianItemOppsummering>
       </Accordion>
+      {vedleggErrorFjernet && (
+        <Alert variant={'warning'}>
+          <BodyLong spacing>
+            {formatMessage({ id: 'søknad.vedleggErFjernetFraSøknadWarning' })}
+          </BodyLong>
+        </Alert>
+      )}
       <ConfirmationPanel
         label={formatMessage({ id: 'søknad.oppsummering.confirmation.text' })}
         name={'søknadBekreft'}
