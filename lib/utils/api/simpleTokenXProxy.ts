@@ -68,7 +68,7 @@ export const simpleTokenXProxy = async <T>({
     logInfo(`OK ${url}, status ${response.status}, callId ${navCallId}`);
 
     if (response.status === 204) {
-      return {} as T;
+      throw new ErrorMedStatus('No content', response.status, navCallId);
     }
 
     const headers = response.headers.get('content-type');

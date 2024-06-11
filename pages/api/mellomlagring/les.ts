@@ -1,14 +1,13 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { getAccessTokenFromRequest } from 'auth/accessToken';
 import { beskyttetApi } from 'auth/beskyttetApi';
-import { logError, logInfo, tokenXApiProxy } from '@navikt/aap-felles-utils';
-import metrics from 'utils/metrics';
+import { logError, logInfo } from '@navikt/aap-felles-utils';
 import { lesCache } from 'mock/mellomlagringsCache';
 import { isFunctionalTest, isMock } from 'utils/environments';
 import { defaultStepList } from 'pages';
 import { SOKNAD_VERSION, SoknadContextState } from 'context/soknadcontext/soknadContext';
 import { simpleTokenXProxy } from 'lib/utils/api/simpleTokenXProxy';
 import { IncomingMessage } from 'http';
+import { ErrorMedStatus } from 'lib/utils/api/ErrorMedStatus';
 
 const handler = beskyttetApi(async (req: NextApiRequest, res: NextApiResponse) => {
   const result = await hentMellomlagring(req);
@@ -44,6 +43,12 @@ export const hentMellomlagring = async (
     logInfo('Mellomlagret søknad hentet fra aap-innsending', mellomlagretSøknad);
     return mellomlagretSøknad;
   } catch (error: any) {
+    if (error instanceof ErrorMedStatus) {
+      if (error.status === 204) {
+        logInfo('Ingen mellomlagring funnet i aap-innsending');
+        return undefined;
+      }
+    }
     logError('Noe gikk galt i henting av mellomlagring fra aap-innsending', error);
     return undefined;
   }
