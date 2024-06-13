@@ -22,7 +22,7 @@ const Kvittering = ({ person, kontaktinformasjon }: Props) => {
     if (isFunctionalTest()) {
       return process.env.NEXT_PUBLIC_MINE_AAP_URL;
     }
-    return 'https://aap-mine-aap.intern.dev.nav.no/aap/mine-aap';
+    return 'https://aap-mine-aap.ansatt.dev.nav.no/aap/mine-aap';
   };
 
   const dittNavUrl = clientSideIsProd()
