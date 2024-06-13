@@ -1,4 +1,5 @@
 ingresses:
-- "https://aap-soknad.intern.dev.nav.no/aap/soknad"
+  - "https://aap-soknad.intern.dev.nav.no/aap/soknad"
+  - "https://aap-soknad.ansatt.dev.nav.no/aap/soknad"
 externals:
   - "dekoratoren.dev.nav.no"
