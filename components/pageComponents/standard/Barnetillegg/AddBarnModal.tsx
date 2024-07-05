@@ -22,6 +22,7 @@ import { IntlFormatters, useIntl } from 'react-intl';
 import { mapValidationErrorToSøknadValidationError } from 'lib/utils/validationUtils';
 import { useFormErrors } from 'hooks/FormErrorHook';
 import { v4 as uuid4 } from 'uuid';
+import { erKelvinSoknad } from 'utils/environments';
 
 interface Props {
   søknad?: Soknad;
@@ -43,6 +44,7 @@ export interface CreateOrUpdateManuelleBarn {
   navn?: Navn;
   fødseldato?: Date;
   relasjon?: Relasjon;
+  fnr?: string;
 }
 
 const ALDER_BARN_ÅR = 18;
@@ -82,6 +84,7 @@ export const getAddBarnSchema = (formatMessage: IntlFormatters['formatMessage'])
           id: 'søknad.barnetillegg.leggTilBarn.modal.fødselsdato.validation.typeError',
         }),
       ),
+    fnr: yup.string().nullable(),
     relasjon: yup
       .string()
       .required(
@@ -147,9 +150,17 @@ export const AddBarnModal = ({
                 });
 
                 if (result?.internId !== undefined) {
-                  updateManuelleBarn({ ...result, internId: result.internId });
+                  updateManuelleBarn({
+                    ...result,
+                    internId: result.internId,
+                    fnr: result.fnr ?? undefined,
+                  });
                 } else {
-                  appendManuelleBarn({ ...result, internId: uuid4() });
+                  appendManuelleBarn({
+                    ...result,
+                    internId: uuid4(),
+                    fnr: result.fnr ?? undefined,
+                  });
                 }
                 clearErrors();
                 onCloseClick();
@@ -201,6 +212,19 @@ export const AddBarnModal = ({
                 setBarn({ ...barn, fødseldato: parseFødselsdato(event) });
               }}
             />
+
+            {erKelvinSoknad() && (
+              <TextField
+                label="FNR"
+                name={'fnr'}
+                id="fnr"
+                value={barn?.fnr}
+                onChange={(event) => {
+                  clearErrors();
+                  setBarn({ ...barn, fnr: event.target.value });
+                }}
+              />
+            )}
 
             <RadioGroup
               legend={formatMessage({ id: 'søknad.barnetillegg.leggTilBarn.modal.relasjon.label' })}

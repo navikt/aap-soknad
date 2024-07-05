@@ -78,6 +78,7 @@ export type ManuelleBarn = {
   fødseldato: Date;
   relasjon: Relasjon;
   vedlegg?: Vedlegg[];
+  fnr?: string;
 };
 
 export type Ferie = {
