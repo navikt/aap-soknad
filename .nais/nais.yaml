@@ -55,7 +55,6 @@ spec:
   accessPolicy:
     outbound:
       rules:
-        - application: soknad-api
         - application: innsending
         - application: oppslag
         - application: nav-dekoratoren
