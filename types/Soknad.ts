@@ -105,7 +105,7 @@ interface Ident {
   identifikator?: string;
 }
 
-interface OppgitteBarn {
+export interface OppgitteBarn {
   identer?: Ident[];
 }
 

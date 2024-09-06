@@ -96,11 +96,17 @@ const handler = beskyttetApi(async (req: NextApiRequest, res: NextApiResponse) =
           ...søknad,
           version: SOKNAD_VERSION,
           etterspurtDokumentasjon,
-          oppgitteBarn: {
-            identer: søknad.manuelleBarn?.map((barn) => {
-              return { identifikator: barn.fnr };
+          ...(søknad.manuelleBarn &&
+            søknad.manuelleBarn.length > 0 &&
+            søknad.manuelleBarn.some((barn) => barn.fnr) && {
+              oppgitteBarn: {
+                identer: søknad.manuelleBarn
+                  .filter((barn) => barn.fnr)
+                  .map((barn) => ({
+                    identifikator: barn.fnr,
+                  })),
+              },
             }),
-          },
         },
         kvittering: søknadPdf,
         filer,
