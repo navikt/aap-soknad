@@ -7,7 +7,7 @@ import { isFunctionalTest, isMock } from 'utils/environments';
 import { createIntl } from 'react-intl';
 import { flattenMessages, messages } from 'utils/message';
 import links from 'translations/links.json';
-import { OppgitteBarn, Soknad } from 'types/Soknad';
+import { Soknad } from 'types/Soknad';
 import { mapSøknadToPdf } from 'utils/api';
 import { getAndreUtbetalingerSchema } from 'components/pageComponents/standard/AndreUtbetalinger/AndreUtbetalinger';
 import { getBehandlerSchema } from 'components/pageComponents/standard/Behandlere/EndreEllerLeggTilBehandlerModal';
