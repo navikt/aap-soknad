@@ -7,7 +7,7 @@ import { isFunctionalTest, isMock } from 'utils/environments';
 import { createIntl } from 'react-intl';
 import { flattenMessages, messages } from 'utils/message';
 import links from 'translations/links.json';
-import { Soknad } from 'types/Soknad';
+import { OppgitteBarn, Soknad } from 'types/Soknad';
 import { mapSøknadToPdf } from 'utils/api';
 import { getAndreUtbetalingerSchema } from 'components/pageComponents/standard/AndreUtbetalinger/AndreUtbetalinger';
 import { getBehandlerSchema } from 'components/pageComponents/standard/Behandlere/EndreEllerLeggTilBehandlerModal';
@@ -96,11 +96,17 @@ const handler = beskyttetApi(async (req: NextApiRequest, res: NextApiResponse) =
           ...søknad,
           version: SOKNAD_VERSION,
           etterspurtDokumentasjon,
-          oppgitteBarn: {
-            identer: søknad.manuelleBarn?.map((barn) => {
-              return { identifikator: barn.fnr };
+          ...(søknad.manuelleBarn &&
+            søknad.manuelleBarn.length > 0 &&
+            søknad.manuelleBarn.some((barn) => barn.fnr) && {
+              oppgitteBarn: {
+                identer: søknad.manuelleBarn
+                  .filter((barn) => barn.fnr)
+                  .map((barn) => ({
+                    identifikator: barn.fnr,
+                  })),
+              },
             }),
-          },
         },
         kvittering: søknadPdf,
         filer,
