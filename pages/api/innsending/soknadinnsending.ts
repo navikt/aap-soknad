@@ -1,5 +1,5 @@
 import { beskyttetApi } from 'auth/beskyttetApi';
-import { logError, tokenXApiProxy } from '@navikt/aap-felles-utils';
+import { logError } from '@navikt/aap-felles-utils';
 import { NextApiRequest, NextApiResponse } from 'next';
 import metrics from 'utils/metrics';
 import { ErrorMedStatus } from 'lib/utils/api/ErrorMedStatus';
@@ -86,10 +86,22 @@ const handler = beskyttetApi(async (req: NextApiRequest, res: NextApiResponse) =
   const { formatMessage } = getIntl();
   const søknadPdf = mapSøknadToPdf(søknad, new Date(), formatMessage, []);
 
+  /**
+   * oppgitteBarn brukes i behandlingsflyt
+   */
   try {
     await sendSoknadViaAapInnsending(
       {
-        soknad: { ...søknad, version: SOKNAD_VERSION, etterspurtDokumentasjon },
+        soknad: {
+          ...søknad,
+          version: SOKNAD_VERSION,
+          etterspurtDokumentasjon,
+          oppgitteBarn: {
+            identer: søknad.manuelleBarn?.map((barn) => {
+              return { identifikator: barn.fnr };
+            }),
+          },
+        },
         kvittering: søknadPdf,
         filer,
       },
