@@ -101,6 +101,14 @@ export interface SoknadVedlegg {
   ANNET?: Vedlegg[];
 }
 
+interface Ident {
+  identifikator?: string;
+}
+
+interface OppgitteBarn {
+  identer?: Ident[];
+}
+
 export interface Soknad {
   sykepenger?: JaEllerNei;
   yrkesskade?: JaEllerNei;
@@ -115,6 +123,7 @@ export interface Soknad {
   andreUtbetalinger?: AndreUtbetalinger;
   barn?: Barn[];
   manuelleBarn?: ManuelleBarn[];
+  oppgitteBarn?: OppgitteBarn;
   tilleggsopplysninger?: string;
   ferie?: Ferie;
   vedlegg?: SoknadVedlegg;
