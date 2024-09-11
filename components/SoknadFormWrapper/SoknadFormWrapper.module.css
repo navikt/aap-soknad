@@ -61,8 +61,14 @@
   align-self: center;
 }
 
-.banner {
+.bannergrønt {
   padding: 0.75rem;
   border-radius: 10px;
   background-color: var(--a-data-surface-5-subtle);
+}
+
+.bannergult {
+  padding: 0.75rem;
+  border-radius: 10px;
+  background-color: var(--a-data-surface-3-subtle);
 }
