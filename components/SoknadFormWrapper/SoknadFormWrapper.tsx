@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import { Button, Detail } from '@navikt/ds-react';
+import { Button, Detail, Heading } from '@navikt/ds-react';
 import * as classes from './SoknadFormWrapper.module.css';
 import { useAppStateContext } from 'context/appStateContext';
 import { FormErrorSummary, SøknadValidationError } from 'components/schema/FormErrorSummary';
 import { useIntl } from 'react-intl';
 import LagreModal from './LagreModal';
 import SlettModal from './SlettModal';
+import { useStepWizard } from 'hooks/StepWizardHook';
 
 interface Props {
   children: React.ReactNode;
@@ -32,6 +33,14 @@ const SøknadFormWrapper = (props: Props) => {
   const [visLagreModal, setVisLagreModal] = useState<boolean>(false);
   const [visAvbrytModal, setVisAvbrytModal] = useState<boolean>(false);
 
+  const { currentStep } = useStepWizard();
+
+  const stegSomBrukesIKelvin: string[] = ['BARNETILLEGG', 'YRKESSKADE', 'STUDENT'];
+  const isDev =
+    window.location.href.includes('intern.dev') || window.location.href.includes('ansatt.dev');
+  const skalViseBannerForOmStegBrukesIKelvin =
+    isDev && stegSomBrukesIKelvin.includes(currentStep.name);
+
   return (
     <>
       <form
@@ -41,6 +50,11 @@ const SøknadFormWrapper = (props: Props) => {
         }}
         className={`${classes?.formContent} ${className}`}
       >
+        {skalViseBannerForOmStegBrukesIKelvin && (
+          <div className={classes.banner}>
+            <Heading size={'small'}>Dette steget er koblet til Kelvin</Heading>
+          </div>
+        )}
         {errors && <FormErrorSummary errors={errors} data-testid={'error-summary'} />}
         {children}
         <div className={classes?.fourButtonWrapper}>

@@ -60,3 +60,9 @@
   height: 50px;
   align-self: center;
 }
+
+.banner {
+  padding: 0.75rem;
+  border-radius: 10px;
+  background-color: var(--a-data-surface-5-subtle);
+}
