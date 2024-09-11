@@ -38,8 +38,7 @@ const SøknadFormWrapper = (props: Props) => {
   const stegSomBrukesIKelvin: string[] = ['BARNETILLEGG', 'YRKESSKADE', 'STUDENT'];
   const isDev =
     window.location.href.includes('intern.dev') || window.location.href.includes('ansatt.dev');
-  const skalViseBannerForOmStegBrukesIKelvin =
-    isDev && stegSomBrukesIKelvin.includes(currentStep.name);
+  const stegBrukesIKelvin = isDev && stegSomBrukesIKelvin.includes(currentStep.name);
 
   return (
     <>
@@ -50,10 +49,18 @@ const SøknadFormWrapper = (props: Props) => {
         }}
         className={`${classes?.formContent} ${className}`}
       >
-        {skalViseBannerForOmStegBrukesIKelvin && (
-          <div className={classes.banner}>
-            <Heading size={'small'}>Dette steget er koblet til Kelvin</Heading>
-          </div>
+        {isDev && (
+          <>
+            {stegBrukesIKelvin ? (
+              <div className={classes.bannergrønt}>
+                <Heading size={'small'}>Dette steget er koblet til Kelvin</Heading>
+              </div>
+            ) : (
+              <div className={classes.bannergult}>
+                <Heading size={'small'}>Dette steget er ikke koblet til Kelvin</Heading>
+              </div>
+            )}
+          </>
         )}
         {errors && <FormErrorSummary errors={errors} data-testid={'error-summary'} />}
         {children}
