@@ -6,7 +6,6 @@ import { FormErrorSummary, SøknadValidationError } from 'components/schema/Form
 import { useIntl } from 'react-intl';
 import LagreModal from './LagreModal';
 import SlettModal from './SlettModal';
-import { isDev, isMock } from 'utils/environments';
 import { useStepWizard } from 'hooks/StepWizardHook';
 
 interface Props {
@@ -37,8 +36,10 @@ const SøknadFormWrapper = (props: Props) => {
   const { currentStep } = useStepWizard();
 
   const stegSomBrukesIKelvin: string[] = ['BARNETILLEGG', 'YRKESSKADE', 'STUDENT'];
+  const isDev =
+    window.location.href.includes('intern.dev') || window.location.href.includes('ansatt.dev');
   const skalViseBannerForOmStegBrukesIKelvin =
-    (isMock() || isDev()) && stegSomBrukesIKelvin.includes(currentStep.name);
+    isDev && stegSomBrukesIKelvin.includes(currentStep.name);
 
   return (
     <>
