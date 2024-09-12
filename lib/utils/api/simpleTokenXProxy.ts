@@ -23,7 +23,7 @@ export const getOnBefalfOfToken = async (
 
   const onBehalfOf = await requestOboToken(token, audience);
   if (!onBehalfOf.ok) {
-    logError(`Henting av oboToken for ${url} feilet`);
+    logError(`Henting av oboToken for ${url} feilet`, onBehalfOf.error);
     throw new Error('Request oboToken for simpleTokenXProxy failed');
   }
 
