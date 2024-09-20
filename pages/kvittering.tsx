@@ -1,5 +1,4 @@
 import PageHeader from 'components/PageHeader';
-import React, { useEffect, useState } from 'react';
 import Kvittering from 'components/pageComponents/standard/Kvittering/Kvittering';
 import * as classes from 'components/pageComponents/standard/standard.module.css';
 import { beskyttetSide } from 'auth/beskyttetSide';
@@ -10,15 +9,14 @@ import { FormattedMessage } from 'react-intl';
 import { SoknadContextProvider } from 'context/soknadcontext/soknadContext';
 import { getKrr, KrrKontaktInfo } from 'pages/api/oppslag/krr';
 import { getPerson, Person } from 'pages/api/oppslagapi/person';
+import { logError } from '@navikt/aap-felles-utils';
 
 interface PageProps {
   person: Person;
-  kontaktinformasjon: KrrKontaktInfo;
+  kontaktinformasjon?: KrrKontaktInfo;
 }
 
 const KvitteringPage = ({ person, kontaktinformasjon }: PageProps) => {
-  const [soker, setSoker] = useState({});
-
   return (
     <SoknadContextProvider>
       <PageHeader align="center" className={classes?.pageHeader}>
@@ -36,7 +34,12 @@ export const getServerSideProps = beskyttetSide(
     });
     const bearerToken = getAccessToken(ctx);
     const person = await getPerson(ctx.req);
-    const kontaktinformasjon = await getKrr(bearerToken);
+    let kontaktinformasjon: KrrKontaktInfo | null = null;
+    try {
+      kontaktinformasjon = await getKrr(bearerToken);
+    } catch (e) {
+      logError(`Noe gikk galt i kallet mot oppslag/krr`, e);
+    }
 
     stopTimer();
     return {
