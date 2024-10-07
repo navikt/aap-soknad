@@ -81,9 +81,6 @@ export const IntroduksjonTekst = ({ navn }: { navn?: string }) => {
             <li>
               {formatMessage({ id: 'søknad.veiledning.accordionInformasjon.bulletPointDeler' })}
             </li>
-            <li>
-              {formatMessage({ id: 'søknad.veiledning.accordionInformasjon.bulletPointForbedre' })}
-            </li>
           </ul>
 
           <Link href={formatMessage({ id: 'applinks.personOpplysninger' })} target={'_blank'}>
