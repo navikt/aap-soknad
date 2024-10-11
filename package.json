@@ -6,7 +6,7 @@
     "@amplitude/analytics-browser": "^2.9.3",
     "@grafana/faro-web-sdk": "^1.8.0",
     "@navikt/aap-felles-css": "^1.0.2",
-    "@navikt/aap-felles-react": "^1.0.2",
+    "@navikt/aap-felles-react": "^1.9.1",
     "@navikt/aap-felles-utils": "^1.0.2",
     "@navikt/aap-felles-utils-client": "^1.0.2",
     "@navikt/ds-css": "^6.13.0",
