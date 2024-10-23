@@ -1,11 +1,11 @@
 name: Build and deploy mocket versjon av aap-soknad
 on:
   workflow_dispatch:
-  push:
-    branches:
-      - main
-    paths-ignore:
-      - '**.md'
+#  push:
+#    branches:
+#      - main
+#    paths-ignore:
+#      - '**.md'
 env:
   IMAGE_SUFFIX: dev-gcp-mock
 jobs:
