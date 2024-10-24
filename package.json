@@ -61,7 +61,6 @@
     "jest-environment-jsdom": "^29.7.0",
     "json-diff": "^1.0.6",
     "lint-staged": "^15.2.7",
-    "patch-package": "^8.0.0",
     "prettier": "^3.3.2",
     "process": "^0.11.10",
     "ts-jest": "^29.1.5"
@@ -80,7 +79,6 @@
     "lint": "next lint",
     "prepare": "husky install",
     "intl:diff": "json-diff -k ./translations/nb.json ./translations/nn.json",
-    "postinstall": "patch-package"
   },
   "lint-staged": {
     "*.{js,ts,tsx}": "eslint --cache --fix",
