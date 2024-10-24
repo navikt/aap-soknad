@@ -78,7 +78,7 @@
     "start": "next start",
     "lint": "next lint",
     "prepare": "husky install",
-    "intl:diff": "json-diff -k ./translations/nb.json ./translations/nn.json",
+    "intl:diff": "json-diff -k ./translations/nb.json ./translations/nn.json"
   },
   "lint-staged": {
     "*.{js,ts,tsx}": "eslint --cache --fix",
