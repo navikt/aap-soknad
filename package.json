@@ -72,13 +72,13 @@
   "scripts": {
     "build:mock": "parcel build src/index.html",
     "lint:jsts": "npx eslint .",
+    "test": "jest",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
     "prepare": "husky install",
-    "intl:diff": "json-diff -k ./translations/nb.json ./translations/nn.json",
-    "test": "echo 'tests are green'"
+    "intl:diff": "json-diff -k ./translations/nb.json ./translations/nn.json"
   },
   "lint-staged": {
     "*.{js,ts,tsx}": "eslint --cache --fix",
