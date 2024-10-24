@@ -45,7 +45,7 @@ jobs:
       imageSuffix: -dev-gcp
       vars: .nais/dev.yaml
   deployProd:
-    needs: buildProd
+    needs: [buildProd, deployDev]
     uses: navikt/aap-workflows/.github/workflows/deploy.yml@main
     permissions:
       contents: read
