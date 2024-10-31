@@ -1,0 +1,63 @@
+version: 2
+registries:
+  npm-github:
+    type: npm-registry
+    url: https://npm.pkg.github.com
+    token: ${{ secrets.READER_TOKEN }}
+updates:
+  - package-ecosystem: 'docker'
+    directory: "/"
+    schedule:
+      interval: weekly
+  - package-ecosystem: 'github-actions'
+    directory: '/'
+    schedule:
+      interval: monthly
+  - package-ecosystem: npm
+    directory: "/"
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 10
+    registries: '*'
+    ignore:
+      - dependency-name: '@navikt/eslint-config-aap'
+      - dependency-name: 'prettier'
+      - dependency-name: '@typescript-eslint*'
+      - dependency-name: 'eslint-*'
+      - dependency-name: 'eslint'
+        versions: [ '9.x' ]
+    groups:
+      aksel-dependencies:
+        patterns:
+          - '@navikt/aksel*'
+          - '@navikt/ds*'
+      react-dependencies:
+        patterns:
+          - 'react'
+          - 'react-dom'
+          - '@types/react'
+          - '@types/react-dom'
+      team-deps:
+        patterns:
+          - '@navikt/aap-felles*'
+      testing:
+        patterns:
+          - 'vitest'
+          - 'vitest-fetch-mock'
+          - '@vitest/coverage-v8'
+          - '@vitejs/plugin-react'
+          - '@testing-library/react'
+          - '@testing-library/user-event'
+          - '@testing-library/dom'
+          - '@testing-library/jest-dom'
+          - 'jsdom'
+      otel:
+        patterns:
+          - '@opentelemetry/api'
+          - '@opentelemetry/api-logs'
+          - '@opentelemetry/instrumentation'
+          - '@opentelemetry/resources'
+          - '@opentelemetry/sdk-logs'
+          - '@opentelemetry/sdk-metrics'
+          - '@opentelemetry/sdk-trace-base'
+          - '@vercel/otel'
