@@ -1,0 +1,18 @@
+name: Build pull request
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths-ignore:
+      - '**.md'
+
+jobs:
+  buildDev:
+    uses: navikt/aap-workflows/.github/workflows/frontend-next-only-build.yml@main
+    permissions:
+      contents: read
+      id-token: write
+      packages: write
+    secrets: inherit
+    with:
+      cluster: dev-gcp

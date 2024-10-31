@@ -1,18 +1,14 @@
-FROM node:20-alpine
+FROM gcr.io/distroless/nodejs20-debian12@sha256:f912a7599e5338df6527a669def29bddc9469fdac9ab22c4cc9282c1b64c868b
 
-ENV NODE_ENV production
-
-RUN addgroup --system --gid 1069 nodejs
-RUN adduser --system --uid 1069 nextjs
 
 WORKDIR /app
-COPY --chown=nextjs:nodejs .next/standalone ./
-COPY --chown=nextjs:nodejs .next/static ./.next/static
+COPY .next/standalone ./
+COPY .next/static ./.next/static
 
-USER nextjs
+ENV NODE_ENV production
 
 EXPOSE 3000
 
 ENV PORT 3000
 
-CMD ["node", "server.js"]
+CMD ["server.js"]
