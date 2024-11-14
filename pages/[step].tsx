@@ -5,7 +5,7 @@ import { completeAndGoToNextStep, goToPreviousStep, setStepList } from 'context/
 import { useStepWizard } from 'hooks/StepWizardHook';
 import { useDebounceLagreSoknad } from 'hooks/useDebounceLagreSoknad';
 import { StepWizard } from 'components/StepWizard';
-import { Soknad, SoknadVedlegg } from 'types/Soknad';
+import { Soknad } from 'types/Soknad';
 import { fetchPOST } from 'api/fetch';
 import { StepNames } from './index';
 import StartDato from 'components/pageComponents/standard/StartDato/StartDato';
@@ -25,7 +25,7 @@ import metrics from 'utils/metrics';
 import { scrollRefIntoView } from 'utils/dom';
 import { Steg0 } from 'components/pageComponents/standard/Steg0/Steg0';
 import * as classes from './step.module.css';
-import { FormattedMessage, useIntl } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import { SoknadContextProvider, SoknadContextState } from 'context/soknadcontext/soknadContext';
 import { useSoknad } from 'hooks/SoknadHook';
 import {
@@ -38,13 +38,12 @@ import { getKrr, KrrKontaktInfo } from 'pages/api/oppslag/krr';
 import { Barn, getBarn } from 'pages/api/oppslag/barn';
 import { hentMellomlagring } from 'pages/api/mellomlagring/les';
 import { RequiredVedlegg } from 'types/SoknadContext';
-import { logError, logInfo, logWarning } from '@navikt/aap-felles-utils';
+import { logError, logInfo } from '@navikt/aap-felles-utils';
 import { parse } from 'date-fns';
 import { Fastlege, getFastlege } from 'pages/api/oppslag/fastlege';
 import { migrerMellomlagretBehandler } from 'lib/utils/migrerMellomlagretBehandler';
 import { getPerson, Person } from 'pages/api/oppslagapi/person';
 import { SoknadUtenVedleggModal } from 'components/pageComponents/standard/Oppsummering/SoknadUtenVedleggModal';
-import { isDev, isMock } from 'utils/environments';
 
 interface PageProps {
   mellomlagretSøknad: SoknadContextState;
@@ -280,7 +279,7 @@ export const getServerSideProps = beskyttetSide(
     }
 
     if (!mellomlagretSøknad?.lagretStepList) {
-      logWarning('lagretStepList mangler i mellomlagret søknad, redirecter til startsiden');
+      logInfo('lagretStepList mangler i mellomlagret søknad, redirecter til startsiden');
       return {
         redirect: {
           destination: '/',
