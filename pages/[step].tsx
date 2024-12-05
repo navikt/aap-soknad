@@ -44,7 +44,6 @@ import { Fastlege, getFastlege } from 'pages/api/oppslag/fastlege';
 import { migrerMellomlagretBehandler } from 'lib/utils/migrerMellomlagretBehandler';
 import { getPerson, Person } from 'pages/api/oppslagapi/person';
 import { SoknadUtenVedleggModal } from 'components/pageComponents/standard/Oppsummering/SoknadUtenVedleggModal';
-import { Alert, BodyShort, Link } from '@navikt/ds-react';
 
 interface PageProps {
   mellomlagretSøknad: SoknadContextState;
@@ -156,15 +155,6 @@ const Steps = ({ person, mellomlagretSøknad, kontaktinformasjon, barn, fastlege
   return (
     <>
       <header>
-        <Alert variant="warning">
-          <BodyShort>
-            Vi opplever for tiden ustabilitet ved innsending av søknader og vedlegg. Du kan prøve
-            igjen senere, eller{' '}
-            <Link href="https://www.nav.no/fyllut/nav111305?sub=paper">
-              sende inn søknad på papir
-            </Link>
-          </BodyShort>
-        </Alert>
         <PageHeader align="center">
           <FormattedMessage
             id={'søknad.pagetitle'}
