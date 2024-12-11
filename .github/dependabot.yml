@@ -16,10 +16,12 @@ updates:
   - package-ecosystem: npm
     directory: "/"
     schedule:
-      interval: weekly
+      interval: daily
     open-pull-requests-limit: 10
     registries: '*'
     ignore:
+      - dependency-name: '*'
+        update-types: [ 'version-update:semver-major' ]
       - dependency-name: '@navikt/eslint-config-aap'
       - dependency-name: 'prettier'
       - dependency-name: '@typescript-eslint*'
@@ -27,6 +29,11 @@ updates:
       - dependency-name: 'eslint'
         versions: [ '9.x' ]
     groups:
+      aap-backend-typescript-types:
+        patterns:
+          - '@navikt/aap-behandlingsflyt-typescript-types'
+          - '@navikt/aap-postmottak-backend-typescript-types'
+          - '@navikt/aap-oppgave-typescript-types'
       aksel-dependencies:
         patterns:
           - '@navikt/aksel*'
