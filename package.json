@@ -21,7 +21,7 @@
     "date-fns": "^3.6.0",
     "i18n-iso-countries": "^7.12.0",
     "is-european": "1.0.7",
-    "next": "^14.2.16",
+    "next": "^15.1.0",
     "node-cache": "^5.1.2",
     "prop-types": "^15.7.2",
     "react": "^18.3.1",
