@@ -13,7 +13,7 @@
     "@navikt/ds-icons": "^3.4.3",
     "@navikt/ds-react": "^6.13.0",
     "@navikt/nav-dekoratoren-moduler": "^2.1.6",
-    "@navikt/next-api-proxy": "3.4.2",
+    "@navikt/next-api-proxy": "3.4.10",
     "@navikt/oasis": "^3.3.0",
     "@ungap/structured-clone": "^1.2.0",
     "@vercel/otel": "1.8.2",

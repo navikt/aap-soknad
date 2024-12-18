@@ -1226,12 +1226,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@navikt/next-api-proxy@npm:3.4.2":
-  version: 3.4.2
-  resolution: "@navikt/next-api-proxy@npm:3.4.2::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Fnext-api-proxy%2F3.4.2%2F84b1e7b75f3f05f1e082738c1b4e8d3fe14909e5"
+"@navikt/next-api-proxy@npm:3.4.10":
+  version: 3.4.10
+  resolution: "@navikt/next-api-proxy@npm:3.4.10::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Fnext-api-proxy%2F3.4.10%2F96802315c3032ede89d010e8746e884e3f74f873"
   peerDependencies:
     next: 13 || 14
-  checksum: 10c0/c171da83d2d514ede011dc69233841e5ea7a2253fdde67089adc2fbaf5ee7154c903fe9803dc813f177966ba11d4328aae40b3c5f7bf2bad8d69e971e244a380
+  checksum: 10c0/b44cc18c21b5c1e0cd3ef3814afa930a4b4313a4dd7d6c7779d6e39a0d4a532e3dd71ca547d57f481b7894076e2d2b479730d7ac4c6459b0995b4a2846ebd336
   languageName: node
   linkType: hard
 
@@ -2152,7 +2152,7 @@ __metadata:
     "@navikt/ds-icons": "npm:^3.4.3"
     "@navikt/ds-react": "npm:^6.13.0"
     "@navikt/nav-dekoratoren-moduler": "npm:^2.1.6"
-    "@navikt/next-api-proxy": "npm:3.4.2"
+    "@navikt/next-api-proxy": "npm:3.4.10"
     "@navikt/oasis": "npm:^3.3.0"
     "@playwright/test": "npm:^1.45.0"
     "@testing-library/dom": "npm:^10.2.0"
