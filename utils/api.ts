@@ -239,14 +239,14 @@ export const mapSøknadToPdf = (
   };
   const getBarn = (søknad?: Soknad) => {
     const registrerteBarn = !søknad?.barn?.length
-      ? createFritekst('Fant ingen registrerte barn')
+      ? createFritekst('Fant ingen registrerte barn under 18 år')
       : søknad?.barn?.map((barn) =>
           createFeltgruppe([
             ...createField('Navn', barn?.navn),
             ...createField('Fødselsdato', formatDate(barn?.fødselsdato) || ''),
           ]),
         ) || [];
-    return createTema('Barn fra folkeregisteret', [...registrerteBarn]);
+    return createTema('Barn under 18 år fra folkeregisteret', [...registrerteBarn]);
   };
   const getAndreBarn = (søknad?: Soknad) => {
     const andreBarn = !søknad?.manuelleBarn?.length
