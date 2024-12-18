@@ -2122,18 +2122,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@vercel/otel@npm:1.8.2":
-  version: 1.8.2
-  resolution: "@vercel/otel@npm:1.8.2"
+"@vercel/otel@npm:1.10.0":
+  version: 1.10.0
+  resolution: "@vercel/otel@npm:1.10.0"
   peerDependencies:
     "@opentelemetry/api": ^1.7.0
-    "@opentelemetry/api-logs": ^0.46.0
-    "@opentelemetry/instrumentation": ^0.46.0
+    "@opentelemetry/api-logs": "*"
+    "@opentelemetry/instrumentation": "*"
     "@opentelemetry/resources": ^1.19.0
-    "@opentelemetry/sdk-logs": ^0.46.0
+    "@opentelemetry/sdk-logs": "*"
     "@opentelemetry/sdk-metrics": ^1.19.0
     "@opentelemetry/sdk-trace-base": ^1.19.0
-  checksum: 10c0/702e37f4ef6b15517fc908d82ae98a12b8f2c74a66dff188532fe28d44c7edfac12418baf934b9fba891d70f7fcf4e4602ca99fd65211902a9ea17732c9e52d4
+  checksum: 10c0/1e5e058176c9dc7d8468942254e9b23d69676bc93085e3e3ebab5e01ae6528726cb52ee13e309f464c5ebc2448fb3fcf35ac39617db3a5484d2bf8755cc3feba
   languageName: node
   linkType: hard
 
@@ -2170,7 +2170,7 @@ __metadata:
     "@typescript-eslint/eslint-plugin": "npm:^7.15.0"
     "@typescript-eslint/parser": "npm:^7.15.0"
     "@ungap/structured-clone": "npm:^1.2.0"
-    "@vercel/otel": "npm:1.8.2"
+    "@vercel/otel": "npm:1.10.0"
     cross-env: "npm:^7.0.3"
     cross-fetch: "npm:^4.0.0"
     date-fns: "npm:^3.6.0"
