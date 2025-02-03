@@ -7,7 +7,6 @@ import { AppProps } from 'next/app';
 import links from 'translations/links.json';
 import { messages, flattenMessages } from 'utils/message';
 import { StepWizardProvider } from 'context/stepWizardContext';
-import { initAmplitude } from 'utils/amplitude';
 import { AppStateContextProvider } from 'context/appStateContext';
 import Head from 'next/head';
 import { SUPPORTED_LOCALE } from 'lib/translations/locale';
@@ -32,10 +31,6 @@ const CustomApp = ({ Component, pageProps }: AppProps) => {
     () => ({ ...messages[locale as DecoratorLocale], ...flattenMessages({ applinks: links }) }),
     [locale],
   );
-
-  useEffect(() => {
-    initAmplitude();
-  }, []);
 
   useEffect(() => {
     if (process.env.NEXT_PUBLIC_FARO_URL) {

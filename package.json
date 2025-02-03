@@ -3,7 +3,6 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@amplitude/analytics-browser": "^2.9.3",
     "@grafana/faro-web-sdk": "^1.8.0",
     "@navikt/aap-felles-css": "^1.0.2",
     "@navikt/aap-felles-react": "^1.9.1",
@@ -40,7 +39,6 @@
     "@testing-library/jest-dom": "^6.4.6",
     "@testing-library/react": "^16.0.0",
     "@testing-library/user-event": "^14.5.2",
-    "@types/amplitude-js": "^8.16.5",
     "@types/jest": "^29.5.12",
     "@types/jest-axe": "^3.5.9",
     "@types/node": "^20.14.9",

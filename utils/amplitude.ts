@@ -1,17 +1,9 @@
-import { init, track } from '@amplitude/analytics-browser';
+import { logAmplitudeEvent as dekoratorenLogEvent } from '@navikt/nav-dekoratoren-moduler';
 
-export const initAmplitude = () => {
-  init('default', undefined, {
-    useBatch: true,
-    serverUrl: 'https://amplitude.nav.no/collect-auto',
-    ingestionMetadata: {
-      sourceName: window.location.toString(),
-    },
+export const logAmplitudeEvent = (eventName: string, eventData?: Record<string, any>) => {
+  dekoratorenLogEvent({ origin: 'aap-soknad', eventName, eventData }).catch((e) => {
+    console.log('Amplitude error', e);
   });
-};
-
-export const logAmplitudeEvent = (event: string, properties?: Record<string, any>) => {
-  track(event, properties);
 };
 
 export function logSkjemaStartetEvent() {
