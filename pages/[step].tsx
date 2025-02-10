@@ -113,11 +113,18 @@ const Steps = ({ person, mellomlagretSøknad, kontaktinformasjon, barn, fastlege
         const erIkkeKomplett = !!søknadState?.requiredVedlegg?.find(
           (vedlegg) => !vedlegg.completed,
         );
+        const erStudentKommeTilbake = søknadState?.søknad?.student?.kommeTilbake;
         const yrkesskade = søknadState?.søknad?.yrkesskade;
         const brukerFritekstfelt =
           søknadState?.søknad?.tilleggsopplysninger !== undefined &&
           søknadState?.søknad?.tilleggsopplysninger.length > 0;
-        logSkjemaFullførtEvent({ harVedlegg, erIkkeKomplett, brukerFritekstfelt, yrkesskade });
+        logSkjemaFullførtEvent({
+          harVedlegg,
+          erIkkeKomplett,
+          brukerFritekstfelt,
+          yrkesskade,
+          erStudentKommeTilbake,
+        });
 
         router.push('kvittering');
         return true;
