@@ -34,6 +34,7 @@ updates:
           - '@navikt/aap-behandlingsflyt-typescript-types'
           - '@navikt/aap-postmottak-backend-typescript-types'
           - '@navikt/aap-oppgave-typescript-types'
+          - '@navikt/aap-statistikk-typescript-types'
       aksel-dependencies:
         patterns:
           - '@navikt/aksel*'
