@@ -23,6 +23,7 @@ import { subYears } from 'date-fns';
 import { IntlFormatters, useIntl } from 'react-intl';
 import { SøknadValidationError } from 'components/schema/FormErrorSummary';
 import { validate } from 'lib/utils/validationUtils';
+import { getStartOfMonthInLocalTime, getEndOfMonthInLocalTime } from 'utils/date';
 
 const { eeaMember } = require('is-european');
 
@@ -206,7 +207,11 @@ const UtenlandsPeriodeVelger = ({
                   dropdownCaption={true}
                   onChange={(dato) => {
                     clearErrors();
-                    setUtenlandsPeriode({ ...utenlandsPeriode, fraDato: dato });
+                    setUtenlandsPeriode({
+                      ...utenlandsPeriode,
+                      fraDato: dato,
+                      fraDatoLocalDate: getStartOfMonthInLocalTime(dato),
+                    });
                   }}
                   error={findError('fraDato')}
                 />
@@ -221,7 +226,11 @@ const UtenlandsPeriodeVelger = ({
                   dropdownCaption={true}
                   onChange={(dato) => {
                     clearErrors();
-                    setUtenlandsPeriode({ ...utenlandsPeriode, tilDato: dato });
+                    setUtenlandsPeriode({
+                      ...utenlandsPeriode,
+                      tilDato: dato,
+                      tilDatoLocalDate: getEndOfMonthInLocalTime(dato),
+                    });
                   }}
                   error={findError('tilDato')}
                 />
