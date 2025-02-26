@@ -22,7 +22,9 @@ export type UtenlandsPeriode = {
   id?: string;
   land?: string;
   tilDato?: Date;
+  tilDatoLocalDate?: string;
   fraDato?: Date;
+  fraDatoLocalDate?: string;
   iArbeid?: JaEllerNei;
   utenlandsId?: string;
 };

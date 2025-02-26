@@ -139,8 +139,8 @@ export const mapSøknadToPdf = (
                   ...createField('Land', opphold.land ? opphold.land.split(':')[1] : undefined),
                   ...createField(
                     'Periode',
-                    `Fra ${formatDate(opphold?.fraDato, 'MMMM yyyy')} til ${formatDate(
-                      opphold?.tilDato,
+                    `Fra ${formatDate(opphold?.fraDatoLocalDate ?? opphold?.fraDato, 'MMMM yyyy')} til ${formatDate(
+                      opphold?.tilDatoLocalDate ?? opphold?.tilDato,
                       'MMMM yyyy',
                     )}`,
                   ),
