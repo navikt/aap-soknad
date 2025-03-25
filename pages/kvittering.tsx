@@ -9,7 +9,7 @@ import { FormattedMessage } from 'react-intl';
 import { SoknadContextProvider } from 'context/soknadcontext/soknadContext';
 import { getKrr, KrrKontaktInfo } from 'pages/api/oppslag/krr';
 import { getPerson, Person } from 'pages/api/oppslagapi/person';
-import { logError } from '@navikt/aap-felles-utils';
+import { logWarning } from '@navikt/aap-felles-utils/src/logger/logger';
 
 interface PageProps {
   person: Person;
@@ -38,7 +38,7 @@ export const getServerSideProps = beskyttetSide(
     try {
       kontaktinformasjon = await getKrr(bearerToken);
     } catch (e) {
-      logError(`Noe gikk galt i kallet mot oppslag/krr`, e);
+      logWarning('Noe gikk galt i kallet mot oppslag/krr', e);
     }
 
     stopTimer();

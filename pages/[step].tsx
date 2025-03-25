@@ -38,7 +38,7 @@ import { getKrr, KrrKontaktInfo } from 'pages/api/oppslag/krr';
 import { Barn, getBarn } from 'pages/api/oppslag/barn';
 import { hentMellomlagring } from 'pages/api/mellomlagring/les';
 import { RequiredVedlegg } from 'types/SoknadContext';
-import { logError, logInfo } from '@navikt/aap-felles-utils';
+import { logError, logInfo, logWarning } from '@navikt/aap-felles-utils';
 import { parse } from 'date-fns';
 import { Fastlege, getFastlege } from 'pages/api/oppslag/fastlege';
 import { migrerMellomlagretBehandler } from 'lib/utils/migrerMellomlagretBehandler';
@@ -251,7 +251,7 @@ export const getServerSideProps = beskyttetSide(
     try {
       kontaktinformasjon = await getKrr(bearerToken);
     } catch (e) {
-      logError(`Noe gikk galt i kallet mot oppslag/krr`, e);
+      logWarning('Noe gikk galt i kallet mot oppslag/krr', e);
     }
 
     const fastlege = await hentFastlege(bearerToken);
