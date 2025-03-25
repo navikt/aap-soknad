@@ -9,7 +9,7 @@ import { FormattedMessage } from 'react-intl';
 import { SoknadContextProvider } from 'context/soknadcontext/soknadContext';
 import { getKrr, KrrKontaktInfo } from 'pages/api/oppslag/krr';
 import { getPerson, Person } from 'pages/api/oppslagapi/person';
-import { logWarning } from '@navikt/aap-felles-utils/src/logger/logger';
+import { logWarning } from '@navikt/aap-felles-utils';
 
 interface PageProps {
   person: Person;
