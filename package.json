@@ -4,10 +4,10 @@
   "private": true,
   "dependencies": {
     "@grafana/faro-web-sdk": "^1.8.0",
-    "@navikt/aap-felles-css": "^1.0.2",
-    "@navikt/aap-felles-react": "^1.9.1",
+    "@navikt/aap-felles-css": "^1.9.7",
+    "@navikt/aap-felles-react": "^1.9.7",
     "@navikt/aap-felles-utils": "^1.9.7",
-    "@navikt/aap-felles-utils-client": "^1.0.2",
+    "@navikt/aap-felles-utils-client": "^1.9.7",
     "@navikt/ds-css": "^6.13.0",
     "@navikt/ds-icons": "^3.4.3",
     "@navikt/ds-react": "^6.13.0",
