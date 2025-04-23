@@ -42,7 +42,6 @@ const FormErrorSummary = (props: Props) => {
         heading={formatMessage({ id: 'errorSummary.title' })}
         role={'alert'}
         aria-hidden={!isError}
-        tabIndex={-1}
         className={!isError ? classes?.visuallyHidden : ''}
         {...props}
       >

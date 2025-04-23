@@ -166,7 +166,6 @@ const UtenlandsPeriodeVelger = ({
               heading={formatMessage({ id: 'errorSummary.title' })}
               aria-hidden={!errors?.length}
               className={errors?.length ? '' : classes?.visuallyHidden}
-              tabIndex={0}
             >
               {errors?.length
                 ? errors.map((error) => (
