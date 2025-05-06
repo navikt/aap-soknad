@@ -2317,7 +2317,7 @@ __metadata:
     eslint-plugin-react: "npm:^7.34.3"
     husky: "npm:^9.0.11"
     i18n-iso-countries: "npm:^7.12.0"
-    is-european: "npm:1.0.7"
+    is-european: "npm:1.0.8"
     jest: "npm:^29.7.0"
     jest-axe: "npm:^9.0.0"
     jest-css-modules-transform: "npm:^4.4.2"
@@ -4915,12 +4915,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"is-european@npm:1.0.7":
-  version: 1.0.7
-  resolution: "is-european@npm:1.0.7"
+"is-european@npm:1.0.8":
+  version: 1.0.8
+  resolution: "is-european@npm:1.0.8"
   dependencies:
     iso-3166: "npm:~3.1.0"
-  checksum: 10c0/f8da1cbfe78c1b148dc5c5ab3e7dad2765766ad7fb6f7a461bb9c6514fa3a8cfdf5c7b1680863dd4847a5baea4114fea1165ea61ef6c41c305c3bf5989b8f041
+  checksum: 10c0/0a2449d2081095bda36a897e908a72c2bd6fde1d1efaea9dc46b49e25e62c566222b392d396cd5bcd33e26f42afa7de8e0fedb41b2865e26053c6172e032485e
   languageName: node
   linkType: hard
 
