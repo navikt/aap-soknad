@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@grafana/faro-web-sdk": "^1.8.0",
+    "@grafana/faro-web-sdk": "^1.18.0",
     "@navikt/aap-felles-css": "^1.9.7",
     "@navikt/aap-felles-react": "^1.9.7",
     "@navikt/aap-felles-utils": "^1.9.7",
