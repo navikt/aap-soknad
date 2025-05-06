@@ -33,7 +33,7 @@
     "zod": "^3.24.2"
   },
   "devDependencies": {
-    "@axe-core/playwright": "^4.9.1",
+    "@axe-core/playwright": "^4.10.1",
     "@playwright/test": "^1.45.0",
     "@testing-library/dom": "^10.2.0",
     "@testing-library/jest-dom": "^6.6.3",
