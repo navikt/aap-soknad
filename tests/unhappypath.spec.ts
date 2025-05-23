@@ -58,6 +58,8 @@ test('at alle feilmeldinger skal dukke opp', async ({ page }) => {
     .getByRole('link', { name: 'Du må fylle ut feriens til-dato. Fyll inn slik: dd.mm.åååå.' })
     .click();
   await expect(page).toHaveURL('http://localhost:3000/aap/soknad/1/#ferie.tilDato');
+  // Fjern cookie-banner
+  await page.getByRole('button', { name: 'Ja' }).click();
   await page
     .getByText('Søknad om arbeidsavklarings­penger (AAP)Steg 1 av 9Du må fikse disse feilene fø')
     .click();
