@@ -25,28 +25,28 @@ test('at navigering i søknaden fungerer', async ({ page }) => {
   await expect(page).toHaveURL('http://localhost:3000/aap/soknad/1/');
 
   await expect(
-    await page.getByRole('group', { name: 'Har du sykepenger nå?' }).getByLabel('Ja').isChecked()
+    await page.getByRole('group', { name: 'Har du sykepenger nå?' }).getByLabel('Ja').isChecked(),
   ).toBe(true);
 
   await expect(
     await page
       .getByRole('group', { name: 'Har du planer om å ta ferie før du er ferdig med sykepenger?' })
       .getByLabel('Ja')
-      .isChecked()
+      .isChecked(),
   ).toBe(true);
 
   await expect(
     await page
       .getByRole('group', { name: 'Vet du når du skal ta ferie?' })
       .getByLabel('Ja, jeg vet fra-dato og til-dato')
-      .isChecked()
+      .isChecked(),
   ).toBe(true);
 
   await expect(
-    await page.getByRole('textbox', { name: /fra dato \(dd\.mm\.åååå\)/i }).inputValue()
+    await page.getByRole('textbox', { name: /fra dato \(dd\.mm\.åååå\)/i }).inputValue(),
   ).toEqual(today);
   await expect(
-    await page.getByRole('textbox', { name: /til dato \(dd\.mm\.åååå\)/i }).inputValue()
+    await page.getByRole('textbox', { name: /til dato \(dd\.mm\.åååå\)/i }).inputValue(),
   ).toEqual(tomorrow);
 
   await page.getByRole('button', { name: 'Neste steg' }).click();
@@ -63,27 +63,27 @@ test('at navigering i søknaden fungerer', async ({ page }) => {
   await expect(page).toHaveURL('http://localhost:3000/aap/soknad/1/');
 
   await expect(
-    await page.getByRole('group', { name: 'Har du sykepenger nå?' }).getByLabel('Ja').isChecked()
+    await page.getByRole('group', { name: 'Har du sykepenger nå?' }).getByLabel('Ja').isChecked(),
   ).toBe(true);
 
   await expect(
     await page
       .getByRole('group', { name: 'Har du planer om å ta ferie før du er ferdig med sykepenger?' })
       .getByLabel('Ja')
-      .isChecked()
+      .isChecked(),
   ).toBe(true);
 
   await expect(
     await page
       .getByRole('group', { name: 'Vet du når du skal ta ferie?' })
       .getByLabel('Nei, men jeg vet antall arbeidsdager jeg skal ta ferie')
-      .isChecked()
+      .isChecked(),
   ).toBe(true);
 
   await expect(
     await page
       .getByRole('textbox', { name: 'Skriv inn antall arbeidsdager du skal ta ferie' })
-      .inputValue()
+      .inputValue(),
   ).toEqual('3');
 
   await page.getByRole('button', { name: 'Neste steg' }).click();
@@ -95,6 +95,10 @@ test('at navigering i søknaden fungerer', async ({ page }) => {
     .getByRole('group', { name: 'Har du jobbet utenfor Norge de fem siste årene?' })
     .getByLabel('Ja')
     .check();
+
+  // Fjern cookie-banner
+  await page.getByRole('button', { name: 'Ja' }).click();
+
   await page
     .getByRole('button', { name: 'Legg til Registrer periode med jobb utenfor Norge' })
     .click();
@@ -122,20 +126,20 @@ test('at navigering i søknaden fungerer', async ({ page }) => {
     await page
       .getByRole('group', { name: 'Har du bodd sammenhengende i Norge de fem siste årene?' })
       .getByLabel('Ja')
-      .isChecked()
+      .isChecked(),
   ).toBe(true);
 
   await expect(
     await page
       .getByRole('group', { name: 'Har du jobbet utenfor Norge de fem siste årene?' })
       .getByLabel('Ja')
-      .isChecked()
+      .isChecked(),
   ).toBe(true);
 
   await expect(
     await page.getByRole('button', {
       name: `Albania ${formatDate(lastMonth, 'MMMM yyyy')} - ${formatDate(thisMonth, 'MMMM yyyy')}`,
-    })
+    }),
   ).toBeVisible();
 
   await page
@@ -168,7 +172,7 @@ test('at navigering i søknaden fungerer', async ({ page }) => {
     .fill(formatDate(thisMonth) ?? '');
 
   await expect(
-    await page.getByLabel('ID-nummer/personnummer for det landet du har jobbet i (valgfritt)')
+    await page.getByLabel('ID-nummer/personnummer for det landet du har jobbet i (valgfritt)'),
   ).toBeVisible();
 
   await page.getByRole('button', { name: 'Lagre' }).click();
@@ -182,14 +186,14 @@ test('at navigering i søknaden fungerer', async ({ page }) => {
     await page
       .getByRole('group', { name: 'Har du bodd sammenhengende i Norge de fem siste årene?' })
       .getByLabel('Nei')
-      .isChecked()
+      .isChecked(),
   ).toBe(true);
 
   await expect(
     await page
       .getByRole('group', { name: 'Har du jobbet sammenhengende i Norge de fem siste årene?' })
       .getByLabel('Ja')
-      .isChecked()
+      .isChecked(),
   ).toBe(true);
 
   await expect(
@@ -198,16 +202,16 @@ test('at navigering i søknaden fungerer', async ({ page }) => {
         name: 'Har du i tillegg til jobb i Norge, også jobbet i et annet land de fem siste årene?',
       })
       .getByLabel('Ja')
-      .isChecked()
+      .isChecked(),
   ).toBe(true);
 
   await expect(
     await page.getByRole('button', {
       name: `Bulgaria ${formatDate(lastMonth, 'MMMM yyyy')} - ${formatDate(
         thisMonth,
-        'MMMM yyyy'
+        'MMMM yyyy',
       )}`,
-    })
+    }),
   ).toBeVisible();
 
   await page
@@ -242,22 +246,22 @@ test('at navigering i søknaden fungerer', async ({ page }) => {
     await page
       .getByRole('group', { name: 'Har du bodd sammenhengende i Norge de fem siste årene?' })
       .getByLabel('Nei')
-      .isChecked()
+      .isChecked(),
   ).toBe(true);
 
   await expect(
     await page
       .getByRole('group', { name: 'Har du jobbet sammenhengende i Norge de fem siste årene?' })
       .getByLabel('Nei')
-      .isChecked()
+      .isChecked(),
   ).toBe(true);
 
   await expect(
     await page.getByRole('button', {
       name: `Brasil ${formatDate(lastMonth, 'MMMM yyyy')} - ${formatDate(
         thisMonth,
-        'MMMM yyyy'
+        'MMMM yyyy',
       )} (Jobb)`,
-    })
+    }),
   ).toBeVisible();
 });
