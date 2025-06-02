@@ -11,6 +11,7 @@ const nextConfig = {
   experimental: {
     instrumentationHook: true,
   },
+  serverExternalPackages: ['pino'],
 
   i18n: {
     locales: ['nb', 'nn'],
