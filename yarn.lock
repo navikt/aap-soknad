@@ -2330,7 +2330,7 @@ __metadata:
     typescript: "npm:^5.8.3"
     uuid: "npm:10.0.0"
     yup: "npm:^1.6.1"
-    zod: "npm:^3.25.20"
+    zod: "npm:^3.25.51"
   languageName: unknown
   linkType: soft
 
@@ -8985,9 +8985,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"zod@npm:^3.25.20":
-  version: 3.25.20
-  resolution: "zod@npm:3.25.20"
-  checksum: 10c0/f3b3e8875e1e02ca25bbfd45332aa1010f1b252b60a619c94c15bd6de637f841d344a3975d6950b2fbee68db4160ddb534cb9571c517fac17983871739085278
+"zod@npm:^3.25.51":
+  version: 3.25.51
+  resolution: "zod@npm:3.25.51"
+  checksum: 10c0/6fc708a45b0d44282c18da4c93f4d42336a884a42487031b40bacb7e8c5a2e539b7993d3ccba75f445df78050f05ff4e34110ffe03d2c3fcbe557c7fe7c1350a
   languageName: node
   linkType: hard
