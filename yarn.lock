@@ -1374,17 +1374,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@navikt/oasis@npm:^3.3.0":
-  version: 3.3.0
-  resolution: "@navikt/oasis@npm:3.3.0::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Foasis%2F3.3.0%2F0d6116b68e84598184f94a86087eee68d8f929a1"
-  dependencies:
-    jose: "npm:^5.2.3"
-    openid-client: "npm:^5.6.5"
-    prom-client: "npm:^15.1.0"
-  checksum: 10c0/bf0f5fe2268341d9d2e7a5c4c1e6c8151d17dff4ea5aaf07d076236e47e0a3619075b80863a5612af79301544aab76a9db9c3065ace653afa88e9a1cfd0d30ee
-  languageName: node
-  linkType: hard
-
 "@navikt/oasis@npm:^3.4.0":
   version: 3.4.0
   resolution: "@navikt/oasis@npm:3.4.0::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Foasis%2F3.4.0%2F7a21e6e8c8e6eca00d7e6a5c06f7e8315c0cc71a"
@@ -1393,6 +1382,17 @@ __metadata:
     openid-client: "npm:^5.6.5"
     prom-client: "npm:^15.1.0"
   checksum: 10c0/e334c4b5a52bd602df4b68e54cc69d2755966d2670bc8182e9131a383e4a13da5bc4e227a478d5fe78fc00a910ccdccc9e1c5f98df618678761739f8dc80c5eb
+  languageName: node
+  linkType: hard
+
+"@navikt/oasis@npm:^3.8.0":
+  version: 3.8.0
+  resolution: "@navikt/oasis@npm:3.8.0::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Foasis%2F3.8.0%2Ffc6862d934adfbefa382220614af18160688cd1e"
+  dependencies:
+    jose: "npm:^5.2.3"
+    openid-client: "npm:^5.6.5"
+    prom-client: "npm:^15.1.0"
+  checksum: 10c0/225e8e26f3651a795c75c2de39cec0b4d9231b2adfc60ec9dd6ed28a94c1746dfffc0ca6aed0eaeeee2f4d782702345a1d94f32be7bad8f54488a59d550509ae
   languageName: node
   linkType: hard
 
@@ -2285,7 +2285,7 @@ __metadata:
     "@navikt/ds-react": "npm:^6.17.0"
     "@navikt/nav-dekoratoren-moduler": "npm:^2.1.6"
     "@navikt/next-api-proxy": "npm:3.4.2"
-    "@navikt/oasis": "npm:^3.3.0"
+    "@navikt/oasis": "npm:^3.8.0"
     "@playwright/test": "npm:^1.53.0"
     "@testing-library/dom": "npm:^10.2.0"
     "@testing-library/jest-dom": "npm:^6.6.3"
