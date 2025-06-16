@@ -2304,7 +2304,7 @@ __metadata:
     "@vercel/otel": "npm:1.13.0"
     cross-env: "npm:^7.0.3"
     cross-fetch: "npm:^4.1.0"
-    date-fns: "npm:^3.6.0"
+    date-fns: "npm:^4.1.0"
     eslint: "npm:^8.57.0"
     eslint-plugin-jsx-a11y: "npm:^6.9.0"
     eslint-plugin-react: "npm:^7.34.3"

@@ -17,7 +17,7 @@
     "@ungap/structured-clone": "^1.3.0",
     "@vercel/otel": "1.13.0",
     "cross-fetch": "^4.1.0",
-    "date-fns": "^3.6.0",
+    "date-fns": "^4.1.0",
     "i18n-iso-countries": "^7.14.0",
     "is-european": "1.0.8",
     "next": "^15.3.3",
