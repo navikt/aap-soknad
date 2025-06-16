@@ -166,14 +166,15 @@ const UtenlandsPeriodeVelger = ({
               heading={formatMessage({ id: 'errorSummary.title' })}
               aria-hidden={!errors?.length}
               className={errors?.length ? '' : classes?.visuallyHidden}
-              tabIndex={0}
             >
               {errors?.length
-                ? errors.map((error) => (
-                  <ErrorSummary.Item key={error.path} href={`#${error.path}`}>
-                    {error.message}
-                  </ErrorSummary.Item>
-                  ))
+                ? errors.map((error) => {
+                    return (
+                      <ErrorSummary.Item key={error.path} href={`#${error.path}`}>
+                        {error.message}
+                      </ErrorSummary.Item>
+                    );
+                  })
                 : 'hidden'}
             </ErrorSummary>
             <CountrySelector
