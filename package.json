@@ -56,7 +56,7 @@
     "jest": "^30.0.3",
     "jest-axe": "^10.0.0",
     "jest-css-modules-transform": "^4.4.2",
-    "jest-environment-jsdom": "^30.0.2",
+    "jest-environment-jsdom": "^30.0.4",
     "json-diff": "^1.0.6",
     "lint-staged": "^15.5.2",
     "prettier": "^3.3.2",
