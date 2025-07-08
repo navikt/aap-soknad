@@ -256,7 +256,7 @@ export const AddBarnModal = ({
             </div>
 
             {barn.ukjentFnr && (
-              <Alert variant="warning">
+              <Alert variant="info">
                 {formatMessage({ id: 'søknad.barnetillegg.leggTilBarn.modal.ukjentFnr.warning' })}
               </Alert>
             )}
