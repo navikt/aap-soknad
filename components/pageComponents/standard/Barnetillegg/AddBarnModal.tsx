@@ -3,6 +3,7 @@ import {
   BodyLong,
   BodyShort,
   Button,
+  Checkbox,
   Heading,
   Modal,
   Radio,
@@ -22,7 +23,6 @@ import { IntlFormatters, useIntl } from 'react-intl';
 import { mapValidationErrorToSøknadValidationError } from 'lib/utils/validationUtils';
 import { useFormErrors } from 'hooks/FormErrorHook';
 import { v4 as uuid4 } from 'uuid';
-import { erKelvinSoknad } from 'utils/environments';
 
 interface Props {
   søknad?: Soknad;
@@ -45,6 +45,7 @@ export interface CreateOrUpdateManuelleBarn {
   fødseldato?: Date;
   relasjon?: Relasjon;
   fnr?: string;
+  ukjentFnr?: boolean;
 }
 
 const ALDER_BARN_ÅR = 18;
@@ -84,7 +85,19 @@ export const getAddBarnSchema = (formatMessage: IntlFormatters['formatMessage'])
           id: 'søknad.barnetillegg.leggTilBarn.modal.fødselsdato.validation.typeError',
         }),
       ),
-    fnr: yup.string().nullable(),
+    fnr: yup.string().when('ukjentFnr', {
+      is: true,
+      then: (schema) => schema.notRequired(),
+      otherwise: (schema) =>
+        schema
+          .required(
+            formatMessage({
+              id: 'søknad.barnetillegg.leggTilBarn.modal.fødselsnummer.validation.required',
+            }),
+          )
+          .matches(/\d{11}/),
+    }),
+    ukjentFnr: yup.boolean().notRequired(),
     relasjon: yup
       .string()
       .required(
@@ -213,9 +226,11 @@ export const AddBarnModal = ({
               }}
             />
 
-            {erKelvinSoknad() && (
+            <div>
               <TextField
-                label="FNR"
+                label={formatMessage({
+                  id: 'søknad.barnetillegg.leggTilBarn.modal.fødselsnummer.label',
+                })}
                 name={'fnr'}
                 id="fnr"
                 value={barn?.fnr}
@@ -223,7 +238,27 @@ export const AddBarnModal = ({
                   clearErrors();
                   setBarn({ ...barn, fnr: event.target.value });
                 }}
+                error={findError('fnr')}
+                disabled={barn.ukjentFnr}
               />
+
+              <Checkbox
+                id="ukjentFnr"
+                name="ukjentFnr"
+                checked={barn?.ukjentFnr}
+                onClick={(event) => {
+                  clearErrors();
+                  setBarn({ ...barn, ukjentFnr: (event.target as HTMLInputElement).checked });
+                }}
+              >
+                {formatMessage({ id: 'søknad.barnetillegg.leggTilBarn.modal.ukjentFnr.label' })}
+              </Checkbox>
+            </div>
+
+            {barn.ukjentFnr && (
+              <Alert variant="warning">
+                {formatMessage({ id: 'søknad.barnetillegg.leggTilBarn.modal.ukjentFnr.warning' })}
+              </Alert>
             )}
 
             <RadioGroup
