@@ -563,11 +563,16 @@
             }
           },
           "fødselsnummer": {
-            "label": "Fødselsnummer/D-nummer",
+            "label": "Fødselsnummer eller D-nummer",
             "validation": {
-              "required": "Du må fylle inn fødselsnummeret/D-nummeret til barnet.",
-              "numberCharacters": "Fødselsnummeret/D-nummeret må bestå av 11 siffer."
+              "required": "Du må fylle inn fødselsnummeret eller D-nummeret til barnet.",
+              "numberCharacters": "Fødselsnummer eller D-nummer må være 11 siffer.",
+              "matches": "Fødselsnummer eller D-nummer må være 11 siffer."
             }
+          },
+          "ukjentFnr": {
+            "label": "Barnet har ikkje fødselsnummer eller D-nummer",
+            "warning": "Saksbehandlingen kan ta lenger tid når du ikkje oppgir fødselsnummeret eller d-nummeret til barnet."
           },
           "fødselsdato": {
             "label": "Fødselsdato (dd.mm.åååå)",
@@ -575,7 +580,7 @@
               "required": "Du må fylle inn fødselsdatoen til barnet. Fyll inn slik: dd.mm.åååå.",
               "min": "Du kan ikkje få barnetillegg for barn over 18 år. Dersom barnet er under 18 år, må du rette opp fødselsdatoen.",
               "max": "Fødselsdatoen til barnet kan ikkje vere etter dags dato. Vel ein fødselsdato før eller lik dags dato",
-              "typeError": "Fødselsdatoen må vera ein gyldig dato på format dd.mm.yyyy"
+              "typeError": "Fødselsdatoen må vera ein gyldig dato på format dd.mm.åååå"
             }
           },
           "relasjon": {

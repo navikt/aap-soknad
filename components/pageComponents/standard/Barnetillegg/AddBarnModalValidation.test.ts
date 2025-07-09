@@ -16,6 +16,7 @@ describe('AddBarnModal validation', () => {
       },
       fødseldato: sub(new Date(), { years: 1 }),
       relasjon: Relasjon.FORELDER,
+      fnr: '01020312345',
     };
     const result = await schema.validate(barn, { abortEarly: false }).catch((err) => err);
     expect(result).toStrictEqual(barn);
@@ -29,8 +30,38 @@ describe('AddBarnModal validation', () => {
       },
       fødseldato: add(new Date(), { years: 1 }),
       relasjon: Relasjon.FORELDER,
+      fnr: '01020312345',
     };
     const result = await schema.validate(barn, { abortEarly: false }).catch((err) => err);
     expect(result.errors.length).toBe(1);
+  });
+
+  it('should validate missing fnr', async () => {
+    const barn = {
+      navn: {
+        fornavn: 'Fornavn',
+        etternavn: 'Etternavn',
+      },
+      fødseldato: sub(new Date(), { years: 1 }),
+      relasjon: Relasjon.FORELDER,
+      fnr: undefined,
+    };
+    const result = await schema.validate(barn, { abortEarly: false }).catch((err) => err);
+    expect(result.errors.length).toBeGreaterThan(0);
+  });
+
+  it('should allow missing fnr if ukjentFnr is true', async () => {
+    const barn = {
+      navn: {
+        fornavn: 'Fornavn',
+        etternavn: 'Etternavn',
+      },
+      fødseldato: sub(new Date(), { years: 1 }),
+      relasjon: Relasjon.FORELDER,
+      fnr: undefined,
+      ukjentFnr: true
+    };
+    const result = await schema.validate(barn, { abortEarly: false }).catch((err) => err);
+    expect(result).toEqual(barn);
   });
 });

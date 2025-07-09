@@ -107,8 +107,16 @@ interface Ident {
   identifikator?: string;
 }
 
+export interface ManueltOppgittBarn {
+  navn?: string
+  fødselsdato?: Date
+  ident?: Ident
+  relasjon?: string
+}
+
 export interface OppgitteBarn {
   identer?: Ident[];
+  barn?: ManueltOppgittBarn[];
 }
 
 export interface Soknad {
