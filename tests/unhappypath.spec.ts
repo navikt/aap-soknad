@@ -342,6 +342,8 @@ test('at alle feilmeldinger skal dukke opp', async ({ page }) => {
   await expect(
     await page.getByText('Du må fylle inn barnets fødselsdato. Fyll inn slik: dd.mm.åååå.'),
   ).toBeVisible();
+  await expect(page.getByText('Du må fylle inn barnets fødselsnummer eller D-nummer.'))
+    .toBeVisible();
   await expect(
     await page.getByText('Du må svare på hvilken relasjon du har til barnet.'),
   ).toBeVisible();
@@ -351,8 +353,11 @@ test('at alle feilmeldinger skal dukke opp', async ({ page }) => {
   const over18years = subYears(new Date(), 19);
 
   await page.getByLabel('Fødselsdato (dd.mm.åååå)').fill(format(over18years, 'dd.MM.yyyy'));
+  await page.getByLabel('Fødselsnummer eller D-nummer').first().fill('01020301234');
   await page.getByLabel('Forelder', { exact: true }).check();
+
   await page.getByRole('button', { name: 'Lagre' }).click();
+
   await expect(
     page.getByText(
       'Du kan ikke få barnetillegg for barn over 18 år. Hvis barnet er under 18 år, må',

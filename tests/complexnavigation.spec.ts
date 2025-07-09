@@ -4,12 +4,24 @@ import { formatDate } from '../utils/date';
 
 test('at navigering i søknaden fungerer', async ({ page }) => {
   await page.goto('http://localhost:3000/aap/soknad/');
+
+  // Fjern cookie-banner
+  await page
+    // .getByRole('group', { name: 'Får vi bruke valgfrie informasjon­skapsler?' })
+    // .getByLabel('Ja')
+    .getByRole('button', { name: 'Ja' })
+    .click();
+
   await page.getByLabel('Jeg vil svare så godt jeg kan på spørsmålene i søknaden.').check();
   await page.getByRole('button', { name: 'Start søknad' }).click();
 
+
   // Steg 1
   await expect(page).toHaveURL('http://localhost:3000/aap/soknad/1/');
-  await page.getByLabel('Ja').check();
+  await page
+    .getByRole('group', { name: 'Har du sykepenger nå?' })
+    .getByLabel('Ja')
+    .check();
   await page
     .getByRole('group', { name: 'Har du planer om å ta ferie før du er ferdig med sykepenger?' })
     .getByLabel('Ja')
@@ -90,14 +102,13 @@ test('at navigering i søknaden fungerer', async ({ page }) => {
 
   // Steg 2
   await expect(page).toHaveURL('http://localhost:3000/aap/soknad/2/');
-  await page.getByLabel('Ja').check();
+  await page
+    .getByRole('group', { name: 'Har du bodd sammenhengende i Norge de fem siste årene?' })
+    .getByLabel('Ja').check();
   await page
     .getByRole('group', { name: 'Har du jobbet utenfor Norge de fem siste årene?' })
     .getByLabel('Ja')
     .check();
-
-  // Fjern cookie-banner
-  await page.getByRole('button', { name: 'Ja' }).click();
 
   await page
     .getByRole('button', { name: 'Legg til Registrer periode med jobb utenfor Norge' })
