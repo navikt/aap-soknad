@@ -23,6 +23,7 @@ import { IntlFormatters, useIntl } from 'react-intl';
 import { mapValidationErrorToSøknadValidationError } from 'lib/utils/validationUtils';
 import { useFormErrors } from 'hooks/FormErrorHook';
 import { v4 as uuid4 } from 'uuid';
+import { erGyldigFødselsnummer } from 'lib/utils/fnr';
 
 interface Props {
   søknad?: Soknad;
@@ -95,7 +96,19 @@ export const getAddBarnSchema = (formatMessage: IntlFormatters['formatMessage'])
               id: 'søknad.barnetillegg.leggTilBarn.modal.fødselsnummer.validation.required',
             }),
           )
-          .matches(/\d{11}/),
+          .matches(
+            /\d{11}/,
+            formatMessage({
+              id: 'søknad.barnetillegg.leggTilBarn.modal.fødselsnummer.validation.matches',
+            }),
+          )
+          .test(
+            'valid-format',
+            formatMessage({
+              id: 'søknad.barnetillegg.leggTilBarn.modal.fødselsnummer.validation.valid',
+            }),
+            erGyldigFødselsnummer,
+          ),
     }),
     ukjentFnr: yup.boolean().notRequired(),
     relasjon: yup
