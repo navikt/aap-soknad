@@ -566,7 +566,7 @@
             "label": "Fødselsnummer eller D-nummer",
             "validation": {
               "required": "Du må fylle inn fødselsnummeret eller D-nummeret til barnet.",
-              "numberCharacters": "Fødselsnummer eller D-nummer må være 11 siffer.",
+              "valid": "Ugyldig fødselsnummer eller D-nummer. Kontroller at du har skrevet rett.",
               "matches": "Fødselsnummer eller D-nummer må være 11 siffer."
             }
           },

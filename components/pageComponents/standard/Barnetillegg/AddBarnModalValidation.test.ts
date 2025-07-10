@@ -16,7 +16,7 @@ describe('AddBarnModal validation', () => {
       },
       fødseldato: sub(new Date(), { years: 1 }),
       relasjon: Relasjon.FORELDER,
-      fnr: '01020312345',
+      fnr: '23457448058',
     };
     const result = await schema.validate(barn, { abortEarly: false }).catch((err) => err);
     expect(result).toStrictEqual(barn);
@@ -30,7 +30,7 @@ describe('AddBarnModal validation', () => {
       },
       fødseldato: add(new Date(), { years: 1 }),
       relasjon: Relasjon.FORELDER,
-      fnr: '01020312345',
+      fnr: '23457448058',
     };
     const result = await schema.validate(barn, { abortEarly: false }).catch((err) => err);
     expect(result.errors.length).toBe(1);
