@@ -353,7 +353,7 @@ test('at alle feilmeldinger skal dukke opp', async ({ page }) => {
   const over18years = subYears(new Date(), 19);
 
   await page.getByLabel('Fødselsdato (dd.mm.åååå)').fill(format(over18years, 'dd.MM.yyyy'));
-  await page.getByLabel('Fødselsnummer eller D-nummer').first().fill('01020301234');
+  await page.getByLabel('Fødselsnummer eller D-nummer').first().fill('03432287806');
   await page.getByLabel('Forelder', { exact: true }).check();
 
   await page.getByRole('button', { name: 'Lagre' }).click();
