@@ -53,7 +53,7 @@
     "eslint-plugin-jsx-a11y": "^6.9.0",
     "eslint-plugin-react": "^7.34.3",
     "husky": "^9.1.7",
-    "jest": "^30.0.4",
+    "jest": "^30.0.5",
     "jest-axe": "^10.0.0",
     "jest-css-modules-transform": "^4.4.2",
     "jest-environment-jsdom": "^30.0.4",
