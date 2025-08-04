@@ -1,4 +1,4 @@
-FROM gcr.io/distroless/nodejs20-debian12@sha256:12edf70828313a57d869cc1e26f7ca0291b3b69b7bd0a39de0399d4cf69809a3
+FROM gcr.io/distroless/nodejs20-debian12@sha256:ae2408f9d8fe3e9c2f07af5d70c61cd66ad679ed4ff061eab65d6136d1741198
 
 WORKDIR /app
 COPY .next/standalone ./
