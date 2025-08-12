@@ -19,7 +19,7 @@
     "cross-fetch": "^4.1.0",
     "date-fns": "^4.1.0",
     "i18n-iso-countries": "^7.14.0",
-    "is-european": "1.0.8",
+    "is-european": "1.0.9",
     "next": "^15.3.5",
     "node-cache": "^5.1.2",
     "prop-types": "^15.7.2",
