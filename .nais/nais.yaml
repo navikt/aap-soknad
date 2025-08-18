@@ -33,8 +33,9 @@ spec:
     enabled: true
     path: /aap/soknad/api/internal/prometheus/
   observability:
-    tracing:
+    autoInstrumentation:
       enabled: true
+      runtime: nodejs
     logging:
       destinations:
         - id: elastic
