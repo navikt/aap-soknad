@@ -4,13 +4,8 @@ const nextConfig = {
   basePath: '/aap/soknad',
   trailingSlash: true,
   reactStrictMode: true,
-  swcMinify: true, // Blir default på i Next 12.2
   output: 'standalone',
   assetPrefix: process.env.ASSET_PREFIX ?? undefined,
-
-  experimental: {
-    instrumentationHook: true,
-  },
   serverExternalPackages: ['pino'],
 
   i18n: {
