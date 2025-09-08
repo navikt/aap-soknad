@@ -36,7 +36,7 @@ jobs:
           team: aap
           identity_provider: ${{ secrets.NAIS_WORKLOAD_IDENTITY_PROVIDER }}
           project_id: ${{ vars.NAIS_MANAGEMENT_PROJECT_ID }}
-          image_suffix: -dev-gcp-mock-historisk
+          image_suffix: dev-gcp-mock-historisk
           tag: ${{ github.sha }}
   "deployAppToLabsHistorisk":
     name: "Deploy branch to dev"
@@ -56,3 +56,4 @@ jobs:
           "RESOURCE": ".nais/historisk-dev-mock.yaml"
           "VAR": ingress=https://${{ steps.slug.outputs.slug }}.ekstern.dev.nav.no,appname=${{ steps.slug.outputs.slug }},replicas=1,branchState=alive
           image_suffix: -dev-gcp-mock-historisk
+          tag: ${{ github.sha }}
