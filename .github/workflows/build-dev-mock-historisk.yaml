@@ -28,7 +28,7 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
       - name: Copy env-file # TODO: Se om vi kan finne en bedre løsning her på sikt
-        run: cp .nais/dev-mock.env .env
+        run: cp .nais/dev-mock.env .env.local
       - name: run build
         run: yarn run build
       - uses: nais/docker-build-push@v0
