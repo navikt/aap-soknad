@@ -1,0 +1,18 @@
+name: "Slett historisk snapshot"
+on: delete
+env:
+  "APP_NAME": "aap-soknad-${{ github.event.ref }}"
+jobs:
+  deploy-branch-to-labs-gcp:
+    if: startsWith(github.event.ref, 'dev-mock-historisk')
+    name: Delete branch labs-gcp
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Scale down dev-gcp-mock-historisk
+        uses: nais/deploy/actions/deploy@v1
+        env:
+          APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
+          CLUSTER: dev-gcp
+          RESOURCE: ".nais/historisk-dev-mock.yaml"
+          VAR: appname=${{env.APP_NAME}},ingress=https://${{env.APP_NAME}}.ekstern.dev.nav.no,replicas=0,branchState=deleted
