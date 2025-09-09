@@ -1,18 +1,13 @@
-apiVersion: 'nais.io/v1alpha1'
-kind: 'Application'
+apiVersion: "nais.io/v1alpha1"
+kind: "Application"
 metadata:
   name: {{appname}}
   namespace: "aap"
   labels:
-    team: aap
+    "team": "aap"
 spec:
   image: {{image}}
   port: 3000
-  ingresses:
-    - {{ingress}}
-  replicas:
-    min: {{replicas}}
-    max: {{replicas}}
   liveness:
     path: "/aap/soknad/api/internal/isAlive"
     initialDelay: 20
@@ -21,3 +16,8 @@ spec:
     path: "/aap/soknad/api/internal/isReady"
     initialDelay: 20
     timeout: 60
+  replicas:
+    min: {{replicas}}
+    max: {{replicas}}
+  ingresses:
+     - {{ingress}}
