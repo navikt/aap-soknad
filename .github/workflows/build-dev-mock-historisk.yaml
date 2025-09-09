@@ -47,7 +47,10 @@ jobs:
   "deployAppToLabsHistorisk":
     name: "Deploy branch to dev"
     needs: buildMock
-    runs-on: "ubuntu-latest"
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
     steps:
       - uses: actions/checkout@v5
       - uses: gacts/github-slug@v1
