@@ -4,8 +4,6 @@ on:
 #  push:
 #    branches:
 #      - "labs-historisk-**"
-env:
-  IMAGE_BASE: europe-north1-docker.pkg.dev/${{ vars.NAIS_MANAGEMENT_PROJECT_ID }}/aap/${{ github.event.repository.name }}-historisk-${{ github.ref_name }}
 jobs:
   buildMock:
     name: build
@@ -13,6 +11,7 @@ jobs:
     permissions:
       contents: read
       id-token: write
+    secrets: inherit
     outputs:
       image: ${{ steps.image.outputs.image }}
     env:
@@ -47,6 +46,7 @@ jobs:
     permissions:
       contents: read
       id-token: write
+    secrets: inherit
     steps:
       - uses: actions/checkout@v5
       - uses: nais/login@v0
