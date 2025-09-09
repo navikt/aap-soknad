@@ -27,6 +27,10 @@ jobs:
           cache: yarn
       - name: Enable Corepack
         run: corepack enable
+      - uses: gacts/github-slug@v1
+        id: slug
+        with:
+          to-slug: aap-soknad-${{ github.ref_name }}
       - name: install dependencies Yarn
         run: yarn install --immutable
         env:
@@ -35,50 +39,28 @@ jobs:
         run: cp .nais/dev-mock.env .env.local
       - name: run build
         run: yarn run build
-      - name: Set up Docker Buildx
-        id: buildx
-        uses: docker/setup-buildx-action@v2
-
-      - name: Setter tag-navn
-        run: echo "TAG=$(date +%Y.%m.%d.%H%M%S)-$(echo $GITHUB_SHA | cut -c1-7)" >> $GITHUB_ENV
-
-      - name: Setter image-navn
-        id: image
-        run:  |
-          echo "IMAGE=$(echo $IMAGE_BASE)-$(echo $TAG)" >> $GITHUB_ENV
-          echo "image=$(echo $IMAGE_BASE)-$(echo $TAG)" >> $GITHUB_OUTPUT
-
-      - name: Login GAR
-        uses: nais/login@v0
+      - uses: nais/docker-build-push@v0
         with:
-          project_id: ${{ vars.NAIS_MANAGEMENT_PROJECT_ID }}
-          identity_provider: ${{ secrets.NAIS_WORKLOAD_IDENTITY_PROVIDER }}
           team: aap
-
-      - name: Build and push Docker
-        uses: docker/build-push-action@v4
-        with:
-          context: .
-          file: Dockerfile
-          tags: ${{ env.IMAGE }}:latest
-          push: true
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+          image_suffix: ${{ steps.slug.outputs.slug }}
+          tag: ${{ github.sha }}
   "deployAppToLabsHistorisk":
     name: "Deploy branch to dev"
     needs: buildMock
     runs-on: "ubuntu-latest"
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: gacts/github-slug@v1
         id: slug
         with:
           to-slug: aap-soknad-${{ github.ref_name }}
-      - name: Deploy historisk søknad til dev
-        uses: nais/deploy/actions/deploy@v1
+      - uses: nais/login@v0
+        id: login
+        with:
+          team: aap
+      - uses: nais/deploy/actions/deploy@v2
         env:
-          IMAGE: ${{needs.buildMock.outputs.image}}
-          APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
+          PRINT_PAYLOAD: true
           CLUSTER: dev-gcp
           RESOURCE: .nais/historisk-dev-mock.yaml
-          VAR: ingress=https://${{ steps.slug.outputs.slug }}.ekstern.dev.nav.no,appname=${{ steps.slug.outputs.slug }},replicas=1,branchState=alive
+          VAR: image=${{ steps.login.outputs.registry }}/${{ github.event.repository.name }}${{ steps.slug.outputs.slug }}:${{ inputs.tag }},ingress=https://${{ steps.slug.outputs.slug }}.ekstern.dev.nav.no,appname=${{ steps.slug.outputs.slug }},replicas=1,branchState=alive
