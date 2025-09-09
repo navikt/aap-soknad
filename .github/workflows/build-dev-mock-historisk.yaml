@@ -66,4 +66,4 @@ jobs:
           PRINT_PAYLOAD: true
           CLUSTER: dev-gcp
           RESOURCE: .nais/historisk-dev-mock.yaml
-          VAR: image=${{ steps.login.outputs.registry }}/${{ github.event.repository.name }}${{ steps.slug.outputs.slug }}:${{ inputs.tag }},ingress=https://${{ steps.slug.outputs.slug }}.ekstern.dev.nav.no,appname=${{ steps.slug.outputs.slug }},replicas=1,branchState=alive
+          VAR: image=${{ steps.login.outputs.registry }}/${{ github.event.repository.name }}${{ steps.slug.outputs.slug }}:${{ github.sha }},ingress=https://${{ steps.slug.outputs.slug }}.ekstern.dev.nav.no,appname=${{ steps.slug.outputs.slug }},replicas=1,branchState=alive
