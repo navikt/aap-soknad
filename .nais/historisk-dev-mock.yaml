@@ -4,7 +4,7 @@ metadata:
   name: {{appname}}
   namespace: "aap"
   labels:
-    "team": "aap"
+    team: aap
     branchState: {{branchState}}
 spec:
   image: {{image}}
