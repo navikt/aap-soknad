@@ -11,7 +11,6 @@ jobs:
     permissions:
       contents: read
       id-token: write
-    secrets: inherit
     outputs:
       image: ${{ steps.image.outputs.image }}
     env:
@@ -46,7 +45,6 @@ jobs:
     permissions:
       contents: read
       id-token: write
-    secrets: inherit
     steps:
       - uses: actions/checkout@v5
       - uses: nais/login@v0
