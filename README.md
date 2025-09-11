@@ -2,11 +2,7 @@
 
 Søknad for arbeidsavklaringspenger med idporten innlogging (wonderwall). Skrevet i NextJS.
 
-Kom i gang:
-
-https://aap-team-innbygger.intern.nav.no/docs/Komme%20i%20gang/komme-i-gang-med-utvikling/
-
-## Bygge app lokalt
+## Bygge og kjøre app lokalt
 
 ### Github package registry
 
@@ -18,6 +14,13 @@ I .bashrc eller .zshrc:
 `export NPM_AUTH_TOKEN=github_pat`
 
 Hvor github_pat er din personal access token laget på github(settings -> developer settings). Husk read:packages rettighet og enable sso når du oppdaterer/lager PAT.
+
+
+### Kjøre lokalt
+
+- Kopier filen `.env.template` til `.env.local`
+- Kjør `yarn dev`
+- Åpne http://localhost:3000/aap/soknad
 
 ---
 

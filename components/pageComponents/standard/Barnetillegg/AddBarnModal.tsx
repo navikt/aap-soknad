@@ -240,20 +240,22 @@ export const AddBarnModal = ({
             />
 
             <div>
-              <TextField
-                label={formatMessage({
-                  id: 'søknad.barnetillegg.leggTilBarn.modal.fødselsnummer.label',
-                })}
-                name={'fnr'}
-                id="fnr"
-                value={barn?.fnr}
-                onChange={(event) => {
-                  clearErrors();
-                  setBarn({ ...barn, fnr: event.target.value });
-                }}
-                error={findError('fnr')}
-                disabled={barn.ukjentFnr}
-              />
+              {!barn.ukjentFnr && (
+                <TextField
+                  label={formatMessage({
+                    id: 'søknad.barnetillegg.leggTilBarn.modal.fødselsnummer.label',
+                  })}
+                  name={'fnr'}
+                  id="fnr"
+                  value={barn?.fnr}
+                  onChange={(event) => {
+                    clearErrors();
+                    setBarn({ ...barn, fnr: event.target.value });
+                  }}
+                  error={findError('fnr')}
+                  disabled={barn.ukjentFnr}
+                />
+              )}
 
               <Checkbox
                 id="ukjentFnr"
@@ -261,7 +263,11 @@ export const AddBarnModal = ({
                 checked={barn?.ukjentFnr}
                 onClick={(event) => {
                   clearErrors();
-                  setBarn({ ...barn, ukjentFnr: (event.target as HTMLInputElement).checked });
+                  setBarn({
+                    ...barn,
+                    fnr: undefined,
+                    ukjentFnr: (event.target as HTMLInputElement).checked,
+                  });
                 }}
               >
                 {formatMessage({ id: 'søknad.barnetillegg.leggTilBarn.modal.ukjentFnr.label' })}
