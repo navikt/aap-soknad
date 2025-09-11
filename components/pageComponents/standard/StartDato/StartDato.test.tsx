@@ -35,7 +35,7 @@ describe('Startdato', () => {
     renderStepSoknadStandard(STARTDATO, <Component />, {});
     await waitFor(() => user.click(screen.getByRole('radio', { name: JaEllerNei.JA })));
     const skalHaFerieLabel = messagesNb?.søknad?.startDato?.skalHaFerie?.label;
-    const oppfølgingsspørsmål = await screen.findByRole('group', { name: skalHaFerieLabel });
+    const oppfølgingsspørsmål = await screen.findByRole('group', { name: new RegExp(skalHaFerieLabel) });
     expect(oppfølgingsspørsmål).not.toBeNull();
   });
 
@@ -52,13 +52,13 @@ describe('Startdato', () => {
     renderStepSoknadStandard(STARTDATO, <Component />, {});
     // Sykepenger
     const sykepengerLabel = messagesNb?.søknad?.startDato?.sykepenger?.legend;
-    const sykepenger = screen.getByRole('group', { name: sykepengerLabel });
+    const sykepenger = screen.getByRole('group', { name: new RegExp(sykepengerLabel) });
     const jaValgForSykepenger = within(sykepenger).getByRole('radio', { name: JaEllerNei.JA });
     await waitFor(() => user.click(jaValgForSykepenger));
 
     // Skal ha ferie
     const skalHaFerieLabel = messagesNb?.søknad?.startDato?.skalHaFerie?.label;
-    const skalHaFerie = screen.getByRole('group', { name: skalHaFerieLabel });
+    const skalHaFerie = screen.getByRole('group', { name: new RegExp(skalHaFerieLabel) });
     const jaValgForSkalHaFerie = within(skalHaFerie).getByRole('radio', { name: JaEllerNei.JA });
     await waitFor(() => user.click(jaValgForSkalHaFerie));
     // Ferietype finnes
@@ -76,12 +76,12 @@ describe('Startdato', () => {
     renderStepSoknadStandard(STARTDATO, <Component />, {});
     // Sykepenger
     const sykepengerLabel = messagesNb?.søknad?.startDato?.sykepenger?.legend;
-    const sykepenger = screen.getByRole('group', { name: sykepengerLabel });
+    const sykepenger = screen.getByRole('group', { name: new RegExp(sykepengerLabel) });
     const jaValgForSykepenger = within(sykepenger).getByRole('radio', { name: JaEllerNei.JA });
     await waitFor(() => user.click(jaValgForSykepenger));
     // Skal ha ferie
     const skalHaFerieLabel = messagesNb?.søknad?.startDato?.skalHaFerie?.label;
-    const skalHaFerie = screen.getByRole('group', { name: skalHaFerieLabel });
+    const skalHaFerie = screen.getByRole('group', { name: new RegExp(skalHaFerieLabel) });
     const jaValgForSkalHaFerie = within(skalHaFerie).getByRole('radio', { name: JaEllerNei.JA });
     await waitFor(() => user.click(jaValgForSkalHaFerie));
     // Ferietype PERIODE
@@ -110,13 +110,13 @@ describe('Startdato', () => {
     renderStepSoknadStandard(STARTDATO, <Component />, {});
     // Sykepenger
     const sykepengerLabel = messagesNb?.søknad?.startDato?.sykepenger?.legend;
-    const sykepenger = screen.getByRole('group', { name: sykepengerLabel });
+    const sykepenger = screen.getByRole('group', { name: new RegExp(sykepengerLabel) });
     const jaValgForSykepenger = within(sykepenger).getByRole('radio', { name: JaEllerNei.JA });
     await waitFor(() => user.click(jaValgForSykepenger));
 
     // Skal ha ferie
     const skalHaFerieLabel = messagesNb?.søknad?.startDato?.skalHaFerie?.label;
-    const skalHaFerie = screen.getByRole('group', { name: skalHaFerieLabel });
+    const skalHaFerie = screen.getByRole('group', { name: new RegExp(skalHaFerieLabel) });
     const jaValgForSkalHaFerie = within(skalHaFerie).getByRole('radio', { name: JaEllerNei.JA });
     await waitFor(() => user.click(jaValgForSkalHaFerie));
 
