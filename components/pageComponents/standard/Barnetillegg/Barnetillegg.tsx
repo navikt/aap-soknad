@@ -6,7 +6,7 @@ import { Add } from '@navikt/ds-icons';
 import { completeAndGoToNextStep } from 'context/stepWizardContext';
 import { useStepWizard } from 'hooks/StepWizardHook';
 import { AddBarnModal, CreateOrUpdateManuelleBarn, Relasjon } from './AddBarnModal';
-import { LucaGuidePanel } from '@navikt/aap-felles-react';
+import { LucaGuidePanel } from 'components/LucaGuidePanel';
 import { useDebounceLagreSoknad } from 'hooks/useDebounceLagreSoknad';
 import { useIntl } from 'react-intl';
 import SoknadFormWrapperNew from 'components/SoknadFormWrapper/SoknadFormWrapper';

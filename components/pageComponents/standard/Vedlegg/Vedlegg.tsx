@@ -4,7 +4,6 @@ import { Alert, BodyLong, BodyShort, Heading, Label, Textarea } from '@navikt/ds
 import { completeAndGoToNextStep } from 'context/stepWizardContext';
 import { useStepWizard } from 'hooks/StepWizardHook';
 import { useDebounceLagreSoknad } from 'hooks/useDebounceLagreSoknad';
-import { LucaGuidePanel } from '@navikt/aap-felles-react';
 import { useIntl } from 'react-intl';
 import SoknadFormWrapperNew from 'components/SoknadFormWrapper/SoknadFormWrapper';
 import { SøknadValidationError } from 'components/schema/FormErrorSummary';
@@ -14,6 +13,7 @@ import { ScanningGuide } from './scanningguide/ScanningGuide';
 import { addVedlegg, deleteVedlegg, updateSøknadData } from 'context/soknadcontext/actions';
 import { useSoknad } from 'hooks/SoknadHook';
 import { FileInputWrapper } from 'components/pageComponents/standard/Vedlegg/FileInputWrapper';
+import { LucaGuidePanel } from 'components/LucaGuidePanel';
 
 interface Props {
   onBackClick: () => void;

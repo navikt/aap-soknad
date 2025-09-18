@@ -8,7 +8,6 @@ import { Soknad, UtenlandsPeriode } from 'types/Soknad';
 import { completeAndGoToNextStep } from 'context/stepWizardContext';
 import { useStepWizard } from 'hooks/StepWizardHook';
 import ColorPanel from 'components/panel/ColorPanel';
-import { LucaGuidePanel } from '@navikt/aap-felles-react';
 import { setFocusOnErrorSummary } from 'components/schema/FormErrorSummary';
 import { useIntl } from 'react-intl';
 import SoknadFormWrapperNew from 'components/SoknadFormWrapper/SoknadFormWrapper';
@@ -28,6 +27,7 @@ import { useSoknad } from 'hooks/SoknadHook';
 import { updateSøknadData } from 'context/soknadcontext/actions';
 import { UtenlandsOppholdListe } from 'components/pageComponents/standard/Medlemskap/UtenlandsOppholdListe';
 import styles from './Medlemskap.module.css';
+import { LucaGuidePanel } from 'components/LucaGuidePanel';
 
 interface Props {
   onBackClick: () => void;

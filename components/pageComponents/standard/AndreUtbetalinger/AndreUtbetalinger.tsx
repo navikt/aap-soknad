@@ -16,7 +16,6 @@ import { Soknad } from 'types/Soknad';
 import * as yup from 'yup';
 import { completeAndGoToNextStep } from 'context/stepWizardContext';
 import ColorPanel from 'components/panel/ColorPanel';
-import { LucaGuidePanel } from '@navikt/aap-felles-react';
 import { useDebounceLagreSoknad } from 'hooks/useDebounceLagreSoknad';
 import { setFocusOnErrorSummary } from 'components/schema/FormErrorSummary';
 import { IntlFormatters, useIntl } from 'react-intl';
@@ -33,6 +32,7 @@ import {
 } from 'context/soknadcontext/actions';
 import { useSoknad } from 'hooks/SoknadHook';
 import { useStepWizard } from 'hooks/StepWizardHook';
+import { LucaGuidePanel } from 'components/LucaGuidePanel';
 
 interface Props {
   onBackClick: () => void;

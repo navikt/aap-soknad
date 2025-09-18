@@ -6,7 +6,6 @@ import ColorPanel from 'components/panel/ColorPanel';
 import * as yup from 'yup';
 import { completeAndGoToNextStep } from 'context/stepWizardContext';
 import { useStepWizard } from 'hooks/StepWizardHook';
-import { LucaGuidePanel } from '@navikt/aap-felles-react';
 import { useDebounceLagreSoknad } from 'hooks/useDebounceLagreSoknad';
 import * as classes from './StartDato.module.css';
 import { setFocusOnErrorSummary } from 'components/schema/FormErrorSummary';
@@ -19,6 +18,7 @@ import TilDato from './TilDato';
 import FraDato from './FraDato';
 import { useSoknad } from 'hooks/SoknadHook';
 import { updateSøknadData } from 'context/soknadcontext/actions';
+import { LucaGuidePanel } from 'components/LucaGuidePanel';
 
 export enum FerieType {
   DAGER = 'DAGER',

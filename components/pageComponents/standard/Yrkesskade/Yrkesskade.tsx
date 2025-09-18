@@ -14,7 +14,6 @@ import { JaEllerNei } from 'types/Generic';
 import * as yup from 'yup';
 import { completeAndGoToNextStep } from 'context/stepWizardContext';
 import { useStepWizard } from 'hooks/StepWizardHook';
-import { LucaGuidePanel } from '@navikt/aap-felles-react';
 import { useDebounceLagreSoknad } from 'hooks/useDebounceLagreSoknad';
 import { setFocusOnErrorSummary } from 'components/schema/FormErrorSummary';
 import { FormattedMessage, IntlFormatters, useIntl } from 'react-intl';
@@ -24,6 +23,7 @@ import { SøknadValidationError } from 'components/schema/FormErrorSummary';
 import SoknadFormWrapperNew from 'components/SoknadFormWrapper/SoknadFormWrapper';
 import { useSoknad } from 'hooks/SoknadHook';
 import { updateSøknadData } from 'context/soknadcontext/actions';
+import { LucaGuidePanel } from 'components/LucaGuidePanel';
 
 interface Props {
   onBackClick: () => void;

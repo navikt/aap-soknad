@@ -6,7 +6,6 @@ import * as yup from 'yup';
 import { completeAndGoToNextStep } from 'context/stepWizardContext';
 import { useStepWizard } from 'hooks/StepWizardHook';
 import { EndreEllerLeggTilBehandlerModal } from './EndreEllerLeggTilBehandlerModal';
-import { LucaGuidePanel } from '@navikt/aap-felles-react';
 import * as classes from './Behandlere.module.css';
 import { useDebounceLagreSoknad } from 'hooks/useDebounceLagreSoknad';
 import { JaEllerNei } from 'types/Generic';
@@ -20,6 +19,7 @@ import { RegistrertBehandler } from 'components/pageComponents/standard/Behandle
 import { AnnenBehandler } from 'components/pageComponents/standard/Behandlere/AnnenBehandler';
 import { useSoknad } from 'hooks/SoknadHook';
 import { updateSøknadData } from 'context/soknadcontext/actions';
+import { LucaGuidePanel } from 'components/LucaGuidePanel';
 
 interface Props {
   onBackClick: () => void;

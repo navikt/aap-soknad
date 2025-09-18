@@ -16,7 +16,6 @@ import * as yup from 'yup';
 import { goToNamedStep } from 'context/stepWizardContext';
 import { useStepWizard } from 'hooks/StepWizardHook';
 import { StepNames } from 'pages';
-import { LucaGuidePanel } from '@navikt/aap-felles-react';
 import { OppsummeringVedlegg } from './OppsummeringVedlegg/OppsummeringVedlegg';
 import {
   getStudentSchema,
@@ -53,6 +52,7 @@ import { OppsummeringBarn } from 'components/pageComponents/standard/Oppsummerin
 import { OppsummeringManuelleBarn } from 'components/pageComponents/standard/Oppsummering/OppsummeringBarn/OppsummeringManuelleBarn';
 import { Person } from 'pages/api/oppslagapi/person';
 import { KrrKontaktInfo } from 'pages/api/oppslag/krr';
+import { LucaGuidePanel } from 'components/LucaGuidePanel';
 
 interface OppsummeringProps {
   onBackClick: () => void;

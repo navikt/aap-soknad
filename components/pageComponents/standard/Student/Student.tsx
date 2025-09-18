@@ -6,7 +6,7 @@ import * as yup from 'yup';
 import { completeAndGoToNextStep } from 'context/stepWizardContext';
 import { useStepWizard } from 'hooks/StepWizardHook';
 import ColorPanel from 'components/panel/ColorPanel';
-import { LucaGuidePanel } from '@navikt/aap-felles-react';
+import { LucaGuidePanel } from 'components/LucaGuidePanel';
 import { useDebounceLagreSoknad } from 'hooks/useDebounceLagreSoknad';
 import { setFocusOnErrorSummary } from 'components/schema/FormErrorSummary';
 import { IntlFormatters, useIntl } from 'react-intl';
