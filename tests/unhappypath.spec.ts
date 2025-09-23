@@ -4,6 +4,10 @@ import { formatDate } from 'utils/date';
 
 test('at alle feilmeldinger skal dukke opp', async ({ page }) => {
   await page.goto('http://localhost:3000/aap/soknad/');
+
+  // Fjern cookie-banner
+  await page.locator('consent-banner').getByRole('button', { name: 'Ja' }).click();
+
   await page.getByRole('button', { name: 'Start søknad' }).click();
   await expect(
     await page.getByText('Du må bekrefte at du vil gi så riktige opplysninger som mulig.'),
@@ -58,8 +62,6 @@ test('at alle feilmeldinger skal dukke opp', async ({ page }) => {
     .getByRole('link', { name: 'Du må fylle ut feriens til-dato. Fyll inn slik: dd.mm.åååå.' })
     .click();
   await expect(page).toHaveURL('http://localhost:3000/aap/soknad/1/#ferie.tilDato');
-  // Fjern cookie-banner
-  await page.getByRole('button', { name: 'Ja' }).click();
   await page
     .getByText('Søknad om arbeidsavklarings­penger (AAP)Steg 1 av 9Du må fikse disse feilene fø')
     .click();
@@ -342,8 +344,9 @@ test('at alle feilmeldinger skal dukke opp', async ({ page }) => {
   await expect(
     await page.getByText('Du må fylle inn barnets fødselsdato. Fyll inn slik: dd.mm.åååå.'),
   ).toBeVisible();
-  await expect(page.getByText('Du må fylle inn barnets fødselsnummer eller D-nummer.'))
-    .toBeVisible();
+  await expect(
+    page.getByText('Du må fylle inn barnets fødselsnummer eller D-nummer.'),
+  ).toBeVisible();
   await expect(
     await page.getByText('Du må svare på hvilken relasjon du har til barnet.'),
   ).toBeVisible();

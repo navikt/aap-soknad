@@ -14,6 +14,9 @@ test('at enkel gjennomkjøring av søknaden fungerer', async ({ page }) => {
     page.getByRole('heading', { name: 'Søknad om arbeidsavklarings­penger (AAP)' }),
   ).toBeVisible();
 
+  // Fjern cookie-banner
+  await page.locator('consent-banner').getByRole('button', { name: 'Ja' }).click();
+
   await page.getByLabel('Jeg vil svare så godt jeg kan på spørsmålene i søknaden.').check();
 
   await page.getByRole('button', { name: 'Start søknad' }).click();
