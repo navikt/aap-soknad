@@ -40,7 +40,7 @@
       },
       "accordionHvis": {
         "title": "Hvis du får AAP, gjelder dette",
-        "bulletPointOppfølging": "Du har rett til oppfølging fra NAV",
+        "bulletPointOppfølging": "Du har rett til oppfølging fra Nav",
         "bulletPointPlikt": "Du har plikt til å bidra til å avklare om du kan beholde eller komme i jobb",
         "bulletPointMeldekort": "Du må sende inn meldekort hver 14. dag",
         "bulletPointTilbakebetaling": "Hvis du får penger du ikke har rett til, er du forberedt på at du må betale dem tilbake.",
@@ -57,7 +57,7 @@
         "folketrygdloven": "Dette gjør vi for å vurdere om du har rett til AAP etter folketrygdloven kapittel 11. Opplysningene brukes også i forbindelse med oppfølgingen du får fra Nav.",
         "bulletPointLagring": "Søknaden din vil være lagret i 24 timer og du kan fortsette der du slapp når du kommer tilbake.",
         "bulletPointDeler": "Vi deler opplysninger om hva du får utbetalt i AAP med Skatteetaten og Statistisk sentralbyrå.",
-        "personopplysningerNavNo": "Du kan lese mer om hvordan NAV behandler personopplysninger på nav.no (åpnes i ny fane)."
+        "personopplysningerNavNo": "Du kan lese mer om hvordan Nav behandler personopplysninger på nav.no (åpnes i ny fane)."
       },
       "veiledningConfirm": {
         "title": "Vi stoler på deg",
@@ -72,7 +72,7 @@
     "startDato": {
       "title": "Startdato",
       "guide": {
-        "text1": "NAV vil beregne startdato for deg, slik at du får AAP så tidlig som mulig. Hovedregelen er at du tidligst kan få AAP fra den dagen du sender inn søknaden."
+        "text1": "Nav vil beregne startdato for deg, slik at du får AAP så tidlig som mulig. Hovedregelen er at du tidligst kan få AAP fra den dagen du sender inn søknaden."
       },
       "sykepenger": {
         "legend": "Har du sykepenger nå?",
@@ -163,7 +163,7 @@
       },
       "iTilleggArbeidUtenforNorge": {
         "label": "Har du i tillegg til jobb i Norge, også jobbet i et annet land de fem siste årene?",
-        "description": "Hvis du har jobbet i et annet land, kan du i noen tilfeller få mer utbetalt i AAP. NAV bruker bare denne inntekten hvis det er til fordel for deg.",
+        "description": "Hvis du har jobbet i et annet land, kan du i noen tilfeller få mer utbetalt i AAP. Nav bruker bare denne inntekten hvis det er til fordel for deg.",
         "readMore": {
           "title": "Regnes ytelser fra utenlandske myndigheter som jobb i et annet land?",
           "text": "Hvis du har mottatt ytelser (for eksempel dagpenger, sykepenger og foreldrepenger) fra utenlandske myndigheter, regnes dette som jobb utenfor Norge. Pensjon regnes ikke som erstatning for jobb."
@@ -251,7 +251,7 @@
     "helseopplysninger": {
       "title": "Kontaktperson for helseopplysninger",
       "guide": {
-        "text1": "NAV henter helseopplysninger fra fastlegen din når vi skal behandle søknaden din. Ved behov kan vi også hente inn opplysninger fra andre behandlere eller leger.",
+        "text1": "Nav henter helseopplysninger fra fastlegen din når vi skal behandle søknaden din. Ved behov kan vi også hente inn opplysninger fra andre behandlere eller leger.",
         "text2": "Hvis vi allerede har tilstrekkelig med opplysninger om deg fra tidligere, innhenter vi ikke legeerklæring."
       },
       "erRegistrertFastlegeRiktig": {
@@ -269,7 +269,7 @@
       },
       "annenBehandler": {
         "title": "Annen lege eller behandler",
-        "description": "Hvis du har en annen lege eller behandler som du ønsker at NAV skal kunne kontakte for helseopplysninger, kan du legge til denne her.",
+        "description": "Hvis du har en annen lege eller behandler som du ønsker at Nav skal kunne kontakte for helseopplysninger, kan du legge til denne her.",
         "addBehandlerButton": "Legg til lege/behandler",
         "accessibleButtonTitle": "Legg til"
       },
@@ -321,7 +321,7 @@
     "andreUtbetalinger": {
       "title": "Utbetalinger",
       "guide": {
-        "text": "Hvis du får utbetalinger fra NAV, arbeidsgiver eller andre, kan din AAP bli redusert. Vi spør om dette fordi du ikke alltid har krav på å få flere typer utbetalinger samtidig. Vi prøver å unngå feilutbetalinger."
+        "text": "Hvis du får utbetalinger fra Nav, arbeidsgiver eller andre, kan din AAP bli redusert. Vi spør om dette fordi du ikke alltid har krav på å få flere typer utbetalinger samtidig. Vi prøver å unngå feilutbetalinger."
       },
       "lønn": {
         "title": "Lønn og andre goder",
@@ -625,18 +625,18 @@
         }
       },
       "alert": {
-        "navVilSjekke": "NAV vil sjekke om yrkesskaden/yrkessykdommen din er:",
-        "bulletPointGodkjent": "godkjent av NAV",
+        "navVilSjekke": "Nav vil sjekke om yrkesskaden/yrkessykdommen din er:",
+        "bulletPointGodkjent": "godkjent av Nav",
         "bulletPointArbeidsevne": "helt eller delvis årsak til at arbeidsevnen din er nedsatt."
       }
     },
     "kvittering": {
       "title": "Takk for søknaden, {navn}",
       "alert": {
-        "text": "Vi har nå mottatt søknaden din om AAP. Saken din er nå til behandling hos NAV. Vi vil ta kontakt med deg hvis vi trenger mer informasjon eller dokumentasjon fra deg."
+        "text": "Vi har nå mottatt søknaden din om AAP. Saken din er nå til behandling hos Nav. Vi vil ta kontakt med deg hvis vi trenger mer informasjon eller dokumentasjon fra deg."
       },
       "vedlegg": {
-        "tekst1": "Du kan også <a>ettersende per post (åpnes i ny fane)</a>, eller levere dokumentasjon på ditt lokale NAV-kontor.",
+        "tekst1": "Du kan også <a>ettersende per post (åpnes i ny fane)</a>, eller levere dokumentasjon på ditt lokale Nav-kontor.",
         "ettersendelseLink": "Hvis du skal ettersende dokumentasjon digitalt kan du gjøre det her (åpnes i ny fane)"
       },
       "saksbehandlingstid": "<a>Du kan se forventet saksbehandlingstid på nav.no/saksbehandlingstid.</a>",
@@ -647,7 +647,7 @@
       },
       "dittNavKnapp": "Følg saken på Mine Arbeidsavklaringspenger"
     },
-    "ettersendelseFrist": "Du kan ettersende dette innen 14 dager per post eller digitalt. Du kan også levere dette på ditt lokale NAV kontor"
+    "ettersendelseFrist": "Du kan ettersende dette innen 14 dager per post eller digitalt. Du kan også levere dette på ditt lokale Nav kontor"
   },
   "fileInputErrors": {
     "unsupportedMediaType": "Filtypen kan ikke lastes opp. Last opp dokumentet i et annet format (PDF, PNG, JPG eller heic). ",

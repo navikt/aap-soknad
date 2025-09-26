@@ -28,7 +28,7 @@ export const OppsummeringVedlegg = ({ søknadState }: Props) => {
           </ul>
           <Alert variant="info">
             Du kan ettersende dette per post eller digitalt. Du kan også levere dette på ditt lokale
-            NAV kontor
+            Nav kontor
           </Alert>
         </div>
       )}

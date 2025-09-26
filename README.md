@@ -15,7 +15,6 @@ I .bashrc eller .zshrc:
 
 Hvor github_pat er din personal access token laget på github(settings -> developer settings). Husk read:packages rettighet og enable sso når du oppdaterer/lager PAT.
 
-
 ### Kjøre lokalt
 
 - Kopier filen `.env.template` til `.env.local`
@@ -30,7 +29,7 @@ Hvor github_pat er din personal access token laget på github(settings -> develo
 
 Spørsmål knyttet til koden eller prosjektet kan stilles som issues her på GitHub
 
-# For NAV-ansatte
+# For Nav-ansatte
 
 ---
 

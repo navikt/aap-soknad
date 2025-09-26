@@ -282,13 +282,13 @@ test('at alle feilmeldinger skal dukke opp', async ({ page }) => {
   await page.getByLabel('Ja').check();
   await expect(
     page.getByText(
-      'InformasjonNAV vil sjekke om yrkesskaden/yrkessykdommen din er:godkjent av NAVhe',
+      'InformasjonNav vil sjekke om yrkesskaden/yrkessykdommen din er:godkjent av Navhe',
     ),
   ).toBeVisible();
   await page.getByLabel('Nei').check();
   await expect(
     page.getByText(
-      'InformasjonNAV vil sjekke om yrkesskaden/yrkessykdommen din er:godkjent av NAVhe',
+      'InformasjonNav vil sjekke om yrkesskaden/yrkessykdommen din er:godkjent av Navhe',
     ),
   ).not.toBeVisible();
   await page.getByRole('button', { name: 'Neste steg' }).click();

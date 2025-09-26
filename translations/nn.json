@@ -28,7 +28,7 @@
     "startDato": {
       "title": "Startdato",
       "guide": {
-        "text1": "NAV vil berekna startdato for deg, slik at du får AAP så tidleg som mogleg. Hovudregelen er at du tidlegast kan få AAP frå den dagen du sender inn søknaden."
+        "text1": "Nav vil berekna startdato for deg, slik at du får AAP så tidleg som mogleg. Hovudregelen er at du tidlegast kan få AAP frå den dagen du sender inn søknaden."
       },
       "sykepenger": {
         "legend": "Har du sjukepengar no?",
@@ -97,7 +97,7 @@
       },
       "accordionHvis": {
         "title": "Dersom du får AAP, gjeld følgjande",
-        "bulletPointOppfølging": "Du har rett til oppfølging frå NAV",
+        "bulletPointOppfølging": "Du har rett til oppfølging frå Nav",
         "bulletPointPlikt": "Du har plikt til å bidra til å avklare om du kan behalde eller kome i jobb",
         "bulletPointMeldekort": "Du må sende inn meldekort kvar 14. dag",
         "bulletPointTilbakebetaling": "Dersom du får pengar du ikkje har rett til, er du førebudd på å betale dei tilbake.",
@@ -114,7 +114,7 @@
         "folketrygdloven": "Dette gjer vi for å vurdere om du har rett til AAP etter folketrygdlova kapittel 11. Opplysningane blir også brukte i samband med oppfølginga du får fra Nav.",
         "bulletPointLagring": "Søknaden din vil vere lagra i 24 timar og du kan halde fram der du slapp når du kjem tilbake.",
         "bulletPointDeler": "Vi deler opplysningar om kva du får utbetalt i AAP, med Skatteetaten og Statistisk sentralbyrå.",
-        "personopplysningerNavNo": "Du kan lese meir om korleis NAV behandlar personopplysningar på nav.no (blir opna i ny fane)."
+        "personopplysningerNavNo": "Du kan lese meir om korleis Nav behandlar personopplysningar på nav.no (blir opna i ny fane)."
       },
       "veiledningConfirm": {
         "title": "Vi stolar på deg",
@@ -163,7 +163,7 @@
       },
       "iTilleggArbeidUtenforNorge": {
         "label": "Har du i tillegg til jobb i Noreg, jobba i eit anna land dei fem siste åra?",
-        "description": "Dersom du har jobba i eit anna land, kan du i enkelte tilfelle få meir utbetalt i AAP. NAV bruker denne inntekta berre viss det er til fordel for deg.",
+        "description": "Dersom du har jobba i eit anna land, kan du i enkelte tilfelle få meir utbetalt i AAP. Nav bruker denne inntekta berre viss det er til fordel for deg.",
         "readMore": {
           "title": "Blir ytingar frå utanlandske styresmakter rekna som jobb i eit anna land?",
           "text": "Dersom du har fått ytingar (t.d. dagpengar, sjukepengar og foreldrepengar) frå utanlandske styresmakter, blir dette rekna som jobb utanfor Noreg. Pensjon blir ikkje rekna som erstatning for jobb."
@@ -251,7 +251,7 @@
     "helseopplysninger": {
       "title": "Kontaktperson for helseopplysningar",
       "guide": {
-        "text1": "NAV hentar helseopplysningar frå fastlegen i samband med behandlinga av søknaden din. Ved behov kan vi også hente inn opplysningar frå andre behandlarar eller legar.",
+        "text1": "Nav hentar helseopplysningar frå fastlegen i samband med behandlinga av søknaden din. Ved behov kan vi også hente inn opplysningar frå andre behandlarar eller legar.",
         "text2": "Dersom vi har tilstrekkeleg med opplysningar om deg frå før, innhentar vi ikkje legeerklæring."
       },
       "erRegistrertFastlegeRiktig": {
@@ -269,7 +269,7 @@
       },
       "annenBehandler": {
         "title": "Annan lege eller behandlar",
-        "description": "Dersom du har ein annan lege eller behandlar du vil at NAV skal kunne kontakte for helseopplysningar, kan du leggje til vedkomande her.",
+        "description": "Dersom du har ein annan lege eller behandlar du vil at Nav skal kunne kontakte for helseopplysningar, kan du leggje til vedkomande her.",
         "addBehandlerButton": "Legg til lege/behandlar",
         "accessibleButtonTitle": "Legg til"
       },
@@ -321,7 +321,7 @@
     "andreUtbetalinger": {
       "title": "Utbetalingar",
       "guide": {
-        "text": "Dersom du får utbetalingar frå NAV, arbeidsgivar eller andre, kan AAP-en din bli redusert. Vi spør om dette fordi du ikkje alltid har krav på å få fleire typar utbetalingar samstundes. Vi prøver å unngå feilutbetalingar."
+        "text": "Dersom du får utbetalingar frå Nav, arbeidsgivar eller andre, kan AAP-en din bli redusert. Vi spør om dette fordi du ikkje alltid har krav på å få fleire typar utbetalingar samstundes. Vi prøver å unngå feilutbetalingar."
       },
       "lønn": {
         "title": "Lønn og andre goder",
@@ -625,15 +625,15 @@
         }
       },
       "alert": {
-        "navVilSjekke": "NAV vil sjekke om yrkesskaden/yrkessjukdommen din er",
-        "bulletPointGodkjent": "godkjend av NAV",
+        "navVilSjekke": "Nav vil sjekke om yrkesskaden/yrkessjukdommen din er",
+        "bulletPointGodkjent": "godkjend av Nav",
         "bulletPointArbeidsevne": "heilt eller delvis årsak til at arbeidsevna di er nedsett"
       }
     },
     "kvittering": {
       "title": "Takk for søknaden, {navn}",
       "alert": {
-        "text": "Vi har nå fått søknaden din om AAP. Saka din ligg inne til behandling hos NAV. Me vil ta kontakt med deg viss me treng meir informasjon eller dokumentasjon frå deg."
+        "text": "Vi har nå fått søknaden din om AAP. Saka din ligg inne til behandling hos Nav. Me vil ta kontakt med deg viss me treng meir informasjon eller dokumentasjon frå deg."
       },
       "vedlegg": {
         "tekst1": "Du kan også <a>ettersenda per post (blir opna i ny fane)</a>, eller levera dokumentasjon på det lokale Nav-kontoret ditt.",
@@ -647,7 +647,7 @@
       },
       "dittNavKnapp": "Følg saka på Mine Arbeidsavklaringspengar"
     },
-    "ettersendelseFrist": "Du kan ettersende dette innan 14 dagar per post eller digitalt. Du kan også levere dette på ditt lokale NAV-kontor"
+    "ettersendelseFrist": "Du kan ettersende dette innan 14 dagar per post eller digitalt. Du kan også levere dette på ditt lokale Nav-kontor"
   },
   "fileInputErrors": {
     "unsupportedMediaType": "Filtypen er ikkje støtta. Last opp dokumentet i eit anna format (PDF, PNG, JPG eller heic).",
