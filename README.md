@@ -33,4 +33,4 @@ Spørsmål knyttet til koden eller prosjektet kan stilles som issues her på Git
 
 ---
 
-Interne henvendelser kan sendes via Slack i kanalen #po-aap-værsågod.
+Interne henvendelser kan sendes via Slack i kanalen #ytelse-aap-værsågod.
