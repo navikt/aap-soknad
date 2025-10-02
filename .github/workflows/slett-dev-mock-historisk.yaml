@@ -8,7 +8,7 @@ jobs:
     name: Delete branch labs-gcp
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Scale down dev-gcp-mock-historisk
         uses: nais/deploy/actions/deploy@v2
         env:

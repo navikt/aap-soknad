@@ -12,7 +12,7 @@ jobs:
       NPM_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
       SKIP_YARN_COREPACK_CHECK: true
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: actions/setup-node@v4
         with:
           node-version: 22
@@ -38,7 +38,7 @@ jobs:
     needs: "buildMock"
     runs-on: "ubuntu-latest"
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: gacts/github-slug@v1
         id: slug
         with:
