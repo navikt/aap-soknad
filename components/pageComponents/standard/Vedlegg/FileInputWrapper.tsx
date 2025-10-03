@@ -1,4 +1,6 @@
-import { FileInput, FileInputInnsending, Vedlegg } from '@navikt/aap-felles-react';
+import { Vedlegg } from 'types/Vedlegg';
+import { FileInputInnsending } from 'components/FileInput/FileInputInnsending';
+import { FileInput } from 'components/FileInput/FileInput';
 
 export const FileInputWrapper = ({
   locale,
