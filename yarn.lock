@@ -1682,15 +1682,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@navikt/aap-felles-utils-client@npm:^1.9.7":
-  version: 1.9.7
-  resolution: "@navikt/aap-felles-utils-client@npm:1.9.7::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faap-felles-utils-client%2F1.9.7%2Fdc8fb2fa39636d4924281710b08c4fc06b58f407"
-  dependencies:
-    date-fns: "npm:^3.6.0"
-  checksum: 10c0/a45ac5df87614689dd16ad5f9969bab9f10803bc6698d5592fb8cf82cc6f18831fa35428bd5b480ad27933e32bd7a8215d2e151b083698470d4ef147e407752a
-  languageName: node
-  linkType: hard
-
 "@navikt/aap-felles-utils@npm:^1.9.7":
   version: 1.9.7
   resolution: "@navikt/aap-felles-utils@npm:1.9.7::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faap-felles-utils%2F1.9.7%2F875e35d7046bd3bb24aaf00d584131b33c7bc3f5"
@@ -2834,7 +2825,6 @@ __metadata:
     "@grafana/faro-web-sdk": "npm:^1.19.0"
     "@navikt/aap-felles-css": "npm:^1.9.7"
     "@navikt/aap-felles-utils": "npm:^1.9.7"
-    "@navikt/aap-felles-utils-client": "npm:^1.9.7"
     "@navikt/ds-css": "npm:^7.31.0"
     "@navikt/ds-icons": "npm:^3.4.3"
     "@navikt/ds-react": "npm:^7.31.0"
@@ -3836,13 +3826,6 @@ __metadata:
   version: 4.1.0
   resolution: "date-fns@npm:4.1.0"
   checksum: 10c0/b79ff32830e6b7faa009590af6ae0fb8c3fd9ffad46d930548fbb5acf473773b4712ae887e156ba91a7b3dc30591ce0f517d69fd83bd9c38650fdc03b4e0bac8
-  languageName: node
-  linkType: hard
-
-"date-fns@npm:^3.6.0":
-  version: 3.6.0
-  resolution: "date-fns@npm:3.6.0"
-  checksum: 10c0/0b5fb981590ef2f8e5a3ba6cd6d77faece0ea7f7158948f2eaae7bbb7c80a8f63ae30b01236c2923cf89bb3719c33aeb150c715ea4fe4e86e37dcf06bed42fb6
   languageName: node
   linkType: hard
 
