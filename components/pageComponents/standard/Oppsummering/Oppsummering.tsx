@@ -7,7 +7,7 @@ import {
   Label,
   Switch,
 } from '@navikt/ds-react';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import AccordianItemOppsummering from './AccordianItemOppsummering/AccordianItemOppsummering';
 import OppsummeringKontaktinfo from './OppsummeringKontaktinfo/OppsummeringKontaktinfo';
 import OppsummeringUtenlandsopphold from './OppsummeringUtenlandsopphold/OppsummeringUtenlandsopphold';
@@ -38,7 +38,6 @@ import {
 import { getYrkesskadeSchema } from 'components/pageComponents/standard/Yrkesskade/Yrkesskade';
 
 import { getBehandlerSchema } from 'components/pageComponents/standard/Behandlere/Behandlere';
-import { logSkjemaValideringFeiletEvent } from 'utils/amplitude';
 import { useIntl } from 'react-intl';
 import { getMedlemskapSchema } from '../Medlemskap/medlemskapSchema';
 import SoknadFormWrapperNew from 'components/SoknadFormWrapper/SoknadFormWrapper';
@@ -108,20 +107,6 @@ const Oppsummering = ({
   const [utbetalingerHasErrors] = useState<boolean>(
     !getAndreUtbetalingerSchema(formatMessage).isValidSync(søknadState?.søknad?.andreUtbetalinger),
   );
-
-  useEffect(() => {
-    const errorSteps = [
-      ...(startDatoHasErrors ? ['STARTDATO'] : []),
-      ...(medlemskapHasErrors ? ['MEDLEMSKAP'] : []),
-      ...(yrkesskadeHasErrors ? ['YRKESSKADE'] : []),
-      ...(behandlereHasErrors ? ['BEHANDLERE'] : []),
-      ...(studentHasErrors ? ['STUDENT'] : []),
-      ...(utbetalingerHasErrors ? ['UTBETALINGER'] : []),
-    ];
-    errorSteps.forEach((stegnavn) => {
-      logSkjemaValideringFeiletEvent(stegnavn);
-    });
-  }, []);
 
   const SummaryRowIfExists = ({ labelKey, value }: { labelKey: string; value?: any }) => {
     return value ? (

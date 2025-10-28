@@ -10,7 +10,6 @@ import { LucaGuidePanel } from 'components/LucaGuidePanel';
 import { useDebounceLagreSoknad } from 'hooks/useDebounceLagreSoknad';
 import { useIntl } from 'react-intl';
 import SoknadFormWrapperNew from 'components/SoknadFormWrapper/SoknadFormWrapper';
-import { logSkjemastegFullførtEvent } from 'utils/amplitude';
 import { ManueltBarn } from './ManueltBarn';
 import { Registerbarn } from './Registerbarn';
 import { useSoknad } from 'hooks/SoknadHook';
@@ -26,7 +25,7 @@ export const Barnetillegg = ({ onBackClick }: Props) => {
   const { formatMessage } = useIntl();
 
   const { søknadState, søknadDispatch } = useSoknad();
-  const { currentStepIndex, stepWizardDispatch } = useStepWizard();
+  const { stepWizardDispatch } = useStepWizard();
   const { stepList } = useStepWizard();
   const [selectedBarn, setSelectedBarn] = useState<CreateOrUpdateManuelleBarn>({});
   const [showModal, setShowModal] = useState<boolean>(false);
@@ -87,7 +86,6 @@ export const Barnetillegg = ({ onBackClick }: Props) => {
     <>
       <SoknadFormWrapperNew
         onNext={() => {
-          logSkjemastegFullførtEvent(currentStepIndex ?? 0);
           completeAndGoToNextStep(stepWizardDispatch);
         }}
         onBack={() => {

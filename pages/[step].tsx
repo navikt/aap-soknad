@@ -20,7 +20,6 @@ import Oppsummering from 'components/pageComponents/standard/Oppsummering/Oppsum
 import { beskyttetSide } from 'auth/beskyttetSide';
 import { GetServerSidePropsResult, NextPageContext } from 'next';
 import { getAccessToken } from 'auth/accessToken';
-import { logSkjemaFullførtEvent, logVeiledningVistEvent } from 'utils/amplitude';
 import metrics from 'utils/metrics';
 import { scrollRefIntoView } from 'utils/dom';
 import { Steg0 } from 'components/pageComponents/standard/Steg0/Steg0';
@@ -109,23 +108,6 @@ const Steps = ({ person, mellomlagretSøknad, kontaktinformasjon, barn, fastlege
       );
 
       if (postResponse?.ok) {
-        const harVedlegg = søknadState.requiredVedlegg && søknadState?.requiredVedlegg?.length > 0;
-        const erIkkeKomplett = !!søknadState?.requiredVedlegg?.find(
-          (vedlegg) => !vedlegg.completed,
-        );
-        const erStudentKommeTilbake = søknadState?.søknad?.student?.kommeTilbake;
-        const yrkesskade = søknadState?.søknad?.yrkesskade;
-        const brukerFritekstfelt =
-          søknadState?.søknad?.tilleggsopplysninger !== undefined &&
-          søknadState?.søknad?.tilleggsopplysninger.length > 0;
-        logSkjemaFullførtEvent({
-          harVedlegg,
-          erIkkeKomplett,
-          brukerFritekstfelt,
-          yrkesskade,
-          erStudentKommeTilbake,
-        });
-
         router.push('kvittering');
         return true;
       } else if (postResponse?.status === 412) {
@@ -185,7 +167,6 @@ const Steps = ({ person, mellomlagretSøknad, kontaktinformasjon, barn, fastlege
               {step === '1' && (
                 <StartDato
                   onBackClick={() => {
-                    logVeiledningVistEvent();
                     router.push('0');
                   }}
                 />

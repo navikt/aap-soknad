@@ -17,7 +17,6 @@ import { useStepWizard } from 'hooks/StepWizardHook';
 import { useDebounceLagreSoknad } from 'hooks/useDebounceLagreSoknad';
 import { setFocusOnErrorSummary } from 'components/schema/FormErrorSummary';
 import { FormattedMessage, IntlFormatters, useIntl } from 'react-intl';
-import { logSkjemastegFullførtEvent } from 'utils/amplitude';
 import { validate } from 'lib/utils/validationUtils';
 import { SøknadValidationError } from 'components/schema/FormErrorSummary';
 import SoknadFormWrapperNew from 'components/SoknadFormWrapper/SoknadFormWrapper';
@@ -42,7 +41,7 @@ export const Yrkesskade = ({ onBackClick }: Props) => {
   const { formatMessage } = useIntl();
 
   const { søknadState, søknadDispatch } = useSoknad();
-  const { currentStepIndex, stepWizardDispatch, stepList } = useStepWizard();
+  const { stepWizardDispatch, stepList } = useStepWizard();
 
   const debouncedLagre = useDebounceLagreSoknad<Soknad>();
 
@@ -62,7 +61,6 @@ export const Yrkesskade = ({ onBackClick }: Props) => {
           return;
         }
 
-        logSkjemastegFullførtEvent(currentStepIndex ?? 0);
         completeAndGoToNextStep(stepWizardDispatch);
       }}
       onBack={() => {

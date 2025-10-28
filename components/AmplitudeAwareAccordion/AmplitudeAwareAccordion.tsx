@@ -1,6 +1,5 @@
 import { Accordion } from '@navikt/ds-react';
 import { useState } from 'react';
-import { logAccordionChangeEvent } from 'utils/amplitude';
 
 interface Props {
   title: string;
@@ -11,7 +10,6 @@ export const AmplitudeAwareAccordion = ({ title, children }: Props) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const onClick = () => {
-    logAccordionChangeEvent(title, isOpen);
     setIsOpen(!isOpen);
   };
 

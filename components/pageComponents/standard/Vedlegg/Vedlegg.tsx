@@ -7,7 +7,6 @@ import { useDebounceLagreSoknad } from 'hooks/useDebounceLagreSoknad';
 import { useIntl } from 'react-intl';
 import SoknadFormWrapperNew from 'components/SoknadFormWrapper/SoknadFormWrapper';
 import { SøknadValidationError } from 'components/schema/FormErrorSummary';
-import { logSkjemastegFullførtEvent } from 'utils/amplitude';
 import { setFocusOnErrorSummary } from '../../../schema/FormErrorSummary';
 import { ScanningGuide } from './scanningguide/ScanningGuide';
 import { addVedlegg, deleteVedlegg, updateSøknadData } from 'context/soknadcontext/actions';
@@ -22,7 +21,7 @@ interface Props {
 const Vedlegg = ({ onBackClick }: Props) => {
   const { formatMessage, locale } = useIntl();
   const { søknadState, søknadDispatch } = useSoknad();
-  const { stepWizardDispatch, currentStepIndex, stepList } = useStepWizard();
+  const { stepWizardDispatch, stepList } = useStepWizard();
   const debouncedLagre = useDebounceLagreSoknad<Soknad>();
 
   useEffect(() => {
@@ -51,7 +50,6 @@ const Vedlegg = ({ onBackClick }: Props) => {
     <SoknadFormWrapperNew
       onNext={() => {
         if (errors.length === 0) {
-          logSkjemastegFullførtEvent(currentStepIndex ?? 0);
           completeAndGoToNextStep(stepWizardDispatch);
         } else {
           setFocusOnErrorSummary();

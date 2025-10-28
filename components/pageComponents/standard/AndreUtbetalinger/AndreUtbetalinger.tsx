@@ -22,7 +22,6 @@ import { IntlFormatters, useIntl } from 'react-intl';
 import SoknadFormWrapperNew from 'components/SoknadFormWrapper/SoknadFormWrapper';
 import { validate } from 'lib/utils/validationUtils';
 import { SøknadValidationError } from 'components/schema/FormErrorSummary';
-import { logSkjemastegFullførtEvent } from 'utils/amplitude';
 import { AttachmentType } from 'types/SoknadContext';
 
 import {
@@ -111,7 +110,7 @@ export const getAndreUtbetalingerSchema = (formatMessage: IntlFormatters['format
 export const AndreUtbetalinger = ({ onBackClick }: Props) => {
   const [errors, setErrors] = useState<SøknadValidationError[] | undefined>();
   const { søknadState, søknadDispatch } = useSoknad();
-  const { stepList, currentStepIndex, stepWizardDispatch } = useStepWizard();
+  const { stepList, stepWizardDispatch } = useStepWizard();
   const { formatMessage } = useIntl();
   const debouncedLagre = useDebounceLagreSoknad<Soknad>();
 
@@ -202,7 +201,7 @@ export const AndreUtbetalinger = ({ onBackClick }: Props) => {
           setFocusOnErrorSummary();
           return;
         }
-        logSkjemastegFullførtEvent(currentStepIndex ?? 0);
+
         completeAndGoToNextStep(stepWizardDispatch);
       }}
       onBack={() => {

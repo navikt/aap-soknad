@@ -11,7 +11,6 @@ import ColorPanel from 'components/panel/ColorPanel';
 import { setFocusOnErrorSummary } from 'components/schema/FormErrorSummary';
 import { useIntl } from 'react-intl';
 import SoknadFormWrapperNew from 'components/SoknadFormWrapper/SoknadFormWrapper';
-import { logSkjemastegFullførtEvent } from 'utils/amplitude';
 import { SøknadValidationError } from 'components/schema/FormErrorSummary';
 import { useDebounceLagreSoknad } from 'hooks/useDebounceLagreSoknad';
 import { v4 as uuid4 } from 'uuid';
@@ -36,7 +35,7 @@ interface Props {
 export const Medlemskap = ({ onBackClick }: Props) => {
   const { formatMessage } = useIntl();
 
-  const { currentStepIndex, stepWizardDispatch, stepList } = useStepWizard();
+  const { stepWizardDispatch, stepList } = useStepWizard();
   const { søknadState, søknadDispatch } = useSoknad();
   const [showUtenlandsPeriodeModal, setShowUtenlandsPeriodeModal] = useState<boolean>(false);
   const [selectedUtenlandsPeriode, setSelectedUtenlandsPeriode] = useState<UtenlandsPeriode>({});
@@ -116,7 +115,6 @@ export const Medlemskap = ({ onBackClick }: Props) => {
             return;
           }
 
-          logSkjemastegFullførtEvent(currentStepIndex ?? 0);
           completeAndGoToNextStep(stepWizardDispatch);
         }}
         onBack={() => {

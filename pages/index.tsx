@@ -4,7 +4,6 @@ import { useRouter } from 'next/router';
 import { GetServerSidePropsResult, NextPageContext } from 'next/types';
 import { beskyttetSide } from 'auth/beskyttetSide';
 import { StepType } from 'components/StepWizard/Step';
-import { logSkjemaStartetEvent } from 'utils/amplitude';
 import metrics from 'utils/metrics';
 import { scrollRefIntoView } from 'utils/dom';
 import { SOKNAD_VERSION, SoknadContextState } from 'context/soknadcontext/soknadContext';
@@ -53,7 +52,6 @@ const Introduksjon = ({ person }: PageProps) => {
   const startSoknad = async () => {
     setIsLoading(true);
     setHasError(false);
-    logSkjemaStartetEvent();
     const initState: SoknadContextState = {
       version: SOKNAD_VERSION,
       søknad: { vedlegg: {} },

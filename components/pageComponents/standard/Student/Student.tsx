@@ -11,7 +11,6 @@ import { useDebounceLagreSoknad } from 'hooks/useDebounceLagreSoknad';
 import { setFocusOnErrorSummary } from 'components/schema/FormErrorSummary';
 import { IntlFormatters, useIntl } from 'react-intl';
 import { validate } from 'lib/utils/validationUtils';
-import { logSkjemastegFullførtEvent } from 'utils/amplitude';
 import { SøknadValidationError } from 'components/schema/FormErrorSummary';
 import SoknadFormWrapperNew from 'components/SoknadFormWrapper/SoknadFormWrapper';
 import { useSoknad } from 'hooks/SoknadHook';
@@ -72,7 +71,7 @@ export const getStudentSchema = (formatMessage: IntlFormatters['formatMessage'])
 const Student = ({ onBackClick }: Props) => {
   const { formatMessage } = useIntl();
   const { søknadState, søknadDispatch } = useSoknad();
-  const { stepList, currentStepIndex, stepWizardDispatch } = useStepWizard();
+  const { stepList, stepWizardDispatch } = useStepWizard();
 
   const debouncedLagre = useDebounceLagreSoknad<Soknad>();
 
@@ -117,7 +116,6 @@ const Student = ({ onBackClick }: Props) => {
           removeRequiredVedlegg('AVBRUTT_STUDIE', søknadDispatch);
         }
 
-        logSkjemastegFullførtEvent(currentStepIndex ?? 0);
         completeAndGoToNextStep(stepWizardDispatch);
       }}
       onBack={() => {
