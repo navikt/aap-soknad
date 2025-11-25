@@ -9,14 +9,27 @@ updates:
     directory: "/"
     schedule:
       interval: weekly
+    cooldown:
+      default-days: 7
   - package-ecosystem: 'github-actions'
     directory: '/'
     schedule:
-      interval: monthly
+      interval: weekly
+    cooldown:
+      default-days: 7
   - package-ecosystem: npm
     directory: "/"
     schedule:
       interval: daily
+    cooldown:
+      default-days: 7
+      exclude:
+        - dependency-name: '@navikt/aap-behandlingsflyt-typescript-types'
+        - dependency-name: '@navikt/aap-postmottak-backend-typescript-types'
+        - dependency-name: '@navikt/aap-oppgave-typescript-types'
+        - dependency-name: '@navikt/aap-statistikk-typescript-types'
+        - dependency-name: '@navikt/aksel*'
+        - dependency-name: '@navikt/ds*'
     open-pull-requests-limit: 10
     registries: '*'
     ignore:
