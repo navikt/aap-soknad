@@ -1667,19 +1667,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@navikt/aap-felles-utils@npm:^5.5.0":
-  version: 5.5.0
-  resolution: "@navikt/aap-felles-utils@npm:5.5.0::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faap-felles-utils%2F5.5.0%2F1ab254a14c94f8e207aad75e75ccf3c640de1401"
+"@navikt/aap-felles-utils@npm:5.5.1":
+  version: 5.5.1
+  resolution: "@navikt/aap-felles-utils@npm:5.5.1::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faap-felles-utils%2F5.5.1%2Fc6f8d1bc5994d08bbb8dd0b166ff6a7428d06940"
   dependencies:
     "@navikt/oasis": "npm:^3.4.0"
     axios: "npm:^1.7.7"
     jose: "npm:^5.9.2"
-    next: "npm:15.5.7"
+    next: "npm:15.5.9"
     openid-client: "npm:^5.7.0"
     pino: "npm:^9.4.0"
     prom-client: "npm:^15.1.3"
     server-only: "npm:^0.0.1"
-  checksum: 10c0/7eaa3cca5b607477b39273889897b7cd9fef0d8dc1c70fbbcc49a19edbb16ed816ffb8c098cbaf5d29b580de83deb82fcf60559e62d07df746ea86270b9d2ed9
+  checksum: 10c0/d31a0defe6b32236b5802f711220b45b5a8091c7fc7ccd9664b2b327b1a26834bef7ee2d1741c49254c96708bddc7b4a87f0b3ad0c02b3da9668902aacf0a94b
   languageName: node
   linkType: hard
 
@@ -1778,10 +1778,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@next/env@npm:15.5.7":
-  version: 15.5.7
-  resolution: "@next/env@npm:15.5.7"
-  checksum: 10c0/f92d99e5fa3516c6b7699abafd9bd813f5c1889dd257ab098f1b71f93137f5e4f49792e22f6dddf8a59efcb134e8e84277c983ff88607b2a42aac651bfde78ea
+"@next/env@npm:15.5.9":
+  version: 15.5.9
+  resolution: "@next/env@npm:15.5.9"
+  checksum: 10c0/92c4e29d81a8e78c33c2da179648a4f478a9a6852966192e079007b19ec9955e72530d5ca7df55ea0efeccbf5b1c9d0efcaf80433e26af89c6478193e1d088f1
   languageName: node
   linkType: hard
 
@@ -2723,7 +2723,7 @@ __metadata:
     "@axe-core/playwright": "npm:^4.11.0"
     "@grafana/faro-web-sdk": "npm:^1.19.0"
     "@navikt/aap-felles-css": "npm:^5.5.0"
-    "@navikt/aap-felles-utils": "npm:^5.5.0"
+    "@navikt/aap-felles-utils": "npm:5.5.1"
     "@navikt/ds-css": "npm:^7.35.1"
     "@navikt/ds-icons": "npm:^3.4.3"
     "@navikt/ds-react": "npm:^7.35.1"
@@ -2762,7 +2762,7 @@ __metadata:
     jest-fetch-mock: "npm:^3.0.3"
     json-diff: "npm:^1.0.6"
     lint-staged: "npm:^15.5.2"
-    next: "npm:15.5.7"
+    next: "npm:15.5.9"
     node-cache: "npm:^5.1.2"
     prettier: "npm:^3.3.2"
     process: "npm:^0.11.10"
@@ -6966,11 +6966,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"next@npm:15.5.7":
-  version: 15.5.7
-  resolution: "next@npm:15.5.7"
+"next@npm:15.5.9":
+  version: 15.5.9
+  resolution: "next@npm:15.5.9"
   dependencies:
-    "@next/env": "npm:15.5.7"
+    "@next/env": "npm:15.5.9"
     "@next/swc-darwin-arm64": "npm:15.5.7"
     "@next/swc-darwin-x64": "npm:15.5.7"
     "@next/swc-linux-arm64-gnu": "npm:15.5.7"
@@ -7021,7 +7021,7 @@ __metadata:
       optional: true
   bin:
     next: dist/bin/next
-  checksum: 10c0/baf5b9f42416c478702b3894479b3d7862bc4abf18afe0e43b7fc7ed35567b8dc6cb76cd94906505bab9013cb8d0f3370cdc0451c01ec15ae5a638d37b5ba7c7
+  checksum: 10c0/6a120afbc45b96aa14debba6375602d6319093af4e3e8c648cf22b12ffb9db016c889df5e764cf5e0aa414ad60505db4e2095624a19f4b71316561076158651a
   languageName: node
   linkType: hard
 
