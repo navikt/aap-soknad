@@ -1660,16 +1660,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@navikt/aap-felles-css@npm:^5.5.1":
-  version: 5.5.1
-  resolution: "@navikt/aap-felles-css@npm:5.5.1::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faap-felles-css%2F5.5.1%2F175308e6fa701d575e72b61da33c2761288cccfe"
-  checksum: 10c0/81932226dc50e654ed1724909b19b90438fba47b095eb201ccba7da674beea572e5077c695f4272189a82d6453025366976ceb361085395b572450e6b43907f3
+"@navikt/aap-felles-css@npm:^5.6.0":
+  version: 5.6.0
+  resolution: "@navikt/aap-felles-css@npm:5.6.0::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faap-felles-css%2F5.6.0%2F58e68c54291454eeab84ca96beb2217fbf5161f6"
+  checksum: 10c0/75bab52656055bd1d243b27a41fee0dd180a5c726556a08afe1e72f64fda4a58740c04916c5ebbd9ac4fced817b860c9cb1bc8c2682fad0c31f7c5ae1e2a9d03
   languageName: node
   linkType: hard
 
-"@navikt/aap-felles-utils@npm:5.5.1":
-  version: 5.5.1
-  resolution: "@navikt/aap-felles-utils@npm:5.5.1::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faap-felles-utils%2F5.5.1%2Fc6f8d1bc5994d08bbb8dd0b166ff6a7428d06940"
+"@navikt/aap-felles-utils@npm:5.6.0":
+  version: 5.6.0
+  resolution: "@navikt/aap-felles-utils@npm:5.6.0::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faap-felles-utils%2F5.6.0%2F95810d7e5732aaabee2418e9b82d7674b63e4d08"
   dependencies:
     "@navikt/oasis": "npm:^3.4.0"
     axios: "npm:^1.7.7"
@@ -1679,7 +1679,7 @@ __metadata:
     pino: "npm:^9.4.0"
     prom-client: "npm:^15.1.3"
     server-only: "npm:^0.0.1"
-  checksum: 10c0/d31a0defe6b32236b5802f711220b45b5a8091c7fc7ccd9664b2b327b1a26834bef7ee2d1741c49254c96708bddc7b4a87f0b3ad0c02b3da9668902aacf0a94b
+  checksum: 10c0/4c701e69906e8963fb937b92f63722c4cfafb4f4c0c0faaf1fc58cd15225334c1ae50d51bc134376cdeea9d6266bd1941a6285c84516734468296c79e92771e8
   languageName: node
   linkType: hard
 
@@ -2722,8 +2722,8 @@ __metadata:
   dependencies:
     "@axe-core/playwright": "npm:^4.11.0"
     "@grafana/faro-web-sdk": "npm:^1.19.0"
-    "@navikt/aap-felles-css": "npm:^5.5.1"
-    "@navikt/aap-felles-utils": "npm:5.5.1"
+    "@navikt/aap-felles-css": "npm:^5.6.0"
+    "@navikt/aap-felles-utils": "npm:5.6.0"
     "@navikt/ds-css": "npm:^7.36.0"
     "@navikt/ds-icons": "npm:^3.4.3"
     "@navikt/ds-react": "npm:^7.36.0"
