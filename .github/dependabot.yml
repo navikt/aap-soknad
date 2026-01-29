@@ -11,6 +11,8 @@ updates:
       interval: weekly
     cooldown:
       default-days: 7
+    ignore:
+      - dependency-name: 'cgr-nav/pull-through/nav.no/node'
   - package-ecosystem: 'github-actions'
     directory: '/'
     schedule:
