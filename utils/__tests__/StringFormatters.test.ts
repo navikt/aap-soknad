@@ -1,4 +1,5 @@
 import { formatTelefonnummer } from 'utils/StringFormatters';
+import { describe, expect, it } from 'vitest';
 
 describe('formatTelefonnummer', () => {
   it('should correctly format regular phone number with 8 characters', () => {

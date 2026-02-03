@@ -1,8 +1,9 @@
 import { JaEllerNei } from 'types/Generic';
 import { getAndreUtbetalingerSchema, StønadType } from './AndreUtbetalinger';
+import { describe, vi, it, expect } from 'vitest';
 
 describe('AndreUtbetalinger validation', () => {
-  const schema = getAndreUtbetalingerSchema(jest.fn());
+  const schema = getAndreUtbetalingerSchema(vi.fn());
   it('ingenting utfylt', async () => {
     const form = {
       stønad: [],

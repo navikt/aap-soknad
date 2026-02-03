@@ -1,13 +1,11 @@
-import { renderStepSoknadStandard, screen } from 'setupTests';
 import { Step, StepWizard } from 'components/StepWizard';
 import React from 'react';
-import { toHaveNoViolations } from 'jest-axe';
 import messagesNb from 'translations/nb.json';
 import Vedlegg from './Vedlegg';
 import { Relasjon } from 'components/pageComponents/standard/Barnetillegg/AddBarnModal';
 import { SoknadContextState } from 'context/soknadcontext/soknadContext';
-
-expect.extend(toHaveNoViolations);
+import { describe, expect, it, vi } from 'vitest';
+import { renderStepSoknadStandard, screen } from 'vitestSetup';
 
 const requiredVedlegg = [
   {
@@ -79,7 +77,7 @@ describe('Vedlegg', () => {
     return (
       <StepWizard>
         <Step name={'VEDLEGG'}>
-          <Vedlegg onBackClick={jest.fn()} />
+          <Vedlegg onBackClick={vi.fn()} />
         </Step>
       </StepWizard>
     );

@@ -1,15 +1,15 @@
-// jest-dom adds custom jest matchers for asserting on DOM nodes.
-// allows you to do things like:
-// expect(element).toHaveTextContent(/react/i)
-// learn more: https://github.com/testing-library/jest-dom
-import '@testing-library/jest-dom';
-import { configure, render as rtlRender } from '@testing-library/react';
-import { AppStateContext, AppStateContextState } from 'context/appStateContext';
-import { StepWizardContext, StepWizardContextState } from 'context/stepWizardContext';
+import { afterEach, beforeAll, vi, expect } from 'vitest';
+import { render as rtlRender } from '@testing-library/react';
+import '@testing-library/jest-dom/vitest';
+import { cleanup } from '@testing-library/react';
+import 'vitest-axe/extend-expect';
+import * as matchers from 'vitest-axe/matchers';
+import links from 'translations/links.json';
+
+import createFetchMock from 'vitest-fetch-mock';
+import { flattenMessages, messages } from 'utils/message';
 import { ReactElement, ReactNode, useReducer } from 'react';
 import { IntlProvider } from 'react-intl';
-import { flattenMessages, messages } from 'utils/message';
-import links from 'translations/links.json';
 import {
   SoknadContext,
   soknadContextInititalState,
@@ -17,13 +17,17 @@ import {
   SoknadContextType,
 } from 'context/soknadcontext/soknadContext';
 import { soknadReducer } from 'context/soknadcontext/reducer';
+import { StepWizardContext, StepWizardContextState } from 'context/stepWizardContext';
+import { AppStateContext, AppStateContextState } from 'context/appStateContext';
 
-jest.setTimeout(10 * 1000);
-configure({ asyncUtilTimeout: 10 * 1000 });
+expect.extend(matchers);
 
-jest.mock('next/router', () => ({
-  useRouter: jest.fn(),
-}));
+const fetchMocker = createFetchMock(vi);
+fetchMocker.enableMocks();
+
+fetchMocker.mockResponse({ status: 200 });
+
+vi.mock('next/router', () => ({ useRouter: vi.fn() }));
 
 const tekster = { ...messages['nb'], ...flattenMessages({ applinks: links }) };
 function render(ui: ReactElement, { locale = 'nb', ...options } = {}) {
@@ -79,7 +83,35 @@ function renderStepSoknadStandard(
   return rtlRender(ui, { wrapper: ProvidersWrapper, ...options });
 }
 
-// Mocker resize observer da jsdom ikke implementerer denne
+beforeAll(() => {
+  vi.mock('next/navigation', () => ({
+    useParams: vi.fn().mockReturnValue({ referanse: '123', innsendingtype: 'innsending' }),
+    useRouter: vi.fn().mockReturnValue({ prefetch: () => null }),
+  }));
+
+  vi.mock('i18n/routing', () => ({
+    // Mocker opp Link til å returnere en a tag slik at vi får korrekt rolle i tester
+    Link: vi.fn().mockImplementation(({ href, children, ...props }) => (
+      <a href={href} {...props}>
+        {children}
+      </a>
+    )),
+    redirect: vi.fn(),
+    usePathname: vi
+      .fn()
+      .mockReturnValue('/sett-inn-riktig-value-her-hvis-det-trengs-en-gang-i-fremtiden'),
+    useRouter: vi.fn().mockReturnValue({
+      push: vi.fn(),
+      replace: vi.fn(),
+      prefetch: vi.fn(),
+    }),
+  }));
+});
+
+afterEach(() => {
+  cleanup();
+});
+
 class ResizeObserver {
   observe() {}
   unobserve() {}
@@ -89,6 +121,9 @@ window.ResizeObserver = ResizeObserver;
 
 // Mocker scrollIntoView da jsdom ikke implementerer denne
 window.HTMLElement.prototype.scrollIntoView = function () {};
+
+// Mock HTMLCanvasElement.getContext for canvas-støtte
+window.HTMLCanvasElement.prototype.getContext = vi.fn().mockReturnValue({});
 
 export * from '@testing-library/react';
 export { render, renderStepSoknadStandard };

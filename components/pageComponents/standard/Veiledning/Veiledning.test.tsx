@@ -1,8 +1,9 @@
 import React, { useRef } from 'react';
-import { render, screen, fireEvent } from 'setupTests';
 import { Veiledning } from './Veiledning';
-import { axe, toHaveNoViolations } from 'jest-axe';
-expect.extend(toHaveNoViolations);
+import { axe } from 'vitest-axe';
+import { describe, it, expect, vi } from 'vitest';
+import { fireEvent, screen } from '@testing-library/react';
+import { render } from 'vitestSetup';
 
 describe('Veiledning', () => {
   const Component = () => {
@@ -10,7 +11,7 @@ describe('Veiledning', () => {
     return (
       <>
         <Veiledning
-          onSubmit={jest.fn()}
+          onSubmit={vi.fn()}
           errorMessageRef={dummyRef}
           hasError={false}
           isLoading={false}
@@ -33,6 +34,7 @@ describe('Veiledning', () => {
   });
   it('UU', async () => {
     const { container } = render(<Component />, {});
+    // @ts-expect-error Det er noe med extend som ikke fungerer helt. TS er misfornøyd men koden kjører
     expect(await axe(container)).toHaveNoViolations();
   });
 });
