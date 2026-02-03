@@ -1,7 +1,6 @@
 import { afterEach, beforeAll, vi, expect } from 'vitest';
-import { render as rtlRender } from '@testing-library/react';
+import { cleanup, render as rtlRender } from '@testing-library/react';
 import '@testing-library/jest-dom/vitest';
-import { cleanup } from '@testing-library/react';
 import 'vitest-axe/extend-expect';
 import * as matchers from 'vitest-axe/matchers';
 import links from 'translations/links.json';
