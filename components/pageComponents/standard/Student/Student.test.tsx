@@ -66,7 +66,7 @@ describe('Student', () => {
 
   it('UU', async () => {
     const { container } = renderStepSoknadStandard(STUDENT, <Component />, {});
-    // @ts-expect-error
+    // @ts-expect-error Det er noe med extend som ikke fungerer helt. TS er misfornøyd men koden kjører
     expect(await axe(container)).toHaveNoViolations();
   });
 });
