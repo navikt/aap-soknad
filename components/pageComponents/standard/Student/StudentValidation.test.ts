@@ -1,8 +1,9 @@
 import { JaNeiVetIkke } from 'types/Generic';
 import { getStudentSchema, JaNeiAvbrutt } from './Student';
+import { describe, expect, it, vi } from 'vitest';
 
 describe('Student validation', () => {
-  const schema = getStudentSchema(jest.fn());
+  const schema = getStudentSchema(vi.fn());
   it('ingenting utfylt', async () => {
     const result = await schema.validate({}, { abortEarly: false }).catch((err) => err);
     expect(result.errors.length).not.toBe(0);

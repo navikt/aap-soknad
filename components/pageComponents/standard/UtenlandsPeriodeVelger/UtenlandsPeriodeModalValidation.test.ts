@@ -1,8 +1,9 @@
 import { getUtenlandsPeriodeSchema } from './UtenlandsPeriodeVelger';
 import { JaEllerNei } from '../../../../types/Generic';
+import { describe, expect, it, vi } from 'vitest';
 
 describe('UtenlandsPeriodaModal Validation', () => {
-  const schema = getUtenlandsPeriodeSchema(jest.fn());
+  const schema = getUtenlandsPeriodeSchema(vi.fn());
   it('should return invalid for empty object', async () => {
     const result = await schema.validate({}, { abortEarly: false }).catch((err) => err);
     expect(result.errors.length).not.toBe(0);

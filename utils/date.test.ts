@@ -1,4 +1,5 @@
 import { getEndOfMonthInLocalTime, getStartOfMonthInLocalTime } from 'utils/date';
+import { describe, it, expect } from 'vitest';
 
 describe('getStartOfMonthInLocalTime', () => {
   it('should return start of month in format yyyy-MM-dd', () => {

@@ -1,13 +1,13 @@
-import { findByRole, fireEvent, renderStepSoknadStandard, screen, waitFor } from 'setupTests';
 import { Step, StepWizard } from 'components/StepWizard';
 import React from 'react';
-import { axe, toHaveNoViolations } from 'jest-axe';
+import { axe } from 'vitest-axe';
 import messagesNb from 'translations/nb.json';
 import StartDato from './StartDato';
 import { JaEllerNei } from 'types/Generic';
 import userEvent from '@testing-library/user-event';
-import { within } from '@testing-library/dom';
-expect.extend(toHaveNoViolations);
+import { findByRole, fireEvent, waitFor, within } from '@testing-library/dom';
+import { expect, describe, it, vi } from 'vitest';
+import { renderStepSoknadStandard, screen } from 'vitestSetup';
 
 const STARTDATO = 'STARTDATO';
 
@@ -17,7 +17,7 @@ describe('Startdato', () => {
     return (
       <StepWizard>
         <Step name={STARTDATO}>
-          <StartDato onBackClick={jest.fn()} />
+          <StartDato onBackClick={vi.fn()} />
         </Step>
       </StepWizard>
     );
@@ -35,7 +35,9 @@ describe('Startdato', () => {
     renderStepSoknadStandard(STARTDATO, <Component />, {});
     await waitFor(() => user.click(screen.getByRole('radio', { name: JaEllerNei.JA })));
     const skalHaFerieLabel = messagesNb?.søknad?.startDato?.skalHaFerie?.label;
-    const oppfølgingsspørsmål = await screen.findByRole('group', { name: new RegExp(skalHaFerieLabel) });
+    const oppfølgingsspørsmål = await screen.findByRole('group', {
+      name: new RegExp(skalHaFerieLabel),
+    });
     expect(oppfølgingsspørsmål).not.toBeNull();
   });
 
@@ -138,12 +140,13 @@ describe('Startdato', () => {
     const påkrevdTekstAntallDager =
       messagesNb?.søknad?.startDato?.antallDager?.validation?.required;
     expect(
-      await findByRole(errorSummary, 'link', { name: påkrevdTekstAntallDager })
+      await findByRole(errorSummary, 'link', { name: påkrevdTekstAntallDager }),
     ).not.toBeNull();
   });
 
   it('UU', async () => {
     const { container } = renderStepSoknadStandard(STARTDATO, <Component />, {});
+    // @ts-expect-error Det er noe med extend som ikke fungerer helt. TS er misfornøyd men koden kjører
     expect(await axe(container)).toHaveNoViolations();
   });
 });

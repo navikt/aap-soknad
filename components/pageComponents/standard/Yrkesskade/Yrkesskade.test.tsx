@@ -1,10 +1,11 @@
-import { findByRole, fireEvent, renderStepSoknadStandard, screen } from 'setupTests';
 import { Step, StepWizard } from 'components/StepWizard';
 import React from 'react';
-import { axe, toHaveNoViolations } from 'jest-axe';
+import { axe } from 'vitest-axe';
 import messagesNb from 'translations/nb.json';
 import { Yrkesskade } from './Yrkesskade';
-expect.extend(toHaveNoViolations);
+import { expect, describe, it, vi } from 'vitest';
+import { renderStepSoknadStandard } from 'vitestSetup';
+import { findByRole, fireEvent, screen } from '@testing-library/react';
 
 const YRKESSKADE = 'yrkesskade';
 
@@ -13,7 +14,7 @@ describe('Startdato', () => {
     return (
       <StepWizard>
         <Step name={YRKESSKADE}>
-          <Yrkesskade onBackClick={jest.fn()} />
+          <Yrkesskade onBackClick={vi.fn()} />
         </Step>
       </StepWizard>
     );
@@ -28,6 +29,7 @@ describe('Startdato', () => {
   });
   it('UU', async () => {
     const { container } = renderStepSoknadStandard(YRKESSKADE, <Component />, {});
+    // @ts-expect-error Det er noe med extend som ikke fungerer helt. TS er misfornøyd men koden kjører
     expect(await axe(container)).toHaveNoViolations();
   });
 });

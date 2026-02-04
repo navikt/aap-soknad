@@ -1,8 +1,9 @@
 import { add, sub } from 'date-fns';
 import { getAddBarnSchema, Relasjon } from './AddBarnModal';
+import { describe, vi, it, expect } from 'vitest';
 
 describe('AddBarnModal validation', () => {
-  const schema = getAddBarnSchema(jest.fn());
+  const schema = getAddBarnSchema(vi.fn());
   it('should return invalid for empty object', async () => {
     const result = await schema.validate({}, { abortEarly: false }).catch((err) => err);
     expect(result.errors.length).not.toBe(0);
@@ -59,7 +60,7 @@ describe('AddBarnModal validation', () => {
       fødseldato: sub(new Date(), { years: 1 }),
       relasjon: Relasjon.FORELDER,
       fnr: undefined,
-      ukjentFnr: true
+      ukjentFnr: true,
     };
     const result = await schema.validate(barn, { abortEarly: false }).catch((err) => err);
     expect(result).toEqual(barn);

@@ -1,8 +1,9 @@
+import { describe, it, expect, vi } from 'vitest';
 import { JaEllerNei } from '../../../../types/Generic';
 import { getMedlemskapSchema } from './medlemskapSchema';
 
 describe('Medlemskap validation', () => {
-  const schema = getMedlemskapSchema(jest.fn());
+  const schema = getMedlemskapSchema(vi.fn());
   it('should return invalid for empty object', async () => {
     const result = await schema.validate({}, { abortEarly: false }).catch((err) => err);
     expect(result.errors.length).not.toBe(0);
@@ -52,7 +53,7 @@ describe('Medlemskap validation', () => {
       };
       const result = await schema.validate(form, { abortEarly: false }).catch((err) => err);
       expect(result.errors.length).not.toBe(0);
-    }
+    },
   );
   it(
     "should be valid when 'harBoddINorgeSiste5År' is 'Ja' " +
@@ -67,6 +68,6 @@ describe('Medlemskap validation', () => {
       };
       const result = await schema.validate(form, { abortEarly: false }).catch((err) => err);
       expect(result).toStrictEqual(form);
-    }
+    },
   );
 });

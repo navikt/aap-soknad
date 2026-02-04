@@ -1,11 +1,11 @@
 import { v4 as uuidV4 } from 'uuid';
 import React, { ReactElement, useState } from 'react';
 import { FileInput, FileInputProps, Vedlegg } from './FileInput';
-import { render } from 'setupTests';
 import { fireEvent, screen, waitFor } from '@testing-library/react';
-import fetchMock from "jest-fetch-mock";
 
 import userEvent from '@testing-library/user-event';
+import { beforeEach, describe, expect, it } from 'vitest';
+import { render } from 'vitestSetup';
 
 const fileOneName = 'filEn.pdf';
 const fileTwoName = 'filTo.pdf';
@@ -125,8 +125,8 @@ describe('FileInput', () => {
     await user.upload(input, pdfFile);
     expect(
       await screen.findByText(
-        'Filtypen kan ikke lastes opp. Last opp dokumentet i et annet format (PDF, PNG, JPG eller heic).'
-      )
+        'Filtypen kan ikke lastes opp. Last opp dokumentet i et annet format (PDF, PNG, JPG eller heic).',
+      ),
     ).toBeVisible();
   });
 
@@ -141,8 +141,8 @@ describe('FileInput', () => {
 
     expect(
       await screen.findByText(
-        'Filen(e) du lastet opp er for stor. Last opp fil(er) med maksimal samlet størrelse 50 MB.'
-      )
+        'Filen(e) du lastet opp er for stor. Last opp fil(er) med maksimal samlet størrelse 50 MB.',
+      ),
     ).toBeVisible();
   });
 
@@ -169,8 +169,8 @@ describe('FileInput', () => {
     await user.upload(input, fileOne);
     expect(
       await screen.findByText(
-        'Filen er passord-beskyttet og vil ikke kunne leses av en saksbehandler, fjern beskyttelsen og prøv igjen'
-      )
+        'Filen er passord-beskyttet og vil ikke kunne leses av en saksbehandler, fjern beskyttelsen og prøv igjen',
+      ),
     ).toBeVisible();
   });
 
@@ -181,7 +181,9 @@ describe('FileInput', () => {
     const input = screen.getByTestId('fileinput');
     await user.upload(input, fileOne);
     expect(
-      await screen.findByText('Det er oppdaget virus på filen du prøver å laste opp. Velg en annen fil å laste opp.')
+      await screen.findByText(
+        'Det er oppdaget virus på filen du prøver å laste opp. Velg en annen fil å laste opp.',
+      ),
     ).toBeVisible();
   });
 
@@ -192,7 +194,9 @@ describe('FileInput', () => {
     const input = screen.getByTestId('fileinput');
     await user.upload(input, fileOne);
     expect(
-      await screen.findByText(/maksimal samlet størrelse på vedlegg per bruker \(50mb\) er oversteget\./i)
+      await screen.findByText(
+        /maksimal samlet størrelse på vedlegg per bruker \(50mb\) er oversteget\./i,
+      ),
     ).toBeVisible();
   });
 
@@ -225,8 +229,16 @@ describe('FileInput', () => {
 export function FileInputWithState(
   props: Omit<
     FileInputProps,
-    'onChange' | 'uploadUrl' | 'heading' | 'id' | 'deleteUrl' | 'onUpload' | 'onDelete' | 'files' | 'readAttachmentUrl'
-  >
+    | 'onChange'
+    | 'uploadUrl'
+    | 'heading'
+    | 'id'
+    | 'deleteUrl'
+    | 'onUpload'
+    | 'onDelete'
+    | 'files'
+    | 'readAttachmentUrl'
+  >,
 ): ReactElement {
   const [files, setFiles] = useState<Vedlegg[]>([]);
 
@@ -239,7 +251,9 @@ export function FileInputWithState(
       deleteUrl={'/delete'}
       readAttachmentUrl={'/read/'}
       onUpload={(attachments) => setFiles([...files, ...attachments])}
-      onDelete={(attachment) => setFiles(files.filter((file) => file.vedleggId !== attachment.vedleggId))}
+      onDelete={(attachment) =>
+        setFiles(files.filter((file) => file.vedleggId !== attachment.vedleggId))
+      }
       files={files}
     />
   );
@@ -251,5 +265,7 @@ interface ErrorInterface {
 }
 
 function mockUploadFile(error?: ErrorInterface) {
-  fetchMock.mockResponseOnce(JSON.stringify(error ? error : uuidV4()), { status: error ? error.status : 200 });
+  fetchMock.mockResponseOnce(JSON.stringify(error ? error : uuidV4()), {
+    status: error ? error.status : 200,
+  });
 }
