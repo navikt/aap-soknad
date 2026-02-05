@@ -47,7 +47,8 @@
     "@typescript-eslint/parser": "^7.15.0",
     "@vitejs/plugin-react": "^5.1.2",
     "cross-env": "^7.0.3",
-    "eslint": "^8.57.0",
+    "eslint": "^9",
+    "eslint-config-next": "15.5.11",
     "eslint-plugin-jsx-a11y": "^6.9.0",
     "eslint-plugin-react": "^7.34.3",
     "husky": "^9.1.7",
@@ -73,7 +74,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
+    "lint": "eslint .",
     "prepare": "husky install",
     "intl:diff": "json-diff -k ./translations/nb.json ./translations/nn.json"
   },
