@@ -57,7 +57,7 @@
     "lint-staged": "^15.5.2",
     "prettier": "^3.3.2",
     "process": "^0.11.10",
-    "vite-tsconfig-paths": "^6.0.5",
+    "vite-tsconfig-paths": "^6.1.0",
     "vitest": "^4.0.18",
     "vitest-axe": "^0.1.0",
     "vitest-fetch-mock": "^0.4.5"
