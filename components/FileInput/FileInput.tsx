@@ -1,6 +1,5 @@
 import { BodyShort, Heading, Loader } from '@navikt/ds-react';
 import React, { InputHTMLAttributes, useMemo, useRef, useState } from 'react';
-import { v4 as uuidV4 } from 'uuid';
 import { UploadIcon } from '@navikt/aksel-icons';
 import { FilePanelError } from './FilePanelError';
 import { FilePanelSuccess } from './FilePanelSuccess';
@@ -46,7 +45,7 @@ export const FileInput = (props: FileInputProps) => {
   const [dragOver, setDragOver] = useState<boolean>(false);
   const [isUploading, setIsUploading] = useState<boolean>(false);
   const fileInputElement = useRef<HTMLInputElement>(null);
-  const inputId = useMemo(() => uuidV4(), []);
+  const inputId = useMemo(() => crypto.randomUUID(), []);
 
   function feilmeldingForSubstatus(substatus: string) {
     switch (substatus) {
@@ -92,7 +91,7 @@ export const FileInput = (props: FileInputProps) => {
       Array.from(filelist).map(async (file) => {
         const internalErrorMessage = internalValidate(file);
         let uploadResult: Vedlegg = {
-          vedleggId: uuidV4(),
+          vedleggId: crypto.randomUUID(),
           errorMessage: '',
           type: file.type,
           size: file.size,

@@ -13,7 +13,6 @@ import { useIntl } from 'react-intl';
 import SoknadFormWrapperNew from 'components/SoknadFormWrapper/SoknadFormWrapper';
 import { SøknadValidationError } from 'components/schema/FormErrorSummary';
 import { useDebounceLagreSoknad } from 'hooks/useDebounceLagreSoknad';
-import { v4 as uuid4 } from 'uuid';
 import { getMedlemskapSchema } from './medlemskapSchema';
 import {
   utenlandsPeriodeArbeidEllerBodd,
@@ -324,7 +323,7 @@ export const Medlemskap = ({ onBackClick }: Props) => {
         }}
         onSave={(utenlandsperiode) => {
           if (selectedUtenlandsPeriode.id === undefined) {
-            append({ ...utenlandsperiode, id: uuid4() });
+            append({ ...utenlandsperiode, id: crypto.randomUUID() });
             clearErrors();
           } else {
             update(utenlandsperiode);

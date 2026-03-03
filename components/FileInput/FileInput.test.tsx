@@ -1,4 +1,3 @@
-import { v4 as uuidV4 } from 'uuid';
 import React, { ReactElement, useState } from 'react';
 import { FileInput, FileInputProps, Vedlegg } from './FileInput';
 import { fireEvent, screen, waitFor } from '@testing-library/react';
@@ -265,7 +264,7 @@ interface ErrorInterface {
 }
 
 function mockUploadFile(error?: ErrorInterface) {
-  fetchMock.mockResponseOnce(JSON.stringify(error ? error : uuidV4()), {
+  fetchMock.mockResponseOnce(JSON.stringify(error ? error : crypto.randomUUID()), {
     status: error ? error.status : 200,
   });
 }
