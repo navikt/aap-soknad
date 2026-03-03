@@ -12,7 +12,6 @@ import { JaEllerNei } from 'types/Generic';
 import { IntlFormatters, useIntl } from 'react-intl';
 import SoknadFormWrapperNew from 'components/SoknadFormWrapper/SoknadFormWrapper';
 import { setFocusOnErrorSummary, SøknadValidationError } from 'components/schema/FormErrorSummary';
-import { v4 as uuid4 } from 'uuid';
 import { validate } from 'lib/utils/validationUtils';
 import { RegistrertBehandler } from 'components/pageComponents/standard/Behandlere/RegistrertBehandler';
 import { AnnenBehandler } from 'components/pageComponents/standard/Behandlere/AnnenBehandler';
@@ -180,7 +179,7 @@ export const Behandlere = ({ onBackClick }: Props) => {
           if (behandler.id === undefined) {
             append({
               ...behandler,
-              id: uuid4(),
+              id: crypto.randomUUID(),
             });
           } else {
             update(behandler);

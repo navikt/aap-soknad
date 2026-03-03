@@ -22,7 +22,6 @@ import { add, format, isValid, parse, sub } from 'date-fns';
 import { IntlFormatters, useIntl } from 'react-intl';
 import { mapValidationErrorToSøknadValidationError } from 'lib/utils/validationUtils';
 import { useFormErrors } from 'hooks/FormErrorHook';
-import { v4 as uuid4 } from 'uuid';
 import { erGyldigFødselsnummer } from 'lib/utils/fnr';
 
 interface Props {
@@ -184,7 +183,7 @@ export const AddBarnModal = ({
                 } else {
                   appendManuelleBarn({
                     ...result,
-                    internId: uuid4(),
+                    internId: crypto.randomUUID(),
                     fnr: result.fnr ?? undefined,
                   });
                 }

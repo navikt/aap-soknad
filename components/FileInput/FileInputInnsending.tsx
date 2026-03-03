@@ -1,7 +1,6 @@
 import { UploadIcon } from '@navikt/aksel-icons';
 import { BodyShort, Heading, Loader } from '@navikt/ds-react';
 import React, { useMemo, useRef, useState } from 'react';
-import { v4 as uuidV4 } from 'uuid';
 
 import { FileInputProps, Vedlegg } from './FileInput';
 import { FilePanelError } from './FilePanelError';
@@ -28,7 +27,7 @@ export const FileInputInnsending = (props: FileInputProps) => {
   const [isUploading, setIsUploading] = useState<boolean>(false);
   const [totalSizeIInnsending, setTotalSizeIInnsending] = useState<number>(0);
   const fileInputElement = useRef<HTMLInputElement>(null);
-  const inputId = useMemo(() => uuidV4(), []);
+  const inputId = useMemo(() => crypto.randomUUID(), []);
 
   function feilmeldingForSubstatus(substatus: string) {
     switch (substatus) {
@@ -75,7 +74,7 @@ export const FileInputInnsending = (props: FileInputProps) => {
       setIsUploading(false);
       onUpload([
         {
-          vedleggId: uuidV4(),
+          vedleggId: crypto.randomUUID(),
           errorMessage: formatMessage({id: 'søknad.vedlegg.fileinput.fileInputErrors.fileTooLarge'}),
           type: '',
           size: totalSize,
@@ -86,7 +85,7 @@ export const FileInputInnsending = (props: FileInputProps) => {
       setIsUploading(false);
       onUpload([
         {
-          vedleggId: uuidV4(),
+          vedleggId: crypto.randomUUID(),
           errorMessage: formatMessage({id: 'søknad.vedlegg.fileinput.fileInputErrors.fileTooLarge'}),
           type: '',
           size: totalSize,
@@ -99,7 +98,7 @@ export const FileInputInnsending = (props: FileInputProps) => {
         fileArray.map(async (file) => {
           const internalErrorMessage = internalValidate(file);
           let uploadResult: Vedlegg = {
-            vedleggId: uuidV4(),
+            vedleggId: crypto.randomUUID(),
             errorMessage: '',
             type: file.type,
             size: file.size,
