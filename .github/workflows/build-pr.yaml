@@ -16,3 +16,4 @@ jobs:
     secrets: inherit
     with:
       cluster: dev-gcp
+      playwright: true
