@@ -2,7 +2,6 @@ import crossFetch from 'cross-fetch';
 import { isDev } from 'utils/environments';
 
 const fetchClient = isDev() ? fetch : crossFetch;
-// test
 
 export const fetchPOST = async (url: string, payload: object, options?: RequestInit) => {
   const headers = {
