@@ -1,5 +1,6 @@
+
 import { Alert, Button, ConfirmationPanel, Heading, Label } from '@navikt/ds-react';
-import * as classes from './Veiledning.module.css';
+import classes from './Veiledning.module.css';
 import { IntroduksjonTekst } from '../../../IntroduksjonTekst/IntroduksjonTekst';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { FormEvent, useRef, useState } from 'react';
