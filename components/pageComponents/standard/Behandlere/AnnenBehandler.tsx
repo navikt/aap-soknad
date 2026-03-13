@@ -1,10 +1,11 @@
+'use client';
 import * as classes from './Behandlere.module.css';
 import { Button, Label } from '@navikt/ds-react';
 import { formatFullAdresse, formatTelefonnummer } from 'utils/StringFormatters';
 import { Delete } from '@navikt/ds-icons';
 import React, { Dispatch } from 'react';
 import { Behandler } from 'types/Soknad';
-import { useIntl } from 'react-intl';
+import { useTranslations } from 'next-intl';
 import { useSoknad } from 'hooks/SoknadHook';
 import { updateSøknadData } from 'context/soknadcontext/actions';
 
@@ -14,7 +15,7 @@ interface Props {
   setShowModal: Dispatch<boolean>;
 }
 export const AnnenBehandler = ({ behandler, setSelectedBehandler, setShowModal }: Props) => {
-  const { formatMessage } = useIntl();
+  const t = useTranslations();
   const { søknadDispatch, søknadState } = useSoknad();
 
   const slettBehandler = (behandlerId?: string) => {
@@ -32,9 +33,7 @@ export const AnnenBehandler = ({ behandler, setSelectedBehandler, setShowModal }
           <div className={classes?.oneLineDetail}>
             <dt>
               <Label as={'span'}>
-                {formatMessage({
-                  id: 'søknad.helseopplysninger.dineBehandlere.navn',
-                })}
+                {t('søknad.helseopplysninger.dineBehandlere.navn')}
                 :
               </Label>
             </dt>
@@ -44,9 +43,7 @@ export const AnnenBehandler = ({ behandler, setSelectedBehandler, setShowModal }
             <div className={classes?.oneLineDetail}>
               <dt>
                 <Label as={'span'}>
-                  {formatMessage({
-                    id: 'søknad.helseopplysninger.dineBehandlere.legekontor',
-                  })}
+                  {t('søknad.helseopplysninger.dineBehandlere.legekontor')}
                   :
                 </Label>
               </dt>
@@ -57,9 +54,7 @@ export const AnnenBehandler = ({ behandler, setSelectedBehandler, setShowModal }
             <div className={classes?.oneLineDetail}>
               <dt>
                 <Label as={'span'}>
-                  {formatMessage({
-                    id: 'søknad.helseopplysninger.dineBehandlere.adresse',
-                  })}
+                  {t('søknad.helseopplysninger.dineBehandlere.adresse')}
                   :
                 </Label>
               </dt>
@@ -78,9 +73,7 @@ export const AnnenBehandler = ({ behandler, setSelectedBehandler, setShowModal }
             <div className={classes?.oneLineDetail}>
               <dt>
                 <Label as={'span'}>
-                  {formatMessage({
-                    id: 'søknad.helseopplysninger.dineBehandlere.telefon',
-                  })}
+                  {t('søknad.helseopplysninger.dineBehandlere.telefon')}
                   :
                 </Label>
               </dt>
@@ -97,9 +90,7 @@ export const AnnenBehandler = ({ behandler, setSelectedBehandler, setShowModal }
               setShowModal(true);
             }}
           >
-            {formatMessage({
-              id: 'søknad.helseopplysninger.dineBehandlere.editButton',
-            })}
+            {t('søknad.helseopplysninger.dineBehandlere.editButton')}
           </Button>
           <Button
             variant="tertiary"
@@ -110,9 +101,7 @@ export const AnnenBehandler = ({ behandler, setSelectedBehandler, setShowModal }
               slettBehandler(behandler.id);
             }}
           >
-            {formatMessage({
-              id: 'søknad.helseopplysninger.dineBehandlere.slettButton',
-            })}
+            {t('søknad.helseopplysninger.dineBehandlere.slettButton')}
           </Button>
         </div>
       </article>

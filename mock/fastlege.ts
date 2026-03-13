@@ -1,4 +1,4 @@
-import { Fastlege } from 'pages/api/oppslag/fastlege';
+import { Fastlege } from 'app/api/oppslag/fastlege/route';
 
 export const mockFastlege: Fastlege[] = [
   {

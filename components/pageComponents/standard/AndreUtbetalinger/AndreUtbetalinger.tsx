@@ -1,3 +1,4 @@
+'use client';
 import {
   Alert,
   BodyShort,
@@ -13,12 +14,12 @@ import {
 import React, { useEffect, useMemo, useState } from 'react';
 import { JaEllerNei } from 'types/Generic';
 import { Soknad } from 'types/Soknad';
-import * as yup from 'yup';
 import { completeAndGoToNextStep } from 'context/stepWizardContext';
 import ColorPanel from 'components/panel/ColorPanel';
 import { useDebounceLagreSoknad } from 'hooks/useDebounceLagreSoknad';
 import { setFocusOnErrorSummary } from 'components/schema/FormErrorSummary';
-import { IntlFormatters, useIntl } from 'react-intl';
+import { useTranslations } from 'next-intl';
+import { StønadType, stønadTypeToAlternativNøkkel, getAndreUtbetalingerSchema } from './andreUtbetalinger.schema';
 import SoknadFormWrapperNew from 'components/SoknadFormWrapper/SoknadFormWrapper';
 import { validate } from 'lib/utils/validationUtils';
 import { SøknadValidationError } from 'components/schema/FormErrorSummary';
@@ -41,77 +42,14 @@ type StønadAlternativer = {
   [key in StønadType]: string;
 };
 
-export enum StønadType {
-  ØKONOMISK_SOSIALHJELP = 'ØKONOMISK_SOSIALHJELP',
-  OMSORGSSTØNAD = 'OMSORGSSTØNAD',
-  INTRODUKSJONSSTØNAD = 'INTRODUKSJONSSTØNAD',
-  KVALIFISERINGSSTØNAD = 'KVALIFISERINGSSTØNAD',
-  VERV = 'VERV',
-  UTLAND = 'UTLAND',
-  AFP = 'AFP',
-  STIPEND = 'STIPEND',
-  LÅN = 'LÅN',
-  NEI = 'NEI',
-}
-
-export const stønadTypeToAlternativNøkkel = (stønadType: StønadType) => {
-  switch (stønadType) {
-    case StønadType.ØKONOMISK_SOSIALHJELP:
-      return 'søknad.andreUtbetalinger.stønad.values.økonomiskSosialhjelp';
-    case StønadType.OMSORGSSTØNAD:
-      return 'søknad.andreUtbetalinger.stønad.values.omsorgsstønad';
-    case StønadType.INTRODUKSJONSSTØNAD:
-      return 'søknad.andreUtbetalinger.stønad.values.introduksjonsStønad';
-    case StønadType.KVALIFISERINGSSTØNAD:
-      return 'søknad.andreUtbetalinger.stønad.values.kvalifiseringsstønad';
-    case StønadType.VERV:
-      return 'søknad.andreUtbetalinger.stønad.values.verv';
-    case StønadType.UTLAND:
-      return 'søknad.andreUtbetalinger.stønad.values.utland';
-    case StønadType.AFP:
-      return 'søknad.andreUtbetalinger.stønad.values.afp';
-    case StønadType.STIPEND:
-      return 'søknad.andreUtbetalinger.stønad.values.stipend';
-    case StønadType.LÅN:
-      return 'søknad.andreUtbetalinger.stønad.values.lån';
-    case StønadType.NEI:
-      return 'søknad.andreUtbetalinger.stønad.values.nei';
-  }
-};
-export const getAndreUtbetalingerSchema = (formatMessage: IntlFormatters['formatMessage']) =>
-  yup.object().shape({
-    lønn: yup
-      .string()
-      .required(formatMessage({ id: 'søknad.andreUtbetalinger.lønn.validation.required' }))
-      .oneOf([JaEllerNei.JA, JaEllerNei.NEI])
-      .nullable(),
-    stønad: yup
-      .array()
-      .ensure()
-      .min(1, formatMessage({ id: 'søknad.andreUtbetalinger.stønad.validation.required' })),
-    afp: yup
-      .object({
-        hvemBetaler: yup.string().nullable(),
-      })
-      .when('stønad', ([stønad], schema) => {
-        if (stønad?.includes(StønadType.AFP)) {
-          return yup.object({
-            hvemBetaler: yup.string().required(
-              formatMessage({
-                id: 'søknad.andreUtbetalinger.hvemBetalerAfp.validation.required',
-              }),
-            ),
-          });
-        }
-        return schema;
-      }),
-  });
+export { StønadType, stønadTypeToAlternativNøkkel } from './andreUtbetalinger.schema';
+export { getAndreUtbetalingerSchema } from './andreUtbetalinger.schema';
 
 export const AndreUtbetalinger = ({ onBackClick }: Props) => {
   const [errors, setErrors] = useState<SøknadValidationError[] | undefined>();
   const { søknadState, søknadDispatch } = useSoknad();
   const { stepList, stepWizardDispatch } = useStepWizard();
-  const { formatMessage } = useIntl();
+  const t = useTranslations();
   const debouncedLagre = useDebounceLagreSoknad<Soknad>();
 
   useEffect(() => {
@@ -121,18 +59,16 @@ export const AndreUtbetalinger = ({ onBackClick }: Props) => {
   const StønadAlternativer = useMemo(() => {
     const stønadTypes: StønadType[] = Object.keys(StønadType) as StønadType[];
     return stønadTypes.reduce((acc, stønadType) => {
-      acc[stønadType] = formatMessage({
-        id: stønadTypeToAlternativNøkkel(stønadType),
-      });
+      acc[stønadType] = t(stønadTypeToAlternativNøkkel(stønadType));
       return acc;
     }, {} as StønadAlternativer);
-  }, [formatMessage]);
+  }, [t]);
 
   const attachments = useMemo(() => {
     function addAttachment(type: AttachmentType, id: string) {
       attachments.push({
         type,
-        description: formatMessage({ id }),
+        description: t(id),
       });
     }
 
@@ -193,7 +129,7 @@ export const AndreUtbetalinger = ({ onBackClick }: Props) => {
     <SoknadFormWrapperNew
       onNext={async () => {
         const errors = await validate(
-          getAndreUtbetalingerSchema(formatMessage),
+          getAndreUtbetalingerSchema(t),
           søknadState.søknad?.andreUtbetalinger,
         );
         if (errors) {
@@ -210,13 +146,13 @@ export const AndreUtbetalinger = ({ onBackClick }: Props) => {
       errors={errors}
     >
       <Heading size="large" level="2">
-        {formatMessage({ id: `søknad.andreUtbetalinger.title` })}
+        {t(`søknad.andreUtbetalinger.title`)}
       </Heading>
       <LucaGuidePanel>
-        {formatMessage({ id: `søknad.andreUtbetalinger.guide.text` })}
+        {t(`søknad.andreUtbetalinger.guide.text`)}
       </LucaGuidePanel>
       <RadioGroup
-        legend={formatMessage({ id: 'søknad.andreUtbetalinger.lønn.label' })}
+        legend={t('søknad.andreUtbetalinger.lønn.label')}
         name={'lønn'}
         id={'lønn'}
         value={søknadState?.søknad?.andreUtbetalinger?.lønn || ''}
@@ -232,19 +168,19 @@ export const AndreUtbetalinger = ({ onBackClick }: Props) => {
         error={errors?.find((e) => e.path === 'lønn')?.message}
       >
         <ReadMore
-          header={formatMessage({ id: 'søknad.andreUtbetalinger.lønn.readMore.title' })}
+          header={t('søknad.andreUtbetalinger.lønn.readMore.title')}
           type={'button'}
         >
-          {formatMessage({ id: 'søknad.andreUtbetalinger.lønn.readMore.text' })}
+          {t('søknad.andreUtbetalinger.lønn.readMore.text')}
         </ReadMore>
         <Radio value={JaEllerNei.JA}>
           <BodyShort>
-            {formatMessage({ id: `answerOptions.jaEllerNei.${JaEllerNei.JA}` })}
+            {t(`answerOptions.jaEllerNei.${JaEllerNei.JA}`)}
           </BodyShort>
         </Radio>
         <Radio value={JaEllerNei.NEI}>
           <BodyShort>
-            {formatMessage({ id: `answerOptions.jaEllerNei.${JaEllerNei.NEI}` })}
+            {t(`answerOptions.jaEllerNei.${JaEllerNei.NEI}`)}
           </BodyShort>
         </Radio>
       </RadioGroup>
@@ -252,7 +188,7 @@ export const AndreUtbetalinger = ({ onBackClick }: Props) => {
         name={'stønad'}
         id={'stønad'}
         size="medium"
-        legend={formatMessage({ id: 'søknad.andreUtbetalinger.stønad.label' })}
+        legend={t('søknad.andreUtbetalinger.stønad.label')}
         value={søknadState?.søknad?.andreUtbetalinger?.stønad || []}
         onChange={(value) => {
           setErrors(errors?.filter((error) => error.path != 'stønad'));
@@ -300,7 +236,7 @@ export const AndreUtbetalinger = ({ onBackClick }: Props) => {
                     },
                   })
                 }
-                label={formatMessage({ id: 'søknad.andreUtbetalinger.hvemBetalerAfp.label' })}
+                label={t('søknad.andreUtbetalinger.hvemBetalerAfp.label')}
                 error={errors?.find((e) => e.path === 'afp.hvemBetaler')?.message}
               />
             </HGrid>
@@ -312,13 +248,13 @@ export const AndreUtbetalinger = ({ onBackClick }: Props) => {
       </CheckboxGroup>
       {attachments.length > 0 && (
         <Alert variant={'info'}>
-          {formatMessage({ id: 'søknad.andreUtbetalinger.alert.leggeVedTekst' })}
+          {t('søknad.andreUtbetalinger.alert.leggeVedTekst')}
           <ul>
             {attachments.map((attachment, index) => (
               <li key={index}>{attachment?.description}</li>
             ))}
           </ul>
-          {formatMessage({ id: 'søknad.andreUtbetalinger.alert.lasteOppVedleggTekst' })}
+          {t('søknad.andreUtbetalinger.alert.lasteOppVedleggTekst')}
         </Alert>
       )}
     </SoknadFormWrapperNew>

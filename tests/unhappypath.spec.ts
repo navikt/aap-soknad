@@ -6,7 +6,7 @@ test('at alle feilmeldinger skal dukke opp', async ({ page }) => {
   await page.goto('http://localhost:3000/aap/soknad/');
 
   // Fjern cookie-banner
-  await page.locator('consent-banner').getByRole('button', { name: 'Ja' }).click();
+  // await page.locator('consent-banner').getByRole('button', { name: 'Ja' }).click();
 
   await page.getByRole('button', { name: 'Start søknad' }).click();
   await expect(
@@ -14,15 +14,15 @@ test('at alle feilmeldinger skal dukke opp', async ({ page }) => {
   ).toBeVisible();
   await page.getByLabel('Jeg vil svare så godt jeg kan på spørsmålene i søknaden.').check();
   await page.getByRole('button', { name: 'Start søknad' }).click();
-  await expect(page).toHaveURL('http://localhost:3000/aap/soknad/1/');
+  await expect(page).toHaveURL('http://localhost:3000/aap/soknad/nb/1/');
 
   // Steg 1
-  await page.goto('http://localhost:3000/aap/soknad/1/');
+  await page.goto('http://localhost:3000/aap/soknad/nb/1/');
   await expect(page.getByRole('heading', { name: 'Startdato' })).toBeVisible();
   await page.getByRole('button', { name: 'Neste steg' }).click();
   await expect(page.getByTestId('error-summary')).toBeVisible();
   await page.getByRole('link', { name: 'Du må svare på om du mottar sykepenger' }).click();
-  await expect(page).toHaveURL('http://localhost:3000/aap/soknad/1/#sykepenger');
+  await expect(page).toHaveURL('http://localhost:3000/aap/soknad/nb/1/#sykepenger');
   await page.getByLabel('Ja').check();
   await page.getByRole('button', { name: 'Neste steg' }).click();
   await page
@@ -35,7 +35,7 @@ test('at alle feilmeldinger skal dukke opp', async ({ page }) => {
       name: 'Du må svare på om du planlegger å ta ferie før du er ferdig med sykepenger.',
     })
     .click();
-  await expect(page).toHaveURL('http://localhost:3000/aap/soknad/1/#ferie.skalHaFerie');
+  await expect(page).toHaveURL('http://localhost:3000/aap/soknad/nb/1/#ferie.skalHaFerie');
   await page
     .getByRole('group', { name: 'Har du planer om å ta ferie før du er ferdig med sykepenger?' })
     .getByLabel('Ja')
@@ -45,7 +45,7 @@ test('at alle feilmeldinger skal dukke opp', async ({ page }) => {
   await page
     .getByRole('link', { name: 'Du må svare på om du vet når du skal ta ut ferie.' })
     .click();
-  await expect(page).toHaveURL('http://localhost:3000/aap/soknad/1/#ferie.ferieType');
+  await expect(page).toHaveURL('http://localhost:3000/aap/soknad/nb/1/#ferie.ferieType');
   await page.getByLabel('Ja, jeg vet fra-dato og til-dato').check();
   await page.getByRole('button', { name: 'Neste steg' }).click();
   await page
@@ -57,11 +57,11 @@ test('at alle feilmeldinger skal dukke opp', async ({ page }) => {
   await page
     .getByRole('link', { name: 'Du må fylle ut feriens fra-dato. Fyll inn slik: dd.mm.åååå.' })
     .click();
-  await expect(page).toHaveURL('http://localhost:3000/aap/soknad/1/#ferie.fraDato');
+  await expect(page).toHaveURL('http://localhost:3000/aap/soknad/nb/1/#ferie.fraDato');
   await page
     .getByRole('link', { name: 'Du må fylle ut feriens til-dato. Fyll inn slik: dd.mm.åååå.' })
     .click();
-  await expect(page).toHaveURL('http://localhost:3000/aap/soknad/1/#ferie.tilDato');
+  await expect(page).toHaveURL('http://localhost:3000/aap/soknad/nb/1/#ferie.tilDato');
   await page
     .getByText('Søknad om arbeidsavklarings­penger (AAP)Steg 1 av 9Du må fikse disse feilene fø')
     .click();
@@ -79,7 +79,7 @@ test('at alle feilmeldinger skal dukke opp', async ({ page }) => {
   await page
     .getByRole('link', { name: 'Fra-dato må være eldre enn til-dato. Fyll inn slik: dd.mm.åååå.' })
     .click();
-  await expect(page).toHaveURL('http://localhost:3000/aap/soknad/1/#ferie.tilDato');
+  await expect(page).toHaveURL('http://localhost:3000/aap/soknad/nb/1/#ferie.tilDato');
   await page.getByRole('textbox', { name: /fra dato \(dd\.mm\.åååå\)/i }).fill(today);
   await page.getByRole('textbox', { name: /til dato \(dd\.mm\.åååå\)/i }).fill(tomorrow);
   // Må klikke utenfor datovelgeren ettersom den legger seg over radio valget
@@ -92,14 +92,14 @@ test('at alle feilmeldinger skal dukke opp', async ({ page }) => {
   await page
     .getByRole('link', { name: 'Du må skrive inn antall arbeidsdager du skal ta ferie.' })
     .click();
-  await expect(page).toHaveURL('http://localhost:3000/aap/soknad/1/#ferie.antallDager');
+  await expect(page).toHaveURL('http://localhost:3000/aap/soknad/nb/1/#ferie.antallDager');
   await page.getByLabel('Skriv inn antall arbeidsdager du skal ta ferie').fill('3');
   await page.getByLabel('Ja, jeg vet fra-dato og til-dato').check();
   await page.getByRole('group', { name: 'Har du sykepenger nå?' }).getByLabel('Nei').check();
   await page.getByRole('button', { name: 'Neste steg' }).click();
 
   // Steg 2
-  await expect(page).toHaveURL('http://localhost:3000/aap/soknad/2/');
+  await expect(page).toHaveURL('http://localhost:3000/aap/soknad/nb/2/');
   await expect(await page.getByRole('heading', { name: 'Bosted og jobb' })).toBeVisible();
   await page.getByRole('button', { name: 'Neste steg' }).click();
   await page
@@ -113,7 +113,7 @@ test('at alle feilmeldinger skal dukke opp', async ({ page }) => {
     })
     .click();
   await expect(page).toHaveURL(
-    'http://localhost:3000/aap/soknad/2/#medlemskap.harBoddINorgeSiste5%C3%85r',
+    'http://localhost:3000/aap/soknad/nb/2/#medlemskap.harBoddINorgeSiste5%C3%85r',
   );
   await page.getByLabel('Ja').check();
   await page.getByRole('button', { name: 'Neste steg' }).click();
@@ -126,7 +126,7 @@ test('at alle feilmeldinger skal dukke opp', async ({ page }) => {
     })
     .click();
   await expect(page).toHaveURL(
-    'http://localhost:3000/aap/soknad/2/#medlemskap.arbeidetUtenforNorgeF%C3%B8rSykdom',
+    'http://localhost:3000/aap/soknad/nb/2/#medlemskap.arbeidetUtenforNorgeF%C3%B8rSykdom',
   );
   await page
     .getByRole('group', { name: 'Har du jobbet utenfor Norge de fem siste årene?' })
@@ -145,7 +145,7 @@ test('at alle feilmeldinger skal dukke opp', async ({ page }) => {
       name: 'Du har svart at du har jobbet utenfor Norge de fem siste årene. Du må derfor legge til minst én periode med jobb utenfor Norge.',
     })
     .click();
-  await expect(page).toHaveURL('http://localhost:3000/aap/soknad/2/#medlemskap.utenlandsOpphold');
+  await expect(page).toHaveURL('http://localhost:3000/aap/soknad/nb/2/#medlemskap.utenlandsOpphold');
   await page
     .getByRole('button', { name: 'Legg til Registrer periode med jobb utenfor Norge' })
     .click();
@@ -200,7 +200,7 @@ test('at alle feilmeldinger skal dukke opp', async ({ page }) => {
     })
     .click();
   await expect(page).toHaveURL(
-    'http://localhost:3000/aap/soknad/2/#medlemskap.harArbeidetINorgeSiste5%C3%85r',
+    'http://localhost:3000/aap/soknad/nb/2/#medlemskap.harArbeidetINorgeSiste5%C3%85r',
   );
   await page
     .getByRole('group', { name: 'Har du jobbet sammenhengende i Norge de fem siste årene?' })
@@ -219,7 +219,7 @@ test('at alle feilmeldinger skal dukke opp', async ({ page }) => {
     })
     .click();
   await expect(page).toHaveURL(
-    'http://localhost:3000/aap/soknad/2/#medlemskap.iTilleggArbeidUtenforNorge',
+    'http://localhost:3000/aap/soknad/nb/2/#medlemskap.iTilleggArbeidUtenforNorge',
   );
   await page
     .getByRole('group', {
@@ -240,7 +240,7 @@ test('at alle feilmeldinger skal dukke opp', async ({ page }) => {
       name: 'Du har svart at du også har jobbet utenfor Norge de fem siste årene. Du må derfor legge til minst én periode med jobb utenfor Norge.',
     })
     .click();
-  await expect(page).toHaveURL('http://localhost:3000/aap/soknad/2/#medlemskap.utenlandsOpphold');
+  await expect(page).toHaveURL('http://localhost:3000/aap/soknad/nb/2/#medlemskap.utenlandsOpphold');
   await page
     .getByRole('button', { name: 'Legg til Registrer periode med jobb utenfor Norge' })
     .click();
@@ -269,7 +269,7 @@ test('at alle feilmeldinger skal dukke opp', async ({ page }) => {
   await page.getByRole('button', { name: 'Neste steg' }).click();
 
   // Steg 3
-  await expect(page).toHaveURL('http://localhost:3000/aap/soknad/3/');
+  await expect(page).toHaveURL('http://localhost:3000/aap/soknad/nb/3/');
   await expect(await page.getByRole('heading', { name: 'Yrkesskade' })).toBeVisible();
   await page.getByRole('button', { name: 'Neste steg' }).click();
   await expect(
@@ -278,7 +278,7 @@ test('at alle feilmeldinger skal dukke opp', async ({ page }) => {
   await page
     .getByRole('link', { name: 'Du må svare på om du har en yrkesskade eller yrkessykdom.' })
     .click();
-  await expect(page).toHaveURL('http://localhost:3000/aap/soknad/3/#yrkesskade');
+  await expect(page).toHaveURL('http://localhost:3000/aap/soknad/nb/3/#yrkesskade');
   await page.getByLabel('Ja').check();
   await expect(
     page.getByText(
@@ -294,7 +294,7 @@ test('at alle feilmeldinger skal dukke opp', async ({ page }) => {
   await page.getByRole('button', { name: 'Neste steg' }).click();
 
   // Steg 4
-  await expect(page).toHaveURL('http://localhost:3000/aap/soknad/4/');
+  await expect(page).toHaveURL('http://localhost:3000/aap/soknad/nb/4/');
   await expect(
     await page.getByRole('heading', { name: 'Kontaktperson for helseopplysninger' }),
   ).toBeVisible();
@@ -310,7 +310,7 @@ test('at alle feilmeldinger skal dukke opp', async ({ page }) => {
     })
     .click();
   await expect(page).toHaveURL(
-    'http://localhost:3000/aap/soknad/4/#fastlege[0].erRegistrertFastlegeRiktig',
+    'http://localhost:3000/aap/soknad/nb/4/#fastlege[0].erRegistrertFastlegeRiktig',
   );
   await page.getByLabel('Nei').check();
   await expect(
@@ -333,7 +333,7 @@ test('at alle feilmeldinger skal dukke opp', async ({ page }) => {
   await page.getByRole('button', { name: 'Neste steg' }).click();
 
   // Steg 5
-  await expect(page).toHaveURL('http://localhost:3000/aap/soknad/5/');
+  await expect(page).toHaveURL('http://localhost:3000/aap/soknad/nb/5/');
   await expect(await page.getByRole('heading', { name: 'Barnetillegg' })).toBeVisible();
   await page.getByRole('button', { name: 'Legg til Legg til barn' }).click();
   await page.getByRole('button', { name: 'Lagre' }).click();
@@ -375,12 +375,12 @@ test('at alle feilmeldinger skal dukke opp', async ({ page }) => {
   await page.getByRole('button', { name: 'Neste steg' }).click();
 
   // Steg 6
-  await expect(page).toHaveURL('http://localhost:3000/aap/soknad/6/');
+  await expect(page).toHaveURL('http://localhost:3000/aap/soknad/nb/6/');
   await expect(page.getByRole('heading', { name: 'Student' })).toBeVisible();
   await page.getByRole('button', { name: 'Neste steg' }).click();
   await expect(await page.locator('p:has-text("Du må svare på om du er student.")')).toBeVisible();
   await page.getByRole('link', { name: 'Du må svare på om du er student.' }).click();
-  await expect(page).toHaveURL('http://localhost:3000/aap/soknad/6/#erStudent');
+  await expect(page).toHaveURL('http://localhost:3000/aap/soknad/nb/6/#erStudent');
   await page.getByLabel('Ja, men har avbrutt studiet helt på grunn av sykdom').check();
   await page.getByRole('button', { name: 'Neste steg' }).click();
   await expect(
@@ -389,7 +389,7 @@ test('at alle feilmeldinger skal dukke opp', async ({ page }) => {
   await page
     .getByRole('link', { name: 'Du må svare på om du har planer om å komme tilbake til studiet.' })
     .click();
-  await expect(page).toHaveURL('http://localhost:3000/aap/soknad/6/#kommeTilbake');
+  await expect(page).toHaveURL('http://localhost:3000/aap/soknad/nb/6/#kommeTilbake');
   await page
     .getByRole('group', { name: 'Har du planer om å komme tilbake til studiet?' })
     .getByLabel('Ja', { exact: true })
@@ -411,7 +411,7 @@ test('at alle feilmeldinger skal dukke opp', async ({ page }) => {
   await page.getByRole('button', { name: 'Neste steg' }).click();
 
   // Steg 7
-  await expect(page).toHaveURL('http://localhost:3000/aap/soknad/7/');
+  await expect(page).toHaveURL('http://localhost:3000/aap/soknad/nb/7/');
   await expect(page.getByRole('heading', { name: 'Utbetalinger' })).toBeVisible();
   await page.getByRole('button', { name: 'Neste steg' }).click();
   await expect(
@@ -429,13 +429,13 @@ test('at alle feilmeldinger skal dukke opp', async ({ page }) => {
       name: 'Du må krysse av for om du har fått eller skal få ekstra utbetalinger fra arbeidsgiver.',
     })
     .click();
-  await expect(page).toHaveURL('http://localhost:3000/aap/soknad/7/#l%C3%B8nn');
+  await expect(page).toHaveURL('http://localhost:3000/aap/soknad/nb/7/#l%C3%B8nn');
   await page
     .getByRole('link', {
       name: 'Du må krysse av for om du får eller nylig har søkt om noen av utbetalingene over.',
     })
     .click();
-  await expect(page).toHaveURL('http://localhost:3000/aap/soknad/7/#st%C3%B8nad');
+  await expect(page).toHaveURL('http://localhost:3000/aap/soknad/nb/7/#st%C3%B8nad');
   await page.getByLabel('Ja').check();
   await page.getByLabel('Avtalefestet pensjon (AFP)').check();
   await page.getByRole('button', { name: 'Neste steg' }).click();
@@ -446,12 +446,12 @@ test('at alle feilmeldinger skal dukke opp', async ({ page }) => {
   await page
     .getByRole('link', { name: 'Du må svare på hvem som utbetaler avtalefestet pensjon (AFP).' })
     .click();
-  await expect(page).toHaveURL('http://localhost:3000/aap/soknad/7/#afp.hvemBetaler');
+  await expect(page).toHaveURL('http://localhost:3000/aap/soknad/nb/7/#afp.hvemBetaler');
   await page.getByLabel('Hvem utbetaler avtalefestet pensjon (AFP)?').fill('nav');
   await page.getByRole('button', { name: 'Neste steg' }).click();
 
   // Steg 8
-  await expect(page).toHaveURL('http://localhost:3000/aap/soknad/8/');
+  await expect(page).toHaveURL('http://localhost:3000/aap/soknad/nb/8/');
   await expect(
     page.getByRole('heading', { name: 'Vedlegg og tilleggsopplysninger' }),
   ).toBeVisible();
@@ -463,7 +463,7 @@ test('at alle feilmeldinger skal dukke opp', async ({ page }) => {
   await page.getByRole('button', { name: 'Neste steg' }).click();
 
   // Steg 9
-  await expect(page).toHaveURL('http://localhost:3000/aap/soknad/9/');
+  await expect(page).toHaveURL('http://localhost:3000/aap/soknad/nb/9/');
   await expect(page.getByRole('heading', { name: 'Oppsummering' })).toBeVisible();
   await page.getByRole('button', { name: 'Send søknad' }).click();
   await expect(
@@ -477,13 +477,13 @@ test('at alle feilmeldinger skal dukke opp', async ({ page }) => {
       name: 'Vennligst bekreft at du har lest all informasjon i søknaden og at opplysningene du har gitt er korrekte.',
     })
     .click();
-  await expect(page).toHaveURL('http://localhost:3000/aap/soknad/9/#s%C3%B8knadBekreft');
+  await expect(page).toHaveURL('http://localhost:3000/aap/soknad/nb/9/#s%C3%B8knadBekreft');
   await page
     .getByLabel(
       'Jeg har lest all informasjonen jeg har fått i søknaden og bekrefter at opplysningene jeg har gitt er korrekte.',
     )
     .check();
   await page.getByRole('button', { name: 'Send søknad' }).click();
-  await expect(page).toHaveURL('http://localhost:3000/aap/soknad/kvittering/');
+  await expect(page).toHaveURL('http://localhost:3000/aap/soknad/nb/kvittering/');
   await expect(page.getByRole('heading', { name: 'Takk for søknaden, Jackie Li' })).toBeVisible();
 });

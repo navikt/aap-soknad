@@ -1,4 +1,5 @@
-import { useIntl } from 'react-intl';
+'use client';
+import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/router';
 import { Alert, Button, Heading, Loader, Modal } from '@navikt/ds-react';
 import * as classes from './SoknadFormWrapper.module.css';
@@ -16,8 +17,8 @@ const SlettModal = ({ isOpen, onClose }: Props) => {
   const [isDeletingSøknad, setIsDeletingSøknad] = useState<boolean>(false);
   const [slettSøknadSuccess, setSlettSøknadSuccess] = useState<boolean>(false);
   const { søknadState } = useSoknad();
-  const { formatMessage } = useIntl();
-  const router = useRouter();
+  const t = useTranslations();
+  // const router = useRouter();
 
   async function onDelete() {
     await deleteOpplastedeVedlegg(søknadState.søknad);
@@ -44,12 +45,12 @@ const SlettModal = ({ isOpen, onClose }: Props) => {
           e.preventDefault();
         }
       }}
-      aria-label={formatMessage({ id: 'avbrytOgSlettModal.heading' })}
+      aria-label={t('avbrytOgSlettModal.heading')}
     >
       {!slettSøknadSuccess && (
         <Modal.Header>
           <Heading size={'small'} level={'2'} spacing>
-            {formatMessage({ id: 'avbrytOgSlettModal.heading' })}
+            {t('avbrytOgSlettModal.heading')}
           </Heading>
         </Modal.Header>
       )}
@@ -59,14 +60,14 @@ const SlettModal = ({ isOpen, onClose }: Props) => {
             <Button variant="primary" type="button" onClick={() => slettSøknadOgAvbryt()}>
               {isDeletingSøknad && <Loader />}
               {!isDeletingSøknad &&
-                formatMessage({ id: 'avbrytOgSlettModal.avbrytOgSlettButtonText' })}
+                t('avbrytOgSlettModal.avbrytOgSlettButtonText')}
             </Button>
             <Button
               variant="tertiary"
               type="button"
               onClick={() => !isDeletingSøknad && onClose(false)}
             >
-              {formatMessage({ id: 'avbrytOgSlettModal.avbrytButtonText' })}
+              {t('avbrytOgSlettModal.avbrytButtonText')}
             </Button>
           </div>
         )}
@@ -86,18 +87,18 @@ const SlettModal = ({ isOpen, onClose }: Props) => {
                   }
                 }}
               >
-                {formatMessage({ id: 'avbrytOgSlettModal.lukkButtonText' })}
+                {t('avbrytOgSlettModal.lukkButtonText')}
               </Button>
               <Button
                 variant="tertiary"
                 type="button"
                 onClick={() => {
                   if (window?.location) {
-                    router.push('/');
+                    // router.push('/');
                   }
                 }}
               >
-                {formatMessage({ id: 'avbrytOgSlettModal.sendNyButtonText' })}
+                {t('avbrytOgSlettModal.sendNyButtonText')}
               </Button>
             </div>
           </>

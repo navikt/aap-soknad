@@ -1,3 +1,4 @@
+'use client';
 import { Alert, BodyShort, Button, Heading } from '@navikt/ds-react';
 import React, { useEffect, useState } from 'react';
 import { ManuelleBarn, Soknad } from 'types/Soknad';
@@ -8,7 +9,7 @@ import { useStepWizard } from 'hooks/StepWizardHook';
 import { AddBarnModal, CreateOrUpdateManuelleBarn, Relasjon } from './AddBarnModal';
 import { LucaGuidePanel } from 'components/LucaGuidePanel';
 import { useDebounceLagreSoknad } from 'hooks/useDebounceLagreSoknad';
-import { useIntl } from 'react-intl';
+import { useTranslations } from 'next-intl';
 import SoknadFormWrapperNew from 'components/SoknadFormWrapper/SoknadFormWrapper';
 import { ManueltBarn } from './ManueltBarn';
 import { Registerbarn } from './Registerbarn';
@@ -22,7 +23,7 @@ interface Props {
 export const GRUNNBELØP = '118 620';
 
 export const Barnetillegg = ({ onBackClick }: Props) => {
-  const { formatMessage } = useIntl();
+  const t = useTranslations();
 
   const { søknadState, søknadDispatch } = useSoknad();
   const { stepWizardDispatch } = useStepWizard();
@@ -58,8 +59,8 @@ export const Barnetillegg = ({ onBackClick }: Props) => {
         {
           filterType: barn.relasjon,
           type: barn.internId,
-          description: formatMessage(
-            { id: `søknad.vedlegg.andreBarn.description.${barn.relasjon}` },
+          description: t(
+            `søknad.vedlegg.andreBarn.description.${barn.relasjon}`,
             {
               navn: `${barn?.navn?.fornavn} ${barn?.navn?.etternavn}`,
             },
@@ -94,19 +95,19 @@ export const Barnetillegg = ({ onBackClick }: Props) => {
         }}
       >
         <Heading size="large" level="2">
-          {formatMessage({ id: 'søknad.barnetillegg.title' })}
+          {t('søknad.barnetillegg.title')}
         </Heading>
         <LucaGuidePanel>
-          <BodyShort spacing>{formatMessage({ id: 'søknad.barnetillegg.guide.text1' })}</BodyShort>
-          <BodyShort>{formatMessage({ id: 'søknad.barnetillegg.guide.text2' })}</BodyShort>
+          <BodyShort spacing>{t('søknad.barnetillegg.guide.text1')}</BodyShort>
+          <BodyShort>{t('søknad.barnetillegg.guide.text2')}</BodyShort>
         </LucaGuidePanel>
         <div>
           <Heading size="small" level="3" spacing>
-            {formatMessage({ id: 'søknad.barnetillegg.registrerteBarn.title' })}
+            {t('søknad.barnetillegg.registrerteBarn.title')}
           </Heading>
           {søknadState?.søknad?.barn?.length === 0 && (
             <BodyShort spacing>
-              {formatMessage({ id: 'søknad.barnetillegg.registrerteBarn.notfound' })}
+              {t('søknad.barnetillegg.registrerteBarn.notfound')}
             </BodyShort>
           )}
           {søknadState?.søknad?.barn && søknadState?.søknad?.barn?.length > 0 && (
@@ -119,7 +120,7 @@ export const Barnetillegg = ({ onBackClick }: Props) => {
         </div>
         <div>
           <Heading size="small" level="3" spacing>
-            {formatMessage({ id: 'søknad.barnetillegg.manuelleBarn.title' })}
+            {t('søknad.barnetillegg.manuelleBarn.title')}
           </Heading>
           {søknadState?.søknad?.manuelleBarn && søknadState?.søknad?.manuelleBarn.length > 0 && (
             <ul className={classes.barnList}>
@@ -134,7 +135,7 @@ export const Barnetillegg = ({ onBackClick }: Props) => {
             </ul>
           )}
           <BodyShort spacing>
-            {formatMessage({ id: 'søknad.barnetillegg.leggTilBarn.description' })}
+            {t('søknad.barnetillegg.leggTilBarn.description')}
           </BodyShort>
           <Button
             variant="tertiary"
@@ -146,38 +147,36 @@ export const Barnetillegg = ({ onBackClick }: Props) => {
               setShowModal(true);
             }}
           >
-            {formatMessage({ id: 'søknad.barnetillegg.leggTilBarn.buttonText' })}
+            {t('søknad.barnetillegg.leggTilBarn.buttonText')}
           </Button>
         </div>
         {(erForelderTilManueltBarn || erFosterforelderTilManueltBarn) && (
           <Alert variant="info">
-            {formatMessage({ id: 'søknad.barnetillegg.alert.leggeVedTekst' })}
+            {t('søknad.barnetillegg.alert.leggeVedTekst')}
             <ul>
               {erForelderTilManueltBarn && (
                 <li>
-                  {formatMessage({ id: 'søknad.barnetillegg.alert.bulletPointVedleggForelder' })}
+                  {t('søknad.barnetillegg.alert.bulletPointVedleggForelder')}
                 </li>
               )}
               {erFosterforelderTilManueltBarn && (
                 <li>
-                  {formatMessage({
-                    id: 'søknad.barnetillegg.alert.bulletPointVedleggFosterforelder',
-                  })}
+                  {t('søknad.barnetillegg.alert.bulletPointVedleggFosterforelder')}
                 </li>
               )}
             </ul>
-            {formatMessage({ id: 'søknad.barnetillegg.alert.lasteOppVedleggTekst' })}
+            {t('søknad.barnetillegg.alert.lasteOppVedleggTekst')}
           </Alert>
         )}
         {(harBarn || harManuelleBarn) && (
           <Alert variant="info">
-            {formatMessage({ id: 'søknad.barnetillegg.alert.barneTillegg.title' })}
+            {t('søknad.barnetillegg.alert.barneTillegg.title')}
             <ul>
               <li>
-                {formatMessage({ id: 'søknad.barnetillegg.alert.barneTillegg.bulletpoint3' })}
+                {t('søknad.barnetillegg.alert.barneTillegg.bulletpoint3')}
               </li>
               <li>
-                {formatMessage({ id: 'søknad.barnetillegg.alert.barneTillegg.bulletpoint4' })}
+                {t('søknad.barnetillegg.alert.barneTillegg.bulletpoint4')}
               </li>
             </ul>
           </Alert>

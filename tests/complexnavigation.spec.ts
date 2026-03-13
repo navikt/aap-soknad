@@ -6,13 +6,13 @@ test('at navigering i søknaden fungerer', async ({ page }) => {
   await page.goto('http://localhost:3000/aap/soknad/');
 
   // Fjern cookie-banner
-  await page.locator('consent-banner').getByRole('button', { name: 'Ja' }).click();
+  // await page.locator('consent-banner').getByRole('button', { name: 'Ja' }).click();
 
   await page.getByLabel('Jeg vil svare så godt jeg kan på spørsmålene i søknaden.').check();
   await page.getByRole('button', { name: 'Start søknad' }).click();
 
   // Steg 1
-  await expect(page).toHaveURL('http://localhost:3000/aap/soknad/1/');
+  await expect(page).toHaveURL('http://localhost:3000/aap/soknad/nb/1/');
   await page.getByRole('group', { name: 'Har du sykepenger nå?' }).getByLabel('Ja').check();
   await page
     .getByRole('group', { name: 'Har du planer om å ta ferie før du er ferdig med sykepenger?' })
@@ -24,9 +24,9 @@ test('at navigering i søknaden fungerer', async ({ page }) => {
   await page.getByRole('textbox', { name: /fra dato \(dd\.mm\.åååå\)/i }).fill(today);
   await page.getByRole('textbox', { name: /til dato \(dd\.mm\.åååå\)/i }).fill(tomorrow);
   await page.getByRole('button', { name: 'Neste steg' }).click();
-  await expect(page).toHaveURL('http://localhost:3000/aap/soknad/2/');
+  await expect(page).toHaveURL('http://localhost:3000/aap/soknad/nb/2/');
   await page.getByRole('button', { name: 'Forrige steg' }).click();
-  await expect(page).toHaveURL('http://localhost:3000/aap/soknad/1/');
+  await expect(page).toHaveURL('http://localhost:3000/aap/soknad/nb/1/');
 
   await expect(
     await page.getByRole('group', { name: 'Har du sykepenger nå?' }).getByLabel('Ja').isChecked(),
@@ -54,17 +54,17 @@ test('at navigering i søknaden fungerer', async ({ page }) => {
   ).toEqual(tomorrow);
 
   await page.getByRole('button', { name: 'Neste steg' }).click();
-  await expect(page).toHaveURL('http://localhost:3000/aap/soknad/2/');
+  await expect(page).toHaveURL('http://localhost:3000/aap/soknad/nb/2/');
   await page.getByRole('button', { name: 'Forrige steg' }).click();
-  await expect(page).toHaveURL('http://localhost:3000/aap/soknad/1/');
+  await expect(page).toHaveURL('http://localhost:3000/aap/soknad/nb/1/');
 
   await page.getByLabel('Nei, men jeg vet antall arbeidsdager jeg skal ta ferie').check();
   await page.getByLabel('Skriv inn antall arbeidsdager du skal ta ferie').fill('3');
 
   await page.getByRole('button', { name: 'Neste steg' }).click();
-  await expect(page).toHaveURL('http://localhost:3000/aap/soknad/2/');
+  await expect(page).toHaveURL('http://localhost:3000/aap/soknad/nb/2/');
   await page.getByRole('button', { name: 'Forrige steg' }).click();
-  await expect(page).toHaveURL('http://localhost:3000/aap/soknad/1/');
+  await expect(page).toHaveURL('http://localhost:3000/aap/soknad/nb/1/');
 
   await expect(
     await page.getByRole('group', { name: 'Har du sykepenger nå?' }).getByLabel('Ja').isChecked(),
@@ -93,7 +93,7 @@ test('at navigering i søknaden fungerer', async ({ page }) => {
   await page.getByRole('button', { name: 'Neste steg' }).click();
 
   // Steg 2
-  await expect(page).toHaveURL('http://localhost:3000/aap/soknad/2/');
+  await expect(page).toHaveURL('http://localhost:3000/aap/soknad/nb/2/');
   await page
     .getByRole('group', { name: 'Har du bodd sammenhengende i Norge de fem siste årene?' })
     .getByLabel('Ja')
@@ -122,9 +122,9 @@ test('at navigering i søknaden fungerer', async ({ page }) => {
   await page.getByRole('button', { name: 'Lagre' }).click();
 
   await page.getByRole('button', { name: 'Neste steg' }).click();
-  await expect(page).toHaveURL('http://localhost:3000/aap/soknad/3/');
+  await expect(page).toHaveURL('http://localhost:3000/aap/soknad/nb/3/');
   await page.getByRole('button', { name: 'Forrige steg' }).click();
-  await expect(page).toHaveURL('http://localhost:3000/aap/soknad/2/');
+  await expect(page).toHaveURL('http://localhost:3000/aap/soknad/nb/2/');
 
   await expect(
     await page
@@ -182,9 +182,9 @@ test('at navigering i søknaden fungerer', async ({ page }) => {
   await page.getByRole('button', { name: 'Lagre' }).click();
 
   await page.getByRole('button', { name: 'Neste steg' }).click();
-  await expect(page).toHaveURL('http://localhost:3000/aap/soknad/3/');
+  await expect(page).toHaveURL('http://localhost:3000/aap/soknad/nb/3/');
   await page.getByRole('button', { name: 'Forrige steg' }).click();
-  await expect(page).toHaveURL('http://localhost:3000/aap/soknad/2/');
+  await expect(page).toHaveURL('http://localhost:3000/aap/soknad/nb/2/');
 
   await expect(
     await page
@@ -242,9 +242,9 @@ test('at navigering i søknaden fungerer', async ({ page }) => {
   await page.getByRole('button', { name: 'Lagre' }).click();
 
   await page.getByRole('button', { name: 'Neste steg' }).click();
-  await expect(page).toHaveURL('http://localhost:3000/aap/soknad/3/');
+  await expect(page).toHaveURL('http://localhost:3000/aap/soknad/nb/3/');
   await page.getByRole('button', { name: 'Forrige steg' }).click();
-  await expect(page).toHaveURL('http://localhost:3000/aap/soknad/2/');
+  await expect(page).toHaveURL('http://localhost:3000/aap/soknad/nb/2/');
 
   await expect(
     await page

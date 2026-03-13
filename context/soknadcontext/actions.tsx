@@ -2,8 +2,8 @@ import { AttachmentType, RequiredVedlegg } from 'types/SoknadContext';
 import { Soknad, SoknadVedlegg } from 'types/Soknad';
 import { Dispatch } from 'react';
 import { SoknadContextState } from './soknadContext';
-import { Barn } from 'pages/api/oppslag/barn';
-import { Fastlege } from 'pages/api/oppslag/fastlege';
+import { Barn } from 'app/api/oppslag/barn/route';
+import { Fastlege } from 'app/api/oppslag/fastlege/route';
 import { Vedlegg } from 'types/Vedlegg';
 
 export enum SoknadActionKeys {

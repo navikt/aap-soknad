@@ -1,3 +1,4 @@
+'use client';
 import { BodyLong, BodyShort, Button, Heading } from '@navikt/ds-react';
 import React, { useEffect, useState } from 'react';
 import { Add } from '@navikt/ds-icons';
@@ -9,7 +10,7 @@ import { EndreEllerLeggTilBehandlerModal } from './EndreEllerLeggTilBehandlerMod
 import * as classes from './Behandlere.module.css';
 import { useDebounceLagreSoknad } from 'hooks/useDebounceLagreSoknad';
 import { JaEllerNei } from 'types/Generic';
-import { IntlFormatters, useIntl } from 'react-intl';
+import { useTranslations } from 'next-intl';
 import SoknadFormWrapperNew from 'components/SoknadFormWrapper/SoknadFormWrapper';
 import { setFocusOnErrorSummary, SøknadValidationError } from 'components/schema/FormErrorSummary';
 import { validate } from 'lib/utils/validationUtils';
@@ -23,14 +24,14 @@ interface Props {
   onBackClick: () => void;
 }
 
-export const getBehandlerSchema = (formatMessage: IntlFormatters['formatMessage']) =>
+export const getBehandlerSchema = (t: (id: string, values?: Record<string, any>) => string) =>
   yup.object().shape({
     fastlege: yup.array().of(
       yup.object().shape({
         erRegistrertFastlegeRiktig: yup
           .string()
           .required(
-            formatMessage({ id: `søknad.helseopplysninger.erRegistrertFastlegeRiktig.required` }),
+            t(`søknad.helseopplysninger.erRegistrertFastlegeRiktig.required`),
           )
           .oneOf([JaEllerNei.JA, JaEllerNei.NEI])
           .nullable(),
@@ -42,7 +43,7 @@ export const Behandlere = ({ onBackClick }: Props) => {
   const [showModal, setShowModal] = useState(false);
   const [selectedBehandler, setSelectedBehandler] = useState<Behandler>({});
 
-  const { formatMessage } = useIntl();
+  const t = useTranslations();
   const { søknadState, søknadDispatch } = useSoknad();
   const { stepWizardDispatch } = useStepWizard();
   const { stepList } = useStepWizard();
@@ -79,7 +80,7 @@ export const Behandlere = ({ onBackClick }: Props) => {
     <>
       <SoknadFormWrapperNew
         onNext={async () => {
-          const errors = await validate(getBehandlerSchema(formatMessage), søknadState.søknad);
+          const errors = await validate(getBehandlerSchema(t), søknadState.søknad);
 
           if (errors) {
             setErrors(errors);
@@ -95,23 +96,23 @@ export const Behandlere = ({ onBackClick }: Props) => {
         errors={errors}
       >
         <Heading size="large" level="2">
-          {formatMessage({ id: 'søknad.helseopplysninger.title' })}
+          {t('søknad.helseopplysninger.title')}
         </Heading>
         <LucaGuidePanel>
           <BodyShort spacing>
-            {formatMessage({ id: 'søknad.helseopplysninger.guide.text1' })}
+            {t('søknad.helseopplysninger.guide.text1')}
           </BodyShort>
           <BodyShort spacing>
-            {formatMessage({ id: 'søknad.helseopplysninger.guide.text2' })}
+            {t('søknad.helseopplysninger.guide.text2')}
           </BodyShort>
         </LucaGuidePanel>
         <div>
           <Heading size={'small'} level={'3'}>
-            {formatMessage({ id: 'søknad.helseopplysninger.registrertFastlege.title' })}
+            {t('søknad.helseopplysninger.registrertFastlege.title')}
           </Heading>
           {søknadState?.søknad?.fastlege?.length === 0 && (
             <BodyLong>
-              {formatMessage({ id: 'søknad.helseopplysninger.registrertFastlege.ingenFastlege' })}
+              {t('søknad.helseopplysninger.registrertFastlege.ingenFastlege')}
             </BodyLong>
           )}
           {søknadState?.søknad?.fastlege?.map((fastlege, index) => (
@@ -126,16 +127,16 @@ export const Behandlere = ({ onBackClick }: Props) => {
         </div>
         <div>
           <Heading size={'small'} level={'3'} spacing>
-            {formatMessage({ id: 'søknad.helseopplysninger.annenBehandler.title' })}
+            {t('søknad.helseopplysninger.annenBehandler.title')}
           </Heading>
           <BodyShort spacing>
-            {formatMessage({ id: 'søknad.helseopplysninger.annenBehandler.description' })}
+            {t('søknad.helseopplysninger.annenBehandler.description')}
           </BodyShort>
           {søknadState?.søknad?.andreBehandlere &&
             søknadState?.søknad?.andreBehandlere?.length > 0 && (
               <>
                 <Heading size={'xsmall'} level={'4'} spacing>
-                  {formatMessage({ id: 'søknad.helseopplysninger.dineBehandlere.title' })}
+                  {t('søknad.helseopplysninger.dineBehandlere.title')}
                 </Heading>
                 <ul className={classes?.legeList}>
                   {søknadState.søknad.andreBehandlere.map((behandler) => (
@@ -155,9 +156,7 @@ export const Behandlere = ({ onBackClick }: Props) => {
             type="button"
             icon={
               <Add
-                title={formatMessage({
-                  id: 'søknad.helseopplysninger.annenBehandler.accessibleButtonTitle',
-                })}
+                title={t('søknad.helseopplysninger.annenBehandler.accessibleButtonTitle')}
               />
             }
             iconPosition={'left'}
@@ -166,7 +165,7 @@ export const Behandlere = ({ onBackClick }: Props) => {
               setShowModal(true);
             }}
           >
-            {formatMessage({ id: 'søknad.helseopplysninger.annenBehandler.addBehandlerButton' })}
+            {t('søknad.helseopplysninger.annenBehandler.addBehandlerButton')}
           </Button>
         </div>
       </SoknadFormWrapperNew>

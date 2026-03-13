@@ -1,9 +1,10 @@
+'use client';
 import { Button, Heading, HGrid, List, Table } from '@navikt/ds-react';
 import * as styles from './Medlemskap.module.css';
 import { formatDate } from 'utils/date';
 import { Delete } from '@navikt/ds-icons';
 import React, { Dispatch } from 'react';
-import { useIntl } from 'react-intl';
+import { useTranslations } from 'next-intl';
 import { UtenlandsPeriode } from 'types/Soknad';
 import { ArbeidEllerBodd } from '../UtenlandsPeriodeVelger/UtenlandsPeriodeVelger';
 import { useSoknad } from 'hooks/SoknadHook';
@@ -21,7 +22,7 @@ export const UtenlandsOppholdListe = ({
   setShowUtenlandsPeriodeModal,
   arbeidEllerBodd,
 }: Props) => {
-  const { formatMessage } = useIntl();
+  const t = useTranslations();
   const { søknadState, søknadDispatch } = useSoknad();
 
   const remove = (id?: string) => {
@@ -38,9 +39,7 @@ export const UtenlandsOppholdListe = ({
   return (
     <div>
       <Heading size="xsmall" level="3">
-        {formatMessage({
-          id: `søknad.medlemskap.utenlandsperiode.perioder.title.${arbeidEllerBodd}`,
-        })}
+        {t(`søknad.medlemskap.utenlandsperiode.perioder.title.${arbeidEllerBodd}`)}
       </Heading>
       <ul className={styles.utenlandsoppholdListe}>
         {utenlandsPerioder.map((utenlandsPeriode) => (

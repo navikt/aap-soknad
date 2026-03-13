@@ -1,29 +1,29 @@
-import { NextApiRequest, NextApiResponse } from 'next';
+import { NextRequest, NextResponse } from 'next/server';
 import { isMock } from '../utils/environments';
 import { verifyIdportenAccessToken } from './verifyIdPortenAccessToken';
 import { ErrorMedStatus } from './ErrorMedStatus';
 import { logError, logInfo, logWarning } from '@navikt/aap-felles-utils';
 
-type ApiHandler = (req: NextApiRequest, res: NextApiResponse) => void | Promise<void>;
+export type RouteHandler = (req: NextRequest, ctx: { params: Promise<any> }) => Promise<NextResponse | Response>;
 
-export function beskyttetApi(handler: ApiHandler): ApiHandler {
-  return async function withBearerTokenHandler(req, res) {
+export function beskyttetApi(handler: RouteHandler): RouteHandler {
+  return async function withBearerTokenHandler(req, ctx) {
     function send401() {
-      return res.status(401).json({ message: 'Access denied' });
+      return NextResponse.json({ message: 'Access denied' }, { status: 401 });
     }
     function send500() {
-      return res.status(500).json({ message: 'NextJS internal server error' });
+      return NextResponse.json({ message: 'Internal server error' }, { status: 500 });
     }
 
     try {
       if (isMock()) {
         logWarning('handling request for mocked environment, should not happen in production');
-        return handler(req, res);
+        return handler(req, ctx);
       }
 
-      const bearerToken: string | null | undefined = req.headers['authorization'];
+      const bearerToken = req.headers.get('authorization');
       if (!bearerToken) {
-        logWarning(`ingen bearer token, path: ${req?.url}`);
+        logWarning(`ingen bearer token, path: ${req.nextUrl?.pathname}`);
         return send401();
       }
       try {
@@ -32,13 +32,13 @@ export function beskyttetApi(handler: ApiHandler): ApiHandler {
         logError('kunne ikke validere idportentoken i beskyttetApi', e);
         return send401();
       }
-      return handler(req, res);
+      return handler(req, ctx);
     } catch (e) {
       logError('beskyttetApi', e);
       logInfo('handling error in beskyttetApi');
       if (e instanceof ErrorMedStatus) {
         logInfo(`sending error with status ${e.status} and message ${e.message}`);
-        return res.status(e.status).json({ message: e.message, navCallId: e.navCallId });
+        return NextResponse.json({ message: e.message, navCallId: e.navCallId }, { status: e.status });
       }
     }
     return send500();

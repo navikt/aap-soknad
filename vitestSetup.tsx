@@ -4,11 +4,11 @@ import '@testing-library/jest-dom/vitest';
 import 'vitest-axe/extend-expect';
 import * as matchers from 'vitest-axe/matchers';
 import links from 'translations/links.json';
+import messagesNb from 'translations/nb.json';
 
 import createFetchMock from 'vitest-fetch-mock';
-import { flattenMessages, messages } from 'utils/message';
 import { ReactElement, ReactNode, useReducer } from 'react';
-import { IntlProvider } from 'react-intl';
+import { NextIntlClientProvider } from 'next-intl';
 import {
   SoknadContext,
   soknadContextInititalState,
@@ -28,13 +28,14 @@ fetchMocker.mockResponse({ status: 200 });
 
 vi.mock('next/router', () => ({ useRouter: vi.fn() }));
 
-const tekster = { ...messages['nb'], ...flattenMessages({ applinks: links }) };
+const messages = { ...messagesNb, applinks: links };
+
 function render(ui: ReactElement, { locale = 'nb', ...options } = {}) {
   function Wrapper({ children }: { children: ReactNode }) {
     return (
-      <IntlProvider locale={locale} messages={tekster}>
+      <NextIntlClientProvider locale={locale} messages={messages}>
         {children}
-      </IntlProvider>
+      </NextIntlClientProvider>
     );
   }
 
@@ -67,7 +68,7 @@ function renderStepSoknadStandard(
       appStateDispatch: () => {},
     };
     return (
-      <IntlProvider locale={locale} messages={tekster}>
+      <NextIntlClientProvider locale={locale} messages={messages}>
         <AppStateContext.Provider value={{ ...appContext }}>
           <SoknadContext.Provider value={{ ...soknadContext }}>
             <StepWizardContext.Provider value={{ ...wizardContext }}>
@@ -76,7 +77,7 @@ function renderStepSoknadStandard(
             ,
           </SoknadContext.Provider>
         </AppStateContext.Provider>
-      </IntlProvider>
+      </NextIntlClientProvider>
     );
   }
   return rtlRender(ui, { wrapper: ProvidersWrapper, ...options });
@@ -90,7 +91,7 @@ beforeAll(() => {
 
   vi.mock('i18n/routing', () => ({
     // Mocker opp Link til å returnere en a tag slik at vi får korrekt rolle i tester
-    Link: vi.fn().mockImplementation(({ href, children, ...props }) => (
+    Link: vi.fn().mockImplementation(({ href, children, ...props }: any) => (
       <a href={href} {...props}>
         {children}
       </a>

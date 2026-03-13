@@ -1,3 +1,4 @@
+'use client';
 import {
   Alert,
   BodyLong,
@@ -19,7 +20,7 @@ import * as classes from './Barnetillegg.module.css';
 import { ModalButtonWrapper } from 'components/ButtonWrapper/ModalButtonWrapper';
 
 import { add, format, isValid, parse, sub } from 'date-fns';
-import { IntlFormatters, useIntl } from 'react-intl';
+import { useTranslations } from 'next-intl';
 import { mapValidationErrorToSøknadValidationError } from 'lib/utils/validationUtils';
 import { useFormErrors } from 'hooks/FormErrorHook';
 import { erGyldigFødselsnummer } from 'lib/utils/fnr';
@@ -34,10 +35,8 @@ interface Props {
   setBarn: Dispatch<CreateOrUpdateManuelleBarn>;
 }
 
-export enum Relasjon {
-  FORELDER = 'FORELDER',
-  FOSTERFORELDER = 'FOSTERFORELDER',
-}
+export { Relasjon } from './barnetillegg.schema';
+import { Relasjon } from './barnetillegg.schema';
 
 export interface CreateOrUpdateManuelleBarn {
   internId?: string;
@@ -50,40 +49,32 @@ export interface CreateOrUpdateManuelleBarn {
 
 const ALDER_BARN_ÅR = 18;
 
-export const getAddBarnSchema = (formatMessage: IntlFormatters['formatMessage']) => {
+export const getAddBarnSchema = (t: (id: string, values?: Record<string, any>) => string) => {
   return yup.object().shape({
     internId: yup.string().optional(),
     navn: yup.object().shape({
       fornavn: yup.string().required(
-        formatMessage({
-          id: 'søknad.barnetillegg.leggTilBarn.modal.navn.fornavn.validation.required',
-        }),
+        t('søknad.barnetillegg.leggTilBarn.modal.navn.fornavn.validation.required'),
       ),
       etternavn: yup.string().required(
-        formatMessage({
-          id: 'søknad.barnetillegg.leggTilBarn.modal.navn.etternavn.validation.required',
-        }),
+        t('søknad.barnetillegg.leggTilBarn.modal.navn.etternavn.validation.required'),
       ),
     }),
     fødseldato: yup
       .date()
       .required(
-        formatMessage({
-          id: 'søknad.barnetillegg.leggTilBarn.modal.fødselsdato.validation.required',
-        }),
+        t('søknad.barnetillegg.leggTilBarn.modal.fødselsdato.validation.required'),
       )
       .min(
         sub(new Date(), { years: ALDER_BARN_ÅR }),
-        formatMessage({ id: 'søknad.barnetillegg.leggTilBarn.modal.fødselsdato.validation.min' }),
+        t('søknad.barnetillegg.leggTilBarn.modal.fødselsdato.validation.min'),
       )
       .max(
         add(new Date(), { days: 1 }),
-        formatMessage({ id: 'søknad.barnetillegg.leggTilBarn.modal.fødselsdato.validation.max' }),
+        t('søknad.barnetillegg.leggTilBarn.modal.fødselsdato.validation.max'),
       )
       .typeError(
-        formatMessage({
-          id: 'søknad.barnetillegg.leggTilBarn.modal.fødselsdato.validation.typeError',
-        }),
+        t('søknad.barnetillegg.leggTilBarn.modal.fødselsdato.validation.typeError'),
       ),
     fnr: yup.string().when('ukjentFnr', {
       is: true,
@@ -91,21 +82,15 @@ export const getAddBarnSchema = (formatMessage: IntlFormatters['formatMessage'])
       otherwise: (schema) =>
         schema
           .required(
-            formatMessage({
-              id: 'søknad.barnetillegg.leggTilBarn.modal.fødselsnummer.validation.required',
-            }),
+            t('søknad.barnetillegg.leggTilBarn.modal.fødselsnummer.validation.required'),
           )
           .matches(
             /\d{11}/,
-            formatMessage({
-              id: 'søknad.barnetillegg.leggTilBarn.modal.fødselsnummer.validation.matches',
-            }),
+            t('søknad.barnetillegg.leggTilBarn.modal.fødselsnummer.validation.matches'),
           )
           .test(
             'valid-format',
-            formatMessage({
-              id: 'søknad.barnetillegg.leggTilBarn.modal.fødselsnummer.validation.valid',
-            }),
+            t('søknad.barnetillegg.leggTilBarn.modal.fødselsnummer.validation.valid'),
             erGyldigFødselsnummer,
           ),
     }),
@@ -113,7 +98,7 @@ export const getAddBarnSchema = (formatMessage: IntlFormatters['formatMessage'])
     relasjon: yup
       .string()
       .required(
-        formatMessage({ id: 'søknad.barnetillegg.leggTilBarn.modal.relasjon.validation.required' }),
+        t('søknad.barnetillegg.leggTilBarn.modal.relasjon.validation.required'),
       )
       .oneOf([Relasjon.FORELDER, Relasjon.FOSTERFORELDER]),
   });
@@ -127,7 +112,7 @@ export const AddBarnModal = ({
   barn,
   setBarn,
 }: Props) => {
-  const { formatMessage } = useIntl();
+  const t = useTranslations();
   const { setErrors, findError, clearErrors } = useFormErrors();
 
   const parseFødselsdato = (event: React.FocusEvent<HTMLInputElement>) =>
@@ -152,16 +137,16 @@ export const AddBarnModal = ({
         clearErrors();
         onCloseClick();
       }}
-      aria-label={formatMessage({ id: 'søknad.barnetillegg.leggTilBarn.modal.title' })}
+      aria-label={t('søknad.barnetillegg.leggTilBarn.modal.title')}
     >
       <Modal.Header>
         <Heading size={'medium'} level={'2'}>
-          {formatMessage({ id: 'søknad.barnetillegg.leggTilBarn.modal.title' })}
+          {t('søknad.barnetillegg.leggTilBarn.modal.title')}
         </Heading>
       </Modal.Header>
       <Modal.Body className={classes?.leggTilBarnModalContent}>
         <BodyLong>
-          {formatMessage({ id: 'søknad.barnetillegg.leggTilBarn.modal.description' })}
+          {t('søknad.barnetillegg.leggTilBarn.modal.description')}
         </BodyLong>
         {showModal && (
           <form
@@ -170,7 +155,7 @@ export const AddBarnModal = ({
               formEvent.preventDefault();
 
               try {
-                const result = await getAddBarnSchema(formatMessage).validate(barn, {
+                const result = await getAddBarnSchema(t).validate(barn, {
                   abortEarly: false,
                 });
 
@@ -198,9 +183,7 @@ export const AddBarnModal = ({
             }}
           >
             <TextField
-              label={formatMessage({
-                id: 'søknad.barnetillegg.leggTilBarn.modal.navn.fornavn.label',
-              })}
+              label={t('søknad.barnetillegg.leggTilBarn.modal.navn.fornavn.label')}
               name={'navn.fornavn'}
               onChange={(event) => {
                 clearErrors();
@@ -211,9 +194,7 @@ export const AddBarnModal = ({
             />
 
             <TextField
-              label={formatMessage({
-                id: 'søknad.barnetillegg.leggTilBarn.modal.navn.etternavn.label',
-              })}
+              label={t('søknad.barnetillegg.leggTilBarn.modal.navn.etternavn.label')}
               name={'navn.etternavn'}
               onChange={(event) => {
                 clearErrors();
@@ -225,9 +206,7 @@ export const AddBarnModal = ({
 
             <TextField
               className={classes.foedselsdatoInput}
-              label={formatMessage({
-                id: 'søknad.barnetillegg.leggTilBarn.modal.fødselsdato.label',
-              })}
+              label={t('søknad.barnetillegg.leggTilBarn.modal.fødselsdato.label')}
               name={'fødselsdato'}
               id={'fødselsdato'}
               error={findError('fødseldato')}
@@ -241,9 +220,7 @@ export const AddBarnModal = ({
             <div>
               {!barn.ukjentFnr && (
                 <TextField
-                  label={formatMessage({
-                    id: 'søknad.barnetillegg.leggTilBarn.modal.fødselsnummer.label',
-                  })}
+                  label={t('søknad.barnetillegg.leggTilBarn.modal.fødselsnummer.label')}
                   name={'fnr'}
                   id="fnr"
                   value={barn?.fnr}
@@ -269,18 +246,18 @@ export const AddBarnModal = ({
                   });
                 }}
               >
-                {formatMessage({ id: 'søknad.barnetillegg.leggTilBarn.modal.ukjentFnr.label' })}
+                {t('søknad.barnetillegg.leggTilBarn.modal.ukjentFnr.label')}
               </Checkbox>
             </div>
 
             {barn.ukjentFnr && (
               <Alert variant="info">
-                {formatMessage({ id: 'søknad.barnetillegg.leggTilBarn.modal.ukjentFnr.warning' })}
+                {t('søknad.barnetillegg.leggTilBarn.modal.ukjentFnr.warning')}
               </Alert>
             )}
 
             <RadioGroup
-              legend={formatMessage({ id: 'søknad.barnetillegg.leggTilBarn.modal.relasjon.label' })}
+              legend={t('søknad.barnetillegg.leggTilBarn.modal.relasjon.label')}
               name={'relasjon'}
               onChange={(value) => {
                 clearErrors();
@@ -291,38 +268,36 @@ export const AddBarnModal = ({
             >
               <Radio value={Relasjon.FORELDER}>
                 <BodyShort>
-                  {formatMessage({ id: `answerOptions.relasjon.${Relasjon.FORELDER}` })}
+                  {t(`answerOptions.relasjon.${Relasjon.FORELDER}`)}
                 </BodyShort>
               </Radio>
               <Radio value={Relasjon.FOSTERFORELDER}>
                 <BodyShort>
-                  {formatMessage({ id: `answerOptions.relasjon.${Relasjon.FOSTERFORELDER}` })}
+                  {t(`answerOptions.relasjon.${Relasjon.FOSTERFORELDER}`)}
                 </BodyShort>
               </Radio>
             </RadioGroup>
 
             {barn.relasjon === Relasjon.FORELDER && (
               <Alert variant={'info'}>
-                {formatMessage({ id: 'søknad.barnetillegg.alert.leggeVedTekst' })}
+                {t('søknad.barnetillegg.alert.leggeVedTekst')}
                 <ul>
                   <li>
-                    {formatMessage({ id: 'søknad.barnetillegg.alert.bulletPointVedleggForelder' })}
+                    {t('søknad.barnetillegg.alert.bulletPointVedleggForelder')}
                   </li>
                 </ul>
-                {formatMessage({ id: 'søknad.barnetillegg.alert.lasteOppVedleggTekst' })}
+                {t('søknad.barnetillegg.alert.lasteOppVedleggTekst')}
               </Alert>
             )}
             {barn.relasjon === Relasjon.FOSTERFORELDER && (
               <Alert variant={'info'}>
-                {formatMessage({ id: 'søknad.barnetillegg.alert.leggeVedTekst' })}
+                {t('søknad.barnetillegg.alert.leggeVedTekst')}
                 <ul>
                   <li>
-                    {formatMessage({
-                      id: 'søknad.barnetillegg.alert.bulletPointVedleggFosterforelder',
-                    })}
+                    {t('søknad.barnetillegg.alert.bulletPointVedleggFosterforelder')}
                   </li>
                 </ul>
-                {formatMessage({ id: 'søknad.barnetillegg.alert.lasteOppVedleggTekst' })}
+                {t('søknad.barnetillegg.alert.lasteOppVedleggTekst')}
               </Alert>
             )}
             <ModalButtonWrapper>
@@ -334,10 +309,10 @@ export const AddBarnModal = ({
                   onCloseClick();
                 }}
               >
-                {formatMessage({ id: 'søknad.barnetillegg.leggTilBarn.modal.buttons.avbryt' })}
+                {t('søknad.barnetillegg.leggTilBarn.modal.buttons.avbryt')}
               </Button>
               <Button type={'submit'}>
-                {formatMessage({ id: 'søknad.barnetillegg.leggTilBarn.modal.buttons.lagre' })}
+                {t('søknad.barnetillegg.leggTilBarn.modal.buttons.lagre')}
               </Button>
             </ModalButtonWrapper>
           </form>

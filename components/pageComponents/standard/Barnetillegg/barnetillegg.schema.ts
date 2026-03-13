@@ -1,0 +1,4 @@
+export enum Relasjon {
+  FORELDER = 'FORELDER',
+  FOSTERFORELDER = 'FOSTERFORELDER',
+}

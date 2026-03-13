@@ -1,4 +1,3 @@
-import { IntlFormatters } from 'react-intl';
 import * as yup from 'yup';
 import { JaEllerNei } from '../../../../types/Generic';
 import {
@@ -7,13 +6,13 @@ import {
   validateOgsåArbeidetUtenforNorge,
 } from './medlemskapUtils';
 
-export const getMedlemskapSchema = (formatMessage: IntlFormatters['formatMessage']) => {
+export const getMedlemskapSchema = (t: (id: string, values?: Record<string, any>) => string) => {
   return yup.object().shape({
     medlemskap: yup.object().shape({
       harBoddINorgeSiste5År: yup
         .mixed<JaEllerNei>()
         .required(
-          formatMessage({ id: 'søknad.medlemskap.harBoddINorgeSiste5År.validation.required' })
+          t('søknad.medlemskap.harBoddINorgeSiste5År.validation.required')
         )
         .oneOf([JaEllerNei.JA, JaEllerNei.NEI])
         .nullable(),
@@ -22,9 +21,7 @@ export const getMedlemskapSchema = (formatMessage: IntlFormatters['formatMessage
         then: (yupSchema) =>
           yupSchema
             .required(
-              formatMessage({
-                id: 'søknad.medlemskap.harArbeidetINorgeSiste5År.validation.required',
-              })
+              t('søknad.medlemskap.harArbeidetINorgeSiste5År.validation.required')
             )
             .oneOf([JaEllerNei.JA, JaEllerNei.NEI])
             .nullable(),
@@ -37,7 +34,7 @@ export const getMedlemskapSchema = (formatMessage: IntlFormatters['formatMessage
           then: (yupSchema) =>
             yupSchema
               .required(
-                formatMessage({ id: 'søknad.medlemskap.arbeidUtenforNorge.validation.required' })
+                t('søknad.medlemskap.arbeidUtenforNorge.validation.required')
               )
               .oneOf([JaEllerNei.JA, JaEllerNei.NEI])
               .nullable(),
@@ -50,9 +47,7 @@ export const getMedlemskapSchema = (formatMessage: IntlFormatters['formatMessage
           then: (yupSchema) =>
             yupSchema
               .required(
-                formatMessage({
-                  id: 'søknad.medlemskap.iTilleggArbeidUtenforNorge.validation.required',
-                })
+                t('søknad.medlemskap.iTilleggArbeidUtenforNorge.validation.required')
               )
               .oneOf([JaEllerNei.JA, JaEllerNei.NEI])
               .nullable(),
@@ -67,15 +62,11 @@ export const getMedlemskapSchema = (formatMessage: IntlFormatters['formatMessage
           then: (yupSchema) =>
             yupSchema
               .required(
-                formatMessage({
-                  id: 'søknad.medlemskap.utenlandsperiode.boddINorgeArbeidUtenforNorge.validation.required',
-                })
+                t('søknad.medlemskap.utenlandsperiode.boddINorgeArbeidUtenforNorge.validation.required')
               )
               .min(
                 1,
-                formatMessage({
-                  id: 'søknad.medlemskap.utenlandsperiode.boddINorgeArbeidUtenforNorge.validation.required',
-                })
+                t('søknad.medlemskap.utenlandsperiode.boddINorgeArbeidUtenforNorge.validation.required')
               ),
         })
         .when(['iTilleggArbeidUtenforNorge'], {
@@ -84,15 +75,11 @@ export const getMedlemskapSchema = (formatMessage: IntlFormatters['formatMessage
           then: (yupSchema) =>
             yupSchema
               .required(
-                formatMessage({
-                  id: 'søknad.medlemskap.utenlandsperiode.ogsåArbeidUtenforNorge.validation.required',
-                })
+                t('søknad.medlemskap.utenlandsperiode.ogsåArbeidUtenforNorge.validation.required')
               )
               .min(
                 1,
-                formatMessage({
-                  id: 'søknad.medlemskap.utenlandsperiode.ogsåArbeidUtenforNorge.validation.required',
-                })
+                t('søknad.medlemskap.utenlandsperiode.ogsåArbeidUtenforNorge.validation.required')
               ),
         })
         .when(['harArbeidetINorgeSiste5År'], {
@@ -101,15 +88,11 @@ export const getMedlemskapSchema = (formatMessage: IntlFormatters['formatMessage
           then: (yupSchema) =>
             yupSchema
               .required(
-                formatMessage({
-                  id: 'søknad.medlemskap.utenlandsperiode.arbeidINorge.validation.required',
-                })
+                t('søknad.medlemskap.utenlandsperiode.arbeidINorge.validation.required')
               )
               .min(
                 1,
-                formatMessage({
-                  id: 'søknad.medlemskap.utenlandsperiode.arbeidINorge.validation.required',
-                })
+                t('søknad.medlemskap.utenlandsperiode.arbeidINorge.validation.required')
               ),
         }),
     }),

@@ -1,3 +1,4 @@
+'use client';
 import { UploadIcon } from '@navikt/aksel-icons';
 import { BodyShort, Heading, Loader } from '@navikt/ds-react';
 import React, { useMemo, useRef, useState } from 'react';
@@ -5,7 +6,7 @@ import React, { useMemo, useRef, useState } from 'react';
 import { FileInputProps, Vedlegg } from './FileInput';
 import { FilePanelError } from './FilePanelError';
 import { FilePanelSuccess } from './FilePanelSuccess';
-import { useIntl } from 'react-intl';
+import { useTranslations } from 'next-intl';
 
 const MAX_TOTAL_FILE_SIZE = 52428800; // 50mb
 export const FileInputInnsending = (props: FileInputProps) => {
@@ -22,7 +23,7 @@ export const FileInputInnsending = (props: FileInputProps) => {
     readAttachmentUrl = 'nb',
     ...rest
   } = props;
-  const { formatMessage } = useIntl();
+  const t = useTranslations();
   const [dragOver, setDragOver] = useState<boolean>(false);
   const [isUploading, setIsUploading] = useState<boolean>(false);
   const [totalSizeIInnsending, setTotalSizeIInnsending] = useState<number>(0);
@@ -32,13 +33,13 @@ export const FileInputInnsending = (props: FileInputProps) => {
   function feilmeldingForSubstatus(substatus: string) {
     switch (substatus) {
       case 'PASSWORD_PROTECTED':
-        return formatMessage({id: 'søknad.vedlegg.fileinput.fileInputErrors.passordbeskyttet'});
+        return t('søknad.vedlegg.fileinput.fileInputErrors.passordbeskyttet');
       case 'VIRUS':
-        return formatMessage({id: 'søknad.vedlegg.fileinput.fileInputErrors.virus'});
+        return t('søknad.vedlegg.fileinput.fileInputErrors.virus');
       case 'SIZE':
-        return formatMessage({id: 'søknad.vedlegg.fileinput.fileInputErrors.size'});
+        return t('søknad.vedlegg.fileinput.fileInputErrors.size');
       default:
-        return formatMessage({id: 'søknad.vedlegg.fileinput.fileInputErrors.default422'});
+        return t('søknad.vedlegg.fileinput.fileInputErrors.default422');
     }
   }
 
@@ -47,11 +48,11 @@ export const FileInputInnsending = (props: FileInputProps) => {
       case 422:
         return feilmeldingForSubstatus(substatus);
       case 413:
-        return formatMessage({id: 'søknad.vedlegg.fileinput.fileInputErrors.fileTooLarge'});
+        return t('søknad.vedlegg.fileinput.fileInputErrors.fileTooLarge');
       case 415:
-        return formatMessage({id: 'søknad.vedlegg.fileinput.fileInputErrors.unsupportedMediaType'});
+        return t('søknad.vedlegg.fileinput.fileInputErrors.unsupportedMediaType');
       default:
-        return formatMessage({id: 'søknad.vedlegg.fileinput.fileInputErrors.other'});
+        return t('søknad.vedlegg.fileinput.fileInputErrors.other');
     }
   };
 
@@ -59,11 +60,11 @@ export const FileInputInnsending = (props: FileInputProps) => {
     const totalUploadedSize = files.reduce((acc, curr) => acc + curr.size, 0);
 
     if (!['image/png', 'image/jpg', 'image/jpeg', 'application/pdf'].includes(fileToUpload?.type)) {
-      return formatMessage({id: 'søknad.vedlegg.fileinput.fileInputErrors.unsupportedMediaType'});
+      return t('søknad.vedlegg.fileinput.fileInputErrors.unsupportedMediaType');
     }
 
     if (totalUploadedSize + fileToUpload?.size > MAX_TOTAL_FILE_SIZE) {
-      return formatMessage({id: 'søknad.vedlegg.fileinput.fileInputErrors.fileTooLarge'});
+      return t('søknad.vedlegg.fileinput.fileInputErrors.fileTooLarge');
     }
   }
 
@@ -75,7 +76,7 @@ export const FileInputInnsending = (props: FileInputProps) => {
       onUpload([
         {
           vedleggId: crypto.randomUUID(),
-          errorMessage: formatMessage({id: 'søknad.vedlegg.fileinput.fileInputErrors.fileTooLarge'}),
+          errorMessage: t('søknad.vedlegg.fileinput.fileInputErrors.fileTooLarge'),
           type: '',
           size: totalSize,
           name: `${fileArray.length} filer`,
@@ -86,7 +87,7 @@ export const FileInputInnsending = (props: FileInputProps) => {
       onUpload([
         {
           vedleggId: crypto.randomUUID(),
-          errorMessage: formatMessage({id: 'søknad.vedlegg.fileinput.fileInputErrors.fileTooLarge'}),
+          errorMessage: t('søknad.vedlegg.fileinput.fileInputErrors.fileTooLarge'),
           type: '',
           size: totalSize,
           name: `${fileArray.length} filer`,
@@ -195,7 +196,7 @@ export const FileInputInnsending = (props: FileInputProps) => {
               ref={fileInputElement}
               {...rest}
             />
-            <BodyShort>{formatMessage({id: 'søknad.vedlegg.fileinput.inputText'})}</BodyShort>
+            <BodyShort>{t('søknad.vedlegg.fileinput.inputText')}</BodyShort>
             <BodyShort>{'eller'}</BodyShort>
             <label htmlFor={inputId} aria-labelledby={props.id}>
               <span
@@ -212,7 +213,7 @@ export const FileInputInnsending = (props: FileInputProps) => {
                 }}
               >
                 <UploadIcon title="Last opp filer" aria-hidden />
-                {formatMessage({id: 'søknad.vedlegg.fileinput.labelText'})} {heading.toLowerCase()}
+                {t('søknad.vedlegg.fileinput.labelText')} {heading.toLowerCase()}
               </span>
             </label>
           </>

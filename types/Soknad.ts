@@ -3,8 +3,8 @@ import { Relasjon } from 'components/pageComponents/standard/Barnetillegg/AddBar
 import { JaEllerNei, JaNeiVetIkke } from './Generic';
 import { JaNeiAvbrutt } from 'components/pageComponents/standard/Student/Student';
 import { FerieType } from 'components/pageComponents/standard/StartDato/StartDato';
-import { Barn } from 'pages/api/oppslag/barn';
-import { Fastlege } from 'pages/api/oppslag/fastlege';
+import { Barn } from 'app/api/oppslag/barn/route';
+import { Fastlege } from 'app/api/oppslag/fastlege/route';
 import { OppslagBehandler } from 'context/sokerOppslagContext';
 import { Vedlegg } from 'types/Vedlegg';
 

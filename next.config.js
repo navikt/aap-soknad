@@ -1,4 +1,7 @@
 /** @type {import('next').NextConfig} */
+const createNextIntlPlugin = require('next-intl/plugin');
+
+const withNextIntl = createNextIntlPlugin('./i18n/request.ts');
 
 const nextConfig = {
   basePath: '/aap/soknad',
@@ -7,11 +10,6 @@ const nextConfig = {
   output: 'standalone',
   assetPrefix: process.env.ASSET_PREFIX ?? undefined,
   serverExternalPackages: ['pino'],
-
-  i18n: {
-    locales: ['nb', 'nn'],
-    defaultLocale: 'nb',
-  },
 
   async redirects() {
     return [
@@ -26,8 +24,6 @@ const nextConfig = {
   async headers() {
     return [
       {
-        // Append the "Service-Worker-Allowed" header
-        // to each response, overriding the default worker's scope.
         source: '/(.*)',
         headers: [
           {
@@ -39,6 +35,7 @@ const nextConfig = {
     ];
   },
 };
+
 console.log('ASSET_PREFIX', process.env.ASSET_PREFIX);
 
-module.exports = nextConfig;
+module.exports = withNextIntl(nextConfig);

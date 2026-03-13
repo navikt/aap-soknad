@@ -1,9 +1,10 @@
+'use client';
 import React, { useState } from 'react';
 import { Button, Detail, Heading } from '@navikt/ds-react';
 import * as classes from './SoknadFormWrapper.module.css';
 import { useAppStateContext } from 'context/appStateContext';
 import { FormErrorSummary, SøknadValidationError } from 'components/schema/FormErrorSummary';
-import { useIntl } from 'react-intl';
+import { useTranslations } from 'next-intl';
 import LagreModal from './LagreModal';
 import SlettModal from './SlettModal';
 import { useStepWizard } from 'hooks/StepWizardHook';
@@ -19,13 +20,13 @@ interface Props {
 }
 
 const SøknadFormWrapper = (props: Props) => {
-  const { formatMessage } = useIntl();
+  const t = useTranslations();
   const {
     children,
     onNext,
     onBack,
     errors,
-    nextButtonText = formatMessage({ id: 'navigation.next' }),
+    nextButtonText = t('navigation.next'),
     nextIsLoading = false,
     className,
   } = props;
@@ -72,7 +73,7 @@ const SøknadFormWrapper = (props: Props) => {
               type="button"
               onClick={onBack}
             >
-              {formatMessage({ id: 'navigation.back' })}
+              {t('navigation.back')}
             </Button>
           )}
           <Button
@@ -97,7 +98,7 @@ const SøknadFormWrapper = (props: Props) => {
             type="button"
             onClick={() => setVisLagreModal(true)}
           >
-            {formatMessage({ id: 'navigation.save' })}
+            {t('navigation.save')}
           </Button>
           <Button
             className={classes?.buttonCancel}
@@ -105,7 +106,7 @@ const SøknadFormWrapper = (props: Props) => {
             type="button"
             onClick={() => setVisAvbrytModal(true)}
           >
-            {formatMessage({ id: 'navigation.cancel' })}
+            {t('navigation.cancel')}
           </Button>
         </div>
       </form>

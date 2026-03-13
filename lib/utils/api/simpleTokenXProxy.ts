@@ -2,14 +2,17 @@ import { getToken, requestOboToken, validateToken } from '@navikt/oasis';
 import { logError, logInfo, logWarning } from '@navikt/aap-felles-utils';
 import { randomUUID } from 'crypto';
 import { IncomingMessage } from 'http';
+import { NextRequest } from 'next/server';
 import { ErrorMedStatus } from 'lib/utils/api/ErrorMedStatus';
 
-export const getOnBefalfOfToken = async (
+type SupportedRequest = IncomingMessage | NextRequest | Request;
+
+export const getOnBehalfOfToken = async (
   audience: string,
   url: string,
-  req: IncomingMessage,
+  req: SupportedRequest,
 ): Promise<string> => {
-  const token = getToken(req);
+  const token = getToken(req as Request | IncomingMessage);
   if (!token) {
     logError(`Token for ${url} er undefined`);
     throw new Error('Token for simpleTokenXProxy is undefined');
@@ -35,7 +38,7 @@ interface Opts {
   method?: 'GET' | 'POST' | 'DELETE';
   audience: string;
   body?: object;
-  req?: IncomingMessage;
+  req?: SupportedRequest;
 }
 
 export const simpleTokenXProxy = async <T>({
@@ -49,10 +52,13 @@ export const simpleTokenXProxy = async <T>({
     logError(`Request for ${url} er undefined`);
     throw new Error('Request for simpleTokenXProxy is undefined');
   }
-  const onBehalfOfToken = await getOnBefalfOfToken(audience, url, req);
+  const onBehalfOfToken = await getOnBehalfOfToken(audience, url, req);
   const navCallId = randomUUID();
 
-  logInfo(`${req.method} ${url}, callId ${navCallId}`);
+  const reqMethod = req instanceof Request || req instanceof NextRequest
+    ? req.method
+    : (req as IncomingMessage).method;
+  logInfo(`${reqMethod} ${url}, callId ${navCallId}`);
 
   const response = await fetch(url, {
     method: method,
@@ -71,8 +77,8 @@ export const simpleTokenXProxy = async <T>({
       throw new ErrorMedStatus('No content', response.status, navCallId);
     }
 
-    const headers = response.headers.get('content-type');
-    const isJson = headers?.includes('application/json');
+    const contentType = response.headers.get('content-type');
+    const isJson = contentType?.includes('application/json');
 
     if (isJson) {
       try {

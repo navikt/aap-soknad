@@ -1,5 +1,5 @@
 .formContent {
-  composes: formContent from '/styles/layout.module.css';
+  composes: formContent from '../../styles/layout.module.css';
 }
 .fourButtonWrapper > button {
   min-width: 201px;

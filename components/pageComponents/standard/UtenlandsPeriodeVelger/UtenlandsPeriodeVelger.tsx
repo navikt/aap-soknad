@@ -1,3 +1,4 @@
+'use client';
 import React, { Dispatch, useState } from 'react';
 import * as yup from 'yup';
 import * as classes from './UtenlandsPeriode.module.css';
@@ -20,7 +21,7 @@ import { ModalButtonWrapper } from 'components/ButtonWrapper/ModalButtonWrapper'
 import { UtenlandsPeriode } from 'types/Soknad';
 import { MonthPickerWrapper } from 'components/input/MonthPickerWrapper/MonthPickerWrapper';
 import { subYears } from 'date-fns';
-import { IntlFormatters, useIntl } from 'react-intl';
+import { useTranslations } from 'next-intl';
 import { SøknadValidationError } from 'components/schema/FormErrorSummary';
 import { validate } from 'lib/utils/validationUtils';
 import { getStartOfMonthInLocalTime, getEndOfMonthInLocalTime } from 'utils/date';
@@ -42,39 +43,33 @@ export interface UtenlandsPeriodeProps {
 }
 
 export const getUtenlandsPeriodeSchema = (
-  formatMessage: IntlFormatters['formatMessage'],
+  t: (id: string, values?: Record<string, any>) => string,
   arbeidEllerBodd = ArbeidEllerBodd.BODD,
 ) => {
   return yup.object().shape({
     land: yup
       .string()
       .required(
-        formatMessage({ id: 'søknad.medlemskap.utenlandsperiode.modal.land.validation.required' }),
+        t('søknad.medlemskap.utenlandsperiode.modal.land.validation.required'),
       )
       .notOneOf(
         ['none'],
-        formatMessage({ id: 'søknad.medlemskap.utenlandsperiode.modal.land.validation.required' }),
+        t('søknad.medlemskap.utenlandsperiode.modal.land.validation.required'),
       ),
     fraDato: yup
       .date()
       .required(
-        formatMessage({
-          id: 'søknad.medlemskap.utenlandsperiode.modal.periode.fraDato.validation.required',
-        }),
+        t('søknad.medlemskap.utenlandsperiode.modal.periode.fraDato.validation.required'),
       )
       .nullable(),
     tilDato: yup
       .date()
       .required(
-        formatMessage({
-          id: 'søknad.medlemskap.utenlandsperiode.modal.periode.tilDato.validation.required',
-        }),
+        t('søknad.medlemskap.utenlandsperiode.modal.periode.tilDato.validation.required'),
       )
       .min(
         yup.ref('fraDato'),
-        formatMessage({
-          id: 'søknad.medlemskap.utenlandsperiode.modal.periode.tilDato.validation.fraDatoEtterTilDato',
-        }),
+        t('søknad.medlemskap.utenlandsperiode.modal.periode.tilDato.validation.fraDatoEtterTilDato'),
       )
       .nullable(),
     iArbeid: yup.string().when('arbeidEllerBodd', ([], schema) => {
@@ -82,9 +77,7 @@ export const getUtenlandsPeriodeSchema = (
         return yup
           .string()
           .required(
-            formatMessage({
-              id: 'søknad.medlemskap.utenlandsperiode.modal.iArbeid.validation.required',
-            }),
+            t('søknad.medlemskap.utenlandsperiode.modal.iArbeid.validation.required'),
           )
           .oneOf([JaEllerNei.JA, JaEllerNei.NEI])
           .nullable();
@@ -104,7 +97,7 @@ const UtenlandsPeriodeVelger = ({
   arbeidEllerBodd,
 }: UtenlandsPeriodeProps) => {
   const [errors, setErrors] = useState<SøknadValidationError[] | undefined>();
-  const { formatMessage } = useIntl();
+  const t = useTranslations();
 
   const antallÅrTilbake = arbeidEllerBodd === ArbeidEllerBodd.ARBEID ? 5 : 60;
   const landKode = utenlandsPeriode?.land?.split(':')?.[0];
@@ -121,28 +114,20 @@ const UtenlandsPeriodeVelger = ({
         clearErrors();
         closeModal();
       }}
-      aria-label={formatMessage({
-        id: `søknad.medlemskap.utenlandsperiode.modal.title.${arbeidEllerBodd}`,
-      })}
+      aria-label={t(`søknad.medlemskap.utenlandsperiode.modal.title.${arbeidEllerBodd}`)}
     >
       <Modal.Header>
         <Heading size={'medium'} level={'3'} spacing>
-          {formatMessage({
-            id: `søknad.medlemskap.utenlandsperiode.modal.title.${arbeidEllerBodd}`,
-          })}
+          {t(`søknad.medlemskap.utenlandsperiode.modal.title.${arbeidEllerBodd}`)}
         </Heading>
       </Modal.Header>
       <Modal.Body className={classes.utenlandsPeriodeVelger}>
         <BodyLong spacing={!(arbeidEllerBodd === 'BODD')}>
-          {formatMessage({
-            id: `søknad.medlemskap.utenlandsperiode.modal.ingress.${arbeidEllerBodd}`,
-          })}
+          {t(`søknad.medlemskap.utenlandsperiode.modal.ingress.${arbeidEllerBodd}`)}
         </BodyLong>
         {arbeidEllerBodd === 'BODD' && (
           <BodyLong spacing>
-            {formatMessage({
-              id: `søknad.medlemskap.utenlandsperiode.modal.ingress.${arbeidEllerBodd}_2`,
-            })}
+            {t(`søknad.medlemskap.utenlandsperiode.modal.ingress.${arbeidEllerBodd}_2`)}
           </BodyLong>
         )}
         {isOpen && (
@@ -150,7 +135,7 @@ const UtenlandsPeriodeVelger = ({
             className={classes.modalForm}
             onSubmit={async (e) => {
               e.preventDefault();
-              const validationSchema = getUtenlandsPeriodeSchema(formatMessage, arbeidEllerBodd);
+              const validationSchema = getUtenlandsPeriodeSchema(t, arbeidEllerBodd);
               const validationErrors = await validate(validationSchema, utenlandsPeriode);
 
               if (validationErrors) {
@@ -163,7 +148,7 @@ const UtenlandsPeriodeVelger = ({
             }}
           >
             <ErrorSummary
-              heading={formatMessage({ id: 'errorSummary.title' })}
+              heading={t('errorSummary.title')}
               aria-hidden={!errors?.length}
               className={errors?.length ? '' : classes?.visuallyHidden}
             >
@@ -181,9 +166,7 @@ const UtenlandsPeriodeVelger = ({
               className={classes.countrySelector}
               name={'land'}
               value={utenlandsPeriode?.land || ''}
-              label={formatMessage({
-                id: `søknad.medlemskap.utenlandsperiode.modal.land.label.${arbeidEllerBodd}`,
-              })}
+              label={t(`søknad.medlemskap.utenlandsperiode.modal.land.label.${arbeidEllerBodd}`)}
               onChange={(e) => {
                 clearErrors();
                 setUtenlandsPeriode({ ...utenlandsPeriode, land: e.target.value });
@@ -192,17 +175,13 @@ const UtenlandsPeriodeVelger = ({
             />
             <div>
               <Label>
-                {formatMessage({
-                  id: `søknad.medlemskap.utenlandsperiode.modal.periode.label.${arbeidEllerBodd}`,
-                })}
+                {t(`søknad.medlemskap.utenlandsperiode.modal.periode.label.${arbeidEllerBodd}`)}
               </Label>
               <HGrid columns={{ xs: 1, md: 2 }} gap="4">
                 <MonthPickerWrapper
                   id="fraDato"
                   selectedDate={utenlandsPeriode.fraDato}
-                  label={formatMessage({
-                    id: 'søknad.medlemskap.utenlandsperiode.modal.periode.fraDato.label',
-                  })}
+                  label={t('søknad.medlemskap.utenlandsperiode.modal.periode.fraDato.label')}
                   fromDate={subYears(new Date(), antallÅrTilbake)}
                   toDate={new Date()}
                   dropdownCaption={true}
@@ -219,9 +198,7 @@ const UtenlandsPeriodeVelger = ({
                 <MonthPickerWrapper
                   id="tilDato"
                   selectedDate={utenlandsPeriode?.tilDato}
-                  label={formatMessage({
-                    id: 'søknad.medlemskap.utenlandsperiode.modal.periode.tilDato.label',
-                  })}
+                  label={t('søknad.medlemskap.utenlandsperiode.modal.periode.tilDato.label')}
                   fromDate={subYears(new Date(), antallÅrTilbake)}
                   toDate={new Date()}
                   dropdownCaption={true}
@@ -240,9 +217,7 @@ const UtenlandsPeriodeVelger = ({
             {arbeidEllerBodd === ArbeidEllerBodd.BODD && (
               <RadioGroup
                 name={'iArbeid'}
-                legend={formatMessage({
-                  id: 'søknad.medlemskap.utenlandsperiode.modal.iArbeid.label',
-                })}
+                legend={t('søknad.medlemskap.utenlandsperiode.modal.iArbeid.label')}
                 onChange={(value) => {
                   clearErrors();
                   setUtenlandsPeriode({ ...utenlandsPeriode, iArbeid: value });
@@ -262,9 +237,7 @@ const UtenlandsPeriodeVelger = ({
               <TextField
                 className={classes.pidInput}
                 name={'utenlandsId'}
-                label={formatMessage({
-                  id: 'søknad.medlemskap.utenlandsperiode.modal.utenlandsId.label',
-                })}
+                label={t('søknad.medlemskap.utenlandsperiode.modal.utenlandsId.label')}
                 value={utenlandsPeriode?.utenlandsId || ''}
                 onChange={(e) => {
                   clearErrors();
@@ -282,11 +255,11 @@ const UtenlandsPeriodeVelger = ({
                   closeModal();
                 }}
               >
-                {formatMessage({ id: 'søknad.medlemskap.utenlandsperiode.modal.buttons.avbryt' })}
+                {t('søknad.medlemskap.utenlandsperiode.modal.buttons.avbryt')}
               </Button>
 
               <Button>
-                {formatMessage({ id: 'søknad.medlemskap.utenlandsperiode.modal.buttons.lagre' })}
+                {t('søknad.medlemskap.utenlandsperiode.modal.buttons.lagre')}
               </Button>
             </ModalButtonWrapper>
           </form>

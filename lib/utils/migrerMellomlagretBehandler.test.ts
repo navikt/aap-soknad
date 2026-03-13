@@ -1,6 +1,6 @@
 import { JaEllerNei } from 'types/Generic';
 import { migrerMellomlagretBehandler } from 'lib/utils/migrerMellomlagretBehandler';
-import { SoknadContextState } from 'context/soknadcontext/soknadContext';
+import { SoknadContextState } from 'context/soknadcontext/soknadContextTypes';
 import { describe, test, expect } from 'vitest';
 
 const mellomlagretSøknadBehandlerFraOppslag: SoknadContextState = {

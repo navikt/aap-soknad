@@ -1,10 +1,11 @@
+'use client';
 import { IntroduksjonTekst } from 'components/IntroduksjonTekst/IntroduksjonTekst';
 import * as classes from './Steg0.module.css';
 import { BodyShort, Label } from '@navikt/ds-react';
 import { SuccessColored } from '@navikt/ds-icons';
-import { useIntl } from 'react-intl';
+import { useTranslations } from 'next-intl';
 import SøknadFormWrapper from 'components/SoknadFormWrapper/SoknadFormWrapper';
-import { Person } from 'pages/api/oppslagapi/person';
+import { Person } from 'app/api/oppslagapi/person/route';
 
 interface Props {
   onNext: () => void;
@@ -12,24 +13,24 @@ interface Props {
 }
 
 export const Steg0 = ({ onNext, person }: Props) => {
-  const { formatMessage } = useIntl();
+  const t = useTranslations();
 
   return (
     <SøknadFormWrapper
       className={classes?.paddingTop}
       onNext={onNext}
-      nextButtonText={formatMessage({ id: 'navigation.next' })}
+      nextButtonText={t('navigation.next')}
     >
       <IntroduksjonTekst navn={person?.navn} />
 
       <div>
         <Label as="p" spacing>
-          {formatMessage({ id: 'søknad.veiledning.veiledningConfirm.title' })}
+          {t('søknad.veiledning.veiledningConfirm.title')}
         </Label>
         <div style={{ display: 'flex', gap: '0.25rem', alignItems: 'center' }}>
           <SuccessColored />
           <BodyShort>
-            {formatMessage({ id: 'søknad.veiledning.veiledningConfirm.label' })}
+            {t('søknad.veiledning.veiledningConfirm.label')}
           </BodyShort>
         </div>
       </div>

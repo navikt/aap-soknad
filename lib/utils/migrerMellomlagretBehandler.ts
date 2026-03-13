@@ -1,5 +1,5 @@
 import { formatFullAdresse, formatNavn } from 'utils/StringFormatters';
-import { SoknadContextState } from 'context/soknadcontext/soknadContext';
+import { SoknadContextState } from 'context/soknadcontext/soknadContextTypes';
 
 /**
  * Migrerer behandlere som er mellomlagret på struktur fra soknad-api

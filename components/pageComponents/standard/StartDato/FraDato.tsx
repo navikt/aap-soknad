@@ -1,4 +1,5 @@
-import { useIntl } from 'react-intl';
+'use client';
+import { useTranslations } from 'next-intl';
 import { DatePicker, useDatepicker } from '@navikt/ds-react';
 import React from 'react';
 import { SoknadContextState } from 'context/soknadcontext/soknadContext';
@@ -14,7 +15,7 @@ interface Props {
 const FraDato = (props: Props) => {
   const { defaultValues, clearErrors, errorMessage } = props;
   const { søknadDispatch, søknadState } = useSoknad();
-  const { formatMessage } = useIntl();
+  const t = useTranslations();
 
   const { datepickerProps: fraDatoProps, inputProps: fraDatoInputProps } = useDatepicker({
     fromDate: new Date(),
@@ -33,7 +34,7 @@ const FraDato = (props: Props) => {
     <DatePicker {...fraDatoProps}>
       <DatePicker.Input
         {...fraDatoInputProps}
-        label={formatMessage({ id: 'søknad.startDato.periode.fraDato.label' })}
+        label={t('søknad.startDato.periode.fraDato.label')}
         name={'ferie.fraDato'}
         id={'ferie.fraDato'}
         error={errorMessage}

@@ -1,11 +1,12 @@
+'use client';
 import { Alert, BodyLong, BodyShort, Button, Heading, Link } from '@navikt/ds-react';
 import React from 'react';
 import * as classes from './Kvittering.module.css';
 import { SuccessStroke } from '@navikt/ds-icons';
 import { clientSideIsProd, isFunctionalTest } from 'utils/environments';
-import { FormattedMessage, useIntl } from 'react-intl';
-import { KrrKontaktInfo } from 'pages/api/oppslag/krr';
-import { Person } from 'pages/api/oppslagapi/person';
+import { useTranslations } from 'next-intl';
+import { KrrKontaktInfo } from 'app/api/oppslag/krr/route';
+import { Person } from 'app/api/oppslagapi/person/route';
 
 interface Props {
   person: Person;
@@ -13,7 +14,7 @@ interface Props {
 }
 
 const Kvittering = ({ person, kontaktinformasjon }: Props) => {
-  const { formatMessage } = useIntl();
+  const t = useTranslations();
 
   const mineAapUrl = () => {
     if (clientSideIsProd()) {
@@ -40,52 +41,46 @@ const Kvittering = ({ person, kontaktinformasjon }: Props) => {
         aria-hidden={true}
       />
       <Heading size={'large'} level={'2'}>
-        <FormattedMessage id={'søknad.kvittering.title'} values={{ navn: person?.navn }} />
+        {t('søknad.kvittering.title', { navn: person?.navn })}
       </Heading>
       <Alert variant={'success'}>
-        <BodyLong>{formatMessage({ id: 'søknad.kvittering.alert.text' })}</BodyLong>
+        <BodyLong>{t('søknad.kvittering.alert.text')}</BodyLong>
       </Alert>
       <Alert variant="info">
         <BodyShort spacing>
           <Link target="_blank" href={`${mineAapUrl()}/ettersendelse/`}>
-            {formatMessage({ id: 'søknad.kvittering.vedlegg.ettersendelseLink' })}
+            {t('søknad.kvittering.vedlegg.ettersendelseLink')}
           </Link>
         </BodyShort>
         <BodyShort spacing>
-          <FormattedMessage
-            id={'søknad.kvittering.vedlegg.tekst1'}
-            values={{
+          {t.rich('søknad.kvittering.vedlegg.tekst1', {
               a: (chunks) => (
-                <Link target="_blank" href={formatMessage({ id: 'applinks.ettersending' })}>
+                <Link target="_blank" href={t('applinks.ettersending')}>
                   {chunks}
                 </Link>
               ),
-            }}
-          />
+            })}
         </BodyShort>
       </Alert>
 
-      <FormattedMessage
-        id={'søknad.kvittering.saksbehandlingstid'}
-        values={{
-          a: (chunks) => (
-            <Link href={formatMessage({ id: 'applinks.saksbehandlingstid' })}>{chunks}</Link>
-          ),
-        }}
-      />
+      {t.rich('søknad.kvittering.saksbehandlingstid', {
+        a: (chunks) => (
+          <Link href={t('applinks.saksbehandlingstid')}>{chunks}</Link>
+        ),
+      })}
       {(kontaktinformasjon?.mobil || kontaktinformasjon?.epost) && (
         <div>
-          {formatMessage({ id: 'søknad.kvittering.bekreftelse.title' })}
+          {t('søknad.kvittering.bekreftelse.title')}
           <ul className={classes?.kvitteringList}>
             {kontaktinformasjon?.mobil && (
               <li>
-                {formatMessage({ id: 'søknad.kvittering.bekreftelse.sms' })}:{' '}
+                {t('søknad.kvittering.bekreftelse.sms')}:{' '}
                 {kontaktinformasjon?.mobil}
               </li>
             )}
             {kontaktinformasjon?.epost && (
               <li>
-                {formatMessage({ id: 'søknad.kvittering.bekreftelse.epost' })}:{' '}
+                {t('søknad.kvittering.bekreftelse.epost')}:{' '}
                 {kontaktinformasjon?.epost}
               </li>
             )}
@@ -94,7 +89,7 @@ const Kvittering = ({ person, kontaktinformasjon }: Props) => {
       )}
       <form action={dittNavUrl}>
         <Button as={'a'} variant={'primary'} href={mineAapUrl()}>
-          {formatMessage({ id: 'søknad.kvittering.dittNavKnapp' })}
+          {t('søknad.kvittering.dittNavKnapp')}
         </Button>
       </form>
     </div>

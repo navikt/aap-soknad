@@ -1,6 +1,6 @@
 import { JaEllerNei } from 'types/Generic';
 import { getBehandlerSchema } from './Behandlere';
-import { Fastlege } from 'pages/api/oppslag/fastlege';
+import { Fastlege } from 'app/api/oppslag/fastlege/route';
 import { describe, vi, it, expect } from 'vitest';
 
 describe('Behandlere validation', () => {

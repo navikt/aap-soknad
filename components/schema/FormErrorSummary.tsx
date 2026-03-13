@@ -1,8 +1,9 @@
+'use client';
 import React, { Ref, useEffect, useMemo, useRef } from 'react';
 import { ErrorSummary } from '@navikt/ds-react';
 import * as classes from './FormErrorSummary.module.css';
 import { setFocusHtmlRef } from 'utils/dom';
-import { useIntl } from 'react-intl';
+import { useTranslations } from 'next-intl';
 
 export interface SøknadValidationError {
   path: string;
@@ -20,7 +21,7 @@ export const setFocusOnErrorSummary = () => {
 
 const FormErrorSummary = (props: Props) => {
   const { errors } = props;
-  const { formatMessage } = useIntl();
+  const t = useTranslations();
 
   const errorSummaryRef: Ref<HTMLDivElement> = useRef(null);
 
@@ -39,7 +40,7 @@ const FormErrorSummary = (props: Props) => {
     return (
       <ErrorSummary
         ref={errorSummaryRef}
-        heading={formatMessage({ id: 'errorSummary.title' })}
+        heading={t('errorSummary.title')}
         role={'alert'}
         aria-hidden={!isError}
         className={!isError ? classes?.visuallyHidden : ''}
@@ -54,7 +55,7 @@ const FormErrorSummary = (props: Props) => {
     <ErrorSummary
       id="aap-error-summary"
       ref={errorSummaryRef}
-      heading={formatMessage({ id: 'errorSummary.title' })}
+      heading={t('errorSummary.title')}
       role={'alert'}
       aria-hidden={!isError}
       className={!isError ? classes?.visuallyHidden : ''}

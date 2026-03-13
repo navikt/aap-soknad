@@ -1,3 +1,4 @@
+'use client';
 import * as classes from './Barnetillegg.module.css';
 import { BodyShort, Button, Label } from '@navikt/ds-react';
 import { formatNavn } from 'utils/StringFormatters';
@@ -6,7 +7,7 @@ import { Relasjon } from './AddBarnModal';
 import { Delete } from '@navikt/ds-icons';
 import React, { Dispatch } from 'react';
 import { ManuelleBarn } from 'types/Soknad';
-import { useIntl } from 'react-intl';
+import { useTranslations } from 'next-intl';
 import { useSoknad } from 'hooks/SoknadHook';
 import { removeRequiredVedlegg, updateSøknadData } from 'context/soknadcontext/actions';
 
@@ -16,7 +17,7 @@ interface BarnKortProps {
   setShowModal: (vis: boolean) => void;
 }
 const ManueltBarn = ({ barn, setSelectedBarn, setShowModal }: BarnKortProps) => {
-  const { formatMessage } = useIntl();
+  const t = useTranslations();
   const { søknadState, søknadDispatch } = useSoknad();
 
   const slettBarn = (barnId: string) => {
@@ -30,24 +31,22 @@ const ManueltBarn = ({ barn, setSelectedBarn, setShowModal }: BarnKortProps) => 
     <li key={barn?.internId}>
       <article className={classes.barneKort}>
         <BodyShort>
-          <Label>{formatMessage({ id: 'søknad.barnetillegg.registrerteBarn.navn' })}: </Label>
+          <Label>{t('søknad.barnetillegg.registrerteBarn.navn')}: </Label>
           {formatNavn(barn?.navn)}
         </BodyShort>
         <BodyShort>
-          <Label>{formatMessage({ id: 'søknad.barnetillegg.manuelleBarn.fødselsdato' })}: </Label>
+          <Label>{t('søknad.barnetillegg.manuelleBarn.fødselsdato')}: </Label>
 
           {formatDate(barn?.fødseldato)}
         </BodyShort>
         {barn?.relasjon === Relasjon.FORELDER && (
           <BodyShort>
-            {formatMessage({ id: 'søknad.barnetillegg.manuelleBarn.erForelder' })}
+            {t('søknad.barnetillegg.manuelleBarn.erForelder')}
           </BodyShort>
         )}
         {barn?.relasjon === Relasjon.FOSTERFORELDER && (
           <BodyShort>
-            {formatMessage({
-              id: 'søknad.barnetillegg.manuelleBarn.erFosterforelder',
-            })}
+            {t('søknad.barnetillegg.manuelleBarn.erFosterforelder')}
           </BodyShort>
         )}
         <div className={classes?.cardButtonWrapper}>
@@ -59,7 +58,7 @@ const ManueltBarn = ({ barn, setSelectedBarn, setShowModal }: BarnKortProps) => 
               setShowModal(true);
             }}
           >
-            {formatMessage({ id: 'søknad.barnetillegg.manuelleBarn.redigerBarn' })}
+            {t('søknad.barnetillegg.manuelleBarn.redigerBarn')}
           </Button>
           <Button
             variant="tertiary"
@@ -70,7 +69,7 @@ const ManueltBarn = ({ barn, setSelectedBarn, setShowModal }: BarnKortProps) => 
               slettBarn(barn.internId);
             }}
           >
-            {formatMessage({ id: 'søknad.barnetillegg.manuelleBarn.slettBarn' })}
+            {t('søknad.barnetillegg.manuelleBarn.slettBarn')}
           </Button>
         </div>
       </article>

@@ -1,35 +1,23 @@
-import { RequiredVedlegg, SøknadType } from 'types/SoknadContext';
-import { Soknad } from 'types/Soknad';
-import React, { createContext, Dispatch, ReactNode, useMemo, useReducer } from 'react';
-import { StepType } from 'components/StepWizard/Step';
+'use client';
+
+import { Dispatch, ReactNode, useMemo, useReducer, createContext } from 'react';
 import { SoknadAction } from './actions';
 import { soknadReducer } from './reducer';
+import { SoknadContextState, soknadContextInitialState } from './soknadContextTypes';
 
-export interface SoknadContextState {
-  version: number;
-  type?: SøknadType;
-  søknad?: Soknad;
-  lagretStepList?: Array<StepType>;
-  requiredVedlegg: RequiredVedlegg[];
-  sistLagret?: string;
-}
-
-export const SOKNAD_VERSION = 1;
-export const soknadContextInititalState: SoknadContextState = {
-  version: SOKNAD_VERSION,
-  søknad: undefined,
-  requiredVedlegg: [],
-  type: SøknadType.STANDARD,
-};
+// Re-export from types file so existing imports from 'soknadContext' still work
+export type { SoknadContextState };
+export { SOKNAD_VERSION, soknadContextInitialState as soknadContextInititalState } from './soknadContextTypes';
 
 export interface SoknadContextType {
   søknadState: SoknadContextState;
   søknadDispatch: Dispatch<SoknadAction>;
 }
+
 export const SoknadContext = createContext<SoknadContextType | undefined>(undefined);
 
 export const SoknadContextProvider = ({ children }: { children: ReactNode }) => {
-  const [state, dispatch] = useReducer(soknadReducer, soknadContextInititalState);
+  const [state, dispatch] = useReducer(soknadReducer, soknadContextInitialState);
 
   const contextValue = useMemo(() => {
     return { søknadState: state, søknadDispatch: dispatch };

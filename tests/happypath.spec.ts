@@ -15,13 +15,13 @@ test('at enkel gjennomkjøring av søknaden fungerer', async ({ page }) => {
   ).toBeVisible();
 
   // Fjern cookie-banner
-  await page.locator('consent-banner').getByRole('button', { name: 'Ja' }).click();
+  // await page.locator('consent-banner').getByRole('button', { name: 'Ja' }).click();
 
   await page.getByLabel('Jeg vil svare så godt jeg kan på spørsmålene i søknaden.').check();
 
   await page.getByRole('button', { name: 'Start søknad' }).click();
 
-  //await page.goto('http://localhost:3000/aap/soknad/1/');
+  //await page.goto('http://localhost:3000/aap/soknad/nb/1/');
   wcagRes = await checkWcag(page);
   await expect(wcagRes.violations).toEqual([]);
 
@@ -30,7 +30,7 @@ test('at enkel gjennomkjøring av søknaden fungerer', async ({ page }) => {
   await page.getByLabel('Nei').check();
 
   await page.getByRole('button', { name: 'Neste steg' }).click();
-  await expect(page).toHaveURL('http://localhost:3000/aap/soknad/2/');
+  await expect(page).toHaveURL('http://localhost:3000/aap/soknad/nb/2/');
   await expect(page.getByRole('heading', { name: 'Bosted og jobb' })).toBeVisible();
   wcagRes = await checkWcag(page);
   await expect(wcagRes.violations).toEqual([]);
@@ -43,7 +43,7 @@ test('at enkel gjennomkjøring av søknaden fungerer', async ({ page }) => {
     .check();
 
   await page.getByRole('button', { name: 'Neste steg' }).click();
-  await expect(page).toHaveURL('http://localhost:3000/aap/soknad/3/');
+  await expect(page).toHaveURL('http://localhost:3000/aap/soknad/nb/3/');
   await expect(page.getByRole('heading', { name: 'Yrkesskade' })).toBeVisible();
   wcagRes = await checkWcag(page);
   await expect(wcagRes.violations).toEqual([]);
@@ -51,7 +51,7 @@ test('at enkel gjennomkjøring av søknaden fungerer', async ({ page }) => {
   await page.getByLabel('Nei').check();
 
   await page.getByRole('button', { name: 'Neste steg' }).click();
-  await expect(page).toHaveURL('http://localhost:3000/aap/soknad/4/');
+  await expect(page).toHaveURL('http://localhost:3000/aap/soknad/nb/4/');
 
   await expect(
     page.getByRole('heading', { name: 'Kontaktperson for helseopplysninger' }),
@@ -62,14 +62,14 @@ test('at enkel gjennomkjøring av søknaden fungerer', async ({ page }) => {
   await page.getByLabel('Ja').check();
 
   await page.getByRole('button', { name: 'Neste steg' }).click();
-  await expect(page).toHaveURL('http://localhost:3000/aap/soknad/5/');
+  await expect(page).toHaveURL('http://localhost:3000/aap/soknad/nb/5/');
 
   await expect(page.getByRole('heading', { name: 'Barnetillegg' })).toBeVisible();
   wcagRes = await checkWcag(page);
   await expect(wcagRes.violations).toEqual([]);
 
   await page.getByRole('button', { name: 'Neste steg' }).click();
-  await expect(page).toHaveURL('http://localhost:3000/aap/soknad/6/');
+  await expect(page).toHaveURL('http://localhost:3000/aap/soknad/nb/6/');
 
   await expect(page.getByRole('heading', { name: 'Student' })).toBeVisible();
   wcagRes = await checkWcag(page);
@@ -78,7 +78,7 @@ test('at enkel gjennomkjøring av søknaden fungerer', async ({ page }) => {
   await page.getByLabel('Nei').check();
 
   await page.getByRole('button', { name: 'Neste steg' }).click();
-  await expect(page).toHaveURL('http://localhost:3000/aap/soknad/7/');
+  await expect(page).toHaveURL('http://localhost:3000/aap/soknad/nb/7/');
 
   await expect(page.getByRole('heading', { name: 'Utbetalinger' })).toBeVisible();
   wcagRes = await checkWcag(page);
@@ -89,7 +89,7 @@ test('at enkel gjennomkjøring av søknaden fungerer', async ({ page }) => {
   await page.getByLabel('Ingen av disse').check();
 
   await page.getByRole('button', { name: 'Neste steg' }).click();
-  await expect(page).toHaveURL('http://localhost:3000/aap/soknad/8/');
+  await expect(page).toHaveURL('http://localhost:3000/aap/soknad/nb/8/');
 
   await expect(
     page.getByRole('heading', { name: 'Vedlegg og tilleggsopplysninger' }),
@@ -98,7 +98,7 @@ test('at enkel gjennomkjøring av søknaden fungerer', async ({ page }) => {
   await expect(wcagRes.violations).toEqual([]);
 
   await page.getByRole('button', { name: 'Neste steg' }).click();
-  await expect(page).toHaveURL('http://localhost:3000/aap/soknad/9/');
+  await expect(page).toHaveURL('http://localhost:3000/aap/soknad/nb/9/');
   await expect(page.getByRole('heading', { name: 'Oppsummering' })).toBeVisible();
   // TODO Disse feiler på link komponenten til Aksel.
   // wcagRes = await checkWcag(page);
@@ -121,7 +121,7 @@ test('at enkel gjennomkjøring av søknaden fungerer', async ({ page }) => {
     .check();
 
   await page.getByRole('button', { name: 'Send søknad' }).click();
-  await expect(page).toHaveURL('http://localhost:3000/aap/soknad/kvittering/');
+  await expect(page).toHaveURL('http://localhost:3000/aap/soknad/nb/kvittering/');
   await expect(page.getByRole('heading', { name: 'Takk for søknaden, Jackie Li' })).toBeVisible();
   wcagRes = await checkWcag(page);
   await expect(wcagRes.violations).toEqual([]);
