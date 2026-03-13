@@ -1,6 +1,7 @@
+'use client';
 import { DatePicker, useDatepicker } from '@navikt/ds-react';
 import React from 'react';
-import { useIntl } from 'react-intl';
+import { useTranslations } from 'next-intl';
 import { SoknadContextState } from 'context/soknadcontext/soknadContext';
 import { useSoknad } from 'hooks/SoknadHook';
 import { updateSøknadData } from 'context/soknadcontext/actions';
@@ -13,7 +14,7 @@ interface Props {
 const TilDato = (props: Props) => {
   const { defaultValues, clearErrors, errorMessage } = props;
   const { søknadDispatch, søknadState } = useSoknad();
-  const { formatMessage } = useIntl();
+  const t = useTranslations();
 
   const { datepickerProps: tilDatoProps, inputProps: tilDatoInputProps } = useDatepicker({
     fromDate: new Date(),
@@ -31,7 +32,7 @@ const TilDato = (props: Props) => {
     <DatePicker {...tilDatoProps}>
       <DatePicker.Input
         {...tilDatoInputProps}
-        label={formatMessage({ id: 'søknad.startDato.periode.tilDato.label' })}
+        label={t('søknad.startDato.periode.tilDato.label')}
         name={'ferie.tilDato'}
         id={'ferie.tilDato'}
         error={errorMessage}

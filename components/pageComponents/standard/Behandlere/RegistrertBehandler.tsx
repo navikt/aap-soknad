@@ -1,9 +1,10 @@
+'use client';
 import * as classes from './Behandlere.module.css';
 import { Alert, BodyShort, Label, Radio, RadioGroup } from '@navikt/ds-react';
 import { formatTelefonnummer } from 'utils/StringFormatters';
 import { JaEllerNei } from 'types/Generic';
 import React from 'react';
-import { useIntl } from 'react-intl';
+import { useTranslations } from 'next-intl';
 import { RegistrertFastlege } from 'types/Soknad';
 import { useSoknad } from 'hooks/SoknadHook';
 import { updateSøknadData } from 'context/soknadcontext/actions';
@@ -15,7 +16,7 @@ interface Props {
   errorMessage?: string;
 }
 export const RegistrertBehandler = ({ fastlege, index, clearErrors, errorMessage }: Props) => {
-  const { formatMessage } = useIntl();
+  const t = useTranslations();
   const { søknadState, søknadDispatch } = useSoknad();
 
   return (
@@ -23,29 +24,27 @@ export const RegistrertBehandler = ({ fastlege, index, clearErrors, errorMessage
       <dl className={classes?.fastLege}>
         <dt>
           <Label as={'span'}>
-            {formatMessage({ id: 'søknad.helseopplysninger.registrertFastlege.navn' })}
+            {t('søknad.helseopplysninger.registrertFastlege.navn')}
           </Label>
         </dt>
         <dd>{fastlege.navn}</dd>
         <dt>
           <Label as={'span'}>
-            {formatMessage({
-              id: 'søknad.helseopplysninger.registrertFastlege.legekontor',
-            })}
+            {t('søknad.helseopplysninger.registrertFastlege.legekontor')}
           </Label>
         </dt>
 
         <dd>{fastlege.kontaktinformasjon.kontor}</dd>
         <dt>
           <Label as={'span'}>
-            {formatMessage({ id: 'søknad.helseopplysninger.registrertFastlege.adresse' })}
+            {t('søknad.helseopplysninger.registrertFastlege.adresse')}
           </Label>
         </dt>
 
         <dd>{fastlege.kontaktinformasjon.adresse}</dd>
         <dt>
           <Label as={'span'}>
-            {formatMessage({ id: 'søknad.helseopplysninger.registrertFastlege.telefon' })}
+            {t('søknad.helseopplysninger.registrertFastlege.telefon')}
           </Label>
         </dt>
 
@@ -54,9 +53,7 @@ export const RegistrertBehandler = ({ fastlege, index, clearErrors, errorMessage
       <RadioGroup
         name={`fastlege[${index}].erRegistrertFastlegeRiktig`}
         id={`fastlege[${index}].erRegistrertFastlegeRiktig`}
-        legend={formatMessage({
-          id: `søknad.helseopplysninger.erRegistrertFastlegeRiktig.label`,
-        })}
+        legend={t(`søknad.helseopplysninger.erRegistrertFastlegeRiktig.label`)}
         value={fastlege.erRegistrertFastlegeRiktig || ''}
         onChange={(value) => {
           clearErrors();
@@ -81,9 +78,7 @@ export const RegistrertBehandler = ({ fastlege, index, clearErrors, errorMessage
       </RadioGroup>
       {fastlege.erRegistrertFastlegeRiktig === JaEllerNei.NEI && (
         <Alert variant={'info'}>
-          {formatMessage({
-            id: 'søknad.helseopplysninger.erRegistrertFastlegeRiktig.alertInfo',
-          })}
+          {t('søknad.helseopplysninger.erRegistrertFastlegeRiktig.alertInfo')}
         </Alert>
       )}
     </div>

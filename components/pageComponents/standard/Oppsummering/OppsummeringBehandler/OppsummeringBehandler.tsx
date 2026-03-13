@@ -1,28 +1,27 @@
+'use client';
 import { BodyShort, Heading } from '@navikt/ds-react';
 import React from 'react';
 import { Behandler } from 'types/Soknad';
 import { formatTelefonnummer } from 'utils/StringFormatters';
-import { useIntl } from 'react-intl';
+import { useTranslations } from 'next-intl';
 
 type Props = {
   behandler: Behandler;
 };
 
 const OppsummeringBehandler = ({ behandler }: Props) => {
-  const { formatMessage } = useIntl();
+  const t = useTranslations();
 
   return (
     <article className={''}>
       <Heading size={'small'} level={'3'}>
-        {formatMessage({ id: 'søknad.oppsummering.helseopplysninger.behandler' })}
+        {t('søknad.oppsummering.helseopplysninger.behandler')}
       </Heading>
       <BodyShort>{`${behandler?.firstname} ${behandler?.lastname}`}</BodyShort>
       {behandler?.legekontor && <BodyShort>{behandler?.legekontor}</BodyShort>}
       <BodyShort>{formaterAdresse(behandler)}</BodyShort>
       {behandler?.telefon && (
-        <BodyShort>{`${formatMessage({
-          id: 'søknad.helseopplysninger.dineBehandlere.telefon',
-        })}: ${formatTelefonnummer(behandler?.telefon)}`}</BodyShort>
+        <BodyShort>{`${t('søknad.helseopplysninger.dineBehandlere.telefon')}: ${formatTelefonnummer(behandler?.telefon)}`}</BodyShort>
       )}
     </article>
   );

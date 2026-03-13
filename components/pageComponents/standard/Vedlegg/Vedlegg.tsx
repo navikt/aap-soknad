@@ -1,10 +1,11 @@
+'use client';
 import { Soknad } from 'types/Soknad';
 import React, { useEffect } from 'react';
 import { Alert, BodyLong, BodyShort, Heading, Label, Textarea } from '@navikt/ds-react';
 import { completeAndGoToNextStep } from 'context/stepWizardContext';
 import { useStepWizard } from 'hooks/StepWizardHook';
 import { useDebounceLagreSoknad } from 'hooks/useDebounceLagreSoknad';
-import { useIntl } from 'react-intl';
+import { useTranslations, useLocale } from 'next-intl';
 import SoknadFormWrapperNew from 'components/SoknadFormWrapper/SoknadFormWrapper';
 import { SøknadValidationError } from 'components/schema/FormErrorSummary';
 import { setFocusOnErrorSummary } from '../../../schema/FormErrorSummary';
@@ -19,7 +20,8 @@ interface Props {
 }
 
 const Vedlegg = ({ onBackClick }: Props) => {
-  const { formatMessage, locale } = useIntl();
+  const t = useTranslations()
+  const locale = useLocale();
   const { søknadState, søknadDispatch } = useSoknad();
   const { stepWizardDispatch, stepList } = useStepWizard();
   const debouncedLagre = useDebounceLagreSoknad<Soknad>();
@@ -59,16 +61,16 @@ const Vedlegg = ({ onBackClick }: Props) => {
       errors={errors}
     >
       <Heading size="large" level="2">
-        {formatMessage({ id: 'søknad.vedlegg.title' })}
+        {t('søknad.vedlegg.title')}
       </Heading>
       {harPåkrevdeVedlegg ? (
         <>
           <LucaGuidePanel>
-            <BodyShort spacing>{formatMessage({ id: 'søknad.vedlegg.guide.text1' })}</BodyShort>
-            <BodyShort>{formatMessage({ id: 'søknad.vedlegg.guide.text2' })}</BodyShort>
+            <BodyShort spacing>{t('søknad.vedlegg.guide.text1')}</BodyShort>
+            <BodyShort>{t('søknad.vedlegg.guide.text2')}</BodyShort>
           </LucaGuidePanel>
           <div>
-            <Label as={'p'}>{formatMessage({ id: 'søknad.vedlegg.harVedlegg.title' })}</Label>
+            <Label as={'p'}>{t('søknad.vedlegg.harVedlegg.title')}</Label>
             <ul>
               {søknadState?.requiredVedlegg?.map((vedlegg, index) => (
                 <li key={index}>{vedlegg?.description}</li>
@@ -79,12 +81,12 @@ const Vedlegg = ({ onBackClick }: Props) => {
       ) : (
         <Alert variant={'info'}>
           <BodyLong spacing>
-            {formatMessage({ id: 'søknad.vedlegg.ingenVedlegg.alert.text1' })}
+            {t('søknad.vedlegg.ingenVedlegg.alert.text1')}
           </BodyLong>
           <BodyLong spacing>
-            {formatMessage({ id: 'søknad.vedlegg.ingenVedlegg.alert.text2' })}
+            {t('søknad.vedlegg.ingenVedlegg.alert.text2')}
           </BodyLong>
-          <BodyLong>{formatMessage({ id: 'søknad.vedlegg.ingenVedlegg.alert.text3' })}</BodyLong>
+          <BodyLong>{t('søknad.vedlegg.ingenVedlegg.alert.text3')}</BodyLong>
         </Alert>
       )}
       <ScanningGuide />
@@ -93,8 +95,8 @@ const Vedlegg = ({ onBackClick }: Props) => {
         <FileInputWrapper
           locale={locale}
           id={'avbruttStudie'}
-          heading={formatMessage({ id: 'søknad.student.vedlegg.name' })}
-          ingress={formatMessage({ id: 'søknad.student.vedlegg.description' })}
+          heading={t('søknad.student.vedlegg.name')}
+          ingress={t('søknad.student.vedlegg.description')}
           onUpload={(vedlegg) => {
             addVedlegg(søknadDispatch, vedlegg, 'AVBRUTT_STUDIE');
           }}
@@ -112,8 +114,8 @@ const Vedlegg = ({ onBackClick }: Props) => {
         <FileInputWrapper
           locale={locale}
           id={'OMSORGSSTØNAD'}
-          heading={formatMessage({ id: 'søknad.andreUtbetalinger.stønad.values.omsorgsstønad' })}
-          ingress={formatMessage({ id: 'søknad.andreUtbetalinger.vedlegg.omsorgsstønad' })}
+          heading={t('søknad.andreUtbetalinger.stønad.values.omsorgsstønad')}
+          ingress={t('søknad.andreUtbetalinger.vedlegg.omsorgsstønad')}
           onUpload={(vedlegg) => {
             addVedlegg(søknadDispatch, vedlegg, 'OMSORGSSTØNAD');
           }}
@@ -131,8 +133,8 @@ const Vedlegg = ({ onBackClick }: Props) => {
         <FileInputWrapper
           locale={locale}
           id={'LØNN_OG_ANDRE_GODER'}
-          heading={formatMessage({ id: 'søknad.andreUtbetalinger.lønn.title' })}
-          ingress={formatMessage({ id: 'søknad.andreUtbetalinger.vedlegg.andreGoder' })}
+          heading={t('søknad.andreUtbetalinger.lønn.title')}
+          ingress={t('søknad.andreUtbetalinger.vedlegg.andreGoder')}
           onUpload={(vedlegg) => {
             addVedlegg(søknadDispatch, vedlegg, 'LØNN_OG_ANDRE_GODER');
           }}
@@ -151,8 +153,8 @@ const Vedlegg = ({ onBackClick }: Props) => {
         <FileInputWrapper
           locale={locale}
           id={'UTLANDSSTØNAD'}
-          heading={formatMessage({ id: 'søknad.andreUtbetalinger.stønad.values.utland' })}
-          ingress={formatMessage({ id: 'søknad.andreUtbetalinger.vedlegg.utlandsStønad' })}
+          heading={t('søknad.andreUtbetalinger.stønad.values.utland')}
+          ingress={t('søknad.andreUtbetalinger.vedlegg.utlandsStønad')}
           onUpload={(vedlegg) => {
             addVedlegg(søknadDispatch, vedlegg, 'UTLANDSSTØNAD');
           }}
@@ -171,8 +173,8 @@ const Vedlegg = ({ onBackClick }: Props) => {
         <FileInputWrapper
           locale={locale}
           id={'LÅN'}
-          heading={formatMessage({ id: 'søknad.andreUtbetalinger.stønad.values.lån' })}
-          ingress={formatMessage({ id: 'søknad.andreUtbetalinger.vedlegg.lån' })}
+          heading={t('søknad.andreUtbetalinger.stønad.values.lån')}
+          ingress={t('søknad.andreUtbetalinger.vedlegg.lån')}
           onUpload={(vedlegg) => {
             addVedlegg(søknadDispatch, vedlegg, 'LÅN');
           }}
@@ -191,8 +193,8 @@ const Vedlegg = ({ onBackClick }: Props) => {
         <FileInputWrapper
           locale={locale}
           id={'SYKESTIPEND'}
-          heading={formatMessage({ id: 'søknad.andreUtbetalinger.stønad.values.stipend' })}
-          ingress={formatMessage({ id: 'søknad.andreUtbetalinger.vedlegg.sykeStipend' })}
+          heading={t('søknad.andreUtbetalinger.stønad.values.stipend')}
+          ingress={t('søknad.andreUtbetalinger.vedlegg.sykeStipend')}
           onUpload={(vedlegg) => {
             addVedlegg(søknadDispatch, vedlegg, 'SYKESTIPEND');
           }}
@@ -214,8 +216,8 @@ const Vedlegg = ({ onBackClick }: Props) => {
             locale={locale}
             key={barn.internId}
             id={barn.internId!}
-            heading={formatMessage(
-              { id: `søknad.vedlegg.andreBarn.title.${requiredVedlegg?.filterType}` },
+            heading={t(
+              `søknad.vedlegg.andreBarn.title.${requiredVedlegg?.filterType}`,
               {
                 navn: `${barn?.navn?.fornavn} ${barn?.navn?.etternavn}`,
               },
@@ -238,8 +240,8 @@ const Vedlegg = ({ onBackClick }: Props) => {
 
       <FileInputWrapper
         locale={locale}
-        heading={formatMessage({ id: 'søknad.vedlegg.andreVedlegg.title' })}
-        ingress={formatMessage({ id: 'søknad.vedlegg.andreVedlegg.ingress' })}
+        heading={t('søknad.vedlegg.andreVedlegg.title')}
+        ingress={t('søknad.vedlegg.andreVedlegg.ingress')}
         id="ANNET"
         onUpload={(vedlegg) => {
           addVedlegg(søknadDispatch, vedlegg, 'ANNET');
@@ -258,10 +260,8 @@ const Vedlegg = ({ onBackClick }: Props) => {
         value={søknadState.søknad?.tilleggsopplysninger}
         name={`tilleggsopplysninger`}
         onChange={(e) => updateSøknadData(søknadDispatch, { tilleggsopplysninger: e.target.value })}
-        label={formatMessage({ id: `søknad.tilleggsopplysninger.tilleggsopplysninger.label` })}
-        description={formatMessage({
-          id: `søknad.tilleggsopplysninger.tilleggsopplysninger.description`,
-        })}
+        label={t(`søknad.tilleggsopplysninger.tilleggsopplysninger.label`)}
+        description={t(`søknad.tilleggsopplysninger.tilleggsopplysninger.description`)}
         maxLength={4000}
       />
     </SoknadFormWrapperNew>

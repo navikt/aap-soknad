@@ -1,27 +1,28 @@
+'use client';
 import * as classes from './Barnetillegg.module.css';
 import { BodyShort, Label } from '@navikt/ds-react';
 import React from 'react';
-import { useIntl } from 'react-intl';
+import { useTranslations } from 'next-intl';
 import { formatDate } from 'utils/date';
-import { Barn } from 'pages/api/oppslag/barn';
+import { Barn } from 'app/api/oppslag/barn/route';
 
 interface Props {
   barn: Barn;
 }
 
 const Registerbarn = ({ barn }: Props) => {
-  const { formatMessage } = useIntl();
+  const t = useTranslations();
 
   return (
     <li>
       <article className={classes.barneKort}>
         <BodyShort>
-          <Label>{formatMessage({ id: 'søknad.barnetillegg.registrerteBarn.navn' })}: </Label>
+          <Label>{t('søknad.barnetillegg.registrerteBarn.navn')}: </Label>
           {barn?.navn}
         </BodyShort>
         <BodyShort>
           <Label>
-            {formatMessage({ id: 'søknad.barnetillegg.registrerteBarn.fødselsdato' })}:{' '}
+            {t('søknad.barnetillegg.registrerteBarn.fødselsdato')}:{' '}
           </Label>
           {formatDate(barn?.fødselsdato)}
         </BodyShort>

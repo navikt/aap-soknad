@@ -3,17 +3,17 @@ import {
   jaNeiAvbruttToTekstnøkkel,
   KOMME_TILBAKE,
   STUDENT,
-} from 'components/pageComponents/standard/Student/Student';
+} from 'components/pageComponents/standard/Student/student.schema';
 import {
   StønadType,
   stønadTypeToAlternativNøkkel,
-} from 'components/pageComponents/standard/AndreUtbetalinger/AndreUtbetalinger';
+} from 'components/pageComponents/standard/AndreUtbetalinger/andreUtbetalinger.schema';
 import { Soknad, SoknadVedlegg } from 'types/Soknad';
 import { formatDate } from './date';
 import { formatFullAdresse, formatNavn } from 'utils/StringFormatters';
 import { RequiredVedlegg } from 'types/SoknadContext';
-import { Relasjon } from 'components/pageComponents/standard/Barnetillegg/AddBarnModal';
-import { FerieTypeToMessageKey } from 'components/pageComponents/standard/StartDato/StartDato';
+import { Relasjon } from 'components/pageComponents/standard/Barnetillegg/barnetillegg.schema';
+import { FerieTypeToMessageKey } from 'components/pageComponents/standard/StartDato/startDato.schema';
 import { utenlandsPeriodeArbeidEllerBodd } from 'components/pageComponents/standard/Medlemskap/medlemskapUtils';
 
 export type SøknadsType = 'UTLAND' | 'STANDARD';

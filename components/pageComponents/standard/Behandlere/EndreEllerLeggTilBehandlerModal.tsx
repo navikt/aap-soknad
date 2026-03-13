@@ -1,9 +1,9 @@
+'use client';
 import { Behandler } from 'types/Soknad';
-import * as yup from 'yup';
 import * as classes from './AddBehandlerModal.module.css';
 import { Button, Heading, Modal, TextField } from '@navikt/ds-react';
 import { ModalButtonWrapper } from 'components/ButtonWrapper/ModalButtonWrapper';
-import { IntlFormatters, useIntl } from 'react-intl';
+import { useTranslations } from 'next-intl';
 import { Dispatch, useState } from 'react';
 import { validate } from 'lib/utils/validationUtils';
 import { SøknadValidationError } from 'components/schema/FormErrorSummary';
@@ -16,20 +16,9 @@ interface Props {
   setBehandler: Dispatch<Behandler>;
 }
 
-export const getBehandlerSchema = (formatMessage: IntlFormatters['formatMessage']) => {
-  return yup.object().shape({
-    firstname: yup
-      .string()
-      .required(formatMessage({ id: 'søknad.helseopplysninger.modal.fornavn.validation.required' }))
-      .nullable(),
-    lastname: yup
-      .string()
-      .required(
-        formatMessage({ id: 'søknad.helseopplysninger.modal.etternavn.validation.required' }),
-      )
-      .nullable(),
-  });
-};
+import { getBehandlerSchema } from './behandler.schema';
+
+export { getBehandlerSchema } from './behandler.schema';
 
 export const EndreEllerLeggTilBehandlerModal = ({
   showModal,
@@ -38,7 +27,7 @@ export const EndreEllerLeggTilBehandlerModal = ({
   behandler,
   setBehandler,
 }: Props) => {
-  const { formatMessage } = useIntl();
+  const t = useTranslations();
   const [errors, setErrors] = useState<SøknadValidationError[] | undefined>();
 
   function clearErrors() {
@@ -54,18 +43,18 @@ export const EndreEllerLeggTilBehandlerModal = ({
         clearErrors();
         onCloseClick();
       }}
-      aria-label={formatMessage({ id: 'søknad.helseopplysninger.modal.title' })}
+      aria-label={t('søknad.helseopplysninger.modal.title')}
     >
       <Modal.Header>
         <Heading className={classes?.modalHeading} size={'small'} level={'3'}>
-          {formatMessage({ id: 'søknad.helseopplysninger.modal.title' })}
+          {t('søknad.helseopplysninger.modal.title')}
         </Heading>
       </Modal.Header>
       <Modal.Body className={classes?.addBehandlerModalContent}>
         <form
           onSubmit={async (formEvent) => {
             formEvent.preventDefault();
-            const errors = await validate(getBehandlerSchema(formatMessage), behandler);
+            const errors = await validate(getBehandlerSchema(t), behandler);
             if (errors) {
               setErrors(errors);
             } else {
@@ -77,7 +66,7 @@ export const EndreEllerLeggTilBehandlerModal = ({
           className={classes?.modalForm}
         >
           <TextField
-            label={formatMessage({ id: 'søknad.helseopplysninger.modal.fornavn.label' })}
+            label={t('søknad.helseopplysninger.modal.fornavn.label')}
             name={'firstname'}
             onChange={(event) => {
               clearErrors();
@@ -87,7 +76,7 @@ export const EndreEllerLeggTilBehandlerModal = ({
             value={behandler.firstname || ''}
           />
           <TextField
-            label={formatMessage({ id: 'søknad.helseopplysninger.modal.etternavn.label' })}
+            label={t('søknad.helseopplysninger.modal.etternavn.label')}
             name={'lastname'}
             onChange={(event) => {
               clearErrors();
@@ -97,7 +86,7 @@ export const EndreEllerLeggTilBehandlerModal = ({
             value={behandler.lastname || ''}
           />
           <TextField
-            label={formatMessage({ id: 'søknad.helseopplysninger.modal.legekontor.label' })}
+            label={t('søknad.helseopplysninger.modal.legekontor.label')}
             name={'legekontor'}
             onChange={(event) => {
               clearErrors();
@@ -107,7 +96,7 @@ export const EndreEllerLeggTilBehandlerModal = ({
             value={behandler.legekontor || ''}
           />
           <TextField
-            label={formatMessage({ id: 'søknad.helseopplysninger.modal.gateadresse.label' })}
+            label={t('søknad.helseopplysninger.modal.gateadresse.label')}
             name={'gateadresse'}
             onChange={(event) => {
               clearErrors();
@@ -118,7 +107,7 @@ export const EndreEllerLeggTilBehandlerModal = ({
           />
           <div className={classes?.addresseFlexContainer}>
             <TextField
-              label={formatMessage({ id: 'søknad.helseopplysninger.modal.postnummer.label' })}
+              label={t('søknad.helseopplysninger.modal.postnummer.label')}
               name={'postnummer'}
               onChange={(event) => {
                 clearErrors();
@@ -128,7 +117,7 @@ export const EndreEllerLeggTilBehandlerModal = ({
               value={behandler.postnummer || ''}
             />
             <TextField
-              label={formatMessage({ id: 'søknad.helseopplysninger.modal.poststed.label' })}
+              label={t('søknad.helseopplysninger.modal.poststed.label')}
               name={'poststed'}
               onChange={(event) => {
                 clearErrors();
@@ -139,7 +128,7 @@ export const EndreEllerLeggTilBehandlerModal = ({
             />
           </div>
           <TextField
-            label={formatMessage({ id: 'søknad.helseopplysninger.modal.telefonnummer.label' })}
+            label={t('søknad.helseopplysninger.modal.telefonnummer.label')}
             name={'telefon'}
             onChange={(event) => {
               clearErrors();
@@ -157,10 +146,10 @@ export const EndreEllerLeggTilBehandlerModal = ({
                 onCloseClick();
               }}
             >
-              {formatMessage({ id: 'søknad.helseopplysninger.modal.buttons.avbryt' })}
+              {t('søknad.helseopplysninger.modal.buttons.avbryt')}
             </Button>
             <Button type={'submit'}>
-              {formatMessage({ id: 'søknad.helseopplysninger.modal.buttons.lagre' })}
+              {t('søknad.helseopplysninger.modal.buttons.lagre')}
             </Button>
           </ModalButtonWrapper>
         </form>

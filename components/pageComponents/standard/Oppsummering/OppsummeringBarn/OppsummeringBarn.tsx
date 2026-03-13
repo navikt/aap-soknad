@@ -2,7 +2,7 @@ import { BodyShort, Label } from '@navikt/ds-react';
 import React from 'react';
 import { formatDate } from 'utils/date';
 import * as classes from './OppsummeringBarn.module.css';
-import { Barn } from 'pages/api/oppslag/barn';
+import { Barn } from 'app/api/oppslag/barn/route';
 
 type OppsummeringBarnProps = {
   barn: Barn;

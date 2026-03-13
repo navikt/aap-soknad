@@ -1,10 +1,11 @@
+'use client';
 
 import { Alert, Button, ConfirmationPanel, Heading, Label } from '@navikt/ds-react';
 import classes from './Veiledning.module.css';
 import { IntroduksjonTekst } from '../../../IntroduksjonTekst/IntroduksjonTekst';
-import { FormattedMessage, useIntl } from 'react-intl';
+import { useTranslations } from 'next-intl';
 import { FormEvent, useRef, useState } from 'react';
-import { Person } from 'pages/api/oppslagapi/person';
+import { Person } from 'app/api/oppslagapi/person/route';
 
 interface VeiledningProps {
   person?: Person;
@@ -20,7 +21,7 @@ export const Veiledning = ({
   errorMessageRef,
   onSubmit,
 }: VeiledningProps) => {
-  const { formatMessage } = useIntl();
+  const t = useTranslations();
   const [errorMessage, setErrorMessage] = useState<string | undefined>(undefined);
   const confirmRef = useRef<HTMLInputElement>(null);
 
@@ -28,7 +29,7 @@ export const Veiledning = ({
     event.preventDefault();
     if (!confirmRef.current?.checked) {
       setErrorMessage(
-        formatMessage({ id: 'søknad.veiledning.veiledningConfirm.validation.required' }),
+        t('søknad.veiledning.veiledningConfirm.validation.required'),
       );
       return;
     }
@@ -39,12 +40,7 @@ export const Veiledning = ({
     <>
       <header className={classes?.veiledningHeader}>
         <Heading size="large" level="1">
-          <FormattedMessage
-            id={`søknad.veiledning.title`}
-            values={{
-              wbr: () => <>&shy;</>,
-            }}
-          />
+          {t.rich('søknad.veiledning.title', { wbr: () => <>&shy;</> })}
         </Heading>
       </header>
       <main className={classes?.veiledningContent}>
@@ -62,18 +58,18 @@ export const Veiledning = ({
         <form onSubmit={(event) => handleSubmit(event)} autoComplete="off">
           <ConfirmationPanel
             ref={confirmRef}
-            label={formatMessage({ id: 'søknad.veiledning.veiledningConfirm.label' })}
+            label={t('søknad.veiledning.veiledningConfirm.label')}
             error={errorMessage}
             onChange={() => setErrorMessage(undefined)}
           >
             <Label as={'span'}>
-              {formatMessage({ id: 'søknad.veiledning.veiledningConfirm.title' })}
+              {t('søknad.veiledning.veiledningConfirm.title')}
             </Label>
           </ConfirmationPanel>
 
           <div className={classes?.startButton}>
             <Button variant="primary" type="submit" loading={isLoading}>
-              {formatMessage({ id: `søknad.veiledning.startSøknad` })}
+              {t(`søknad.veiledning.startSøknad`)}
             </Button>
           </div>
         </form>

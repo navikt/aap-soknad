@@ -9,7 +9,7 @@
 }
 
 .modalForm {
-  composes: modalForm from '/styles/layout.module.css';
+  composes: modalForm from '../../../../styles/layout.module.css';
 }
 
 .countrySelector {
@@ -20,5 +20,5 @@
   max-width: 8rem;
 }
 .visuallyHidden {
-  composes: visuallyHidden from '/styles/visibility.module.css';
+  composes: visuallyHidden from '../../../../styles/visibility.module.css';
 }

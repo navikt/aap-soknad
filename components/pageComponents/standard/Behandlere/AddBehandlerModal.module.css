@@ -17,5 +17,5 @@
 }
 
 .modalForm {
-  composes: modalForm from '/styles/layout.module.css';
+  composes: modalForm from '../../../../styles/layout.module.css';
 }

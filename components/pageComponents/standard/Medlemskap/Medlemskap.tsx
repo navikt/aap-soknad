@@ -1,3 +1,4 @@
+'use client';
 import { BodyShort, Button, HGrid, Heading, Radio, RadioGroup, ReadMore } from '@navikt/ds-react';
 import React, { useEffect, useState } from 'react';
 import { JaEllerNei } from 'types/Generic';
@@ -9,7 +10,7 @@ import { completeAndGoToNextStep } from 'context/stepWizardContext';
 import { useStepWizard } from 'hooks/StepWizardHook';
 import ColorPanel from 'components/panel/ColorPanel';
 import { setFocusOnErrorSummary } from 'components/schema/FormErrorSummary';
-import { useIntl } from 'react-intl';
+import { useTranslations } from 'next-intl';
 import SoknadFormWrapperNew from 'components/SoknadFormWrapper/SoknadFormWrapper';
 import { SøknadValidationError } from 'components/schema/FormErrorSummary';
 import { useDebounceLagreSoknad } from 'hooks/useDebounceLagreSoknad';
@@ -32,7 +33,7 @@ interface Props {
 }
 
 export const Medlemskap = ({ onBackClick }: Props) => {
-  const { formatMessage } = useIntl();
+  const t = useTranslations();
 
   const { stepWizardDispatch, stepList } = useStepWizard();
   const { søknadState, søknadDispatch } = useSoknad();
@@ -107,7 +108,7 @@ export const Medlemskap = ({ onBackClick }: Props) => {
     <>
       <SoknadFormWrapperNew
         onNext={async () => {
-          const errors = await validate(getMedlemskapSchema(formatMessage), søknadState.søknad);
+          const errors = await validate(getMedlemskapSchema(t), søknadState.søknad);
           if (errors) {
             setErrors(errors);
             setFocusOnErrorSummary();
@@ -123,13 +124,13 @@ export const Medlemskap = ({ onBackClick }: Props) => {
         errors={errors}
       >
         <Heading size="large" level="2">
-          {formatMessage({ id: 'søknad.medlemskap.title' })}
+          {t('søknad.medlemskap.title')}
         </Heading>
-        <LucaGuidePanel>{formatMessage({ id: 'søknad.medlemskap.guide.text' })}</LucaGuidePanel>
+        <LucaGuidePanel>{t('søknad.medlemskap.guide.text')}</LucaGuidePanel>
         <RadioGroup
           name={`medlemskap.harBoddINorgeSiste5År`}
           id={`medlemskap.harBoddINorgeSiste5År`}
-          legend={formatMessage({ id: 'søknad.medlemskap.harBoddINorgeSiste5År.label' })}
+          legend={t('søknad.medlemskap.harBoddINorgeSiste5År.label')}
           value={søknadState?.søknad?.medlemskap?.harBoddINorgeSiste5År || ''}
           onChange={(value) => {
             clearErrors();
@@ -138,10 +139,10 @@ export const Medlemskap = ({ onBackClick }: Props) => {
           error={findError('medlemskap.harBoddINorgeSiste5År')}
         >
           <ReadMore
-            header={formatMessage({ id: 'søknad.medlemskap.harBoddINorgeSiste5År.readMore.title' })}
+            header={t('søknad.medlemskap.harBoddINorgeSiste5År.readMore.title')}
             type={'button'}
           >
-            {formatMessage({ id: 'søknad.medlemskap.harBoddINorgeSiste5År.readMore.text' })}
+            {t('søknad.medlemskap.harBoddINorgeSiste5År.readMore.text')}
           </ReadMore>
           <Radio value={JaEllerNei.JA}>
             <BodyShort>Ja</BodyShort>
@@ -155,7 +156,7 @@ export const Medlemskap = ({ onBackClick }: Props) => {
             <RadioGroup
               name={'medlemskap.harArbeidetINorgeSiste5År'}
               id={'medlemskap.harArbeidetINorgeSiste5År'}
-              legend={formatMessage({ id: 'søknad.medlemskap.harArbeidetINorgeSiste5År.label' })}
+              legend={t('søknad.medlemskap.harArbeidetINorgeSiste5År.label')}
               value={søknadState?.søknad?.medlemskap?.harArbeidetINorgeSiste5År || ''}
               onChange={(value) => {
                 clearErrors();
@@ -169,12 +170,10 @@ export const Medlemskap = ({ onBackClick }: Props) => {
               error={findError('medlemskap.harArbeidetINorgeSiste5År')}
             >
               <ReadMore
-                header={formatMessage({
-                  id: 'søknad.medlemskap.harArbeidetINorgeSiste5År.readMore.title',
-                })}
+                header={t('søknad.medlemskap.harArbeidetINorgeSiste5År.readMore.title')}
                 type={'button'}
               >
-                {formatMessage({ id: 'søknad.medlemskap.harArbeidetINorgeSiste5År.readMore.text' })}
+                {t('søknad.medlemskap.harArbeidetINorgeSiste5År.readMore.text')}
               </ReadMore>
               <Radio value={JaEllerNei.JA}>
                 <BodyShort>Ja</BodyShort>
@@ -191,7 +190,7 @@ export const Medlemskap = ({ onBackClick }: Props) => {
             <RadioGroup
               name={'medlemskap.arbeidetUtenforNorgeFørSykdom'}
               id={'medlemskap.arbeidetUtenforNorgeFørSykdom'}
-              legend={formatMessage({ id: 'søknad.medlemskap.arbeidUtenforNorge.label' })}
+              legend={t('søknad.medlemskap.arbeidUtenforNorge.label')}
               value={søknadState?.søknad?.medlemskap?.arbeidetUtenforNorgeFørSykdom || ''}
               onChange={(value) => {
                 clearErrors();
@@ -205,12 +204,10 @@ export const Medlemskap = ({ onBackClick }: Props) => {
               error={findError('medlemskap.arbeidetUtenforNorgeFørSykdom')}
             >
               <ReadMore
-                header={formatMessage({
-                  id: 'søknad.medlemskap.arbeidUtenforNorge.readMore.title',
-                })}
+                header={t('søknad.medlemskap.arbeidUtenforNorge.readMore.title')}
                 type={'button'}
               >
-                {formatMessage({ id: 'søknad.medlemskap.arbeidUtenforNorge.readMore.text' })}
+                {t('søknad.medlemskap.arbeidUtenforNorge.readMore.text')}
               </ReadMore>
               <Radio value={JaEllerNei.JA}>
                 <BodyShort>Ja</BodyShort>
@@ -226,10 +223,8 @@ export const Medlemskap = ({ onBackClick }: Props) => {
             <RadioGroup
               name={'medlemskap.iTilleggArbeidUtenforNorge'}
               id={'medlemskap.iTilleggArbeidUtenforNorge'}
-              legend={formatMessage({ id: 'søknad.medlemskap.iTilleggArbeidUtenforNorge.label' })}
-              description={formatMessage({
-                id: 'søknad.medlemskap.iTilleggArbeidUtenforNorge.description',
-              })}
+              legend={t('søknad.medlemskap.iTilleggArbeidUtenforNorge.label')}
+              description={t('søknad.medlemskap.iTilleggArbeidUtenforNorge.description')}
               value={søknadState?.søknad?.medlemskap?.iTilleggArbeidUtenforNorge || ''}
               onChange={(value) => {
                 clearErrors();
@@ -245,14 +240,10 @@ export const Medlemskap = ({ onBackClick }: Props) => {
               error={findError('medlemskap.iTilleggArbeidUtenforNorge')}
             >
               <ReadMore
-                header={formatMessage({
-                  id: 'søknad.medlemskap.iTilleggArbeidUtenforNorge.readMore.title',
-                })}
+                header={t('søknad.medlemskap.iTilleggArbeidUtenforNorge.readMore.title')}
                 type={'button'}
               >
-                {formatMessage({
-                  id: 'søknad.medlemskap.iTilleggArbeidUtenforNorge.readMore.text',
-                })}
+                {t('søknad.medlemskap.iTilleggArbeidUtenforNorge.readMore.text')}
               </ReadMore>
               <Radio value={JaEllerNei.JA}>
                 <BodyShort>Ja</BodyShort>
@@ -266,15 +257,11 @@ export const Medlemskap = ({ onBackClick }: Props) => {
         {visLeggTilUtenlandsPeriode && (
           <ColorPanel color={'grey'}>
             <BodyShort spacing>
-              {formatMessage({
-                id: `søknad.medlemskap.utenlandsperiode.modal.ingress.${arbeidEllerBodd}`,
-              })}
+              {t(`søknad.medlemskap.utenlandsperiode.modal.ingress.${arbeidEllerBodd}`)}
             </BodyShort>
             {arbeidEllerBodd === 'BODD' && (
               <BodyShort spacing>
-                {formatMessage({
-                  id: `søknad.medlemskap.utenlandsperiode.modal.ingress.${arbeidEllerBodd}_2`,
-                })}
+                {t(`søknad.medlemskap.utenlandsperiode.modal.ingress.${arbeidEllerBodd}_2`)}
               </BodyShort>
             )}
             {søknadState?.søknad?.medlemskap?.utenlandsOpphold &&

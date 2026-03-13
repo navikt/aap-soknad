@@ -1,4 +1,5 @@
-import { useIntl } from 'react-intl';
+'use client';
+import { useTranslations } from 'next-intl';
 import { BodyShort, Button, Heading, Modal } from '@navikt/ds-react';
 import * as classes from './SoknadFormWrapper.module.css';
 import { clientSideIsProd } from '../../utils/environments';
@@ -9,20 +10,20 @@ interface Props {
   onClose: (value: boolean) => void;
 }
 const LagreModal = ({ isOpen, onClose }: Props) => {
-  const { formatMessage } = useIntl();
+  const t = useTranslations();
   return (
     <Modal
       open={isOpen}
       onClose={() => onClose(false)}
-      aria-label={formatMessage({ id: 'lagreModal.heading' })}
+      aria-label={t('lagreModal.heading')}
     >
       <Modal.Header>
         <Heading size={'small'} level={'2'} spacing>
-          {formatMessage({ id: 'lagreModal.heading' })}
+          {t('lagreModal.heading')}
         </Heading>
       </Modal.Header>
       <Modal.Body className={classes?.modalContent}>
-        <BodyShort>{formatMessage({ id: 'lagreModal.text' })}</BodyShort>
+        <BodyShort>{t('lagreModal.text')}</BodyShort>
         <div className={classes?.buttonWrapper}>
           <Button
             variant="primary"
@@ -35,10 +36,10 @@ const LagreModal = ({ isOpen, onClose }: Props) => {
               }
             }}
           >
-            {formatMessage({ id: 'lagreModal.lagreButtonText' })}
+            {t('lagreModal.lagreButtonText')}
           </Button>
           <Button variant="tertiary" type="button" onClick={() => onClose(false)}>
-            {formatMessage({ id: 'lagreModal.avbrytButtonText' })}
+            {t('lagreModal.avbrytButtonText')}
           </Button>
         </div>
       </Modal.Body>
