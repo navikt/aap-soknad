@@ -99,7 +99,7 @@ const config: PlaywrightTestConfig = {
 
   /* Run your local dev server before starting the tests */
   webServer: {
-    command: 'cp -r .next/static .next/standalone/aap-soknad/.next/static && cp -r public .next/standalone/aap-soknad/public 2>/dev/null; FUNCTIONAL_TESTS=enabled node .next/standalone/aap-soknad/server.js',
+    command: 'FUNCTIONAL_TESTS=enabled yarn start',
     port: 3000,
   },
 };
