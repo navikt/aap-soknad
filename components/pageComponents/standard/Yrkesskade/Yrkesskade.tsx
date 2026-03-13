@@ -45,7 +45,6 @@ export const Yrkesskade = ({ onBackClick }: Props) => {
 
   const [errors, setErrors] = useState<SøknadValidationError[] | undefined>();
 
-  console.log(søknadState)
   return (
     <SoknadFormWrapperNew
       onNext={async () => {
