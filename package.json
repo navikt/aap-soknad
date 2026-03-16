@@ -43,7 +43,7 @@
     "@types/ungap__structured-clone": "^1.2.0",
     "@typescript-eslint/eslint-plugin": "^7.15.0",
     "@typescript-eslint/parser": "^7.15.0",
-    "@vitejs/plugin-react": "^5.1.4",
+    "@vitejs/plugin-react": "^5.2.0",
     "cross-env": "^7.0.3",
     "eslint": "^9",
     "eslint-config-next": "15.5.11",
@@ -56,7 +56,7 @@
     "prettier": "^3.3.2",
     "process": "^0.11.10",
     "vite-tsconfig-paths": "^6.1.1",
-    "vitest": "^4.0.18",
+    "vitest": "^4.1.0",
     "vitest-axe": "^0.1.0",
     "vitest-fetch-mock": "^0.4.5"
   },
