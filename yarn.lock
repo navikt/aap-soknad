@@ -2727,7 +2727,7 @@ __metadata:
     react: "npm:^19.2.4"
     react-dom: "npm:^19.2.4"
     react-error-boundary: "npm:^6.1.1"
-    react-intl: "npm:8.1.3"
+    react-intl: "npm:8.1.4"
     typescript: "npm:^5.9.3"
     vite-tsconfig-paths: "npm:^6.1.1"
     vitest: "npm:^4.0.18"
@@ -7382,9 +7382,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-intl@npm:8.1.3":
-  version: 8.1.3
-  resolution: "react-intl@npm:8.1.3"
+"react-intl@npm:8.1.4":
+  version: 8.1.4
+  resolution: "react-intl@npm:8.1.4"
   dependencies:
     "@formatjs/ecma402-abstract": "npm:3.1.1"
     "@formatjs/icu-messageformat-parser": "npm:3.5.1"
@@ -7400,7 +7400,7 @@ __metadata:
   peerDependenciesMeta:
     typescript:
       optional: true
-  checksum: 10c0/e17a7a99f5559ee12d87aa4777f00051145f73b1417c7a9107e46d4b60c83043a7c104a2411afbc89a59a31c947cd3f7a9bae44b988782b4a35b6d4fde94fa4c
+  checksum: 10c0/6d1eedf683ca0818be944b2ae0e202d33c1351c2720c3c70af7ec4da1e0d030b7a0197abc0cdcf1544a491bec0e33ef53ba565303391bb6855c25f0c82512e31
   languageName: node
   linkType: hard
 
