@@ -17,20 +17,26 @@ const logger = pino({
     },
   },
 });
+
+const sanitizeLogMessage = (message: string): string => {
+  // Remove newline and carriage return characters to prevent log injection
+  return message.replace(/[\r\n]/g, '');
+};
+
 export const logInfo = (message: string, error?: unknown, callid?: string) => {
   const logObject = createLogObject(error, callid);
 
-  logger.info(logObject, message);
+  logger.info(logObject, sanitizeLogMessage(message));
 };
 export const logWarning = (message: string, error?: unknown, callid?: string) => {
   const logObject = createLogObject(error, callid);
 
-  logger.warn(logObject, message);
+  logger.warn(logObject, sanitizeLogMessage(message));
 };
 export const logError = (message: string, error?: unknown, callid?: string) => {
   const logObject = createLogObject(error, callid);
 
-  logger.error(logObject, message);
+  logger.error(logObject, sanitizeLogMessage(message));
 };
 const createLogObject = (error?: unknown, callid?: string) => {
   const navCallid = callid ? { 'Nav-CallId': callid } : {};
