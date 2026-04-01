@@ -1,5 +1,5 @@
 import { getToken, requestOboToken, validateToken } from '@navikt/oasis';
-import { logError, logInfo, logWarning } from '@navikt/aap-felles-utils';
+import { logError, logInfo, logWarning } from 'lib/utils/logger';
 import { randomUUID } from 'crypto';
 import { IncomingMessage } from 'http';
 import { ErrorMedStatus } from 'lib/utils/api/ErrorMedStatus';

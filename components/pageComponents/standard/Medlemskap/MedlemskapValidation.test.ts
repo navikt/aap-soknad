@@ -56,7 +56,7 @@ describe('Medlemskap validation', () => {
     },
   );
   it(
-    "should be valid when 'harBoddINorgeSiste5År' is 'Ja' " +
+    "should be valid when 'harBoddINorgeSiste5år' is 'Ja' " +
       "and 'harArbeidetINorgeSiste5År' is 'Ja' and not empty utenlandsPeriode",
     async () => {
       const form = {
@@ -70,4 +70,28 @@ describe('Medlemskap validation', () => {
       expect(result).toStrictEqual(form);
     },
   );
+
+  // Bug: .nullable() on a .required().oneOf([JA, NEI]) field allows null to pass validation.
+  // null can reach the submission handler via stale mellomlagring (e.g. after a radio is reset).
+  it("should be INVALID when 'harBoddINorgeSiste5År' is null", async () => {
+    const form = {
+      medlemskap: {
+        harBoddINorgeSiste5År: null,
+      },
+    };
+    const result = await schema.validate(form, { abortEarly: false }).catch((err) => err);
+    expect(result.errors.length).not.toBe(0);
+  });
+
+  it("should be INVALID when 'harBoddINorgeSiste5År' is null even with other fields present", async () => {
+    const form = {
+      medlemskap: {
+        harBoddINorgeSiste5År: null,
+        harArbeidetINorgeSiste5År: JaEllerNei.JA,
+        iTilleggArbeidUtenforNorge: JaEllerNei.NEI,
+      },
+    };
+    const result = await schema.validate(form, { abortEarly: false }).catch((err) => err);
+    expect(result.errors.length).not.toBe(0);
+  });
 });

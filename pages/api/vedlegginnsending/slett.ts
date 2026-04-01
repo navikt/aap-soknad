@@ -1,4 +1,5 @@
-import { getTokenX, logError } from '@navikt/aap-felles-utils';
+import { getTokenX } from '@navikt/aap-felles-utils';
+import { logError } from 'lib/utils/logger';
 import { proxyApiRouteRequest } from '@navikt/next-api-proxy';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { beskyttetApi } from 'auth/beskyttetApi';

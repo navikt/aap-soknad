@@ -37,7 +37,7 @@ import { getKrr, KrrKontaktInfo } from 'pages/api/oppslag/krr';
 import { Barn, getBarn } from 'pages/api/oppslag/barn';
 import { hentMellomlagring } from 'pages/api/mellomlagring/les';
 import { RequiredVedlegg } from 'types/SoknadContext';
-import { logError, logInfo, logWarning } from '@navikt/aap-felles-utils';
+import { logError, logInfo, logWarning } from 'lib/utils/logger';
 import { parse } from 'date-fns';
 import { Fastlege, getFastlege } from 'pages/api/oppslag/fastlege';
 import { migrerMellomlagretBehandler } from 'lib/utils/migrerMellomlagretBehandler';

@@ -9,7 +9,7 @@ import { scrollRefIntoView } from 'utils/dom';
 import { SOKNAD_VERSION, SoknadContextState } from 'context/soknadcontext/soknadContext';
 import { hentMellomlagring } from 'pages/api/mellomlagring/les';
 import { isFunctionalTest } from 'utils/environments';
-import { logError, logInfo } from '@navikt/aap-felles-utils';
+import { logError, logInfo } from 'lib/utils/logger';
 import { Person, getPerson } from 'pages/api/oppslagapi/person';
 import { mellomLagreSøknad } from 'hooks/useDebounceLagreSoknad';
 

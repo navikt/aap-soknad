@@ -1,7 +1,8 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { getAccessTokenFromRequest } from 'auth/accessToken';
 import { beskyttetApi } from 'auth/beskyttetApi';
-import { logError, tokenXApiProxy } from '@navikt/aap-felles-utils';
+import { tokenXApiProxy } from '@navikt/aap-felles-utils';
+import { logError } from 'lib/utils/logger';
 import { isMock } from 'utils/environments';
 import metrics from 'utils/metrics';
 import { mockKrr } from 'mock/krr';
