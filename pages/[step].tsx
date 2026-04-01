@@ -19,7 +19,7 @@ import Vedlegg from 'components/pageComponents/standard/Vedlegg/Vedlegg';
 import Oppsummering from 'components/pageComponents/standard/Oppsummering/Oppsummering';
 import { beskyttetSide } from 'auth/beskyttetSide';
 import { GetServerSidePropsResult, NextPageContext } from 'next';
-import { getAccessToken } from 'auth/accessToken';
+import { IncomingMessage } from 'http';
 import metrics from 'utils/metrics';
 import { scrollRefIntoView } from 'utils/dom';
 import { Steg0 } from 'components/pageComponents/standard/Steg0/Steg0';
@@ -212,9 +212,9 @@ const StepsWithContextProvider = (props: PageProps) => (
   </SoknadContextProvider>
 );
 
-const hentFastlege = async (bearerToken?: string) => {
+const hentFastlege = async (req: IncomingMessage) => {
   try {
-    return await getFastlege(bearerToken);
+    return await getFastlege(req);
   } catch (e) {
     logError('Noe gikk galt i kallet mot oppslag/fastlege', e);
     return [];
@@ -226,16 +226,15 @@ export const getServerSideProps = beskyttetSide(
     const stopTimer = metrics.getServersidePropsDurationHistogram.startTimer({
       path: '/[steg]',
     });
-    const bearerToken = getAccessToken(ctx);
     const person = await getPerson(ctx.req);
     let kontaktinformasjon: KrrKontaktInfo | null = null;
     try {
-      kontaktinformasjon = await getKrr(bearerToken);
+      kontaktinformasjon = await getKrr(ctx.req!);
     } catch (e) {
       logWarning('Noe gikk galt i kallet mot oppslag/krr', e);
     }
 
-    const fastlege = await hentFastlege(bearerToken);
+    const fastlege = await hentFastlege(ctx.req!);
 
     let mellomlagretSøknad: SoknadContextState | undefined;
     try {
@@ -250,7 +249,7 @@ export const getServerSideProps = beskyttetSide(
 
     let barn: Barn[] = [];
     try {
-      barn = await getBarn(bearerToken);
+      barn = await getBarn(ctx.req!);
       barn.sort((barnA, barnB) => {
         const a = parse(barnA.fødselsdato, 'yyyy-MM-dd', new Date() as any);
         const b = parse(barnB.fødselsdato, 'yyyy-MM-dd', new Date() as any);

@@ -1,12 +1,12 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { getAccessTokenFromRequest } from 'auth/accessToken';
 import { beskyttetApi } from 'auth/beskyttetApi';
-import { tokenXApiProxy } from '@navikt/aap-felles-utils';
 import { logError } from 'lib/utils/logger';
 import metrics from 'utils/metrics';
 import { z } from 'zod';
 import { isDev, isMock } from 'utils/environments';
 import { mockFastlege } from 'mock/fastlege';
+import { simpleTokenXProxy } from 'lib/utils/api/simpleTokenXProxy';
+import { IncomingMessage } from 'http';
 
 const Fastlege = z.object({
   navn: z.string(),
@@ -21,18 +21,17 @@ const Fastlege = z.object({
 export type Fastlege = z.infer<typeof Fastlege>;
 
 const handler = beskyttetApi(async (req: NextApiRequest, res: NextApiResponse) => {
-  const accessToken = getAccessTokenFromRequest(req);
-  res.status(200).json(await getFastlege(accessToken));
+  res.status(200).json(await getFastlege(req));
 });
-export const getFastlege = async (accessToken?: string): Promise<Fastlege[]> => {
+export const getFastlege = async (req: IncomingMessage): Promise<Fastlege[]> => {
   if (isMock() || isDev()) return mockFastlege;
 
-  const fastlege: Fastlege = await tokenXApiProxy({
+  const fastlege: Fastlege = await simpleTokenXProxy({
     url: `${process.env.OPPSLAG_URL}/fastlege`,
     prometheusPath: 'oppslag/fastlege',
     method: 'GET',
     audience: process.env.OPPSLAG_AUDIENCE!,
-    bearerToken: accessToken,
+    req,
     metricsStatusCodeCounter: metrics.backendApiStatusCodeCounter,
     metricsTimer: metrics.backendApiDurationHistogram,
   });

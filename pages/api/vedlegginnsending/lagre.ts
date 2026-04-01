@@ -1,22 +1,30 @@
 import { randomUUID } from 'crypto';
-import { getAccessTokenFromRequest } from 'auth/accessToken';
 import { beskyttetApi } from 'auth/beskyttetApi';
-import { tokenXApiStreamProxy } from '@navikt/aap-felles-utils';
-import metrics from 'utils/metrics';
+import { requestOboToken } from '@navikt/oasis';
+import { proxyApiRouteRequest } from '@navikt/next-api-proxy';
+import { getAccessTokenFromRequest } from 'auth/accessToken';
 import { isMock } from 'utils/environments';
+import { logError } from 'lib/utils/logger';
 
 const handler = beskyttetApi(async (req, res) => {
   if (isMock()) return res.status(201).json({ filId: randomUUID() });
-  const accessToken = getAccessTokenFromRequest(req);
-  await tokenXApiStreamProxy({
-    url: `${process.env.INNSENDING_URL}/mellomlagring/fil`,
-    prometheusPath: '/mellomlagring/fil',
+  const accessToken = getAccessTokenFromRequest(req)?.substring('Bearer '.length)!;
+  let tokenXToken;
+  try {
+    const result = await requestOboToken(accessToken, process.env.INNSENDING_AUDIENCE!);
+    if (!result.ok) throw result.error;
+    tokenXToken = result.token;
+  } catch (err) {
+    logError('Kunne ikke hente tokenXToken i lagring av vedlegg', err);
+    return res.status(500).json({ error: 'Token exchange failed' });
+  }
+  await proxyApiRouteRequest({
+    hostname: 'innsending',
+    path: '/mellomlagring/fil',
     req,
     res,
-    audience: process.env.INNSENDING_AUDIENCE!,
-    bearerToken: accessToken,
-    metricsStatusCodeCounter: metrics.backendApiStatusCodeCounter,
-    metricsTimer: metrics.backendApiDurationHistogram,
+    bearerToken: tokenXToken,
+    https: false,
   });
 });
 
