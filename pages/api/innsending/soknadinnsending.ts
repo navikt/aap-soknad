@@ -1,5 +1,5 @@
 import { beskyttetApi } from 'auth/beskyttetApi';
-import { logError } from '@navikt/aap-felles-utils';
+import { logError } from 'lib/utils/logger';
 import { NextApiRequest, NextApiResponse } from 'next';
 import metrics from 'utils/metrics';
 import { ErrorMedStatus } from 'lib/utils/api/ErrorMedStatus';

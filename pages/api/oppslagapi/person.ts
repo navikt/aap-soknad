@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { beskyttetApi } from 'auth/beskyttetApi';
-import { logError } from '@navikt/aap-felles-utils';
+import { logError } from 'lib/utils/logger';
 import { z } from 'zod';
 import { simpleTokenXProxy } from 'lib/utils/api/simpleTokenXProxy';
 import { IncomingMessage } from 'http';

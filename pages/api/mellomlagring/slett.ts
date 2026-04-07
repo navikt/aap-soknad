@@ -1,13 +1,10 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { getAccessTokenFromRequest } from 'auth/accessToken';
 import { beskyttetApi } from 'auth/beskyttetApi';
-import { logError, logInfo, tokenXApiProxy } from '@navikt/aap-felles-utils';
-import metrics from 'utils/metrics';
+import { logError, logInfo } from 'lib/utils/logger';
 import { deleteCache } from 'mock/mellomlagringsCache';
 import { isMock } from 'utils/environments';
 import { simpleTokenXProxy } from 'lib/utils/api/simpleTokenXProxy';
 import { IncomingMessage } from 'http';
-import { ca } from 'date-fns/locale';
 
 const handler = beskyttetApi(async (req: NextApiRequest, res: NextApiResponse) => {
   await slettBucket(req);

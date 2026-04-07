@@ -1,4 +1,5 @@
-import { getTokenX, logError } from '@navikt/aap-felles-utils';
+import { requestOboToken } from '@navikt/oasis';
+import { logError } from 'lib/utils/logger';
 import { proxyApiRouteRequest } from '@navikt/next-api-proxy';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { beskyttetApi } from 'auth/beskyttetApi';
@@ -26,7 +27,9 @@ export const slettVedleggInnsending = async (
   const idportenToken = accessToken.split(' ')[1];
   let tokenXToken;
   try {
-    tokenXToken = await getTokenX(idportenToken, process.env.INNSENDING_AUDIENCE!);
+    const result = await requestOboToken(idportenToken, process.env.INNSENDING_AUDIENCE!);
+    if (!result.ok) throw result.error;
+    tokenXToken = result.token;
   } catch (error) {
     logError('Kunne ikke hente tokenXToken i sletting av vedlegg i ny innsending', error);
     throw error;

@@ -56,7 +56,7 @@ describe('Medlemskap validation', () => {
     },
   );
   it(
-    "should be valid when 'harBoddINorgeSiste5År' is 'Ja' " +
+    "should be valid when 'harBoddINorgeSiste5år' is 'Ja' " +
       "and 'harArbeidetINorgeSiste5År' is 'Ja' and not empty utenlandsPeriode",
     async () => {
       const form = {

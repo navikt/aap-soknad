@@ -1,11 +1,12 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { getAccessTokenFromRequest } from 'auth/accessToken';
 import { beskyttetApi } from 'auth/beskyttetApi';
-import { logError, tokenXApiProxy } from '@navikt/aap-felles-utils';
+import { logError } from 'lib/utils/logger';
 import metrics from 'utils/metrics';
 import { z } from 'zod';
 import { mockBarn } from 'mock/barn';
 import { isMock } from 'utils/environments';
+import { simpleTokenXProxy } from 'lib/utils/api/simpleTokenXProxy';
+import { IncomingMessage } from 'http';
 
 const Barn = z.object({
   navn: z.string(),
@@ -14,19 +15,18 @@ const Barn = z.object({
 export type Barn = z.infer<typeof Barn>;
 
 const handler = beskyttetApi(async (req: NextApiRequest, res: NextApiResponse) => {
-  const accessToken = getAccessTokenFromRequest(req);
-  res.status(200).json(await getBarn(accessToken));
+  res.status(200).json(await getBarn(req));
 });
 
-export const getBarn = async (accessToken?: string): Promise<Array<Barn>> => {
+export const getBarn = async (req: IncomingMessage): Promise<Array<Barn>> => {
   const barn = isMock()
     ? mockBarn()
-    : await tokenXApiProxy({
+    : await simpleTokenXProxy({
         url: `${process.env.OPPSLAG_URL}/person/barn`,
         prometheusPath: 'oppslag/barn',
         method: 'GET',
         audience: process.env.OPPSLAG_AUDIENCE!,
-        bearerToken: accessToken,
+        req,
         metricsStatusCodeCounter: metrics.backendApiStatusCodeCounter,
         metricsTimer: metrics.backendApiDurationHistogram,
       });

@@ -2,7 +2,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import { isMock } from '../utils/environments';
 import { verifyIdportenAccessToken } from './verifyIdPortenAccessToken';
 import { ErrorMedStatus } from './ErrorMedStatus';
-import { logError, logInfo, logWarning } from '@navikt/aap-felles-utils';
+import { logError, logInfo, logWarning } from 'lib/utils/logger';
 
 type ApiHandler = (req: NextApiRequest, res: NextApiResponse) => void | Promise<void>;
 
