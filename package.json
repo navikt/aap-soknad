@@ -60,10 +60,6 @@
     "vitest-axe": "^0.1.0",
     "vitest-fetch-mock": "^0.4.5"
   },
-  "resolutions": {
-    "lmdb": "2.1.7",
-    "@types/react": "^18.0.26"
-  },
   "scripts": {
     "build:mock": "parcel build src/index.html",
     "lint:jsts": "npx eslint .",
