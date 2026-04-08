@@ -67,7 +67,7 @@
     "test": "vitest --run",
     "test:watch": "vitest --watch",
     "dev": "next dev --webpack",
-    "build": "next build",
+    "build": "next build --webpack",
     "start": "next start",
     "lint": "eslint .",
     "prepare": "husky install",
