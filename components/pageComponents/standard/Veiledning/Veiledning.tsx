@@ -6,6 +6,7 @@ import {
   Checkbox,
   ErrorMessage,
   Heading,
+  BodyLong,
   Link,
 } from '@navikt/ds-react';
 import * as classes from './Veiledning.module.css';
@@ -65,7 +66,18 @@ export const Veiledning = ({
           )}
         </div>
 
-        <IntroduksjonTekst navn={person?.navn} />
+        {person?.erUnderAttenÅr ? (
+          <Alert variant="warning">
+            <Heading size="small" spacing level="2">
+              {formatMessage({ id: 'søknad.veiledning.søkerUnderAttenÅr.title' })}
+            </Heading>
+            <BodyLong>
+              {formatMessage({ id: 'søknad.veiledning.søkerUnderAttenÅr.description' })}
+            </BodyLong>
+          </Alert>
+        ) : (
+          <>
+            <IntroduksjonTekst navn={person?.navn} />
 
         <form onSubmit={(event) => handleSubmit(event)} autoComplete="off">
           <Box
@@ -97,12 +109,14 @@ export const Veiledning = ({
             {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
           </Box>
 
-          <div className={classes?.startButton}>
-            <Button variant="primary" type="submit" loading={isLoading}>
-              {formatMessage({ id: `søknad.veiledning.startSøknad` })}
-            </Button>
-          </div>
-        </form>
+              <div className={classes?.startButton}>
+                <Button variant="primary" type="submit" loading={isLoading}>
+                  {formatMessage({ id: `søknad.veiledning.startSøknad` })}
+                </Button>
+              </div>
+            </form>
+          </>
+        )}
       </main>
     </>
   );

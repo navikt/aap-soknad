@@ -107,7 +107,7 @@ export const getServerSideProps = beskyttetSide(
     const activeIndex = activeStep?.stepIndex;
 
     stopTimer();
-    if (activeIndex && !isFunctionalTest()) {
+    if (activeIndex && !isFunctionalTest() && person.erUnderAttenÅr === false) {
       logInfo('Starter påbegynt søknad');
       return {
         redirect: {
