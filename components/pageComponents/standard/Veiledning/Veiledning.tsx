@@ -7,6 +7,7 @@ import {
   ErrorMessage,
   Heading,
   BodyLong,
+  InfoCard,
   Link,
 } from '@navikt/ds-react';
 import * as classes from './Veiledning.module.css';
@@ -67,14 +68,22 @@ export const Veiledning = ({
         </div>
 
         {person?.erUnderAttenÅr ? (
-          <Alert variant="warning">
-            <Heading size="small" spacing level="2">
-              {formatMessage({ id: 'søknad.veiledning.søkerUnderAttenÅr.title' })}
-            </Heading>
-            <BodyLong>
+          <InfoCard>
+            <InfoCard.Header>
+              <InfoCard.Title>
+                {formatMessage({ id: 'søknad.veiledning.søkerUnderAttenÅr.title' })}
+              </InfoCard.Title>
+            </InfoCard.Header>
+            <InfoCard.Content>
               {formatMessage({ id: 'søknad.veiledning.søkerUnderAttenÅr.description' })}
-            </BodyLong>
-          </Alert>
+              <BodyShort>
+                Du må benytte deg av{' '}
+                <Link href="https://www.nav.no/fyllut/nav111305?sub=paper">
+                  søknadsskjema for ikke digitale
+                </Link>
+              </BodyShort>
+            </InfoCard.Content>
+          </InfoCard>
         ) : (
           <>
             <IntroduksjonTekst navn={person?.navn} />
