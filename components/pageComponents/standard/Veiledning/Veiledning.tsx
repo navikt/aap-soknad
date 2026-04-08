@@ -1,4 +1,4 @@
-import { Alert, Button, ConfirmationPanel, Heading, Label } from '@navikt/ds-react';
+import { Alert, BodyLong, Button, ConfirmationPanel, Heading, Label } from '@navikt/ds-react';
 import * as classes from './Veiledning.module.css';
 import { IntroduksjonTekst } from '../../../IntroduksjonTekst/IntroduksjonTekst';
 import { FormattedMessage, useIntl } from 'react-intl';
@@ -56,26 +56,39 @@ export const Veiledning = ({
           )}
         </div>
 
-        <IntroduksjonTekst navn={person?.navn} />
+        {person?.erUnderAttenÅr ? (
+          <Alert variant="warning">
+            <Heading size="small" spacing level="2">
+              {formatMessage({ id: 'søknad.veiledning.søkerUnderAttenÅr.title' })}
+            </Heading>
+            <BodyLong>
+              {formatMessage({ id: 'søknad.veiledning.søkerUnderAttenÅr.description' })}
+            </BodyLong>
+          </Alert>
+        ) : (
+          <>
+            <IntroduksjonTekst navn={person?.navn} />
 
-        <form onSubmit={(event) => handleSubmit(event)} autoComplete="off">
-          <ConfirmationPanel
-            ref={confirmRef}
-            label={formatMessage({ id: 'søknad.veiledning.veiledningConfirm.label' })}
-            error={errorMessage}
-            onChange={() => setErrorMessage(undefined)}
-          >
-            <Label as={'span'}>
-              {formatMessage({ id: 'søknad.veiledning.veiledningConfirm.title' })}
-            </Label>
-          </ConfirmationPanel>
+            <form onSubmit={(event) => handleSubmit(event)} autoComplete="off">
+              <ConfirmationPanel
+                ref={confirmRef}
+                label={formatMessage({ id: 'søknad.veiledning.veiledningConfirm.label' })}
+                error={errorMessage}
+                onChange={() => setErrorMessage(undefined)}
+              >
+                <Label as={'span'}>
+                  {formatMessage({ id: 'søknad.veiledning.veiledningConfirm.title' })}
+                </Label>
+              </ConfirmationPanel>
 
-          <div className={classes?.startButton}>
-            <Button variant="primary" type="submit" loading={isLoading}>
-              {formatMessage({ id: `søknad.veiledning.startSøknad` })}
-            </Button>
-          </div>
-        </form>
+              <div className={classes?.startButton}>
+                <Button variant="primary" type="submit" loading={isLoading}>
+                  {formatMessage({ id: `søknad.veiledning.startSøknad` })}
+                </Button>
+              </div>
+            </form>
+          </>
+        )}
       </main>
     </>
   );

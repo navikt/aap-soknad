@@ -7,4 +7,5 @@ export const MockPerson: Person = {
   fnr: '12345678910',
   adresse: 'Oslo',
   fødseldato: formatDate(sub(new Date(), { years: 30 }), 'yyyy-MM-dd')!,
+  erUnderAttenÅr: false,
 };

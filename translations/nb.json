@@ -67,7 +67,11 @@
         }
       },
       "startSøknad": "Start søknad",
-      "avbrytSøknad": "Avbryt søknad"
+      "avbrytSøknad": "Avbryt søknad",
+      "søkerUnderAttenÅr": {
+        "title": "Du kan ikke søke om AAP digitalt",
+        "description": "Du må være 18 år eller eldre for å søke om arbeidsavklaringspenger (AAP) digitalt. [Legg inn en lenke til fyll ut og send inn elns?]"
+      }
     },
     "startDato": {
       "title": "Startdato",
