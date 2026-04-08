@@ -1,8 +1,8 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { isMock } from '../utils/environments';
-import { verifyIdportenAccessToken } from './verifyIdPortenAccessToken';
 import { ErrorMedStatus } from './ErrorMedStatus';
 import { logError, logInfo, logWarning } from 'lib/utils/logger';
+import { validateToken } from '@navikt/oasis';
 
 type ApiHandler = (req: NextApiRequest, res: NextApiResponse) => void | Promise<void>;
 
@@ -26,10 +26,9 @@ export function beskyttetApi(handler: ApiHandler): ApiHandler {
         logWarning(`ingen bearer token, path: ${req?.url}`);
         return send401();
       }
-      try {
-        await verifyIdportenAccessToken(bearerToken);
-      } catch (e) {
-        logError('kunne ikke validere idportentoken i beskyttetApi', e);
+      const validation = await validateToken(bearerToken);
+      if (!validation.ok) {
+        logError('kunne ikke validere idportentoken i beskyttetApi', validation.error);
         return send401();
       }
       return handler(req, res);
