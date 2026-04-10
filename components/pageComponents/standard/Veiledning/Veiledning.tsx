@@ -1,6 +1,5 @@
 import {
   Alert,
-  BodyLong,
   BodyShort,
   Button,
   ConfirmationPanel,
@@ -13,7 +12,6 @@ import { IntroduksjonTekst } from '../../../IntroduksjonTekst/IntroduksjonTekst'
 import { FormattedMessage, useIntl } from 'react-intl';
 import { FormEvent, useRef, useState } from 'react';
 import { Person } from 'pages/api/oppslagapi/person';
-import Header from '@navikt/ds-react/esm/table/Header';
 import Link from 'next/link';
 
 interface VeiledningProps {
