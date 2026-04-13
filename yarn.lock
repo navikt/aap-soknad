@@ -2320,9 +2320,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@vercel/otel@npm:1.14.0":
-  version: 1.14.0
-  resolution: "@vercel/otel@npm:1.14.0"
+"@vercel/otel@npm:1.14.1":
+  version: 1.14.1
+  resolution: "@vercel/otel@npm:1.14.1"
   peerDependencies:
     "@opentelemetry/api": ">=1.7.0 <2.0.0"
     "@opentelemetry/api-logs": ">=0.46.0 <0.200.0"
@@ -2331,7 +2331,7 @@ __metadata:
     "@opentelemetry/sdk-logs": ">=0.46.0 <0.200.0"
     "@opentelemetry/sdk-metrics": ">=1.19.0 <2.0.0"
     "@opentelemetry/sdk-trace-base": ">=1.19.0 <2.0.0"
-  checksum: 10c0/2186f07bc95cab6052ff74824e1b1642e1b67c8ecb6ca078fa0a3176195f0d5bd2b5eb710986cfe55c606869dd426640ed094bc25d8f48313d4c18f44d2b09a1
+  checksum: 10c0/e9e9e32ff10799e97aace551cc5c8f89a6b33758b37dcbd50ce6b338534c867393ed3088dedf89e63a16bb2dfcc63a21cffa9e2b5a8e5ab86104bd2c1b86b8b8
   languageName: node
   linkType: hard
 
@@ -2459,7 +2459,7 @@ __metadata:
     "@typescript-eslint/eslint-plugin": "npm:^7.15.0"
     "@typescript-eslint/parser": "npm:^7.15.0"
     "@ungap/structured-clone": "npm:^1.3.0"
-    "@vercel/otel": "npm:1.14.0"
+    "@vercel/otel": "npm:1.14.1"
     "@vitejs/plugin-react": "npm:^5.2.0"
     cross-env: "npm:^7.0.3"
     cross-fetch: "npm:^4.1.0"
