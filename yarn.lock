@@ -1115,10 +1115,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@navikt/aap-felles-css@npm:^5.6.0":
-  version: 5.6.0
-  resolution: "@navikt/aap-felles-css@npm:5.6.0::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faap-felles-css%2F5.6.0%2F58e68c54291454eeab84ca96beb2217fbf5161f6"
-  checksum: 10c0/75bab52656055bd1d243b27a41fee0dd180a5c726556a08afe1e72f64fda4a58740c04916c5ebbd9ac4fced817b860c9cb1bc8c2682fad0c31f7c5ae1e2a9d03
+"@navikt/aap-felles-css@npm:^5.6.2":
+  version: 5.6.2
+  resolution: "@navikt/aap-felles-css@npm:5.6.2::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faap-felles-css%2F5.6.2%2F7a06c62c1bcb11757c2579856945838775c384cf"
+  checksum: 10c0/65fa3a44d389e91b93ab59cc052739e1676902bd6550a78a913f336d0b5d4197a22496553ac8d2a037e440c451f5276379a2f57c3c29fb7901aaefb32f4422fc
   languageName: node
   linkType: hard
 
@@ -2439,7 +2439,7 @@ __metadata:
   dependencies:
     "@axe-core/playwright": "npm:^4.11.1"
     "@grafana/faro-web-sdk": "npm:^1.19.0"
-    "@navikt/aap-felles-css": "npm:^5.6.0"
+    "@navikt/aap-felles-css": "npm:^5.6.2"
     "@navikt/ds-css": "npm:^7.40.0"
     "@navikt/ds-icons": "npm:^3.4.3"
     "@navikt/ds-react": "npm:^7.40.0"
@@ -2481,8 +2481,8 @@ __metadata:
     prettier: "npm:^3.3.2"
     process: "npm:^0.11.10"
     prop-types: "npm:^15.7.2"
-    react: "npm:19.2.4"
-    react-dom: "npm:19.2.4"
+    react: "npm:^19.2.5"
+    react-dom: "npm:^19.2.5"
     react-error-boundary: "npm:^6.1.1"
     react-intl: "npm:8.1.4"
     typescript: "npm:^5.9.3"
@@ -6994,14 +6994,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-dom@npm:19.2.4":
-  version: 19.2.4
-  resolution: "react-dom@npm:19.2.4"
+"react-dom@npm:^19.2.5":
+  version: 19.2.5
+  resolution: "react-dom@npm:19.2.5"
   dependencies:
     scheduler: "npm:^0.27.0"
   peerDependencies:
-    react: ^19.2.4
-  checksum: 10c0/f0c63f1794dedb154136d4d0f59af00b41907f4859571c155940296808f4b94bf9c0c20633db75b5b2112ec13d8d7dd4f9bf57362ed48782f317b11d05a44f35
+    react: ^19.2.5
+  checksum: 10c0/8067606e9f58e4c2e8cb5f09570217dbc71c4843ebcaa20ae2085912d3e3a351f17d8f7c1713313cdda7f272840c8c34ff6c860fcb840862071bceea218e0c63
   languageName: node
   linkType: hard
 
@@ -7064,10 +7064,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react@npm:19.2.4":
-  version: 19.2.4
-  resolution: "react@npm:19.2.4"
-  checksum: 10c0/cd2c9ff67a720799cc3b38a516009986f7fc4cb8d3e15716c6211cf098d1357ee3e348ab05ad0600042bbb0fd888530ba92e329198c92eafa0994f5213396596
+"react@npm:^19.2.5":
+  version: 19.2.5
+  resolution: "react@npm:19.2.5"
+  checksum: 10c0/4b5f231dbef92886f602533c9ce3bde04d99f0e71dfb5d794c43e02726efaad0421c08688f75fc98a6d6e1dc017372e1af7abbfecdc86a79968f461675931a7a
   languageName: node
   linkType: hard
 
