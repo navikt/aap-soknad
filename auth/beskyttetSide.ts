@@ -1,8 +1,8 @@
 import { NextPageContext, GetServerSidePropsResult } from 'next';
 import { isMock } from 'utils/environments';
 import { getAccessToken } from './accessToken';
-import { verifyIdportenAccessToken } from './verifyIdPortenAccessToken';
 import { logError } from 'lib/utils/logger';
+import { validateToken } from '@navikt/oasis';
 
 type PageHandler = (context: NextPageContext) => void | Promise<GetServerSidePropsResult<{}>>;
 
@@ -27,20 +27,11 @@ export function beskyttetSide(handler: PageHandler) {
       return wonderwallRedirect;
     }
 
-    try {
-      await verifyIdportenAccessToken(bearerToken);
-    } catch (e) {
-      logError('kunne ikke validere idportentoken i beskyttetSide', e);
+    const validation = await validateToken(bearerToken);
+    if (!validation.ok) {
+      logError('kunne ikke validere idportentoken i beskyttetSide', validation.error);
       return wonderwallRedirect;
     }
     return handler(context);
   };
 }
-
-export const beskyttetSideUtenProps = beskyttetSide(
-  async (): Promise<GetServerSidePropsResult<{}>> => {
-    return {
-      props: {},
-    };
-  },
-);

@@ -1,6 +1,6 @@
 import Document, { Html, Head, Main, NextScript, DocumentContext } from 'next/document';
 import {
-  DecoratorComponents,
+  DecoratorComponentsReact,
   DecoratorFetchProps,
   DecoratorEnvProps,
   fetchDecoratorReact,
@@ -22,7 +22,7 @@ const decoratorParams: DecoratorFetchProps = {
   },
 };
 
-class _Document extends Document<{ decorator: DecoratorComponents }> {
+class _Document extends Document<{ decorator: DecoratorComponentsReact }> {
   static async getInitialProps(ctx: DocumentContext) {
     const initialProps = await Document.getInitialProps(ctx);
     const decorator = await fetchDecoratorReact(decoratorParams);
@@ -30,13 +30,13 @@ class _Document extends Document<{ decorator: DecoratorComponents }> {
   }
 
   render() {
-    const { Styles, Scripts, Header, Footer } = this.props.decorator;
+    const { HeadAssets, Scripts, Header, Footer } = this.props.decorator;
     return (
       <Html>
         <Head>
           <meta name="robots" content="noindex,nofollow" />
+          <HeadAssets />
         </Head>
-        <Styles />
         <Scripts />
 
         <body>
