@@ -18,7 +18,7 @@
     "html-react-parser": "^6.0.0",
     "i18n-iso-countries": "^7.14.0",
     "is-european": "1.0.9",
-    "next": "16.2.2",
+    "next": "16.2.3",
     "node-cache": "^5.1.2",
     "pino": "^10.3.1",
     "prop-types": "^15.7.2",
