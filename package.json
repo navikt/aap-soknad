@@ -17,7 +17,7 @@
     "date-fns": "^4.1.0",
     "html-react-parser": "^6.0.0",
     "i18n-iso-countries": "^7.14.0",
-    "is-european": "1.0.9",
+    "is-european": "1.0.10",
     "next": "16.2.3",
     "node-cache": "^5.1.2",
     "pino": "^10.3.1",
