@@ -15,7 +15,7 @@
     "@vercel/otel": "1.14.1",
     "cross-fetch": "^4.1.0",
     "date-fns": "^4.1.0",
-    "html-react-parser": "^6.0.0",
+    "html-react-parser": "^6.0.1",
     "i18n-iso-countries": "^7.14.0",
     "is-european": "1.0.10",
     "next": "16.2.3",
