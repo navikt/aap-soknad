@@ -22,6 +22,7 @@ import { simpleTokenXProxy } from 'lib/utils/api/simpleTokenXProxy';
 import { IncomingMessage } from 'http';
 import { søknadVedleggStateTilFilArray } from 'utils/vedlegg';
 import { formatNavn } from 'utils/StringFormatters';
+import { format, isValid } from 'date-fns';
 
 // TODO: Sjekke om vi må generere pdf på samme språk som bruker har valgt når de fyller ut søknaden
 function getIntl() {
@@ -84,7 +85,31 @@ const handler = beskyttetApi(async (req: NextApiRequest, res: NextApiResponse) =
     return;
   }
 
-  const { formatMessage } = getIntl();
+  const toLocalDateString = (value?: Date | string) => {
+    if (!value) return undefined;
+
+    if (typeof value === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(value)) {
+      return value;
+    }
+
+    const d = value instanceof Date ? value : new Date(value);
+    if (!isValid(d)) return undefined;
+
+    const parts = new Intl.DateTimeFormat('sv-SE', {
+      timeZone: 'Europe/Oslo',
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+    }).formatToParts(d);
+
+    const y = parts.find((p) => p.type === 'year')?.value;
+    const m = parts.find((p) => p.type === 'month')?.value;
+    const day = parts.find((p) => p.type === 'day')?.value;
+
+    return y && m && day ? `${y}-${m}-${day}` : undefined;
+  };
+
+    const { formatMessage } = getIntl();
   const søknadPdf = mapSøknadToPdf(søknad, new Date(), formatMessage, []);
 
   /**
@@ -108,7 +133,7 @@ const handler = beskyttetApi(async (req: NextApiRequest, res: NextApiResponse) =
                   (barn) =>
                     ({
                       navn: formatNavn(barn.navn),
-                      fødselsdato: barn.fødseldato,
+                      fødselsdato: toLocalDateString(barn.fødseldato),
                       ident: barn.fnr ? { identifikator: barn.fnr } : undefined,
                       relasjon: barn.relasjon,
                     }) as ManueltOppgittBarn,

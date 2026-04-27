@@ -130,10 +130,8 @@ export const AddBarnModal = ({
   const { formatMessage } = useIntl();
   const { setErrors, findError, clearErrors } = useFormErrors();
 
-  const parseFødselsdato = (event: React.FocusEvent<HTMLInputElement>) => {
-    const date = parse(event.target.value, 'dd.MM.yyyy', new Date());
-    return new Date(date.getFullYear(), date.getMonth(), date.getDate());
-  };
+  const parseFødselsdato = (event: React.FocusEvent<HTMLInputElement>) =>
+    parse(event.target.value, 'dd.MM.yyyy', new Date());
 
   const parseFødselsdatoToString = () => {
     if (!barn.fødseldato) {
