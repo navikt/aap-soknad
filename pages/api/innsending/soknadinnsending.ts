@@ -85,12 +85,30 @@ const handler = beskyttetApi(async (req: NextApiRequest, res: NextApiResponse) =
     return;
   }
 
-    const toLocalDateString = (value?: Date | string) => {
-      if (!value) return undefined;
-      const d = value instanceof Date ? value : new Date(value);
-      if (!isValid(d)) return undefined;
-      return format(d, 'yyyy-MM-dd');
-    };
+  const toLocalDateString = (value?: Date | string) => {
+    if (!value) return undefined;
+
+    if (typeof value === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(value)) {
+      return value;
+    }
+
+    const d = value instanceof Date ? value : new Date(value);
+    if (!isValid(d)) return undefined;
+
+    const parts = new Intl.DateTimeFormat('sv-SE', {
+      timeZone: 'Europe/Oslo',
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+    }).formatToParts(d);
+
+    const y = parts.find((p) => p.type === 'year')?.value;
+    const m = parts.find((p) => p.type === 'month')?.value;
+    const day = parts.find((p) => p.type === 'day')?.value;
+
+    return y && m && day ? `${y}-${m}-${day}` : undefined;
+  };
+
     const { formatMessage } = getIntl();
   const søknadPdf = mapSøknadToPdf(søknad, new Date(), formatMessage, []);
 
