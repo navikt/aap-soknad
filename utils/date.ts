@@ -46,5 +46,5 @@ export const toLocalDateString = (value?: Date | string) => {
   const y = parts.find((p) => p.type === 'year')?.value;
   const m = parts.find((p) => p.type === 'month')?.value;
   const day = parts.find((p) => p.type === 'day')?.value;
-  return y && m && day ? `${y}-${m}-${day}` : undefined;
+  return y && m && day ? `${day}.${m}.${y}` : undefined;
 };
