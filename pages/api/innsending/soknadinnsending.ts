@@ -22,6 +22,7 @@ import { simpleTokenXProxy } from 'lib/utils/api/simpleTokenXProxy';
 import { IncomingMessage } from 'http';
 import { søknadVedleggStateTilFilArray } from 'utils/vedlegg';
 import { formatNavn } from 'utils/StringFormatters';
+import { format, isValid } from 'date-fns';
 
 // TODO: Sjekke om vi må generere pdf på samme språk som bruker har valgt når de fyller ut søknaden
 function getIntl() {
@@ -84,7 +85,13 @@ const handler = beskyttetApi(async (req: NextApiRequest, res: NextApiResponse) =
     return;
   }
 
-  const { formatMessage } = getIntl();
+    const toLocalDateString = (value?: Date | string) => {
+      if (!value) return undefined;
+      const d = value instanceof Date ? value : new Date(value);
+      if (!isValid(d)) return undefined;
+      return format(d, 'yyyy-MM-dd');
+    };
+    const { formatMessage } = getIntl();
   const søknadPdf = mapSøknadToPdf(søknad, new Date(), formatMessage, []);
 
   /**
@@ -108,7 +115,7 @@ const handler = beskyttetApi(async (req: NextApiRequest, res: NextApiResponse) =
                   (barn) =>
                     ({
                       navn: formatNavn(barn.navn),
-                      fødselsdato: barn.fødseldato,
+                      fødselsdato: toLocalDateString(barn.fødseldato),
                       ident: barn.fnr ? { identifikator: barn.fnr } : undefined,
                       relasjon: barn.relasjon,
                     }) as ManueltOppgittBarn,
