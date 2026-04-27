@@ -22,6 +22,7 @@ import { simpleTokenXProxy } from 'lib/utils/api/simpleTokenXProxy';
 import { IncomingMessage } from 'http';
 import { søknadVedleggStateTilFilArray } from 'utils/vedlegg';
 import { formatNavn } from 'utils/StringFormatters';
+import { getPerson } from 'pages/api/oppslagapi/person';
 
 // TODO: Sjekke om vi må generere pdf på samme språk som bruker har valgt når de fyller ut søknaden
 function getIntl() {
@@ -71,6 +72,12 @@ const søknadIsValid = (søknad: Soknad) => {
 };
 
 const handler = beskyttetApi(async (req: NextApiRequest, res: NextApiResponse) => {
+  const person = await getPerson(req);
+  if (person.erUnderAttenÅr) {
+    res.status(403).json({ errorMessage: 'Du må være 18 år eller eldre for å sende inn søknad' });
+    return;
+  }
+
   const { søknad, requiredVedlegg } = req.body as {
     søknad: Soknad;
     requiredVedlegg: RequiredVedlegg[];
@@ -98,23 +105,23 @@ const handler = beskyttetApi(async (req: NextApiRequest, res: NextApiResponse) =
           version: SOKNAD_VERSION,
           etterspurtDokumentasjon,
           ...(!!søknad.manuelleBarn?.length && {
-              oppgitteBarn: {
-                identer: søknad.manuelleBarn
-                  .filter((barn) => barn.fnr)
-                  .map((barn) => ({
-                    identifikator: barn.fnr,
-                  })),
-                barn: søknad.manuelleBarn.map(
-                  (barn) =>
-                    ({
-                      navn: formatNavn(barn.navn),
-                      fødselsdato: barn.fødseldato,
-                      ident: barn.fnr ? { identifikator: barn.fnr } : undefined,
-                      relasjon: barn.relasjon,
-                    }) as ManueltOppgittBarn,
-                ),
-              },
-            }),
+            oppgitteBarn: {
+              identer: søknad.manuelleBarn
+                .filter((barn) => barn.fnr)
+                .map((barn) => ({
+                  identifikator: barn.fnr,
+                })),
+              barn: søknad.manuelleBarn.map(
+                (barn) =>
+                  ({
+                    navn: formatNavn(barn.navn),
+                    fødselsdato: barn.fødseldato,
+                    ident: barn.fnr ? { identifikator: barn.fnr } : undefined,
+                    relasjon: barn.relasjon,
+                  }) as ManueltOppgittBarn,
+              ),
+            },
+          }),
         },
         kvittering: søknadPdf,
         filer,

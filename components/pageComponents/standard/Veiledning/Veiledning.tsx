@@ -1,9 +1,18 @@
-import { Alert, Button, ConfirmationPanel, Heading, Label } from '@navikt/ds-react';
+import {
+  Alert,
+  BodyShort,
+  Button,
+  ConfirmationPanel,
+  Heading,
+  InfoCard,
+  Label,
+} from '@navikt/ds-react';
 import * as classes from './Veiledning.module.css';
 import { IntroduksjonTekst } from '../../../IntroduksjonTekst/IntroduksjonTekst';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { FormEvent, useRef, useState } from 'react';
 import { Person } from 'pages/api/oppslagapi/person';
+import Link from 'next/link';
 
 interface VeiledningProps {
   person?: Person;
@@ -56,26 +65,47 @@ export const Veiledning = ({
           )}
         </div>
 
-        <IntroduksjonTekst navn={person?.navn} />
+        {person?.erUnderAttenÅr ? (
+          <InfoCard>
+            <InfoCard.Header>
+              <InfoCard.Title>
+                {formatMessage({ id: 'søknad.veiledning.søkerUnderAttenÅr.title' })}
+              </InfoCard.Title>
+            </InfoCard.Header>
+            <InfoCard.Content>
+              {formatMessage({ id: 'søknad.veiledning.søkerUnderAttenÅr.description' })}
+              <BodyShort>
+                Du må benytte deg av{' '}
+                <Link href="https://www.nav.no/fyllut/nav111305?sub=paper">
+                  søknadsskjema for ikke digitale
+                </Link>
+              </BodyShort>
+            </InfoCard.Content>
+          </InfoCard>
+        ) : (
+          <>
+            <IntroduksjonTekst navn={person?.navn} />
 
-        <form onSubmit={(event) => handleSubmit(event)} autoComplete="off">
-          <ConfirmationPanel
-            ref={confirmRef}
-            label={formatMessage({ id: 'søknad.veiledning.veiledningConfirm.label' })}
-            error={errorMessage}
-            onChange={() => setErrorMessage(undefined)}
-          >
-            <Label as={'span'}>
-              {formatMessage({ id: 'søknad.veiledning.veiledningConfirm.title' })}
-            </Label>
-          </ConfirmationPanel>
+            <form onSubmit={(event) => handleSubmit(event)} autoComplete="off">
+              <ConfirmationPanel
+                ref={confirmRef}
+                label={formatMessage({ id: 'søknad.veiledning.veiledningConfirm.label' })}
+                error={errorMessage}
+                onChange={() => setErrorMessage(undefined)}
+              >
+                <Label as={'span'}>
+                  {formatMessage({ id: 'søknad.veiledning.veiledningConfirm.title' })}
+                </Label>
+              </ConfirmationPanel>
 
-          <div className={classes?.startButton}>
-            <Button variant="primary" type="submit" loading={isLoading}>
-              {formatMessage({ id: `søknad.veiledning.startSøknad` })}
-            </Button>
-          </div>
-        </form>
+              <div className={classes?.startButton}>
+                <Button variant="primary" type="submit" loading={isLoading}>
+                  {formatMessage({ id: `søknad.veiledning.startSøknad` })}
+                </Button>
+              </div>
+            </form>
+          </>
+        )}
       </main>
     </>
   );

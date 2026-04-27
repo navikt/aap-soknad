@@ -227,6 +227,17 @@ export const getServerSideProps = beskyttetSide(
       path: '/[steg]',
     });
     const person = await getPerson(ctx.req);
+
+    if (person.erUnderAttenÅr) {
+      logInfo('Bruker er ikke over 18 år, redirecter til startsiden');
+      return {
+        redirect: {
+          destination: '/',
+          permanent: false,
+        },
+      };
+    }
+
     let kontaktinformasjon: KrrKontaktInfo | null = null;
     try {
       kontaktinformasjon = await getKrr(ctx.req!);
