@@ -9,7 +9,7 @@ import {
   stønadTypeToAlternativNøkkel,
 } from 'components/pageComponents/standard/AndreUtbetalinger/AndreUtbetalinger';
 import { Soknad, SoknadVedlegg } from 'types/Soknad';
-import { formatDate } from './date';
+import { formatDate, toLocalDateString } from './date';
 import { formatFullAdresse, formatNavn } from 'utils/StringFormatters';
 import { RequiredVedlegg } from 'types/SoknadContext';
 import { Relasjon } from 'components/pageComponents/standard/Barnetillegg/AddBarnModal';
@@ -251,16 +251,16 @@ export const mapSøknadToPdf = (
   const getAndreBarn = (søknad?: Soknad) => {
     const andreBarn = !søknad?.manuelleBarn?.length
       ? createFritekst('Ingen barn lagt til av søker')
-      : søknad?.manuelleBarn?.map((barn) =>
-          createFeltgruppe([
+      : søknad?.manuelleBarn?.map((barn) => {
+          return createFeltgruppe([
             ...createField('Navn', formatNavn(barn?.navn)),
-            ...createField('Fødselsdato', barn?.fødseldato ? formatDate(barn.fødseldato) : ''),
+            ...createField('Fødselsdato', toLocalDateString(barn.fødseldato) || ''),
             ...createField(
               formatMessage({ id: 'søknad.barnetillegg.leggTilBarn.modal.relasjon.label' }),
               barn?.relasjon,
             ),
-          ]),
-        ) || [];
+          ]);
+        }) || [];
     return createTema('Andre barn (lagt til av søker)', [...andreBarn]);
   };
   const getAndreYtelser = (søknad?: Soknad) => {
