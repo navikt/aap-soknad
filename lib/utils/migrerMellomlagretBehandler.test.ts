@@ -3,145 +3,90 @@ import { migrerMellomlagretBehandler } from 'lib/utils/migrerMellomlagretBehandl
 import { SoknadContextState } from 'context/soknadcontext/soknadContext';
 import { describe, test, expect } from 'vitest';
 
-const mellomlagretSøknadBehandlerFraOppslag: SoknadContextState = {
+const mellomlagretSøknadMedFastlegeObjekt: SoknadContextState = {
   version: 1,
   requiredVedlegg: [],
   søknad: {
-    fastlege: [
-      {
-        navn: 'Sonja Paracet Plastersen',
-        erRegistrertFastlegeRiktig: JaEllerNei.JA,
-        behandlerRef: 'd182f24b-ebca-4f44-bf86-65901ec6141b',
-        kontaktinformasjon: {
-          adresse: 'Skogveien 17, 1234 Andeby',
-          kontor: 'Andeby legekontor',
-          telefon: '99999999',
-        },
+    fastlege: {
+      navn: 'Sonja Paracet Plastersen',
+      erRegistrertFastlegeRiktig: JaEllerNei.JA,
+      behandlerRef: 'd182f24b-ebca-4f44-bf86-65901ec6141b',
+      kontaktinformasjon: {
+        adresse: 'Skogveien 17, 1234 Andeby',
+        kontor: 'Andeby legekontor',
+        telefon: '99999999',
       },
-    ],
+    },
   },
 };
 
-const mellomlagretSøknadBehandlerFraSøknadAPI: SoknadContextState = {
-  requiredVedlegg: [],
-  version: 1,
-  søknad: {
-    registrerteBehandlere: [
-      {
-        erRegistrertFastlegeRiktig: JaEllerNei.JA,
-        type: 'FASTLEGE',
-        navn: { fornavn: 'Sonja', mellomnavn: 'Paracet', etternavn: 'Plastersen' },
-        kategori: 'LEGE',
-        kontaktinformasjon: {
-          behandlerRef: 'd182f24b-ebca-4f44-bf86-65901ec6141b',
-          kontor: 'Andeby legekontor',
-          orgnummer: '999999',
-          adresse: {
-            adressenavn: 'Skogveien',
-            husnummer: '17',
-            postnummer: {
-              postnr: '1234',
-              poststed: 'Andeby',
-            },
-          },
-          telefon: '99999999',
-        },
-      },
-    ],
-  },
-};
-
-describe('migrer mellomlagret behandler', () => {
+describe('migrer mellomlagret fastlege', () => {
   describe('migrerer når', () => {
-    test('behandler kommer fra gammel struktur og spørsmål om behandler er korrekt er besvart', () => {
-      const migrertMellomlagring = migrerMellomlagretBehandler(
-        mellomlagretSøknadBehandlerFraSøknadAPI,
-      );
+    test('mellomlagret fastlege som liste normaliseres til objekt', () => {
+      const mellomlagretMedFastlegeListe: SoknadContextState = {
+        version: 1,
+        requiredVedlegg: [],
+        søknad: {
+          fastlege: [
+            {
+              navn: 'Sonja Paracet Plastersen',
+              erRegistrertFastlegeRiktig: JaEllerNei.JA,
+              behandlerRef: 'd182f24b-ebca-4f44-bf86-65901ec6141b',
+              kontaktinformasjon: {
+                adresse: 'Skogveien 17, 1234 Andeby',
+                kontor: 'Andeby legekontor',
+                telefon: '99999999',
+              },
+            },
+          ] as any,
+        },
+      };
 
-      expect(migrertMellomlagring.søknad?.fastlege).toHaveLength(1);
+      const res = migrerMellomlagretBehandler(mellomlagretMedFastlegeListe);
+      expect(Array.isArray(res.søknad?.fastlege)).toBe(false);
+      expect(res.søknad?.fastlege).toEqual(mellomlagretSøknadMedFastlegeObjekt.søknad?.fastlege);
+    });
 
-      const migrertFastlege =
-        migrertMellomlagring.søknad?.fastlege && migrertMellomlagring.søknad.fastlege[0];
-      expect(migrertFastlege).not.toBeUndefined();
+    test('tom fastlegeliste normaliseres til null', () => {
+      const mellomlagretMedTomFastlegeListe: SoknadContextState = {
+        version: 1,
+        requiredVedlegg: [],
+        søknad: {
+          fastlege: [] as any,
+        },
+      };
 
-      // @ts-ignore - Typen sier den kan være undef, men den er ikke det her.
-      const forventetBehandler = mellomlagretSøknadBehandlerFraOppslag.søknad?.fastlege[0];
-      expect(migrertMellomlagring).toEqual(mellomlagretSøknadBehandlerFraOppslag);
-      expect(migrertFastlege).toEqual(forventetBehandler);
+      const res = migrerMellomlagretBehandler(mellomlagretMedTomFastlegeListe);
+      expect(res.søknad?.fastlege).toBeNull();
     });
   });
 
   describe('migrerer ikke når', () => {
-    test('mellomlagret behandler kommer fra oppslag', () => {
-      const res = migrerMellomlagretBehandler(mellomlagretSøknadBehandlerFraOppslag);
-      expect(res).toEqual(mellomlagretSøknadBehandlerFraOppslag);
+    test('mellomlagret fastlege allerede er objekt', () => {
+      const res = migrerMellomlagretBehandler(mellomlagretSøknadMedFastlegeObjekt);
+      expect(res).toEqual(mellomlagretSøknadMedFastlegeObjekt);
     });
 
-    test('mellomlagret søknad ikke inneholder noen behandlere', () => {
-      const mellomlagretSøknadUtenRegistrertBehandler: SoknadContextState = {
-        version: 1,
-        requiredVedlegg: [],
-        søknad: {
-          registrerteBehandlere: [],
-        },
-      };
-
-      const res = migrerMellomlagretBehandler(mellomlagretSøknadUtenRegistrertBehandler);
-      expect(res.søknad?.registrerteBehandlere).toEqual([]);
-    });
-
-    test('registerteBehandlere ikke finnes', () => {
-      const mellomlagretSøknadUtenRegistrertBehandler: SoknadContextState = {
+    test('søknad mangler fastlege', () => {
+      const mellomlagretSøknadUtenFastlege: SoknadContextState = {
         version: 1,
         requiredVedlegg: [],
         søknad: {},
       };
 
-      const res = migrerMellomlagretBehandler(mellomlagretSøknadUtenRegistrertBehandler);
-      expect(res.søknad?.registrerteBehandlere).toEqual(undefined);
+      const res = migrerMellomlagretBehandler(mellomlagretSøknadUtenFastlege);
+      expect(res).toEqual(mellomlagretSøknadUtenFastlege);
     });
 
-    test('registrerteBehandlere er undefined', () => {
-      const mellomlagretSøknadUtenRegistrertBehandler: SoknadContextState = {
+    test('søknad er undefined', () => {
+      const mellomlagretSøknadUtenSøknad: SoknadContextState = {
         version: 1,
         requiredVedlegg: [],
-        søknad: {
-          registrerteBehandlere: undefined,
-        },
+        søknad: undefined,
       };
 
-      const res = migrerMellomlagretBehandler(mellomlagretSøknadUtenRegistrertBehandler);
-      expect(res.søknad?.registrerteBehandlere).toEqual(undefined);
-    });
-
-    test('behandler kommer fra soknad-api og spørsmål om behandler er korrekt ikke er besvart', () => {
-      const fastlegeSpmIkkeBesvart: any = {
-        søknad: {
-          registrerteBehandlere: [
-            {
-              type: 'FASTLEGE',
-              navn: { fornavn: 'Sonja', mellomnavn: 'Paracet', etternavn: 'Plastersen' },
-              kategori: 'LEGE',
-              kontaktinformasjon: {
-                behandlerRef: 'd182f24b-ebca-4f44-bf86-65901ec6141b',
-                kontor: 'Andeby legekontor',
-                orgnummer: '999999',
-                adresse: {
-                  adressenavn: 'Skogveien',
-                  husnummer: '17',
-                  postnummer: {
-                    postnr: '1234',
-                    poststed: 'Andeby',
-                  },
-                },
-                telefon: '99999999',
-              },
-            },
-          ],
-        },
-      };
-      const res = migrerMellomlagretBehandler(fastlegeSpmIkkeBesvart);
-      expect(res).toEqual(fastlegeSpmIkkeBesvart);
+      const res = migrerMellomlagretBehandler(mellomlagretSøknadUtenSøknad);
+      expect(res).toEqual(mellomlagretSøknadUtenSøknad);
     });
   });
 });

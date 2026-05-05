@@ -10,11 +10,10 @@ import { updateSøknadData } from 'context/soknadcontext/actions';
 
 interface Props {
   fastlege: RegistrertFastlege;
-  index: number;
   clearErrors: () => void;
   errorMessage?: string;
 }
-export const RegistrertBehandler = ({ fastlege, index, clearErrors, errorMessage }: Props) => {
+export const RegistrertBehandler = ({ fastlege, clearErrors, errorMessage }: Props) => {
   const { formatMessage } = useIntl();
   const { søknadState, søknadDispatch } = useSoknad();
 
@@ -52,8 +51,8 @@ export const RegistrertBehandler = ({ fastlege, index, clearErrors, errorMessage
         <dd>{formatTelefonnummer(fastlege.kontaktinformasjon.telefon)}</dd>
       </dl>
       <RadioGroup
-        name={`fastlege[${index}].erRegistrertFastlegeRiktig`}
-        id={`fastlege[${index}].erRegistrertFastlegeRiktig`}
+        name={'fastlege.erRegistrertFastlegeRiktig'}
+        id={'fastlege.erRegistrertFastlegeRiktig'}
         legend={formatMessage({
           id: `søknad.helseopplysninger.erRegistrertFastlegeRiktig.label`,
         })}
@@ -61,13 +60,9 @@ export const RegistrertBehandler = ({ fastlege, index, clearErrors, errorMessage
         onChange={(value) => {
           clearErrors();
           updateSøknadData(søknadDispatch, {
-            fastlege: søknadState.søknad?.fastlege?.map((behandler) => {
-              if (behandler.behandlerRef === fastlege.behandlerRef) {
-                return { ...behandler, erRegistrertFastlegeRiktig: value };
-              } else {
-                return behandler;
-              }
-            }),
+            fastlege: søknadState.søknad?.fastlege
+              ? { ...søknadState.søknad.fastlege, erRegistrertFastlegeRiktig: value }
+              : null,
           });
         }}
         error={errorMessage}

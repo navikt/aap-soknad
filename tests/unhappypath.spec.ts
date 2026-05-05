@@ -310,7 +310,7 @@ test('at alle feilmeldinger skal dukke opp', async ({ page }) => {
     })
     .click();
   await expect(page).toHaveURL(
-    'http://localhost:3000/aap/soknad/4/#fastlege[0].erRegistrertFastlegeRiktig',
+    'http://localhost:3000/aap/soknad/4/#fastlege.erRegistrertFastlegeRiktig',
   );
   await page.getByLabel('Nei').check();
   await expect(

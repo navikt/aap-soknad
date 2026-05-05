@@ -20,13 +20,28 @@ const Fastlege = z.object({
 
 export type Fastlege = z.infer<typeof Fastlege>;
 
+const normalizeFastlegeResponse = (data: Fastlege[] | Fastlege | null): Fastlege | null => {
+  if (data === null) {
+    return null;
+  }
+
+  if (Array.isArray(data)) {
+    if (data.length === 0) {
+      return null;
+    }
+    return data[0];
+  }
+
+  return data;
+};
+
 const handler = beskyttetApi(async (req: NextApiRequest, res: NextApiResponse) => {
   res.status(200).json(await getFastlege(req));
 });
-export const getFastlege = async (req: IncomingMessage): Promise<Fastlege[]> => {
-  if (isMock() || isDev()) return mockFastlege;
+export const getFastlege = async (req: IncomingMessage): Promise<Fastlege | null> => {
+  if (isMock() || isDev()) return normalizeFastlegeResponse(mockFastlege);
 
-  const fastlege: Fastlege = await simpleTokenXProxy({
+  const fastlege = await simpleTokenXProxy({
     url: `${process.env.OPPSLAG_URL}/fastlege`,
     prometheusPath: 'oppslag/fastlege',
     method: 'GET',
@@ -36,12 +51,13 @@ export const getFastlege = async (req: IncomingMessage): Promise<Fastlege[]> => 
     metricsTimer: metrics.backendApiDurationHistogram,
   });
 
-  const validatedResponse = z.array(Fastlege).safeParse(fastlege);
+  const validatedResponse = z.union([z.array(Fastlege), Fastlege, z.null()]).safeParse(fastlege);
   if (!validatedResponse.success) {
     logError(`oppslag/fastlege valideringsfeil: ${validatedResponse.error.message}`);
-    return [];
+    return null;
   }
-  return validatedResponse.data;
+
+  return normalizeFastlegeResponse(validatedResponse.data);
 };
 
 export default handler;

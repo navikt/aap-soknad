@@ -49,7 +49,7 @@ interface PageProps {
   kontaktinformasjon: KrrKontaktInfo | null;
   person: Person;
   barn: Barn[];
-  fastlege: Fastlege[];
+  fastlege: Fastlege | null;
 }
 
 const Steps = ({ person, mellomlagretSøknad, kontaktinformasjon, barn, fastlege }: PageProps) => {
@@ -217,7 +217,7 @@ const hentFastlege = async (req: IncomingMessage) => {
     return await getFastlege(req);
   } catch (e) {
     logError('Noe gikk galt i kallet mot oppslag/fastlege', e);
-    return [];
+    return null;
   }
 };
 

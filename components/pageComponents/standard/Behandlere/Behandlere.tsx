@@ -25,8 +25,9 @@ interface Props {
 
 export const getBehandlerSchema = (formatMessage: IntlFormatters['formatMessage']) =>
   yup.object().shape({
-    fastlege: yup.array().of(
-      yup.object().shape({
+    fastlege: yup
+      .object()
+      .shape({
         erRegistrertFastlegeRiktig: yup
           .string()
           .required(
@@ -34,8 +35,8 @@ export const getBehandlerSchema = (formatMessage: IntlFormatters['formatMessage'
           )
           .oneOf([JaEllerNei.JA, JaEllerNei.NEI])
           .nullable(),
-      }),
-    ),
+      })
+      .nullable(),
   });
 export const Behandlere = ({ onBackClick }: Props) => {
   const [errors, setErrors] = useState<SøknadValidationError[] | undefined>();
@@ -109,20 +110,19 @@ export const Behandlere = ({ onBackClick }: Props) => {
           <Heading size={'small'} level={'3'}>
             {formatMessage({ id: 'søknad.helseopplysninger.registrertFastlege.title' })}
           </Heading>
-          {søknadState?.søknad?.fastlege?.length === 0 && (
+          {!søknadState?.søknad?.fastlege && (
             <BodyLong>
               {formatMessage({ id: 'søknad.helseopplysninger.registrertFastlege.ingenFastlege' })}
             </BodyLong>
           )}
-          {søknadState?.søknad?.fastlege?.map((fastlege, index) => (
+          {søknadState?.søknad?.fastlege && (
             <RegistrertBehandler
-              key={fastlege.behandlerRef}
-              index={index}
-              fastlege={fastlege}
+              key={søknadState.søknad.fastlege.behandlerRef}
+              fastlege={søknadState.søknad.fastlege}
               clearErrors={clearErrors}
-              errorMessage={findError(`fastlege[${index}].erRegistrertFastlegeRiktig`)}
+              errorMessage={findError('fastlege.erRegistrertFastlegeRiktig')}
             />
-          ))}
+          )}
         </div>
         <div>
           <Heading size={'small'} level={'3'} spacing>

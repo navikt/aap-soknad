@@ -194,22 +194,20 @@ export const mapSøknadToPdf = (
     ]);
   };
   const getRegistrerteBehandlere = (søknad?: Soknad) => {
-    if (!søknad?.fastlege?.length) {
-    }
-    const fastleger = !søknad?.fastlege?.length
+    const fastleger = !søknad?.fastlege
       ? createFritekst('Fant ingen registrert fastlege')
-      : søknad?.fastlege?.map((behandler) =>
+      : [
           createFeltgruppe([
-            ...createField('Navn', behandler?.navn),
-            ...createField('Kontor', behandler?.kontaktinformasjon?.kontor),
-            ...createField('Adresse', behandler?.kontaktinformasjon?.adresse),
-            ...createField('Telefon', behandler?.kontaktinformasjon?.telefon),
+            ...createField('Navn', søknad.fastlege?.navn),
+            ...createField('Kontor', søknad.fastlege?.kontaktinformasjon?.kontor),
+            ...createField('Adresse', søknad.fastlege?.kontaktinformasjon?.adresse),
+            ...createField('Telefon', søknad.fastlege?.kontaktinformasjon?.telefon),
             ...createField(
               formatMessage({ id: `søknad.helseopplysninger.erRegistrertFastlegeRiktig.label` }),
-              behandler?.erRegistrertFastlegeRiktig,
+              søknad.fastlege?.erRegistrertFastlegeRiktig,
             ),
           ]),
-        ) || [];
+        ];
     return createTema('Registrerte behandlere', fastleger);
   };
   const getAndreBehandlere = (søknad?: Soknad) => {

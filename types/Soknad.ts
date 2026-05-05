@@ -123,11 +123,7 @@ export interface Soknad {
   sykepenger?: JaEllerNei;
   yrkesskade?: JaEllerNei;
   medlemskap?: Medlemskap;
-  /**
-   * @Deprecated
-   */
-  registrerteBehandlere?: RegistrertBehandler[];
-  fastlege?: RegistrertFastlege[];
+  fastlege?: RegistrertFastlege | null;
   andreBehandlere?: Behandler[];
   student?: Student;
   andreUtbetalinger?: AndreUtbetalinger;
