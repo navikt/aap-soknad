@@ -24,7 +24,7 @@ const handler = beskyttetApi(async (req: NextApiRequest, res: NextApiResponse) =
   res.status(200).json(await getFastlege(req));
 });
 export const getFastlege = async (req: IncomingMessage): Promise<Fastlege[]> => {
-  if (isMock() || isDev()) return mockFastlege;
+  if (isMock()) return mockFastlege;
 
   const fastlege: Fastlege = await simpleTokenXProxy({
     url: `${process.env.OPPSLAG_URL}/fastlege`,
@@ -40,6 +40,9 @@ export const getFastlege = async (req: IncomingMessage): Promise<Fastlege[]> => 
   if (!validatedResponse.success) {
     logError(`oppslag/fastlege valideringsfeil: ${validatedResponse.error.message}`);
     return [];
+  }
+  if (isDev() && validatedResponse.data.length === 0) {
+    return mockFastlege;
   }
   return validatedResponse.data;
 };
