@@ -16,42 +16,36 @@ describe('Behandlere validation', () => {
   };
   it('ingenting registrerte behandlere', async () => {
     const form = {
-      fastlege: [],
+      fastlege: null,
     };
     const result = await schema.validate(form, { abortEarly: false }).catch((err) => err);
     expect(result).toStrictEqual(form);
   });
   it('har registrert behandler, info er riktig', async () => {
     const form = {
-      fastlege: [
-        {
-          ...fastlege,
-          erRegistrertFastlegeRiktig: JaEllerNei.JA,
-        },
-      ],
+      fastlege: {
+        ...fastlege,
+        erRegistrertFastlegeRiktig: JaEllerNei.JA,
+      },
     };
     const result = await schema.validate(form, { abortEarly: false }).catch((err) => err);
     expect(result).toStrictEqual(form);
   });
   it('har registrert behandler, info er feil', async () => {
     const form = {
-      fastlege: [
-        {
-          ...fastlege,
-          erRegistrertFastlegeRiktig: JaEllerNei.NEI,
-        },
-      ],
+      fastlege: {
+        ...fastlege,
+        erRegistrertFastlegeRiktig: JaEllerNei.NEI,
+      },
     };
     const result = await schema.validate(form, { abortEarly: false }).catch((err) => err);
     expect(result).toStrictEqual(form);
   });
   it('har registrert behandler, må svare om info er riktig', async () => {
     const form = {
-      fastlege: [
-        {
-          ...fastlege,
-        },
-      ],
+      fastlege: {
+        ...fastlege,
+      },
     };
     const result = await schema.validate(form, { abortEarly: false }).catch((err) => err);
     expect(result.errors.length).not.toBe(0);

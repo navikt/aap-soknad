@@ -36,7 +36,7 @@ type AddBarnIfMissing = {
 };
 type AddFastlegeIfMissing = {
   type: SoknadActionKeys.ADD_FASTLEGE_IF_MISSING;
-  payload: Fastlege[];
+  payload: Fastlege | null;
 };
 type AddRequiredVedlegg = {
   type: SoknadActionKeys.ADD_REQUIRED_VEDLEGG;
@@ -121,7 +121,7 @@ export async function removeRequiredVedlegg(
   if (vedleggType)
     dispatch({ type: SoknadActionKeys.REMOVE_REQUIRED_VEDLEGG, payload: vedleggType });
 }
-export const addFastlegeIfMissing = (dispatch: Dispatch<SoknadAction>, data: Fastlege[]) => {
+export const addFastlegeIfMissing = (dispatch: Dispatch<SoknadAction>, data: Fastlege | null) => {
   dispatch({ type: SoknadActionKeys.ADD_FASTLEGE_IF_MISSING, payload: data });
 };
 export const addBarnIfMissing = (dispatch: Dispatch<SoknadAction>, data: Barn[]) => {

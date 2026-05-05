@@ -272,22 +272,22 @@ const Oppsummering = ({
           hasError={behandlereHasErrors}
         >
           <>
-            {søknadState?.søknad?.fastlege?.map((fastlege, index) => (
-              <article key={'fastlege-' + index}>
+            {søknadState?.søknad?.fastlege && (
+              <article>
                 <Heading size={'small'} level={'3'}>
                   {formatMessage({ id: 'søknad.oppsummering.helseopplysninger.fastlege' })}
                 </Heading>
-                <BodyShort>{fastlege.navn}</BodyShort>
-                <BodyShort>{fastlege.kontaktinformasjon.kontor}</BodyShort>
-                <BodyShort>{fastlege.kontaktinformasjon.adresse}</BodyShort>
+                <BodyShort>{søknadState.søknad.fastlege.navn}</BodyShort>
+                <BodyShort>{søknadState.søknad.fastlege.kontaktinformasjon.kontor}</BodyShort>
+                <BodyShort>{søknadState.søknad.fastlege.kontaktinformasjon.adresse}</BodyShort>
                 <BodyShort>{`Telefon: ${formatTelefonnummer(
-                  fastlege.kontaktinformasjon.telefon,
+                  søknadState.søknad.fastlege.kontaktinformasjon.telefon,
                 )}`}</BodyShort>
                 <BodyShort>{`${formatMessage({
                   id: 'søknad.oppsummering.helseopplysninger.informasjonOmFastlege',
-                })} ${fastlege.erRegistrertFastlegeRiktig}`}</BodyShort>
+                })} ${søknadState.søknad.fastlege.erRegistrertFastlegeRiktig}`}</BodyShort>
               </article>
-            ))}
+            )}
 
             {søknadState?.søknad?.andreBehandlere?.map((behandler) => (
               <OppsummeringBehandler key={behandler.id} behandler={behandler} />

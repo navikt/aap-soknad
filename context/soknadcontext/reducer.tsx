@@ -34,22 +34,19 @@ export function soknadReducer(state: SoknadContextState, action: SoknadAction): 
       };
     }
     case SoknadActionKeys.ADD_FASTLEGE_IF_MISSING: {
-      const oldRegistrertFastlege = state?.søknad?.fastlege || [];
-      const registrerteFastleger: RegistrertFastlege[] = structuredClone(action.payload).map(
-        (fastlege) => {
-          const eksisterende = oldRegistrertFastlege.find(
-            (e) => e?.behandlerRef === fastlege?.behandlerRef,
-          );
-          return eksisterende?.erRegistrertFastlegeRiktig
-            ? { ...fastlege, erRegistrertFastlegeRiktig: eksisterende.erRegistrertFastlegeRiktig }
-            : fastlege;
-        },
-      );
+      const eksisterende = state.søknad?.fastlege;
+      const ny = structuredClone(action.payload);
+
+      const fastlege =
+        ny && eksisterende?.behandlerRef === ny.behandlerRef
+          ? { ...ny, erRegistrertFastlegeRiktig: eksisterende.erRegistrertFastlegeRiktig }
+          : ny;
+
       return {
         ...state,
         søknad: {
           ...state.søknad,
-          fastlege: registrerteFastleger,
+          fastlege,
         },
       };
     }
