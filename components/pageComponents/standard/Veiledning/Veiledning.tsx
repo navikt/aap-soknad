@@ -73,13 +73,21 @@ export const Veiledning = ({
               </InfoCard.Title>
             </InfoCard.Header>
             <InfoCard.Content>
-              {formatMessage({ id: 'søknad.veiledning.søkerUnderAttenÅr.description' })}
-              <BodyShort>
-                Du må benytte deg av{' '}
-                <Link href="https://www.nav.no/fyllut/nav111305?sub=paper">
-                  søknadsskjema for ikke digitale
-                </Link>
-              </BodyShort>
+              <FormattedMessage
+                id={'søknad.veiledning.søkerUnderAttenÅr.description'}
+                values={{
+                  a: (chunks) => (
+                    <Link
+                      target="_blank"
+                      href={formatMessage({
+                        id: 'applinks.ikkeInnloggetSkjema',
+                      })}
+                    >
+                      {chunks}
+                    </Link>
+                  ),
+                }}
+              />
             </InfoCard.Content>
           </InfoCard>
         ) : (

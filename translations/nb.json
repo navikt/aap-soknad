@@ -69,8 +69,8 @@
       "startSøknad": "Start søknad",
       "avbrytSøknad": "Avbryt søknad",
       "søkerUnderAttenÅr": {
-        "title": "Du kan ikke søke om AAP digitalt",
-        "description": "Du må være 18 år eller eldre for å søke om arbeidsavklaringspenger (AAP) digitalt."
+        "title": "Du kan ikke søke digitalt om AAP når du er under 18 år",
+        "description": "Du må ha fylt 18 år for å bruke den digitale søknaden om arbeidsavklaringspenger (AAP). I stedet må du bruke <a>søknadsskjemaet \"Send i posten\"</a>. Der kan du fylle ut søknaden før du skriver den ut."
       }
     },
     "startDato": {
