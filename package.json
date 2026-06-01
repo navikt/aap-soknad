@@ -24,7 +24,7 @@
     "prop-types": "^15.7.2",
     "react": "^19.2.6",
     "react-dom": "^19.2.6",
-    "react-error-boundary": "^6.1.1",
+    "react-error-boundary": "^6.1.2",
     "react-intl": "8.1.4",
     "typescript": "^5.9.3",
     "yup": "^1.7.1",
