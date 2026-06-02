@@ -2474,7 +2474,7 @@ __metadata:
     eslint-config-next: "npm:16.2.2"
     eslint-plugin-jsx-a11y: "npm:^6.9.0"
     eslint-plugin-react: "npm:^7.37.5"
-    html-react-parser: "npm:^6.1.0"
+    html-react-parser: "npm:^6.1.2"
     husky: "npm:^9.1.7"
     i18n-iso-countries: "npm:^7.14.0"
     is-european: "npm:1.0.10"
@@ -4936,21 +4936,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"html-react-parser@npm:^6.1.0":
-  version: 6.1.0
-  resolution: "html-react-parser@npm:6.1.0"
+"html-react-parser@npm:^6.1.2":
+  version: 6.1.2
+  resolution: "html-react-parser@npm:6.1.2"
   dependencies:
     domhandler: "npm:6.0.1"
     html-dom-parser: "npm:7.1.0"
     react-property: "npm:2.0.2"
-    style-to-js: "npm:1.1.21"
+    style-to-js: "npm:2.0.0"
   peerDependencies:
     "@types/react": 0.14 || 15 || 16 || 17 || 18 || 19
     react: 0.14 || 15 || 16 || 17 || 18 || 19
   peerDependenciesMeta:
     "@types/react":
       optional: true
-  checksum: 10c0/1626454d3e3edf01b8e626b6f4a150b9ab013b4d379e5038506c93c3ce7cfb09a78abff079512ecbd4dd6d840c0bbcd55f722ee3302a70400c760e9109891b49
+  checksum: 10c0/af016a9286c6454c355da9167586baac1489253c38863b6714aeeceb9ebf9e4b9f23e1d0b6217fadddc7fde3cdbd4b0f270a6d5388f8fae30a3cc09cbc8f6256
   languageName: node
   linkType: hard
 
@@ -7991,12 +7991,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"style-to-js@npm:1.1.21":
-  version: 1.1.21
-  resolution: "style-to-js@npm:1.1.21"
+"style-to-js@npm:2.0.0":
+  version: 2.0.0
+  resolution: "style-to-js@npm:2.0.0"
   dependencies:
     style-to-object: "npm:1.0.14"
-  checksum: 10c0/94231aa80f58f442c3a5ae01a21d10701e5d62f96b4b3e52eab3499077ee52df203cc0df4a1a870707f5e99470859136ea8657b782a5f4ca7934e0ffe662a588
+  checksum: 10c0/6119b5f0e25d56a994de3037e52cbecfdbfebc30f7df16bce8bca0070b09f4704e13c4900e8d9554b32e66456fef192fc1f7e610f96f79a258337563169b563a
   languageName: node
   linkType: hard
 
