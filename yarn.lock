@@ -1179,16 +1179,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@navikt/nav-dekoratoren-moduler@npm:^3.7.2":
-  version: 3.7.2
-  resolution: "@navikt/nav-dekoratoren-moduler@npm:3.7.2::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Fnav-dekoratoren-moduler%2F3.7.2%2Ff9ee8b56964dd7b5611ad83e07662eacb2f659a6"
+"@navikt/nav-dekoratoren-moduler@npm:^3.7.3":
+  version: 3.7.3
+  resolution: "@navikt/nav-dekoratoren-moduler@npm:3.7.3::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Fnav-dekoratoren-moduler%2F3.7.3%2F3c790758f06d026b8732261131b13aa937055646"
   dependencies:
     csp-header: "npm:6.3.1"
     js-cookie: "npm:3.0.7"
   peerDependencies:
     html-react-parser: ">=5.x"
     react: ">=17.x"
-  checksum: 10c0/b0430898b68e36072f6e6065c54873026f1c51921b075caf565def599764dc295fd4b140e42ffad54751e0a3f6099270b49fdf713a9725fbdd210ca71d05cd62
+  checksum: 10c0/1807ede95ebafe2f71e674c45a1f782ecdaf2f6a0d73571931fa905ec2177d7c787876da8c1f1ecda137ce62ab1c7425de1e9b18fa07ce81ff1e5e40b9c6cc1b
   languageName: node
   linkType: hard
 
@@ -2449,7 +2449,7 @@ __metadata:
     "@navikt/ds-css": "npm:^7.40.0"
     "@navikt/ds-icons": "npm:^3.4.3"
     "@navikt/ds-react": "npm:^7.40.0"
-    "@navikt/nav-dekoratoren-moduler": "npm:^3.7.2"
+    "@navikt/nav-dekoratoren-moduler": "npm:^3.7.3"
     "@navikt/next-api-proxy": "npm:3.4.2"
     "@navikt/oasis": "npm:^3.8.0"
     "@playwright/test": "npm:^1.60.0"
