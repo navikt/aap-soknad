@@ -64,7 +64,7 @@ const Introduksjon = ({ person }: PageProps) => {
       setIsLoading(false);
       setHasError(true);
     } else {
-      router.push('/1');
+      await router.push('/1');
     }
   };
 

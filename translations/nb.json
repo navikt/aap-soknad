@@ -60,8 +60,10 @@
         "personopplysningerNavNo": "Du kan lese mer om hvordan Nav behandler personopplysninger på nav.no (åpnes i ny fane)."
       },
       "veiledningConfirm": {
-        "title": "Vi stoler på deg",
-        "label": "Jeg vil svare så godt jeg kan på spørsmålene i søknaden.",
+        "checkbox": "Jeg bekrefter at jeg vil svare så riktig som jeg kan.",
+        "description": "Det er viktig at du gir oss riktige opplysninger slik at vi kan behandle saken din.",
+        "readMore": "Les mer om viktigheten av å gi riktige opplysninger",
+        "link": "https://www.nav.no/endringer",
         "validation": {
           "required": "Du må bekrefte at du vil gi så riktige opplysninger som mulig."
         }

@@ -117,8 +117,10 @@
         "personopplysningerNavNo": "Du kan lese meir om korleis Nav behandlar personopplysningar på nav.no (blir opna i ny fane)."
       },
       "veiledningConfirm": {
-        "title": "Vi stolar på deg",
-        "label": "Eg vil svara så godt eg kan på spørsmåla i søknaden.",
+        "checkbox": "Eg stadfestar at eg vil svara så riktig som eg kan.",
+        "description": "Det er viktig at du gir oss rette opplysningar slik at vi kan behandle saka di.",
+        "readMore": "Les meir om viktigheita av å gi rette opplysningar",
+        "link": "https://www.nav.no/endringer/nn",
         "validation": {
           "required": "Du må stadfeste at du vil gi så rette opplysningar som mogleg."
         }
