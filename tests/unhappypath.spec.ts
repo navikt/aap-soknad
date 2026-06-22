@@ -12,7 +12,7 @@ test('at alle feilmeldinger skal dukke opp', async ({ page }) => {
   await expect(
     await page.getByText('Du må bekrefte at du vil gi så riktige opplysninger som mulig.'),
   ).toBeVisible();
-  await page.getByLabel('Jeg vil svare så godt jeg kan på spørsmålene i søknaden.').check();
+  await page.getByLabel('Jeg bekrefter at jeg vil svare så riktig som jeg kan.').check();
   await page.getByRole('button', { name: 'Start søknad' }).click();
   await expect(page).toHaveURL('http://localhost:3000/aap/soknad/1/');
 
