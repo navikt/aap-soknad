@@ -1,7 +1,7 @@
 import '@navikt/ds-css';
 import '@navikt/aap-felles-css';
 import 'styles/index.css';
-import React, { useEffect, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import { IntlProvider } from 'react-intl';
 import { AppProps } from 'next/app';
 import links from 'translations/links.json';
@@ -13,7 +13,8 @@ import { SUPPORTED_LOCALE } from 'lib/translations/locale';
 import { useRouter } from 'next/router';
 import { NavDecorator } from 'components/NavDecorator/NavDecorator';
 import { DecoratorLocale } from '@navikt/nav-dekoratoren-moduler';
-import { initializeFaro } from '@grafana/faro-web-sdk';
+import Faro from 'components/Faro';
+import ErrorBoundary from 'components/ErrorBoundary';
 
 const getLocaleOrFallback = (locale?: string) => {
   if (locale && SUPPORTED_LOCALE.includes(locale)) {
@@ -32,31 +33,22 @@ const CustomApp = ({ Component, pageProps }: AppProps) => {
     [locale],
   );
 
-  useEffect(() => {
-    if (process.env.NEXT_PUBLIC_FARO_URL) {
-      initializeFaro({
-        url: process.env.NEXT_PUBLIC_FARO_URL,
-        app: {
-          name: 'aap-soknad',
-          version: process.env.NEXT_PUBLIC_ENVIRONMENT ?? '',
-        },
-      });
-    }
-  }, []);
-
   return (
-    <IntlProvider locale={locale} messages={currentMessages}>
-      <AppStateContextProvider>
-        <NavDecorator>
-          <StepWizardProvider>
-            <Head>
-              <title>Søknad om arbeidsavklaringspenger (AAP)</title>
-            </Head>
-            <Component {...pageProps} />
-          </StepWizardProvider>
-        </NavDecorator>
-      </AppStateContextProvider>
-    </IntlProvider>
+    <ErrorBoundary>
+      <IntlProvider locale={locale} messages={currentMessages}>
+        <AppStateContextProvider>
+          <NavDecorator>
+            <StepWizardProvider>
+              <Head>
+                <title>Søknad om arbeidsavklaringspenger (AAP)</title>
+              </Head>
+              <Faro collectorUrl={process.env.NAIS_FRONTEND_TELEMETRY_COLLECTOR_URL} />
+              <Component {...pageProps} />
+            </StepWizardProvider>
+          </NavDecorator>
+        </AppStateContextProvider>
+      </IntlProvider>
+    </ErrorBoundary>
   );
 };
 

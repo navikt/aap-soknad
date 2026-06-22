@@ -32,6 +32,9 @@ spec:
   prometheus:
     enabled: true
     path: /aap/soknad/api/internal/prometheus/
+  frontend:
+    generatedConfig:
+      mountPath: /tmp/nais.js
   observability:
     autoInstrumentation:
       enabled: true
