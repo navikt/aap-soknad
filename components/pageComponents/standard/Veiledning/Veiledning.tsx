@@ -1,15 +1,24 @@
-import { Alert, Button, ConfirmationPanel, Heading, Label } from '@navikt/ds-react';
+import {
+  Alert,
+  BodyShort,
+  Box,
+  Button,
+  Checkbox,
+  ErrorMessage,
+  Heading,
+  Link,
+} from '@navikt/ds-react';
 import * as classes from './Veiledning.module.css';
 import { IntroduksjonTekst } from '../../../IntroduksjonTekst/IntroduksjonTekst';
 import { FormattedMessage, useIntl } from 'react-intl';
-import { FormEvent, useRef, useState } from 'react';
+import { FormEvent, RefObject, useState } from 'react';
 import { Person } from 'pages/api/oppslagapi/person';
 
 interface VeiledningProps {
   person?: Person;
   isLoading: boolean;
   hasError: boolean;
-  errorMessageRef: React.MutableRefObject<HTMLDivElement | null>;
+  errorMessageRef: RefObject<HTMLDivElement | null>;
   onSubmit: () => void;
 }
 export const Veiledning = ({
@@ -21,11 +30,11 @@ export const Veiledning = ({
 }: VeiledningProps) => {
   const { formatMessage } = useIntl();
   const [errorMessage, setErrorMessage] = useState<string | undefined>(undefined);
-  const confirmRef = useRef<HTMLInputElement>(null);
+  const [confirmation, setConfirmation] = useState(false);
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    if (!confirmRef.current?.checked) {
+    if (!confirmation) {
       setErrorMessage(
         formatMessage({ id: 'søknad.veiledning.veiledningConfirm.validation.required' }),
       );
@@ -59,16 +68,34 @@ export const Veiledning = ({
         <IntroduksjonTekst navn={person?.navn} />
 
         <form onSubmit={(event) => handleSubmit(event)} autoComplete="off">
-          <ConfirmationPanel
-            ref={confirmRef}
-            label={formatMessage({ id: 'søknad.veiledning.veiledningConfirm.label' })}
-            error={errorMessage}
-            onChange={() => setErrorMessage(undefined)}
+          <Box
+            background="surface-warning-subtle"
+            borderColor="border-warning"
+            borderWidth="1"
+            padding="space-16"
+            borderRadius="medium"
           >
-            <Label as={'span'}>
-              {formatMessage({ id: 'søknad.veiledning.veiledningConfirm.title' })}
-            </Label>
-          </ConfirmationPanel>
+            <BodyShort>
+              {formatMessage({ id: 'søknad.veiledning.veiledningConfirm.description' })}{' '}
+              <Link
+                href={formatMessage({ id: 'søknad.veiledning.veiledningConfirm.link' })}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {formatMessage({ id: 'søknad.veiledning.veiledningConfirm.readMore' })}
+              </Link>
+            </BodyShort>
+
+            <Checkbox
+              onChange={(e) => {
+                setConfirmation(e.target.checked);
+                setErrorMessage(undefined);
+              }}
+            >
+              {formatMessage({ id: 'søknad.veiledning.veiledningConfirm.checkbox' })}
+            </Checkbox>
+            {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
+          </Box>
 
           <div className={classes?.startButton}>
             <Button variant="primary" type="submit" loading={isLoading}>

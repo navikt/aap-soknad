@@ -17,7 +17,7 @@ test('at enkel gjennomkjøring av søknaden fungerer', async ({ page }) => {
   // Fjern cookie-banner
   await page.locator('consent-banner').getByRole('button', { name: 'Ja' }).click();
 
-  await page.getByLabel('Jeg vil svare så godt jeg kan på spørsmålene i søknaden.').check();
+  await page.getByLabel('Jeg bekrefter at jeg vil svare så riktig som jeg kan.').check();
 
   await page.getByRole('button', { name: 'Start søknad' }).click();
 
