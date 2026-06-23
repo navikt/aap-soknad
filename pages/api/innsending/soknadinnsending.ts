@@ -3,7 +3,7 @@ import { logError } from 'lib/utils/logger';
 import { NextApiRequest, NextApiResponse } from 'next';
 import metrics from 'utils/metrics';
 import { ErrorMedStatus } from 'lib/utils/api/ErrorMedStatus';
-import { isFunctionalTest, isMock } from 'utils/environments';
+import { isFunctionalTest, isMock, isDev } from 'utils/environments';
 import { createIntl } from 'react-intl';
 import { flattenMessages, messages } from 'utils/message';
 import links from 'translations/links.json';
@@ -75,7 +75,7 @@ const søknadIsValid = (søknad: Soknad) => {
 
 const handler = beskyttetApi(async (req: NextApiRequest, res: NextApiResponse) => {
   const person = await getPerson(req);
-  if (person.erUnderAttenÅr) {
+  if (isDev() && person.erUnderAttenÅr) {
     res.status(403).json({ errorMessage: 'Du må være 18 år eller eldre for å sende inn søknad' });
     return;
   }

@@ -15,6 +15,7 @@ import { IntroduksjonTekst } from '../../../IntroduksjonTekst/IntroduksjonTekst'
 import { FormattedMessage, useIntl } from 'react-intl';
 import { FormEvent, RefObject, useState } from 'react';
 import { Person } from 'pages/api/oppslagapi/person';
+import { clientSideIsProd } from 'utils/environments';
 
 interface VeiledningProps {
   person?: Person;
@@ -67,7 +68,7 @@ export const Veiledning = ({
           )}
         </div>
 
-        {person?.erUnderAttenÅr ? (
+        {person?.erUnderAttenÅr && !clientSideIsProd() ? (
           <InfoCard>
             <InfoCard.Header>
               <InfoCard.Title>
@@ -96,35 +97,35 @@ export const Veiledning = ({
           <>
             <IntroduksjonTekst navn={person?.navn} />
 
-        <form onSubmit={(event) => handleSubmit(event)} autoComplete="off">
-          <Box
-            background="surface-warning-subtle"
-            borderColor="border-warning"
-            borderWidth="1"
-            padding="space-16"
-            borderRadius="medium"
-          >
-            <BodyShort>
-              {formatMessage({ id: 'søknad.veiledning.veiledningConfirm.description' })}{' '}
-              <Link
-                href={formatMessage({ id: 'søknad.veiledning.veiledningConfirm.link' })}
-                target="_blank"
-                rel="noopener noreferrer"
+            <form onSubmit={(event) => handleSubmit(event)} autoComplete="off">
+              <Box
+                background="surface-warning-subtle"
+                borderColor="border-warning"
+                borderWidth="1"
+                padding="space-16"
+                borderRadius="medium"
               >
-                {formatMessage({ id: 'søknad.veiledning.veiledningConfirm.readMore' })}
-              </Link>
-            </BodyShort>
+                <BodyShort>
+                  {formatMessage({ id: 'søknad.veiledning.veiledningConfirm.description' })}{' '}
+                  <Link
+                    href={formatMessage({ id: 'søknad.veiledning.veiledningConfirm.link' })}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    {formatMessage({ id: 'søknad.veiledning.veiledningConfirm.readMore' })}
+                  </Link>
+                </BodyShort>
 
-            <Checkbox
-              onChange={(e) => {
-                setConfirmation(e.target.checked);
-                setErrorMessage(undefined);
-              }}
-            >
-              {formatMessage({ id: 'søknad.veiledning.veiledningConfirm.checkbox' })}
-            </Checkbox>
-            {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
-          </Box>
+                <Checkbox
+                  onChange={(e) => {
+                    setConfirmation(e.target.checked);
+                    setErrorMessage(undefined);
+                  }}
+                >
+                  {formatMessage({ id: 'søknad.veiledning.veiledningConfirm.checkbox' })}
+                </Checkbox>
+                {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
+              </Box>
 
               <div className={classes?.startButton}>
                 <Button variant="primary" type="submit" loading={isLoading}>
