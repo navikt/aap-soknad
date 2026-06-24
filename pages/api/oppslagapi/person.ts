@@ -12,6 +12,8 @@ const Person = z.object({
   fnr: z.string(),
   adresse: z.string().optional().nullable(),
   fødseldato: z.string().optional().nullable(),
+  // setter default til false for å kunne håndtere evt mellomlagrede søknader. Kan slettes etter et par dager
+  erUnderAttenÅr: z.boolean().default(false),
 });
 export type Person = z.infer<typeof Person>;
 

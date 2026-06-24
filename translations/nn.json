@@ -126,7 +126,11 @@
         }
       },
       "startSøknad": "Start søknad",
-      "avbrytSøknad": "Avbryt søknad"
+      "avbrytSøknad": "Avbryt søknad",
+      "søkerUnderAttenÅr": {
+        "title": "Du kan ikkje søkje digitalt om AAP når du er under 18 år",
+        "description": "Du må ha fylt 18 år for å bruka den digitale søknaden om arbeidsaklaringspengar. I staden må du bruka <a>søknadsskjemaet \"Send i posten”</a>. Der kan du fylla ut søknaden før du skriv den ut."
+      }
     },
     "medlemskap": {
       "title": "Bustad og jobb",

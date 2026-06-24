@@ -8,7 +8,7 @@ import metrics from 'utils/metrics';
 import { scrollRefIntoView } from 'utils/dom';
 import { SOKNAD_VERSION, SoknadContextState } from 'context/soknadcontext/soknadContext';
 import { hentMellomlagring } from 'pages/api/mellomlagring/les';
-import { isFunctionalTest } from 'utils/environments';
+import { isFunctionalTest, isDev } from 'utils/environments';
 import { logError, logInfo } from 'lib/utils/logger';
 import { Person, getPerson } from 'pages/api/oppslagapi/person';
 import { mellomLagreSøknad } from 'hooks/useDebounceLagreSoknad';
@@ -107,7 +107,15 @@ export const getServerSideProps = beskyttetSide(
     const activeIndex = activeStep?.stepIndex;
 
     stopTimer();
-    if (activeIndex && !isFunctionalTest()) {
+
+    const fortsettForBrukereOverAtten = () => {
+      if (isDev()) {
+        return person.erUnderAttenÅr === false;
+      }
+      return true;
+    };
+
+    if (activeIndex && !isFunctionalTest() && fortsettForBrukereOverAtten()) {
       logInfo('Starter påbegynt søknad');
       return {
         redirect: {
