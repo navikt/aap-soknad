@@ -6,7 +6,6 @@ import {
   Checkbox,
   ErrorMessage,
   Heading,
-  BodyLong,
   InfoCard,
   Link,
 } from '@navikt/ds-react';
@@ -15,7 +14,7 @@ import { IntroduksjonTekst } from '../../../IntroduksjonTekst/IntroduksjonTekst'
 import { FormattedMessage, useIntl } from 'react-intl';
 import { FormEvent, RefObject, useState } from 'react';
 import { Person } from 'pages/api/oppslagapi/person';
-import { clientSideIsProd } from 'utils/environments';
+import { isProduction } from 'utils/environments';
 
 interface VeiledningProps {
   person?: Person;
@@ -48,6 +47,10 @@ export const Veiledning = ({
 
   return (
     <>
+      <div style={{ background: 'cyan', border: '5px dashed #f00' }}>
+        {process.env.NEXT_PUBLIC_ENVIRONMENT}
+        {process.env.NEXT_PUBLIC_ENVIRONMENT}
+      </div>
       <header className={classes?.veiledningHeader}>
         <Heading size="large" level="1">
           <FormattedMessage
@@ -68,7 +71,7 @@ export const Veiledning = ({
           )}
         </div>
 
-        {person?.erUnderAttenÅr && !clientSideIsProd() ? (
+        {person?.erUnderAttenÅr && !isProduction() ? (
           <InfoCard>
             <InfoCard.Header>
               <InfoCard.Title>

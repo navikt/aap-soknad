@@ -3,8 +3,8 @@ import { useRouter } from 'next/router';
 import { Alert, Button, Heading, Loader, Modal } from '@navikt/ds-react';
 import * as classes from './SoknadFormWrapper.module.css';
 import { SuccessStroke } from '@navikt/ds-icons';
-import { clientSideIsProd } from 'utils/environments';
-import React, { useState } from 'react';
+import { isProduction } from 'utils/environments';
+import { useState } from 'react';
 import { useSoknad } from 'hooks/SoknadHook';
 import { deleteOpplastedeVedlegg, slettLagretSoknadState } from 'context/soknadcontext/actions';
 
@@ -80,7 +80,7 @@ const SlettModal = ({ isOpen, onClose }: Props) => {
                 type="button"
                 onClick={() => {
                   if (window?.location) {
-                    window.location.href = clientSideIsProd()
+                    window.location.href = isProduction()
                       ? 'https://www.nav.no/person/dittnav'
                       : 'https://www.dev.nav.no/person/dittnav';
                   }

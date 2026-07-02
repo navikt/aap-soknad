@@ -1,8 +1,7 @@
 import { useIntl } from 'react-intl';
 import { BodyShort, Button, Heading, Modal } from '@navikt/ds-react';
 import * as classes from './SoknadFormWrapper.module.css';
-import { clientSideIsProd } from '../../utils/environments';
-import React from 'react';
+import { isProduction } from '../../utils/environments';
 
 interface Props {
   isOpen: boolean;
@@ -29,7 +28,7 @@ const LagreModal = ({ isOpen, onClose }: Props) => {
             type="button"
             onClick={() => {
               if (window?.location) {
-                window.location.href = clientSideIsProd()
+                window.location.href = isProduction()
                   ? 'https://www.nav.no/minside/'
                   : 'https://www.dev.nav.no/minside/';
               }
