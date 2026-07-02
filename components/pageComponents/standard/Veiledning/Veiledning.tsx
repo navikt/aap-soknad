@@ -47,10 +47,6 @@ export const Veiledning = ({
 
   return (
     <>
-      <div style={{ background: 'cyan', border: '5px dashed #f00' }}>
-        {process.env.NEXT_PUBLIC_ENVIRONMENT}
-        {process.env.NEXT_PUBLIC_ENVIRONMENT}
-      </div>
       <header className={classes?.veiledningHeader}>
         <Heading size="large" level="1">
           <FormattedMessage
