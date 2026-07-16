@@ -11,7 +11,7 @@ Vi bruker Github sitt package registry for npm pakker, siden flere av Nav sine p
 For å kunne kjøre `yarn install` lokalt må du logge inn mot Github package registry. Legg til følgende i .bashrc eller .zshrc lokalt på din maskin:
 I .bashrc eller .zshrc:
 
-`export NPM_AUTH_TOKEN=github_pat`
+`export NODE_AUTH_TOKEN=github_pat`
 
 Hvor github_pat er din personal access token laget på github(settings -> developer settings). Husk read:packages rettighet og enable sso når du oppdaterer/lager PAT.
 
