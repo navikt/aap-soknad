@@ -20,8 +20,7 @@ test('at enkel gjennomkjøring av søknaden fungerer', async ({ page }) => {
   await page.getByLabel('Jeg bekrefter at jeg vil svare så riktig som jeg kan.').check();
 
   await page.getByRole('button', { name: 'Start søknad' }).click();
-
-  //await page.goto('http://localhost:3000/aap/soknad/1/');
+  await expect(page).toHaveURL('http://localhost:3000/aap/soknad/1/');
   wcagRes = await checkWcag(page);
   await expect(wcagRes.violations).toEqual([]);
 
