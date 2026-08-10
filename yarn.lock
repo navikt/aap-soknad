@@ -1177,13 +1177,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@navikt/aap-felles-css@npm:^5.10.0":
-  version: 5.10.0
-  resolution: "@navikt/aap-felles-css@npm:5.10.0::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faap-felles-css%2F5.10.0%2Fd64dd079183536bf42433ea014038412a8c405b9"
-  checksum: 10c0/cde717e05684a5df74a5f90b2f460b4c078822676b04b1a6fcf0edc591049d2debb12875b87c619e159f628eb3fbba555921c8d0895c71793557c90751907c8b
-  languageName: node
-  linkType: hard
-
 "@navikt/aksel-icons@npm:^7.40.0":
   version: 7.40.0
   resolution: "@navikt/aksel-icons@npm:7.40.0::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faksel-icons%2F7.40.0%2F16d67c0742bcf2a2c38ad37be6c287765640fd7f"
@@ -2503,7 +2496,6 @@ __metadata:
     "@axe-core/playwright": "npm:^4.12.1"
     "@grafana/faro-web-sdk": "npm:^2.8.2"
     "@grafana/faro-web-tracing": "npm:2.8.2"
-    "@navikt/aap-felles-css": "npm:^5.10.0"
     "@navikt/ds-css": "npm:^7.40.0"
     "@navikt/ds-icons": "npm:^3.4.3"
     "@navikt/ds-react": "npm:^7.40.0"

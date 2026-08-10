@@ -7,6 +7,8 @@ import { FilePanelError } from './FilePanelError';
 import { FilePanelSuccess } from './FilePanelSuccess';
 import { useIntl } from 'react-intl';
 
+import styles from './FileInputInnsending.module.css';
+
 const MAX_TOTAL_FILE_SIZE = 52428800; // 50mb
 export const FileInputInnsending = (props: FileInputProps) => {
   const {
@@ -32,13 +34,13 @@ export const FileInputInnsending = (props: FileInputProps) => {
   function feilmeldingForSubstatus(substatus: string) {
     switch (substatus) {
       case 'PASSWORD_PROTECTED':
-        return formatMessage({id: 'søknad.vedlegg.fileinput.fileInputErrors.passordbeskyttet'});
+        return formatMessage({ id: 'søknad.vedlegg.fileinput.fileInputErrors.passordbeskyttet' });
       case 'VIRUS':
-        return formatMessage({id: 'søknad.vedlegg.fileinput.fileInputErrors.virus'});
+        return formatMessage({ id: 'søknad.vedlegg.fileinput.fileInputErrors.virus' });
       case 'SIZE':
-        return formatMessage({id: 'søknad.vedlegg.fileinput.fileInputErrors.size'});
+        return formatMessage({ id: 'søknad.vedlegg.fileinput.fileInputErrors.size' });
       default:
-        return formatMessage({id: 'søknad.vedlegg.fileinput.fileInputErrors.default422'});
+        return formatMessage({ id: 'søknad.vedlegg.fileinput.fileInputErrors.default422' });
     }
   }
 
@@ -47,11 +49,13 @@ export const FileInputInnsending = (props: FileInputProps) => {
       case 422:
         return feilmeldingForSubstatus(substatus);
       case 413:
-        return formatMessage({id: 'søknad.vedlegg.fileinput.fileInputErrors.fileTooLarge'});
+        return formatMessage({ id: 'søknad.vedlegg.fileinput.fileInputErrors.fileTooLarge' });
       case 415:
-        return formatMessage({id: 'søknad.vedlegg.fileinput.fileInputErrors.unsupportedMediaType'});
+        return formatMessage({
+          id: 'søknad.vedlegg.fileinput.fileInputErrors.unsupportedMediaType',
+        });
       default:
-        return formatMessage({id: 'søknad.vedlegg.fileinput.fileInputErrors.other'});
+        return formatMessage({ id: 'søknad.vedlegg.fileinput.fileInputErrors.other' });
     }
   };
 
@@ -59,11 +63,11 @@ export const FileInputInnsending = (props: FileInputProps) => {
     const totalUploadedSize = files.reduce((acc, curr) => acc + curr.size, 0);
 
     if (!['image/png', 'image/jpg', 'image/jpeg', 'application/pdf'].includes(fileToUpload?.type)) {
-      return formatMessage({id: 'søknad.vedlegg.fileinput.fileInputErrors.unsupportedMediaType'});
+      return formatMessage({ id: 'søknad.vedlegg.fileinput.fileInputErrors.unsupportedMediaType' });
     }
 
     if (totalUploadedSize + fileToUpload?.size > MAX_TOTAL_FILE_SIZE) {
-      return formatMessage({id: 'søknad.vedlegg.fileinput.fileInputErrors.fileTooLarge'});
+      return formatMessage({ id: 'søknad.vedlegg.fileinput.fileInputErrors.fileTooLarge' });
     }
   }
 
@@ -75,7 +79,9 @@ export const FileInputInnsending = (props: FileInputProps) => {
       onUpload([
         {
           vedleggId: crypto.randomUUID(),
-          errorMessage: formatMessage({id: 'søknad.vedlegg.fileinput.fileInputErrors.fileTooLarge'}),
+          errorMessage: formatMessage({
+            id: 'søknad.vedlegg.fileinput.fileInputErrors.fileTooLarge',
+          }),
           type: '',
           size: totalSize,
           name: `${fileArray.length} filer`,
@@ -86,7 +92,9 @@ export const FileInputInnsending = (props: FileInputProps) => {
       onUpload([
         {
           vedleggId: crypto.randomUUID(),
-          errorMessage: formatMessage({id: 'søknad.vedlegg.fileinput.fileInputErrors.fileTooLarge'}),
+          errorMessage: formatMessage({
+            id: 'søknad.vedlegg.fileinput.fileInputErrors.fileTooLarge',
+          }),
           type: '',
           size: totalSize,
           name: `${fileArray.length} filer`,
@@ -138,7 +146,7 @@ export const FileInputInnsending = (props: FileInputProps) => {
   }
 
   return (
-    <div className={'fileInput'} id={props.id}>
+    <div className={styles.fileInput} id={props.id}>
       <Heading size={'medium'}>{heading}</Heading>
       {ingress && <BodyShort>{ingress}</BodyShort>}
       {files?.map((file) => {
@@ -162,7 +170,7 @@ export const FileInputInnsending = (props: FileInputProps) => {
       })}
       <div
         data-testid={'dropzone'}
-        className={`dropzone ${dragOver ? 'dragover' : ''}`}
+        className={`${styles.dropzone} ${dragOver ? styles.dragover : ''}`}
         onDragEnter={() => setDragOver(true)}
         onDragLeave={() => setDragOver(false)}
         onDragOver={(e) => e.preventDefault()}
@@ -187,7 +195,7 @@ export const FileInputInnsending = (props: FileInputProps) => {
                   validateAndSetFiles(e.target.files);
                 }
               }}
-              className={'visuallyHidden'}
+              className={styles.visuallyHidden}
               tabIndex={-1}
               data-testid={'fileinput'}
               multiple={true}
@@ -195,13 +203,11 @@ export const FileInputInnsending = (props: FileInputProps) => {
               ref={fileInputElement}
               {...rest}
             />
-            <BodyShort>{formatMessage({id: 'søknad.vedlegg.fileinput.inputText'})}</BodyShort>
+            <BodyShort>{formatMessage({ id: 'søknad.vedlegg.fileinput.inputText' })}</BodyShort>
             <BodyShort>{'eller'}</BodyShort>
             <label htmlFor={inputId} aria-labelledby={props.id}>
               <span
-                className={
-                  'fileInputButton navds-button navds-button__inner navds-body-short navds-button--secondary'
-                }
+                className={`${styles.fileInputButton} navds-button navds-button__inner navds-body-short navds-button--secondary`}
                 role={'button'}
                 aria-controls={inputId}
                 tabIndex={0}
@@ -212,7 +218,8 @@ export const FileInputInnsending = (props: FileInputProps) => {
                 }}
               >
                 <UploadIcon title="Last opp filer" aria-hidden />
-                {formatMessage({id: 'søknad.vedlegg.fileinput.labelText'})} {heading.toLowerCase()}
+                {formatMessage({ id: 'søknad.vedlegg.fileinput.labelText' })}{' '}
+                {heading.toLowerCase()}
               </span>
             </label>
           </>

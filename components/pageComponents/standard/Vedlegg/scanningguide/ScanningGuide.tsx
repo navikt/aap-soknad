@@ -5,6 +5,8 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { scrollRefIntoView } from 'utils/dom';
 
+import styles from './ScanningGuide.module.css';
+
 export const ScanningGuide = () => {
   const { formatMessage } = useIntl();
   const [scanningGuideOpen, setScanningGuideOpen] = useState(false);
@@ -25,7 +27,7 @@ export const ScanningGuide = () => {
         onClick={() => setScanningGuideOpen(!scanningGuideOpen)}
         ref={scanningGuideElement}
       >
-        <div className={'scanning-guide'}>
+        <div className={styles.scanningGuide}>
           <article>
             <Label as="p" spacing>
               {formatMessage({ id: 'scanningGuide.alert.takePictureTitle' })}
@@ -47,14 +49,14 @@ export const ScanningGuide = () => {
               {formatMessage({ id: 'scanningGuide.alert.examplesPicturesTitle' })}
             </Label>
           </article>
-          <ul className={'scanning-examples'}>
-            <li className={'scanning-example'}>
+          <ul className={styles.scanningExamples}>
+            <li className={styles.scanningExample}>
               <ScanningIcon
                 status={'good'}
                 title={formatMessage({ id: 'scanningGuide.alert.exampleLabelGood' })}
               />
-              <div className="scanning-example-item">
-                <span className={'scanning-example-status'}>
+              <div className={styles.scanningExampleItem}>
+                <span className={styles.scanningExampleStatus}>
                   <CheckmarkCircleIcon color={'var(--a-green-600)'} />
                   <Label as="span">
                     {formatMessage({ id: 'scanningGuide.alert.exampleLabelGood' })}
@@ -63,13 +65,13 @@ export const ScanningGuide = () => {
                 <BodyShort>{formatMessage({ id: 'scanningGuide.alert.exampleGood' })}</BodyShort>
               </div>
             </li>
-            <li className={'scanning-example'}>
+            <li className={styles.scanningExample}>
               <ScanningIcon
                 status={'keystone'}
                 title={formatMessage({ id: 'scanningGuide.alert.exampleLabelBad' })}
               />
-              <div className="scanning-example-item">
-                <span className={'scanning-example-status'}>
+              <div className={styles.scanningExampleItem}>
+                <span className={styles.scanningExampleStatus}>
                   <XMarkOctagonIcon color={'var(--a-nav-red)'} />
                   <Label as="span">
                     {formatMessage({ id: 'scanningGuide.alert.exampleLabelBad' })}
@@ -80,13 +82,13 @@ export const ScanningGuide = () => {
                 </BodyShort>
               </div>
             </li>
-            <li className={'scanning-example'}>
+            <li className={styles.scanningExample}>
               <ScanningIcon
                 status={'horizontal'}
                 title={formatMessage({ id: 'scanningGuide.alert.exampleLabelBad' })}
               />
-              <div className="scanning-example-item">
-                <span className={'scanning-example-status'}>
+              <div className={styles.scanningExampleItem}>
+                <span className={styles.scanningExampleStatus}>
                   <XMarkOctagonIcon color={'var(--a-nav-red)'} />
                   <Label as="span">
                     {formatMessage({ id: 'scanningGuide.alert.exampleLabelBad' })}
@@ -97,13 +99,13 @@ export const ScanningGuide = () => {
                 </BodyShort>
               </div>
             </li>
-            <li className={'scanning-example'}>
+            <li className={styles.scanningExample}>
               <ScanningIcon
                 status={'shadow'}
                 title={formatMessage({ id: 'scanningGuide.alert.exampleLabelBad' })}
               />
-              <div className="scanning-example-item">
-                <span className={'scanning-example-status'}>
+              <div className={styles.scanningExampleItem}>
+                <span className={styles.scanningExampleStatus}>
                   <XMarkOctagonIcon color={'var(--a-nav-red)'} />
                   <Label as="span">
                     {formatMessage({ id: 'scanningGuide.alert.exampleLabelBad' })}
