@@ -1,8 +1,8 @@
 import { CheckmarkIcon, XMarkIcon } from '@navikt/aksel-icons';
 import { BodyShort, Detail, Link, Panel } from '@navikt/ds-react';
-import { Vedlegg } from './FileInput';
 
 import styles from './FileInputInnsending.module.css';
+import { Vedlegg } from 'types/Vedlegg';
 
 interface Props {
   file: Vedlegg;
