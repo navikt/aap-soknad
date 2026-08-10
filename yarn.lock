@@ -798,32 +798,32 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@grafana/faro-core@npm:^2.8.2":
-  version: 2.8.2
-  resolution: "@grafana/faro-core@npm:2.8.2"
+"@grafana/faro-core@npm:^2.9.0":
+  version: 2.9.0
+  resolution: "@grafana/faro-core@npm:2.9.0"
   dependencies:
     "@opentelemetry/api": "npm:^1.9.0"
     "@opentelemetry/otlp-transformer": "npm:^0.219.0"
-  checksum: 10c0/efac63dd5b399ee3a01f44e9aa328faecf82b9099ed732af178d4db21191f0ea4a0fdbd1a0f84b65e428692cbafbdaa970b8423bd30a3d9392b958018e09765f
+  checksum: 10c0/1f08c46a53e3cb88bd2901266965e7d76a15c997847e8d101c3d174a2b91d24e0a869ec49dd5146fb2c52c80104464999428f86cc336466cdba0b2752703d579
   languageName: node
   linkType: hard
 
-"@grafana/faro-web-sdk@npm:^2.8.2":
-  version: 2.8.2
-  resolution: "@grafana/faro-web-sdk@npm:2.8.2"
+"@grafana/faro-web-sdk@npm:^2.9.0":
+  version: 2.9.0
+  resolution: "@grafana/faro-web-sdk@npm:2.9.0"
   dependencies:
-    "@grafana/faro-core": "npm:^2.8.2"
+    "@grafana/faro-core": "npm:^2.9.0"
     ua-parser-js: "npm:1.0.41"
     web-vitals: "npm:^5.1.0"
-  checksum: 10c0/70c1eb5a7e2162ec7b52acd9c91d8162ef959af7ed1ad55cb1e21d528b0db52e4d611bb9bb3340338ab990fa241197f55f0bee8d143c4d118fa98d17db330a9c
+  checksum: 10c0/8703883ca3d19050f215df122ceafdee723802d7e49f210340dbb1e032dab08543cb88d1ac211c3eb69197dce0cc4aeb80e70dfd6f137ffc7f64ffe3e0f92cf6
   languageName: node
   linkType: hard
 
-"@grafana/faro-web-tracing@npm:2.8.2":
-  version: 2.8.2
-  resolution: "@grafana/faro-web-tracing@npm:2.8.2"
+"@grafana/faro-web-tracing@npm:2.9.0":
+  version: 2.9.0
+  resolution: "@grafana/faro-web-tracing@npm:2.9.0"
   dependencies:
-    "@grafana/faro-web-sdk": "npm:^2.8.2"
+    "@grafana/faro-web-sdk": "npm:^2.9.0"
     "@opentelemetry/api": "npm:^1.9.0"
     "@opentelemetry/core": "npm:^2.0.0"
     "@opentelemetry/exporter-trace-otlp-http": "npm:^0.219.0"
@@ -834,7 +834,7 @@ __metadata:
     "@opentelemetry/resources": "npm:^2.0.0"
     "@opentelemetry/sdk-trace-web": "npm:^2.0.0"
     "@opentelemetry/semantic-conventions": "npm:^1.32.0"
-  checksum: 10c0/2decb4b13477be252afb21d0c4d8dc3cc80bf00bae8f18013f7a2eb8f0f946bef0db7538d647f10031def554270d530f13355a856a83fe5813b6a4125c664d3f
+  checksum: 10c0/fa9be73551f9479febace158638ac462774176b4afd49c3729ad56d8403dc2451e4cc5efe6180edddde992d75f4bc988cff12a82ef15444d666407b0dbdb79e8
   languageName: node
   linkType: hard
 
@@ -1604,14 +1604,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@playwright/test@npm:^1.62.0":
-  version: 1.62.0
-  resolution: "@playwright/test@npm:1.62.0"
+"@playwright/test@npm:^1.62.1":
+  version: 1.62.1
+  resolution: "@playwright/test@npm:1.62.1"
   dependencies:
-    playwright: "npm:1.62.0"
+    playwright: "npm:1.62.1"
   bin:
     playwright: cli.js
-  checksum: 10c0/1132666c5cc4955fb043d41447475b4947e6571bd390e1b7c9fdcc9381cb58563fa7f86509a4a61e572e9b0f7ff2d9d9027eb9ee8b1f24bea7423b52b4308436
+  checksum: 10c0/4b76f2f717723f84a73601f74fde97f5d92e4b5c869cf87c0f5628bf247fa1d18c9dc6c8e136463303233239e8ce58f902513d4281a9fabc3c426e911ded2c83
   languageName: node
   linkType: hard
 
@@ -2494,15 +2494,15 @@ __metadata:
   resolution: "aap-soknad@workspace:."
   dependencies:
     "@axe-core/playwright": "npm:^4.12.1"
-    "@grafana/faro-web-sdk": "npm:^2.8.2"
-    "@grafana/faro-web-tracing": "npm:2.8.2"
+    "@grafana/faro-web-sdk": "npm:^2.9.0"
+    "@grafana/faro-web-tracing": "npm:2.9.0"
     "@navikt/ds-css": "npm:^7.40.0"
     "@navikt/ds-icons": "npm:^3.4.3"
     "@navikt/ds-react": "npm:^7.40.0"
     "@navikt/nav-dekoratoren-moduler": "npm:^3.7.3"
     "@navikt/next-api-proxy": "npm:3.4.2"
     "@navikt/oasis": "npm:^3.8.0"
-    "@playwright/test": "npm:^1.62.0"
+    "@playwright/test": "npm:^1.62.1"
     "@testing-library/dom": "npm:^10.4.1"
     "@testing-library/jest-dom": "npm:^6.9.1"
     "@testing-library/react": "npm:^16.3.2"
@@ -5705,13 +5705,13 @@ __metadata:
   linkType: hard
 
 "js-yaml@npm:^4.1.1":
-  version: 4.3.0
-  resolution: "js-yaml@npm:4.3.0"
+  version: 4.3.1
+  resolution: "js-yaml@npm:4.3.1"
   dependencies:
     argparse: "npm:^2.0.1"
   bin:
     js-yaml: bin/js-yaml.js
-  checksum: 10c0/058b30473d6915ca5b4feb11e2f7d4d97242f98d00a798ed48dd90b46b7c640398afe9128c5db22c5300f8c6528fe2a174b9a93f351a70ebc28c6203938d8bff
+  checksum: 10c0/13c500ca322e0c3f8c81686e6ecda96d2ea37b45247a420c17c7db36932d6965cc27391abc2d1a104501600e7f0d947a5f8b7be6db619c4fefa87901b3512807
   languageName: node
   linkType: hard
 
@@ -6344,21 +6344,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"nanoid@npm:^3.3.12":
-  version: 3.3.12
-  resolution: "nanoid@npm:3.3.12"
+"nanoid@npm:^3.3.12, nanoid@npm:^3.3.6":
+  version: 3.3.18
+  resolution: "nanoid@npm:3.3.18"
   bin:
     nanoid: bin/nanoid.cjs
-  checksum: 10c0/ba142b7b39e11e80c16dd74b0365d407880c87c1cf7e1480956981ae940ee36060fa5b6f092cd1e315184dd19244c657bd017d03327bd3c62247d691c5e8edfb
-  languageName: node
-  linkType: hard
-
-"nanoid@npm:^3.3.6":
-  version: 3.3.7
-  resolution: "nanoid@npm:3.3.7"
-  bin:
-    nanoid: bin/nanoid.cjs
-  checksum: 10c0/e3fb661aa083454f40500473bb69eedb85dc160e763150b9a2c567c7e9ff560ce028a9f833123b618a6ea742e311138b591910e795614a629029e86e180660f3
+  checksum: 10c0/b994b4e396730f8be2520923284e2040d61eaee55cc6d4935ef6d38d34bafdc46133eda4d3faea5073bda545aa6079d82b886caeac5c731cf9ac18bcc1301425
   languageName: node
   linkType: hard
 
@@ -6897,27 +6888,27 @@ __metadata:
   languageName: node
   linkType: hard
 
-"playwright-core@npm:1.62.0":
-  version: 1.62.0
-  resolution: "playwright-core@npm:1.62.0"
+"playwright-core@npm:1.62.1":
+  version: 1.62.1
+  resolution: "playwright-core@npm:1.62.1"
   bin:
     playwright-core: cli.js
-  checksum: 10c0/bc7c770cc4118a7ea65d2c357fc271aaef49af6b5b8964aa19d765d4ea3473e56af926f693123fd63ed6e580830059905722ac68fbf22a31a5b1533e11600228
+  checksum: 10c0/a37d0f03bb73364cfd0eba704c4b3359b609c4779ae2649a88d8e2b3a29c7357dfcc58bdcf0cb68ddffdef7687abf78902c8356e89f189682c7e19be38e108f0
   languageName: node
   linkType: hard
 
-"playwright@npm:1.62.0":
-  version: 1.62.0
-  resolution: "playwright@npm:1.62.0"
+"playwright@npm:1.62.1":
+  version: 1.62.1
+  resolution: "playwright@npm:1.62.1"
   dependencies:
     fsevents: "npm:2.3.2"
-    playwright-core: "npm:1.62.0"
+    playwright-core: "npm:1.62.1"
   dependenciesMeta:
     fsevents:
       optional: true
   bin:
     playwright: cli.js
-  checksum: 10c0/14d2d2c35e4ef88cf69d9e6c5bf351ff47fe9cd00da09da9f48da8aaf75ebdb266330c073cb217821785fb35d7e5d9d89789220b208329e4934aaaa43da260f3
+  checksum: 10c0/4d3522cd46325f50c46f8874d31f70d036f6983228a9f8b9d68fc249e4c17464edcd97cc4adfbb24e712d1829c1386d3bc24e17f58a1ced94e7c423300c21845
   languageName: node
   linkType: hard
 
