@@ -1,7 +1,6 @@
 import '@navikt/ds-css';
-import '@navikt/aap-felles-css';
 import 'styles/index.css';
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 import { IntlProvider } from 'react-intl';
 import { AppProps } from 'next/app';
 import links from 'translations/links.json';

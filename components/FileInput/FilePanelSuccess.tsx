@@ -1,7 +1,8 @@
 import { CheckmarkIcon, XMarkIcon } from '@navikt/aksel-icons';
 import { BodyShort, Detail, Link, Panel } from '@navikt/ds-react';
-import React from 'react';
 import { Vedlegg } from './FileInput';
+
+import styles from './FileInputInnsending.module.css';
 
 interface Props {
   file: Vedlegg;
@@ -12,12 +13,12 @@ interface Props {
 
 export const FilePanelSuccess = ({ file, onDelete, deleteUrl, readAttachmentUrl }: Props) => {
   return (
-    <Panel className={'fileCard'}>
-      <div className={'fileCardLeftContent'}>
-        <div className={'fileSuccess'}>
+    <Panel className={styles.fileCard}>
+      <div className={styles.fileCardLeftContent}>
+        <div className={styles.fileSuccess}>
           <CheckmarkIcon color={'var(--a-icon-success)'} />
         </div>
-        <div className={'fileInputText'}>
+        <div className={styles.fileInputText}>
           <Link target={'_blank'} href={`${readAttachmentUrl}${file.vedleggId}`}>
             {file.name}
           </Link>
@@ -33,7 +34,7 @@ export const FilePanelSuccess = ({ file, onDelete, deleteUrl, readAttachmentUrl 
         }}
         type={'button'}
         tabIndex={0}
-        className={'deleteAttachment'}
+        className={styles.deleteAttachment}
         data-testid={'slett-knapp'}
       >
         <XMarkIcon title={'Slett'} />
