@@ -1,8 +1,8 @@
 import { BodyShort, Label, Panel } from '@navikt/ds-react';
 import { ArrowUndoIcon, FileTextIcon } from '@navikt/aksel-icons';
-import { Vedlegg } from './FileInput';
 
 import styles from './FileInputInnsending.module.css';
+import { Vedlegg } from 'types/Vedlegg';
 
 interface Props {
   file: Vedlegg;

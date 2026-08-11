@@ -1,13 +1,26 @@
 import { UploadIcon } from '@navikt/aksel-icons';
 import { BodyShort, Heading, Loader } from '@navikt/ds-react';
-import React, { useMemo, useRef, useState } from 'react';
+import { InputHTMLAttributes, useMemo, useRef, useState } from 'react';
 
-import { FileInputProps, Vedlegg } from './FileInput';
 import { FilePanelError } from './FilePanelError';
 import { FilePanelSuccess } from './FilePanelSuccess';
 import { useIntl } from 'react-intl';
 
 import styles from './FileInputInnsending.module.css';
+import { Vedlegg } from 'types/Vedlegg';
+
+interface FileInputProps extends InputHTMLAttributes<HTMLInputElement> {
+  heading: string;
+  id: string;
+  onUpload: (attachments: Vedlegg[]) => void;
+  onDelete: (attachment: Vedlegg) => void;
+  deleteUrl: string;
+  uploadUrl: string;
+  readAttachmentUrl: string;
+  files: Vedlegg[];
+  ingress?: string;
+  locale?: string;
+}
 
 const MAX_TOTAL_FILE_SIZE = 52428800; // 50mb
 export const FileInputInnsending = (props: FileInputProps) => {
