@@ -12,37 +12,25 @@ import { Vedlegg } from 'types/Vedlegg';
 interface FileInputProps extends InputHTMLAttributes<HTMLInputElement> {
   heading: string;
   id: string;
+  files: Vedlegg[];
   onUpload: (attachments: Vedlegg[]) => void;
   onDelete: (attachment: Vedlegg) => void;
-  deleteUrl: string;
-  uploadUrl: string;
-  readAttachmentUrl: string;
-  files: Vedlegg[];
   ingress?: string;
-  locale?: string;
 }
 
 const MAX_TOTAL_FILE_SIZE = 52428800; // 50mb
 export const FileInputInnsending = (props: FileInputProps) => {
-  const {
-    heading,
-    ingress,
-    files,
-    onUpload,
-    onDelete,
-    uploadUrl,
-    deleteUrl,
-    id,
-    locale,
-    readAttachmentUrl = 'nb',
-    ...rest
-  } = props;
+  const { heading, ingress, files, onUpload, onDelete, id, ...rest } = props;
   const { formatMessage } = useIntl();
   const [dragOver, setDragOver] = useState<boolean>(false);
   const [isUploading, setIsUploading] = useState<boolean>(false);
   const [totalSizeIInnsending, setTotalSizeIInnsending] = useState<number>(0);
   const fileInputElement = useRef<HTMLInputElement>(null);
   const inputId = useMemo(() => crypto.randomUUID(), []);
+
+  const readAttachmentUrl = '/aap/soknad/vedlegg/';
+  const deleteUrl = '/aap/soknad/api/vedlegginnsending/slett/?uuid=';
+  const uploadUrl = '/aap/soknad/api/vedlegginnsending/lagre/';
 
   function feilmeldingForSubstatus(substatus: string) {
     switch (substatus) {
