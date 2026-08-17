@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { beskyttetApi } from 'auth/beskyttetApi';
-import { logError, logInfo } from '@navikt/aap-felles-utils';
+import { logError, logInfo } from 'lib/utils/logger';
 import { lesCache } from 'mock/mellomlagringsCache';
 import { isFunctionalTest, isMock } from 'utils/environments';
 import { defaultStepList } from 'pages';
@@ -27,7 +27,7 @@ export const hentMellomlagring = async (
   }
   if (isMock()) {
     const result = await lesCache();
-    return result ? JSON.parse(result) : {};
+    return result ? JSON.parse(result) : undefined;
   }
   try {
     const mellomlagretSøknad = await simpleTokenXProxy<SoknadContextState | string>({

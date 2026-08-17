@@ -1,4 +1,7 @@
-import fetch from 'cross-fetch';
+import crossFetch from 'cross-fetch';
+import { isDev } from 'utils/environments';
+
+const fetchClient = isDev() ? fetch : crossFetch;
 
 export const fetchPOST = async (url: string, payload: object, options?: RequestInit) => {
   const headers = {
@@ -6,7 +9,7 @@ export const fetchPOST = async (url: string, payload: object, options?: RequestI
     ...options?.headers,
   };
   try {
-    const res = await fetch(url, {
+    const res = await fetchClient(url, {
       method: 'POST',
       body: JSON.stringify(payload),
       headers,

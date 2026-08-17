@@ -1,7 +1,7 @@
-import { LucaGuidePanel } from '@navikt/aap-felles-react';
 import { BodyShort, Heading, Link } from '@navikt/ds-react';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { AmplitudeAwareAccordion } from '../AmplitudeAwareAccordion/AmplitudeAwareAccordion';
+import { LucaGuidePanel } from 'components/LucaGuidePanel';
 
 export const IntroduksjonTekst = ({ navn }: { navn?: string }) => {
   const { formatMessage } = useIntl();

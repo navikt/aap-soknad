@@ -1,8 +1,9 @@
 import { JaEllerNei } from 'types/Generic';
 import { getYrkesskadeSchema } from './Yrkesskade';
+import { describe, it, expect, vi } from 'vitest';
 
 describe('Yrkesskade validation', () => {
-  const schema = getYrkesskadeSchema(jest.fn());
+  const schema = getYrkesskadeSchema(vi.fn());
   it('ingenting utfylt', async () => {
     const result = await schema.validate({}, { abortEarly: false }).catch((err) => err);
     expect(result.errors.length).not.toBe(0);

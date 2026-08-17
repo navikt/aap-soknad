@@ -1,9 +1,10 @@
 import { JaEllerNei } from 'types/Generic';
 import { getBehandlerSchema } from './Behandlere';
 import { Fastlege } from 'pages/api/oppslag/fastlege';
+import { describe, vi, it, expect } from 'vitest';
 
 describe('Behandlere validation', () => {
-  const schema = getBehandlerSchema(jest.fn());
+  const schema = getBehandlerSchema(vi.fn());
   const fastlege: Fastlege = {
     navn: 'Lise Legesen',
     behandlerRef: 'd182f24b-ebca-4f44-bf86-65901ec6141b',

@@ -1,16 +1,24 @@
 /** @type {import('next').NextConfig} */
 
+const ssr = require('@navikt/nav-dekoratoren-moduler/ssr');
+
+const appDirectives = {
+  'connect-src': ["'self'"],
+  'font-src': ['https://fonts.gstatic.com'],
+  'object-src': ['blob:'],
+  'script-src-elem': ["'self'"],
+  'style-src-elem': ["'self'"],
+  'frame-src': ['self', 'blob:'],
+  'img-src': ["'self'", 'data:', 'blob:'],
+};
+
 const nextConfig = {
   basePath: '/aap/soknad',
   trailingSlash: true,
   reactStrictMode: true,
-  swcMinify: true, // Blir default på i Next 12.2
   output: 'standalone',
   assetPrefix: process.env.ASSET_PREFIX ?? undefined,
-
-  experimental: {
-    instrumentationHook: true,
-  },
+  serverExternalPackages: ['pino'],
 
   i18n: {
     locales: ['nb', 'nn'],
@@ -28,6 +36,9 @@ const nextConfig = {
   },
 
   async headers() {
+    const csp = await ssr.buildCspHeader(appDirectives, {
+      env: process.env.DECORATOR_ENV ?? 'prod',
+    });
     return [
       {
         // Append the "Service-Worker-Allowed" header
@@ -35,8 +46,8 @@ const nextConfig = {
         source: '/(.*)',
         headers: [
           {
-            key: 'Service-Worker-Allowed',
-            value: '/',
+            key: 'Content-Security-Policy',
+            value: csp,
           },
         ],
       },

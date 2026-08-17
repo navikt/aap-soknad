@@ -1,8 +1,7 @@
 import { Alert, BodyLong, BodyShort, Button, Heading, Link } from '@navikt/ds-react';
-import React from 'react';
 import * as classes from './Kvittering.module.css';
 import { SuccessStroke } from '@navikt/ds-icons';
-import { clientSideIsProd, isFunctionalTest } from 'utils/environments';
+import { isFunctionalTest, isProduction } from 'utils/environments';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { KrrKontaktInfo } from 'pages/api/oppslag/krr';
 import { Person } from 'pages/api/oppslagapi/person';
@@ -16,8 +15,8 @@ const Kvittering = ({ person, kontaktinformasjon }: Props) => {
   const { formatMessage } = useIntl();
 
   const mineAapUrl = () => {
-    if (clientSideIsProd()) {
-      return 'https://nav.no/aap/mine-aap';
+    if (isProduction()) {
+      return 'https://www.nav.no/aap/mine-aap';
     }
     if (isFunctionalTest()) {
       return process.env.NEXT_PUBLIC_MINE_AAP_URL;
@@ -25,7 +24,7 @@ const Kvittering = ({ person, kontaktinformasjon }: Props) => {
     return 'https://aap-mine-aap.ansatt.dev.nav.no/aap/mine-aap';
   };
 
-  const dittNavUrl = clientSideIsProd()
+  const dittNavUrl = isProduction()
     ? 'https://www.nav.no/person/dittnav/'
     : 'https://www.dev.nav.no/person/dittnav/';
 

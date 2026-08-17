@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { beskyttetApi } from 'auth/beskyttetApi';
-import { logError, logInfo } from '@navikt/aap-felles-utils';
+import { logError, logInfo } from 'lib/utils/logger';
 import { lagreCache } from 'mock/mellomlagringsCache';
 import { isFunctionalTest, isMock } from 'utils/environments';
 

@@ -1,15 +1,26 @@
-import { Alert, Button, ConfirmationPanel, Heading, Label } from '@navikt/ds-react';
+import {
+  Alert,
+  BodyShort,
+  Box,
+  Button,
+  Checkbox,
+  ErrorMessage,
+  Heading,
+  InfoCard,
+  Link,
+} from '@navikt/ds-react';
 import * as classes from './Veiledning.module.css';
 import { IntroduksjonTekst } from '../../../IntroduksjonTekst/IntroduksjonTekst';
 import { FormattedMessage, useIntl } from 'react-intl';
-import { FormEvent, useRef, useState } from 'react';
+import { FormEvent, RefObject, useState } from 'react';
 import { Person } from 'pages/api/oppslagapi/person';
+import { isProduction } from 'utils/environments';
 
 interface VeiledningProps {
   person?: Person;
   isLoading: boolean;
   hasError: boolean;
-  errorMessageRef: React.MutableRefObject<HTMLDivElement | null>;
+  errorMessageRef: RefObject<HTMLDivElement | null>;
   onSubmit: () => void;
 }
 export const Veiledning = ({
@@ -21,11 +32,11 @@ export const Veiledning = ({
 }: VeiledningProps) => {
   const { formatMessage } = useIntl();
   const [errorMessage, setErrorMessage] = useState<string | undefined>(undefined);
-  const confirmRef = useRef<HTMLInputElement>(null);
+  const [confirmation, setConfirmation] = useState(false);
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    if (!confirmRef.current?.checked) {
+    if (!confirmation) {
       setErrorMessage(
         formatMessage({ id: 'søknad.veiledning.veiledningConfirm.validation.required' }),
       );
@@ -56,26 +67,73 @@ export const Veiledning = ({
           )}
         </div>
 
-        <IntroduksjonTekst navn={person?.navn} />
+        {person?.erUnderAttenÅr && !isProduction() ? (
+          <InfoCard>
+            <InfoCard.Header>
+              <InfoCard.Title>
+                {formatMessage({ id: 'søknad.veiledning.søkerUnderAttenÅr.title' })}
+              </InfoCard.Title>
+            </InfoCard.Header>
+            <InfoCard.Content>
+              <FormattedMessage
+                id={'søknad.veiledning.søkerUnderAttenÅr.description'}
+                values={{
+                  a: (chunks) => (
+                    <Link
+                      target="_blank"
+                      href={formatMessage({
+                        id: 'applinks.ikkeInnloggetSkjema',
+                      })}
+                    >
+                      {chunks}
+                    </Link>
+                  ),
+                }}
+              />
+            </InfoCard.Content>
+          </InfoCard>
+        ) : (
+          <>
+            <IntroduksjonTekst navn={person?.navn} />
 
-        <form onSubmit={(event) => handleSubmit(event)} autoComplete="off">
-          <ConfirmationPanel
-            ref={confirmRef}
-            label={formatMessage({ id: 'søknad.veiledning.veiledningConfirm.label' })}
-            error={errorMessage}
-            onChange={() => setErrorMessage(undefined)}
-          >
-            <Label as={'span'}>
-              {formatMessage({ id: 'søknad.veiledning.veiledningConfirm.title' })}
-            </Label>
-          </ConfirmationPanel>
+            <form onSubmit={(event) => handleSubmit(event)} autoComplete="off">
+              <Box
+                background="surface-warning-subtle"
+                borderColor="border-warning"
+                borderWidth="1"
+                padding="space-16"
+                borderRadius="medium"
+              >
+                <BodyShort>
+                  {formatMessage({ id: 'søknad.veiledning.veiledningConfirm.description' })}{' '}
+                  <Link
+                    href={formatMessage({ id: 'søknad.veiledning.veiledningConfirm.link' })}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    {formatMessage({ id: 'søknad.veiledning.veiledningConfirm.readMore' })}
+                  </Link>
+                </BodyShort>
 
-          <div className={classes?.startButton}>
-            <Button variant="primary" type="submit" loading={isLoading}>
-              {formatMessage({ id: `søknad.veiledning.startSøknad` })}
-            </Button>
-          </div>
-        </form>
+                <Checkbox
+                  onChange={(e) => {
+                    setConfirmation(e.target.checked);
+                    setErrorMessage(undefined);
+                  }}
+                >
+                  {formatMessage({ id: 'søknad.veiledning.veiledningConfirm.checkbox' })}
+                </Checkbox>
+                {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
+              </Box>
+
+              <div className={classes?.startButton}>
+                <Button variant="primary" type="submit" loading={isLoading}>
+                  {formatMessage({ id: `søknad.veiledning.startSøknad` })}
+                </Button>
+              </div>
+            </form>
+          </>
+        )}
       </main>
     </>
   );

@@ -6,20 +6,18 @@ import * as yup from 'yup';
 import { completeAndGoToNextStep } from 'context/stepWizardContext';
 import { useStepWizard } from 'hooks/StepWizardHook';
 import { EndreEllerLeggTilBehandlerModal } from './EndreEllerLeggTilBehandlerModal';
-import { LucaGuidePanel } from '@navikt/aap-felles-react';
 import * as classes from './Behandlere.module.css';
 import { useDebounceLagreSoknad } from 'hooks/useDebounceLagreSoknad';
 import { JaEllerNei } from 'types/Generic';
 import { IntlFormatters, useIntl } from 'react-intl';
 import SoknadFormWrapperNew from 'components/SoknadFormWrapper/SoknadFormWrapper';
 import { setFocusOnErrorSummary, SøknadValidationError } from 'components/schema/FormErrorSummary';
-import { v4 as uuid4 } from 'uuid';
-import { logSkjemastegFullførtEvent } from 'utils/amplitude';
 import { validate } from 'lib/utils/validationUtils';
 import { RegistrertBehandler } from 'components/pageComponents/standard/Behandlere/RegistrertBehandler';
 import { AnnenBehandler } from 'components/pageComponents/standard/Behandlere/AnnenBehandler';
 import { useSoknad } from 'hooks/SoknadHook';
 import { updateSøknadData } from 'context/soknadcontext/actions';
+import { LucaGuidePanel } from 'components/LucaGuidePanel';
 
 interface Props {
   onBackClick: () => void;
@@ -46,7 +44,7 @@ export const Behandlere = ({ onBackClick }: Props) => {
 
   const { formatMessage } = useIntl();
   const { søknadState, søknadDispatch } = useSoknad();
-  const { currentStepIndex, stepWizardDispatch } = useStepWizard();
+  const { stepWizardDispatch } = useStepWizard();
   const { stepList } = useStepWizard();
   const debouncedLagre = useDebounceLagreSoknad<Soknad>();
 
@@ -87,7 +85,6 @@ export const Behandlere = ({ onBackClick }: Props) => {
             setErrors(errors);
             setFocusOnErrorSummary();
           } else {
-            logSkjemastegFullførtEvent(currentStepIndex ?? 0);
             completeAndGoToNextStep(stepWizardDispatch);
           }
         }}
@@ -182,7 +179,7 @@ export const Behandlere = ({ onBackClick }: Props) => {
           if (behandler.id === undefined) {
             append({
               ...behandler,
-              id: uuid4(),
+              id: crypto.randomUUID(),
             });
           } else {
             update(behandler);

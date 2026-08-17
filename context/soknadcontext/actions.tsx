@@ -1,10 +1,10 @@
 import { AttachmentType, RequiredVedlegg } from 'types/SoknadContext';
-import { Vedlegg } from '@navikt/aap-felles-react';
 import { Soknad, SoknadVedlegg } from 'types/Soknad';
 import { Dispatch } from 'react';
 import { SoknadContextState } from './soknadContext';
 import { Barn } from 'pages/api/oppslag/barn';
 import { Fastlege } from 'pages/api/oppslag/fastlege';
+import { Vedlegg } from 'types/Vedlegg';
 
 export enum SoknadActionKeys {
   SET_STATE_FROM_CACHE = 'SET_STATE_FROM_CACHE',

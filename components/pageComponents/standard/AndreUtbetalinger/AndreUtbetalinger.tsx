@@ -16,14 +16,12 @@ import { Soknad } from 'types/Soknad';
 import * as yup from 'yup';
 import { completeAndGoToNextStep } from 'context/stepWizardContext';
 import ColorPanel from 'components/panel/ColorPanel';
-import { LucaGuidePanel } from '@navikt/aap-felles-react';
 import { useDebounceLagreSoknad } from 'hooks/useDebounceLagreSoknad';
 import { setFocusOnErrorSummary } from 'components/schema/FormErrorSummary';
 import { IntlFormatters, useIntl } from 'react-intl';
 import SoknadFormWrapperNew from 'components/SoknadFormWrapper/SoknadFormWrapper';
 import { validate } from 'lib/utils/validationUtils';
 import { SøknadValidationError } from 'components/schema/FormErrorSummary';
-import { logSkjemastegFullførtEvent } from 'utils/amplitude';
 import { AttachmentType } from 'types/SoknadContext';
 
 import {
@@ -33,6 +31,7 @@ import {
 } from 'context/soknadcontext/actions';
 import { useSoknad } from 'hooks/SoknadHook';
 import { useStepWizard } from 'hooks/StepWizardHook';
+import { LucaGuidePanel } from 'components/LucaGuidePanel';
 
 interface Props {
   onBackClick: () => void;
@@ -111,7 +110,7 @@ export const getAndreUtbetalingerSchema = (formatMessage: IntlFormatters['format
 export const AndreUtbetalinger = ({ onBackClick }: Props) => {
   const [errors, setErrors] = useState<SøknadValidationError[] | undefined>();
   const { søknadState, søknadDispatch } = useSoknad();
-  const { stepList, currentStepIndex, stepWizardDispatch } = useStepWizard();
+  const { stepList, stepWizardDispatch } = useStepWizard();
   const { formatMessage } = useIntl();
   const debouncedLagre = useDebounceLagreSoknad<Soknad>();
 
@@ -202,7 +201,7 @@ export const AndreUtbetalinger = ({ onBackClick }: Props) => {
           setFocusOnErrorSummary();
           return;
         }
-        logSkjemastegFullførtEvent(currentStepIndex ?? 0);
+
         completeAndGoToNextStep(stepWizardDispatch);
       }}
       onBack={() => {

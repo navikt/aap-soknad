@@ -1,8 +1,9 @@
 import { beskyttetApi } from 'auth/beskyttetApi';
 import { getStringFromPossiblyArrayQuery } from 'utils/string';
-import { getTokenX } from '@navikt/aap-felles-utils';
+import { requestOboToken } from '@navikt/oasis';
 import { proxyApiRouteRequest } from '@navikt/next-api-proxy';
 import { getAccessTokenFromRequest } from 'auth/accessToken';
+import { logError } from 'lib/utils/logger';
 
 const handler = beskyttetApi(async (req, res) => {
   const uuid = getStringFromPossiblyArrayQuery(req.query.uuid);
@@ -12,9 +13,11 @@ const handler = beskyttetApi(async (req, res) => {
     const accessToken = getAccessTokenFromRequest(req)?.substring('Bearer '.length)!;
     let tokenxToken;
     try {
-      tokenxToken = await getTokenX(accessToken, process.env.INNSENDING_AUDIENCE!);
+      const result = await requestOboToken(accessToken, process.env.INNSENDING_AUDIENCE!);
+      if (!result.ok) throw result.error;
+      tokenxToken = result.token;
     } catch (err: any) {
-      console.log('getTokenXError', err);
+      logError('getTokenXError', err);
     }
     return await proxyApiRouteRequest({
       hostname: 'innsending',

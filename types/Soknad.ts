@@ -3,10 +3,10 @@ import { Relasjon } from 'components/pageComponents/standard/Barnetillegg/AddBar
 import { JaEllerNei, JaNeiVetIkke } from './Generic';
 import { JaNeiAvbrutt } from 'components/pageComponents/standard/Student/Student';
 import { FerieType } from 'components/pageComponents/standard/StartDato/StartDato';
-import { Vedlegg } from '@navikt/aap-felles-react';
 import { Barn } from 'pages/api/oppslag/barn';
 import { Fastlege } from 'pages/api/oppslag/fastlege';
 import { OppslagBehandler } from 'context/sokerOppslagContext';
+import { Vedlegg } from 'types/Vedlegg';
 
 export type Navn = {
   fornavn?: string;
@@ -22,7 +22,9 @@ export type UtenlandsPeriode = {
   id?: string;
   land?: string;
   tilDato?: Date;
+  tilDatoLocalDate?: string;
   fraDato?: Date;
+  fraDatoLocalDate?: string;
   iArbeid?: JaEllerNei;
   utenlandsId?: string;
 };
@@ -105,8 +107,16 @@ interface Ident {
   identifikator?: string;
 }
 
+export interface ManueltOppgittBarn {
+  navn?: string;
+  fødselsdato?: Date;
+  ident?: Ident;
+  relasjon?: string;
+}
+
 export interface OppgitteBarn {
   identer?: Ident[];
+  barn?: ManueltOppgittBarn[];
 }
 
 export interface Soknad {

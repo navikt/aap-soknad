@@ -1,8 +1,10 @@
 import { render, screen } from '@testing-library/react';
-import { axe, toHaveNoViolations } from 'jest-axe';
 import { Step, StepWizard } from './index';
 import { StepWizardContext, StepWizardContextState } from 'context/stepWizardContext';
 import { BodyShort } from '@navikt/ds-react';
+import { describe, expect, it } from 'vitest';
+
+import { axe } from 'vitest-axe';
 
 // SET UP DUMMY DATA FOR CONTEXT
 enum stepNames {
@@ -41,8 +43,6 @@ const MyWizard = () => (
   </StepWizard>
 );
 
-expect.extend(toHaveNoViolations);
-
 describe('StepWizard', () => {
   it('render StepWizard med steg', () => {
     renderWithContext(<MyWizard />, {});
@@ -52,7 +52,7 @@ describe('StepWizard', () => {
   it('uu-sjekk', async () => {
     const { container } = renderWithContext(<MyWizard />, {});
     const res = await axe(container);
-
+    // @ts-expect-error Det er noe med extend som ikke fungerer helt. TS er misfornøyd men koden kjører
     expect(res).toHaveNoViolations();
   });
 });

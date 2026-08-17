@@ -9,7 +9,7 @@ import {
   stønadTypeToAlternativNøkkel,
 } from 'components/pageComponents/standard/AndreUtbetalinger/AndreUtbetalinger';
 import { Soknad, SoknadVedlegg } from 'types/Soknad';
-import { formatDate } from './date';
+import { formatDate, toLocalDateString } from './date';
 import { formatFullAdresse, formatNavn } from 'utils/StringFormatters';
 import { RequiredVedlegg } from 'types/SoknadContext';
 import { Relasjon } from 'components/pageComponents/standard/Barnetillegg/AddBarnModal';
@@ -139,8 +139,8 @@ export const mapSøknadToPdf = (
                   ...createField('Land', opphold.land ? opphold.land.split(':')[1] : undefined),
                   ...createField(
                     'Periode',
-                    `Fra ${formatDate(opphold?.fraDato, 'MMMM yyyy')} til ${formatDate(
-                      opphold?.tilDato,
+                    `Fra ${formatDate(opphold?.fraDatoLocalDate ?? opphold?.fraDato, 'MMMM yyyy')} til ${formatDate(
+                      opphold?.tilDatoLocalDate ?? opphold?.tilDato,
                       'MMMM yyyy',
                     )}`,
                   ),
@@ -239,28 +239,28 @@ export const mapSøknadToPdf = (
   };
   const getBarn = (søknad?: Soknad) => {
     const registrerteBarn = !søknad?.barn?.length
-      ? createFritekst('Fant ingen registrerte barn')
+      ? createFritekst('Fant ingen registrerte barn under 18 år')
       : søknad?.barn?.map((barn) =>
           createFeltgruppe([
             ...createField('Navn', barn?.navn),
             ...createField('Fødselsdato', formatDate(barn?.fødselsdato) || ''),
           ]),
         ) || [];
-    return createTema('Barn fra folkeregisteret', [...registrerteBarn]);
+    return createTema('Barn under 18 år fra folkeregisteret', [...registrerteBarn]);
   };
   const getAndreBarn = (søknad?: Soknad) => {
     const andreBarn = !søknad?.manuelleBarn?.length
       ? createFritekst('Ingen barn lagt til av søker')
-      : søknad?.manuelleBarn?.map((barn) =>
-          createFeltgruppe([
+      : søknad?.manuelleBarn?.map((barn) => {
+          return createFeltgruppe([
             ...createField('Navn', formatNavn(barn?.navn)),
-            ...createField('Fødselsdato', barn?.fødseldato ? formatDate(barn.fødseldato) : ''),
+            ...createField('Fødselsdato', toLocalDateString(barn.fødseldato) || ''),
             ...createField(
               formatMessage({ id: 'søknad.barnetillegg.leggTilBarn.modal.relasjon.label' }),
               barn?.relasjon,
             ),
-          ]),
-        ) || [];
+          ]);
+        }) || [];
     return createTema('Andre barn (lagt til av søker)', [...andreBarn]);
   };
   const getAndreYtelser = (søknad?: Soknad) => {

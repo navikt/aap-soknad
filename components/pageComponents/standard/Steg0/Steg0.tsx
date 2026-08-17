@@ -24,12 +24,12 @@ export const Steg0 = ({ onNext, person }: Props) => {
 
       <div>
         <Label as="p" spacing>
-          {formatMessage({ id: 'søknad.veiledning.veiledningConfirm.title' })}
+          {formatMessage({ id: 'søknad.veiledning.veiledningConfirm.description' })}
         </Label>
         <div style={{ display: 'flex', gap: '0.25rem', alignItems: 'center' }}>
           <SuccessColored />
           <BodyShort>
-            {formatMessage({ id: 'søknad.veiledning.veiledningConfirm.label' })}
+            {formatMessage({ id: 'søknad.veiledning.veiledningConfirm.checkbox' })}
           </BodyShort>
         </div>
       </div>

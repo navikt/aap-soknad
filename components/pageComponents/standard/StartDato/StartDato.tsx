@@ -6,19 +6,18 @@ import ColorPanel from 'components/panel/ColorPanel';
 import * as yup from 'yup';
 import { completeAndGoToNextStep } from 'context/stepWizardContext';
 import { useStepWizard } from 'hooks/StepWizardHook';
-import { LucaGuidePanel } from '@navikt/aap-felles-react';
 import { useDebounceLagreSoknad } from 'hooks/useDebounceLagreSoknad';
 import * as classes from './StartDato.module.css';
 import { setFocusOnErrorSummary } from 'components/schema/FormErrorSummary';
 import SoknadFormWrapperNew from 'components/SoknadFormWrapper/SoknadFormWrapper';
 import { validate } from 'lib/utils/validationUtils';
-import { logSkjemastegFullførtEvent } from 'utils/amplitude';
 import { SøknadValidationError } from 'components/schema/FormErrorSummary';
 import { IntlFormatters, useIntl } from 'react-intl';
 import TilDato from './TilDato';
 import FraDato from './FraDato';
 import { useSoknad } from 'hooks/SoknadHook';
 import { updateSøknadData } from 'context/soknadcontext/actions';
+import { LucaGuidePanel } from 'components/LucaGuidePanel';
 
 export enum FerieType {
   DAGER = 'DAGER',
@@ -123,7 +122,7 @@ export const getStartDatoSchema = (formatMessage: IntlFormatters['formatMessage'
 const StartDato = ({ onBackClick }: Props) => {
   const { formatMessage } = useIntl();
   const debouncedLagre = useDebounceLagreSoknad<Soknad>();
-  const { currentStepIndex, stepWizardDispatch, stepList } = useStepWizard();
+  const { stepWizardDispatch, stepList } = useStepWizard();
 
   const [errors, setErrors] = useState<SøknadValidationError[] | undefined>();
   const { søknadState, søknadDispatch } = useSoknad();
@@ -157,7 +156,6 @@ const StartDato = ({ onBackClick }: Props) => {
           return;
         }
 
-        logSkjemastegFullførtEvent(currentStepIndex ?? 0);
         completeAndGoToNextStep(stepWizardDispatch);
       }}
       onBack={() => {

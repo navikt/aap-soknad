@@ -3,6 +3,7 @@ import {
   BodyLong,
   BodyShort,
   Button,
+  Checkbox,
   Heading,
   Modal,
   Radio,
@@ -21,8 +22,7 @@ import { add, format, isValid, parse, sub } from 'date-fns';
 import { IntlFormatters, useIntl } from 'react-intl';
 import { mapValidationErrorToSøknadValidationError } from 'lib/utils/validationUtils';
 import { useFormErrors } from 'hooks/FormErrorHook';
-import { v4 as uuid4 } from 'uuid';
-import { erKelvinSoknad } from 'utils/environments';
+import { erGyldigFødselsnummer } from 'lib/utils/fnr';
 
 interface Props {
   søknad?: Soknad;
@@ -45,6 +45,7 @@ export interface CreateOrUpdateManuelleBarn {
   fødseldato?: Date;
   relasjon?: Relasjon;
   fnr?: string;
+  ukjentFnr?: boolean;
 }
 
 const ALDER_BARN_ÅR = 18;
@@ -84,7 +85,31 @@ export const getAddBarnSchema = (formatMessage: IntlFormatters['formatMessage'])
           id: 'søknad.barnetillegg.leggTilBarn.modal.fødselsdato.validation.typeError',
         }),
       ),
-    fnr: yup.string().nullable(),
+    fnr: yup.string().when('ukjentFnr', {
+      is: true,
+      then: (schema) => schema.notRequired(),
+      otherwise: (schema) =>
+        schema
+          .required(
+            formatMessage({
+              id: 'søknad.barnetillegg.leggTilBarn.modal.fødselsnummer.validation.required',
+            }),
+          )
+          .matches(
+            /\d{11}/,
+            formatMessage({
+              id: 'søknad.barnetillegg.leggTilBarn.modal.fødselsnummer.validation.matches',
+            }),
+          )
+          .test(
+            'valid-format',
+            formatMessage({
+              id: 'søknad.barnetillegg.leggTilBarn.modal.fødselsnummer.validation.valid',
+            }),
+            erGyldigFødselsnummer,
+          ),
+    }),
+    ukjentFnr: yup.boolean().notRequired(),
     relasjon: yup
       .string()
       .required(
@@ -158,7 +183,7 @@ export const AddBarnModal = ({
                 } else {
                   appendManuelleBarn({
                     ...result,
-                    internId: uuid4(),
+                    internId: crypto.randomUUID(),
                     fnr: result.fnr ?? undefined,
                   });
                 }
@@ -213,17 +238,45 @@ export const AddBarnModal = ({
               }}
             />
 
-            {erKelvinSoknad() && (
-              <TextField
-                label="FNR"
-                name={'fnr'}
-                id="fnr"
-                value={barn?.fnr}
-                onChange={(event) => {
+            <div>
+              {!barn.ukjentFnr && (
+                <TextField
+                  label={formatMessage({
+                    id: 'søknad.barnetillegg.leggTilBarn.modal.fødselsnummer.label',
+                  })}
+                  name={'fnr'}
+                  id="fnr"
+                  value={barn?.fnr}
+                  onChange={(event) => {
+                    clearErrors();
+                    setBarn({ ...barn, fnr: event.target.value });
+                  }}
+                  error={findError('fnr')}
+                  disabled={barn.ukjentFnr}
+                />
+              )}
+
+              <Checkbox
+                id="ukjentFnr"
+                name="ukjentFnr"
+                checked={barn?.ukjentFnr}
+                onClick={(event) => {
                   clearErrors();
-                  setBarn({ ...barn, fnr: event.target.value });
+                  setBarn({
+                    ...barn,
+                    fnr: undefined,
+                    ukjentFnr: (event.target as HTMLInputElement).checked,
+                  });
                 }}
-              />
+              >
+                {formatMessage({ id: 'søknad.barnetillegg.leggTilBarn.modal.ukjentFnr.label' })}
+              </Checkbox>
+            </div>
+
+            {barn.ukjentFnr && (
+              <Alert variant="info">
+                {formatMessage({ id: 'søknad.barnetillegg.leggTilBarn.modal.ukjentFnr.warning' })}
+              </Alert>
             )}
 
             <RadioGroup

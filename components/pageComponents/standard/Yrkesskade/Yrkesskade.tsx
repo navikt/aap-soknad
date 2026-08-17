@@ -14,16 +14,15 @@ import { JaEllerNei } from 'types/Generic';
 import * as yup from 'yup';
 import { completeAndGoToNextStep } from 'context/stepWizardContext';
 import { useStepWizard } from 'hooks/StepWizardHook';
-import { LucaGuidePanel } from '@navikt/aap-felles-react';
 import { useDebounceLagreSoknad } from 'hooks/useDebounceLagreSoknad';
 import { setFocusOnErrorSummary } from 'components/schema/FormErrorSummary';
 import { FormattedMessage, IntlFormatters, useIntl } from 'react-intl';
-import { logSkjemastegFullførtEvent } from 'utils/amplitude';
 import { validate } from 'lib/utils/validationUtils';
 import { SøknadValidationError } from 'components/schema/FormErrorSummary';
 import SoknadFormWrapperNew from 'components/SoknadFormWrapper/SoknadFormWrapper';
 import { useSoknad } from 'hooks/SoknadHook';
 import { updateSøknadData } from 'context/soknadcontext/actions';
+import { LucaGuidePanel } from 'components/LucaGuidePanel';
 
 interface Props {
   onBackClick: () => void;
@@ -42,7 +41,7 @@ export const Yrkesskade = ({ onBackClick }: Props) => {
   const { formatMessage } = useIntl();
 
   const { søknadState, søknadDispatch } = useSoknad();
-  const { currentStepIndex, stepWizardDispatch, stepList } = useStepWizard();
+  const { stepWizardDispatch, stepList } = useStepWizard();
 
   const debouncedLagre = useDebounceLagreSoknad<Soknad>();
 
@@ -62,7 +61,6 @@ export const Yrkesskade = ({ onBackClick }: Props) => {
           return;
         }
 
-        logSkjemastegFullførtEvent(currentStepIndex ?? 0);
         completeAndGoToNextStep(stepWizardDispatch);
       }}
       onBack={() => {

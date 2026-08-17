@@ -1,9 +1,10 @@
-import { add, sub } from 'date-fns';
+import { add } from 'date-fns';
 import { JaEllerNei } from 'types/Generic';
 import { FerieType, getStartDatoSchema } from './StartDato';
+import { describe, expect, it, vi } from 'vitest';
 
 describe('StartDato validation', () => {
-  const schema = getStartDatoSchema(jest.fn());
+  const schema = getStartDatoSchema(vi.fn());
   it('ingenting utfylt', async () => {
     const result = await schema.validate({}, { abortEarly: false }).catch((err) => err);
     expect(result.errors.length).not.toBe(0);

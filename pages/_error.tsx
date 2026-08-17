@@ -1,5 +1,4 @@
-import { BodyShort, Box, Button, HGrid, Heading, Link, List, Page, VStack } from '@navikt/ds-react';
-import Body from '@navikt/ds-react/esm/table/Body';
+import { BodyShort, Box, HGrid, Heading, Link, List, Page, VStack } from '@navikt/ds-react';
 
 const ErrorPage = () => {
   return (

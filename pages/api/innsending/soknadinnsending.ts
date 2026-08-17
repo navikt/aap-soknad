@@ -1,13 +1,13 @@
 import { beskyttetApi } from 'auth/beskyttetApi';
-import { logError } from '@navikt/aap-felles-utils';
+import { logError } from 'lib/utils/logger';
 import { NextApiRequest, NextApiResponse } from 'next';
 import metrics from 'utils/metrics';
 import { ErrorMedStatus } from 'lib/utils/api/ErrorMedStatus';
-import { isFunctionalTest, isMock } from 'utils/environments';
+import { isFunctionalTest, isMock, isDev } from 'utils/environments';
 import { createIntl } from 'react-intl';
 import { flattenMessages, messages } from 'utils/message';
 import links from 'translations/links.json';
-import { Soknad } from 'types/Soknad';
+import { ManueltOppgittBarn, Soknad } from 'types/Soknad';
 import { mapSøknadToPdf } from 'utils/api';
 import { getAndreUtbetalingerSchema } from 'components/pageComponents/standard/AndreUtbetalinger/AndreUtbetalinger';
 import { getBehandlerSchema } from 'components/pageComponents/standard/Behandlere/EndreEllerLeggTilBehandlerModal';
@@ -21,6 +21,10 @@ import { deleteCache } from 'mock/mellomlagringsCache';
 import { simpleTokenXProxy } from 'lib/utils/api/simpleTokenXProxy';
 import { IncomingMessage } from 'http';
 import { søknadVedleggStateTilFilArray } from 'utils/vedlegg';
+import { formatNavn } from 'utils/StringFormatters';
+import { format, isValid } from 'date-fns';
+import { toLocalDateString } from '../../../utils/date';
+import { getPerson } from 'pages/api/oppslagapi/person';
 
 // TODO: Sjekke om vi må generere pdf på samme språk som bruker har valgt når de fyller ut søknaden
 function getIntl() {
@@ -70,6 +74,12 @@ const søknadIsValid = (søknad: Soknad) => {
 };
 
 const handler = beskyttetApi(async (req: NextApiRequest, res: NextApiResponse) => {
+  const person = await getPerson(req);
+  if (isDev() && person.erUnderAttenÅr) {
+    res.status(403).json({ errorMessage: 'Du må være 18 år eller eldre for å sende inn søknad' });
+    return;
+  }
+
   const { søknad, requiredVedlegg } = req.body as {
     søknad: Soknad;
     requiredVedlegg: RequiredVedlegg[];
@@ -83,7 +93,8 @@ const handler = beskyttetApi(async (req: NextApiRequest, res: NextApiResponse) =
     return;
   }
 
-  const { formatMessage } = getIntl();
+
+    const { formatMessage } = getIntl();
   const søknadPdf = mapSøknadToPdf(søknad, new Date(), formatMessage, []);
 
   /**
@@ -96,15 +107,22 @@ const handler = beskyttetApi(async (req: NextApiRequest, res: NextApiResponse) =
           ...søknad,
           version: SOKNAD_VERSION,
           etterspurtDokumentasjon,
-          ...(søknad.manuelleBarn &&
-            søknad.manuelleBarn.length > 0 &&
-            søknad.manuelleBarn.some((barn) => barn.fnr) && {
+          ...(!!søknad.manuelleBarn?.length && {
               oppgitteBarn: {
                 identer: søknad.manuelleBarn
                   .filter((barn) => barn.fnr)
                   .map((barn) => ({
                     identifikator: barn.fnr,
                   })),
+                barn: søknad.manuelleBarn.map(
+                  (barn) =>
+                    ({
+                      navn: formatNavn(barn.navn),
+                      fødselsdato: toLocalDateString(barn.fødseldato),
+                      ident: barn.fnr ? { identifikator: barn.fnr } : undefined,
+                      relasjon: barn.relasjon,
+                    }) as ManueltOppgittBarn,
+                ),
               },
             }),
         },

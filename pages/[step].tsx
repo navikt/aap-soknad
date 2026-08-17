@@ -19,10 +19,10 @@ import Vedlegg from 'components/pageComponents/standard/Vedlegg/Vedlegg';
 import Oppsummering from 'components/pageComponents/standard/Oppsummering/Oppsummering';
 import { beskyttetSide } from 'auth/beskyttetSide';
 import { GetServerSidePropsResult, NextPageContext } from 'next';
-import { getAccessToken } from 'auth/accessToken';
-import { logSkjemaFullførtEvent, logVeiledningVistEvent } from 'utils/amplitude';
+import { IncomingMessage } from 'http';
 import metrics from 'utils/metrics';
 import { scrollRefIntoView } from 'utils/dom';
+import { isDev } from 'utils/environments';
 import { Steg0 } from 'components/pageComponents/standard/Steg0/Steg0';
 import * as classes from './step.module.css';
 import { FormattedMessage } from 'react-intl';
@@ -38,7 +38,7 @@ import { getKrr, KrrKontaktInfo } from 'pages/api/oppslag/krr';
 import { Barn, getBarn } from 'pages/api/oppslag/barn';
 import { hentMellomlagring } from 'pages/api/mellomlagring/les';
 import { RequiredVedlegg } from 'types/SoknadContext';
-import { logError, logInfo } from '@navikt/aap-felles-utils';
+import { logError, logInfo, logWarning } from 'lib/utils/logger';
 import { parse } from 'date-fns';
 import { Fastlege, getFastlege } from 'pages/api/oppslag/fastlege';
 import { migrerMellomlagretBehandler } from 'lib/utils/migrerMellomlagretBehandler';
@@ -109,16 +109,6 @@ const Steps = ({ person, mellomlagretSøknad, kontaktinformasjon, barn, fastlege
       );
 
       if (postResponse?.ok) {
-        const harVedlegg = søknadState.requiredVedlegg && søknadState?.requiredVedlegg?.length > 0;
-        const erIkkeKomplett = !!søknadState?.requiredVedlegg?.find(
-          (vedlegg) => !vedlegg.completed,
-        );
-        const yrkesskade = søknadState?.søknad?.yrkesskade;
-        const brukerFritekstfelt =
-          søknadState?.søknad?.tilleggsopplysninger !== undefined &&
-          søknadState?.søknad?.tilleggsopplysninger.length > 0;
-        logSkjemaFullførtEvent({ harVedlegg, erIkkeKomplett, brukerFritekstfelt, yrkesskade });
-
         router.push('kvittering');
         return true;
       } else if (postResponse?.status === 412) {
@@ -178,7 +168,6 @@ const Steps = ({ person, mellomlagretSøknad, kontaktinformasjon, barn, fastlege
               {step === '1' && (
                 <StartDato
                   onBackClick={() => {
-                    logVeiledningVistEvent();
                     router.push('0');
                   }}
                 />
@@ -224,9 +213,9 @@ const StepsWithContextProvider = (props: PageProps) => (
   </SoknadContextProvider>
 );
 
-const hentFastlege = async (bearerToken?: string) => {
+const hentFastlege = async (req: IncomingMessage) => {
   try {
-    return await getFastlege(bearerToken);
+    return await getFastlege(req);
   } catch (e) {
     logError('Noe gikk galt i kallet mot oppslag/fastlege', e);
     return [];
@@ -238,16 +227,26 @@ export const getServerSideProps = beskyttetSide(
     const stopTimer = metrics.getServersidePropsDurationHistogram.startTimer({
       path: '/[steg]',
     });
-    const bearerToken = getAccessToken(ctx);
     const person = await getPerson(ctx.req);
-    let kontaktinformasjon: KrrKontaktInfo | null = null;
-    try {
-      kontaktinformasjon = await getKrr(bearerToken);
-    } catch (e) {
-      logError(`Noe gikk galt i kallet mot oppslag/krr`, e);
+
+    if (isDev() && person.erUnderAttenÅr) {
+      logInfo('Bruker er ikke over 18 år, redirecter til startsiden');
+      return {
+        redirect: {
+          destination: '/',
+          permanent: false,
+        },
+      };
     }
 
-    const fastlege = await hentFastlege(bearerToken);
+    let kontaktinformasjon: KrrKontaktInfo | null = null;
+    try {
+      kontaktinformasjon = await getKrr(ctx.req!);
+    } catch (e) {
+      logWarning('Noe gikk galt i kallet mot oppslag/krr', e);
+    }
+
+    const fastlege = await hentFastlege(ctx.req!);
 
     let mellomlagretSøknad: SoknadContextState | undefined;
     try {
@@ -262,7 +261,7 @@ export const getServerSideProps = beskyttetSide(
 
     let barn: Barn[] = [];
     try {
-      barn = await getBarn(bearerToken);
+      barn = await getBarn(ctx.req!);
       barn.sort((barnA, barnB) => {
         const a = parse(barnA.fødselsdato, 'yyyy-MM-dd', new Date() as any);
         const b = parse(barnB.fødselsdato, 'yyyy-MM-dd', new Date() as any);

@@ -1,7 +1,8 @@
 import { getToken, requestOboToken, validateToken } from '@navikt/oasis';
-import { logError, logInfo, logWarning } from '@navikt/aap-felles-utils';
+import { logError, logInfo, logWarning } from 'lib/utils/logger';
 import { randomUUID } from 'crypto';
 import { IncomingMessage } from 'http';
+import { Counter, Histogram } from 'prom-client';
 import { ErrorMedStatus } from 'lib/utils/api/ErrorMedStatus';
 
 export const getOnBefalfOfToken = async (
@@ -36,6 +37,9 @@ interface Opts {
   audience: string;
   body?: object;
   req?: IncomingMessage;
+  prometheusPath?: string;
+  metricsTimer?: Histogram;
+  metricsStatusCodeCounter?: Counter;
 }
 
 export const simpleTokenXProxy = async <T>({
@@ -44,6 +48,9 @@ export const simpleTokenXProxy = async <T>({
   req,
   method = 'GET',
   body,
+  prometheusPath,
+  metricsTimer,
+  metricsStatusCodeCounter,
 }: Opts): Promise<T> => {
   if (!req) {
     logError(`Request for ${url} er undefined`);
@@ -54,6 +61,7 @@ export const simpleTokenXProxy = async <T>({
 
   logInfo(`${req.method} ${url}, callId ${navCallId}`);
 
+  const stopTimer = metricsTimer?.startTimer({ path: prometheusPath });
   const response = await fetch(url, {
     method: method,
     headers: {
@@ -63,6 +71,8 @@ export const simpleTokenXProxy = async <T>({
     },
     body: method === 'POST' ? JSON.stringify(body) : undefined,
   });
+  stopTimer?.();
+  metricsStatusCodeCounter?.inc({ path: prometheusPath, status: response.status });
 
   if (response.ok) {
     logInfo(`OK ${url}, status ${response.status}, callId ${navCallId}`);
@@ -78,7 +88,7 @@ export const simpleTokenXProxy = async <T>({
       try {
         return await response.json();
       } catch (e) {
-        logWarning(`Kunne ikke parse json i simpleTokenXProxy for ${url}`);
+        logWarning(`Kunde ikke parse json i simpleTokenXProxy for ${url}`);
       }
     }
 

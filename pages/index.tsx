@@ -4,13 +4,12 @@ import { useRouter } from 'next/router';
 import { GetServerSidePropsResult, NextPageContext } from 'next/types';
 import { beskyttetSide } from 'auth/beskyttetSide';
 import { StepType } from 'components/StepWizard/Step';
-import { logSkjemaStartetEvent } from 'utils/amplitude';
 import metrics from 'utils/metrics';
 import { scrollRefIntoView } from 'utils/dom';
 import { SOKNAD_VERSION, SoknadContextState } from 'context/soknadcontext/soknadContext';
 import { hentMellomlagring } from 'pages/api/mellomlagring/les';
-import { isFunctionalTest } from 'utils/environments';
-import { logError, logInfo } from '@navikt/aap-felles-utils';
+import { isFunctionalTest, isDev } from 'utils/environments';
+import { logError, logInfo } from 'lib/utils/logger';
 import { Person, getPerson } from 'pages/api/oppslagapi/person';
 import { mellomLagreSøknad } from 'hooks/useDebounceLagreSoknad';
 
@@ -53,7 +52,6 @@ const Introduksjon = ({ person }: PageProps) => {
   const startSoknad = async () => {
     setIsLoading(true);
     setHasError(false);
-    logSkjemaStartetEvent();
     const initState: SoknadContextState = {
       version: SOKNAD_VERSION,
       søknad: { vedlegg: {} },
@@ -66,7 +64,7 @@ const Introduksjon = ({ person }: PageProps) => {
       setIsLoading(false);
       setHasError(true);
     } else {
-      router.push('/1');
+      await router.push('/1');
     }
   };
 
@@ -109,7 +107,15 @@ export const getServerSideProps = beskyttetSide(
     const activeIndex = activeStep?.stepIndex;
 
     stopTimer();
-    if (activeIndex && !isFunctionalTest()) {
+
+    const fortsettForBrukereOverAtten = () => {
+      if (isDev()) {
+        return person.erUnderAttenÅr === false;
+      }
+      return true;
+    };
+
+    if (activeIndex && !isFunctionalTest() && fortsettForBrukereOverAtten()) {
       logInfo('Starter påbegynt søknad');
       return {
         redirect: {

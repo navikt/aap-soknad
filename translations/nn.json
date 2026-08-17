@@ -28,7 +28,7 @@
     "startDato": {
       "title": "Startdato",
       "guide": {
-        "text1": "NAV vil berekna startdato for deg, slik at du får AAP så tidleg som mogleg. Hovudregelen er at du tidlegast kan få AAP frå den dagen du sender inn søknaden."
+        "text1": "Nav vil berekna startdato for deg, slik at du får AAP så tidleg som mogleg. Hovudregelen er at du tidlegast kan få AAP frå den dagen du sender inn søknaden."
       },
       "sykepenger": {
         "legend": "Har du sjukepengar no?",
@@ -97,7 +97,7 @@
       },
       "accordionHvis": {
         "title": "Dersom du får AAP, gjeld følgjande",
-        "bulletPointOppfølging": "Du har rett til oppfølging frå NAV",
+        "bulletPointOppfølging": "Du har rett til oppfølging frå Nav",
         "bulletPointPlikt": "Du har plikt til å bidra til å avklare om du kan behalde eller kome i jobb",
         "bulletPointMeldekort": "Du må sende inn meldekort kvar 14. dag",
         "bulletPointTilbakebetaling": "Dersom du får pengar du ikkje har rett til, er du førebudd på å betale dei tilbake.",
@@ -111,20 +111,26 @@
         "bulletpointHelse": "Helseinformasjon frå lege/behandlar for å kartleggje arbeidsevna di.",
         "bulletPointArbeid": "Opplysningar om arbeidsforholdet ditt frå Arbeidsgivar- og arbeidstakarregisteret.",
         "bulletPointAndreOpplysninger": "Opplysningar vi har om deg frå før.",
-        "folketrygdloven": "Dette gjer vi for å vurdere om du har rett til AAP etter folketrygdlova kapittel 11.",
+        "folketrygdloven": "Dette gjer vi for å vurdere om du har rett til AAP etter folketrygdlova kapittel 11. Opplysningane blir også brukte i samband med oppfølginga du får fra Nav.",
         "bulletPointLagring": "Søknaden din vil vere lagra i 24 timar og du kan halde fram der du slapp når du kjem tilbake.",
         "bulletPointDeler": "Vi deler opplysningar om kva du får utbetalt i AAP, med Skatteetaten og Statistisk sentralbyrå.",
-        "personopplysningerNavNo": "Du kan lese meir om korleis NAV behandlar personopplysningar på nav.no (blir opna i ny fane)."
+        "personopplysningerNavNo": "Du kan lese meir om korleis Nav behandlar personopplysningar på nav.no (blir opna i ny fane)."
       },
       "veiledningConfirm": {
-        "title": "Vi stolar på deg",
-        "label": "Eg vil svara så godt eg kan på spørsmåla i søknaden.",
+        "checkbox": "Eg stadfestar at eg vil svara så riktig som eg kan.",
+        "description": "Det er viktig at du gir oss rette opplysningar slik at vi kan behandle saka di.",
+        "readMore": "Les meir om viktigheita av å gi rette opplysningar",
+        "link": "https://www.nav.no/endringer/nn",
         "validation": {
           "required": "Du må stadfeste at du vil gi så rette opplysningar som mogleg."
         }
       },
       "startSøknad": "Start søknad",
-      "avbrytSøknad": "Avbryt søknad"
+      "avbrytSøknad": "Avbryt søknad",
+      "søkerUnderAttenÅr": {
+        "title": "Du kan ikkje søkje digitalt om AAP når du er under 18 år",
+        "description": "Du må ha fylt 18 år for å bruka den digitale søknaden om arbeidsaklaringspengar. I staden må du bruka <a>søknadsskjemaet \"Send i posten”</a>. Der kan du fylla ut søknaden før du skriv den ut."
+      }
     },
     "medlemskap": {
       "title": "Bustad og jobb",
@@ -163,7 +169,7 @@
       },
       "iTilleggArbeidUtenforNorge": {
         "label": "Har du i tillegg til jobb i Noreg, jobba i eit anna land dei fem siste åra?",
-        "description": "Dersom du har jobba i eit anna land, kan du i enkelte tilfelle få meir utbetalt i AAP. NAV bruker denne inntekta berre viss det er til fordel for deg.",
+        "description": "Dersom du har jobba i eit anna land, kan du i enkelte tilfelle få meir utbetalt i AAP. Nav bruker denne inntekta berre viss det er til fordel for deg.",
         "readMore": {
           "title": "Blir ytingar frå utanlandske styresmakter rekna som jobb i eit anna land?",
           "text": "Dersom du har fått ytingar (t.d. dagpengar, sjukepengar og foreldrepengar) frå utanlandske styresmakter, blir dette rekna som jobb utanfor Noreg. Pensjon blir ikkje rekna som erstatning for jobb."
@@ -251,7 +257,7 @@
     "helseopplysninger": {
       "title": "Kontaktperson for helseopplysningar",
       "guide": {
-        "text1": "NAV hentar helseopplysningar frå fastlegen i samband med behandlinga av søknaden din. Ved behov kan vi også hente inn opplysningar frå andre behandlarar eller legar.",
+        "text1": "Nav hentar helseopplysningar frå fastlegen i samband med behandlinga av søknaden din. Ved behov kan vi også hente inn opplysningar frå andre behandlarar eller legar.",
         "text2": "Dersom vi har tilstrekkeleg med opplysningar om deg frå før, innhentar vi ikkje legeerklæring."
       },
       "erRegistrertFastlegeRiktig": {
@@ -269,7 +275,7 @@
       },
       "annenBehandler": {
         "title": "Annan lege eller behandlar",
-        "description": "Dersom du har ein annan lege eller behandlar du vil at NAV skal kunne kontakte for helseopplysningar, kan du leggje til vedkomande her.",
+        "description": "Dersom du har ein annan lege eller behandlar du vil at Nav skal kunne kontakte for helseopplysningar, kan du leggje til vedkomande her.",
         "addBehandlerButton": "Legg til lege/behandlar",
         "accessibleButtonTitle": "Legg til"
       },
@@ -321,7 +327,7 @@
     "andreUtbetalinger": {
       "title": "Utbetalingar",
       "guide": {
-        "text": "Dersom du får utbetalingar frå NAV, arbeidsgivar eller andre, kan AAP-en din bli redusert. Vi spør om dette fordi du ikkje alltid har krav på å få fleire typar utbetalingar samstundes. Vi prøver å unngå feilutbetalingar."
+        "text": "Dersom du får utbetalingar frå Nav, arbeidsgivar eller andre, kan AAP-en din bli redusert. Vi spør om dette fordi du ikkje alltid har krav på å få fleire typar utbetalingar samstundes. Vi prøver å unngå feilutbetalingar."
       },
       "lønn": {
         "title": "Lønn og andre goder",
@@ -410,6 +416,19 @@
       "andreVedlegg": {
         "title": "Annan dokumentasjon",
         "ingress": "Viss du har noko anna du ønksjer å leggje ved kan du lasta det opp her (valfritt)."
+      },
+      "fileinput": {
+        "inputText": "Dra og slepp",
+        "labelText": "Vel dine filar for",
+        "fileInputErrors": {
+          "unsupportedMediaType": "Filtypen er ikkje støtta. Last opp dokumentet i eit anna format (PDF, PNG, JPG eller heic).",
+          "fileTooLarge": "Éi eller fleire av filene du lasta opp, er større enn det som er tillate. Last opp éi eller fleire fil med ein samla storleik på maks 50 MB.",
+          "virus": "Det er oppdaga virus på fila du prøver å laste opp. Last opp ei anna fil.",
+          "size": "Maksimal samlet størrelse på vedlegg per bruker (50MB) er oversteget.",
+          "default422": "Noko gjekk gale i prosesseringa av fila. Prøv å lasta opp dokumentet som PDF i staden.",
+          "passordbeskyttet": "Fila er sikra med passord og vil ikkje vere mogleg for ein saksbehandlar å lese. Opphev passordsikringa og prøv igjen",
+          "other": "Opplastinga var mislukka. Prøv på nytt"
+        }
       }
     },
     "tilleggsopplysninger": {
@@ -563,11 +582,16 @@
             }
           },
           "fødselsnummer": {
-            "label": "Fødselsnummer/D-nummer",
+            "label": "Fødselsnummer eller D-nummer",
             "validation": {
-              "required": "Du må fylle inn fødselsnummeret/D-nummeret til barnet.",
-              "numberCharacters": "Fødselsnummeret/D-nummeret må bestå av 11 siffer."
+              "required": "Du må fylle inn fødselsnummeret eller D-nummeret til barnet.",
+              "valid": "Ugyldig fødselsnummer eller D-nummer. Kontroller at du har skrevet rett.",
+              "matches": "Fødselsnummer eller D-nummer må være 11 siffer."
             }
+          },
+          "ukjentFnr": {
+            "label": "Barnet har ikkje fødselsnummer eller D-nummer",
+            "warning": "Saksbehandlingen kan ta lenger tid når du ikkje oppgir fødselsnummeret eller d-nummeret til barnet."
           },
           "fødselsdato": {
             "label": "Fødselsdato (dd.mm.åååå)",
@@ -575,7 +599,7 @@
               "required": "Du må fylle inn fødselsdatoen til barnet. Fyll inn slik: dd.mm.åååå.",
               "min": "Du kan ikkje få barnetillegg for barn over 18 år. Dersom barnet er under 18 år, må du rette opp fødselsdatoen.",
               "max": "Fødselsdatoen til barnet kan ikkje vere etter dags dato. Vel ein fødselsdato før eller lik dags dato",
-              "typeError": "Fødselsdatoen må vera ein gyldig dato på format dd.mm.yyyy"
+              "typeError": "Fødselsdatoen må vera ein gyldig dato på format dd.mm.åååå"
             }
           },
           "relasjon": {
@@ -620,15 +644,15 @@
         }
       },
       "alert": {
-        "navVilSjekke": "NAV vil sjekke om yrkesskaden/yrkessjukdommen din er",
-        "bulletPointGodkjent": "godkjend av NAV",
+        "navVilSjekke": "Nav vil sjekke om yrkesskaden/yrkessjukdommen din er",
+        "bulletPointGodkjent": "godkjend av Nav",
         "bulletPointArbeidsevne": "heilt eller delvis årsak til at arbeidsevna di er nedsett"
       }
     },
     "kvittering": {
       "title": "Takk for søknaden, {navn}",
       "alert": {
-        "text": "Vi har nå fått søknaden din om AAP. Saka din ligg inne til behandling hos NAV. Me vil ta kontakt med deg viss me treng meir informasjon eller dokumentasjon frå deg."
+        "text": "Vi har nå fått søknaden din om AAP. Saka din ligg inne til behandling hos Nav. Me vil ta kontakt med deg viss me treng meir informasjon eller dokumentasjon frå deg."
       },
       "vedlegg": {
         "tekst1": "Du kan også <a>ettersenda per post (blir opna i ny fane)</a>, eller levera dokumentasjon på det lokale Nav-kontoret ditt.",
@@ -642,7 +666,7 @@
       },
       "dittNavKnapp": "Følg saka på Mine Arbeidsavklaringspengar"
     },
-    "ettersendelseFrist": "Du kan ettersende dette innan 14 dagar per post eller digitalt. Du kan også levere dette på ditt lokale NAV-kontor"
+    "ettersendelseFrist": "Du kan ettersende dette innan 14 dagar per post eller digitalt. Du kan også levere dette på ditt lokale Nav-kontor"
   },
   "fileInputErrors": {
     "unsupportedMediaType": "Filtypen er ikkje støtta. Last opp dokumentet i eit anna format (PDF, PNG, JPG eller heic).",
@@ -689,5 +713,25 @@
     "title": "Du har blitt logga ut",
     "soknadMessage": "Alt du har svart på i søknaden så langt er blitt lagra.",
     "buttonText": "Logg inn på nytt"
+  },
+  "scanningGuide": {
+    "title": "Slik tek du eit godt bilete av dokumentet",
+    "alert": {
+      "takePictureTitle": "Slik tek du eit godt bilete",
+      "bulletPointTakePicture1": "Hald mobilen eller kameraet direkte over dokumentet.",
+      "bulletPointTakePicture2": "Dokumentet skal fylle heile biletet. Biletet skal ikkje innehalde annan dokumentasjon eller gjenstandar.",
+      "bulletPointTakePicture3": "Biletet må innehalde all teksten i dokumentet. Dersom dokumentet er på meir enn éi side, bør du laste opp fleire bilete.",
+      "checkPictureTitle": "Etter at du har teke biletet, sjekkar du følgjande før du lastar det opp:",
+      "bulletPointCheckPicture1": "Dokumentet har rett retning.",
+      "bulletPointCheckPicture2": "Teksten i dokumentet er godt leseleg.",
+      "bulletPointCheckPicture3": "Biletet er godt opplyst, utan skuggar.",
+      "examplesPicturesTitle": "Døme på bra og dårlege bilete av dokument",
+      "exampleLabelGood": "Bra",
+      "exampleLabelBad": "Dårleg",
+      "exampleGood": "Dokumentet fyller heile biletet",
+      "exampleKeystone": "Biletet er ikkje teken ovanfrå",
+      "exampleHorizontal": "Biletet har ikkje rett retning",
+      "exampleShaddow": "Biletet har skugge på dokumentet"
+    }
   }
 }
