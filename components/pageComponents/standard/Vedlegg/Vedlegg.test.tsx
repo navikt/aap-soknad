@@ -1,5 +1,4 @@
 import { Step, StepWizard } from 'components/StepWizard';
-import React from 'react';
 import messagesNb from 'translations/nb.json';
 import Vedlegg from './Vedlegg';
 import { Relasjon } from 'components/pageComponents/standard/Barnetillegg/AddBarnModal';

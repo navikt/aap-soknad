@@ -19,7 +19,7 @@ interface Props {
 }
 
 const Vedlegg = ({ onBackClick }: Props) => {
-  const { formatMessage, locale } = useIntl();
+  const { formatMessage } = useIntl();
   const { søknadState, søknadDispatch } = useSoknad();
   const { stepWizardDispatch, stepList } = useStepWizard();
   const debouncedLagre = useDebounceLagreSoknad<Soknad>();
@@ -40,11 +40,6 @@ const Vedlegg = ({ onBackClick }: Props) => {
     .filter((error): error is SøknadValidationError => error !== undefined);
 
   const harPåkrevdeVedlegg = søknadState.requiredVedlegg.length > 0;
-
-  const deleteUrl = '/aap/soknad/api/vedlegginnsending/slett/?uuid=';
-  const uploadUrl = '/aap/soknad/api/vedlegginnsending/lagre/';
-
-  const readAttachmentUrl = '/aap/soknad/vedlegg/';
 
   return (
     <SoknadFormWrapperNew
@@ -91,7 +86,6 @@ const Vedlegg = ({ onBackClick }: Props) => {
 
       {søknadState?.requiredVedlegg?.find((e) => e.type === 'AVBRUTT_STUDIE') && (
         <FileInputInnsending
-          locale={locale}
           id={'avbruttStudie'}
           heading={formatMessage({ id: 'søknad.student.vedlegg.name' })}
           ingress={formatMessage({ id: 'søknad.student.vedlegg.description' })}
@@ -101,15 +95,11 @@ const Vedlegg = ({ onBackClick }: Props) => {
           onDelete={(vedlegg) => {
             deleteVedlegg(søknadDispatch, vedlegg, 'AVBRUTT_STUDIE');
           }}
-          deleteUrl={deleteUrl}
-          uploadUrl={uploadUrl}
-          readAttachmentUrl={readAttachmentUrl}
           files={søknadState.søknad?.vedlegg?.AVBRUTT_STUDIE || []}
         />
       )}
       {søknadState?.requiredVedlegg?.find((e) => e.type === 'OMSORGSSTØNAD') && (
         <FileInputInnsending
-          locale={locale}
           id={'OMSORGSSTØNAD'}
           heading={formatMessage({ id: 'søknad.andreUtbetalinger.stønad.values.omsorgsstønad' })}
           ingress={formatMessage({ id: 'søknad.andreUtbetalinger.vedlegg.omsorgsstønad' })}
@@ -119,15 +109,11 @@ const Vedlegg = ({ onBackClick }: Props) => {
           onDelete={(vedlegg) => {
             deleteVedlegg(søknadDispatch, vedlegg, 'OMSORGSSTØNAD');
           }}
-          deleteUrl={deleteUrl}
-          uploadUrl={uploadUrl}
-          readAttachmentUrl={readAttachmentUrl}
           files={søknadState.søknad?.vedlegg?.OMSORGSSTØNAD || []}
         />
       )}
       {søknadState?.requiredVedlegg?.find((e) => e.type === 'LØNN_OG_ANDRE_GODER') && (
         <FileInputInnsending
-          locale={locale}
           id={'LØNN_OG_ANDRE_GODER'}
           heading={formatMessage({ id: 'søknad.andreUtbetalinger.lønn.title' })}
           ingress={formatMessage({ id: 'søknad.andreUtbetalinger.vedlegg.andreGoder' })}
@@ -137,16 +123,12 @@ const Vedlegg = ({ onBackClick }: Props) => {
           onDelete={(vedlegg) => {
             deleteVedlegg(søknadDispatch, vedlegg, 'LØNN_OG_ANDRE_GODER');
           }}
-          deleteUrl={deleteUrl}
-          uploadUrl={uploadUrl}
-          readAttachmentUrl={readAttachmentUrl}
           files={søknadState.søknad?.vedlegg?.LØNN_OG_ANDRE_GODER || []}
         />
       )}
 
       {søknadState?.requiredVedlegg?.find((e) => e.type === 'UTLANDSSTØNAD') && (
         <FileInputInnsending
-          locale={locale}
           id={'UTLANDSSTØNAD'}
           heading={formatMessage({ id: 'søknad.andreUtbetalinger.stønad.values.utland' })}
           ingress={formatMessage({ id: 'søknad.andreUtbetalinger.vedlegg.utlandsStønad' })}
@@ -156,16 +138,12 @@ const Vedlegg = ({ onBackClick }: Props) => {
           onDelete={(vedlegg) => {
             deleteVedlegg(søknadDispatch, vedlegg, 'UTLANDSSTØNAD');
           }}
-          deleteUrl={deleteUrl}
-          uploadUrl={uploadUrl}
-          readAttachmentUrl={readAttachmentUrl}
           files={søknadState.søknad?.vedlegg?.UTLANDSSTØNAD || []}
         />
       )}
 
       {søknadState.requiredVedlegg?.find((e) => e.type === 'LÅN') && (
         <FileInputInnsending
-          locale={locale}
           id={'LÅN'}
           heading={formatMessage({ id: 'søknad.andreUtbetalinger.stønad.values.lån' })}
           ingress={formatMessage({ id: 'søknad.andreUtbetalinger.vedlegg.lån' })}
@@ -175,16 +153,12 @@ const Vedlegg = ({ onBackClick }: Props) => {
           onDelete={(vedlegg) => {
             deleteVedlegg(søknadDispatch, vedlegg, 'LÅN');
           }}
-          deleteUrl={deleteUrl}
-          uploadUrl={uploadUrl}
-          readAttachmentUrl={readAttachmentUrl}
           files={søknadState.søknad?.vedlegg?.LÅN || []}
         />
       )}
 
       {søknadState.requiredVedlegg?.find((e) => e.type === 'SYKESTIPEND') && (
         <FileInputInnsending
-          locale={locale}
           id={'SYKESTIPEND'}
           heading={formatMessage({ id: 'søknad.andreUtbetalinger.stønad.values.stipend' })}
           ingress={formatMessage({ id: 'søknad.andreUtbetalinger.vedlegg.sykeStipend' })}
@@ -194,9 +168,6 @@ const Vedlegg = ({ onBackClick }: Props) => {
           onDelete={(vedlegg) => {
             deleteVedlegg(søknadDispatch, vedlegg, 'SYKESTIPEND');
           }}
-          deleteUrl={deleteUrl}
-          uploadUrl={uploadUrl}
-          readAttachmentUrl={readAttachmentUrl}
           files={søknadState.søknad?.vedlegg?.SYKESTIPEND || []}
         />
       )}
@@ -205,7 +176,6 @@ const Vedlegg = ({ onBackClick }: Props) => {
         const requiredVedlegg = søknadState?.requiredVedlegg.find((e) => e?.type === barn.internId);
         return (
           <FileInputInnsending
-            locale={locale}
             key={barn.internId}
             id={barn.internId!}
             heading={formatMessage(
@@ -221,16 +191,12 @@ const Vedlegg = ({ onBackClick }: Props) => {
             onDelete={(vedlegg) => {
               deleteVedlegg(søknadDispatch, vedlegg, barn.internId);
             }}
-            deleteUrl={deleteUrl}
-            uploadUrl={uploadUrl}
-            readAttachmentUrl={readAttachmentUrl}
             files={søknadState.søknad?.vedlegg?.[barn.internId] || []}
           />
         );
       })}
 
       <FileInputInnsending
-        locale={locale}
         heading={formatMessage({ id: 'søknad.vedlegg.andreVedlegg.title' })}
         ingress={formatMessage({ id: 'søknad.vedlegg.andreVedlegg.ingress' })}
         id="ANNET"
@@ -240,9 +206,6 @@ const Vedlegg = ({ onBackClick }: Props) => {
         onDelete={(vedlegg) => {
           deleteVedlegg(søknadDispatch, vedlegg, 'ANNET');
         }}
-        deleteUrl={deleteUrl}
-        uploadUrl={uploadUrl}
-        readAttachmentUrl={readAttachmentUrl}
         files={søknadState.søknad?.vedlegg?.ANNET || []}
       />
 
