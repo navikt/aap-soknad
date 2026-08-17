@@ -2544,7 +2544,7 @@ __metadata:
     html-react-parser: "npm:^6.1.5"
     husky: "npm:^9.1.7"
     i18n-iso-countries: "npm:^7.14.0"
-    is-european: "npm:1.0.10"
+    is-european: "npm:1.0.12"
     jsdom: "npm:^29.1.1"
     json-diff: "npm:^1.0.6"
     lint-staged: "npm:^15.5.2"
@@ -5351,12 +5351,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"is-european@npm:1.0.10":
-  version: 1.0.10
-  resolution: "is-european@npm:1.0.10"
+"is-european@npm:1.0.12":
+  version: 1.0.12
+  resolution: "is-european@npm:1.0.12"
   dependencies:
     iso-3166: "npm:~3.1.0"
-  checksum: 10c0/f7ba92d1ef73516ff67e34aa64c9c21ea97f34235c90ab3fda3606c4986776e835b2b78768a9a2dacc7a8c9bdebc26699b641a8aa9c6d4d6a65ec2a18b4be44a
+  checksum: 10c0/b7e1a3eefd740a3378e9aaafd290d8a1ac32e5a9fe8ff6262a792f6a69d73f435b01324347677235d43e2bb31285c680fa06cf3561a3e959efc869e48faae545
   languageName: node
   linkType: hard
 
