@@ -35,7 +35,7 @@ const SøknadFormWrapper = (props: Props) => {
 
   const { currentStep } = useStepWizard();
 
-  const stegSomBrukesIKelvin: string[] = ['BARNETILLEGG', 'YRKESSKADE', 'STUDENT'];
+  const stegSomBrukesIKelvin: string[] = ['STARTDATO', 'BARNETILLEGG', 'YRKESSKADE', 'STUDENT'];
   const isDev =
     window.location.href.includes('intern.dev') || window.location.href.includes('ansatt.dev');
   const stegBrukesIKelvin = isDev && stegSomBrukesIKelvin.includes(currentStep.name);
