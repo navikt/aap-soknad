@@ -80,6 +80,9 @@ updates:
           - '@testing-library/dom'
           - '@testing-library/jest-dom'
           - 'jsdom'
+      grafana:
+        patterns:
+          - '@grafana/*'
       otel:
         patterns:
           - '@opentelemetry/api'
