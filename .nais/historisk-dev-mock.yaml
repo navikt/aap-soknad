@@ -6,6 +6,7 @@ metadata:
   labels:
     "team": "aap"
     branchState: {{branchState}}
+    "systemkatalog.nav.no/system": "TE-496"
 spec:
   image: {{image}}
   port: 3000
