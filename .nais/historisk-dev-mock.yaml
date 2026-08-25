@@ -6,6 +6,7 @@ metadata:
   labels:
     "team": "aap"
     branchState: {{branchState}}
+    "systemkatalog.nav.no/system": "SK-268"
 spec:
   image: {{image}}
   port: 3000
