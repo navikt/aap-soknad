@@ -9,33 +9,38 @@ updates:
     directory: "/"
     schedule:
       interval: "cron"
-      cronjob: "0 6 1-7,15-21 * 1" # første og tredje mandag i måneden kl 06:00
+      cronjob: "0 6 1,15 * *" # 1 og 15 hver måned
       timezone: "Europe/Oslo"
     cooldown:
       default-days: 7
     ignore:
       - dependency-name: 'cgr-nav/pull-through/nav.no/node'
+    groups:
+      all:
+        patterns:
+          - '*'
   - package-ecosystem: 'github-actions'
     directory: '/'
     schedule:
       interval: "cron"
-      cronjob: "0 6 1-7,15-21 * 1" # første og tredje mandag i måneden kl 06:00
+      cronjob: "0 6 1,15 * *" # 1 og 15 hver måned
       timezone: "Europe/Oslo"
     cooldown:
       default-days: 7
+    groups:
+      all:
+        patterns:
+          - '*'
   - package-ecosystem: npm
     directory: "/"
     schedule:
       interval: "cron"
-      cronjob: "0 6 1-7,15-21 * 1" # første og tredje mandag i måneden kl 06:00
+      cronjob: "0 6 1,15 * *" # 1 og 15 hver måned
       timezone: "Europe/Oslo"
     cooldown:
       default-days: 7
       exclude:
-        - '@navikt/aap-behandlingsflyt-typescript-types'
-        - '@navikt/aap-postmottak-backend-typescript-types'
-        - '@navikt/aap-oppgave-typescript-types'
-        - '@navikt/aap-statistikk-typescript-types'
+        - '@navikt/aap*'
         - '@navikt/aksel*'
         - '@navikt/ds*'
     open-pull-requests-limit: 10
@@ -50,12 +55,9 @@ updates:
       - dependency-name: 'eslint'
         versions: [ '9.x' ]
     groups:
-      aap-backend-typescript-types:
+      aap-deps:
         patterns:
-          - '@navikt/aap-behandlingsflyt-typescript-types'
-          - '@navikt/aap-postmottak-backend-typescript-types'
-          - '@navikt/aap-oppgave-typescript-types'
-          - '@navikt/aap-statistikk-typescript-types'
+          - '@navikt/aap*'
       aksel-dependencies:
         patterns:
           - '@navikt/aksel*'
@@ -66,9 +68,6 @@ updates:
           - 'react-dom'
           - '@types/react'
           - '@types/react-dom'
-      team-deps:
-        patterns:
-          - '@navikt/aap-felles*'
       testing:
         patterns:
           - 'vitest'
@@ -80,11 +79,9 @@ updates:
           - '@testing-library/dom'
           - '@testing-library/jest-dom'
           - 'jsdom'
-      grafana:
+      metrics:
         patterns:
           - '@grafana/*'
-      otel:
-        patterns:
           - '@opentelemetry/api'
           - '@opentelemetry/api-logs'
           - '@opentelemetry/instrumentation'
@@ -97,3 +94,6 @@ updates:
         patterns:
           - 'astro'
           - '@astrojs/*'
+      misc:
+        patterns:
+          - '*'
