@@ -23,6 +23,7 @@ import SoknadFormWrapperNew from 'components/SoknadFormWrapper/SoknadFormWrapper
 import { useSoknad } from 'hooks/SoknadHook';
 import { updateSøknadData } from 'context/soknadcontext/actions';
 import { LucaGuidePanel } from 'components/LucaGuidePanel';
+import { Events } from '@navikt/analytics-types';
 
 interface Props {
   onBackClick: () => void;
@@ -89,6 +90,8 @@ export const Yrkesskade = ({ onBackClick }: Props) => {
         <ReadMore
           header={formatMessage({ id: 'søknad.yrkesskade.harDuYrkesskade.readMore.title' })}
           type={'button'}
+          data-sporing-event={Events.ACCORDION_APNET}
+          data-sporing-event-tekst={'hva mener vi med yrkesskade eller yrkessykdom?'}
         >
           <div>
             <BodyShort spacing>

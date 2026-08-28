@@ -32,6 +32,7 @@ import {
 import { useSoknad } from 'hooks/SoknadHook';
 import { useStepWizard } from 'hooks/StepWizardHook';
 import { LucaGuidePanel } from 'components/LucaGuidePanel';
+import { Events } from '@navikt/analytics-types';
 
 interface Props {
   onBackClick: () => void;
@@ -234,6 +235,8 @@ export const AndreUtbetalinger = ({ onBackClick }: Props) => {
         <ReadMore
           header={formatMessage({ id: 'søknad.andreUtbetalinger.lønn.readMore.title' })}
           type={'button'}
+          data-sporing-event={Events.ACCORDION_APNET}
+          data-sporing-event-tekst={'hva menes med ekstra utbetalinger?'}
         >
           {formatMessage({ id: 'søknad.andreUtbetalinger.lønn.readMore.text' })}
         </ReadMore>

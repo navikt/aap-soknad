@@ -26,6 +26,7 @@ import { updateSøknadData } from 'context/soknadcontext/actions';
 import { UtenlandsOppholdListe } from 'components/pageComponents/standard/Medlemskap/UtenlandsOppholdListe';
 import styles from './Medlemskap.module.css';
 import { LucaGuidePanel } from 'components/LucaGuidePanel';
+import { Events } from '@navikt/analytics-types';
 
 interface Props {
   onBackClick: () => void;
@@ -140,6 +141,8 @@ export const Medlemskap = ({ onBackClick }: Props) => {
           <ReadMore
             header={formatMessage({ id: 'søknad.medlemskap.harBoddINorgeSiste5År.readMore.title' })}
             type={'button'}
+            data-sporing-event={Events.ACCORDION_APNET}
+            data-sporing-event-tekst={'hva menes med å ha bodd sammenhengende?'}
           >
             {formatMessage({ id: 'søknad.medlemskap.harBoddINorgeSiste5År.readMore.text' })}
           </ReadMore>
@@ -173,6 +176,8 @@ export const Medlemskap = ({ onBackClick }: Props) => {
                   id: 'søknad.medlemskap.harArbeidetINorgeSiste5År.readMore.title',
                 })}
                 type={'button'}
+                data-sporing-event={Events.ACCORDION_APNET}
+                data-sporing-event-tekst={'regnes ytelser fra norske myndigheter som jobb?'}
               >
                 {formatMessage({ id: 'søknad.medlemskap.harArbeidetINorgeSiste5År.readMore.text' })}
               </ReadMore>
@@ -209,6 +214,10 @@ export const Medlemskap = ({ onBackClick }: Props) => {
                   id: 'søknad.medlemskap.arbeidUtenforNorge.readMore.title',
                 })}
                 type={'button'}
+                data-sporing-event={Events.ACCORDION_APNET}
+                data-sporing-event-tekst={
+                  'regnes ytelser fra utenlandske myndigheter som jobb i utlandet?'
+                }
               >
                 {formatMessage({ id: 'søknad.medlemskap.arbeidUtenforNorge.readMore.text' })}
               </ReadMore>
@@ -249,6 +258,10 @@ export const Medlemskap = ({ onBackClick }: Props) => {
                   id: 'søknad.medlemskap.iTilleggArbeidUtenforNorge.readMore.title',
                 })}
                 type={'button'}
+                data-sporing-event={Events.ACCORDION_APNET}
+                data-sporing-event-tekst={
+                  'regnes ytelser fra utenlandske myndigheter som jobb i et annet land?'
+                }
               >
                 {formatMessage({
                   id: 'søknad.medlemskap.iTilleggArbeidUtenforNorge.readMore.text',

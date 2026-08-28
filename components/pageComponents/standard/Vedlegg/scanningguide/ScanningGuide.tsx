@@ -6,6 +6,7 @@ import { useIntl } from 'react-intl';
 import { scrollRefIntoView } from 'utils/dom';
 
 import styles from './ScanningGuide.module.css';
+import { Events } from '@navikt/analytics-types';
 
 export const ScanningGuide = () => {
   const { formatMessage } = useIntl();
@@ -26,6 +27,10 @@ export const ScanningGuide = () => {
         open={scanningGuideOpen}
         onClick={() => setScanningGuideOpen(!scanningGuideOpen)}
         ref={scanningGuideElement}
+        data-sporing-event={Events.ACCORDION_APNET}
+        data-sporing-event-tekst={
+          'slik tar du et godt bilde av dokumentet'
+        }
       >
         <div className={styles.scanningGuide}>
           <article>
