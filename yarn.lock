@@ -1202,6 +1202,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@navikt/analytics-types@npm:0.0.9":
+  version: 0.0.9
+  resolution: "@navikt/analytics-types@npm:0.0.9::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Fanalytics-types%2F0.0.9%2F5919241a6dbb782eb101fff3234ce5c36d16e942"
+  checksum: 10c0/25eeb6c324fe9133bfffc53a325bf115c526cef4380cabf28e2b3958906bb20fead03eb6ee471b92e0a910e45bfa435c1aa3026f9c6a8779d7d07b350efb9883
+  languageName: node
+  linkType: hard
+
 "@navikt/ds-css@npm:^7.40.0":
   version: 7.40.0
   resolution: "@navikt/ds-css@npm:7.40.0::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Fds-css%2F7.40.0%2F267682132732537194904a0498ce8971bf8b4922"
@@ -2574,6 +2581,7 @@ __metadata:
     "@axe-core/playwright": "npm:^4.13.0"
     "@grafana/faro-web-sdk": "npm:^2.10.0"
     "@grafana/faro-web-tracing": "npm:2.10.0"
+    "@navikt/analytics-types": "npm:0.0.9"
     "@navikt/ds-css": "npm:^7.40.0"
     "@navikt/ds-icons": "npm:^3.4.3"
     "@navikt/ds-react": "npm:^7.40.0"

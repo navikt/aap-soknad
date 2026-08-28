@@ -14,6 +14,7 @@ import { NavDecorator } from 'components/NavDecorator/NavDecorator';
 import { DecoratorLocale } from '@navikt/nav-dekoratoren-moduler';
 import Faro from 'components/Faro';
 import ErrorBoundary from 'components/ErrorBoundary';
+import Script from 'next/script';
 
 const getLocaleOrFallback = (locale?: string) => {
   if (locale && SUPPORTED_LOCALE.includes(locale)) {
@@ -40,6 +41,12 @@ const CustomApp = ({ Component, pageProps }: AppProps) => {
             <StepWizardProvider>
               <Head>
                 <title>Søknad om arbeidsavklaringspenger (AAP)</title>
+                <Script
+                  defer
+                  strategy="afterInteractive"
+                  src="https://cdn.nav.no/team-researchops/sporing/sporing-dev.js"
+                  data-website-id="09db40bf-ca75-4fc6-a9f1-dfe258ef5913"
+                />
               </Head>
               <Faro collectorUrl={process.env.NAIS_FRONTEND_TELEMETRY_COLLECTOR_URL} />
               <Component {...pageProps} />
