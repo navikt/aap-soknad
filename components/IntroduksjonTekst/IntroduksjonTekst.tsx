@@ -1,7 +1,7 @@
-import { BodyShort, Heading, Link } from '@navikt/ds-react';
+import { Accordion, BodyShort, Heading, Link } from '@navikt/ds-react';
 import { FormattedMessage, useIntl } from 'react-intl';
-import { AmplitudeAwareAccordion } from '../AmplitudeAwareAccordion/AmplitudeAwareAccordion';
 import { LucaGuidePanel } from 'components/LucaGuidePanel';
+import { Events } from '@navikt/analytics-types';
 
 export const IntroduksjonTekst = ({ navn }: { navn?: string }) => {
   const { formatMessage } = useIntl();
@@ -28,8 +28,10 @@ export const IntroduksjonTekst = ({ navn }: { navn?: string }) => {
         </BodyShort>
       </article>
       <article>
-        <AmplitudeAwareAccordion
+        <Accordion
           title={formatMessage({ id: 'søknad.veiledning.accordionHvis.title' })}
+          data-sporing-event={Events.ACCORDION_APNET}
+          data-sporing-event-tekst={'hvis du får AAP gjelder dette'}
         >
           <ul>
             <li>
@@ -42,9 +44,11 @@ export const IntroduksjonTekst = ({ navn }: { navn?: string }) => {
             </li>
             <li>{formatMessage({ id: 'søknad.veiledning.accordionHvis.bulletPointBeskjed' })}</li>
           </ul>
-        </AmplitudeAwareAccordion>
-        <AmplitudeAwareAccordion
+        </Accordion>
+        <Accordion
           title={formatMessage({ id: 'søknad.veiledning.accordionInformasjon.title' })}
+          data-sporing-event={Events.ACCORDION_APNET}
+          data-sporing-event-tekst={'vi vil hente og bruke informasjon om deg'}
         >
           <BodyShort spacing>
             {formatMessage({ id: 'søknad.veiledning.accordionInformasjon.informasjonDuOppgir' })}
@@ -83,12 +87,17 @@ export const IntroduksjonTekst = ({ navn }: { navn?: string }) => {
             </li>
           </ul>
 
-          <Link href={formatMessage({ id: 'applinks.personOpplysninger' })} target={'_blank'}>
+          <Link
+            href={formatMessage({ id: 'applinks.personOpplysninger' })}
+            target={'_blank'}
+            data-sporing-event={Events.NAVIGERE}
+            data-sporing-event-lenketekst={'Du kan lese mer om hvordan Nav behandler personopplysninger på nav.no'}
+          >
             {formatMessage({
               id: 'søknad.veiledning.accordionInformasjon.personopplysningerNavNo',
             })}
           </Link>
-        </AmplitudeAwareAccordion>
+        </Accordion>
       </article>
     </>
   );
