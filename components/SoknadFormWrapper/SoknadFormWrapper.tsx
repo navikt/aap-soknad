@@ -7,6 +7,7 @@ import { useIntl } from 'react-intl';
 import LagreModal from './LagreModal';
 import SlettModal from './SlettModal';
 import { useStepWizard } from 'hooks/StepWizardHook';
+import { Events } from '@navikt/analytics-types';
 
 interface Props {
   children: React.ReactNode;
@@ -97,6 +98,9 @@ const SøknadFormWrapper = (props: Props) => {
             variant="tertiary"
             type="button"
             onClick={() => setVisLagreModal(true)}
+            data-sporing-event={Events.NAVIGERE}
+            data-sporing-event-lenketekst={'fortsett senere'}
+            data-sporing-event-kontekst={currentStep.name}
           >
             {formatMessage({ id: 'navigation.save' })}
           </Button>
@@ -105,6 +109,9 @@ const SøknadFormWrapper = (props: Props) => {
             variant="tertiary"
             type="button"
             onClick={() => setVisAvbrytModal(true)}
+            data-sporing-event={Events.NAVIGERE}
+            data-sporing-event-lenketekst={'slett søknad'}
+            data-sporing-event-kontekst={currentStep.name}
           >
             {formatMessage({ id: 'navigation.cancel' })}
           </Button>
