@@ -90,7 +90,7 @@ export const Yrkesskade = ({ onBackClick }: Props) => {
         <ReadMore
           header={formatMessage({ id: 'søknad.yrkesskade.harDuYrkesskade.readMore.title' })}
           type={'button'}
-          data-sporing-event={Events.ACCORDION_APNET}
+          data-sporing-event={Events.LES_MER_APNET}
           data-sporing-event-tekst={'hva mener vi med yrkesskade eller yrkessykdom?'}
         >
           <div>

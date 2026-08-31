@@ -141,7 +141,7 @@ export const Medlemskap = ({ onBackClick }: Props) => {
           <ReadMore
             header={formatMessage({ id: 'søknad.medlemskap.harBoddINorgeSiste5År.readMore.title' })}
             type={'button'}
-            data-sporing-event={Events.ACCORDION_APNET}
+            data-sporing-event={Events.LES_MER_APNET}
             data-sporing-event-tekst={'hva menes med å ha bodd sammenhengende?'}
           >
             {formatMessage({ id: 'søknad.medlemskap.harBoddINorgeSiste5År.readMore.text' })}
@@ -176,7 +176,7 @@ export const Medlemskap = ({ onBackClick }: Props) => {
                   id: 'søknad.medlemskap.harArbeidetINorgeSiste5År.readMore.title',
                 })}
                 type={'button'}
-                data-sporing-event={Events.ACCORDION_APNET}
+                data-sporing-event={Events.LES_MER_APNET}
                 data-sporing-event-tekst={'regnes ytelser fra norske myndigheter som jobb?'}
               >
                 {formatMessage({ id: 'søknad.medlemskap.harArbeidetINorgeSiste5År.readMore.text' })}
@@ -214,7 +214,7 @@ export const Medlemskap = ({ onBackClick }: Props) => {
                   id: 'søknad.medlemskap.arbeidUtenforNorge.readMore.title',
                 })}
                 type={'button'}
-                data-sporing-event={Events.ACCORDION_APNET}
+                data-sporing-event={Events.LES_MER_APNET}
                 data-sporing-event-tekst={
                   'regnes ytelser fra utenlandske myndigheter som jobb i utlandet?'
                 }
@@ -258,7 +258,7 @@ export const Medlemskap = ({ onBackClick }: Props) => {
                   id: 'søknad.medlemskap.iTilleggArbeidUtenforNorge.readMore.title',
                 })}
                 type={'button'}
-                data-sporing-event={Events.ACCORDION_APNET}
+                data-sporing-event={Events.LES_MER_APNET}
                 data-sporing-event-tekst={
                   'regnes ytelser fra utenlandske myndigheter som jobb i et annet land?'
                 }

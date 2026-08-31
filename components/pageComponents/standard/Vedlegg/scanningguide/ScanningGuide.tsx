@@ -27,7 +27,7 @@ export const ScanningGuide = () => {
         open={scanningGuideOpen}
         onClick={() => setScanningGuideOpen(!scanningGuideOpen)}
         ref={scanningGuideElement}
-        data-sporing-event={Events.ACCORDION_APNET}
+        data-sporing-event={Events.LES_MER_APNET}
         data-sporing-event-tekst={
           'slik tar du et godt bilde av dokumentet'
         }

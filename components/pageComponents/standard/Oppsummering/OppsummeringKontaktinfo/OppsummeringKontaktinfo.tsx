@@ -30,7 +30,7 @@ const OppsummeringKontaktinfo = ({ kontaktinformasjon, person }: Props) => {
               id: 'søknad.oppsummering.contactInformation.adresse.readMore.title',
             })}
             type={'button'}
-            data-sporing-event={Events.ACCORDION_APNET}
+            data-sporing-event={Events.LES_MER_APNET}
             data-sporing-event-tekst={'hva gjør jeg hvis jeg har en annen adresse?'}
           >
             <FormattedMessage
@@ -56,7 +56,7 @@ const OppsummeringKontaktinfo = ({ kontaktinformasjon, person }: Props) => {
             id: 'søknad.oppsummering.contactInformation.telefonnummer.readMore.title',
           })}
           type={'button'}
-          data-sporing-event={Events.ACCORDION_APNET}
+          data-sporing-event={Events.LES_MER_APNET}
           data-sporing-event-tekst={'hva gjør jeg hvis jeg har et annet telefonnummer?'}
         >
           <FormattedMessage
@@ -82,7 +82,7 @@ const OppsummeringKontaktinfo = ({ kontaktinformasjon, person }: Props) => {
             id: 'søknad.oppsummering.contactInformation.epost.readMore.title',
           })}
           type={'button'}
-          data-sporing-event={Events.ACCORDION_APNET}
+          data-sporing-event={Events.LES_MER_APNET}
           data-sporing-event-tekst={'hva gjør jeg hvis jeg har en annen e-post adresse?'}
         >
           <FormattedMessage
