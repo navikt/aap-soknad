@@ -4,10 +4,14 @@ const ssr = require('@navikt/nav-dekoratoren-moduler/ssr');
 
 const appDirectives = {
   'script-src': ["'self'", 'https://cdn.nav.no'],
-  'connect-src': ["'self'", 'https://reops-event-proxy.nav.no', 'https://reops-event-proxy.ekstern.dev.nav.no'],
+  'connect-src': [
+    "'self'",
+    'https://reops-event-proxy.nav.no',
+    'https://reops-event-proxy.ekstern.dev.nav.no',
+  ],
   'font-src': ['https://fonts.gstatic.com'],
   'object-src': ['blob:'],
-  'script-src-elem': ["'self'"],
+  'script-src-elem': ["'self'", 'https://cdn.nav.no'],
   'style-src-elem': ["'self'"],
   'frame-src': ['self', 'blob:'],
   'img-src': ["'self'", 'data:', 'blob:'],
