@@ -8,6 +8,7 @@ import { useIntl } from 'react-intl';
 
 import styles from './FileInputInnsending.module.css';
 import { Vedlegg } from 'types/Vedlegg';
+import { sporFileInputHendelse } from 'lib/utils/umami';
 
 interface FileInputProps extends InputHTMLAttributes<HTMLInputElement> {
   heading: string;
@@ -193,6 +194,7 @@ export const FileInputInnsending = (props: FileInputProps) => {
               value={''}
               onChange={(e) => {
                 if (e.target.files) {
+                  sporFileInputHendelse(id)
                   validateAndSetFiles(e.target.files);
                 }
               }}

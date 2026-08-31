@@ -1,5 +1,4 @@
-import { type EventName } from '@navikt/analytics-types';
-import { StepNames } from '../../pages';
+import { type EventName, Events } from '@navikt/analytics-types';
 
 declare global {
   interface Window {
@@ -19,4 +18,8 @@ export function sporHendelse(hendelse: EventName, hendelseData?: Record<string, 
 
 export function sporSkjemaHendelse(hendelse: EventName, skjemanavn: string) {
   sporHendelse(hendelse, { skjemanavn })
+}
+
+export function sporFileInputHendelse(kategori: string) {
+  sporHendelse(Events.FIL_LASTET_OPP, { kategori });
 }
