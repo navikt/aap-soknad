@@ -28,75 +28,101 @@ export const IntroduksjonTekst = ({ navn }: { navn?: string }) => {
         </BodyShort>
       </article>
       <article>
-        <Accordion
-          title={formatMessage({ id: 'søknad.veiledning.accordionHvis.title' })}
-          data-sporing-event={Events.ACCORDION_APNET}
-          data-sporing-event-tekst={'hvis du får AAP gjelder dette'}
-        >
-          <ul>
-            <li>
-              {formatMessage({ id: 'søknad.veiledning.accordionHvis.bulletPointOppfølging' })}
-            </li>
-            <li>{formatMessage({ id: 'søknad.veiledning.accordionHvis.bulletPointPlikt' })}</li>
-            <li>{formatMessage({ id: 'søknad.veiledning.accordionHvis.bulletPointMeldekort' })}</li>
-            <li>
-              {formatMessage({ id: 'søknad.veiledning.accordionHvis.bulletPointTilbakebetaling' })}
-            </li>
-            <li>{formatMessage({ id: 'søknad.veiledning.accordionHvis.bulletPointBeskjed' })}</li>
-          </ul>
+        <Accordion>
+          <Accordion.Item>
+            <Accordion.Header
+              data-sporing-event={Events.ACCORDION_APNET}
+              data-sporing-event-tekst={'hvis du får AAP gjelder dette'}
+            >
+              {formatMessage({ id: 'søknad.veiledning.accordionHvis.title' })}
+            </Accordion.Header>
+            <Accordion.Content>
+              <ul>
+                <li>
+                  {formatMessage({ id: 'søknad.veiledning.accordionHvis.bulletPointOppfølging' })}
+                </li>
+                <li>{formatMessage({ id: 'søknad.veiledning.accordionHvis.bulletPointPlikt' })}</li>
+                <li>
+                  {formatMessage({ id: 'søknad.veiledning.accordionHvis.bulletPointMeldekort' })}
+                </li>
+                <li>
+                  {formatMessage({
+                    id: 'søknad.veiledning.accordionHvis.bulletPointTilbakebetaling',
+                  })}
+                </li>
+                <li>
+                  {formatMessage({ id: 'søknad.veiledning.accordionHvis.bulletPointBeskjed' })}
+                </li>
+              </ul>
+            </Accordion.Content>
+          </Accordion.Item>
         </Accordion>
-        <Accordion
-          title={formatMessage({ id: 'søknad.veiledning.accordionInformasjon.title' })}
-          data-sporing-event={Events.ACCORDION_APNET}
-          data-sporing-event-tekst={'vi vil hente og bruke informasjon om deg'}
-        >
-          <BodyShort spacing>
-            {formatMessage({ id: 'søknad.veiledning.accordionInformasjon.informasjonDuOppgir' })}
-          </BodyShort>
-          <ul>
-            <li>
-              {formatMessage({
-                id: 'søknad.veiledning.accordionInformasjon.bulletPointPersoninformasjon',
-              })}
-            </li>
-            <li>
-              {formatMessage({ id: 'søknad.veiledning.accordionInformasjon.bulletPontSkatt' })}
-            </li>
-            <li>
-              {formatMessage({ id: 'søknad.veiledning.accordionInformasjon.bulletpointHelse' })}
-            </li>
-            <li>
-              {formatMessage({ id: 'søknad.veiledning.accordionInformasjon.bulletPointArbeid' })}
-            </li>
-            <li>
-              {formatMessage({
-                id: 'søknad.veiledning.accordionInformasjon.bulletPointAndreOpplysninger',
-              })}
-            </li>
-          </ul>
+        <Accordion>
+          <Accordion.Item>
+            <Accordion.Header
+              data-sporing-event={Events.ACCORDION_APNET}
+              data-sporing-event-tekst={'vi vil hente og bruke informasjon om deg'}
+            >
+              {formatMessage({ id: 'søknad.veiledning.accordionInformasjon.title' })}
+            </Accordion.Header>
+            <Accordion.Content>
+              <BodyShort spacing>
+                {formatMessage({
+                  id: 'søknad.veiledning.accordionInformasjon.informasjonDuOppgir',
+                })}
+              </BodyShort>
+              <ul>
+                <li>
+                  {formatMessage({
+                    id: 'søknad.veiledning.accordionInformasjon.bulletPointPersoninformasjon',
+                  })}
+                </li>
+                <li>
+                  {formatMessage({ id: 'søknad.veiledning.accordionInformasjon.bulletPontSkatt' })}
+                </li>
+                <li>
+                  {formatMessage({ id: 'søknad.veiledning.accordionInformasjon.bulletpointHelse' })}
+                </li>
+                <li>
+                  {formatMessage({
+                    id: 'søknad.veiledning.accordionInformasjon.bulletPointArbeid',
+                  })}
+                </li>
+                <li>
+                  {formatMessage({
+                    id: 'søknad.veiledning.accordionInformasjon.bulletPointAndreOpplysninger',
+                  })}
+                </li>
+              </ul>
 
-          <BodyShort spacing>
-            {formatMessage({ id: 'søknad.veiledning.accordionInformasjon.folketrygdloven' })}
-          </BodyShort>
-          <ul>
-            <li>
-              {formatMessage({ id: 'søknad.veiledning.accordionInformasjon.bulletPointLagring' })}
-            </li>
-            <li>
-              {formatMessage({ id: 'søknad.veiledning.accordionInformasjon.bulletPointDeler' })}
-            </li>
-          </ul>
+              <BodyShort spacing>
+                {formatMessage({ id: 'søknad.veiledning.accordionInformasjon.folketrygdloven' })}
+              </BodyShort>
+              <ul>
+                <li>
+                  {formatMessage({
+                    id: 'søknad.veiledning.accordionInformasjon.bulletPointLagring',
+                  })}
+                </li>
+                <li>
+                  {formatMessage({ id: 'søknad.veiledning.accordionInformasjon.bulletPointDeler' })}
+                </li>
+              </ul>
 
-          <Link
-            href={formatMessage({ id: 'applinks.personOpplysninger' })}
-            target={'_blank'}
-            data-sporing-event={Events.NAVIGERE}
-            data-sporing-event-lenketekst={'Du kan lese mer om hvordan Nav behandler personopplysninger på nav.no'}
-          >
-            {formatMessage({
-              id: 'søknad.veiledning.accordionInformasjon.personopplysningerNavNo',
-            })}
-          </Link>
+              <Link
+                href={formatMessage({ id: 'applinks.personOpplysninger' })}
+                target={'_blank'}
+                data-sporing-event={Events.NAVIGERE}
+                data-sporing-event-lenketekst={
+                  'Du kan lese mer om hvordan Nav behandler personopplysninger på nav.no'
+                }
+              >
+                {formatMessage({
+                  id: 'søknad.veiledning.accordionInformasjon.personopplysningerNavNo',
+                })}
+              </Link>
+            </Accordion.Content>
+          </Accordion.Item>
         </Accordion>
       </article>
     </>
