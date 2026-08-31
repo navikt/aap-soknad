@@ -12,6 +12,8 @@ import { isFunctionalTest, isDev } from 'utils/environments';
 import { logError, logInfo } from 'lib/utils/logger';
 import { Person, getPerson } from 'pages/api/oppslagapi/person';
 import { mellomLagreSøknad } from 'hooks/useDebounceLagreSoknad';
+import { sporHendelse } from '../lib/utils/umami';
+import { Events } from '@navikt/analytics-types';
 
 interface PageProps {
   person: Person;
@@ -52,6 +54,7 @@ const Introduksjon = ({ person }: PageProps) => {
   const startSoknad = async () => {
     setIsLoading(true);
     setHasError(false);
+    sporHendelse(Events.SKJEMA_STARTET)
     const initState: SoknadContextState = {
       version: SOKNAD_VERSION,
       søknad: { vedlegg: {} },
