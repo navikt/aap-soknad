@@ -1,4 +1,5 @@
 import { type EventName } from '@navikt/analytics-types';
+import { StepNames } from '../../pages';
 
 declare global {
   interface Window {
@@ -8,8 +9,14 @@ declare global {
   }
 }
 
-export function sporHendelse(hendelse: EventName) {
+
+export function sporHendelse(hendelse: EventName, hendelseData?: Record<string, string | number>) {
   if (typeof window.sporing?.track === 'function') {
-    window.sporing.track(hendelse);
+    window.sporing.track(hendelse, hendelseData || {});
   }
+}
+
+
+export function sporSkjemaHendelse(hendelse: EventName, skjemanavn: string) {
+  sporHendelse(hendelse, { skjemanavn })
 }

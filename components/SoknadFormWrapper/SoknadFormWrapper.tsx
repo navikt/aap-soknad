@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, Detail, Heading } from '@navikt/ds-react';
 import * as classes from './SoknadFormWrapper.module.css';
 import { useAppStateContext } from 'context/appStateContext';
@@ -8,6 +8,7 @@ import LagreModal from './LagreModal';
 import SlettModal from './SlettModal';
 import { useStepWizard } from 'hooks/StepWizardHook';
 import { Events } from '@navikt/analytics-types';
+import { sporSkjemaHendelse } from '../../lib/utils/umami';
 
 interface Props {
   children: React.ReactNode;
@@ -35,6 +36,9 @@ const SøknadFormWrapper = (props: Props) => {
   const [visAvbrytModal, setVisAvbrytModal] = useState<boolean>(false);
 
   const { currentStep } = useStepWizard();
+  useEffect(() => {
+    sporSkjemaHendelse(Events.SKJEMA_STARTET, currentStep.name)
+  }, [currentStep]);
 
 
   const stegSomBrukesIKelvin: string[] = ['STARTDATO', 'BARNETILLEGG', 'MEDLEMSKAP', 'YRKESSKADE', 'STUDENT'];
@@ -79,6 +83,7 @@ const SøknadFormWrapper = (props: Props) => {
           )}
           <Button
             className={onBack ? classes?.buttonNext : classes?.buttonBack}
+            onClick={() => sporSkjemaHendelse(Events.SKJEMA_FULLFORT, currentStep.name)}
             variant="primary"
             type="submit"
             disabled={nextIsLoading}

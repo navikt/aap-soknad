@@ -44,7 +44,7 @@ import { Fastlege, getFastlege } from 'pages/api/oppslag/fastlege';
 import { migrerMellomlagretBehandler } from 'lib/utils/migrerMellomlagretBehandler';
 import { getPerson, Person } from 'pages/api/oppslagapi/person';
 import { SoknadUtenVedleggModal } from 'components/pageComponents/standard/Oppsummering/SoknadUtenVedleggModal';
-import { sporHendelse } from '../lib/utils/umami';
+import { sporSkjemaHendelse } from '../lib/utils/umami';
 import { Events } from '@navikt/analytics-types';
 
 interface PageProps {
@@ -111,7 +111,7 @@ const Steps = ({ person, mellomlagretSøknad, kontaktinformasjon, barn, fastlege
       );
 
       if (postResponse?.ok) {
-        sporHendelse(Events.SKJEMA_FULLFORT)
+        sporSkjemaHendelse(Events.SKJEMA_FULLFORT, 'SOKNAD');
         router.push('kvittering');
         return true;
       } else if (postResponse?.status === 412) {
