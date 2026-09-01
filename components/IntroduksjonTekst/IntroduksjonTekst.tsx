@@ -1,10 +1,11 @@
 import { Accordion, BodyShort, Heading, Link } from '@navikt/ds-react';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { LucaGuidePanel } from 'components/LucaGuidePanel';
-import { Events } from '@navikt/analytics-types';
+import { sporAccordionApnet, sporLenkeKlikket } from 'lib/utils/umami';
 
 export const IntroduksjonTekst = ({ navn }: { navn?: string }) => {
   const { formatMessage } = useIntl();
+  const personopplysningerUrl = formatMessage({ id: 'applinks.personOpplysninger' });
 
   return (
     <>
@@ -29,11 +30,10 @@ export const IntroduksjonTekst = ({ navn }: { navn?: string }) => {
       </article>
       <article>
         <Accordion>
-          <Accordion.Item>
-            <Accordion.Header
-              data-sporing-event={Events.ACCORDION_APNET}
-              data-sporing-event-tekst={'hvis du får AAP gjelder dette'}
-            >
+          <Accordion.Item
+            onOpenChange={(open) => open && sporAccordionApnet('hvis du får AAP gjelder dette')}
+          >
+            <Accordion.Header>
               {formatMessage({ id: 'søknad.veiledning.accordionHvis.title' })}
             </Accordion.Header>
             <Accordion.Content>
@@ -58,11 +58,12 @@ export const IntroduksjonTekst = ({ navn }: { navn?: string }) => {
           </Accordion.Item>
         </Accordion>
         <Accordion>
-          <Accordion.Item>
-            <Accordion.Header
-              data-sporing-event={Events.ACCORDION_APNET}
-              data-sporing-event-tekst={'vi vil hente og bruke informasjon om deg'}
-            >
+          <Accordion.Item
+            onOpenChange={(open) =>
+              open && sporAccordionApnet('vi vil hente og bruke informasjon om deg')
+            }
+          >
+            <Accordion.Header>
               {formatMessage({ id: 'søknad.veiledning.accordionInformasjon.title' })}
             </Accordion.Header>
             <Accordion.Content>
@@ -110,11 +111,13 @@ export const IntroduksjonTekst = ({ navn }: { navn?: string }) => {
               </ul>
 
               <Link
-                href={formatMessage({ id: 'applinks.personOpplysninger' })}
+                href={personopplysningerUrl}
                 target={'_blank'}
-                data-sporing-event={Events.NAVIGERE}
-                data-sporing-event-lenketekst={
-                  'Du kan lese mer om hvordan Nav behandler personopplysninger på nav.no'
+                onClick={() =>
+                  sporLenkeKlikket(
+                    'Du kan lese mer om hvordan Nav behandler personopplysninger på nav.no',
+                    personopplysningerUrl,
+                  )
                 }
               >
                 {formatMessage({

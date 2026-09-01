@@ -7,7 +7,7 @@ import { useIntl } from 'react-intl';
 import LagreModal from './LagreModal';
 import SlettModal from './SlettModal';
 import { useStepWizard } from 'hooks/StepWizardHook';
-import { Events } from '@navikt/analytics-types';
+import { sporKnappKlikket } from 'lib/utils/umami';
 
 interface Props {
   children: React.ReactNode;
@@ -36,7 +36,13 @@ const SøknadFormWrapper = (props: Props) => {
 
   const { currentStep } = useStepWizard();
 
-  const stegSomBrukesIKelvin: string[] = ['STARTDATO', 'BARNETILLEGG', 'MEDLEMSKAP', 'YRKESSKADE', 'STUDENT'];
+  const stegSomBrukesIKelvin: string[] = [
+    'STARTDATO',
+    'BARNETILLEGG',
+    'MEDLEMSKAP',
+    'YRKESSKADE',
+    'STUDENT',
+  ];
   const isDev =
     window.location.href.includes('intern.dev') || window.location.href.includes('ansatt.dev');
   const stegBrukesIKelvin = isDev && stegSomBrukesIKelvin.includes(currentStep.name);
@@ -96,10 +102,10 @@ const SøknadFormWrapper = (props: Props) => {
             className={classes?.buttonSave}
             variant="tertiary"
             type="button"
-            onClick={() => setVisLagreModal(true)}
-            data-sporing-event={Events.NAVIGERE}
-            data-sporing-event-lenketekst={'fortsett senere'}
-            data-sporing-event-kontekst={currentStep.name}
+            onClick={() => {
+              sporKnappKlikket('fortsett senere', currentStep.name);
+              setVisLagreModal(true);
+            }}
           >
             {formatMessage({ id: 'navigation.save' })}
           </Button>
@@ -107,10 +113,10 @@ const SøknadFormWrapper = (props: Props) => {
             className={classes?.buttonCancel}
             variant="tertiary"
             type="button"
-            onClick={() => setVisAvbrytModal(true)}
-            data-sporing-event={Events.NAVIGERE}
-            data-sporing-event-lenketekst={'slett søknad'}
-            data-sporing-event-kontekst={currentStep.name}
+            onClick={() => {
+              sporKnappKlikket('slett søknad', currentStep.name);
+              setVisAvbrytModal(true);
+            }}
           >
             {formatMessage({ id: 'navigation.cancel' })}
           </Button>

@@ -6,7 +6,7 @@ import { useIntl } from 'react-intl';
 import { scrollRefIntoView } from 'utils/dom';
 
 import styles from './ScanningGuide.module.css';
-import { Events } from '@navikt/analytics-types';
+import { sporLesMerApnet } from 'lib/utils/umami';
 
 export const ScanningGuide = () => {
   const { formatMessage } = useIntl();
@@ -25,12 +25,11 @@ export const ScanningGuide = () => {
         header={formatMessage({ id: 'søknad.vedlegg.vedleggPåPapir.readMore.title' })}
         type={'button'}
         open={scanningGuideOpen}
-        onClick={() => setScanningGuideOpen(!scanningGuideOpen)}
+        onClick={() => {
+          if (!scanningGuideOpen) sporLesMerApnet('slik tar du et godt bilde av dokumentet');
+          setScanningGuideOpen(!scanningGuideOpen);
+        }}
         ref={scanningGuideElement}
-        data-sporing-event={Events.LES_MER_APNET}
-        data-sporing-event-tekst={
-          'slik tar du et godt bilde av dokumentet'
-        }
       >
         <div className={styles.scanningGuide}>
           <article>

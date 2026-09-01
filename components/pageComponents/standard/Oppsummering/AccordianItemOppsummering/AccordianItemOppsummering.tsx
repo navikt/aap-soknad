@@ -2,7 +2,7 @@ import { Accordion, Alert, BodyShort, HGrid, Link } from '@navikt/ds-react';
 import React, { ReactNode, useEffect, useState } from 'react';
 import * as classes from './AccordianItemOppsummering.module.css';
 import { Back } from '@navikt/ds-icons';
-import { Events } from '@navikt/analytics-types';
+import { sporLenkeKlikket } from 'lib/utils/umami';
 
 type SummaryAccordianItemProps = {
   title: string;
@@ -55,10 +55,10 @@ const AccordianItemOppsummering = ({
             <HGrid columns={{ xs: 1 }}>
               <Link
                 href="#"
-                onClick={onEdit}
-                data-sporing-event={Events.NAVIGERE}
-                data-sporing-event-lenketekst={editText}
-                data-sporing-event-kontekst={'endre opplysninger'}
+                onClick={() => {
+                  sporLenkeKlikket(editText ?? '', '#', 'endre opplysninger');
+                  onEdit?.();
+                }}
               >
                 <Back aria-label={'tilbake'} />
                 {editText}
