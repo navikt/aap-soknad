@@ -49,7 +49,7 @@ const Vedlegg = ({ onBackClick }: Props) => {
         if (errors.length === 0) {
           if(søknadState.søknad?.tilleggsopplysninger?.length &&
             søknadState.søknad?.tilleggsopplysninger?.length > 0){
-            sporHendelse(Events.TEXTAREA_UTFYLT, {kategori: 'tilleggsopplysninger'})
+            sporHendelse(Events.TEXTAREA_UTFYLT, {feltNavn: 'tilleggsopplysninger'})
           }
 
           completeAndGoToNextStep(stepWizardDispatch);
