@@ -17,8 +17,18 @@ export function sporHendelse<T extends EventName>(hendelse: T, hendelseData?: Pr
 
 type SkjemaHendelse = typeof Events.SKJEMA_STARTET | typeof Events.SKJEMA_FULLFORT;
 
+export const SKJEMANAVN = 'SOKNAD';
+
 export function sporSkjemaHendelse(hendelse: SkjemaHendelse, skjemanavn: string) {
   sporHendelse(hendelse, { skjemanavn })
+}
+
+export function sporStegStartet(steg: string) {
+  sporHendelse(Events.SKJEMA_STARTET, { skjemanavn: SKJEMANAVN, kontekst: steg });
+}
+
+export function sporStegFullfort(steg: string) {
+  sporHendelse(Events.SKJEMA_STEG_FULLFORT, { skjemanavn: SKJEMANAVN, steg, kontekst: steg });
 }
 
 export function sporFileInputHendelse(kategori: string) {
