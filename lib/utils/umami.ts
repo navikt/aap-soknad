@@ -34,6 +34,21 @@ export function sporFileInputHendelse(kategori: string) {
   sporHendelse(Events.FIL_LASTET_OPP, { kontekst: kategori });
 }
 
+export type Valideringsfeil =
+  | 'ugyldig_format'
+  | 'for_stor'
+  | 'passordbeskyttet'
+  | 'virus'
+  | 'teknisk_feil';
+
+export function sporFileInputValideringFeilet(kategori: string, aarsak: Valideringsfeil) {
+  sporHendelse(Events.SKJEMA_VALIDERING_FEILET, {
+    skjemanavn: SKJEMANAVN,
+    kontekst: kategori,
+    opprinnelse: aarsak,
+  });
+}
+
 export function sporLesMerApnet(tittel: string) {
   sporHendelse(Events.LES_MER_APNET, { tittel });
 }

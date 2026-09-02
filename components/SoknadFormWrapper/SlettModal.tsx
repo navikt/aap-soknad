@@ -7,6 +7,8 @@ import { isProduction } from 'utils/environments';
 import { useState } from 'react';
 import { useSoknad } from 'hooks/SoknadHook';
 import { deleteOpplastedeVedlegg, slettLagretSoknadState } from 'context/soknadcontext/actions';
+import { useStepWizard } from 'hooks/StepWizardHook';
+import { sporKnappKlikket } from 'lib/utils/umami';
 
 interface Props {
   isOpen: boolean;
@@ -16,6 +18,7 @@ const SlettModal = ({ isOpen, onClose }: Props) => {
   const [isDeletingSøknad, setIsDeletingSøknad] = useState<boolean>(false);
   const [slettSøknadSuccess, setSlettSøknadSuccess] = useState<boolean>(false);
   const { søknadState } = useSoknad();
+  const { currentStep } = useStepWizard();
   const { formatMessage } = useIntl();
   const router = useRouter();
 
@@ -29,6 +32,7 @@ const SlettModal = ({ isOpen, onClose }: Props) => {
       setIsDeletingSøknad(true);
       await onDelete();
       setIsDeletingSøknad(false);
+      sporKnappKlikket('slett søknad bekreftet', currentStep?.name);
       setSlettSøknadSuccess(true);
     } catch (err) {
       setIsDeletingSøknad(false);
