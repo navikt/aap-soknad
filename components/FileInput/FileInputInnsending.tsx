@@ -8,6 +8,11 @@ import { useIntl } from 'react-intl';
 
 import styles from './FileInputInnsending.module.css';
 import { Vedlegg } from 'types/Vedlegg';
+import {
+  sporFileInputHendelse,
+  sporFileInputValideringFeilet,
+  Valideringsfeil,
+} from 'lib/utils/umami';
 
 interface FileInputProps extends InputHTMLAttributes<HTMLInputElement> {
   heading: string;
@@ -60,15 +65,47 @@ export const FileInputInnsending = (props: FileInputProps) => {
     }
   };
 
-  function internalValidate(fileToUpload: File): string | undefined {
+  const valideringsfeilkode = (statusCode: number, substatus = ''): Valideringsfeil => {
+    switch (statusCode) {
+      case 422:
+        switch (substatus) {
+          case 'PASSWORD_PROTECTED':
+            return 'passordbeskyttet';
+          case 'VIRUS':
+            return 'virus';
+          case 'SIZE':
+            return 'for_stor';
+          default:
+            return 'teknisk_feil';
+        }
+      case 413:
+        return 'for_stor';
+      case 415:
+        return 'ugyldig_format';
+      default:
+        return 'teknisk_feil';
+    }
+  };
+
+  function internalValidate(
+    fileToUpload: File,
+  ): { melding: string; kode: Valideringsfeil } | undefined {
     const totalUploadedSize = files.reduce((acc, curr) => acc + curr.size, 0);
 
     if (!['image/png', 'image/jpg', 'image/jpeg', 'application/pdf'].includes(fileToUpload?.type)) {
-      return formatMessage({ id: 'søknad.vedlegg.fileinput.fileInputErrors.unsupportedMediaType' });
+      return {
+        melding: formatMessage({
+          id: 'søknad.vedlegg.fileinput.fileInputErrors.unsupportedMediaType',
+        }),
+        kode: 'ugyldig_format',
+      };
     }
 
     if (totalUploadedSize + fileToUpload?.size > MAX_TOTAL_FILE_SIZE) {
-      return formatMessage({ id: 'søknad.vedlegg.fileinput.fileInputErrors.fileTooLarge' });
+      return {
+        melding: formatMessage({ id: 'søknad.vedlegg.fileinput.fileInputErrors.fileTooLarge' }),
+        kode: 'for_stor',
+      };
     }
   }
 
@@ -77,6 +114,7 @@ export const FileInputInnsending = (props: FileInputProps) => {
     const totalSize = fileArray.reduce((acc, curr) => acc + curr.size, 0);
     if (totalSize > MAX_TOTAL_FILE_SIZE) {
       setIsUploading(false);
+      sporFileInputValideringFeilet(id, 'for_stor');
       onUpload([
         {
           vedleggId: crypto.randomUUID(),
@@ -90,6 +128,7 @@ export const FileInputInnsending = (props: FileInputProps) => {
       ]);
     } else if (totalSize + totalSizeIInnsending > MAX_TOTAL_FILE_SIZE) {
       setIsUploading(false);
+      sporFileInputValideringFeilet(id, 'for_stor');
       onUpload([
         {
           vedleggId: crypto.randomUUID(),
@@ -103,9 +142,9 @@ export const FileInputInnsending = (props: FileInputProps) => {
       ]);
     } else {
       setIsUploading(true);
-      const uploadedFiles: Vedlegg[] = await Promise.all(
+      const resultater = await Promise.all(
         fileArray.map(async (file) => {
-          const internalErrorMessage = internalValidate(file);
+          const internalFeil = internalValidate(file);
           let uploadResult: Vedlegg = {
             vedleggId: crypto.randomUUID(),
             errorMessage: '',
@@ -113,8 +152,9 @@ export const FileInputInnsending = (props: FileInputProps) => {
             size: file.size,
             name: file.name,
           };
+          let kode: Valideringsfeil | undefined;
 
-          if (!internalErrorMessage) {
+          if (!internalFeil) {
             try {
               const data = new FormData();
               data.append('vedlegg', file);
@@ -125,17 +165,29 @@ export const FileInputInnsending = (props: FileInputProps) => {
                 uploadResult.vedleggId = resData.filId;
               } else {
                 uploadResult.errorMessage = settFeilmelding(res.status, resData.substatus);
+                kode = valideringsfeilkode(res.status, resData.substatus);
               }
             } catch (err: any) {
               uploadResult.errorMessage = settFeilmelding(err?.status || 500);
+              kode = valideringsfeilkode(err?.status || 500);
             }
-          } else if (internalErrorMessage) {
-            uploadResult.errorMessage = internalErrorMessage;
+          } else {
+            uploadResult.errorMessage = internalFeil.melding;
+            kode = internalFeil.kode;
           }
 
-          return uploadResult;
+          return { uploadResult, kode };
         }),
       );
+
+      const uploadedFiles: Vedlegg[] = resultater.map((resultat) => resultat.uploadResult);
+
+      const feilkoder = new Set(
+        resultater
+          .map((resultat) => resultat.kode)
+          .filter((kode): kode is Valideringsfeil => kode !== undefined),
+      );
+      feilkoder.forEach((kode) => sporFileInputValideringFeilet(id, kode));
 
       const successfullyUploadedFiles = uploadedFiles.filter((file) => !file.errorMessage);
       setTotalSizeIInnsending(
@@ -193,6 +245,7 @@ export const FileInputInnsending = (props: FileInputProps) => {
               value={''}
               onChange={(e) => {
                 if (e.target.files) {
+                  sporFileInputHendelse(id);
                   validateAndSetFiles(e.target.files);
                 }
               }}

@@ -13,6 +13,8 @@ import { addVedlegg, deleteVedlegg, updateSøknadData } from 'context/soknadcont
 import { useSoknad } from 'hooks/SoknadHook';
 import { LucaGuidePanel } from 'components/LucaGuidePanel';
 import { FileInputInnsending } from 'components/FileInput/FileInputInnsending';
+import { sporHendelse } from 'lib/utils/umami';
+import { Events } from '@navikt/analytics-types';
 
 interface Props {
   onBackClick: () => void;
@@ -45,6 +47,11 @@ const Vedlegg = ({ onBackClick }: Props) => {
     <SoknadFormWrapperNew
       onNext={() => {
         if (errors.length === 0) {
+          if(søknadState.søknad?.tilleggsopplysninger?.length &&
+            søknadState.søknad?.tilleggsopplysninger?.length > 0){
+            sporHendelse(Events.TEXTAREA_UTFYLT, {feltNavn: 'tilleggsopplysninger'})
+          }
+
           completeAndGoToNextStep(stepWizardDispatch);
         } else {
           setFocusOnErrorSummary();

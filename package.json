@@ -5,6 +5,7 @@
   "dependencies": {
     "@grafana/faro-web-sdk": "^2.10.0",
     "@grafana/faro-web-tracing": "2.10.0",
+    "@navikt/analytics-types": "0.0.9",
     "@navikt/ds-css": "^7.40.0",
     "@navikt/ds-icons": "^3.4.3",
     "@navikt/ds-react": "^7.40.0",

@@ -23,6 +23,7 @@ import SoknadFormWrapperNew from 'components/SoknadFormWrapper/SoknadFormWrapper
 import { useSoknad } from 'hooks/SoknadHook';
 import { updateSøknadData } from 'context/soknadcontext/actions';
 import { LucaGuidePanel } from 'components/LucaGuidePanel';
+import { sporLesMerApnet } from 'lib/utils/umami';
 
 interface Props {
   onBackClick: () => void;
@@ -89,6 +90,9 @@ export const Yrkesskade = ({ onBackClick }: Props) => {
         <ReadMore
           header={formatMessage({ id: 'søknad.yrkesskade.harDuYrkesskade.readMore.title' })}
           type={'button'}
+          onOpenChange={(open) =>
+            open && sporLesMerApnet('hva mener vi med yrkesskade eller yrkessykdom?')
+          }
         >
           <div>
             <BodyShort spacing>

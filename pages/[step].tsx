@@ -44,6 +44,8 @@ import { Fastlege, getFastlege } from 'pages/api/oppslag/fastlege';
 import { migrerMellomlagretBehandler } from 'lib/utils/migrerMellomlagretBehandler';
 import { getPerson, Person } from 'pages/api/oppslagapi/person';
 import { SoknadUtenVedleggModal } from 'components/pageComponents/standard/Oppsummering/SoknadUtenVedleggModal';
+import { sporSkjemaHendelse, sporStegFullfort, sporStegStartet } from 'lib/utils/umami';
+import { Events } from '@navikt/analytics-types';
 
 interface PageProps {
   mellomlagretSøknad: SoknadContextState;
@@ -58,7 +60,7 @@ const Steps = ({ person, mellomlagretSøknad, kontaktinformasjon, barn, fastlege
   const { step } = router.query;
 
   const { søknadState, søknadDispatch } = useSoknad();
-  const { currentStep, stepList, stepWizardDispatch } = useStepWizard();
+  const { currentStep, currentStepIndex, stepList, stepWizardDispatch } = useStepWizard();
   const debouncedLagre = useDebounceLagreSoknad<Soknad>();
 
   const [showFetchErrorMessage, setShowFetchErrorMessage] = useState(false);
@@ -92,6 +94,23 @@ const Steps = ({ person, mellomlagretSøknad, kontaktinformasjon, barn, fastlege
     }
   }, [currentStep]);
 
+  const forrigeSteg = useRef<{ navn: string; indeks: number } | null>(null);
+  useEffect(() => {
+    if (!currentStep?.name || currentStepIndex === undefined) return;
+
+    const naavaerende = { navn: currentStep.name, indeks: currentStepIndex };
+    const forrige = forrigeSteg.current;
+
+    if (forrige?.navn === naavaerende.navn) return;
+
+    // et steg regnes som fullført først når brukeren faktisk har kommet videre
+    if (forrige && naavaerende.indeks > forrige.indeks) {
+      sporStegFullfort(forrige.navn);
+    }
+    sporStegStartet(naavaerende.navn);
+    forrigeSteg.current = naavaerende;
+  }, [currentStep?.name, currentStepIndex]);
+
   useEffect(() => {
     if (showFetchErrorMessage) {
       if (submitErrorMessageRef?.current != null) scrollRefIntoView(submitErrorMessageRef);
@@ -109,6 +128,7 @@ const Steps = ({ person, mellomlagretSøknad, kontaktinformasjon, barn, fastlege
       );
 
       if (postResponse?.ok) {
+        sporSkjemaHendelse(Events.SKJEMA_FULLFORT, 'SOKNAD');
         router.push('kvittering');
         return true;
       } else if (postResponse?.status === 412) {

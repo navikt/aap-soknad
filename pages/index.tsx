@@ -8,10 +8,12 @@ import metrics from 'utils/metrics';
 import { scrollRefIntoView } from 'utils/dom';
 import { SOKNAD_VERSION, SoknadContextState } from 'context/soknadcontext/soknadContext';
 import { hentMellomlagring } from 'pages/api/mellomlagring/les';
-import { isFunctionalTest, isDev } from 'utils/environments';
+import { isDev, isFunctionalTest } from 'utils/environments';
 import { logError, logInfo } from 'lib/utils/logger';
-import { Person, getPerson } from 'pages/api/oppslagapi/person';
+import { getPerson, Person } from 'pages/api/oppslagapi/person';
 import { mellomLagreSøknad } from 'hooks/useDebounceLagreSoknad';
+import { sporSkjemaHendelse } from '../lib/utils/umami';
+import { Events } from '@navikt/analytics-types';
 
 interface PageProps {
   person: Person;
@@ -52,6 +54,7 @@ const Introduksjon = ({ person }: PageProps) => {
   const startSoknad = async () => {
     setIsLoading(true);
     setHasError(false);
+    sporSkjemaHendelse(Events.SKJEMA_STARTET, 'SOKNAD');
     const initState: SoknadContextState = {
       version: SOKNAD_VERSION,
       søknad: { vedlegg: {} },

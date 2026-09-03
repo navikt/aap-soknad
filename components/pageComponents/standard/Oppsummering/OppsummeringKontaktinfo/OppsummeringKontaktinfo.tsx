@@ -4,6 +4,7 @@ import { formatTelefonnummer } from 'utils/StringFormatters';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { Person } from 'pages/api/oppslagapi/person';
 import { KrrKontaktInfo } from 'pages/api/oppslag/krr';
+import { sporLesMerApnet } from 'lib/utils/umami';
 
 type Props = {
   kontaktinformasjon: KrrKontaktInfo | null;
@@ -29,6 +30,9 @@ const OppsummeringKontaktinfo = ({ kontaktinformasjon, person }: Props) => {
               id: 'søknad.oppsummering.contactInformation.adresse.readMore.title',
             })}
             type={'button'}
+            onOpenChange={(open) =>
+              open && sporLesMerApnet('hva gjør jeg hvis jeg har en annen adresse?')
+            }
           >
             <FormattedMessage
               id={'søknad.oppsummering.contactInformation.adresse.readMore.text'}
@@ -53,6 +57,9 @@ const OppsummeringKontaktinfo = ({ kontaktinformasjon, person }: Props) => {
             id: 'søknad.oppsummering.contactInformation.telefonnummer.readMore.title',
           })}
           type={'button'}
+          onOpenChange={(open) =>
+            open && sporLesMerApnet('hva gjør jeg hvis jeg har et annet telefonnummer?')
+          }
         >
           <FormattedMessage
             id={'søknad.oppsummering.contactInformation.telefonnummer.readMore.text'}
@@ -77,6 +84,9 @@ const OppsummeringKontaktinfo = ({ kontaktinformasjon, person }: Props) => {
             id: 'søknad.oppsummering.contactInformation.epost.readMore.title',
           })}
           type={'button'}
+          onOpenChange={(open) =>
+            open && sporLesMerApnet('hva gjør jeg hvis jeg har en annen e-post adresse?')
+          }
         >
           <FormattedMessage
             id={'søknad.oppsummering.contactInformation.epost.readMore.text'}
