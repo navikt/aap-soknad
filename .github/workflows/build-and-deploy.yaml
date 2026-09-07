@@ -64,9 +64,12 @@ jobs:
     if: github.ref == 'refs/heads/main'
     steps:
       - uses: actions/checkout@v7
+      - uses: nais/login@v0
+        id: login
+        with:
+          team: aap
       - name: Deploy alerts
         uses: nais/deploy/actions/deploy@v2
         env:
-          APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
           CLUSTER: prod-gcp
           RESOURCE: .nais/prod-alerts.yaml
