@@ -54,22 +54,6 @@ jobs:
     secrets: inherit
     with:
       cluster: prod-gcp
-      manifest: .nais/nais.yaml,.nais/prod-alerts.yaml
+      manifest: .nais/nais.yaml
       imageSuffix: -prod-gcp
       vars: .nais/prod.yaml
-  deployAlertsProd:
-    name: Deploy alerts to prod
-    needs: buildProd
-    runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main'
-    steps:
-      - uses: actions/checkout@v7
-      - uses: nais/login@v0
-        id: login
-        with:
-          team: aap
-      - name: Deploy alerts
-        uses: nais/deploy/actions/deploy@v2
-        env:
-          CLUSTER: prod-gcp
-          RESOURCE: .nais/prod-alerts.yaml
