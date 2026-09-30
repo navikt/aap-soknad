@@ -1262,16 +1262,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@navikt/nav-dekoratoren-moduler@npm:^3.7.3":
-  version: 3.7.3
-  resolution: "@navikt/nav-dekoratoren-moduler@npm:3.7.3::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Fnav-dekoratoren-moduler%2F3.7.3%2F3c790758f06d026b8732261131b13aa937055646"
+"@navikt/nav-dekoratoren-moduler@npm:^4.5.0":
+  version: 4.5.0
+  resolution: "@navikt/nav-dekoratoren-moduler@npm:4.5.0::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Fnav-dekoratoren-moduler%2F4.5.0%2Fe3c7d8e6e3f2efd2fb46952564e6c9c47ca200ad"
   dependencies:
-    csp-header: "npm:6.3.1"
-    js-cookie: "npm:3.0.7"
+    "@navikt/analytics-types": "npm:0.0.9"
+    csp-header: "npm:6.4.0"
+    js-cookie: "npm:3.0.8"
   peerDependencies:
     html-react-parser: ">=5.x"
     react: ">=17.x"
-  checksum: 10c0/1807ede95ebafe2f71e674c45a1f782ecdaf2f6a0d73571931fa905ec2177d7c787876da8c1f1ecda137ce62ab1c7425de1e9b18fa07ce81ff1e5e40b9c6cc1b
+  checksum: 10c0/35ce6b409eb0701eb72af2e4ad2aa0ee1fb5ed798b07376e7c3fed9f600f8ed70fa3015ee4e058aa48cfd5aea561a0594ab35eba46e6d6def19bfc68370724d7
   languageName: node
   linkType: hard
 
@@ -2595,7 +2596,7 @@ __metadata:
     "@navikt/ds-css": "npm:^7.40.0"
     "@navikt/ds-icons": "npm:^3.4.3"
     "@navikt/ds-react": "npm:^7.40.0"
-    "@navikt/nav-dekoratoren-moduler": "npm:^3.7.3"
+    "@navikt/nav-dekoratoren-moduler": "npm:^4.5.0"
     "@navikt/next-api-proxy": "npm:3.4.10"
     "@navikt/oasis": "npm:^3.8.0"
     "@playwright/test": "npm:^1.63.0"
@@ -3428,10 +3429,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"csp-header@npm:6.3.1":
-  version: 6.3.1
-  resolution: "csp-header@npm:6.3.1"
-  checksum: 10c0/b9a2a1c90a944a1ad6ed8e3b309ecb1b3b2b0d68c9ceeab73ee8a17513635db83ef1e3d624e928d14b40270ba203016cf5f3b3d4dcf0aeaa76adcb9f2fbbdfc0
+"csp-header@npm:6.4.0":
+  version: 6.4.0
+  resolution: "csp-header@npm:6.4.0"
+  checksum: 10c0/1be7366012103f643489eb772432f5ab46c6aea2f4d27b871e5f259ce3692ac43221cdd17e58564f552060dca87f2bae0e6c321b4ae2d99f245e6ed20c9cb3a7
   languageName: node
   linkType: hard
 
@@ -5758,10 +5759,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"js-cookie@npm:3.0.7":
-  version: 3.0.7
-  resolution: "js-cookie@npm:3.0.7"
-  checksum: 10c0/c921c43014e98bb94a1765663a1a10d693048d61444e374c1ecf459eba92320381f9c406e724df9aa44e819c4b606e6a7240f2abe2d5c54ad1e73a3002b191c2
+"js-cookie@npm:3.0.8":
+  version: 3.0.8
+  resolution: "js-cookie@npm:3.0.8"
+  checksum: 10c0/421912a4a55535bda32b3059835864e1182c3af5b4516df00a060edc1fa5a53d38bb8d5a91d5d305e396206f4fd11e829f17850aa5aa8164118c04d8ebf1ff5d
   languageName: node
   linkType: hard
 
