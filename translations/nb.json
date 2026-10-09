@@ -396,7 +396,7 @@
         "title": "Ut fra dine svar trenger du ikke laste opp noen vedlegg til søknaden. Hvis du likevel har  dokumenter du mener har betydning for din søknad, kan du laste opp disse her. Dette er helt valgfritt.",
         "alert": {
           "text1": "Du trenger ikke å laste opp noen vedlegg. Vi har fått all informasjonen vi trenger for å behandle søknaden din. Hvis vi trenger mer informasjon eller dokumentasjon, kontakter vi deg.",
-          "text2": "Hvis du skal ettersende dokumentasjon på et seinere tidspunkt, kan du gjøre dette via Mine Arbeidsavklaringspenger på nav.no etter at du har sendt inn søknaden.",
+          "text2": "Hvis du skal ettersende dokumentasjon på et seinere tidspunkt, kan du gjøre dette via Mine arbeidsavklaringspenger på nav.no etter at du har sendt inn søknaden.",
           "text3": "Hvis du ønsker å legge til dokumenter du mener har betydning for din søknad, kan du laste opp dette her (valgfritt)."
         },
         "readMore": {
@@ -664,7 +664,7 @@
         "sms": "SMS",
         "epost": "E-post"
       },
-      "dittNavKnapp": "Følg saken på Mine Arbeidsavklaringspenger"
+      "dittNavKnapp": "Følg saken på Mine arbeidsavklaringspenger"
     },
     "ettersendelseFrist": "Du kan ettersende dette innen 14 dager per post eller digitalt. Du kan også levere dette på ditt lokale Nav kontor"
   },

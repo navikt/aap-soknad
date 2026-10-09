@@ -386,7 +386,7 @@
         "title": "Ut frå svara dine har vi ikkje registrert vedlegg som må lastast opp. Viss du likevel har  dokument du meiner har noko å seia for søknaden din, kan du lasta opp desse her. Dette er heilt valfritt.",
         "alert": {
           "text1": "Du treng du ikkje å lasta opp nokon vedlegg. Me har fått all informasjonen me treng for å behandla søknaden din. Viss me treng meir informasjon eller dokumentasjon, kontaktar me deg.",
-          "text2": "Viss du skal ettersenda dokumentasjon på eit seinare tidspunkt, kan du gjera dette via Mine Arbeidsavklaringspenger på nav.no etter at du har sendt inn søknaden.",
+          "text2": "Viss du skal ettersenda dokumentasjon på eit seinare tidspunkt, kan du gjera dette via Mine arbeidsavklaringspenger på nav.no etter at du har sendt inn søknaden.",
           "text3": "Viss du ønskjer å leggja til dokument du meiner har noko å seia for søknaden din, kan du lasta opp dette her (valfritt)."
         },
         "readMore": {
@@ -664,7 +664,7 @@
         "sms": "SMS",
         "epost": "e-post"
       },
-      "dittNavKnapp": "Følg saka på Mine Arbeidsavklaringspengar"
+      "dittNavKnapp": "Følg saka på Mine arbeidsavklaringspengar"
     },
     "ettersendelseFrist": "Du kan ettersende dette innan 14 dagar per post eller digitalt. Du kan også levere dette på ditt lokale Nav-kontor"
   },
