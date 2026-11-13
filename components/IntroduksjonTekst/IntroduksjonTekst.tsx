@@ -2,7 +2,6 @@ import { Accordion, BodyShort, Heading, Link } from '@navikt/ds-react';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { LucaGuidePanel } from 'components/LucaGuidePanel';
 import { sporAccordionApnet, sporLenkeKlikket } from 'lib/utils/umami';
-import { format } from 'path';
 
 export const IntroduksjonTekst = ({ navn }: { navn?: string }) => {
   const { formatMessage } = useIntl();
