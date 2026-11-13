@@ -1,7 +1,8 @@
 {
   "ettersending": "https://www.nav.no/start/ettersend-soknad-aap",
   "saksbehandlingstid": "https://www.nav.no/saksbehandlingstider#arbeidsavklaringspenger-aap",
-  "personOpplysninger": "https://www.nav.no/personvern-sikkerhet-navno",
+  "personvernerklæring": "https://www.nav.no/personvernerklaering",
+  "personopplysninger": "https://www.nav.no/personvernerklaering#hvorfor",
   "forskriftOmYrkessykdommer": "https://lovdata.no/dokument/SF/forskrift/1960-02-19-6",
   "folkeregisteret": "https://www.skatteetaten.no/person/folkeregister/flytte/",
   "kontaktOgReservasjonsregisteret": "https://www.norge.no/nb/digital-borger/oppdater-kontaktinformasjon",

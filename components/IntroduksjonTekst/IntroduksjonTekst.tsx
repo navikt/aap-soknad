@@ -2,10 +2,12 @@ import { Accordion, BodyShort, Heading, Link } from '@navikt/ds-react';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { LucaGuidePanel } from 'components/LucaGuidePanel';
 import { sporAccordionApnet, sporLenkeKlikket } from 'lib/utils/umami';
+import { format } from 'path';
 
 export const IntroduksjonTekst = ({ navn }: { navn?: string }) => {
   const { formatMessage } = useIntl();
-  const personopplysningerUrl = formatMessage({ id: 'applinks.personOpplysninger' });
+  const personopplysningerUrl = formatMessage({ id: 'applinks.personopplysninger' });
+  const personvernerklæringUrl = formatMessage({ id: 'applinks.personvernerklæring' });
 
   return (
     <>
@@ -16,6 +18,7 @@ export const IntroduksjonTekst = ({ navn }: { navn?: string }) => {
         <BodyShort spacing>{formatMessage({ id: 'søknad.veiledning.guide.text1' })}</BodyShort>
         <BodyShort spacing>{formatMessage({ id: 'søknad.veiledning.guide.text2' })}</BodyShort>
         <BodyShort spacing>{formatMessage({ id: 'søknad.veiledning.guide.text3' })}</BodyShort>
+        <BodyShort spacing>{formatMessage({ id: 'søknad.veiledning.guide.text4' })}</BodyShort>
       </LucaGuidePanel>
       <article>
         <Heading size={'small'} level={'2'} spacing>
@@ -99,29 +102,39 @@ export const IntroduksjonTekst = ({ navn }: { navn?: string }) => {
               <BodyShort spacing>
                 {formatMessage({ id: 'søknad.veiledning.accordionInformasjon.folketrygdloven' })}
               </BodyShort>
-              <ul>
-                <li>
-                  {formatMessage({
-                    id: 'søknad.veiledning.accordionInformasjon.bulletPointLagring',
+              <BodyShort spacing>
+                {formatMessage({ id: 'søknad.veiledning.accordionInformasjon.delerInformasjon' })}
+              </BodyShort>
+              <BodyShort spacing>
+                {formatMessage({ id: 'søknad.veiledning.accordionInformasjon.andreFormål' })}
+                <Link
+                  href={formatMessage({
+                    id: 'applinks.personopplysninger',
                   })}
-                </li>
-                <li>
-                  {formatMessage({ id: 'søknad.veiledning.accordionInformasjon.bulletPointDeler' })}
-                </li>
-              </ul>
+                  onClick={() =>
+                    sporLenkeKlikket(
+                      'Les mer om hvorfor vi trenger personopplysninger',
+                      personopplysningerUrl,
+                    )
+                  }
+                  target="_blank"
+                  rel="noopener norefferer"
+                >
+                  {formatMessage({
+                    id: 'søknad.veiledning.accordionInformasjon.personopplysningerLenketekst',
+                  })}
+                </Link>
+              </BodyShort>
 
               <Link
-                href={personopplysningerUrl}
+                href={personvernerklæringUrl}
                 target={'_blank'}
                 onClick={() =>
-                  sporLenkeKlikket(
-                    'Du kan lese mer om hvordan Nav behandler personopplysninger på nav.no',
-                    personopplysningerUrl,
-                  )
+                  sporLenkeKlikket('Hele personvernerklæringen til Nav', personvernerklæringUrl)
                 }
               >
                 {formatMessage({
-                  id: 'søknad.veiledning.accordionInformasjon.personopplysningerNavNo',
+                  id: 'søknad.veiledning.accordionInformasjon.personvernerklæring',
                 })}
               </Link>
             </Accordion.Content>
