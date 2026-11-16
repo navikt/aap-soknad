@@ -29,9 +29,10 @@
       "title": "Søknad om arbeidsavklarings<wbr></wbr>penger (AAP)",
       "guide": {
         "title": "Hei, {name}!",
-        "text1": "Jeg er her for å veilede deg gjennom søknaden. Svarene dine lagres underveis, slik at du trygt kan gå tilbake og endre dem.",
-        "text2": "Arbeidsavklaringspenger forkortes ofte med “AAP”.",
-        "text3": "AAP skal sikre deg inntekt når du på grunn av sykdom eller skade har behov for å få avklart mulighetene dine til å jobbe."
+        "text1": "Jeg er her for å veilede deg gjennom søknaden.",
+        "text2": "Arbeidsavklaringspenger forkortes ofte med «AAP».",
+        "text3": "AAP skal sikre deg inntekt når du på grunn av sykdom eller skade har behov for å få avklart mulighetene dine til å jobbe.",
+        "text4": "Vi lagrer søknaden din i 24 timer slik at du kan fortsette der du slapp når du kommer tilbake."
       },
       "søknadsdato": {
         "title": "Søknadsdato er viktig for utbetaling av AAP",
@@ -40,24 +41,25 @@
       },
       "accordionHvis": {
         "title": "Hvis du får AAP, gjelder dette",
-        "bulletPointOppfølging": "Du har rett til oppfølging fra Nav",
-        "bulletPointPlikt": "Du har plikt til å bidra til å avklare om du kan beholde eller komme i jobb",
-        "bulletPointMeldekort": "Du må sende inn meldekort hver 14. dag",
-        "bulletPointTilbakebetaling": "Hvis du får penger du ikke har rett til, er du forberedt på at du må betale dem tilbake.",
-        "bulletPointBeskjed": "Du har plikt til å gi beskjed hvis situasjonen din endrer seg"
+        "bulletPointOppfølging": "Du har rett til oppfølging fra Nav.",
+        "bulletPointPlikt": "Du har plikt til å bidra til å avklare om du kan beholde eller komme i jobb.",
+        "bulletPointMeldekort": "Du må sende inn meldekort hver 14. dag.",
+        "bulletPointTilbakebetaling": "Hvis du får penger du ikke har rett til, må du være forberedt på å betale dem tilbake.",
+        "bulletPointBeskjed": "Du har plikt til å gi beskjed hvis situasjonen din endrer seg."
       },
       "accordionInformasjon": {
         "title": "Vi vil hente og bruke informasjon om deg",
         "informasjonDuOppgir": "I tillegg til den informasjonen du oppgir i søknaden, henter vi:",
-        "bulletPointPersoninformasjon": "Personinformasjon om deg og barna dine fra Folkeregisteret.",
-        "bulletPontSkatt": "Inntektsinformasjon fra Skatteetaten.",
-        "bulletpointHelse": "Helseinformasjon fra lege/behandler for å kartlegge arbeidsevnen din.",
-        "bulletPointArbeid": "Opplysninger om arbeidsforholdet ditt fra Arbeidsgiver- og arbeidstakerregisteret.",
-        "bulletPointAndreOpplysninger": "Opplysninger om deg vi har fra før.",
+        "bulletPointPersoninformasjon": "personinformasjon om deg og barna dine fra Folkeregisteret",
+        "bulletPontSkatt": "inntektsinformasjon fra Skatteetaten",
+        "bulletpointHelse": "helseinformasjon fra lege/behandler for å kartlegge arbeidsevnen din",
+        "bulletPointArbeid": "opplysninger om arbeidsforholdet ditt fra Arbeidsgiver- og arbeidstakerregisteret",
+        "bulletPointAndreOpplysninger": "opplysninger om deg vi har fra før",
         "folketrygdloven": "Dette gjør vi for å vurdere om du har rett til AAP etter folketrygdloven kapittel 11. Opplysningene brukes også i forbindelse med oppfølgingen du får fra Nav.",
-        "bulletPointLagring": "Søknaden din vil være lagret i 24 timer og du kan fortsette der du slapp når du kommer tilbake.",
-        "bulletPointDeler": "Vi deler opplysninger om hva du får utbetalt i AAP med Skatteetaten og Statistisk sentralbyrå.",
-        "personopplysningerNavNo": "Du kan lese mer om hvordan Nav behandler personopplysninger på nav.no (åpnes i ny fane)."
+        "delerInformasjon": "Vi deler opplysninger om hva du får utbetalt i AAP med Skatteetaten og Statistisk sentralbyrå.",
+        "andreFormål": "I tillegg bruker vi opplysningene til andre formål, for eksempel som grunnlag for statistikk og analyse for å forbedre saksbehandlingsløsningen vår.",
+        "personopplysningerLenketekst": "Les mer om hvorfor vi trenger personopplysninger",
+        "personvernerklæring": "Hele personvernerklæringen til Nav"
       },
       "veiledningConfirm": {
         "checkbox": "Jeg bekrefter at jeg vil svare så riktig som jeg kan.",
