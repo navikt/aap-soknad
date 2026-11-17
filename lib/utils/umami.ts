@@ -8,10 +8,7 @@ const sporing = getAnalyticsInstance('aap-soknad') as (
 ) => Promise<unknown>;
 
 export function sporHendelse<T extends EventName>(hendelse: T, hendelseData?: PropertiesFor<T>) {
-  // sporing ikke aktivert i prod
-  if (isDev()) {
     sporing(hendelse, hendelseData);
-  }
 }
 
 type SkjemaHendelse = typeof Events.SKJEMA_STARTET | typeof Events.SKJEMA_FULLFORT;
